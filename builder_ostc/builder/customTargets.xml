@@ -114,6 +114,9 @@
 	<openscada.builder.copyFeature id="org.openscada.ae.client.test"/>
 	<openscada.builder.copyFeature id="org.openscada.hd.client.test"/>
   	
+  	<openscada.builder.copyPlugin id="org.openscada.da.ice.client"/>
+  	<openscada.builder.copyPlugin id="org.openscada.da.net.client"/>
+  	
   	<!-- OpenSCADA DA Test Servers -->
   	
   	<openscada.builder.copyFeature id="org.openscada.da.rcp.LocalTestServer" />

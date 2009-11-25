@@ -111,7 +111,6 @@
   	<openscada.builder.copyFeature id="org.openscada.orilla"/>
   	<openscada.builder.copyFeature id="org.openscada.orilla.sdk"/>
   	
-  	<openscada.builder.copyFeature id="org.openscada.core.client.test"/>
   	<openscada.builder.copyPlugin id="org.openscada.ui.databinding"/>
   	<openscada.builder.copyPlugin id="org.openscada.external.jfreechart"/>
   	
@@ -147,7 +146,7 @@
   	<openscada.builder.copyPlugin id="org.openscada.ae.ui.connection.creator.net" />
   	
   	<!-- OpenSCADA HD UI -->
-  	
+
   	<openscada.builder.copyPlugin id="org.openscada.hd.ui"/>
   	<openscada.builder.copyPlugin id="org.openscada.hd.chart"/>
   	<openscada.builder.copyPlugin id="org.openscada.hd.ui.connection" />
