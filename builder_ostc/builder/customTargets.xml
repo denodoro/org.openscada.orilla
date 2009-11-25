@@ -109,6 +109,11 @@
   <target name="postSetup">
     <antcall target="getBaseComponents" />
   	
+  	<openscada.builder.copyFeature id="org.openscada.core.client.test"/>
+  	<openscada.builder.copyFeature id="org.openscada.da.client.test"/>
+	<openscada.builder.copyFeature id="org.openscada.ae.client.test"/>
+	<openscada.builder.copyFeature id="org.openscada.hd.client.test"/>
+  	
   	<!-- OpenSCADA DA Test Servers -->
   	
   	<openscada.builder.copyFeature id="org.openscada.da.rcp.LocalTestServer" />
