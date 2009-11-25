@@ -108,6 +108,9 @@
   <target name="postSetup">
     <antcall target="getBaseComponents" />
   	
+  	<openscada.builder.copyFeature id="org.openscada.orilla"/>
+  	<openscada.builder.copyFeature id="org.openscada.orilla.sdk"/>
+  	
   	<openscada.builder.copyFeature id="org.openscada.core.client.test"/>
   	<openscada.builder.copyPlugin id="org.openscada.ui.databinding"/>
   	<openscada.builder.copyPlugin id="org.openscada.external.jfreechart"/>
@@ -137,11 +140,6 @@
   	<openscada.builder.copyPlugin id="org.openscada.da.ui.connection" />
   	<openscada.builder.copyPlugin id="org.openscada.da.ui.connection.creator.net" />
   	
-  	<!-- OpenSCADA DA Test Servers -->
-  	
-  	<openscada.builder.copyFeature id="org.openscada.da.rcp.LocalTestServer" />
-  	<openscada.builder.copyPlugin id="org.openscada.da.rcp.LocalTestServer"/>
-  	
   	<!-- OpenSCADA AE UI -->
   	  	
   	<openscada.builder.copyFeature id="org.openscada.ae.client.test"/>
@@ -158,10 +156,6 @@
   	<openscada.builder.copyPlugin id="org.openscada.hd.ui.connection" />
   	<openscada.builder.copyPlugin id="org.openscada.hd.ui.connection.creator.net" />
   	
-  	<!-- OpenSCADA RCP -->
-  	
-  	<openscada.builder.copyFeature id="org.openscada.rcp.client" />
-  	<openscada.builder.copyPlugin id="org.openscada.rcp.client"/>
   </target>
 
   <!-- ===================================================================== -->
@@ -230,6 +224,7 @@
   <!-- ===================================================================== -->
   <target name="postBuild">
     <antcall target="gatherLogs" />
+  	<openscada.deploy.repository name="org.openscada.orilla.sdk"/>
   </target>
 
   <!-- ===================================================================== -->

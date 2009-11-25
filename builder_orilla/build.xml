@@ -36,7 +36,7 @@
           target: build              
          ================================= -->
     <target name="build" depends="populate" description="OpenSCADA Aurora">
-    	<openscada.productBuild builder="builder"/>
+    	<openscada.bundleBuild builder="builder"/>
     </target>
 
 	<!-- ================================= 
@@ -49,7 +49,7 @@
           target: publish              
          ================================= -->
     <target name="publish" depends="" description="Publish artifacts">
-    	<openscada.publish.product project="atlantis" name="ostc"/>
+    	<openscada.publish.repository id="org.openscada.orilla.sdk" project="orilla"/>
     </target>
 	
 	<!-- ================================= 
