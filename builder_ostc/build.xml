@@ -35,7 +35,7 @@
 	<!-- ================================= 
           target: build              
          ================================= -->
-    <target name="build" depends="populate" description="OpenSCADA Aurora">
+    <target name="build" depends="populate" description="OpenSCADA Orilla">
     	<openscada.productBuild builder="builder"/>
     </target>
 
