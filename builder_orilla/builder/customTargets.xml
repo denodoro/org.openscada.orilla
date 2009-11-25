@@ -126,7 +126,6 @@
 
 	<!-- OpenSCADA DA UI -->
   	
-  	<openscada.builder.copyFeature id="org.openscada.da.client.test" />
   	<openscada.builder.copyPlugin id="org.openscada.da.ui"/>
   	<openscada.builder.copyPlugin id="org.openscada.da.client.base"/>
   	<openscada.builder.copyPlugin id="org.openscada.da.client.chart"/>
@@ -142,7 +141,6 @@
   	
   	<!-- OpenSCADA AE UI -->
   	  	
-  	<openscada.builder.copyFeature id="org.openscada.ae.client.test"/>
   	<openscada.builder.copyPlugin id="org.openscada.ae.ui"/>
   	<openscada.builder.copyPlugin id="org.openscada.ae.ui.testing"/>
   	<openscada.builder.copyPlugin id="org.openscada.ae.ui.connection" />
@@ -150,7 +148,6 @@
   	
   	<!-- OpenSCADA HD UI -->
   	
-  	<openscada.builder.copyFeature id="org.openscada.hd.client.test"/>
   	<openscada.builder.copyPlugin id="org.openscada.hd.ui"/>
   	<openscada.builder.copyPlugin id="org.openscada.hd.chart"/>
   	<openscada.builder.copyPlugin id="org.openscada.hd.ui.connection" />
