@@ -21,7 +21,7 @@
 	<property file="common/config/local.properties"/>
 	<property file="common/config/build.properties"/>
 	
-	<property name="buildId" value="${atlantis.version}"/>
+	<property name="buildId" value="${orilla.version}"/>
 	<property name="buildLabel" value="${buildType}.${buildId}"/>
 	
 	<import file="${build.root}/common/lib/lib.xml" />
