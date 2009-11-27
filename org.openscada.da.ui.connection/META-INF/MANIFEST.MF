@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: OpenSCADA DA Connection UI
 Bundle-SymbolicName: org.openscada.da.ui.connection;singleton:=true
-Bundle-Version: 0.14.0.qualifier
+Bundle-Version: 0.15.0.qualifier
 Bundle-Activator: org.openscada.da.ui.connection.Activator
 Bundle-Vendor: inavare GmbH
 Require-Bundle: org.eclipse.ui,
@@ -24,7 +24,9 @@ Require-Bundle: org.eclipse.ui,
  org.openscada.core.client.common;bundle-version="0.14.0"
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
-Import-Package: org.slf4j;version="1.5.8"
+Import-Package: org.openscada.core;version="0.14.0",
+ org.openscada.core.subscription;version="0.14.0",
+ org.slf4j;version="1.5.8"
 Export-Package: org.openscada.da.ui.connection;version="0.14.0";uses:="org.eclipse.ui.plugin,org.osgi.framework",
  org.openscada.da.ui.connection.commands;version="0.14.0",
  org.openscada.da.ui.connection.data;version="0.14.0",
