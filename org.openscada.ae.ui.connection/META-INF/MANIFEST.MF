@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: OpenSCADA AE Connection UI
 Bundle-SymbolicName: org.openscada.ae.ui.connection;singleton:=true
-Bundle-Version: 0.14.0.qualifier
+Bundle-Version: 0.15.0.qualifier
 Bundle-Activator: org.openscada.ae.ui.connection.Activator
 Bundle-Vendor: inavare GmbH
 Require-Bundle: org.eclipse.ui;bundle-version="3.5.0",
@@ -22,9 +22,10 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.5.0",
  org.openscada.core.client.common;bundle-version="0.14.0"
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
-Import-Package: org.slf4j;version="1.5.8"
-Export-Package: org.openscada.ae.ui.connection.data;version="0.14.0";
-  uses:="org.openscada.ae.client,
-   org.openscada.utils.beans,
+Import-Package: org.openscada.core,
+ org.slf4j;version="1.5.8"
+Export-Package: org.openscada.ae.ui.connection.data;version="0.15.0";
+  uses:="org.openscada.utils.beans,
+   org.openscada.ae.connection.provider,
    org.openscada.core,
    org.openscada.ae"
