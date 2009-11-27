@@ -51,7 +51,7 @@
       <import plugin="org.eclipse.ecf" version="2.0.0" match="greaterOrEqual"/>
       <import plugin="ch.ethz.iks.slp"/>
       <import plugin="org.eclipse.equinox.common" version="3.5.0" match="greaterOrEqual"/>
-      <import plugin="org.springframework.osgi.log4j.osgi"/>
+      <import plugin="com.springsource.org.apache.log4j"/>
    </requires>
 
    <plugin
