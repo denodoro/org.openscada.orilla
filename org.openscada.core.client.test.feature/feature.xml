@@ -19,7 +19,6 @@
    </license>
 
    <requires>
-      <import plugin="com.springsource.org.apache.log4j"/>
       <import plugin="org.apache.mina.core"/>
       <import plugin="org.openscada.net.base"/>
       <import plugin="org.openscada.utils"/>
@@ -33,7 +32,6 @@
       <import plugin="org.eclipse.jface.databinding" version="1.3.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.databinding" version="1.2.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.databinding.beans" version="1.2.0" match="greaterOrEqual"/>
-      <import plugin="org.openscada.core.common" version="0.14.0" match="greaterOrEqual"/>
       <import plugin="org.openscada.core.connection.provider" version="0.14.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.expressions"/>
       <import plugin="org.openscada.ui.databinding" version="1.4.0" match="greaterOrEqual"/>
@@ -43,16 +41,17 @@
       <import plugin="org.openscada.core.ui.connection" version="0.14.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.runtime" version="3.5.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui" version="3.5.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ecf.discovery" version="3.0.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ecf" version="3.0.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.equinox.common"/>
       <import plugin="org.eclipse.equinox.registry"/>
       <import plugin="org.eclipse.core.jobs"/>
       <import plugin="org.eclipse.osgi.services"/>
-      <import plugin="ch.ethz.iks.slp"/>
-      <import plugin="org.eclipse.equinox.common" version="3.5.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.ecf.discovery" version="3.0.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.ecf" version="3.0.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ecf.identity" version="2.1.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ecf" version="2.0.0" match="greaterOrEqual"/>
+      <import plugin="ch.ethz.iks.slp"/>
+      <import plugin="org.eclipse.equinox.common" version="3.5.0" match="greaterOrEqual"/>
+      <import plugin="org.springframework.osgi.log4j.osgi"/>
    </requires>
 
    <plugin
@@ -70,7 +69,7 @@
          unpack="false"/>
 
    <plugin
-         id="org.openscada.core.common"
+         id="org.openscada.core"
          download-size="0"
          install-size="0"
          version="0.0.0"
