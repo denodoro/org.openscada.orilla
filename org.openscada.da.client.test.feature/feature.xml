@@ -328,7 +328,7 @@ POSSIBILITY OF SUCH DAMAGES.
       <import plugin="org.eclipse.core.runtime" version="3.5.0" match="greaterOrEqual"/>
       <import plugin="org.openscada.da.client.base" version="0.14.0" match="greaterOrEqual"/>
       <import plugin="org.openscada.core.client.common" version="0.14.0" match="greaterOrEqual"/>
-      <import plugin="org.openscada.core.common" version="0.14.0" match="greaterOrEqual"/>
+      <import plugin="org.openscada.core" version="0.14.0" match="greaterOrEqual"/>
       <import plugin="org.openscada.da.client.common" version="0.14.0" match="greaterOrEqual"/>
       <import plugin="org.openscada.da.core.common" version="0.14.0" match="greaterOrEqual"/>
       <import plugin="org.openscada.da.client.connector" version="0.14.0" match="greaterOrEqual"/>
@@ -369,7 +369,7 @@ POSSIBILITY OF SUCH DAMAGES.
       <import plugin="org.openscada.core.ice.base"/>
       <import plugin="org.openscada.core.server.common"/>
       <import plugin="org.openscada.core.client.common" version="0.13.0" match="greaterOrEqual"/>
-      <import plugin="org.openscada.core.common" version="0.13.0" match="greaterOrEqual"/>
+      <import plugin="org.openscada.core" version="0.13.0" match="greaterOrEqual"/>
       <import plugin="org.openscada.core.ice.base" version="0.13.0" match="greaterOrEqual"/>
       <import plugin="org.openscada.da.client.common" version="0.13.0" match="greaterOrEqual"/>
       <import plugin="org.openscada.da.client.connector" version="0.13.3" match="greaterOrEqual"/>
