@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: SWTChart Plug-in
-Bundle-SymbolicName: org.openscada.hd.chart;singleton:=true
+Bundle-SymbolicName: org.openscada.hd.ui.chart;singleton:=true
 Bundle-Version: 0.6.0.qualifier
 Require-Bundle: org.eclipse.swt
 Export-Package: org.openscada.hd.chart;version="0.14.0",

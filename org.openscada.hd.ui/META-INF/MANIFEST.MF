@@ -10,7 +10,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.databinding;bundle-version="1.2.0",
  org.eclipse.core.databinding.beans;bundle-version="1.2.0",
  org.eclipse.jface.databinding;bundle-version="1.3.0",
- org.openscada.hd.chart;bundle-version="0.6.0"
+ org.openscada.hd.ui.chart;bundle-version="0.6.0"
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Import-Package: org.apache.mina.core.service;version="2.0.0.M6",
