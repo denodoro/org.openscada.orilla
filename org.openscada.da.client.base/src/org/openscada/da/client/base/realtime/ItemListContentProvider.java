@@ -46,7 +46,7 @@ public class ItemListContentProvider implements ITreeContentProvider, Listener
         }
         else if ( parentElement instanceof ListEntry )
         {
-            return ( (ListEntry)parentElement ).getAttributes ().toArray ( new ListEntry.AttributePair[0] );
+            return ( (ListEntry)parentElement ).getAttributes ().toArray ( new AttributePair[0] );
         }
 
         return new Object[0];

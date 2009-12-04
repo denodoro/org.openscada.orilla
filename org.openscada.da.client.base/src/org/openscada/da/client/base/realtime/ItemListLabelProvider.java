@@ -33,7 +33,6 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.RGB;
 import org.openscada.da.client.base.browser.VariantHelper;
-import org.openscada.da.client.base.realtime.ListEntry.AttributePair;
 
 public class ItemListLabelProvider extends LabelProvider implements ITableLabelProvider, ITableFontProvider, ITableColorProvider
 {
@@ -92,9 +91,9 @@ public class ItemListLabelProvider extends LabelProvider implements ITableLabelP
                 return null;
             }
         }
-        else if ( element instanceof ListEntry.AttributePair )
+        else if ( element instanceof AttributePair )
         {
-            final ListEntry.AttributePair ap = (ListEntry.AttributePair)element;
+            final AttributePair ap = (AttributePair)element;
             switch ( columnIndex )
             {
             case 0:

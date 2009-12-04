@@ -33,10 +33,10 @@ public class ListEntryComparator extends ViewerComparator
             final ListEntry l2 = (ListEntry)e2;
             return l1.getDataItem ().getItem ().getId ().compareTo ( l2.getDataItem ().getItem ().getId () );
         }
-        if ( e1 instanceof ListEntry.AttributePair && e2 instanceof ListEntry.AttributePair )
+        if ( e1 instanceof AttributePair && e2 instanceof AttributePair )
         {
-            final ListEntry.AttributePair l1 = (ListEntry.AttributePair)e1;
-            final ListEntry.AttributePair l2 = (ListEntry.AttributePair)e2;
+            final AttributePair l1 = (AttributePair)e1;
+            final AttributePair l2 = (AttributePair)e2;
             return l1.key.compareTo ( l2.key );
         }
         return super.compare ( viewer, e1, e2 );

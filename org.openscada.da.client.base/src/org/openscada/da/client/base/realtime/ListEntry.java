@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2008 inavare GmbH (http://inavare.com)
+ * Copyright (C) 2006-2009 inavare GmbH (http://inavare.com)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,71 +47,6 @@ public class ListEntry extends Observable implements IAdaptable, IPropertySource
         VALUE,
         SUBSCRIPTION_STATE
     };
-
-    public class AttributePair
-    {
-        public String key;
-
-        public Variant value;
-
-        public AttributePair ( final String key, final Variant value )
-        {
-            super ();
-            this.key = key;
-            this.value = value;
-        }
-
-        @Override
-        public int hashCode ()
-        {
-            final int PRIME = 31;
-            int result = 1;
-            result = PRIME * result + ( this.key == null ? 0 : this.key.hashCode () );
-            result = PRIME * result + ( this.value == null ? 0 : this.value.hashCode () );
-            return result;
-        }
-
-        @Override
-        public boolean equals ( final Object obj )
-        {
-            if ( this == obj )
-            {
-                return true;
-            }
-            if ( obj == null )
-            {
-                return false;
-            }
-            if ( getClass () != obj.getClass () )
-            {
-                return false;
-            }
-            final AttributePair other = (AttributePair)obj;
-            if ( this.key == null )
-            {
-                if ( other.key != null )
-                {
-                    return false;
-                }
-            }
-            else if ( !this.key.equals ( other.key ) )
-            {
-                return false;
-            }
-            if ( this.value == null )
-            {
-                if ( other.value != null )
-                {
-                    return false;
-                }
-            }
-            else if ( !this.value.equals ( other.value ) )
-            {
-                return false;
-            }
-            return true;
-        }
-    }
 
     private DataItemHolder dataItem;
 
@@ -173,7 +108,7 @@ public class ListEntry extends Observable implements IAdaptable, IPropertySource
         final List<AttributePair> pairs = new ArrayList<AttributePair> ( this.value.getAttributes ().size () );
         for ( final Map.Entry<String, Variant> entry : this.value.getAttributes ().entrySet () )
         {
-            pairs.add ( new AttributePair ( entry.getKey (), entry.getValue () ) );
+            pairs.add ( new AttributePair ( this.item, entry.getKey (), entry.getValue () ) );
         }
         return pairs;
     }
