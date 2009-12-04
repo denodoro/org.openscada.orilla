@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006 inavare GmbH (http://inavare.com)
+ * Copyright (C) 2006-2009 inavare GmbH (http://inavare.com)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,44 +34,50 @@ import org.openscada.da.client.test.wizards.WriteAttributesOperationWizard;
 
 public class WriteAttributesOperationAction implements IObjectActionDelegate, IViewActionDelegate
 {
-    @SuppressWarnings("unused")
-    private static Logger _log = Logger.getLogger ( WriteAttributesOperationAction.class );
-    
-    private IWorkbenchPartSite _site = null;
-    
-    private IStructuredSelection _selection = null;
-   
-    public void run ( IAction action )
+    @SuppressWarnings ( "unused" )
+    private static Logger logger = Logger.getLogger ( WriteAttributesOperationAction.class );
+
+    private IWorkbenchPartSite site = null;
+
+    private IStructuredSelection selection = null;
+
+    public void run ( final IAction action )
     {
-        if ( _selection == null )
+        if ( this.selection == null )
+        {
             return;
-        
-        IWorkbenchWizard wiz = new WriteAttributesOperationWizard ();
-        wiz.init ( _site.getWorkbenchWindow ().getWorkbench (), _selection );
-        
+        }
+
+        final IWorkbenchWizard wiz = new WriteAttributesOperationWizard ();
+        wiz.init ( this.site.getWorkbenchWindow ().getWorkbench (), this.selection );
+
         // Embed the wizard into a dialog
-        WizardDialog dialog = new WizardDialog ( _site.getShell () , wiz );
-        dialog.open();
+        final WizardDialog dialog = new WizardDialog ( this.site.getShell (), wiz );
+        dialog.open ();
     }
 
-    public void selectionChanged ( IAction action, ISelection selection )
-    {     
+    public void selectionChanged ( final IAction action, final ISelection selection )
+    {
         if ( selection == null )
+        {
             return;
-        if ( ! (selection instanceof IStructuredSelection) )
+        }
+        if ( ! ( selection instanceof IStructuredSelection ) )
+        {
             return;
-        
-        _selection = (IStructuredSelection)selection;
+        }
+
+        this.selection = (IStructuredSelection)selection;
     }
 
-    public void setActivePart ( IAction action, IWorkbenchPart targetPart )
+    public void setActivePart ( final IAction action, final IWorkbenchPart targetPart )
     {
-        _site = targetPart.getSite ();
+        this.site = targetPart.getSite ();
     }
 
-    public void init ( IViewPart view )
+    public void init ( final IViewPart view )
     {
-        _site = view.getSite ();
+        this.site = view.getSite ();
     }
 
 }

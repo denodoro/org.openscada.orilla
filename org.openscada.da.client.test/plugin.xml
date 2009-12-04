@@ -100,6 +100,18 @@
                label="Write Attributes Operation"
                menubarPath="additions"/>
       </objectContribution>
+      <objectContribution
+            adaptable="false"
+            id="org.openscada.da.client.test.popupMenus.oc4"
+            objectClass="org.openscada.da.client.base.realtime.AttributePair">
+         <action
+               class="org.openscada.da.client.test.actions.WriteAttributesOperationAction"
+               icon="icons/16x16/stock_write.png"
+               id="org.openscada.da.client.test.actions.WriteAttributesOperationAction"
+               label="Write Attributes Operation"
+               menubarPath="additions">
+         </action>
+      </objectContribution>
    </extension>
    <extension
          point="org.eclipse.ui.newWizards">

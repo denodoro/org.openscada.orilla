@@ -60,6 +60,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.openscada.core.Variant;
 import org.openscada.da.client.base.browser.ValueType;
+import org.openscada.da.client.base.realtime.AttributePair;
 import org.openscada.da.ui.connection.data.Item;
 import org.openscada.da.ui.connection.data.ItemSelectionHelper;
 
@@ -550,5 +551,26 @@ class WriteAttributesOperationWizardValuePage extends WizardPage implements IWiz
     public void setSelection ( final IStructuredSelection selection )
     {
         this.item = ItemSelectionHelper.getFirstFromSelection ( selection );
+        findAttributes ( selection );
+    }
+
+    private void findAttributes ( final IStructuredSelection selection )
+    {
+        final Iterator<?> i = selection.iterator ();
+        while ( i.hasNext () )
+        {
+            final Object o = i.next ();
+            if ( o instanceof AttributePair )
+            {
+                final AttributePair pair = (AttributePair)o;
+
+                final AttributeEntry entry = new AttributeEntry ( pair.key, ValueType.fromVariantType ( pair.value.getType () ), pair.value.asString ( "" ) );
+                this.attributes.add ( entry );
+                if ( this.table != null )
+                {
+                    this.table.add ( entry );
+                }
+            }
+        }
     }
 }
