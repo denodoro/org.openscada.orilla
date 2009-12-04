@@ -15,25 +15,15 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.5.0",
  org.openscada.core;bundle-version="0.15.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
-Export-Package: org.openscada.da.client.base.action;version="0.14.0";
+Export-Package: org.openscada.da.client.base.action;version="0.15.0";
   uses:="org.eclipse.jface.action,
    org.eclipse.core.runtime,
    org.eclipse.ui,
    org.eclipse.jface.viewers,
-   org.openscada.da.client.base.item",
- org.openscada.da.client.base.browser;version="0.14.0";
-  uses:="org.eclipse.core.runtime,
-   org.eclipse.ui,
-   org.eclipse.ui.views.properties,
-   org.openscada.da.client,
-   org.openscada.core,
-   org.openscada.da.core",
- org.openscada.da.client.base.connection;version="0.14.0";
-  uses:="org.openscada.core.client,
-   org.openscada.da.client,
-   org.openscada.da.client.base.item,
-   org.openscada.core",
- org.openscada.da.client.base.realtime;version="0.14.0";
+   org.openscada.da.ui.connection.data",
+ org.openscada.da.client.base.browser;version="0.15.0";uses:="org.openscada.core",
+ org.openscada.da.client.base.connection;version="0.15.0";uses:="org.openscada.core.client,org.openscada.da.client,org.openscada.core",
+ org.openscada.da.client.base.realtime;version="0.15.0";
   uses:="org.eclipse.core.runtime,
    org.eclipse.ui,
    org.eclipse.ui.views.properties,

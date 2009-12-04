@@ -3,6 +3,7 @@ package org.openscada.da.client.base.browser;
 import org.openscada.core.NotConvertableException;
 import org.openscada.core.NullValueException;
 import org.openscada.core.Variant;
+import org.openscada.core.VariantType;
 import org.openscada.da.client.connector.Activator;
 
 /**
@@ -97,25 +98,46 @@ public enum ValueType
     },
     ;
 
-    private int _index;
+    private int index;
 
-    private String _label;
+    private String label;
 
     ValueType ( final int index, final String label )
     {
-        this._index = index;
-        this._label = label;
+        this.index = index;
+        this.label = label;
     }
 
     public String label ()
     {
-        return this._label;
+        return this.label;
     }
 
     public int index ()
     {
-        return this._index;
+        return this.index;
     }
 
     public abstract Variant convertTo ( String value ) throws NotConvertableException;
+
+    public static ValueType fromVariantType ( final VariantType type )
+    {
+        switch ( type )
+        {
+        case BOOLEAN:
+            return ValueType.BOOLEAN;
+        case DOUBLE:
+            return ValueType.DOUBLE;
+        case INT32:
+            return ValueType.INT;
+        case INT64:
+            return ValueType.LONG;
+        case NULL:
+            return ValueType.NULL;
+        case STRING:
+            return ValueType.STRING;
+        default:
+            return ValueType.STRING;
+        }
+    }
 }
