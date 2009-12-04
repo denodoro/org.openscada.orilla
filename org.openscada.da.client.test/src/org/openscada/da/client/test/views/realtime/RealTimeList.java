@@ -19,6 +19,8 @@
 
 package org.openscada.da.client.test.views.realtime;
 
+import java.util.Collection;
+
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
@@ -215,6 +217,11 @@ public class RealTimeList extends ViewPart implements RealtimeListAdapter
     public void remove ( final ListEntry entry )
     {
         this.list.remove ( entry );
+    }
+
+    public void remove ( final Collection<ListEntry> entries )
+    {
+        this.list.removeAll ( entries );
     }
 
     public void add ( final ListEntry entry )

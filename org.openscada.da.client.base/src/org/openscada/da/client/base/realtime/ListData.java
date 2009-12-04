@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2008 inavare GmbH (http://inavare.com)
+ * Copyright (C) 2006-2009 inavare GmbH (http://inavare.com)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@
 package org.openscada.da.client.base.realtime;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -32,23 +33,23 @@ import org.openscada.da.ui.connection.data.Item;
 
 public class ListData implements Observer
 {
-    private static Logger _log = Logger.getLogger ( ListData.class );
+    private static Logger logger = Logger.getLogger ( ListData.class );
 
-    private List<ListEntry> _items = new CopyOnWriteArrayList<ListEntry> ();
+    private List<ListEntry> items = new CopyOnWriteArrayList<ListEntry> ();
 
-    private final Set<Listener> _listeners = new CopyOnWriteArraySet<Listener> ();
+    private final Set<Listener> listeners = new CopyOnWriteArraySet<Listener> ();
 
     public List<ListEntry> getItems ()
     {
-        return new ArrayList<ListEntry> ( this._items );
+        return new ArrayList<ListEntry> ( this.items );
     }
 
     synchronized public void setItems ( final List<ListEntry> items )
     {
         clear ();
 
-        this._items = items;
-        fireAdded ( this._items.toArray ( new ListEntry[this._items.size ()] ) );
+        this.items = items;
+        fireAdded ( this.items.toArray ( new ListEntry[this.items.size ()] ) );
         for ( final ListEntry entry : items )
         {
             entry.addObserver ( this );
@@ -57,7 +58,7 @@ public class ListData implements Observer
 
     public void add ( final ListEntry entry )
     {
-        if ( this._items.add ( entry ) )
+        if ( this.items.add ( entry ) )
         {
             fireAdded ( new ListEntry[] { entry } );
             entry.addObserver ( this );
@@ -74,7 +75,7 @@ public class ListData implements Observer
 
     public void remove ( final ListEntry entry )
     {
-        if ( this._items.remove ( entry ) )
+        if ( this.items.remove ( entry ) )
         {
             entry.deleteObserver ( this );
             entry.clear ();
@@ -82,36 +83,47 @@ public class ListData implements Observer
         }
     }
 
+    public void removeAll ( final Collection<ListEntry> entries )
+    {
+        this.items.removeAll ( entries );
+        for ( final ListEntry entry : entries )
+        {
+            entry.deleteObserver ( this );
+            entry.clear ();
+        }
+        fireRemoved ( entries.toArray ( new ListEntry[entries.size ()] ) );
+    }
+
     synchronized public void clear ()
     {
-        for ( final ListEntry entry : this._items )
+        for ( final ListEntry entry : this.items )
         {
             entry.deleteObserver ( this );
         }
-        this._items.clear ();
-        fireRemoved ( this._items.toArray ( new ListEntry[this._items.size ()] ) );
+        this.items.clear ();
+        fireRemoved ( this.items.toArray ( new ListEntry[this.items.size ()] ) );
     }
 
     public void addListener ( final Listener listener )
     {
-        this._listeners.add ( listener );
+        this.listeners.add ( listener );
 
         // now fill the new listener with what we already have
-        if ( !this._items.isEmpty () )
+        if ( !this.items.isEmpty () )
         {
-            listener.added ( this._items.toArray ( new ListEntry[this._items.size ()] ) );
+            listener.added ( this.items.toArray ( new ListEntry[this.items.size ()] ) );
         }
     }
 
     public void removeListener ( final Listener listener )
     {
-        this._listeners.remove ( listener );
+        this.listeners.remove ( listener );
     }
 
     protected void fireAdded ( final ListEntry[] entries )
     {
-        _log.debug ( String.format ( "Fire add for %d items", entries.length ) ); //$NON-NLS-1$
-        for ( final Listener listener : this._listeners )
+        logger.debug ( String.format ( "Fire add for %d items", entries.length ) ); //$NON-NLS-1$
+        for ( final Listener listener : this.listeners )
         {
             try
             {
@@ -119,14 +131,14 @@ public class ListData implements Observer
             }
             catch ( final Exception e )
             {
-                _log.warn ( "Failed while sending add notification", e ); //$NON-NLS-1$
+                logger.warn ( "Failed while sending add notification", e ); //$NON-NLS-1$
             }
         }
     }
 
     protected void fireRemoved ( final ListEntry[] entries )
     {
-        for ( final Listener listener : this._listeners )
+        for ( final Listener listener : this.listeners )
         {
             try
             {
@@ -134,16 +146,16 @@ public class ListData implements Observer
             }
             catch ( final Exception e )
             {
-                _log.warn ( "Failed while sending remove notification", e ); //$NON-NLS-1$
+                logger.warn ( "Failed while sending remove notification", e ); //$NON-NLS-1$
             }
         }
     }
 
     protected void fireUpdated ( final ListEntry[] entries )
     {
-        _log.debug ( "Updating items: " + entries.length ); //$NON-NLS-1$
+        logger.debug ( "Updating items: " + entries.length ); //$NON-NLS-1$
 
-        for ( final Listener listener : this._listeners )
+        for ( final Listener listener : this.listeners )
         {
             try
             {
@@ -151,14 +163,14 @@ public class ListData implements Observer
             }
             catch ( final Exception e )
             {
-                _log.warn ( "Failed while sending update notification", e ); //$NON-NLS-1$
+                logger.warn ( "Failed while sending update notification", e ); //$NON-NLS-1$
             }
         }
     }
 
     public void update ( final Observable o, final Object arg )
     {
-        if ( o instanceof ListEntry && this._items.contains ( o ) )
+        if ( o instanceof ListEntry && this.items.contains ( o ) )
         {
             fireUpdated ( new ListEntry[] { (ListEntry)o } );
         }

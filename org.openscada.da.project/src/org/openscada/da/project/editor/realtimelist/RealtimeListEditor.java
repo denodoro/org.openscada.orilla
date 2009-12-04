@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2008 inavare GmbH (http://inavare.com)
+ * Copyright (C) 2006-2009 inavare GmbH (http://inavare.com)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@
 package org.openscada.da.project.editor.realtimelist;
 
 import java.net.URI;
+import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
@@ -274,6 +275,12 @@ public class RealtimeListEditor extends EditorPart implements RealtimeListAdapte
     public void remove ( final ListEntry entry )
     {
         this.list.remove ( entry );
+        makeDirty ();
+    }
+
+    public void remove ( final Collection<ListEntry> entries )
+    {
+        this.list.removeAll ( entries );
         makeDirty ();
     }
 

@@ -52,10 +52,7 @@ public class RemoveAction extends Action implements ISelectionChangedListener, I
         {
             return;
         }
-        for ( final ListEntry entry : this.entries )
-        {
-            this.view.remove ( entry );
-        }
+        this.view.remove ( this.entries );
     }
 
     public void selectionChanged ( final SelectionChangedEvent event )
