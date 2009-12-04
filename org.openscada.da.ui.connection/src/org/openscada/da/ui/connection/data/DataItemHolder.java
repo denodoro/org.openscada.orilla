@@ -116,8 +116,8 @@ public class DataItemHolder
         if ( this.connection != null )
         {
             this.dataItem = new DataItem ( this.item.getId () );
-            this.dataItem.register ( this.connection.getItemManager () );
             this.dataItem.addObserver ( this.observer );
+            this.dataItem.register ( this.connection.getItemManager () );
         }
     }
 
