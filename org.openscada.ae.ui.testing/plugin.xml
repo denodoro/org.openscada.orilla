@@ -11,5 +11,13 @@
             name="Monitors"
             restorable="true">
       </view>
+	  <view
+            allowMultiple="false"
+            category="org.openscada.ae.ui.category"
+            class="org.openscada.ae.ui.testing.views.EventQueryView"
+            id="org.openscada.ae.ui.testing.views.EventQueryView"
+            name="Event Query"
+            restorable="true">
+      </view>
    </extension>
 </plugin>

@@ -1,9 +1,7 @@
 package org.openscada.ae.ui.testing.views;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.eclipse.core.databinding.beans.BeansObservables;
 import org.eclipse.core.databinding.observable.set.WritableSet;
@@ -25,29 +23,28 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IWorkbenchActionConstants;
-import org.openscada.ae.ConditionStatusInformation;
-import org.openscada.ae.ui.connection.data.MonitorStatusBean;
+import org.openscada.ae.Event;
 import org.openscada.core.subscription.SubscriptionState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class MonitorsView extends AbstractConditionQueryViewPart
+public class EventQueryView extends AbstractEventQueryViewPart
 {
-    private final static Logger logger = LoggerFactory.getLogger ( MonitorsView.class );
+    private final static Logger logger = LoggerFactory.getLogger ( EventQueryView.class );
 
-    public static final String VIEW_ID = "org.openscada.ae.ui.testing.views.MonitorsView";
+    public static final String VIEW_ID = "org.openscada.ae.ui.testing.views.EventQueryView";
 
     private Label stateLabel;
 
-    private final Map<String, MonitorStatusBean> monitorSet = new HashMap<String, MonitorStatusBean> ();
+    private final Set<Event> eventSet = new HashSet<Event> ();
 
-    private final WritableSet monitors;
+    private final WritableSet events;
 
     private TableViewer viewer;
 
-    public MonitorsView ()
+    public EventQueryView ()
     {
-        this.monitors = new WritableSet ( SWTObservables.getRealm ( Display.getDefault () ) );
+        this.events = new WritableSet ( SWTObservables.getRealm ( Display.getDefault () ) );
     }
 
     @Override
@@ -77,31 +74,31 @@ public class MonitorsView extends AbstractConditionQueryViewPart
         tableLayout.setColumnData ( col, new ColumnWeightData ( 50 ) );
 
         col = new TableColumn ( this.viewer.getTable (), SWT.NONE );
-        col.setText ( "State" );
+        col.setText ( "Timestamp" );
         tableLayout.setColumnData ( col, new ColumnWeightData ( 50 ) );
 
         col = new TableColumn ( this.viewer.getTable (), SWT.NONE );
-        col.setText ( "Timestamp" );
-        tableLayout.setColumnData ( col, new ColumnWeightData ( 100 ) );
+        col.setText ( "Source" );
+        tableLayout.setColumnData ( col, new ColumnWeightData ( 50 ) );
+
+        col = new TableColumn ( this.viewer.getTable (), SWT.NONE );
+        col.setText ( "Type" );
+        tableLayout.setColumnData ( col, new ColumnWeightData ( 50 ) );
 
         col = new TableColumn ( this.viewer.getTable (), SWT.NONE );
         col.setText ( "Value" );
         tableLayout.setColumnData ( col, new ColumnWeightData ( 50 ) );
 
         col = new TableColumn ( this.viewer.getTable (), SWT.NONE );
-        col.setText ( "Ack User" );
-        tableLayout.setColumnData ( col, new ColumnWeightData ( 50 ) );
-
-        col = new TableColumn ( this.viewer.getTable (), SWT.NONE );
-        col.setText ( "Ack Timestamp" );
-        tableLayout.setColumnData ( col, new ColumnWeightData ( 100 ) );
+        col.setText ( "Message" );
+        tableLayout.setColumnData ( col, new ColumnWeightData ( 200 ) );
 
         this.viewer.getTable ().setLayout ( layout );
         this.viewer.getTable ().setHeaderVisible ( true );
 
         this.viewer.setContentProvider ( new ObservableSetContentProvider () );
-        this.viewer.setLabelProvider ( new MonitorsLabelProvider ( BeansObservables.observeMaps ( this.monitors, MonitorStatusBean.class, new String[] { "id", MonitorStatusBean.PROP_STATUS, MonitorStatusBean.PROP_STATUS_TIMESTAMP, MonitorStatusBean.PROP_VALUE, MonitorStatusBean.PROP_LAST_AKN_USER, MonitorStatusBean.PROP_LAST_AKN_TIMESTAMP } ) ) );
-        this.viewer.setInput ( this.monitors );
+        this.viewer.setLabelProvider ( new EventsLabelProvider ( BeansObservables.observeMaps ( this.events, Event.class, new String[] {} ) ) );
+        this.viewer.setInput ( this.events );
 
         getViewSite ().setSelectionProvider ( this.viewer );
 
@@ -138,13 +135,13 @@ public class MonitorsView extends AbstractConditionQueryViewPart
     }
 
     @Override
-    public void handleDataChanged ( final ConditionStatusInformation[] addedOrUpdated, final String[] removed, final boolean full )
+    protected void handleDataChanged ( final Event[] addedEvents )
     {
-        this.monitors.getRealm ().asyncExec ( new Runnable () {
+        this.events.getRealm ().asyncExec ( new Runnable () {
 
             public void run ()
             {
-                performDataChanged ( addedOrUpdated, removed );
+                performDataChanged ( addedEvents );
             }
         } );
     }
@@ -154,65 +151,25 @@ public class MonitorsView extends AbstractConditionQueryViewPart
     {
         super.clear ();
 
-        this.monitors.getRealm ().asyncExec ( new Runnable () {
+        this.events.getRealm ().asyncExec ( new Runnable () {
 
             public void run ()
             {
-                MonitorsView.this.monitorSet.clear ();
-                MonitorsView.this.monitors.clear ();
-                MonitorsView.this.stateLabel.setText ( "<no query selected>" );
+                EventQueryView.this.eventSet.clear ();
+                EventQueryView.this.events.clear ();
+                EventQueryView.this.stateLabel.setText ( "<no query selected>" );
             }
         } );
     }
 
-    protected void performDataChanged ( final ConditionStatusInformation[] addedOrUpdated, final String[] removed )
+    protected void performDataChanged ( final Event[] addedEvents )
     {
-        logger.debug ( "Got data change" );
-
-        try
+        for ( final Event event : addedEvents )
         {
-            Collection<MonitorStatusBean> infos = new LinkedList<MonitorStatusBean> ();
-            if ( removed != null )
-            {
-                for ( final String id : removed )
-                {
-                    final MonitorStatusBean info = this.monitorSet.remove ( id );
-                    if ( info != null )
-                    {
-                        infos.add ( info );
-                    }
-                }
-            }
-
-            this.monitors.removeAll ( infos );
-
-            infos = new LinkedList<MonitorStatusBean> ();
-
-            if ( addedOrUpdated != null )
-            {
-                for ( final ConditionStatusInformation info : addedOrUpdated )
-                {
-                    if ( this.monitorSet.containsKey ( info.getId () ) )
-                    {
-                        // update
-                        final MonitorStatusBean infoBean = this.monitorSet.get ( info.getId () );
-                        infoBean.update ( info );
-                    }
-                    else
-                    {
-                        // add
-                        final MonitorStatusBean infoBean = new MonitorStatusBean ( this.entry.getConnection (), info );
-                        this.monitorSet.put ( info.getId (), infoBean );
-                        infos.add ( infoBean );
-                    }
-                }
-            }
-
-            this.monitors.addAll ( infos );
-        }
-        catch ( final Throwable e )
-        {
-            logger.warn ( "Failed to handle data", e );
+            this.eventSet.remove ( event );
+            this.eventSet.add ( event );
+            this.events.remove ( event );
+            this.events.add ( event );
         }
     }
 
@@ -233,11 +190,11 @@ public class MonitorsView extends AbstractConditionQueryViewPart
 
             public void run ()
             {
-                if ( MonitorsView.this.stateLabel.isDisposed () )
+                if ( EventQueryView.this.stateLabel.isDisposed () )
                 {
                     return;
                 }
-                MonitorsView.this.stateLabel.setText ( status.toString () );
+                EventQueryView.this.stateLabel.setText ( status.toString () );
             }
         } );
     }

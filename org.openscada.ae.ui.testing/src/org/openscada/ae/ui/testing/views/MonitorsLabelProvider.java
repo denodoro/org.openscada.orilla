@@ -12,7 +12,7 @@ import org.eclipse.jface.viewers.ViewerCell;
 import org.openscada.ae.ui.connection.data.MonitorStatusBean;
 import org.openscada.core.Variant;
 
-public class LabelProvider extends CellLabelProvider
+public class MonitorsLabelProvider extends CellLabelProvider
 {
 
     private final IMapChangeListener mapChangeListener = new IMapChangeListener () {
@@ -21,7 +21,7 @@ public class LabelProvider extends CellLabelProvider
             final Set<?> affectedElements = event.diff.getChangedKeys ();
             if ( !affectedElements.isEmpty () )
             {
-                final LabelProviderChangedEvent newEvent = new LabelProviderChangedEvent ( LabelProvider.this, affectedElements.toArray () );
+                final LabelProviderChangedEvent newEvent = new LabelProviderChangedEvent ( MonitorsLabelProvider.this, affectedElements.toArray () );
                 fireLabelProviderChanged ( newEvent );
             }
         }
@@ -31,7 +31,7 @@ public class LabelProvider extends CellLabelProvider
 
     private final DateFormat dateFormat;
 
-    public LabelProvider ( final IObservableMap... attributeMaps )
+    public MonitorsLabelProvider ( final IObservableMap... attributeMaps )
     {
         super ();
 
