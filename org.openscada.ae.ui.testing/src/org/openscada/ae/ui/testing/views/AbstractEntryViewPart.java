@@ -100,7 +100,7 @@ public abstract class AbstractEntryViewPart extends ViewPart
     protected synchronized void setSelection ( final ISelection selection )
     {
         final BrowserEntryBean query = getQueryFromSelection ( selection );
-        if ( query != this.entry )
+        if ( query != this.entry && query != null )
         {
             clear ();
             if ( query != null )

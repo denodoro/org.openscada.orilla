@@ -26,7 +26,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.openscada.ae.ConditionStatusInformation;
-import org.openscada.ae.ui.connection.data.ConditionStatusBean;
+import org.openscada.ae.ui.connection.data.MonitorStatusBean;
 import org.openscada.core.subscription.SubscriptionState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,15 +39,15 @@ public class MonitorsView extends AbstractEntryViewPart
 
     private Label stateLabel;
 
-    private final Map<String, ConditionStatusBean> conditionSet = new HashMap<String, ConditionStatusBean> ();
+    private final Map<String, MonitorStatusBean> monitorSet = new HashMap<String, MonitorStatusBean> ();
 
-    private final WritableSet conditions;
+    private final WritableSet monitors;
 
     private TableViewer viewer;
 
     public MonitorsView ()
     {
-        this.conditions = new WritableSet ( SWTObservables.getRealm ( Display.getDefault () ) );
+        this.monitors = new WritableSet ( SWTObservables.getRealm ( Display.getDefault () ) );
     }
 
     @Override
@@ -89,19 +89,21 @@ public class MonitorsView extends AbstractEntryViewPart
         tableLayout.setColumnData ( col, new ColumnWeightData ( 50 ) );
 
         col = new TableColumn ( this.viewer.getTable (), SWT.NONE );
-        col.setText ( "Akn User" );
+        col.setText ( "Ack User" );
         tableLayout.setColumnData ( col, new ColumnWeightData ( 50 ) );
 
         col = new TableColumn ( this.viewer.getTable (), SWT.NONE );
-        col.setText ( "Akn Timestamp" );
+        col.setText ( "Ack Timestamp" );
         tableLayout.setColumnData ( col, new ColumnWeightData ( 100 ) );
 
         this.viewer.getTable ().setLayout ( layout );
         this.viewer.getTable ().setHeaderVisible ( true );
 
         this.viewer.setContentProvider ( new ObservableSetContentProvider () );
-        this.viewer.setLabelProvider ( new LabelProvider ( BeansObservables.observeMaps ( this.conditions, ConditionStatusBean.class, new String[] { "id", ConditionStatusBean.PROP_STATUS, ConditionStatusBean.PROP_STATUS_TIMESTAMP, ConditionStatusBean.PROP_VALUE, ConditionStatusBean.PROP_LAST_AKN_USER, ConditionStatusBean.PROP_LAST_AKN_TIMESTAMP } ) ) );
-        this.viewer.setInput ( this.conditions );
+        this.viewer.setLabelProvider ( new LabelProvider ( BeansObservables.observeMaps ( this.monitors, MonitorStatusBean.class, new String[] { "id", MonitorStatusBean.PROP_STATUS, MonitorStatusBean.PROP_STATUS_TIMESTAMP, MonitorStatusBean.PROP_VALUE, MonitorStatusBean.PROP_LAST_AKN_USER, MonitorStatusBean.PROP_LAST_AKN_TIMESTAMP } ) ) );
+        this.viewer.setInput ( this.monitors );
+
+        getViewSite ().setSelectionProvider ( this.viewer );
 
         hookContextMenu ();
         addSelectionListener ();
@@ -138,7 +140,7 @@ public class MonitorsView extends AbstractEntryViewPart
     @Override
     public void handleDataChanged ( final ConditionStatusInformation[] addedOrUpdated, final String[] removed, final boolean full )
     {
-        this.conditions.getRealm ().asyncExec ( new Runnable () {
+        this.monitors.getRealm ().asyncExec ( new Runnable () {
 
             public void run ()
             {
@@ -152,12 +154,12 @@ public class MonitorsView extends AbstractEntryViewPart
     {
         super.clear ();
 
-        this.conditions.getRealm ().asyncExec ( new Runnable () {
+        this.monitors.getRealm ().asyncExec ( new Runnable () {
 
             public void run ()
             {
-                MonitorsView.this.conditionSet.clear ();
-                MonitorsView.this.conditions.clear ();
+                MonitorsView.this.monitorSet.clear ();
+                MonitorsView.this.monitors.clear ();
                 MonitorsView.this.stateLabel.setText ( "<no query selected>" );
             }
         } );
@@ -169,12 +171,12 @@ public class MonitorsView extends AbstractEntryViewPart
 
         try
         {
-            Collection<ConditionStatusBean> infos = new LinkedList<ConditionStatusBean> ();
+            Collection<MonitorStatusBean> infos = new LinkedList<MonitorStatusBean> ();
             if ( removed != null )
             {
                 for ( final String id : removed )
                 {
-                    final ConditionStatusBean info = this.conditionSet.remove ( id );
+                    final MonitorStatusBean info = this.monitorSet.remove ( id );
                     if ( info != null )
                     {
                         infos.add ( info );
@@ -182,31 +184,31 @@ public class MonitorsView extends AbstractEntryViewPart
                 }
             }
 
-            this.conditions.removeAll ( infos );
+            this.monitors.removeAll ( infos );
 
-            infos = new LinkedList<ConditionStatusBean> ();
+            infos = new LinkedList<MonitorStatusBean> ();
 
             if ( addedOrUpdated != null )
             {
                 for ( final ConditionStatusInformation info : addedOrUpdated )
                 {
-                    if ( this.conditionSet.containsKey ( info.getId () ) )
+                    if ( this.monitorSet.containsKey ( info.getId () ) )
                     {
                         // update
-                        final ConditionStatusBean infoBean = this.conditionSet.get ( info.getId () );
+                        final MonitorStatusBean infoBean = this.monitorSet.get ( info.getId () );
                         infoBean.update ( info );
                     }
                     else
                     {
                         // add
-                        final ConditionStatusBean infoBean = new ConditionStatusBean ( this.entry.getConnection (), info );
-                        this.conditionSet.put ( info.getId (), infoBean );
+                        final MonitorStatusBean infoBean = new MonitorStatusBean ( this.entry.getConnection (), info );
+                        this.monitorSet.put ( info.getId (), infoBean );
                         infos.add ( infoBean );
                     }
                 }
             }
 
-            this.conditions.addAll ( infos );
+            this.monitors.addAll ( infos );
         }
         catch ( final Throwable e )
         {

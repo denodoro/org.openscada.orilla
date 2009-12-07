@@ -9,7 +9,7 @@ import org.eclipse.core.databinding.observable.map.MapChangeEvent;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.LabelProviderChangedEvent;
 import org.eclipse.jface.viewers.ViewerCell;
-import org.openscada.ae.ui.connection.data.ConditionStatusBean;
+import org.openscada.ae.ui.connection.data.MonitorStatusBean;
 import org.openscada.core.Variant;
 
 public class LabelProvider extends CellLabelProvider
@@ -58,9 +58,9 @@ public class LabelProvider extends CellLabelProvider
     public void update ( final ViewerCell cell )
     {
         final Object o = cell.getElement ();
-        if ( o instanceof ConditionStatusBean )
+        if ( o instanceof MonitorStatusBean )
         {
-            final ConditionStatusBean info = (ConditionStatusBean)o;
+            final MonitorStatusBean info = (MonitorStatusBean)o;
             switch ( cell.getColumnIndex () )
             {
             case 0:
