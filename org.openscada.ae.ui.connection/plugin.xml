@@ -40,24 +40,30 @@
       <handler
             class="org.openscada.ae.ui.connection.commands.AknHandler"
             commandId="org.openscada.ae.ui.connection.command.aknowledge">
+            
          <enabledWhen>
-            <with
-                  variable="selection">
                <iterate
-                     ifEmpty="false"
-                     operator="and">
+                     ifEmpty="true"
+                     operator="or">
+                  <instanceof
+                        value="org.openscada.ae.ui.connection.data.MonitorStatusBean">
+                  </instanceof>
+                  <adapt
+                        type="org.openscada.ae.ui.connection.data.MonitorStatusBean">
+                  </adapt>
                </iterate>
-            </with></enabledWhen>
+            </enabledWhen>
       </handler>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
       <menuContribution
-            locationURI="popup:org.openscada.ae.ui.testing.views.MonitorsView#PopupMenu">
+            locationURI="popup:org.openscada.ae.ui.testing.views.MonitorsView">
          <command
                commandId="org.openscada.ae.ui.connection.command.aknowledge"
                label="Aknowledge"
                style="push">
+               <!--
             <visibleWhen
                   checkEnabled="false">
                <iterate
@@ -65,6 +71,7 @@
                      operator="and">
                </iterate>
             </visibleWhen>
+            -->
          </command>
       </menuContribution>
    </extension>

@@ -7,9 +7,19 @@ import org.openscada.ae.ConditionStatusInformation;
 import org.openscada.ae.connection.provider.ConnectionService;
 import org.openscada.core.Variant;
 import org.openscada.utils.beans.AbstractPropertyChange;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class ConditionStatusBean extends AbstractPropertyChange
+/**
+ * A bean holding the monitor status information for the viewer
+ * @author Jens Reimann
+ *
+ */
+public class MonitorStatusBean extends AbstractPropertyChange
 {
+
+    private final static Logger logger = LoggerFactory.getLogger ( MonitorStatusBean.class );
+
     public static final String PROP_STATUS = "status";
 
     public static final String PROP_STATUS_TIMESTAMP = "statusTimestamp";
@@ -34,13 +44,13 @@ public class ConditionStatusBean extends AbstractPropertyChange
 
     private Date lastAknTimestamp;
 
-    public ConditionStatusBean ( final ConnectionService connection, final String id )
+    public MonitorStatusBean ( final ConnectionService connection, final String id )
     {
         this.connection = connection;
         this.id = id;
     }
 
-    public ConditionStatusBean ( final ConnectionService connection, final ConditionStatusInformation information )
+    public MonitorStatusBean ( final ConnectionService connection, final ConditionStatusInformation information )
     {
         this ( connection, information.getId () );
         this.status = information.getStatus ();
@@ -131,6 +141,7 @@ public class ConditionStatusBean extends AbstractPropertyChange
 
     public void akn ()
     {
+        logger.debug ( "Request ACK: {}", this.id );
         this.connection.getConnection ().acknowledge ( this.id, new Date () );
     }
 }
