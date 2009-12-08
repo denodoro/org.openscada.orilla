@@ -1,6 +1,7 @@
 package org.openscada.ae.ui.testing.views;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Set;
 
 import org.eclipse.core.databinding.observable.map.IMapChangeListener;
@@ -41,7 +42,7 @@ public class EventsLabelProvider extends CellLabelProvider
         }
         this.attributeMaps = attributeMaps;
 
-        this.dateFormat = DateFormat.getDateTimeInstance ( DateFormat.LONG, DateFormat.LONG );
+        this.dateFormat = new SimpleDateFormat ( "yyyy-MM-dd HH:mm:ss.SSS" );
     }
 
     @Override
@@ -82,10 +83,10 @@ public class EventsLabelProvider extends CellLabelProvider
             switch ( cell.getColumnIndex () )
             {
             case 0:
-                cell.setText ( info.getId ().toString () );
+                cell.setText ( this.dateFormat.format ( info.getSourceTimestamp () ) );
                 break;
             case 1:
-                cell.setText ( this.dateFormat.format ( info.getSourceTimestamp () ) );
+                cell.setText ( this.dateFormat.format ( info.getEntryTimestamp () ) );
                 break;
             case 2:
                 cell.setText ( getAttributes ( info, Event.Fields.SOURCE.getName () ).asString ( "" ) );

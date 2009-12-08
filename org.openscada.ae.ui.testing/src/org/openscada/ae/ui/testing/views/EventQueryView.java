@@ -14,6 +14,8 @@ import org.eclipse.jface.databinding.viewers.ObservableSetContentProvider;
 import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -30,6 +32,38 @@ import org.slf4j.LoggerFactory;
 
 public class EventQueryView extends AbstractEventQueryViewPart
 {
+    private final static class SourceTimestampViewerComparator extends ViewerComparator
+    {
+        @Override
+        public int compare ( final Viewer viewer, final Object e1, final Object e2 )
+        {
+            if ( ! ( e1 instanceof Event ) || ! ( e2 instanceof Event ) )
+            {
+                return -super.compare ( viewer, e1, e2 );
+            }
+            final Event evt1 = (Event)e1;
+            final Event evt2 = (Event)e2;
+
+            return -evt1.getSourceTimestamp ().compareTo ( evt2.getSourceTimestamp () );
+        }
+    }
+
+    private final static class EntryTimestampViewerComparator extends ViewerComparator
+    {
+        @Override
+        public int compare ( final Viewer viewer, final Object e1, final Object e2 )
+        {
+            if ( ! ( e1 instanceof Event ) || ! ( e2 instanceof Event ) )
+            {
+                return -super.compare ( viewer, e1, e2 );
+            }
+            final Event evt1 = (Event)e1;
+            final Event evt2 = (Event)e2;
+
+            return -evt1.getEntryTimestamp ().compareTo ( evt2.getEntryTimestamp () );
+        }
+    }
+
     private final static Logger logger = LoggerFactory.getLogger ( EventQueryView.class );
 
     public static final String VIEW_ID = "org.openscada.ae.ui.testing.views.EventQueryView";
@@ -70,20 +104,20 @@ public class EventQueryView extends AbstractEventQueryViewPart
         TableColumn col;
 
         col = new TableColumn ( this.viewer.getTable (), SWT.NONE );
-        col.setText ( "ID" );
-        tableLayout.setColumnData ( col, new ColumnWeightData ( 50 ) );
+        col.setText ( "Source Timestamp" );
+        tableLayout.setColumnData ( col, new ColumnWeightData ( 100 ) );
 
         col = new TableColumn ( this.viewer.getTable (), SWT.NONE );
-        col.setText ( "Timestamp" );
-        tableLayout.setColumnData ( col, new ColumnWeightData ( 50 ) );
+        col.setText ( "Entry Timestamp" );
+        tableLayout.setColumnData ( col, new ColumnWeightData ( 100 ) );
 
         col = new TableColumn ( this.viewer.getTable (), SWT.NONE );
         col.setText ( "Source" );
-        tableLayout.setColumnData ( col, new ColumnWeightData ( 50 ) );
+        tableLayout.setColumnData ( col, new ColumnWeightData ( 25 ) );
 
         col = new TableColumn ( this.viewer.getTable (), SWT.NONE );
         col.setText ( "Type" );
-        tableLayout.setColumnData ( col, new ColumnWeightData ( 50 ) );
+        tableLayout.setColumnData ( col, new ColumnWeightData ( 25 ) );
 
         col = new TableColumn ( this.viewer.getTable (), SWT.NONE );
         col.setText ( "Value" );
@@ -99,6 +133,7 @@ public class EventQueryView extends AbstractEventQueryViewPart
         this.viewer.setContentProvider ( new ObservableSetContentProvider () );
         this.viewer.setLabelProvider ( new EventsLabelProvider ( BeansObservables.observeMaps ( this.events, Event.class, new String[] {} ) ) );
         this.viewer.setInput ( this.events );
+        this.viewer.setComparator ( new EntryTimestampViewerComparator () );
 
         getViewSite ().setSelectionProvider ( this.viewer );
 
@@ -166,10 +201,29 @@ public class EventQueryView extends AbstractEventQueryViewPart
     {
         for ( final Event event : addedEvents )
         {
+
             this.eventSet.remove ( event );
             this.eventSet.add ( event );
-            this.events.remove ( event );
-            this.events.add ( event );
+            try
+            {
+                this.events.setStale ( true );
+                this.events.remove ( event );
+                this.events.add ( event );
+            }
+            finally
+            {
+                this.events.setStale ( false );
+            }
+
+            try
+            {
+                this.viewer.getTable ().setTopIndex ( 0 );
+            }
+            catch ( final IllegalArgumentException e )
+            {
+                // failed to scroll up
+                logger.debug ( "Failed to scroll up", e );
+            }
         }
     }
 
