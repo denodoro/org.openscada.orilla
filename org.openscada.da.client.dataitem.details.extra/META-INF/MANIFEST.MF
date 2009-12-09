@@ -1,10 +1,10 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Extra Details Plug-in
+Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: org.openscada.da.client.dataitem.details.extra;singleton:=true
 Bundle-Version: 0.15.0.qualifier
 Bundle-Activator: org.openscada.da.client.dataitem.details.extra.Activator
-Bundle-Vendor: inavare GmbH
+Bundle-Vendor: %Bundle-Vendor
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.openscada.da.client.dataitem.details;bundle-version="0.14.0",
