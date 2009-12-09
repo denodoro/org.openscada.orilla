@@ -244,12 +244,27 @@ public class EventQueryView extends AbstractEventQueryViewPart
 
             public void run ()
             {
-                if ( EventQueryView.this.stateLabel.isDisposed () )
-                {
-                    return;
-                }
-                EventQueryView.this.stateLabel.setText ( status.toString () );
+                performEventStatusUpdate ( status );
             }
         } );
+    }
+
+    protected void performEventStatusUpdate ( final SubscriptionState status )
+    {
+        if ( this.stateLabel.isDisposed () )
+        {
+            return;
+        }
+
+        this.stateLabel.setText ( status.toString () );
+
+        switch ( status )
+        {
+        case DISCONNECTED:
+        case GRANTED:
+            this.events.clear ();
+            this.eventSet.clear ();
+            break;
+        }
     }
 }
