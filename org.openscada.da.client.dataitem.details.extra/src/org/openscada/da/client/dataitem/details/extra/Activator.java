@@ -19,6 +19,9 @@
 
 package org.openscada.da.client.dataitem.details.extra;
 
+import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.jface.resource.LocalResourceManager;
+import org.eclipse.jface.resource.ResourceManager;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -34,11 +37,18 @@ public class Activator extends AbstractUIPlugin
     // The shared instance
     private static Activator plugin;
 
+    private static ResourceManager resources;
+
     /**
      * The constructor
      */
     public Activator ()
     {
+    }
+
+    public static ResourceManager getResources ()
+    {
+        return resources;
     }
 
     /*
@@ -47,7 +57,9 @@ public class Activator extends AbstractUIPlugin
      */
     public void start ( final BundleContext context ) throws Exception
     {
+        resources = new LocalResourceManager ( JFaceResources.getResources () );
         super.start ( context );
+
         plugin = this;
     }
 
@@ -59,6 +71,7 @@ public class Activator extends AbstractUIPlugin
     {
         plugin = null;
         super.stop ( context );
+        resources.dispose ();
     }
 
     /**
