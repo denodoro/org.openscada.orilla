@@ -116,7 +116,11 @@ public class EventQueryView extends AbstractEventQueryViewPart
         tableLayout.setColumnData ( col, new ColumnWeightData ( 25 ) );
 
         col = new TableColumn ( this.viewer.getTable (), SWT.NONE );
-        col.setText ( "Type" );
+        col.setText ( "Monitor Type" );
+        tableLayout.setColumnData ( col, new ColumnWeightData ( 25 ) );
+
+        col = new TableColumn ( this.viewer.getTable (), SWT.NONE );
+        col.setText ( "Event Type" );
         tableLayout.setColumnData ( col, new ColumnWeightData ( 25 ) );
 
         col = new TableColumn ( this.viewer.getTable (), SWT.NONE );
