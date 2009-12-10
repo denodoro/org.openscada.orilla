@@ -92,7 +92,7 @@ public class EventsLabelProvider extends CellLabelProvider
                 cell.setText ( getAttributes ( info, Event.Fields.SOURCE.getName () ).asString ( "" ) );
                 break;
             case 3:
-                cell.setText ( getAttributes ( info, Event.Fields.TYPE.getName () ).asString ( "" ) );
+                cell.setText ( getAttributes ( info, Event.Fields.EVENT_TYPE.getName () ).asString ( "" ) );
                 break;
             case 4:
                 cell.setText ( getAttributes ( info, "value" ).asString ( "" ) );
