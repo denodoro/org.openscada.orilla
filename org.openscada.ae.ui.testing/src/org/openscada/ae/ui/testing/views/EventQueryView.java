@@ -3,7 +3,6 @@ package org.openscada.ae.ui.testing.views;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.eclipse.core.databinding.beans.BeansObservables;
 import org.eclipse.core.databinding.observable.set.WritableSet;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -32,6 +31,7 @@ import org.slf4j.LoggerFactory;
 
 public class EventQueryView extends AbstractEventQueryViewPart
 {
+    @SuppressWarnings ( "unused" )
     private final static class SourceTimestampViewerComparator extends ViewerComparator
     {
         @Override
@@ -135,7 +135,7 @@ public class EventQueryView extends AbstractEventQueryViewPart
         this.viewer.getTable ().setHeaderVisible ( true );
 
         this.viewer.setContentProvider ( new ObservableSetContentProvider () );
-        this.viewer.setLabelProvider ( new EventsLabelProvider ( BeansObservables.observeMaps ( this.events, Event.class, new String[] {} ) ) );
+        this.viewer.setLabelProvider ( new EventsLabelProvider () );
         this.viewer.setInput ( this.events );
         this.viewer.setComparator ( new EntryTimestampViewerComparator () );
 
@@ -203,32 +203,37 @@ public class EventQueryView extends AbstractEventQueryViewPart
 
     protected void performDataChanged ( final Event[] addedEvents )
     {
-        for ( final Event event : addedEvents )
+        try
         {
+            this.events.setStale ( true );
 
-            this.eventSet.remove ( event );
-            this.eventSet.add ( event );
-            try
+            for ( final Event event : addedEvents )
             {
-                this.events.setStale ( true );
-                this.events.remove ( event );
+                /*
+                this.eventSet.remove ( event );
+                this.eventSet.add ( event );
+                */
+                // this.events.remove ( event );
                 this.events.add ( event );
-            }
-            finally
-            {
-                this.events.setStale ( false );
+
             }
 
-            try
-            {
-                this.viewer.getTable ().setTopIndex ( 0 );
-            }
-            catch ( final IllegalArgumentException e )
-            {
-                // failed to scroll up
-                logger.debug ( "Failed to scroll up", e );
-            }
         }
+        finally
+        {
+            this.events.setStale ( false );
+        }
+
+        try
+        {
+            this.viewer.getTable ().setTopIndex ( 0 );
+        }
+        catch ( final IllegalArgumentException e )
+        {
+            // failed to scroll up
+            logger.debug ( "Failed to scroll up", e );
+        }
+
     }
 
     @Override
