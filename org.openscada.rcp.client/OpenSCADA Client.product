@@ -22,9 +22,9 @@
 
    <splash
       location="org.openscada.rcp.client"
-      startupProgressRect="15,274,250,12"
-      startupMessageRect="15,249,424,18"
-      startupForegroundColor="000000" />
+      startupProgressRect="0,0,455,12"
+      startupMessageRect="18,30,264,49"
+      startupForegroundColor="FFFFFF" />
    <launcher name="ostc">
       <linux icon="/org.openscada.rcp.client/icons/app/openscada_128px.xpm"/>
       <macosx icon="/org.openscada.rcp.client/icons/app/app_icon.icns"/>
