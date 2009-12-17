@@ -7,7 +7,6 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.openscada.ae.Event;
 
-@SuppressWarnings ( "unused" )
 final class SourceTimestampViewerComparator extends ViewerComparator
 {
     @Override

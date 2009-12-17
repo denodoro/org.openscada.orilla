@@ -1,5 +1,8 @@
 package org.openscada.ae.ui.testing.views;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 import org.eclipse.core.databinding.observable.set.IObservableSet;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
@@ -9,7 +12,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.openscada.ae.ui.testing.navigator.QueryBean;
 
-public class QueryOfflineViewPart extends AbstractQueryViewPart
+public class QueryOfflineViewPart extends AbstractQueryViewPart implements PropertyChangeListener
 {
     public static final String VIEW_ID = "org.openscada.ae.ui.testing.QueryOfflineView";
 
@@ -35,7 +38,11 @@ public class QueryOfflineViewPart extends AbstractQueryViewPart
         }
         this.viewer.setInput ( null );
 
-        this.query = null;
+        if ( this.query != null )
+        {
+            this.query.removePropertyChangeListener ( this );
+            this.query = null;
+        }
     }
 
     @Override
@@ -44,6 +51,8 @@ public class QueryOfflineViewPart extends AbstractQueryViewPart
         this.query = query;
         this.events = this.query.getEventObservable ();
         this.viewer.setInput ( this.events );
+        query.addPropertyChangeListener ( this );
+        update ();
     }
 
     @Override
@@ -72,4 +81,31 @@ public class QueryOfflineViewPart extends AbstractQueryViewPart
         this.viewer.getControl ().setFocus ();
     }
 
+    public void propertyChange ( final PropertyChangeEvent evt )
+    {
+        getSite ().getShell ().getDisplay ().asyncExec ( new Runnable () {
+
+            public void run ()
+            {
+                update ();
+            }
+        } );
+    }
+
+    protected void update ()
+    {
+        if ( this.stateLabel.isDisposed () )
+        {
+            return;
+        }
+
+        if ( this.query != null )
+        {
+            this.stateLabel.setText ( String.format ( "%s - %s", this.query.getState (), this.query.getCount () ) );
+        }
+        else
+        {
+            this.stateLabel.setText ( "" );
+        }
+    }
 }

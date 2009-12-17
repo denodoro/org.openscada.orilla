@@ -53,14 +53,14 @@ public class EventViewHelper
         viewer.getTable ().setLayout ( new GridLayout ( 1, false ) );
         viewer.getTable ().setHeaderVisible ( true );
 
+        viewer.setUseHashlookup ( true );
         viewer.setContentProvider ( new ObservableSetContentProvider () );
         viewer.setLabelProvider ( new EventsLabelProvider () );
-        viewer.setInput ( events );
         viewer.setComparator ( new EntryTimestampViewerComparator () );
+        viewer.setInput ( events );
 
         viewSite.setSelectionProvider ( viewer );
 
         return viewer;
     }
-
 }

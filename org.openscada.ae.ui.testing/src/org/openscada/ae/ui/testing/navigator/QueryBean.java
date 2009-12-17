@@ -67,9 +67,11 @@ public class QueryBean extends AbstractPropertyChange implements QueryListener
 
     protected void addData ( final Event[] events )
     {
+        final long tix = System.currentTimeMillis ();
         final int oldSize = this.events.size ();
         this.events.addAll ( Arrays.asList ( events ) );
         final int newSize = this.events.size ();
+        logger.debug ( "String delta: {}", System.currentTimeMillis () - tix );
 
         firePropertyChange ( PROP_COUNT, oldSize, newSize );
     }
