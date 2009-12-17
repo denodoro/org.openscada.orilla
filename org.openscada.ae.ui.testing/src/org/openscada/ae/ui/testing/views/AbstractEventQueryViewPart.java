@@ -47,7 +47,7 @@ public abstract class AbstractEventQueryViewPart extends AbstractEntryViewPart
     }
 
     @Override
-    protected void setQuery ( final BrowserEntryBean query )
+    protected void setEntry ( final BrowserEntryBean query )
     {
         logger.info ( "Setting entry: {}", query ); //$NON-NLS-1$
 

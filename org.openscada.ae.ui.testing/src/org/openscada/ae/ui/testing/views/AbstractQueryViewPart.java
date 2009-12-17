@@ -5,11 +5,11 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
-import org.openscada.ae.ui.connection.data.BrowserEntryBean;
+import org.openscada.ae.ui.testing.navigator.QueryBean;
 
-public abstract class AbstractEntryViewPart extends ViewPart
+public abstract class AbstractQueryViewPart extends ViewPart
 {
-    protected BrowserEntryBean entry;
+    protected QueryBean query;
 
     private ISelectionListener selectionListener;
 
@@ -28,7 +28,7 @@ public abstract class AbstractEntryViewPart extends ViewPart
 
                 public void selectionChanged ( final IWorkbenchPart part, final ISelection selection )
                 {
-                    AbstractEntryViewPart.this.setSelection ( selection );
+                    AbstractQueryViewPart.this.setSelection ( selection );
                 }
             } );
         }
@@ -43,7 +43,7 @@ public abstract class AbstractEntryViewPart extends ViewPart
         }
     }
 
-    protected BrowserEntryBean getEntryFromSelection ( final ISelection selection )
+    protected QueryBean getQueryFromSelection ( final ISelection selection )
     {
         if ( selection.isEmpty () )
         {
@@ -54,30 +54,30 @@ public abstract class AbstractEntryViewPart extends ViewPart
             return null;
         }
         final Object o = ( (IStructuredSelection)selection ).getFirstElement ();
-        if ( o instanceof BrowserEntryBean )
+        if ( o instanceof QueryBean )
         {
-            return (BrowserEntryBean)o;
+            return (QueryBean)o;
         }
         return null;
     }
 
     protected synchronized void setSelection ( final ISelection selection )
     {
-        final BrowserEntryBean browserEntry = getEntryFromSelection ( selection );
-        if ( browserEntry != this.entry && browserEntry != null && isSupported ( browserEntry ) )
+        final QueryBean query = getQueryFromSelection ( selection );
+        if ( query != this.query && query != null && isSupported ( query ) )
         {
             clear ();
-            if ( browserEntry != null )
+            if ( query != null )
             {
-                setEntry ( browserEntry );
+                setQuery ( query );
             }
         }
     }
 
-    protected abstract boolean isSupported ( BrowserEntryBean browserEntry );
+    protected abstract boolean isSupported ( QueryBean query );
 
     protected abstract void clear ();
 
-    protected abstract void setEntry ( BrowserEntryBean browserEntry );
+    protected abstract void setQuery ( QueryBean query );
 
 }

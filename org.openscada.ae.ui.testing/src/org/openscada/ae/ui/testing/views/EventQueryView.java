@@ -9,12 +9,7 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.databinding.swt.SWTObservables;
-import org.eclipse.jface.databinding.viewers.ObservableSetContentProvider;
-import org.eclipse.jface.layout.TableColumnLayout;
-import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -22,7 +17,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.openscada.ae.Event;
 import org.openscada.core.subscription.SubscriptionState;
@@ -31,39 +25,6 @@ import org.slf4j.LoggerFactory;
 
 public class EventQueryView extends AbstractEventQueryViewPart
 {
-    @SuppressWarnings ( "unused" )
-    private final static class SourceTimestampViewerComparator extends ViewerComparator
-    {
-        @Override
-        public int compare ( final Viewer viewer, final Object e1, final Object e2 )
-        {
-            if ( ! ( e1 instanceof Event ) || ! ( e2 instanceof Event ) )
-            {
-                return -super.compare ( viewer, e1, e2 );
-            }
-            final Event evt1 = (Event)e1;
-            final Event evt2 = (Event)e2;
-
-            return -evt1.getSourceTimestamp ().compareTo ( evt2.getSourceTimestamp () );
-        }
-    }
-
-    private final static class EntryTimestampViewerComparator extends ViewerComparator
-    {
-        @Override
-        public int compare ( final Viewer viewer, final Object e1, final Object e2 )
-        {
-            if ( ! ( e1 instanceof Event ) || ! ( e2 instanceof Event ) )
-            {
-                return -super.compare ( viewer, e1, e2 );
-            }
-            final Event evt1 = (Event)e1;
-            final Event evt2 = (Event)e2;
-
-            return -evt1.getEntryTimestamp ().compareTo ( evt2.getEntryTimestamp () );
-        }
-    }
-
     private final static Logger logger = LoggerFactory.getLogger ( EventQueryView.class );
 
     public static final String VIEW_ID = "org.openscada.ae.ui.testing.views.EventQueryView";
@@ -96,50 +57,7 @@ public class EventQueryView extends AbstractEventQueryViewPart
         final Composite wrapper = new Composite ( parent, SWT.NONE );
         wrapper.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, true ) );
 
-        this.viewer = new TableViewer ( wrapper );
-
-        TableColumnLayout tableLayout;
-        wrapper.setLayout ( tableLayout = new TableColumnLayout () );
-
-        TableColumn col;
-
-        col = new TableColumn ( this.viewer.getTable (), SWT.NONE );
-        col.setText ( "Source Timestamp" );
-        tableLayout.setColumnData ( col, new ColumnWeightData ( 100 ) );
-
-        col = new TableColumn ( this.viewer.getTable (), SWT.NONE );
-        col.setText ( "Entry Timestamp" );
-        tableLayout.setColumnData ( col, new ColumnWeightData ( 100 ) );
-
-        col = new TableColumn ( this.viewer.getTable (), SWT.NONE );
-        col.setText ( "Source" );
-        tableLayout.setColumnData ( col, new ColumnWeightData ( 25 ) );
-
-        col = new TableColumn ( this.viewer.getTable (), SWT.NONE );
-        col.setText ( "Monitor Type" );
-        tableLayout.setColumnData ( col, new ColumnWeightData ( 25 ) );
-
-        col = new TableColumn ( this.viewer.getTable (), SWT.NONE );
-        col.setText ( "Event Type" );
-        tableLayout.setColumnData ( col, new ColumnWeightData ( 25 ) );
-
-        col = new TableColumn ( this.viewer.getTable (), SWT.NONE );
-        col.setText ( "Value" );
-        tableLayout.setColumnData ( col, new ColumnWeightData ( 50 ) );
-
-        col = new TableColumn ( this.viewer.getTable (), SWT.NONE );
-        col.setText ( "Message" );
-        tableLayout.setColumnData ( col, new ColumnWeightData ( 200 ) );
-
-        this.viewer.getTable ().setLayout ( layout );
-        this.viewer.getTable ().setHeaderVisible ( true );
-
-        this.viewer.setContentProvider ( new ObservableSetContentProvider () );
-        this.viewer.setLabelProvider ( new EventsLabelProvider () );
-        this.viewer.setInput ( this.events );
-        this.viewer.setComparator ( new EntryTimestampViewerComparator () );
-
-        getViewSite ().setSelectionProvider ( this.viewer );
+        this.viewer = EventViewHelper.createTableViewer ( wrapper, getViewSite (), this.events );
 
         hookContextMenu ();
         addSelectionListener ();

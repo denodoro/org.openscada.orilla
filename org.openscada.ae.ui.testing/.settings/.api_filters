@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<component id="org.openscada.ae.ui.testing" version="2">
+    <resource path="src/org/openscada/ae/ui/testing/navigator/ContentProvider.java" type="org.openscada.ae.ui.testing.navigator.ContentProvider">
+        <filter id="571473929">
+            <message_arguments>
+                <message_argument value="ObservableSetTreeContentProvider"/>
+                <message_argument value="ContentProvider"/>
+            </message_arguments>
+        </filter>
+    </resource>
+</component>
