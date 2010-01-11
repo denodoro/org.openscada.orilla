@@ -1,7 +1,23 @@
-package org.openscada.da.client.dataitem.details.extra.part;
+/*
+ * This file is part of the OpenSCADA project
+ * Copyright (C) 2006-2010 inavare GmbH (http://inavare.com)
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
 
-import java.util.HashMap;
-import java.util.Map;
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
+
+package org.openscada.da.client.dataitem.details.extra.part;
 
 import org.eclipse.draw2d.BendpointConnectionRouter;
 import org.eclipse.draw2d.BorderLayout;
@@ -26,19 +42,20 @@ import org.eclipse.swt.graphics.RGB;
 import org.openscada.core.Variant;
 import org.openscada.da.client.dataitem.details.extra.Activator;
 
-public class LevelPresets extends AbstractBaseDraw2DDetailsPart
+public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
 {
-    private static final String TAG_FLOOR = "floor"; //$NON-NLS-1$
 
-    private static final String TAG_LL = "lowlow"; //$NON-NLS-1$
+    private static final String TAG_FLOOR = "floor";
 
-    private static final String TAG_L = "low"; //$NON-NLS-1$
+    private static final String TAG_LL = "lowlow";
 
-    private static final String TAG_H = "high"; //$NON-NLS-1$
+    private static final String TAG_L = "low";
 
-    private static final String TAG_HH = "highhigh"; //$NON-NLS-1$
+    private static final String TAG_H = "high";
 
-    private static final String TAG_CEIL = "ceil"; //$NON-NLS-1$
+    private static final String TAG_HH = "highhigh";
+
+    private static final String TAG_CEIL = "ceil";
 
     private Triangle triHH;
 
@@ -65,6 +82,8 @@ public class LevelPresets extends AbstractBaseDraw2DDetailsPart
     private Label presetCeil;
 
     private Label presetFloor;
+
+    private static final Dimension TRI_DIMENSION = new Dimension ( 50, 50 );
 
     @Override
     protected IFigure createRoot ()
@@ -119,9 +138,12 @@ public class LevelPresets extends AbstractBaseDraw2DDetailsPart
         rootFigure.add ( c );
     }
 
-    private final static Dimension TRI_DIMENSION = new Dimension ( 50, 50 );
+    private static final Dimension RECT_DIMENSION = new Dimension ( 50, 15 );
 
-    private final static Dimension RECT_DIMENSION = new Dimension ( 50, 15 );
+    public GenericLevelPresets ()
+    {
+        super ();
+    }
 
     private IFigure createArrowFigure ()
     {
@@ -209,7 +231,7 @@ public class LevelPresets extends AbstractBaseDraw2DDetailsPart
 
             public void mouseDoubleClicked ( final MouseEvent me )
             {
-                LevelPresets.this.triggerAction ( string );
+                GenericLevelPresets.this.triggerAction ( string );
             }
 
             public void mousePressed ( final MouseEvent me )
@@ -298,38 +320,16 @@ public class LevelPresets extends AbstractBaseDraw2DDetailsPart
         }
     }
 
-    private boolean isUnsafe ( final String string )
-    {
-        return getBooleanAttribute ( String.format ( "org.openscada.da.level.%s.unsafe", string ) ); //$NON-NLS-1$
-    }
+    protected abstract void setPreset ( final Variant value, final String string );
 
-    private boolean isActive ( final String string )
-    {
-        return getPreset ( string ) != null;
-    }
+    protected abstract boolean isError ( final String string );
 
-    private Number getPreset ( final String string )
-    {
-        return getNumberAttribute ( String.format ( "org.openscada.da.level.%s.preset", string ), null ); //$NON-NLS-1$
-    }
+    protected abstract boolean isAlarm ( final String string );
 
-    private boolean isAlarm ( final String string )
-    {
-        return getBooleanAttribute ( String.format ( "org.openscada.da.level.%s.alarm", string ) ); //$NON-NLS-1$
-    }
+    protected abstract Number getPreset ( final String string );
 
-    private boolean isError ( final String string )
-    {
-        return getBooleanAttribute ( String.format ( "org.openscada.da.level.%s.error", string ) ); //$NON-NLS-1$
-    }
+    protected abstract boolean isActive ( final String string );
 
-    private void setPreset ( final Variant value, final String string )
-    {
-        final Map<String, Variant> attributes = new HashMap<String, Variant> ();
-
-        attributes.put ( String.format ( "org.openscada.da.level.%s.preset", string ), value ); //$NON-NLS-1$
-
-        this.item.writeAtrtibutes ( attributes );
-    }
+    protected abstract boolean isUnsafe ( final String string );
 
 }

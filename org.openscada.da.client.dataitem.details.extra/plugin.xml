@@ -9,9 +9,14 @@
             sortKey="5000">
       </detailsPart>
       <detailsPart
-            class="org.openscada.da.client.dataitem.details.extra.part.LevelPresets"
+            class="org.openscada.da.client.dataitem.details.extra.part.LocalLevelPresets"
             name="%detailsPart.levelPresets.name"
             sortKey="3000">
+      </detailsPart>
+      <detailsPart
+            class="org.openscada.da.client.dataitem.details.extra.part.RemoteLevelPresets"
+            name="%detailsPart.remoteLevelPresets.name"
+            sortKey="3010">
       </detailsPart>
       <detailsPart
             class="org.openscada.da.client.dataitem.details.extra.part.InputScaleDetails"
