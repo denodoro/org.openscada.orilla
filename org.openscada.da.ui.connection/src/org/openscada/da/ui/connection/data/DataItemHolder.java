@@ -70,23 +70,26 @@ public class DataItemHolder
         this.context = context;
         this.item = item;
 
-        this.listener = listener;
+        synchronized ( this )
+        {
+            this.listener = listener;
 
-        this.observer = new Observer () {
+            this.observer = new Observer () {
 
-            public void update ( final Observable o, final Object arg )
-            {
-                DataItemHolder.this.update ( o, arg );
-            }
-        };
+                public void update ( final Observable o, final Object arg )
+                {
+                    DataItemHolder.this.update ( o, arg );
+                }
+            };
 
-        this.tracker = new ConnectionRequestTracker ( this.context, createRequest (), new ConnectionTracker.Listener () {
+            this.tracker = new ConnectionRequestTracker ( this.context, createRequest (), new ConnectionTracker.Listener () {
 
-            public void setConnection ( final org.openscada.core.connection.provider.ConnectionService connectionService )
-            {
-                DataItemHolder.this.setConnection ( (ConnectionService)connectionService );
-            }
-        } );
+                public void setConnection ( final org.openscada.core.connection.provider.ConnectionService connectionService )
+                {
+                    DataItemHolder.this.setConnection ( (ConnectionService)connectionService );
+                }
+            } );
+        }
         this.tracker.listen ();
 
     }
