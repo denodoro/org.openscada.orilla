@@ -122,15 +122,18 @@ public class ToggleServiceImpl implements ToggleService, Runnable
 
                     final Collection<ToggleCallback> callbacks = this.toggleCallbacks.get ( toggle );
 
-                    for ( final ToggleCallback bc : callbacks )
+                    if ( callbacks != null )
                     {
-                        try
+                        for ( final ToggleCallback bc : callbacks )
                         {
-                            bc.toggle ( isOn );
-                        }
-                        catch ( final Exception e )
-                        {
-                            logger.warn ( "call of toggle action failed", e );
+                            try
+                            {
+                                bc.toggle ( isOn );
+                            }
+                            catch ( final Exception e )
+                            {
+                                logger.warn ( "call of toggle action failed", e );
+                            }
                         }
                     }
                 }
