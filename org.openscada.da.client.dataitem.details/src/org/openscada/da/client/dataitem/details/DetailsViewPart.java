@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2009 inavare GmbH (http://inavare.com)
+ * Copyright (C) 2006-2010 inavare GmbH (http://inavare.com)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,6 +41,9 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.IMemento;
+import org.eclipse.ui.IViewSite;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 import org.openscada.da.client.DataItemValue;
 import org.openscada.da.client.dataitem.details.part.DetailsPart;
@@ -67,6 +70,8 @@ public class DetailsViewPart extends ViewPart
 
     private final LocalResourceManager resourceManager = new LocalResourceManager ( JFaceResources.getResources () );
 
+    private Item initItem;
+
     @Override
     public void createPartControl ( final Composite parent )
     {
@@ -74,7 +79,7 @@ public class DetailsViewPart extends ViewPart
         final Composite comp = new Composite ( parent, SWT.NONE );
         comp.setLayout ( new GridLayout ( 1, false ) );
 
-        // createHeader ( comp );
+        createHeader ( comp );
 
         this.tabFolder = new CTabFolder ( comp, SWT.BOTTOM | SWT.FLAT );
         this.tabFolder.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, true ) );
@@ -99,6 +104,21 @@ public class DetailsViewPart extends ViewPart
         {
             this.tabFolder.setSelection ( 0 );
         }
+
+        setDataItem ( this.initItem );
+    }
+
+    @Override
+    public void saveState ( final IMemento memento )
+    {
+        this.dataItem.getItem ().saveTo ( memento );
+    }
+
+    @Override
+    public void init ( final IViewSite site, final IMemento memento ) throws PartInitException
+    {
+        this.initItem = Item.loadFrom ( memento );
+        super.init ( site, memento );
     }
 
     private void createHeader ( final Composite parent )
@@ -199,8 +219,11 @@ public class DetailsViewPart extends ViewPart
         if ( item != null )
         {
 
-            // this.headerLabel.setText ( String.format ( "Data Item: %s", item.getId () ) );
-            // this.headerValueLabel.setText ( "" );
+            if ( this.headerLabel != null )
+            {
+                this.headerLabel.setText ( String.format ( "Data Item: %s", item.getId () ) );
+                this.headerValueLabel.setText ( "" );
+            }
 
             this.dataItem = new DataItemHolder ( Activator.getDefault ().getBundle ().getBundleContext (), item, new DataSourceListener () {
 
@@ -217,8 +240,11 @@ public class DetailsViewPart extends ViewPart
         }
         else
         {
-            this.headerLabel.setText ( "Data Item: <none>" );
-            this.headerValueLabel.setText ( "" );
+            if ( this.headerLabel != null )
+            {
+                this.headerLabel.setText ( "Data Item: <none>" );
+                this.headerValueLabel.setText ( "" );
+            }
 
             // clear
             for ( final DetailsPart part : this.detailParts )
@@ -234,7 +260,7 @@ public class DetailsViewPart extends ViewPart
 
             public void run ()
             {
-                // updateHeader ( value );
+                updateHeader ( value );
 
                 for ( final DetailsPart part : DetailsViewPart.this.detailParts )
                 {
@@ -247,9 +273,17 @@ public class DetailsViewPart extends ViewPart
 
     private void updateHeader ( final DataItemValue value )
     {
+        if ( this.headerValueLabel.isDisposed () )
+        {
+            return;
+        }
+
         if ( value == null )
         {
             this.headerValueLabel.setText ( "<no value>" );
+            this.headerValueLabel.setBackground ( null );
+            this.headerLabel.setBackground ( null );
+            this.header.setBackground ( null );
             return;
         }
 
@@ -257,25 +291,32 @@ public class DetailsViewPart extends ViewPart
 
         if ( value.isAlarm () )
         {
-            this.header.setForeground ( this.resourceManager.createColor ( new RGB ( 1.0f, 0.0f, 0.0f ) ) );
+            this.headerValueLabel.setForeground ( this.resourceManager.createColor ( new RGB ( 1.0f, 0.0f, 0.0f ) ) );
         }
         else
         {
-            this.header.setForeground ( null );
+            this.headerValueLabel.setForeground ( null );
         }
 
         if ( value.isError () )
         {
             this.header.setBackground ( this.resourceManager.createColor ( new RGB ( 1.0f, 1.0f, 0.0f ) ) );
+            this.headerValueLabel.setBackground ( this.resourceManager.createColor ( new RGB ( 1.0f, 1.0f, 0.0f ) ) );
+            this.headerLabel.setBackground ( this.resourceManager.createColor ( new RGB ( 1.0f, 1.0f, 0.0f ) ) );
         }
         else if ( value.isManual () )
         {
             this.header.setBackground ( this.resourceManager.createColor ( new RGB ( 0.0f, 1.0f, 1.0f ) ) );
+            this.headerValueLabel.setBackground ( this.resourceManager.createColor ( new RGB ( 0.0f, 1.0f, 1.0f ) ) );
+            this.headerLabel.setBackground ( this.resourceManager.createColor ( new RGB ( 0.0f, 1.0f, 1.0f ) ) );
         }
         else
         {
             this.header.setBackground ( null );
+            this.headerValueLabel.setBackground ( null );
+            this.headerLabel.setBackground ( null );
         }
+        this.header.layout ();
     }
 
     private void disposeDataItem ()

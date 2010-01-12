@@ -58,7 +58,6 @@ public class OverviewDetailsPart extends AbstractBaseDetailsPart implements Deta
         label = new Label ( parent, SWT.NONE );
         label.setText ( "Connection: " );
         this.connectionUriText = new Text ( parent, SWT.READ_ONLY | SWT.BORDER );
-        this.connectionUriText.setVisible ( false ); // FIXME: for now
         this.connectionUriText.setLayoutData ( new GridData ( SWT.FILL, SWT.BEGINNING, true, false ) );
 
         // item id

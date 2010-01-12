@@ -57,6 +57,12 @@ public class LocalLevelPresets extends GenericLevelPresets
     }
 
     @Override
+    protected boolean isAckRequired ( final String string )
+    {
+        return getBooleanAttribute ( String.format ( "org.openscada.da.level.%s.ackRequired", string ) ); //$NON-NLS-1$
+    }
+
+    @Override
     protected void setPreset ( final Variant value, final String string )
     {
         final Map<String, Variant> attributes = new HashMap<String, Variant> ();

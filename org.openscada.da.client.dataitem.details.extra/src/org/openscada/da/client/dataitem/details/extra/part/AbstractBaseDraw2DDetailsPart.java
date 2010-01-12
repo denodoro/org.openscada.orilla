@@ -32,12 +32,13 @@ public abstract class AbstractBaseDraw2DDetailsPart extends AbstractBaseDetailsP
 
     public void createPart ( final Composite parent )
     {
-        parent.setLayout ( new org.eclipse.swt.layout.GridLayout ( 1, false ) );
+        final org.eclipse.swt.layout.GridLayout layout = new org.eclipse.swt.layout.GridLayout ( 1, false );
+        // layout.marginBottom = layout.marginTop = layout.marginLeft = layout.marginRight = layout.marginHeight = layout.marginWidth = 0;
+        parent.setLayout ( layout );
 
         this.canvas = new Canvas ( parent, SWT.NONE );
         this.canvas.setLayoutData ( new org.eclipse.swt.layout.GridData ( SWT.FILL, SWT.FILL, true, true ) );
         final LightweightSystem lws = new LightweightSystem ( this.canvas );
-
         lws.setContents ( createRoot () );
     }
 

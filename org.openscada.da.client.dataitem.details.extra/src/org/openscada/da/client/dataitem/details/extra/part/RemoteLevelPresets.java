@@ -51,6 +51,12 @@ public class RemoteLevelPresets extends GenericLevelPresets
     }
 
     @Override
+    protected boolean isAckRequired ( final String string )
+    {
+        return getBooleanAttribute ( String.format ( "remote.level.%s.ackRequired", string ) ); //$NON-NLS-1$
+    }
+
+    @Override
     protected boolean isError ( final String string )
     {
         return getBooleanAttribute ( String.format ( "remote.level.%s.error", string ) ); //$NON-NLS-1$

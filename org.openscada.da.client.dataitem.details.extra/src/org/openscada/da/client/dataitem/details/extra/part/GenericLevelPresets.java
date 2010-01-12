@@ -31,6 +31,8 @@ import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
+import org.eclipse.draw2d.Layer;
+import org.eclipse.draw2d.LayeredPane;
 import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseListener;
 import org.eclipse.draw2d.PolylineConnection;
@@ -41,9 +43,27 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.swt.graphics.RGB;
 import org.openscada.core.Variant;
 import org.openscada.da.client.dataitem.details.extra.Activator;
+import org.openscada.ui.utils.blink.Blinker;
+import org.openscada.ui.utils.blink.Blinker.Handler;
+import org.openscada.ui.utils.blink.Blinker.State;
 
 public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
 {
+
+    private final class HandlerImplementation implements Handler
+    {
+        private final Shape tri;
+
+        public HandlerImplementation ( final Shape tri )
+        {
+            this.tri = tri;
+        }
+
+        public void setState ( final State state )
+        {
+            GenericLevelPresets.this.blink ( this.tri, state );
+        }
+    }
 
     private static final String TAG_FLOOR = "floor";
 
@@ -83,28 +103,46 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
 
     private Label presetFloor;
 
+    private Blinker blinkerHH;
+
+    private Blinker blinkerCeil;
+
+    private Blinker blinkerH;
+
+    private Blinker blinkerL;
+
+    private Blinker blinkerLL;
+
+    private Blinker blinkerFloor;
+
     private static final Dimension TRI_DIMENSION = new Dimension ( 50, 50 );
 
     @Override
     protected IFigure createRoot ()
     {
-        final Figure baseFigure = new Figure ();
+        final Figure baseFigure = new LayeredPane ();
 
-        final ConnectionLayer rootFigure = new ConnectionLayer ();
-        rootFigure.setAntialias ( 1 );
-        rootFigure.setConnectionRouter ( ConnectionRouter.NULL );
+        ConnectionLayer connLayer;
+
+        final Layer rootFigure = new Layer ();
+
+        connLayer = new ConnectionLayer ();
+        connLayer.setAntialias ( 1 );
+        connLayer.setConnectionRouter ( ConnectionRouter.NULL );
+
+        baseFigure.add ( connLayer );
         baseFigure.add ( rootFigure );
 
         rootFigure.setLayoutManager ( new BorderLayout () );
         rootFigure.setBackgroundColor ( ColorConstants.white );
 
         rootFigure.add ( createArrowFigure (), BorderLayout.RIGHT );
-        rootFigure.add ( createEntryGrid ( rootFigure ), BorderLayout.CENTER );
+        rootFigure.add ( createEntryGrid ( connLayer ), BorderLayout.CENTER );
 
-        return rootFigure;
+        return baseFigure;
     }
 
-    private IFigure createEntryGrid ( final Figure rootFigure )
+    private IFigure createEntryGrid ( final Figure connLayer )
     {
         final Figure figure = new Figure ();
         figure.setLayoutManager ( new GridLayout ( 1, false ) );
@@ -119,23 +157,57 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
         figure.add ( this.presetLL = new Label ( Messages.LevelPresets_InitialLabel ), new GridData ( GridData.CENTER, GridData.FILL, true, true ) );
         figure.add ( this.presetFloor = new Label ( Messages.LevelPresets_InitialLabel ), new GridData ( GridData.CENTER, GridData.FILL, true, true ) );
 
-        createConnection ( figure, this.presetCeil, this.rectCeil );
-        createConnection ( figure, this.presetHH, this.triHH );
-        createConnection ( figure, this.presetH, this.triH );
-        createConnection ( figure, this.presetL, this.triL );
-        createConnection ( figure, this.presetLL, this.triLL );
-        createConnection ( figure, this.presetFloor, this.rectFloor );
+        createConnection ( connLayer, this.presetCeil, this.rectCeil );
+        createConnection ( connLayer, this.presetHH, this.triHH );
+        createConnection ( connLayer, this.presetH, this.triH );
+        createConnection ( connLayer, this.presetL, this.triL );
+        createConnection ( connLayer, this.presetLL, this.triLL );
+        createConnection ( connLayer, this.presetFloor, this.rectFloor );
+
+        this.blinkerCeil = new Blinker ( new HandlerImplementation ( this.rectCeil ) );
+        this.blinkerHH = new Blinker ( new HandlerImplementation ( this.triHH ) );
+        this.blinkerH = new Blinker ( new HandlerImplementation ( this.triH ) );
+        this.blinkerL = new Blinker ( new HandlerImplementation ( this.triL ) );
+        this.blinkerLL = new Blinker ( new HandlerImplementation ( this.triLL ) );
+        this.blinkerFloor = new Blinker ( new HandlerImplementation ( this.rectFloor ) );
 
         return figure;
     }
 
-    private void createConnection ( final Figure rootFigure, final Label label, final Figure figure )
+    protected void blink ( final Shape tri, final State state )
+    {
+        switch ( state )
+        {
+        case NORMAL:
+            tri.setBackgroundColor ( ColorConstants.lightGray );
+            break;
+        case ALARM:
+            tri.setBackgroundColor ( ColorConstants.red );
+            break;
+        case ALARM_0:
+            tri.setBackgroundColor ( ColorConstants.lightGray );
+            break;
+        case ALARM_1:
+            tri.setBackgroundColor ( ColorConstants.red );
+            break;
+
+        }
+    }
+
+    private void createConnection ( final Figure connLayer, final Label label, final Figure figure )
     {
         final Connection c = new PolylineConnection ();
         c.setSourceAnchor ( new ChopboxAnchor ( label ) );
         c.setTargetAnchor ( new ChopboxAnchor ( figure ) );
         c.setConnectionRouter ( new BendpointConnectionRouter () );
-        rootFigure.add ( c );
+        connLayer.add ( c );
+    }
+
+    @Override
+    public void dispose ()
+    {
+        this.blinkerHH.dispose ();
+        super.dispose ();
     }
 
     private static final Dimension RECT_DIMENSION = new Dimension ( 50, 15 );
@@ -280,6 +352,13 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
         setTri ( this.triLL, TAG_LL );
         setTri ( this.rectFloor, TAG_FLOOR );
 
+        setBlinker ( this.blinkerCeil, TAG_CEIL );
+        setBlinker ( this.blinkerHH, TAG_HH );
+        setBlinker ( this.blinkerH, TAG_H );
+        setBlinker ( this.blinkerL, TAG_L );
+        setBlinker ( this.blinkerLL, TAG_LL );
+        setBlinker ( this.blinkerFloor, TAG_FLOOR );
+
         setLabel ( this.presetCeil, TAG_CEIL );
         setLabel ( this.presetHH, TAG_HH );
         setLabel ( this.presetH, TAG_H );
@@ -288,6 +367,11 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
         setLabel ( this.presetFloor, TAG_FLOOR );
 
         this.currentLabel.setText ( "" + this.value.getValue () ); //$NON-NLS-1$
+    }
+
+    private void setBlinker ( final Blinker blinker, final String tag )
+    {
+        blinker.setState ( isAlarm ( tag ) || isError ( tag ), isAckRequired ( tag ), isUnsafe ( tag ) );
     }
 
     private void setLabel ( final Label preset, final String string )
@@ -325,6 +409,8 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
     protected abstract boolean isError ( final String string );
 
     protected abstract boolean isAlarm ( final String string );
+
+    protected abstract boolean isAckRequired ( final String string );
 
     protected abstract Number getPreset ( final String string );
 
