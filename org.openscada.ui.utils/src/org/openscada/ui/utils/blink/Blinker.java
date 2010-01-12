@@ -11,7 +11,8 @@ public class Blinker implements ToggleCallback
         NORMAL,
         ALARM,
         ALARM_0,
-        ALARM_1
+        ALARM_1,
+        UNSAFE
     }
 
     public interface Handler
@@ -28,6 +29,8 @@ public class Blinker implements ToggleCallback
     private final int baseFrequency;
 
     private final int inactiveFactor;
+
+    private boolean unsafe;
 
     public Blinker ( final Handler handler )
     {
@@ -46,9 +49,15 @@ public class Blinker implements ToggleCallback
         Activator.removeDefaultToggle ( this );
     }
 
-    public void setState ( final boolean alarm, final boolean requireAck )
+    public void setState ( final boolean alarm, final boolean requireAck, final boolean unsafe )
     {
+        this.unsafe = unsafe;
         this.alarm = alarm;
+        if ( unsafe )
+        {
+            setFrequency ( 0 );
+            this.handler.setState ( State.UNSAFE );
+        }
         if ( alarm && requireAck )
         {
             setFrequency ( this.baseFrequency );
