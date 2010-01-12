@@ -34,6 +34,7 @@ import org.eclipse.jface.resource.LocalResourceManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -281,34 +282,42 @@ public class DetailsViewPart extends ViewPart
         if ( value == null )
         {
             this.headerValueLabel.setText ( "<no value>" );
+            this.headerValueLabel.setForeground ( null );
+            this.headerLabel.setForeground ( null );
+            this.header.setForeground ( null );
             this.headerValueLabel.setBackground ( null );
             this.headerLabel.setBackground ( null );
             this.header.setBackground ( null );
             return;
         }
 
+        // set the value label
         this.headerValueLabel.setText ( value.toString () );
 
+        // set the foreground colors
         if ( value.isAlarm () )
         {
-            this.headerValueLabel.setForeground ( this.resourceManager.createColor ( new RGB ( 1.0f, 0.0f, 0.0f ) ) );
+            this.headerValueLabel.setForeground ( this.resourceManager.createColor ( new RGB ( 255, 0, 0 ) ) );
         }
         else
         {
             this.headerValueLabel.setForeground ( null );
         }
 
+        // set the background colors
         if ( value.isError () )
         {
-            this.header.setBackground ( this.resourceManager.createColor ( new RGB ( 1.0f, 1.0f, 0.0f ) ) );
-            this.headerValueLabel.setBackground ( this.resourceManager.createColor ( new RGB ( 1.0f, 1.0f, 0.0f ) ) );
-            this.headerLabel.setBackground ( this.resourceManager.createColor ( new RGB ( 1.0f, 1.0f, 0.0f ) ) );
+            final Color color = this.resourceManager.createColor ( new RGB ( 255, 255, 0 ) );
+            this.header.setBackground ( color );
+            this.headerValueLabel.setBackground ( color );
+            this.headerLabel.setBackground ( color );
         }
         else if ( value.isManual () )
         {
-            this.header.setBackground ( this.resourceManager.createColor ( new RGB ( 0.0f, 1.0f, 1.0f ) ) );
-            this.headerValueLabel.setBackground ( this.resourceManager.createColor ( new RGB ( 0.0f, 1.0f, 1.0f ) ) );
-            this.headerLabel.setBackground ( this.resourceManager.createColor ( new RGB ( 0.0f, 1.0f, 1.0f ) ) );
+            final Color color = this.resourceManager.createColor ( new RGB ( 0, 255, 255 ) );
+            this.header.setBackground ( color );
+            this.headerValueLabel.setBackground ( color );
+            this.headerLabel.setBackground ( color );
         }
         else
         {
