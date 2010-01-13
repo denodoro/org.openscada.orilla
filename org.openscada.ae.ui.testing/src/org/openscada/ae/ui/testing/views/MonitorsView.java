@@ -16,6 +16,8 @@ import org.eclipse.jface.databinding.viewers.ObservableSetContentProvider;
 import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -65,7 +67,7 @@ public class MonitorsView extends AbstractConditionQueryViewPart
         final Composite wrapper = new Composite ( parent, SWT.NONE );
         wrapper.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, true ) );
 
-        this.viewer = new TableViewer ( wrapper );
+        this.viewer = new TableViewer ( wrapper, SWT.FULL_SELECTION );
 
         TableColumnLayout tableLayout;
         wrapper.setLayout ( tableLayout = new TableColumnLayout () );
@@ -99,6 +101,19 @@ public class MonitorsView extends AbstractConditionQueryViewPart
         this.viewer.getTable ().setLayout ( layout );
         this.viewer.getTable ().setHeaderVisible ( true );
 
+        this.viewer.setComparator ( new ViewerComparator () {
+            @Override
+            public int compare ( final Viewer viewer, final Object e1, final Object e2 )
+            {
+                if ( e1 instanceof MonitorStatusBean && e2 instanceof MonitorStatusBean )
+                {
+                    final MonitorStatusBean b1 = (MonitorStatusBean)e1;
+                    final MonitorStatusBean b2 = (MonitorStatusBean)e2;
+                    return b1.getId ().compareTo ( b2.getId () );
+                }
+                return 0;
+            }
+        } );
         this.viewer.setContentProvider ( new ObservableSetContentProvider () );
         this.viewer.setLabelProvider ( new MonitorsLabelProvider ( BeansObservables.observeMaps ( this.monitors, MonitorStatusBean.class, new String[] { "id", MonitorStatusBean.PROP_STATUS, MonitorStatusBean.PROP_STATUS_TIMESTAMP, MonitorStatusBean.PROP_VALUE, MonitorStatusBean.PROP_LAST_AKN_USER, MonitorStatusBean.PROP_LAST_AKN_TIMESTAMP } ) ) );
         this.viewer.setInput ( this.monitors );
