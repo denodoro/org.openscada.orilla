@@ -207,6 +207,11 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
     public void dispose ()
     {
         this.blinkerHH.dispose ();
+        this.blinkerH.dispose ();
+        this.blinkerLL.dispose ();
+        this.blinkerL.dispose ();
+        this.blinkerCeil.dispose ();
+        this.blinkerFloor.dispose ();
         super.dispose ();
     }
 
