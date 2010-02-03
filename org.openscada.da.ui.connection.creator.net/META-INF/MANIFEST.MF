@@ -15,7 +15,7 @@ Require-Bundle: org.eclipse.ui,
  org.openscada.da.client.common;bundle-version="0.14.0",
  org.openscada.core.client.net;bundle-version="0.14.0",
  org.openscada.utils;bundle-version="0.14.0",
- org.openscada.da.net.base;bundle-version="0.14.0",
+ org.openscada.da.net;bundle-version="0.14.0",
  org.apache.mina.core;bundle-version="2.0.0",
  org.openscada.da.client.connection.service;bundle-version="0.14.0",
  org.openscada.core;bundle-version="0.15.0"
