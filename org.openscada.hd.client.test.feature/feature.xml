@@ -21,7 +21,7 @@
    <requires>
       <import plugin="org.openscada.core"/>
       <import plugin="org.openscada.core.client.common"/>
-      <import plugin="org.openscada.core.server.common"/>
+      <import plugin="org.openscada.core.server"/>
       <import plugin="org.openscada.utils"/>
       <import plugin="com.springsource.org.apache.log4j"/>
       <import plugin="org.apache.mina.core"/>
