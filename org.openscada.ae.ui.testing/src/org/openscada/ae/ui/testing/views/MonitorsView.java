@@ -67,7 +67,7 @@ public class MonitorsView extends AbstractConditionQueryViewPart
         final Composite wrapper = new Composite ( parent, SWT.NONE );
         wrapper.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, true ) );
 
-        this.viewer = new TableViewer ( wrapper, SWT.FULL_SELECTION );
+        this.viewer = new TableViewer ( wrapper, SWT.FULL_SELECTION | SWT.MULTI );
 
         TableColumnLayout tableLayout;
         wrapper.setLayout ( tableLayout = new TableColumnLayout () );
