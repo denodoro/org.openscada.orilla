@@ -43,6 +43,10 @@ public class EventViewHelper
         tableLayout.setColumnData ( col, new ColumnWeightData ( 25 ) );
 
         col = new TableColumn ( viewer.getTable (), SWT.NONE );
+        col.setText ( "User" );
+        tableLayout.setColumnData ( col, new ColumnWeightData ( 25 ) );
+
+        col = new TableColumn ( viewer.getTable (), SWT.NONE );
         col.setText ( "Value" );
         tableLayout.setColumnData ( col, new ColumnWeightData ( 50 ) );
 
