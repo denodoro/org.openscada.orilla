@@ -26,7 +26,7 @@
       <import plugin="com.springsource.org.apache.log4j"/>
       <import plugin="org.apache.mina.core"/>
       <import plugin="org.openscada.core.client.net"/>
-      <import plugin="org.openscada.net.base"/>
+      <import plugin="org.openscada.net"/>
       <import plugin="org.eclipse.osgi"/>
       <import plugin="slf4j.api"/>
       <import plugin="org.openscada.core.connection.provider"/>
