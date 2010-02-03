@@ -374,7 +374,7 @@ POSSIBILITY OF SUCH DAMAGES.
       <import plugin="org.openscada.da.client.common" version="0.13.0" match="greaterOrEqual"/>
       <import plugin="org.openscada.da.client.connector" version="0.13.3" match="greaterOrEqual"/>
       <import plugin="org.openscada.da.core.common" version="0.13.0" match="greaterOrEqual"/>
-      <import plugin="org.openscada.da.ice.base" version="0.13.0" match="greaterOrEqual"/>
+      <import plugin="org.openscada.da.ice" version="0.13.0" match="greaterOrEqual"/>
       <import plugin="org.openscada.da.client.ice" version="0.13.0" match="greaterOrEqual"/>
       <import plugin="org.openscada.da.server.common"/>
       <import plugin="org.openscada.da.client.net" version="0.13.0" match="greaterOrEqual"/>
@@ -529,7 +529,7 @@ POSSIBILITY OF SUCH DAMAGES.
          unpack="false"/>
 
    <plugin
-         id="org.openscada.da.ice.base"
+         id="org.openscada.da.ice"
          download-size="0"
          install-size="0"
          version="0.0.0"
