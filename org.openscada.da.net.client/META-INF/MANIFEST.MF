@@ -6,7 +6,7 @@ Bundle-Version: 0.15.0.qualifier
 Bundle-ClassPath: .
 Bundle-Vendor: inavare GmbH
 Export-Package: org.openscada.da.net.client
-Require-Bundle: org.openscada.core.client.common;bundle-version="0.13.0",
+Require-Bundle: org.openscada.core.client;bundle-version="0.15.0",
  org.openscada.da.client.connector;bundle-version="0.13.3",
  org.openscada.da.client.net;bundle-version="0.13.0",
  org.openscada.core;bundle-version="0.15.0"
