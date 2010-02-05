@@ -22,7 +22,6 @@ package org.openscada.da.rcp.LocalTestServer;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.eclipse.core.commands.operations.OperationStatus;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.ErrorDialog;
@@ -33,13 +32,15 @@ import org.openscada.core.ConnectionInformation;
 import org.openscada.da.core.server.Hive;
 import org.openscada.da.server.net.Exporter;
 import org.osgi.framework.BundleContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The activator class controls the plug-in life cycle
  */
 public class Activator extends AbstractUIPlugin
 {
-    private final static Logger logger = Logger.getLogger ( Activator.class );
+    private final static Logger logger = LoggerFactory.getLogger ( Activator.class );
 
     // The plug-in ID
     public static final String PLUGIN_ID = "org.openscada.da.rcp.LocalTestServer";

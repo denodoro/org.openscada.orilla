@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006 inavare GmbH (http://inavare.com)
+ * Copyright (C) 2006-2010 inavare GmbH (http://inavare.com)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +19,6 @@
 
 package org.openscada.da.rcp.LocalTestServer.actions;
 
-import org.apache.log4j.Logger;
 import org.eclipse.core.commands.operations.OperationStatus;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.action.IAction;
@@ -29,12 +28,15 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 import org.openscada.da.rcp.LocalTestServer.Activator;
 import org.openscada.da.rcp.LocalTestServer.AlreadyStartedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class StartSimServerAction implements IWorkbenchWindowActionDelegate
 {
-    private static Logger _log = Logger.getLogger ( StartSimServerAction.class );
 
-    private IWorkbenchWindow _window = null;
+    private final static Logger logger = LoggerFactory.getLogger ( StartSimServerAction.class );
+
+    private IWorkbenchWindow window = null;
 
     public void dispose ()
     {
@@ -42,12 +44,12 @@ public class StartSimServerAction implements IWorkbenchWindowActionDelegate
 
     public void init ( final IWorkbenchWindow window )
     {
-        this._window = window;
+        this.window = window;
     }
 
     public void run ( final IAction action )
     {
-        _log.debug ( "Try to start local sim server" );
+        logger.debug ( "Try to start local sim server" );
 
         IStatus status = null;
         try
@@ -64,7 +66,7 @@ public class StartSimServerAction implements IWorkbenchWindowActionDelegate
         }
         if ( status != null )
         {
-            ErrorDialog.openError ( this._window.getShell (), null, "Failed to start local server", status );
+            ErrorDialog.openError ( this.window.getShell (), null, "Failed to start local server", status );
         }
     }
 
