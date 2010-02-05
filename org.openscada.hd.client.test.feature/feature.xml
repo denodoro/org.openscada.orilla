@@ -20,7 +20,7 @@
 
    <requires>
       <import plugin="org.openscada.core"/>
-      <import plugin="org.openscada.core.client.common"/>
+      <import plugin="org.openscada.core.client"/>
       <import plugin="org.openscada.core.server"/>
       <import plugin="org.openscada.utils"/>
       <import plugin="com.springsource.org.apache.log4j"/>
@@ -42,7 +42,7 @@
       <import plugin="org.openscada.core.ui.connection" version="0.14.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui.navigator" version="3.4.0" match="greaterOrEqual"/>
       <import plugin="org.openscada.utils" version="0.14.0" match="greaterOrEqual"/>
-      <import plugin="org.openscada.core.client.common" version="0.14.0" match="greaterOrEqual"/>
+      <import plugin="org.openscada.core.client" version="0.15.0" match="greaterOrEqual"/>
       <import plugin="org.openscada.core.connection.provider" version="0.14.0" match="greaterOrEqual"/>
       <import plugin="org.openscada.ui.databinding" version="1.4.0" match="greaterOrEqual"/>
       <import plugin="org.openscada.hd.client.common" version="0.14.0" match="greaterOrEqual"/>
