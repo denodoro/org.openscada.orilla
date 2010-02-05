@@ -2,7 +2,7 @@
 <feature
       id="org.openscada.core.client.test"
       label="OpenSCADA Core Test Client Feature"
-      version="0.14.0.qualifier"
+      version="0.15.0.qualifier"
       provider-name="inavare GmbH"
       plugin="org.openscada.core.ui">
 
@@ -55,7 +55,7 @@
    </requires>
 
    <plugin
-         id="org.openscada.core.client.common"
+         id="org.openscada.core.client"
          download-size="0"
          install-size="0"
          version="0.0.0"
