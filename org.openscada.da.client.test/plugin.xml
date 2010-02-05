@@ -154,18 +154,6 @@
          point="org.eclipse.ui.perspectiveExtensions">
       <perspectiveExtension
             targetID="org.openscada.da.ui.perspective">
-         <view
-               closeable="true"
-               id="org.openscada.da.test.views.RealTimeList"
-               minimized="false"
-               moveable="true"
-               ratio="0.75"
-               relationship="stack"
-               relative="org.eclipse.ui.editorss"
-               showTitle="true"
-               standalone="false"
-               visible="true">
-         </view>
       </perspectiveExtension>
    </extension>
    
