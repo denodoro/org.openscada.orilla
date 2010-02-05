@@ -19,7 +19,7 @@ public class PerspectiveFactory implements IPerspectiveFactory
         folder.addPlaceholder ( "org.openscada.da.test.views.RealTimeList:*" );
 
         layout.addView ( "org.openscada.core.ui.connection.ConnectionView", IPageLayout.LEFT, 0.25f, "org.openscada.da.ui.mainFolder" );
-        layout.addView ( "org.eclipse.pde.runtime.LogView", IPageLayout.BOTTOM, 0.75f, "org.openscada.da.ui.mainFolder" );
+        layout.addPlaceholder ( "org.eclipse.pde.runtime.LogView", IPageLayout.BOTTOM, 0.75f, "org.openscada.da.ui.mainFolder" );
     }
 
 }
