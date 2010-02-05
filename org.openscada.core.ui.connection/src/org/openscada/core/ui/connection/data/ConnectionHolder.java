@@ -4,6 +4,12 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.MultiStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.dialogs.ErrorDialog;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.PlatformUI;
 import org.openscada.core.ConnectionInformation;
 import org.openscada.core.client.Connection;
 import org.openscada.core.client.ConnectionState;
@@ -11,6 +17,8 @@ import org.openscada.core.client.ConnectionStateListener;
 import org.openscada.core.connection.provider.ConnectionService;
 import org.openscada.core.ui.connection.Activator;
 import org.openscada.core.ui.connection.creator.ConnectionCreatorHelper;
+import org.openscada.sec.AuthenticationException;
+import org.openscada.sec.osgi.MultiAuthenticationException;
 import org.openscada.utils.beans.AbstractPropertyChange;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
@@ -182,8 +190,72 @@ public class ConnectionHolder extends AbstractPropertyChange implements Connecti
     public void stateChange ( final Connection connection, final ConnectionState state, final Throwable error )
     {
         logger.debug ( "Connection state changed: {}", state );
+
+        final IStatus status = makeStatus ( connection, state, error );
+        Activator.getDefault ().getLog ().log ( status );
+
         setConnectionState ( state );
         setConnectionError ( error );
+
+        showError ( status );
+    }
+
+    private void showError ( final IStatus status )
+    {
+        if ( !status.matches ( IStatus.ERROR ) )
+        {
+            return;
+        }
+
+        final Display display = PlatformUI.getWorkbench ().getDisplay ();
+        if ( !display.isDisposed () )
+        {
+            display.asyncExec ( new Runnable () {
+
+                public void run ()
+                {
+                    if ( !display.isDisposed () )
+                    {
+                        ErrorDialog.openError ( PlatformUI.getWorkbench ().getActiveWorkbenchWindow ().getShell (), "Connection error", "Connection failed", status, IStatus.ERROR );
+                    }
+                }
+            } );
+        }
+    }
+
+    private IStatus makeStatus ( final Connection connection, final ConnectionState state, final Throwable error )
+    {
+        if ( error instanceof MultiAuthenticationException )
+        {
+            final MultiStatus status = new MultiStatus ( Activator.PLUGIN_ID, 0, "Failed to establish connection", error );
+            for ( final AuthenticationException e : ( (MultiAuthenticationException)error ).getCauses () )
+            {
+                status.add ( makeStatus ( connection, state, e ) );
+            }
+            return status;
+        }
+        else
+        {
+            int severity;
+            String message;
+            if ( error != null )
+            {
+                message = error.getMessage ();
+                severity = IStatus.ERROR;
+            }
+            else if ( state == ConnectionState.CLOSED )
+            {
+                message = "Connection closed";
+                severity = IStatus.WARNING;
+            }
+            else
+            {
+                message = String.format ( "State changed: %s", state );
+                severity = IStatus.INFO;
+            }
+
+            return new Status ( severity, Activator.PLUGIN_ID, message, error );
+        }
     }
 
     @SuppressWarnings ( "unchecked" )
