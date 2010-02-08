@@ -56,12 +56,16 @@ public class InputScaleDetails extends AbstractBaseDraw2DDetailsPart
 
     private Label rawLabel;
 
+    private RoundedRectangle offsetFigure;
+
+    private Label offsetLabel;
+
     @Override
     protected IFigure createRoot ()
     {
         final Figure rootFigure = new Figure ();
 
-        rootFigure.setLayoutManager ( new GridLayout ( 3, true ) );
+        rootFigure.setLayoutManager ( new GridLayout ( 4, true ) );
         rootFigure.setBackgroundColor ( ColorConstants.white );
 
         // cell 1,1
@@ -89,6 +93,27 @@ public class InputScaleDetails extends AbstractBaseDraw2DDetailsPart
         } );
 
         // cell 3,1
+        rootFigure.add ( this.offsetFigure = new RoundedRectangle (), new GridData ( GridData.CENTER, GridData.CENTER, true, true ) );
+        this.offsetFigure.setBackgroundColor ( ColorConstants.lightGray );
+        this.offsetFigure.setForegroundColor ( ColorConstants.black );
+        this.offsetFigure.setBorder ( new MarginBorder ( 10 ) );
+        this.offsetFigure.setLayoutManager ( new BorderLayout () );
+        this.offsetFigure.add ( this.offsetLabel = new Label (), BorderLayout.CENTER );
+        this.offsetFigure.addMouseMotionListener ( new MouseMotionListener.Stub () {
+            @Override
+            public void mouseEntered ( final MouseEvent me )
+            {
+                InputScaleDetails.this.offsetFigure.setLineWidth ( 2 );
+            }
+
+            @Override
+            public void mouseExited ( final MouseEvent me )
+            {
+                InputScaleDetails.this.offsetFigure.setLineWidth ( 1 );
+            }
+        } );
+
+        // cell 4,1
         rootFigure.add ( new Figure () );
 
         // cell 1,2
@@ -100,19 +125,32 @@ public class InputScaleDetails extends AbstractBaseDraw2DDetailsPart
         this.rawFigure.add ( this.rawLabel = new Label (), BorderLayout.CENTER );
 
         // cell 2,2
-        final RectangleFigure rect = new RectangleFigure ();
-        rect.setLayoutManager ( new BorderLayout () );
-        rect.add ( new Label ( "*" ), BorderLayout.CENTER );
-        rect.setBorder ( new MarginBorder ( 10 ) );
-        rect.setBackgroundColor ( ColorConstants.lightGray );
-        rect.setForegroundColor ( ColorConstants.black );
-        rect.setLineStyle ( Graphics.LINE_SOLID );
-        rect.setLineWidth ( 1 );
-        rect.setFill ( true );
-        rect.setOpaque ( true );
-        rootFigure.add ( rect, new GridData ( GridData.CENTER, GridData.CENTER, true, true ) );
+        final RectangleFigure factorRect = new RectangleFigure ();
+        factorRect.setLayoutManager ( new BorderLayout () );
+        factorRect.add ( new Label ( "*" ), BorderLayout.CENTER );
+        factorRect.setBorder ( new MarginBorder ( 10 ) );
+        factorRect.setBackgroundColor ( ColorConstants.lightGray );
+        factorRect.setForegroundColor ( ColorConstants.black );
+        factorRect.setLineStyle ( Graphics.LINE_SOLID );
+        factorRect.setLineWidth ( 1 );
+        factorRect.setFill ( true );
+        factorRect.setOpaque ( true );
+        rootFigure.add ( factorRect, new GridData ( GridData.CENTER, GridData.CENTER, true, true ) );
 
-        // cell 3,2
+        // cell 3, 2
+        final RectangleFigure offsetRect = new RectangleFigure ();
+        offsetRect.setLayoutManager ( new BorderLayout () );
+        offsetRect.add ( new Label ( "+" ), BorderLayout.CENTER );
+        offsetRect.setBorder ( new MarginBorder ( 10 ) );
+        offsetRect.setBackgroundColor ( ColorConstants.lightGray );
+        offsetRect.setForegroundColor ( ColorConstants.black );
+        offsetRect.setLineStyle ( Graphics.LINE_SOLID );
+        offsetRect.setLineWidth ( 1 );
+        offsetRect.setFill ( true );
+        offsetRect.setOpaque ( true );
+        rootFigure.add ( offsetRect, new GridData ( GridData.CENTER, GridData.CENTER, true, true ) );
+
+        // cell 4,2
         rootFigure.add ( this.valueFigure = new RoundedRectangle (), new GridData ( GridData.CENTER, GridData.CENTER, true, true ) );
         this.valueFigure.setLayoutManager ( new BorderLayout () );
         this.valueFigure.setBackgroundColor ( ColorConstants.lightGray );
@@ -121,9 +159,11 @@ public class InputScaleDetails extends AbstractBaseDraw2DDetailsPart
         this.valueFigure.add ( this.valueLabel = new Label (), BorderLayout.CENTER );
 
         // add connections
-        connect ( rootFigure, this.factorFigure, rect );
-        connect ( rootFigure, this.rawFigure, rect );
-        connect ( rootFigure, rect, this.valueFigure );
+        connect ( rootFigure, this.factorFigure, factorRect );
+        connect ( rootFigure, this.rawFigure, factorRect );
+        connect ( rootFigure, factorRect, offsetRect );
+        connect ( rootFigure, this.offsetFigure, offsetRect );
+        connect ( rootFigure, offsetRect, this.valueFigure );
 
         // hook up entry dialogs
         this.factorFigure.addMouseListener ( new MouseListener.Stub () {
@@ -131,6 +171,13 @@ public class InputScaleDetails extends AbstractBaseDraw2DDetailsPart
             public void mouseDoubleClicked ( final MouseEvent me )
             {
                 InputScaleDetails.this.triggerFactorInput ();
+            }
+        } );
+        this.offsetFigure.addMouseListener ( new MouseListener.Stub () {
+            @Override
+            public void mouseDoubleClicked ( final MouseEvent me )
+            {
+                InputScaleDetails.this.triggerOffsetInput ();
             }
         } );
 
@@ -144,6 +191,17 @@ public class InputScaleDetails extends AbstractBaseDraw2DDetailsPart
         {
             final Map<String, Variant> attributes = new HashMap<String, Variant> ();
             attributes.put ( "org.openscada.da.scale.input.factor", factor );
+            this.item.writeAtrtibutes ( attributes );
+        }
+    }
+
+    protected void triggerOffsetInput ()
+    {
+        final Variant factor = new VariantEntryDialog ( this.shell ).getValue ();
+        if ( factor != null )
+        {
+            final Map<String, Variant> attributes = new HashMap<String, Variant> ();
+            attributes.put ( "org.openscada.da.scale.input.offset", factor );
             this.item.writeAtrtibutes ( attributes );
         }
     }
@@ -175,6 +233,8 @@ public class InputScaleDetails extends AbstractBaseDraw2DDetailsPart
 
         final Variant factor = this.value.getAttributes ().get ( "org.openscada.da.scale.input.factor" );
         final Variant raw = this.value.getAttributes ().get ( "org.openscada.da.scale.input.raw" );
+        final Variant active = this.value.getAttributes ().get ( "org.openscada.da.scale.input.active" );
+        final Variant offset = this.value.getAttributes ().get ( "org.openscada.da.scale.input.offset" );
 
         // set the factor value if available
         if ( factor != null )
@@ -194,6 +254,16 @@ public class InputScaleDetails extends AbstractBaseDraw2DDetailsPart
         else
         {
             this.rawLabel.setText ( "" );
+        }
+
+        // set the offset value if available
+        if ( offset != null )
+        {
+            this.offsetLabel.setText ( offset.toString () );
+        }
+        else
+        {
+            this.offsetLabel.setText ( "" );
         }
     }
 
