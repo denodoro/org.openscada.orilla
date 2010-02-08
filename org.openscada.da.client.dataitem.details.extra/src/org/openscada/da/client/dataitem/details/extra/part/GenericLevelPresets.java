@@ -242,6 +242,7 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
         rect.setLineWidth ( 3 );
         attachDoubleClick ( rect, TAG_CEIL );
         outerFigure.add ( rect, BorderLayout.TOP );
+        attachActivate ( this.rectCeil, TAG_CEIL );
 
         // create HH
         this.triHH = tri = new Triangle ();
@@ -251,6 +252,7 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
         tri.setLineWidth ( 3 );
         attachDoubleClick ( tri, TAG_HH );
         figure.add ( tri, BorderLayout.TOP );
+        attachActivate ( this.triHH, TAG_HH );
 
         // create H
         this.triH = tri = new Triangle ();
@@ -260,6 +262,7 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
         tri.setLineWidth ( 3 );
         attachDoubleClick ( tri, TAG_H );
         innerFigure.add ( tri, BorderLayout.TOP );
+        attachActivate ( this.triH, TAG_H );
 
         // create L
         this.triL = tri = new Triangle ();
@@ -269,6 +272,7 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
         tri.setLineWidth ( 3 );
         attachDoubleClick ( tri, TAG_L );
         innerFigure.add ( tri, BorderLayout.BOTTOM );
+        attachActivate ( this.triL, TAG_L );
 
         // create LL
         this.triLL = tri = new Triangle ();
@@ -278,6 +282,7 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
         tri.setLineWidth ( 3 );
         attachDoubleClick ( tri, TAG_LL );
         figure.add ( tri, BorderLayout.BOTTOM );
+        attachActivate ( this.triLL, TAG_LL );
 
         // create floor
         this.rectFloor = rect = new RectangleFigure ();
@@ -286,6 +291,7 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
         rect.setLineWidth ( 3 );
         attachDoubleClick ( rect, TAG_FLOOR );
         outerFigure.add ( rect, BorderLayout.BOTTOM );
+        attachActivate ( this.rectFloor, TAG_FLOOR );
 
         figure.add ( innerFigure, BorderLayout.CENTER );
         outerFigure.add ( figure, BorderLayout.CENTER );
@@ -300,6 +306,21 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
         innerFigure.add ( c );
 
         return outerFigure;
+    }
+
+    protected void attachActivate ( final Figure figure, final String tag )
+    {
+        figure.addMouseListener ( new MouseListener.Stub () {
+            public void mouseReleased ( final MouseEvent event )
+            {
+                GenericLevelPresets.this.activate ( tag );
+            }
+        } );
+    }
+
+    protected void activate ( final String tag )
+    {
+        setActive ( !isActive ( tag ), tag );
     }
 
     private void attachDoubleClick ( final Figure figure, final String string )
@@ -410,6 +431,8 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
     }
 
     protected abstract void setPreset ( final Variant value, final String string );
+
+    protected abstract void setActive ( final boolean state, final String tag );
 
     protected abstract boolean isError ( final String string );
 

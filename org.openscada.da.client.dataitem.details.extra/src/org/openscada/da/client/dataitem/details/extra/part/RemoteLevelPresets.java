@@ -72,4 +72,14 @@ public class RemoteLevelPresets extends GenericLevelPresets
         this.item.writeAtrtibutes ( attributes );
     }
 
+    @Override
+    protected void setActive ( final boolean state, final String string )
+    {
+        final Map<String, Variant> attributes = new HashMap<String, Variant> ();
+
+        attributes.put ( String.format ( "remote.level.%s.active", string ), state ? Variant.TRUE : Variant.FALSE ); //$NON-NLS-1$
+
+        this.item.writeAtrtibutes ( attributes );
+    }
+
 }

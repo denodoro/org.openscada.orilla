@@ -72,4 +72,13 @@ public class LocalLevelPresets extends GenericLevelPresets
         this.item.writeAtrtibutes ( attributes );
     }
 
+    @Override
+    protected void setActive ( final boolean state, final String tag )
+    {
+        final Map<String, Variant> attributes = new HashMap<String, Variant> ();
+
+        attributes.put ( String.format ( "org.openscada.da.level.%s.active", tag ), state ? Variant.TRUE : Variant.FALSE ); //$NON-NLS-1$
+
+        this.item.writeAtrtibutes ( attributes );
+    }
 }
