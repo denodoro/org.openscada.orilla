@@ -63,4 +63,26 @@ public class StyleInformation
         }
         return resourceManager.createFont ( this.font );
     }
+
+    public StyleInformation override ( final StyleInformation overrideInformation )
+    {
+        ColorDescriptor foreground = this.foreground;
+        ColorDescriptor background = this.background;
+        FontDescriptor font = this.font;
+
+        if ( foreground == null )
+        {
+            foreground = overrideInformation.getForeground ();
+        }
+        if ( background == null )
+        {
+            background = overrideInformation.getBackground ();
+        }
+        if ( font == null )
+        {
+            font = overrideInformation.getFont ();
+        }
+
+        return new StyleInformation ( foreground, background, font );
+    }
 }

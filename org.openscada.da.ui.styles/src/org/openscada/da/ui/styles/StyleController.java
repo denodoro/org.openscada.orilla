@@ -3,8 +3,6 @@ package org.openscada.da.ui.styles;
 import java.util.EnumSet;
 import java.util.Set;
 
-import org.eclipse.jface.resource.ColorDescriptor;
-import org.eclipse.jface.resource.FontDescriptor;
 import org.openscada.core.ui.styles.Style;
 import org.openscada.core.ui.styles.StyleInformation;
 import org.openscada.da.client.DataItemValue;
@@ -55,22 +53,6 @@ public class StyleController
 
     private StyleInformation mergeStyle ( final StyleInformation result, final StyleInformation style )
     {
-        ColorDescriptor foreground = style.getForeground ();
-        ColorDescriptor background = style.getBackground ();
-        FontDescriptor font = style.getFont ();
-        if ( foreground == null )
-        {
-            foreground = result.getForeground ();
-        }
-        if ( background == null )
-        {
-            background = result.getBackground ();
-        }
-        if ( font == null )
-        {
-            font = result.getFont ();
-        }
-
-        return new StyleInformation ( foreground, background, font );
+        return result.override ( style );
     }
 }
