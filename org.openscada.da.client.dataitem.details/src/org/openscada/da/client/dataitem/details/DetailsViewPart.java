@@ -34,8 +34,6 @@ import org.eclipse.jface.resource.LocalResourceManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -46,6 +44,7 @@ import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
+import org.openscada.core.ui.styles.StyleInformation;
 import org.openscada.da.client.DataItemValue;
 import org.openscada.da.client.dataitem.details.part.DetailsPart;
 import org.openscada.da.ui.connection.data.DataItemHolder;
@@ -294,37 +293,17 @@ public class DetailsViewPart extends ViewPart
         // set the value label
         this.headerValueLabel.setText ( value.toString () );
 
-        // set the foreground colors
-        if ( value.isAlarm () )
-        {
-            this.headerValueLabel.setForeground ( this.resourceManager.createColor ( new RGB ( 255, 0, 0 ) ) );
-        }
-        else
-        {
-            this.headerValueLabel.setForeground ( null );
-        }
+        final StyleInformation style = org.openscada.da.ui.styles.Activator.getStyle ( value );
+        this.headerValueLabel.setForeground ( style.createForeground ( this.resourceManager ) );
+        this.headerValueLabel.setBackground ( style.createBackground ( this.resourceManager ) );
+        this.headerValueLabel.setFont ( style.createFont ( this.resourceManager ) );
+        this.header.setForeground ( style.createForeground ( this.resourceManager ) );
+        this.header.setBackground ( style.createBackground ( this.resourceManager ) );
+        this.header.setFont ( style.createFont ( this.resourceManager ) );
+        this.headerLabel.setForeground ( style.createForeground ( this.resourceManager ) );
+        this.headerLabel.setBackground ( style.createBackground ( this.resourceManager ) );
+        this.headerLabel.setFont ( style.createFont ( this.resourceManager ) );
 
-        // set the background colors
-        if ( value.isError () )
-        {
-            final Color color = this.resourceManager.createColor ( new RGB ( 255, 255, 0 ) );
-            this.header.setBackground ( color );
-            this.headerValueLabel.setBackground ( color );
-            this.headerLabel.setBackground ( color );
-        }
-        else if ( value.isManual () )
-        {
-            final Color color = this.resourceManager.createColor ( new RGB ( 0, 255, 255 ) );
-            this.header.setBackground ( color );
-            this.headerValueLabel.setBackground ( color );
-            this.headerLabel.setBackground ( color );
-        }
-        else
-        {
-            this.header.setBackground ( null );
-            this.headerValueLabel.setBackground ( null );
-            this.headerLabel.setBackground ( null );
-        }
         this.header.layout ();
     }
 
