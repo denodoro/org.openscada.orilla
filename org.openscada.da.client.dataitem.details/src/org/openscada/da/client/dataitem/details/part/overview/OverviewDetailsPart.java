@@ -48,6 +48,8 @@ public class OverviewDetailsPart extends AbstractBaseDetailsPart implements Deta
 
     private Text timestampText;
 
+    private Text manualText;
+
     public void createPart ( final Composite parent )
     {
         parent.setLayout ( new GridLayout ( 2, false ) );
@@ -83,6 +85,11 @@ public class OverviewDetailsPart extends AbstractBaseDetailsPart implements Deta
         this.errorText.setLayoutData ( new GridData ( SWT.FILL, SWT.BEGINNING, true, false ) );
 
         label = new Label ( parent, SWT.NONE );
+        label.setText ( "Manual:" );
+        this.manualText = new Text ( parent, SWT.READ_ONLY | SWT.BORDER );
+        this.manualText.setLayoutData ( new GridData ( SWT.FILL, SWT.BEGINNING, true, false ) );
+
+        label = new Label ( parent, SWT.NONE );
         label.setText ( "Value:" );
         this.valueText = new Text ( parent, SWT.READ_ONLY | SWT.BORDER );
         this.valueText.setLayoutData ( new GridData ( SWT.FILL, SWT.BEGINNING, true, false ) );
@@ -110,6 +117,7 @@ public class OverviewDetailsPart extends AbstractBaseDetailsPart implements Deta
             this.stateText.setText ( "" );
             this.alarmText.setText ( "" );
             this.errorText.setText ( "" );
+            this.manualText.setText ( "" );
             this.valueText.setText ( "" );
             this.timestampText.setText ( "" );
         }
@@ -132,8 +140,9 @@ public class OverviewDetailsPart extends AbstractBaseDetailsPart implements Deta
             this.stateText.setText ( String.format ( "%s (%s)", this.value.getSubscriptionState ().name (), this.value.getSubscriptionError ().getMessage () ) );
         }
 
-        this.alarmText.setText ( isAlarm () ? "alarm active" : "no alarm" );
-        this.errorText.setText ( isError () ? "error" : "ok" );
+        this.alarmText.setText ( this.value.isAlarm () ? "alarm active" : "no alarm" );
+        this.errorText.setText ( this.value.isError () ? "error" : "ok" );
+        this.manualText.setText ( this.value.isManual () ? "active" : "not active" );
 
         this.valueText.setText ( this.value.getValue () != null ? this.value.getValue ().toString () : "<null>" );
         final Calendar c = this.value.getTimestamp ();
