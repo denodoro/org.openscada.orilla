@@ -80,6 +80,19 @@ public class ListEntry extends Observable implements IAdaptable, IPropertySource
         }
     }
 
+    public DataItemValue getItemValue ()
+    {
+        final DataItemValue value = this.value;
+        if ( value != null )
+        {
+            return value;
+        }
+        else
+        {
+            return new DataItemValue ();
+        }
+    }
+
     public Variant getValue ()
     {
         if ( this.value == null )
