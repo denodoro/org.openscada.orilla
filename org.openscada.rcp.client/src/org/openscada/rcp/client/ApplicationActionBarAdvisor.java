@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006 inavare GmbH (http://inavare.com)
+ * Copyright (C) 2006-2010 inavare GmbH (http://inavare.com)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,13 +45,16 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor
     // in the fill methods. This ensures that the actions aren't recreated
     // when fillActionBars is called with FILL_PROXY.
     private IWorkbenchAction exitAction;
+
     private IWorkbenchAction aboutAction;
+
     private IWorkbenchAction newWindowAction;
 
-    private IContributionItem _showViews = null;
-    private IContributionItem _newWizards = null;
+    private IContributionItem showViews = null;
 
-    public ApplicationActionBarAdvisor ( IActionBarConfigurer configurer )
+    private IContributionItem newWizards = null;
+
+    public ApplicationActionBarAdvisor ( final IActionBarConfigurer configurer )
     {
         super ( configurer );
     }
@@ -66,34 +69,35 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor
         // Registering also provides automatic disposal of the actions when
         // the window is closed.
 
-        exitAction = ActionFactory.QUIT.create ( window );
-        register ( exitAction );
+        this.exitAction = ActionFactory.QUIT.create ( window );
+        register ( this.exitAction );
 
-        aboutAction = ActionFactory.ABOUT.create ( window );
-        register ( aboutAction );
+        this.aboutAction = ActionFactory.ABOUT.create ( window );
+        register ( this.aboutAction );
 
-        newWindowAction = ActionFactory.OPEN_NEW_WINDOW.create ( window );
-        register ( newWindowAction );
+        this.newWindowAction = ActionFactory.OPEN_NEW_WINDOW.create ( window );
+        register ( this.newWindowAction );
 
         register ( ActionFactory.NEW_WIZARD_DROP_DOWN.create ( window ) );
         register ( ActionFactory.NEW.create ( window ) );
         register ( ActionFactory.INTRO.create ( window ) );
 
-        _showViews = ContributionItemFactory.VIEWS_SHORTLIST.create ( window );
-        _newWizards = ContributionItemFactory.NEW_WIZARD_SHORTLIST.create ( window );
-        
+        this.showViews = ContributionItemFactory.VIEWS_SHORTLIST.create ( window );
+        this.newWizards = ContributionItemFactory.NEW_WIZARD_SHORTLIST.create ( window );
+
         register ( ActionFactory.NEW_EDITOR.create ( window ) );
-        
+        register ( ActionFactory.PREFERENCES.create ( window ) );
+
     }
 
     @Override
-    protected void fillMenuBar ( IMenuManager menuBar )
+    protected void fillMenuBar ( final IMenuManager menuBar )
     {
-        MenuManager fileMenu = new MenuManager ( "&File", IWorkbenchActionConstants.M_FILE );
-        MenuManager windowMenu = new MenuManager ( "&Window", IWorkbenchActionConstants.M_WINDOW );
-        MenuManager helpMenu = new MenuManager ( "&Help", IWorkbenchActionConstants.M_HELP );
-        MenuManager fileNewMenu = new MenuManager ( "&New", IWorkbenchActionConstants.NEW_EXT );
-        MenuManager windowNewMenu = new MenuManager ( "Show &View", IWorkbenchActionConstants.SHOW_EXT );
+        final MenuManager fileMenu = new MenuManager ( "&File", IWorkbenchActionConstants.M_FILE );
+        final MenuManager windowMenu = new MenuManager ( "&Window", IWorkbenchActionConstants.M_WINDOW );
+        final MenuManager helpMenu = new MenuManager ( "&Help", IWorkbenchActionConstants.M_HELP );
+        final MenuManager fileNewMenu = new MenuManager ( "&New", IWorkbenchActionConstants.NEW_EXT );
+        final MenuManager windowNewMenu = new MenuManager ( "Show &View", IWorkbenchActionConstants.SHOW_EXT );
 
         menuBar.add ( fileMenu );
         // Add a group marker indicating where action set menus will appear.
@@ -102,30 +106,31 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor
         menuBar.add ( helpMenu );
 
         // File
-        fileMenu.add ( newWindowAction );
+        fileMenu.add ( this.newWindowAction );
         fileMenu.add ( new Separator () );
         fileMenu.add ( fileNewMenu );
         fileMenu.add ( getAction ( ActionFactory.NEW_EDITOR.getId () ) );
         fileMenu.add ( new GroupMarker ( IWorkbenchActionConstants.OPEN_EXT ) );
 
         fileMenu.add ( new Separator () );
-        fileMenu.add ( exitAction );
+        fileMenu.add ( this.exitAction );
 
-        fileNewMenu.add ( _newWizards );
+        fileNewMenu.add ( this.newWizards );
 
         // Window
-        windowNewMenu.add ( _showViews );
+        windowNewMenu.add ( this.showViews );
         windowMenu.add ( windowNewMenu );
+        windowMenu.add ( getAction ( ActionFactory.PREFERENCES.getId () ) );
 
         // Help
-        helpMenu.add ( aboutAction );
+        helpMenu.add ( this.aboutAction );
         helpMenu.add ( getAction ( ActionFactory.INTRO.getId () ) );
     }
 
     @Override
-    protected void fillCoolBar ( ICoolBarManager coolBar )
+    protected void fillCoolBar ( final ICoolBarManager coolBar )
     {
-        IToolBarManager toolbar = new ToolBarManager ( SWT.FLAT | SWT.RIGHT );
+        final IToolBarManager toolbar = new ToolBarManager ( SWT.FLAT | SWT.RIGHT );
         coolBar.add ( new ToolBarContributionItem ( toolbar, "main" ) );
         toolbar.add ( getAction ( ActionFactory.NEW_WIZARD_DROP_DOWN.getId () ) );
     }
