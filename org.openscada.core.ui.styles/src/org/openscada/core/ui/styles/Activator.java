@@ -36,10 +36,15 @@ public class Activator extends AbstractUIPlugin
         plugin = this;
         this.styles = new StyleManager ();
 
-        this.styles.put ( Style.OK, new StyleInformation ( null, null, null ) );
-        this.styles.put ( Style.ALARM, new StyleInformation ( null, ColorDescriptor.createFrom ( new RGB ( 255, 0, 0 ) ), null ) );
-        this.styles.put ( Style.ERROR, new StyleInformation ( null, ColorDescriptor.createFrom ( new RGB ( 255, 0, 255 ) ), null ) );
-        this.styles.put ( Style.MANUAL, new StyleInformation ( null, ColorDescriptor.createFrom ( new RGB ( 100, 149, 237 ) ), null ) );
+        fillDefault ( this.styles );
+    }
+
+    public static void fillDefault ( final StyleManager styles )
+    {
+        styles.put ( Style.OK, new StyleInformation ( null, null, null ) );
+        styles.put ( Style.ALARM, new StyleInformation ( null, ColorDescriptor.createFrom ( new RGB ( 255, 0, 0 ) ), null ) );
+        styles.put ( Style.ERROR, new StyleInformation ( null, ColorDescriptor.createFrom ( new RGB ( 255, 0, 255 ) ), null ) );
+        styles.put ( Style.MANUAL, new StyleInformation ( null, ColorDescriptor.createFrom ( new RGB ( 100, 149, 237 ) ), null ) );
     }
 
     /*
