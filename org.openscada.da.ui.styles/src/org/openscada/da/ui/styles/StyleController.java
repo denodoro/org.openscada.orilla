@@ -29,17 +29,12 @@ public class StyleController
             result.add ( Style.MANUAL );
         }
 
-        if ( result.isEmpty () )
-        {
-            result.add ( Style.OK );
-        }
-
         return result;
     }
 
-    public StyleInformation getStyle ( final Set<Style> styles )
+    public StyleInformation getStyle ( final StyleInformation initialStyle, final Set<Style> styles )
     {
-        StyleInformation result = org.openscada.core.ui.styles.Activator.getStyle ( Style.OK );
+        StyleInformation result = initialStyle;
 
         for ( final Style style : Style.values () )
         {
@@ -49,6 +44,12 @@ public class StyleController
             }
         }
         return result;
+    }
+
+    public StyleInformation getStyle ( final Set<Style> styles )
+    {
+        return getStyle ( org.openscada.core.ui.styles.Activator.getStyle ( Style.OK ), styles );
+
     }
 
     private StyleInformation mergeStyle ( final StyleInformation result, final StyleInformation style )

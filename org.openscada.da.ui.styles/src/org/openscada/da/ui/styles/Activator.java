@@ -63,4 +63,9 @@ public class Activator extends AbstractUIPlugin
         return plugin.controller.getStyle ( plugin.controller.convertToStyle ( value ) );
     }
 
+    public static StyleInformation getStyle ( final StyleInformation baseStyle, final DataItemValue value )
+    {
+        return plugin.controller.getStyle ( baseStyle, plugin.controller.convertToStyle ( value ) );
+    }
+
 }
