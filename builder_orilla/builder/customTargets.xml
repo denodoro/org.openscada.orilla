@@ -139,6 +139,7 @@
   	<openscada.builder.copyPlugin id="org.openscada.da.net.client"/>
   	<openscada.builder.copyPlugin id="org.openscada.da.ui.connection" />
   	<openscada.builder.copyPlugin id="org.openscada.da.ui.connection.creator.net" />
+  	<openscada.builder.copyPlugin id="org.openscada.da.ui.styles"/>
   	
   	<!-- OpenSCADA AE UI -->
   	  	
