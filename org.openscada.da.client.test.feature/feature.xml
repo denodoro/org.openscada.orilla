@@ -378,6 +378,7 @@ POSSIBILITY OF SUCH DAMAGES.
       <import plugin="org.openscada.da.server.common"/>
       <import plugin="org.openscada.da.client.net" version="0.13.0" match="greaterOrEqual"/>
       <import plugin="org.openscada.da.ui" version="0.14.0" match="greaterOrEqual"/>
+      <import plugin="org.openscada.core.ui.styles"/>
    </requires>
 
    <plugin
@@ -571,6 +572,13 @@ POSSIBILITY OF SUCH DAMAGES.
 
    <plugin
          id="org.openscada.da.ui.connection.creator.net"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.openscada.da.ui.styles"
          download-size="0"
          install-size="0"
          version="0.0.0"
