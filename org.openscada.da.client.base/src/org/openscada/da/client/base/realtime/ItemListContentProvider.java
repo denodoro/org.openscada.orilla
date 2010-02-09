@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2008 inavare GmbH (http://inavare.com)
+ * Copyright (C) 2006-2010 inavare GmbH (http://inavare.com)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,22 +19,24 @@
 
 package org.openscada.da.client.base.realtime;
 
-import org.apache.log4j.Logger;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ItemListContentProvider implements ITreeContentProvider, Listener
 {
-    private static Logger _log = Logger.getLogger ( ItemListContentProvider.class );
 
-    private Viewer _viewer = null;
+    private final static Logger logger = LoggerFactory.getLogger ( ItemListContentProvider.class );
 
-    private ListData _data = null;
+    private Viewer viewer = null;
+
+    private ListData data = null;
 
     public Object[] getChildren ( final Object parentElement )
     {
-        if ( this._data == null )
+        if ( this.data == null )
         {
             return null;
         }
@@ -54,14 +56,14 @@ public class ItemListContentProvider implements ITreeContentProvider, Listener
 
     public Object getParent ( final Object element )
     {
-        if ( this._data == null )
+        if ( this.data == null )
         {
             return null;
         }
 
         if ( element instanceof ListEntry )
         {
-            return this._data;
+            return this.data;
         }
 
         return null;
@@ -69,7 +71,7 @@ public class ItemListContentProvider implements ITreeContentProvider, Listener
 
     public boolean hasChildren ( final Object element )
     {
-        if ( this._data == null )
+        if ( this.data == null )
         {
             return false;
         }
@@ -96,7 +98,7 @@ public class ItemListContentProvider implements ITreeContentProvider, Listener
     {
         unsubscribe ();
 
-        this._viewer = viewer;
+        this.viewer = viewer;
 
         if ( newInput != null )
         {
@@ -111,16 +113,16 @@ public class ItemListContentProvider implements ITreeContentProvider, Listener
             return;
         }
 
-        this._data = (ListData)newInput;
-        this._data.addListener ( this );
+        this.data = (ListData)newInput;
+        this.data.addListener ( this );
     }
 
     private void unsubscribe ()
     {
-        if ( this._data != null )
+        if ( this.data != null )
         {
-            this._data.removeListener ( this );
-            this._data = null;
+            this.data.removeListener ( this );
+            this.data = null;
         }
     }
 
@@ -128,9 +130,9 @@ public class ItemListContentProvider implements ITreeContentProvider, Listener
     {
         try
         {
-            if ( this._viewer != null )
+            if ( this.viewer != null )
             {
-                this._viewer.getControl ().getDisplay ().asyncExec ( new Runnable () {
+                this.viewer.getControl ().getDisplay ().asyncExec ( new Runnable () {
                     public void run ()
                     {
                         performAdded ( entries );
@@ -140,24 +142,24 @@ public class ItemListContentProvider implements ITreeContentProvider, Listener
         }
         catch ( final Exception e )
         {
-            _log.warn ( "Failed to notify viewer", e ); //$NON-NLS-1$
+            logger.warn ( "Failed to notify viewer", e ); //$NON-NLS-1$
         }
     }
 
     protected void performAdded ( final ListEntry[] entries )
     {
-        if ( this._viewer.getControl ().isDisposed () )
+        if ( this.viewer.getControl ().isDisposed () )
         {
             return;
         }
 
-        if ( this._viewer instanceof TreeViewer )
+        if ( this.viewer instanceof TreeViewer )
         {
-            ( (TreeViewer)this._viewer ).add ( this._data, entries );
+            ( (TreeViewer)this.viewer ).add ( this.data, entries );
         }
-        else if ( this._viewer != null )
+        else if ( this.viewer != null )
         {
-            this._viewer.refresh ();
+            this.viewer.refresh ();
         }
     }
 
@@ -165,9 +167,9 @@ public class ItemListContentProvider implements ITreeContentProvider, Listener
     {
         try
         {
-            if ( this._viewer != null )
+            if ( this.viewer != null )
             {
-                this._viewer.getControl ().getDisplay ().asyncExec ( new Runnable () {
+                this.viewer.getControl ().getDisplay ().asyncExec ( new Runnable () {
                     public void run ()
                     {
                         performRemoved ( entries );
@@ -177,24 +179,24 @@ public class ItemListContentProvider implements ITreeContentProvider, Listener
         }
         catch ( final Exception e )
         {
-            _log.warn ( "Failed to notify viewer", e ); //$NON-NLS-1$
+            logger.warn ( "Failed to notify viewer", e ); //$NON-NLS-1$
         }
     }
 
     public void performRemoved ( final ListEntry[] entries )
     {
-        if ( this._viewer.getControl ().isDisposed () )
+        if ( this.viewer.getControl ().isDisposed () )
         {
             return;
         }
 
-        if ( this._viewer instanceof TreeViewer )
+        if ( this.viewer instanceof TreeViewer )
         {
-            ( (TreeViewer)this._viewer ).remove ( entries );
+            ( (TreeViewer)this.viewer ).remove ( entries );
         }
-        else if ( this._viewer != null )
+        else if ( this.viewer != null )
         {
-            this._viewer.refresh ();
+            this.viewer.refresh ();
         }
     }
 
@@ -202,9 +204,9 @@ public class ItemListContentProvider implements ITreeContentProvider, Listener
     {
         try
         {
-            if ( this._viewer != null )
+            if ( this.viewer != null )
             {
-                this._viewer.getControl ().getDisplay ().asyncExec ( new Runnable () {
+                this.viewer.getControl ().getDisplay ().asyncExec ( new Runnable () {
                     public void run ()
                     {
                         performUpdated ( entries );
@@ -214,28 +216,28 @@ public class ItemListContentProvider implements ITreeContentProvider, Listener
         }
         catch ( final Exception e )
         {
-            _log.warn ( "Failed to notify viewer", e ); //$NON-NLS-1$
+            logger.warn ( "Failed to notify viewer", e ); //$NON-NLS-1$
         }
     }
 
     public void performUpdated ( final ListEntry[] entries )
     {
-        if ( this._viewer.getControl ().isDisposed () )
+        if ( this.viewer.getControl ().isDisposed () )
         {
             return;
         }
 
-        if ( this._viewer instanceof TreeViewer )
+        if ( this.viewer instanceof TreeViewer )
         {
             for ( final ListEntry entry : entries )
             {
-                ( (TreeViewer)this._viewer ).refresh ( entry );
+                ( (TreeViewer)this.viewer ).refresh ( entry );
             }
-            ( (TreeViewer)this._viewer ).update ( entries, null );
+            ( (TreeViewer)this.viewer ).update ( entries, null );
         }
-        else if ( this._viewer != null )
+        else if ( this.viewer != null )
         {
-            this._viewer.refresh ();
+            this.viewer.refresh ();
         }
     }
 

@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2009 inavare GmbH (http://inavare.com)
+ * Copyright (C) 2006-2010 inavare GmbH (http://inavare.com)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,12 +28,13 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-import org.apache.log4j.Logger;
 import org.openscada.da.ui.connection.data.Item;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ListData implements Observer
 {
-    private static Logger logger = Logger.getLogger ( ListData.class );
+    private final static Logger logger = LoggerFactory.getLogger ( ListData.class );
 
     private List<ListEntry> items = new CopyOnWriteArrayList<ListEntry> ();
 
