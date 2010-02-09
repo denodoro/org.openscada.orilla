@@ -1,5 +1,7 @@
 package org.openscada.core.ui.styles;
 
+import org.eclipse.jface.resource.ColorDescriptor;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -14,6 +16,8 @@ public class Activator extends AbstractUIPlugin
 
     // The shared instance
     private static Activator plugin;
+
+    private StyleManager styles;
 
     /**
      * The constructor
@@ -30,6 +34,12 @@ public class Activator extends AbstractUIPlugin
     {
         super.start ( context );
         plugin = this;
+        this.styles = new StyleManager ();
+
+        this.styles.put ( Style.OK, new StyleInformation ( null, null, null ) );
+        this.styles.put ( Style.ALARM, new StyleInformation ( null, ColorDescriptor.createFrom ( new RGB ( 255, 0, 0 ) ), null ) );
+        this.styles.put ( Style.ERROR, new StyleInformation ( null, ColorDescriptor.createFrom ( new RGB ( 255, 0, 255 ) ), null ) );
+        this.styles.put ( Style.MANUAL, new StyleInformation ( null, ColorDescriptor.createFrom ( new RGB ( 100, 149, 237 ) ), null ) );
     }
 
     /*
@@ -39,6 +49,7 @@ public class Activator extends AbstractUIPlugin
     public void stop ( final BundleContext context ) throws Exception
     {
         plugin = null;
+        this.styles = null;
         super.stop ( context );
     }
 
@@ -52,4 +63,8 @@ public class Activator extends AbstractUIPlugin
         return plugin;
     }
 
+    public static StyleInformation getStyle ( final Style style )
+    {
+        return plugin.styles.getStyle ( style );
+    }
 }
