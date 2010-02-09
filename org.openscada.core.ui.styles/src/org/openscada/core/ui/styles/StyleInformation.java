@@ -66,21 +66,21 @@ public class StyleInformation
 
     public StyleInformation override ( final StyleInformation overrideInformation )
     {
-        ColorDescriptor foreground = this.foreground;
-        ColorDescriptor background = this.background;
-        FontDescriptor font = this.font;
+        ColorDescriptor foreground = overrideInformation.foreground;
+        ColorDescriptor background = overrideInformation.background;
+        FontDescriptor font = overrideInformation.font;
 
         if ( foreground == null )
         {
-            foreground = overrideInformation.getForeground ();
+            foreground = this.getForeground ();
         }
         if ( background == null )
         {
-            background = overrideInformation.getBackground ();
+            background = this.getBackground ();
         }
         if ( font == null )
         {
-            font = overrideInformation.getFont ();
+            font = this.getFont ();
         }
 
         return new StyleInformation ( foreground, background, font );
