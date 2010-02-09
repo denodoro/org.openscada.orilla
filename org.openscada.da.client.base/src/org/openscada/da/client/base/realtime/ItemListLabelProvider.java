@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2008 inavare GmbH (http://inavare.com)
+ * Copyright (C) 2006-2010 inavare GmbH (http://inavare.com)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,8 +19,6 @@
 
 package org.openscada.da.client.base.realtime;
 
-import org.eclipse.jface.resource.ColorDescriptor;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.resource.LocalResourceManager;
 import org.eclipse.jface.resource.ResourceManager;
@@ -31,7 +29,7 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.RGB;
+import org.openscada.core.ui.styles.StyleInformation;
 import org.openscada.da.client.base.browser.VariantHelper;
 
 public class ItemListLabelProvider extends LabelProvider implements ITableLabelProvider, ITableFontProvider, ITableColorProvider
@@ -41,21 +39,6 @@ public class ItemListLabelProvider extends LabelProvider implements ITableLabelP
 
     public Image getColumnImage ( final Object element, final int columnIndex )
     {
-        if ( columnIndex == 0 && element instanceof ListEntry )
-        {
-            final ListEntry entry = (ListEntry)element;
-            if ( isError ( entry ) )
-            {
-                try
-                {
-                    return this.resourceManager.createImage ( ImageDescriptor.createFromFile ( ItemListLabelProvider.class, "icons/alarm.png" ) ); //$NON-NLS-1$
-                }
-                catch ( final Throwable e )
-                {
-                    return null;
-                }
-            }
-        }
         return null;
     }
 
@@ -117,19 +100,26 @@ public class ItemListLabelProvider extends LabelProvider implements ITableLabelP
 
     public Font getFont ( final Object element, final int columnIndex )
     {
-        return null;
-    }
-
-    private boolean isAttribute ( final ListEntry entry, final String attributeName, final boolean defaultValue )
-    {
-        for ( final AttributePair pair : entry.getAttributes () )
+        try
         {
-            if ( pair.key.equals ( attributeName ) )
+            if ( element instanceof ListEntry )
             {
-                return pair.value.asBoolean ();
+                final ListEntry entry = (ListEntry)element;
+                final StyleInformation si = org.openscada.da.ui.styles.Activator.getStyle ( entry.getItemValue () );
+
+                if ( si.getFont () == null )
+                {
+                    return null;
+                }
+
+                return this.resourceManager.createFont ( si.getFont () );
             }
         }
-        return defaultValue;
+        catch ( final Throwable e )
+        {
+        }
+
+        return null;
     }
 
     public Color getBackground ( final Object element, final int columnIndex )
@@ -139,14 +129,14 @@ public class ItemListLabelProvider extends LabelProvider implements ITableLabelP
             if ( element instanceof ListEntry )
             {
                 final ListEntry entry = (ListEntry)element;
-                if ( isError ( entry ) )
+                final StyleInformation si = org.openscada.da.ui.styles.Activator.getStyle ( entry.getItemValue () );
+
+                if ( si.getBackground () == null )
                 {
-                    return this.resourceManager.createColor ( ColorDescriptor.createFrom ( new RGB ( 255, 255, 0 ) ) );
+                    return null;
                 }
-                else if ( isAlarm ( entry ) )
-                {
-                    return this.resourceManager.createColor ( ColorDescriptor.createFrom ( new RGB ( 255, 0, 0 ) ) );
-                }
+
+                return this.resourceManager.createColor ( si.getBackground () );
             }
         }
         catch ( final Throwable e )
@@ -163,35 +153,21 @@ public class ItemListLabelProvider extends LabelProvider implements ITableLabelP
             if ( element instanceof ListEntry )
             {
                 final ListEntry entry = (ListEntry)element;
-                if ( isError ( entry ) )
+                final StyleInformation si = org.openscada.da.ui.styles.Activator.getStyle ( entry.getItemValue () );
+
+                if ( si.getForeground () == null )
                 {
                     return null;
                 }
-                else if ( isManual ( entry ) )
-                {
-                    return this.resourceManager.createColor ( ColorDescriptor.createFrom ( new RGB ( 0, 0, 255 ) ) );
-                }
+
+                return this.resourceManager.createColor ( si.getForeground () );
             }
         }
         catch ( final Throwable e )
         {
         }
+
         return null;
-    }
-
-    private boolean isManual ( final ListEntry entry )
-    {
-        return isAttribute ( entry, "org.openscada.da.manual.active", false ) || isAttribute ( entry, "manual", false ); //$NON-NLS-1$ $NON-NLS-2$
-    }
-
-    private boolean isAlarm ( final ListEntry entry )
-    {
-        return isAttribute ( entry, "alarm", false ); //$NON-NLS-1$
-    }
-
-    private boolean isError ( final ListEntry entry )
-    {
-        return isAttribute ( entry, "error", false ); //$NON-NLS-1$
     }
 
     @Override

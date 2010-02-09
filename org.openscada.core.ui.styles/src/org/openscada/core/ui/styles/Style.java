@@ -4,6 +4,6 @@ public enum Style
 {
     OK,
     ERROR,
-    ALARM,
-    MANUAL;
+    MANUAL,
+    ALARM;
 }
