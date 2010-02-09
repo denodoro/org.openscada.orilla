@@ -40,8 +40,10 @@ import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.Shape;
 import org.eclipse.draw2d.Triangle;
 import org.eclipse.draw2d.geometry.Dimension;
-import org.eclipse.swt.graphics.RGB;
+import org.eclipse.jface.resource.ColorDescriptor;
 import org.openscada.core.Variant;
+import org.openscada.core.ui.styles.Style;
+import org.openscada.core.ui.styles.StyleInformation;
 import org.openscada.da.client.dataitem.details.extra.Activator;
 import org.openscada.ui.utils.blink.Blinker;
 import org.openscada.ui.utils.blink.Blinker.Handler;
@@ -174,24 +176,34 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
         return figure;
     }
 
-    protected void blink ( final Shape tri, final State state )
+    protected void blink ( final Shape shape, final State state )
     {
+        final StyleInformation style;
+
         switch ( state )
         {
-        case NORMAL:
-            tri.setBackgroundColor ( ColorConstants.lightGray );
-            break;
-        case ALARM:
-            tri.setBackgroundColor ( ColorConstants.red );
-            break;
-        case ALARM_0:
-            tri.setBackgroundColor ( ColorConstants.lightGray );
-            break;
-        case ALARM_1:
-            tri.setBackgroundColor ( ColorConstants.red );
+        case UNSAFE:
+            style = org.openscada.core.ui.styles.Activator.getStyle ( Style.ERROR );
             break;
 
+        case ALARM:
+            style = org.openscada.core.ui.styles.Activator.getStyle ( Style.ALARM );
+            break;
+
+        case ALARM_1:
+            style = org.openscada.core.ui.styles.Activator.getStyle ( Style.ALARM );
+            break;
+
+        case NORMAL:
+        case ALARM_0:
+        default:
+            style = new StyleInformation ( null, ColorDescriptor.createFrom ( ColorConstants.lightGray ), null );
+            break;
         }
+
+        shape.setForegroundColor ( style.createForeground ( Activator.getResources () ) );
+        shape.setBackgroundColor ( style.createBackground ( Activator.getResources () ) );
+        shape.setFont ( style.createFont ( Activator.getResources () ) );
     }
 
     private void createConnection ( final Figure connLayer, final Label label, final Figure figure )
@@ -416,18 +428,6 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
     private void setTri ( final Shape tri, final String string )
     {
         tri.setOutline ( isActive ( string ) );
-        if ( isUnsafe ( string ) )
-        {
-            tri.setBackgroundColor ( Activator.getResources ().createColor ( new RGB ( 255, 0, 255 ) ) );
-        }
-        else if ( isAlarm ( string ) || isError ( string ) )
-        {
-            tri.setBackgroundColor ( ColorConstants.red );
-        }
-        else
-        {
-            tri.setBackgroundColor ( ColorConstants.lightGray );
-        }
     }
 
     protected abstract void setPreset ( final Variant value, final String string );

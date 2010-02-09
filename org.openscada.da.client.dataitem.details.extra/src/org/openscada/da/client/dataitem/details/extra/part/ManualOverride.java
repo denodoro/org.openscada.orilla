@@ -41,11 +41,17 @@ import org.eclipse.draw2d.MouseMotionListener;
 import org.eclipse.draw2d.PolygonDecoration;
 import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.RoundedRectangle;
+import org.eclipse.jface.resource.ColorDescriptor;
+import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.jface.resource.LocalResourceManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.openscada.core.Variant;
+import org.openscada.core.ui.styles.Style;
+import org.openscada.core.ui.styles.StyleInformation;
 import org.openscada.da.client.dataitem.details.part.AbstractBaseDetailsPart;
+import org.openscada.da.ui.styles.Activator;
 
 /**
  * A detail view for the manual override value, setting and getting the status
@@ -87,8 +93,16 @@ public class ManualOverride extends AbstractBaseDetailsPart
 
     private PolylineConnection rm2pConnection;
 
+    private LocalResourceManager resourceManager;
+
+    private StyleInformation baseStyle;
+
     public void createPart ( final Composite parent )
     {
+        this.baseStyle = new StyleInformation ( null, ColorDescriptor.createFrom ( ColorConstants.lightGray ), null );
+
+        this.resourceManager = new LocalResourceManager ( JFaceResources.getResources () );
+
         parent.setLayout ( new org.eclipse.swt.layout.GridLayout ( 1, false ) );
 
         this.canvas = new Canvas ( parent, SWT.NONE );
@@ -425,6 +439,7 @@ public class ManualOverride extends AbstractBaseDetailsPart
     public void dispose ()
     {
         this.canvas.dispose ();
+        this.resourceManager.dispose ();
         super.dispose ();
     }
 
@@ -470,11 +485,6 @@ public class ManualOverride extends AbstractBaseDetailsPart
         return this.value.isAttribute ( "remote.manual.active", false );
     }
 
-    private boolean isGlobalManual ()
-    {
-        return isLocalManual () || isRemoteManual ();
-    }
-
     private void updateLocalManualValue ()
     {
         if ( this.manualValue == null )
@@ -496,31 +506,25 @@ public class ManualOverride extends AbstractBaseDetailsPart
 
         // set result value
         this.rvValue.setText ( this.value.getValue ().toString () );
-        if ( isUnsafe () )
-        {
-            this.rvRect.setBackgroundColor ( ColorConstants.yellow );
-        }
-        else if ( isAlarm () )
-        {
-            this.rvRect.setBackgroundColor ( ColorConstants.red );
-        }
-        else if ( isGlobalManual () )
-        {
-            this.rvRect.setBackgroundColor ( ColorConstants.cyan );
-        }
-        else
-        {
-            this.rvRect.setBackgroundColor ( ColorConstants.lightGray );
-        }
 
+        final StyleInformation rvStyle = Activator.getStyle ( this.baseStyle, this.value );
+        this.rvRect.setForegroundColor ( rvStyle.createForeground ( this.resourceManager ) );
+        this.rvRect.setBackgroundColor ( rvStyle.createBackground ( this.resourceManager ) );
+        this.rvRect.setFont ( rvStyle.createFont ( this.resourceManager ) );
+
+        final StyleInformation pvStyle;
         if ( isRemoteManual () )
         {
-            this.pvRect.setBackgroundColor ( ColorConstants.cyan );
+            pvStyle = org.openscada.core.ui.styles.Activator.getStyle ( Style.MANUAL );
         }
         else
         {
-            this.pvRect.setBackgroundColor ( ColorConstants.lightGray );
+            pvStyle = this.baseStyle;
         }
+
+        this.pvRect.setBackgroundColor ( pvStyle.createBackground ( this.resourceManager ) );
+        this.pvRect.setForegroundColor ( pvStyle.createForeground ( this.resourceManager ) );
+        this.pvRect.setFont ( pvStyle.createFont ( this.resourceManager ) );
 
         // set manual value
         final Variant manualValue = this.value.getAttributes ().get ( "org.openscada.da.manual.value" );
