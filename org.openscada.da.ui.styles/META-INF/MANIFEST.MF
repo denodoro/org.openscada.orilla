@@ -1,0 +1,19 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: OpenSCADA DA Styles
+Bundle-SymbolicName: org.openscada.da.ui.styles
+Bundle-Version: 0.15.0.qualifier
+Bundle-Activator: org.openscada.da.ui.styles.Activator
+Bundle-Vendor: inavare GmbH
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.openscada.core.ui.styles;bundle-version="0.15.0"
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-ActivationPolicy: lazy
+Import-Package: org.openscada.da.client;version="0.15.0",
+ org.openscada.da.core;version="0.15.0"
+Export-Package: org.openscada.da.ui.styles;version="0.15.0";
+  uses:="org.openscada.da.client,
+   org.eclipse.ui.plugin,
+   org.osgi.framework,
+   org.openscada.core.ui.styles"
