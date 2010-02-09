@@ -47,7 +47,7 @@ public class StyleController
         {
             if ( styles.contains ( style ) )
             {
-                result = mergeStyle ( result, org.openscada.core.ui.styles.Activator.getStyle ( Style.OK ) );
+                result = mergeStyle ( result, org.openscada.core.ui.styles.Activator.getStyle ( style ) );
             }
         }
         return result;
