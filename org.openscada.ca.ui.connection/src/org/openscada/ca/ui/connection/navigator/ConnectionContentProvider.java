@@ -1,4 +1,4 @@
-package org.openscada.ae.ui.connection.navigator;
+package org.openscada.ca.ui.connection.navigator;
 
 import org.eclipse.jface.databinding.viewers.ObservableSetTreeContentProvider;
 import org.eclipse.jface.databinding.viewers.TreeStructureAdvisor;
