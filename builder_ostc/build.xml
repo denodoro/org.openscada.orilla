@@ -49,7 +49,7 @@
           target: publish              
          ================================= -->
     <target name="publish" depends="" description="Publish artifacts">
-    	<openscada.publish.product project="orilla" name="ostc"/>
+    	<openscada.publish.product project="orilla" name="ostc" builder="builder"/>
     </target>
 	
 	<!-- ================================= 
