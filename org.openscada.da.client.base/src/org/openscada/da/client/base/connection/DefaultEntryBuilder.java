@@ -19,8 +19,6 @@
 
 package org.openscada.da.client.base.connection;
 
-import java.util.concurrent.Executors;
-
 import org.openscada.core.ConnectionInformation;
 import org.openscada.da.client.Connection;
 import org.openscada.da.client.ItemManager;
@@ -64,7 +62,6 @@ public class DefaultEntryBuilder implements EntryBuilder
      */
     protected void setupConnection ( final Connection connection, final boolean requireOpen )
     {
-        connection.setExecutor ( Executors.newFixedThreadPool ( 1 ) );
         if ( requireOpen )
         {
             connection.connect ();

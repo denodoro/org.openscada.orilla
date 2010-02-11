@@ -19,8 +19,6 @@
 
 package org.openscada.da.client.base.connection;
 
-import java.util.concurrent.Executors;
-
 import org.openscada.core.ConnectionInformation;
 import org.openscada.core.client.AutoReconnectController;
 import org.openscada.da.client.Connection;
@@ -83,8 +81,6 @@ public class AutoReconnectEntryBuilder implements EntryBuilder
      */
     protected void setupConnection ( final Entry entry, final boolean requireOpen )
     {
-        entry.getConnection ().setExecutor ( Executors.newFixedThreadPool ( 1 ) );
-
         if ( requireOpen )
         {
             entry.getController ().connect ();
