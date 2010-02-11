@@ -77,7 +77,9 @@ public class DetailsViewPart extends ViewPart
     {
 
         final Composite comp = new Composite ( parent, SWT.NONE );
-        comp.setLayout ( new GridLayout ( 1, false ) );
+        final GridLayout layout = new GridLayout ( 1, false );
+        layout.marginHeight = layout.marginWidth = 0;
+        comp.setLayout ( layout );
 
         createHeader ( comp );
 
