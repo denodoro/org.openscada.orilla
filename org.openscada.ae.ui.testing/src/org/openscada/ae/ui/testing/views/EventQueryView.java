@@ -3,6 +3,7 @@ package org.openscada.ae.ui.testing.views;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.eclipse.core.databinding.observable.Realm;
 import org.eclipse.core.databinding.observable.set.WritableSet;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -33,13 +34,19 @@ public class EventQueryView extends AbstractEventQueryViewPart
 
     private final Set<Event> eventSet = new HashSet<Event> ();
 
-    private final WritableSet events;
+    final WritableSet events;
 
     private TableViewer viewer;
 
     public EventQueryView ()
     {
         this.events = new WritableSet ( SWTObservables.getRealm ( Display.getDefault () ) );
+    }
+
+    @Override
+    protected Realm getRealm ()
+    {
+        return this.events.getRealm ();
     }
 
     @Override
@@ -92,29 +99,29 @@ public class EventQueryView extends AbstractEventQueryViewPart
     }
 
     @Override
-    protected void handleDataChanged ( final Event[] addedEvents )
-    {
-        this.events.getRealm ().asyncExec ( new Runnable () {
-
-            public void run ()
-            {
-                performDataChanged ( addedEvents );
-            }
-        } );
-    }
-
-    @Override
     protected void clear ()
     {
         super.clear ();
 
-        this.events.getRealm ().asyncExec ( new Runnable () {
+        scheduleJob ( new Runnable () {
 
             public void run ()
             {
                 EventQueryView.this.eventSet.clear ();
                 EventQueryView.this.events.clear ();
                 EventQueryView.this.stateLabel.setText ( "<no query selected>" );
+            }
+        } );
+    }
+
+    @Override
+    protected void handleDataChanged ( final Event[] addedEvents )
+    {
+        scheduleJob ( new Runnable () {
+
+            public void run ()
+            {
+                performDataChanged ( addedEvents );
             }
         } );
     }
@@ -127,13 +134,7 @@ public class EventQueryView extends AbstractEventQueryViewPart
 
             for ( final Event event : addedEvents )
             {
-                /*
-                this.eventSet.remove ( event );
-                this.eventSet.add ( event );
-                */
-                // this.events.remove ( event );
                 this.events.add ( event );
-
             }
 
         }
@@ -167,7 +168,7 @@ public class EventQueryView extends AbstractEventQueryViewPart
             return;
         }
 
-        this.stateLabel.getDisplay ().asyncExec ( new Runnable () {
+        scheduleJob ( new Runnable () {
 
             public void run ()
             {

@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.Map;
 
 import org.eclipse.core.databinding.beans.BeansObservables;
+import org.eclipse.core.databinding.observable.Realm;
 import org.eclipse.core.databinding.observable.set.WritableSet;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -50,6 +51,12 @@ public class MonitorsView extends AbstractConditionQueryViewPart
     public MonitorsView ()
     {
         this.monitors = new WritableSet ( SWTObservables.getRealm ( Display.getDefault () ) );
+    }
+
+    @Override
+    protected Realm getRealm ()
+    {
+        return this.monitors.getRealm ();
     }
 
     @Override
@@ -153,29 +160,29 @@ public class MonitorsView extends AbstractConditionQueryViewPart
     }
 
     @Override
-    public void handleDataChanged ( final ConditionStatusInformation[] addedOrUpdated, final String[] removed, final boolean full )
-    {
-        this.monitors.getRealm ().asyncExec ( new Runnable () {
-
-            public void run ()
-            {
-                performDataChanged ( addedOrUpdated, removed );
-            }
-        } );
-    }
-
-    @Override
     protected void clear ()
     {
         super.clear ();
 
-        this.monitors.getRealm ().asyncExec ( new Runnable () {
+        scheduleJob ( new Runnable () {
 
             public void run ()
             {
                 MonitorsView.this.monitorSet.clear ();
                 MonitorsView.this.monitors.clear ();
                 MonitorsView.this.stateLabel.setText ( "<no query selected>" );
+            }
+        } );
+    }
+
+    @Override
+    public void handleDataChanged ( final ConditionStatusInformation[] addedOrUpdated, final String[] removed, final boolean full )
+    {
+        scheduleJob ( new Runnable () {
+
+            public void run ()
+            {
+                performDataChanged ( addedOrUpdated, removed );
             }
         } );
     }
@@ -244,7 +251,7 @@ public class MonitorsView extends AbstractConditionQueryViewPart
             return;
         }
 
-        this.stateLabel.getDisplay ().asyncExec ( new Runnable () {
+        scheduleJob ( new Runnable () {
 
             public void run ()
             {

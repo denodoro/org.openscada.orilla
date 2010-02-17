@@ -4,10 +4,9 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.part.ViewPart;
 import org.openscada.ae.ui.connection.data.BrowserEntryBean;
 
-public abstract class AbstractEntryViewPart extends ViewPart
+public abstract class AbstractEntryViewPart extends JobViewPart
 {
     protected BrowserEntryBean entry;
 
