@@ -1,0 +1,23 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Alarms & Events GUI
+Bundle-SymbolicName: org.openscada.ae.ui.views; singleton:=true
+Bundle-Version: 0.15.0.qualifier
+Bundle-Activator: org.openscada.ae.ui.views.Activator
+Bundle-Vendor: inavare GmbH
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.jface.databinding;bundle-version="1.3.0",
+ org.eclipse.core.databinding;bundle-version="1.2.0",
+ org.eclipse.nebula.cwt;bundle-version="0.9.0",
+ org.eclipse.nebula.widgets.cdatetime;bundle-version="0.14.0"
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-ActivationPolicy: lazy
+Import-Package: org.openscada.ae,
+ org.openscada.ae.client,
+ org.openscada.core;version="0.15.0",
+ org.openscada.core.client;version="0.14.0",
+ org.openscada.core.connection.provider;version="0.14.0",
+ org.openscada.utils.filter;version="0.15.0",
+ org.openscada.utils.lang,
+ org.slf4j;version="1.5.8"

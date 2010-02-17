@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            allowMultiple="true"
+            category="org.openscada.ae.ui.category"
+            class="org.openscada.ae.ui.views.views.MonitorsView"
+            icon="icons/monitors.png"
+            id="org.openscada.ae.ui.views.views.monitors"
+            name="Monitors*"
+            restorable="true">
+      </view>
+      <view
+            allowMultiple="false"
+            category="org.openscada.ae.ui.category"
+            class="org.openscada.ae.ui.views.views.EventPoolView"
+            icon="icons/eventpool.png"
+            id="org.openscada.ae.ui.views.views.eventpool"
+            name="Event Pool*"
+            restorable="true">
+      </view>
+      <view
+            allowMultiple="false"
+            category="org.openscada.ae.ui.category"
+            class="org.openscada.ae.ui.views.views.EventHistoryView"
+            icon="icons/eventhistory.png"
+            id="org.openscada.ae.ui.views.views.eventhistory"
+            name="Event History*"
+            restorable="true">
+      </view>
+   </extension>
+
+</plugin>
