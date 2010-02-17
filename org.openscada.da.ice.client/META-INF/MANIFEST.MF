@@ -8,7 +8,7 @@ Bundle-Vendor: inavare GmbH
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.openscada.core.client;bundle-version="0.15.0",
- org.openscada.core.ice.base;bundle-version="0.13.0",
+ org.openscada.core.ice;bundle-version="0.13.0",
  org.openscada.da.client.base;bundle-version="0.14.0",
  org.openscada.da.client.common;bundle-version="0.13.0",
  org.openscada.da.client.connector;bundle-version="0.13.3",
