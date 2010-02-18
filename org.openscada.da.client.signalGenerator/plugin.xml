@@ -18,7 +18,7 @@
       <objectContribution
             adaptable="false"
             id="org.openscada.da.client.signalGenerator.popupMenus.oc1"
-            objectClass="org.openscada.da.client.base.browser.DataItemEntry">
+            objectClass="org.openscada.da.ui.connection.data.DataItemHolder">
          <action
                class="org.openscada.da.client.signalgenerator.action.ShowGenerator"
                enablesFor="+"
