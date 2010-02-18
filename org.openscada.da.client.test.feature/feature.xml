@@ -361,7 +361,7 @@ POSSIBILITY OF SUCH DAMAGES.
       <import plugin="slf4j.api"/>
       <import plugin="org.apache.mina.core"/>
       <import plugin="org.openscada.core.client.net"/>
-      <import plugin="org.openscada.core.net.base"/>
+      <import plugin="org.openscada.core.net"/>
       <import plugin="org.openscada.net"/>
       <import plugin="org.openscada.utils.osgi"/>
       <import plugin="com.springsource.javax.xml.stream"/>
