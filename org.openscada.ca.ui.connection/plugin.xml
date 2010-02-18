@@ -39,6 +39,10 @@
                      value="org.openscada.ca.ui.connection.data.ConfigurationInformationBean">
                </instanceof>
             </or></possibleChildren>
+         <actionProvider
+               class="org.openscada.ca.ui.connection.CommonActionProvider"
+               priority="high">
+         </actionProvider>
       </navigatorContent>
    </extension>
    <extension
@@ -49,6 +53,15 @@
    </extension>
    <extension
          point="org.eclipse.ui.commands">
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="org.openscada.ca.ui.connection.editors.BasicEditor"
+            default="false"
+            id="org.openscada.ca.ui.connection.editors.BasicEditor"
+            name="Configuration Editor">
+      </editor>
    </extension>
 
 </plugin>

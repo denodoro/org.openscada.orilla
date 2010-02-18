@@ -99,23 +99,20 @@ public class FactoryInformationBean extends AbstractPropertyChange implements Co
 
     protected void setFactoryInformation ( final FactoryInformation factoryInformation )
     {
+        this.configurations.clear ();
         if ( factoryInformation != null )
         {
             this.factoryInformation = factoryInformation;
-        }
-        if ( this.factoryInformation != null && this.factoryInformation.getConfigurations () != null )
-        {
-            this.configurations.clear ();
-            for ( final ConfigurationInformation cfg : factoryInformation.getConfigurations () )
+            if ( factoryInformation.getConfigurations () != null )
             {
-                final ConfigurationInformationBean cfgBean = new ConfigurationInformationBean ( cfg );
-                this.configurations.add ( cfgBean );
+                for ( final ConfigurationInformation cfg : factoryInformation.getConfigurations () )
+                {
+                    final ConfigurationInformationBean cfgBean = new ConfigurationInformationBean ( this.service, cfg );
+                    this.configurations.add ( cfgBean );
+                }
             }
         }
-        else
-        {
-            this.configurations.clear ();
-        }
+
         firePropertyChange ( FactoryInformationBean.PROP_DATA, null, factoryInformation );
     }
 
@@ -138,7 +135,7 @@ public class FactoryInformationBean extends AbstractPropertyChange implements Co
     {
         if ( state == ConnectionState.BOUND )
         {
-            // loadConfiguration ();
+            loadConfiguration ();
         }
         else
         {

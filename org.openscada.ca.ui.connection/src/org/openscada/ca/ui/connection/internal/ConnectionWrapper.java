@@ -138,11 +138,14 @@ public class ConnectionWrapper extends WritableSet implements PropertyChangeList
         {
             clear ();
             this.entries.clear ();
-            for ( final FactoryInformation info : factories )
+            if ( factories != null )
             {
-                final FactoryInformationBean bean = new FactoryInformationBean ( info, this.service );
-                this.entries.put ( bean.getFactoryInformation ().getId (), bean );
-                add ( bean );
+                for ( final FactoryInformation info : factories )
+                {
+                    final FactoryInformationBean bean = new FactoryInformationBean ( info, this.service );
+                    this.entries.put ( bean.getFactoryInformation ().getId (), bean );
+                    add ( bean );
+                }
             }
         }
         finally

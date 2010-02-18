@@ -1,5 +1,9 @@
 package org.openscada.ca.ui.connection.navigator;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.Arrays;
+
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.resource.LocalResourceManager;
 import org.eclipse.jface.resource.ResourceManager;
@@ -11,7 +15,7 @@ import org.openscada.ui.databinding.StyledViewerLabel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ConnectionLabelProvider extends CommonListeningLabelProvider
+public class ConnectionLabelProvider extends CommonListeningLabelProvider implements PropertyChangeListener
 {
 
     private final static Logger logger = LoggerFactory.getLogger ( ConnectionLabelProvider.class );
@@ -40,7 +44,12 @@ public class ConnectionLabelProvider extends CommonListeningLabelProvider
             final FactoryInformationBean entry = (FactoryInformationBean)element;
             final StyledString string = new StyledString ( entry.getFactoryInformation ().getId () );
 
-            string.append ( String.format ( " [%s]", entry.getFactoryInformation ().getState () ), StyledString.COUNTER_STYLER );
+            string.append ( String.format ( " [%s]", entry.getFactoryInformation ().getState () ), StyledString.DECORATIONS_STYLER );
+
+            if ( entry.getConfigurations () != null )
+            {
+                string.append ( String.format ( " (%s)", entry.getConfigurations ().size () ), StyledString.COUNTER_STYLER );
+            }
 
             label.setStyledText ( string );
         }
@@ -50,7 +59,7 @@ public class ConnectionLabelProvider extends CommonListeningLabelProvider
 
             final StyledString string = new StyledString ( entry.getConfigurationInformation ().getId () );
 
-            string.append ( String.format ( " [%s]", entry.getConfigurationInformation ().getState () ), StyledString.COUNTER_STYLER );
+            string.append ( String.format ( " [%s]", entry.getConfigurationInformation ().getState () ), StyledString.DECORATIONS_STYLER );
 
             label.setStyledText ( string );
         }
@@ -77,12 +86,26 @@ public class ConnectionLabelProvider extends CommonListeningLabelProvider
     protected void addListenerTo ( final Object next )
     {
         super.addListenerTo ( next );
+        if ( next instanceof FactoryInformationBean )
+        {
+            ( (FactoryInformationBean)next ).addPropertyChangeListener ( this );
+        }
     }
 
     @Override
     protected void removeListenerFrom ( final Object next )
     {
+        if ( next instanceof FactoryInformationBean )
+        {
+            ( (FactoryInformationBean)next ).removePropertyChangeListener ( this );
+        }
+
         super.removeListenerFrom ( next );
+    }
+
+    public void propertyChange ( final PropertyChangeEvent evt )
+    {
+        fireChangeEvent ( Arrays.asList ( evt.getSource () ) );
     }
 
 }
