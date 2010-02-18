@@ -17,18 +17,6 @@
          point="org.eclipse.ui.popupMenus">
       <objectContribution
             adaptable="false"
-            id="org.openscada.da.client.dataitem.details.objectContribution1"
-            objectClass="org.openscada.da.client.base.browser.HiveItem">
-         <action
-               class="org.openscada.da.client.dataitem.details.ShowDetailsAction"
-               enablesFor="1"
-               id="org.openscada.da.client.dataitem.details.DataItemDetails"
-               label="%action.dataItemDetails.label"
-               menubarPath="additions">
-         </action>
-      </objectContribution>
-      <objectContribution
-            adaptable="false"
             id="org.openscada.da.client.dataitem.details.objectContribution2"
             objectClass="org.openscada.da.client.base.realtime.ListEntry">
          <action
@@ -42,7 +30,7 @@
       <objectContribution
             adaptable="false"
             id="org.openscada.da.client.dataitem.details.objectContribution3"
-            objectClass="org.openscada.da.client.base.browser.DataItemEntry">
+            objectClass="org.openscada.da.ui.connection.data.DataItemHolder">
          <action
                class="org.openscada.da.client.dataitem.details.ShowDetailsAction"
                enablesFor="1"
