@@ -27,7 +27,7 @@
       <import plugin="org.openscada.core.client.net"/>
       <import plugin="org.openscada.da.core.common"/>
       <import plugin="org.openscada.net"/>
-      <import plugin="org.openscada.core.net.base"/>
+      <import plugin="org.openscada.core.net"/>
       <import plugin="org.eclipse.ui"/>
       <import plugin="org.eclipse.core.runtime"/>
       <import plugin="org.eclipse.jface.databinding" version="1.2.0" match="greaterOrEqual"/>
