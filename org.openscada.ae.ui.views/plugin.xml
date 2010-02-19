@@ -28,7 +28,7 @@
             class="org.openscada.ae.ui.views.views.EventHistoryView"
             icon="icons/eventhistory.png"
             id="org.openscada.ae.ui.views.views.eventhistory"
-            name="Event History*"
+            name="Event History"
             restorable="true">
       </view>
    </extension>

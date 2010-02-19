@@ -246,14 +246,21 @@ public class EventHistoryView extends AbstractAlarmsEventsView
 
     private void retrieveData ( final String filter )
     {
-
         QueryListener queryListener = new QueryListener () {
             public void queryStateChanged ( final QueryState state )
             {
-                System.err.println ( state );
                 if ( ( state == QueryState.CONNECTED ) && ( !EventHistoryView.this.isPaused.get () ) )
                 {
                     continueLoading ();
+                }
+                else if ( state == QueryState.CONNECTING )
+                {
+                    getSite ().getShell ().getDisplay ().asyncExec ( new Runnable () {
+                        public void run ()
+                        {
+                            EventHistoryView.this.stateLabel.setText ( "loading ..." );
+                        }
+                    } );
                 }
                 else if ( state == QueryState.DISCONNECTED )
                 {
@@ -261,7 +268,7 @@ public class EventHistoryView extends AbstractAlarmsEventsView
                     getSite ().getShell ().getDisplay ().asyncExec ( new Runnable () {
                         public void run ()
                         {
-                            EventHistoryView.this.stateLabel.setText ( "found " + EventHistoryView.this.noOfEvents.get () + " Events" );
+                            EventHistoryView.this.stateLabel.setText ( "Found " + EventHistoryView.this.noOfEvents.get () + " Events." );
                             EventHistoryView.this.pauseAction.setEnabled ( false );
                         }
                     } );
@@ -270,17 +277,27 @@ public class EventHistoryView extends AbstractAlarmsEventsView
 
             public void queryData ( final Event[] events )
             {
-
-                final Set<DecoratedEvent> decoratedEvents = new LinkedHashSet<DecoratedEvent> ( events.length + 1 );
-                for ( Event event : events )
+                final Set<DecoratedEvent> decoratedEvents;
+                if ( events == null )
                 {
-                    decoratedEvents.add ( new DecoratedEvent ( event ) );
+                    decoratedEvents = new LinkedHashSet<DecoratedEvent> ();
+                }
+                else
+                {
+                    // set initial capacity to expected capacity
+                    // which should be a bit more efficient, because the space
+                    // for the given events has to be reserved anyway
+                    decoratedEvents = new LinkedHashSet<DecoratedEvent> ( events.length + 1 );
+                    for ( Event event : events )
+                    {
+                        decoratedEvents.add ( new DecoratedEvent ( event ) );
+                    }
                 }
                 EventHistoryView.this.noOfEvents.addAndGet ( decoratedEvents.size () );
                 getSite ().getShell ().getDisplay ().asyncExec ( new Runnable () {
                     public void run ()
                     {
-                        EventHistoryView.this.stateLabel.setText ( "found " + EventHistoryView.this.noOfEvents.get () + " Events" );
+                        EventHistoryView.this.stateLabel.setText ( "Found " + EventHistoryView.this.noOfEvents.get () + " Events. loading ..." );
                         EventHistoryView.this.eventsTable.addEvents ( decoratedEvents );
                     }
                 } );

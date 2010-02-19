@@ -82,7 +82,8 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
             {
                 try
                 {
-                    setConnectionUri ( "ae:net://localhost:1302" );
+                    //setConnectionUri ( "ae:net://localhost:1302" );
+                    setConnectionUri ( "ae:net://zeroone.local:1302" );
                 }
                 catch ( Exception e )
                 {
@@ -182,6 +183,7 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
                 connectionService.getConnection ().addConnectionStateListener ( connectionStateListener );
                 if ( connectionService.getConnection ().getState () == ConnectionState.BOUND )
                 {
+                    AbstractAlarmsEventsView.this.setConnection ( (Connection)connectionService.getConnection () );
                     onConnect ();
                 }
                 else

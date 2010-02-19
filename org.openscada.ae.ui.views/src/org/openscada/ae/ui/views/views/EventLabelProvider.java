@@ -1,19 +1,11 @@
-package org.openscada.ae.ui.views.model;
+package org.openscada.ae.ui.views.views;
 
-import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ViewerCell;
-import org.eclipse.swt.graphics.Image;
 import org.openscada.ae.Event;
-import org.openscada.ae.Event.Fields;
-import org.openscada.core.Variant;
+import org.openscada.ae.ui.views.model.DecoratedEvent;
 
-public class EventLabelProvider extends CellLabelProvider
+public class EventLabelProvider extends BaseLabelProvider
 {
-    public Image getColumnImage ( final Object element, final int columnIndex )
-    {
-        return null;
-    }
-
     @Override
     public void update ( final ViewerCell cell )
     {
@@ -28,10 +20,10 @@ public class EventLabelProvider extends CellLabelProvider
             cell.setText ( event.getEvent ().getId ().toString () );
             break;
         case 1:
-            cell.setText ( event.getEvent ().getSourceTimestamp ().toString () );
+            cell.setText ( this.df.format ( event.getEvent ().getSourceTimestamp () ) );
             break;
         case 2:
-            cell.setText ( event.getEvent ().getEntryTimestamp ().toString () );
+            cell.setText ( this.df.format ( event.getEvent ().getEntryTimestamp () ) );
             break;
         case 3:
             cell.setText ( toLabel ( event, Event.Fields.MONITOR_TYPE ) );
@@ -81,15 +73,5 @@ public class EventLabelProvider extends CellLabelProvider
         default:
             cell.setText ( "" );
         }
-    }
-
-    private String toLabel ( final DecoratedEvent event, final Fields field )
-    {
-        Variant value = event.getEvent ().getField ( field );
-        if ( value == null )
-        {
-            return "";
-        }
-        return value.toLabel ( "" );
     }
 }

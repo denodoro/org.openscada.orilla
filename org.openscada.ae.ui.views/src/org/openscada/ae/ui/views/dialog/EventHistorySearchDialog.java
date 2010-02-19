@@ -45,7 +45,7 @@ public class EventHistorySearchDialog extends TitleAreaDialog implements FilterC
         // add QBE filter form
         TabItem qbeTab = new TabItem ( tabFolder, SWT.NULL );
         qbeTab.setText ( "Query by Example" );
-        qbeTab.setControl ( new FilterQueryByExampleComposite ( this, tabFolder, SWT.NONE ) );
+        qbeTab.setControl ( new FilterQueryByExampleComposite ( this, tabFolder, SWT.NONE, filterString ) );
         // add advanced filter form
         TabItem advancedTab = new TabItem ( tabFolder, SWT.NULL );
         advancedTab.setText ( "Advanced Query" );

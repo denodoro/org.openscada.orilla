@@ -14,7 +14,6 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.openscada.ae.Event;
 import org.openscada.ae.ui.views.model.DecoratedEvent;
-import org.openscada.ae.ui.views.model.EventLabelProvider;
 
 public class EventViewTable extends Composite
 {
@@ -61,7 +60,7 @@ public class EventViewTable extends Composite
         // id
         TableViewerColumn idColumn = new TableViewerColumn ( table, SWT.NONE );
         idColumn.getColumn ().setText ( "ID" );
-        idColumn.getColumn ().setWidth ( 75 );
+        idColumn.getColumn ().setWidth ( 0 );
         idColumn.getColumn ().setResizable ( true );
         idColumn.getColumn ().setMoveable ( false );
         idColumn.setLabelProvider ( labelProvider );
