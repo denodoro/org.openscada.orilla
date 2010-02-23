@@ -82,8 +82,9 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
             {
                 try
                 {
-                    //setConnectionUri ( "ae:net://localhost:1302" );
-                    setConnectionUri ( "ae:net://zeroone.local:1302" );
+                    // setConnectionUri ( "ae:net://localhost:1302" );
+                    // setConnectionUri ( "ae:net://zeroone.local:1302" );
+                    setConnectionUri ( "ae:net://carlton.local:1302" );
                 }
                 catch ( Exception e )
                 {

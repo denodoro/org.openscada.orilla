@@ -111,6 +111,13 @@ public class MonitorsView extends SubscriptionAlarmsEventsView
     }
 
     @Override
+    protected void onDisconnect ()
+    {
+        clearData ();
+        super.onDisconnect ();
+    }
+
+    @Override
     protected void subscribe ()
     {
         getSite ().getShell ().getDisplay ().asyncExec ( new Runnable () {
@@ -160,10 +167,21 @@ public class MonitorsView extends SubscriptionAlarmsEventsView
     protected void unSubscribe ()
     {
         System.err.println ( "UnSubscribe" );
+        clearData ();
         if ( this.connnection == null )
         {
             return;
         }
         this.connnection.setConditionListener ( this.subscriptionId, null );
+    }
+
+    private void clearData ()
+    {
+        getSite ().getShell ().getDisplay ().asyncExec ( new Runnable () {
+            public void run ()
+            {
+                MonitorsView.this.monitorsTable.clear ();
+            }
+        } );
     }
 }
