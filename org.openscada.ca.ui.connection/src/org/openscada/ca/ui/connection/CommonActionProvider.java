@@ -19,7 +19,11 @@ import org.eclipse.ui.navigator.ICommonActionExtensionSite;
 import org.eclipse.ui.navigator.ICommonViewerSite;
 import org.eclipse.ui.navigator.ICommonViewerWorkbenchSite;
 import org.openscada.ca.ui.connection.data.ConfigurationInformationBean;
+import org.openscada.ca.ui.connection.data.FactoryInformationBean;
 import org.openscada.ca.ui.connection.editors.BasicEditor;
+import org.openscada.ca.ui.connection.editors.ConfigurationEditorInput;
+import org.openscada.ca.ui.connection.editors.FactoryEditor;
+import org.openscada.ca.ui.connection.editors.FactoryEditorInput;
 
 public class CommonActionProvider extends org.eclipse.ui.navigator.CommonActionProvider
 {
@@ -58,7 +62,14 @@ public class CommonActionProvider extends org.eclipse.ui.navigator.CommonActionP
         {
             try
             {
-                page.openEditor ( input, BasicEditor.EDITOR_ID, true );
+                if ( input instanceof ConfigurationEditorInput )
+                {
+                    page.openEditor ( input, BasicEditor.EDITOR_ID, true );
+                }
+                else if ( input instanceof FactoryEditorInput )
+                {
+                    page.openEditor ( input, FactoryEditor.EDITOR_ID, true );
+                }
             }
             catch ( final PartInitException e )
             {
@@ -81,6 +92,12 @@ public class CommonActionProvider extends org.eclipse.ui.navigator.CommonActionP
                 {
                     final ConfigurationInformationBean bean = (ConfigurationInformationBean)o;
                     final ConfigurationEditorInput input = new ConfigurationEditorInput ( bean.getService (), bean.getConfigurationInformation ().getFactoryId (), bean.getConfigurationInformation ().getId () );
+                    result.add ( input );
+                }
+                else if ( o instanceof FactoryInformationBean )
+                {
+                    final FactoryInformationBean bean = (FactoryInformationBean)o;
+                    final FactoryEditorInput input = new FactoryEditorInput ( bean.getService (), bean.getFactoryInformation ().getId () );
                     result.add ( input );
                 }
             }

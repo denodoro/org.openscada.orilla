@@ -62,6 +62,12 @@
             id="org.openscada.ca.ui.connection.editors.BasicEditor"
             name="Configuration Editor">
       </editor>
+      <editor
+            class="org.openscada.ca.ui.connection.editors.FactoryEditor"
+            default="false"
+            id="org.openscada.ca.ui.connection.editors.FactoryEditor"
+            name="Factory Editor">
+      </editor>
    </extension>
 
 </plugin>

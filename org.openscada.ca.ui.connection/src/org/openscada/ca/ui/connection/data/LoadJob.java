@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.openscada.ca.ui.connection;
+package org.openscada.ca.ui.connection.data;
 
 import java.util.concurrent.ExecutionException;
 
@@ -11,6 +11,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.openscada.ca.ConfigurationInformation;
 import org.openscada.ca.connection.provider.ConnectionService;
+import org.openscada.ca.ui.connection.Activator;
 import org.openscada.utils.concurrent.NotifyFuture;
 
 public class LoadJob extends Job

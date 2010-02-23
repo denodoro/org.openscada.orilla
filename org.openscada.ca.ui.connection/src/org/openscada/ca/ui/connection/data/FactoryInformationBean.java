@@ -50,6 +50,11 @@ public class FactoryInformationBean extends AbstractPropertyChange implements Co
         service.getConnection ().addConnectionStateListener ( this );
     }
 
+    public ConnectionService getService ()
+    {
+        return this.service;
+    }
+
     public void setState ( final State state )
     {
         final State oldState = this.state;
@@ -135,7 +140,7 @@ public class FactoryInformationBean extends AbstractPropertyChange implements Co
     {
         if ( state == ConnectionState.BOUND )
         {
-            loadConfiguration ();
+            // loadConfiguration ();
         }
         else
         {

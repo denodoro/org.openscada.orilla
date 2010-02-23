@@ -11,8 +11,7 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 import org.openscada.ca.ConfigurationInformation;
-import org.openscada.ca.ui.connection.ConfigurationEditorInput;
-import org.openscada.ca.ui.connection.LoadJob;
+import org.openscada.ca.ui.connection.data.LoadJob;
 
 public class BasicEditor extends EditorPart
 {

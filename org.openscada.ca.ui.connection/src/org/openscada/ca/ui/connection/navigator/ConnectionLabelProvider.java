@@ -10,6 +10,7 @@ import org.eclipse.jface.resource.ResourceManager;
 import org.eclipse.jface.viewers.StyledString;
 import org.openscada.ca.ui.connection.data.ConfigurationInformationBean;
 import org.openscada.ca.ui.connection.data.FactoryInformationBean;
+import org.openscada.ca.ui.connection.data.FactoryInformationBean.State;
 import org.openscada.ui.databinding.CommonListeningLabelProvider;
 import org.openscada.ui.databinding.StyledViewerLabel;
 import org.slf4j.Logger;
@@ -46,7 +47,7 @@ public class ConnectionLabelProvider extends CommonListeningLabelProvider implem
 
             string.append ( String.format ( " [%s]", entry.getFactoryInformation ().getState () ), StyledString.DECORATIONS_STYLER );
 
-            if ( entry.getConfigurations () != null )
+            if ( entry.getConfigurations () != null && entry.getState () == State.COMPLETE )
             {
                 string.append ( String.format ( " (%s)", entry.getConfigurations ().size () ), StyledString.COUNTER_STYLER );
             }

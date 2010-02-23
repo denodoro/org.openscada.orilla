@@ -1,9 +1,10 @@
-package org.openscada.ca.ui.connection;
+package org.openscada.ca.ui.connection.editors;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
 import org.openscada.ca.connection.provider.ConnectionService;
+import org.openscada.ca.ui.connection.data.LoadJob;
 
 public class ConfigurationEditorInput implements IEditorInput
 {
@@ -52,9 +53,9 @@ public class ConfigurationEditorInput implements IEditorInput
         return toString ();
     }
 
+    @SuppressWarnings ( "unchecked" )
     public Object getAdapter ( final Class adapter )
     {
-        // TODO Auto-generated method stub
         return null;
     }
 
