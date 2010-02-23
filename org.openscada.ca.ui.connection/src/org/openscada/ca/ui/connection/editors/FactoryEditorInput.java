@@ -9,6 +9,8 @@ import org.openscada.ca.ui.connection.data.LoadFactoryJob;
 public class FactoryEditorInput implements IEditorInput
 {
 
+    private final String connectionUri;
+
     private final String factoryId;
 
     private final ConnectionService connectionService;
@@ -16,7 +18,13 @@ public class FactoryEditorInput implements IEditorInput
     public FactoryEditorInput ( final ConnectionService connectionService, final String factoryId )
     {
         this.connectionService = connectionService;
+        this.connectionUri = connectionService.getConnection ().getConnectionInformation ().toString ();
         this.factoryId = factoryId;
+    }
+
+    public String getConnectionUri ()
+    {
+        return this.connectionUri;
     }
 
     @Override

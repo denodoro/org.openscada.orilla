@@ -3,7 +3,6 @@ package org.openscada.ca.ui.connection.editors;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
-import org.openscada.ca.connection.provider.ConnectionService;
 import org.openscada.ca.ui.connection.data.LoadJob;
 
 public class ConfigurationEditorInput implements IEditorInput
@@ -13,11 +12,11 @@ public class ConfigurationEditorInput implements IEditorInput
 
     private final String configurationId;
 
-    private final ConnectionService connectionService;
+    private final String connectionUri;
 
-    public ConfigurationEditorInput ( final ConnectionService connectionService, final String factoryId, final String configurationId )
+    public ConfigurationEditorInput ( final String connectionUri, final String factoryId, final String configurationId )
     {
-        this.connectionService = connectionService;
+        this.connectionUri = connectionUri;
         this.factoryId = factoryId;
         this.configurationId = configurationId;
     }
@@ -61,7 +60,7 @@ public class ConfigurationEditorInput implements IEditorInput
 
     public LoadJob load ()
     {
-        return new LoadJob ( this.connectionService, this.factoryId, this.configurationId );
+        return new LoadJob ( this.connectionUri, this.factoryId, this.configurationId );
     }
 
 }

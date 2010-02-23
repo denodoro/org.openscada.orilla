@@ -1,10 +1,20 @@
 package org.openscada.ca.ui.connection.editors;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import org.eclipse.core.databinding.observable.Realm;
+import org.eclipse.core.databinding.observable.set.WritableSet;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
-import org.eclipse.jface.dialogs.ProgressIndicator;
+import org.eclipse.jface.databinding.viewers.ObservableSetContentProvider;
+import org.eclipse.jface.viewers.ColumnWeightData;
+import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
@@ -15,17 +25,17 @@ import org.openscada.ca.ui.connection.data.LoadJob;
 
 public class BasicEditor extends EditorPart
 {
-
     public static final String EDITOR_ID = "org.openscada.ca.ui.connection.editors.BasicEditor";
 
     private TableViewer viewer;
 
-    private ProgressIndicator progress;
-
     private ConfigurationInformation configuration;
+
+    private final WritableSet dataSet;
 
     public BasicEditor ()
     {
+        this.dataSet = new WritableSet ();
     }
 
     @Override
@@ -43,31 +53,69 @@ public class BasicEditor extends EditorPart
     {
         setPartName ( input.toString () );
         setSite ( site );
-        setInput ( input );
+        try
+        {
+            setInput ( input );
+        }
+        catch ( final Exception e )
+        {
+            throw new PartInitException ( "Failed to initialize editor", e );
+        }
+    }
 
-        final ConfigurationEditorInput cfgInput = (ConfigurationEditorInput)input;
-
-        final LoadJob job = cfgInput.load ();
+    @Override
+    protected void setInput ( final IEditorInput input )
+    {
+        final ConfigurationEditorInput factoryInput = (ConfigurationEditorInput)input;
+        final LoadJob job = factoryInput.load ();
         job.addJobChangeListener ( new JobChangeAdapter () {
             @Override
             public void done ( final IJobChangeEvent event )
             {
-                setData ( job );
+                BasicEditor.this.handleSetResult ( job.getConfiguration () );
             }
         } );
         job.schedule ();
+
+        super.setInput ( input );
     }
 
-    protected void setData ( final LoadJob job )
+    protected void handleSetResult ( final ConfigurationInformation configurationInformation )
     {
-        this.configuration = job.getConfiguration ();
-        getSite ().getShell ().getDisplay ().asyncExec ( new Runnable () {
+        final Realm realm = this.dataSet.getRealm ();
+        realm.asyncExec ( new Runnable () {
             public void run ()
             {
-                BasicEditor.this.viewer.getControl ().setEnabled ( true );
-                BasicEditor.this.viewer.setInput ( BasicEditor.this.configuration );
+                if ( !BasicEditor.this.dataSet.isDisposed () )
+                {
+                    setResult ( configurationInformation );
+                }
             }
         } );
+    }
+
+    protected void setResult ( final ConfigurationInformation configurationInformation )
+    {
+        this.configuration = configurationInformation;
+        this.dataSet.setStale ( true );
+        this.dataSet.clear ();
+        this.dataSet.addAll ( convertData ( configurationInformation.getData () ) );
+        this.dataSet.setStale ( false );
+    }
+
+    private List<ConfigurationEntry> convertData ( final Map<String, String> data )
+    {
+        final List<ConfigurationEntry> result = new LinkedList<ConfigurationEntry> ();
+
+        for ( final Map.Entry<String, String> entry : data.entrySet () )
+        {
+            final ConfigurationEntry newEntry = new ConfigurationEntry ();
+            newEntry.setKey ( entry.getKey () );
+            newEntry.setValue ( entry.getValue () );
+            result.add ( newEntry );
+        }
+
+        return result;
     }
 
     @Override
@@ -86,8 +134,26 @@ public class BasicEditor extends EditorPart
     public void createPartControl ( final Composite parent )
     {
         this.viewer = new TableViewer ( parent );
-        this.viewer.getControl ().setEnabled ( false );
 
+        final TableLayout tableLayout = new TableLayout ();
+        this.viewer.getTable ().setLayout ( tableLayout );
+
+        TableViewerColumn col;
+
+        col = new TableViewerColumn ( this.viewer, SWT.NONE );
+        col.setLabelProvider ( new ConfigurationCellLabelProvider () );
+        col.getColumn ().setText ( "Key" );
+        tableLayout.addColumnData ( new ColumnWeightData ( 100, true ) );
+
+        col = new TableViewerColumn ( this.viewer, SWT.NONE );
+        col.setLabelProvider ( new ConfigurationCellLabelProvider () );
+        col.getColumn ().setText ( "Value" );
+        tableLayout.addColumnData ( new ColumnWeightData ( 200, true ) );
+
+        this.viewer.getTable ().setHeaderVisible ( true );
+
+        this.viewer.setContentProvider ( new ObservableSetContentProvider () );
+        this.viewer.setInput ( this.dataSet );
     }
 
     @Override

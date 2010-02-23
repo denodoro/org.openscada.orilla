@@ -5,6 +5,8 @@ import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnWeightData;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
@@ -17,7 +19,10 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
+import org.openscada.ca.ConfigurationInformation;
 import org.openscada.ca.FactoryInformation;
+import org.openscada.ca.ui.connection.EditorHelper;
+import org.openscada.ca.ui.connection.data.ConfigurationDescriptor;
 import org.openscada.ca.ui.connection.data.LoadFactoryJob;
 
 public class FactoryEditor extends EditorPart
@@ -68,7 +73,7 @@ public class FactoryEditor extends EditorPart
             @Override
             public void done ( final IJobChangeEvent event )
             {
-                FactoryEditor.this.handleSetResult ( job.getFactory () );
+                FactoryEditor.this.handleSetResult ( job.getFactory (), factoryInput.getConnectionUri () );
             }
         } );
         job.schedule ();
@@ -76,7 +81,7 @@ public class FactoryEditor extends EditorPart
         super.setInput ( input );
     }
 
-    protected void handleSetResult ( final FactoryInformation factory )
+    protected void handleSetResult ( final FactoryInformation factory, final String connectionUri )
     {
         final Display display = getSite ().getShell ().getDisplay ();
         if ( !display.isDisposed () )
@@ -87,20 +92,37 @@ public class FactoryEditor extends EditorPart
                 {
                     if ( !display.isDisposed () )
                     {
-                        setResult ( factory );
+                        setResult ( factory, connectionUri );
                     }
                 }
             } );
         }
     }
 
-    protected void setResult ( final FactoryInformation factory )
+    protected void setResult ( final FactoryInformation factory, final String connectionUri )
     {
         this.factory = factory;
         if ( this.viewer != null && !this.viewer.getControl ().isDisposed () )
         {
-            this.viewer.setInput ( factory.getConfigurations () );
+            this.viewer.setInput ( convert ( factory.getConfigurations (), connectionUri ) );
         }
+    }
+
+    private ConfigurationDescriptor[] convert ( final ConfigurationInformation[] configurations, final String connectionUri )
+    {
+        final ConfigurationDescriptor[] result = new ConfigurationDescriptor[configurations.length];
+        for ( int i = 0; i < configurations.length; i++ )
+        {
+            final ConfigurationDescriptor newEntry = new ConfigurationDescriptor ();
+            final ConfigurationInformation entry = configurations[i];
+
+            newEntry.setConfigurationInformation ( entry );
+            newEntry.setConnectionUri ( connectionUri );
+
+            result[i] = newEntry;
+
+        }
+        return result;
     }
 
     @Override
@@ -141,11 +163,24 @@ public class FactoryEditor extends EditorPart
 
         this.viewer.getTable ().setHeaderVisible ( true );
 
+        this.viewer.addDoubleClickListener ( new IDoubleClickListener () {
+
+            public void doubleClick ( final DoubleClickEvent event )
+            {
+                FactoryEditor.this.handleDoubleClick ( event );
+            }
+        } );
+
         this.viewer.setContentProvider ( new ArrayContentProvider () );
         if ( this.factory != null )
         {
             this.viewer.setInput ( this.factory.getConfigurations () );
         }
+    }
+
+    protected void handleDoubleClick ( final DoubleClickEvent event )
+    {
+        EditorHelper.handleOpen ( getSite ().getPage (), event.getSelection () );
     }
 
     @Override
