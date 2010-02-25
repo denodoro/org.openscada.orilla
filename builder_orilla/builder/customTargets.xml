@@ -155,6 +155,12 @@
   	<openscada.builder.copyPlugin id="org.openscada.hd.ui.connection" />
   	<openscada.builder.copyPlugin id="org.openscada.hd.ui.connection.creator.net" />
   	
+  	<!-- OpenSCADA CA UI -->
+  	
+  	<openscada.builder.copyPlugin id="org.openscada.ca.ui"/>
+  	<openscada.builder.copyPlugin id="org.openscada.ca.ui.connection" />
+  	<openscada.builder.copyPlugin id="org.openscada.ca.ui.connection.creator.jaxws" />
+  	
   </target>
 
   <!-- ===================================================================== -->

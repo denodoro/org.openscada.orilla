@@ -253,7 +253,7 @@
          unpack="false"/>
 
    <plugin
-         id="org.openscada.ca.ui.connection.creator.net"
+         id="org.openscada.ca.ui.connection.creator.jaxws"
          download-size="0"
          install-size="0"
          version="0.0.0"
