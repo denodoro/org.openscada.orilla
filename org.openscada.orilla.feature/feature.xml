@@ -17,6 +17,10 @@
       [Enter License Description here.]
    </license>
 
+   <requires>
+      <import feature="org.openscada.atlantis" version="0.15.0.qualifier"/>
+   </requires>
+
    <plugin
          id="org.openscada.ui.databinding"
          download-size="0"
@@ -229,6 +233,27 @@
 
    <plugin
          id="org.openscada.da.ui.styles"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.openscada.ca.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.openscada.ca.ui.connection"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.openscada.ca.ui.connection.creator.net"
          download-size="0"
          install-size="0"
          version="0.0.0"
