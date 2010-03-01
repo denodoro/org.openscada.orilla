@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.core.databinding.observable.set.WritableSet;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.databinding.viewers.ObservableSetContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
@@ -16,6 +17,9 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.openscada.ae.ConditionStatusInformation;
@@ -138,9 +142,12 @@ public class MonitorsViewTable extends Composite
 
     private final WritableSet monitors;
 
-    public MonitorsViewTable ( final Composite parent, final int style )
+    private final Action ackAction;
+
+    public MonitorsViewTable ( final Composite parent, final int style, final Action ackAction )
     {
         super ( parent, style );
+        this.ackAction = ackAction;
 
         this.monitors = new WritableSet ( SWTObservables.getRealm ( parent.getDisplay () ) );
 
@@ -159,6 +166,24 @@ public class MonitorsViewTable extends Composite
         table.setInput ( this.monitors );
         table.setSorter ( new Sorter ( Columns.ID, SWT.UP ) );
         table.getTable ().setSortDirection ( SWT.UP );
+
+        table.getTable ().setMenu ( createContextMenu ( table.getTable () ) );
+    }
+
+    private Menu createContextMenu ( final Control parent )
+    {
+        Menu ackMenu = new Menu ( parent );
+        MenuItem ackMenuItem = new MenuItem ( ackMenu, SWT.NONE );
+        ackMenuItem.setText ( "Acknowledge" );
+        ackMenuItem.setImage ( this.ackAction.getImageDescriptor ().createImage () );
+        ackMenuItem.addSelectionListener ( new SelectionAdapter () {
+            @Override
+            public void widgetSelected ( final SelectionEvent e )
+            {
+                MonitorsViewTable.this.ackAction.run ();
+            }
+        } );
+        return ackMenu;
     }
 
     private void createColumns ( final TableViewer table )
@@ -172,7 +197,6 @@ public class MonitorsViewTable extends Composite
         idColumn.getColumn ().setWidth ( 450 );
         idColumn.getColumn ().setResizable ( true );
         idColumn.getColumn ().setMoveable ( false );
-        //        idColumn.setLabelProvider ( labelProvider );
         idColumn.getColumn ().addSelectionListener ( sortListener );
         // state
         TableViewerColumn stateColumn = new TableViewerColumn ( table, SWT.NONE );
@@ -181,7 +205,6 @@ public class MonitorsViewTable extends Composite
         stateColumn.getColumn ().setWidth ( 150 );
         stateColumn.getColumn ().setResizable ( true );
         stateColumn.getColumn ().setMoveable ( false );
-        //        stateColumn.setLabelProvider ( labelProvider );
         stateColumn.getColumn ().addSelectionListener ( sortListener );
         // timestamp
         TableViewerColumn timestampColumn = new TableViewerColumn ( table, SWT.NONE );
@@ -190,7 +213,6 @@ public class MonitorsViewTable extends Composite
         timestampColumn.getColumn ().setWidth ( 180 );
         timestampColumn.getColumn ().setResizable ( true );
         timestampColumn.getColumn ().setMoveable ( false );
-        //        timestampColumn.setLabelProvider ( labelProvider );
         timestampColumn.getColumn ().addSelectionListener ( sortListener );
         // value
         TableViewerColumn valueColumn = new TableViewerColumn ( table, SWT.NONE );
@@ -199,7 +221,6 @@ public class MonitorsViewTable extends Composite
         valueColumn.getColumn ().setWidth ( 100 );
         valueColumn.getColumn ().setResizable ( true );
         valueColumn.getColumn ().setMoveable ( false );
-        //        valueColumn.setLabelProvider ( labelProvider );
         valueColumn.getColumn ().addSelectionListener ( sortListener );
         // akn user
         TableViewerColumn aknUserColumn = new TableViewerColumn ( table, SWT.NONE );
@@ -208,7 +229,6 @@ public class MonitorsViewTable extends Composite
         aknUserColumn.getColumn ().setWidth ( 150 );
         aknUserColumn.getColumn ().setResizable ( true );
         aknUserColumn.getColumn ().setMoveable ( false );
-        //        aknUserColumn.setLabelProvider ( labelProvider );
         aknUserColumn.getColumn ().addSelectionListener ( sortListener );
         // akn timestamp
         TableViewerColumn aknTimestampColumn = new TableViewerColumn ( table, SWT.NONE );
@@ -217,7 +237,6 @@ public class MonitorsViewTable extends Composite
         aknTimestampColumn.getColumn ().setWidth ( 180 );
         aknTimestampColumn.getColumn ().setResizable ( true );
         aknTimestampColumn.getColumn ().setMoveable ( false );
-        //        aknTimestampColumn.setLabelProvider ( labelProvider );
         aknTimestampColumn.getColumn ().addSelectionListener ( sortListener );
     }
 
@@ -232,5 +251,23 @@ public class MonitorsViewTable extends Composite
         {
             this.monitors.add ( decoratedMonitor );
         }
+    }
+
+    public DecoratedMonitor selectedMonitor ()
+    {
+        if ( this.tableRef.get ().getTable ().getSelectionCount () == 0 )
+        {
+            return null;
+        }
+        return (DecoratedMonitor)this.tableRef.get ().getTable ().getSelection ()[0].getData ();
+    }
+
+    /**
+     * may only be called from GUI thread
+     * @return
+     */
+    public int numOfEntries ()
+    {
+        return this.monitors.size ();
     }
 }

@@ -6,10 +6,14 @@ public abstract class SubscriptionAlarmsEventsView extends AbstractAlarmsEventsV
 
     public void setSubscriptionId ( final String subscriptionId )
     {
-        if ( !String.valueOf ( subscriptionId ).equals ( this.subscriptionId ) )
+        if ( !String.valueOf ( subscriptionId ).equals ( String.valueOf ( this.subscriptionId ) ) )
         {
             unSubscribe ();
             subscribe ();
+        }
+        else if ( subscriptionId == null )
+        {
+            unSubscribe ();
         }
         this.subscriptionId = subscriptionId;
     }

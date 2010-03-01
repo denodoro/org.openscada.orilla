@@ -1,14 +1,17 @@
 package org.openscada.ae.ui.views.views;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.KeyAdapter;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.layout.FillLayout;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
+import org.openscada.ae.Event;
+import org.openscada.ae.client.EventListener;
+import org.openscada.ae.ui.views.model.DecoratedEvent;
+import org.openscada.core.subscription.SubscriptionState;
 
-public class EventPoolView extends AbstractAlarmsEventsView
+public class EventPoolView extends SubscriptionAlarmsEventsView
 {
     public static final String ID = "org.openscada.ae.ui.views.views.eventpool";
 
@@ -21,27 +24,23 @@ public class EventPoolView extends AbstractAlarmsEventsView
     @Override
     public void createPartControl ( final Composite parent )
     {
-        final Text urlText = new Text ( parent, SWT.BORDER | SWT.MULTI );
-        urlText.addKeyListener ( new KeyAdapter () {
-            @Override
-            public void keyReleased ( final KeyEvent e )
+        // FIXME: remove this, momentarily it is just for testing purposes
+        // --- snip ---------------------------------------------------------------
+        ScheduledExecutorService s = Executors.newSingleThreadScheduledExecutor ();
+        s.schedule ( new Runnable () {
+            public void run ()
             {
-                if ( e.character == 13 )
+                try
                 {
-                    urlText.setText ( urlText.getText ().trim () );
-                    try
-                    {
-                        EventPoolView.this.setConnectionUri ( urlText.getText () );
-                    }
-                    catch ( Exception e1 )
-                    {
-                        e1.printStackTrace ();
-                    }
+                    setSubscriptionId ( "all" );
+                }
+                catch ( Exception e )
+                {
+                    e.printStackTrace ();
                 }
             }
-        } );
-        this.connectionState = new Label ( parent, SWT.BORDER );
-        parent.setLayout ( new FillLayout ( SWT.VERTICAL ) );
+        }, 2, TimeUnit.SECONDS );
+        // --- snap ---------------------------------------------------------------
     }
 
     /**
@@ -55,10 +54,10 @@ public class EventPoolView extends AbstractAlarmsEventsView
     @Override
     protected void onConnect ()
     {
+        super.onConnect ();
         this.getSite ().getShell ().getDisplay ().asyncExec ( new Runnable () {
             public void run ()
             {
-                EventPoolView.this.connectionState.setText ( "CONNECTED" );
             }
         } );
     }
@@ -66,11 +65,43 @@ public class EventPoolView extends AbstractAlarmsEventsView
     @Override
     protected void onDisconnect ()
     {
+        super.onDisconnect ();
         this.getSite ().getShell ().getDisplay ().asyncExec ( new Runnable () {
             public void run ()
             {
-                EventPoolView.this.connectionState.setText ( "DISCONNECTED !!!" );
             }
         } );
     }
+
+    @Override
+    protected void subscribe ()
+    {
+        System.err.println ( "subscribe called" );
+        if ( this.connnection != null )
+        {
+            System.err.println ( "subscribe???" + getSubscriptionId () );
+            this.connnection.setEventListener ( getSubscriptionId (), new EventListener () {
+                public void statusChanged ( final SubscriptionState state )
+                {
+                    System.err.println ( "Subscriptionstate" + state );
+                }
+
+                public void dataChanged ( final Event[] addedEvents )
+                {
+                    for ( Event event : addedEvents )
+                    {
+                        DecoratedEvent decoratedEvent = new DecoratedEvent ( event );
+                    }
+                }
+            } );
+        }
+    }
+
+    @Override
+    protected void unSubscribe ()
+    {
+        // TODO Auto-generated method stub
+
+    }
+
 }

@@ -5,15 +5,17 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.openscada.ae.BrowserEntry;
-import org.openscada.ae.BrowserListener;
 import org.openscada.ae.ConditionStatusInformation;
 import org.openscada.ae.client.ConditionListener;
+import org.openscada.ae.ui.views.Activator;
+import org.openscada.ae.ui.views.CustomizableAction;
 import org.openscada.ae.ui.views.model.DecoratedMonitor;
 import org.openscada.core.client.Connection;
 import org.openscada.core.client.ConnectionState;
@@ -27,6 +29,8 @@ public class MonitorsView extends SubscriptionAlarmsEventsView
     private Label stateLabel = null;
 
     private MonitorsViewTable monitorsTable = null;
+
+    private CustomizableAction ackAction = null;
 
     /**
      * This is a callback that will allow us to create the viewer and initialize
@@ -44,11 +48,26 @@ public class MonitorsView extends SubscriptionAlarmsEventsView
 
         // label which contains no of retrieved events
         final Label stateLabel = new Label ( contentPane, SWT.NONE );
-        stateLabel.setText ( "dummy" );
+        stateLabel.setText ( "" );
         stateLabel.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, false ) );
         this.stateLabel = stateLabel;
 
-        this.monitorsTable = new MonitorsViewTable ( contentPane, SWT.BORDER );
+        this.ackAction = new CustomizableAction ();
+        this.ackAction.setText ( "Acknowledge" );
+        this.ackAction.setToolTipText ( "Acknowledge" );
+        this.ackAction.setImageDescriptor ( ImageDescriptor.createFromURL ( Activator.getDefault ().getBundle ().getResource ( "icons/acknowledge.gif" ) ) );
+        this.ackAction.setRunnable ( new Runnable () {
+            public void run ()
+            {
+                DecoratedMonitor m = MonitorsView.this.monitorsTable.selectedMonitor ();
+                MonitorsView.this.connnection.acknowledge ( m.getMonitor ().getId (), null );
+            }
+        } );
+
+        IToolBarManager toolBarManager = getViewSite ().getActionBars ().getToolBarManager ();
+        toolBarManager.add ( this.ackAction );
+
+        this.monitorsTable = new MonitorsViewTable ( contentPane, SWT.BORDER, this.ackAction );
         this.monitorsTable.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, true, 1, 1 ) );
 
         // FIXME: remove this, momentarily it is just for testing purposes
@@ -82,31 +101,14 @@ public class MonitorsView extends SubscriptionAlarmsEventsView
     protected void onConnect ()
     {
         super.onConnect ();
-        System.err.println ( "Monitor on Connect" );
         if ( this.connnection != null )
         {
             this.connnection.addConnectionStateListener ( new ConnectionStateListener () {
                 public void stateChange ( final Connection connection, final ConnectionState state, final Throwable error )
                 {
-                    //                    System.out.println ( "MONITOR : " + state );
+                    updateStatusLine ();
                 }
             } );
-            this.connnection.addBrowserListener ( new BrowserListener () {
-                public void dataChanged ( final BrowserEntry[] addedOrUpdated, final String[] removed, final boolean full )
-                {
-                    if ( addedOrUpdated == null )
-                    {
-                        return;
-                    }
-                    System.err.println ( addedOrUpdated );
-                    for ( BrowserEntry be : addedOrUpdated )
-                    {
-                        System.err.println ( "MONITOR " + be.getId () );
-                        System.err.println ( "ATTR = " + be.getAttributes () );
-                    }
-                }
-            } );
-            System.out.println ( this.connnection.getState () );
         }
     }
 
@@ -120,23 +122,16 @@ public class MonitorsView extends SubscriptionAlarmsEventsView
     @Override
     protected void subscribe ()
     {
-        getSite ().getShell ().getDisplay ().asyncExec ( new Runnable () {
-            public void run ()
-            {
-                MonitorsView.this.stateLabel.setText ( "watch " + MonitorsView.this.subscriptionId );
-            }
-        } );
-        System.err.println ( "SUBSCRIBE " + this.connnection );
         if ( this.connnection == null )
         {
+            updateStatusLine ();
             return;
         }
-        System.err.println ( "setConditionListener " + this.connnection.getState () );
         this.connnection.setConditionListener ( this.subscriptionId, null );
         this.connnection.setConditionListener ( this.subscriptionId, new ConditionListener () {
             public void statusChanged ( final SubscriptionState state )
             {
-                System.err.println ( "SUBSCRIPTION STATE: " + state );
+                updateStatusLine ();
             }
 
             public void dataChanged ( final ConditionStatusInformation[] addedOrUpdated, final String[] removed )
@@ -154,6 +149,7 @@ public class MonitorsView extends SubscriptionAlarmsEventsView
                             MonitorsView.this.monitorsTable.addMonitors ( monitors );
                         }
                     } );
+                    updateStatusLine ();
                 }
                 catch ( Exception e )
                 {
@@ -166,7 +162,6 @@ public class MonitorsView extends SubscriptionAlarmsEventsView
     @Override
     protected void unSubscribe ()
     {
-        System.err.println ( "UnSubscribe" );
         clearData ();
         if ( this.connnection == null )
         {
@@ -181,6 +176,31 @@ public class MonitorsView extends SubscriptionAlarmsEventsView
             public void run ()
             {
                 MonitorsView.this.monitorsTable.clear ();
+            }
+        } );
+    }
+
+    private void updateStatusLine ()
+    {
+        String label = "";
+        if ( this.connnection != null )
+        {
+            label += this.connnection.getState ();
+        }
+        else
+        {
+            label += "NO CONNECTION";
+        }
+        if ( this.subscriptionId != null )
+        {
+            label += " : " + this.subscriptionId;
+        }
+        final String s = label;
+        getSite ().getShell ().getDisplay ().asyncExec ( new Runnable () {
+            public void run ()
+            {
+                String entries = " (" + MonitorsView.this.monitorsTable.numOfEntries () + " entries)";
+                MonitorsView.this.stateLabel.setText ( s + entries );
             }
         } );
     }
