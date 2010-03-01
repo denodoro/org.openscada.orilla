@@ -1,4 +1,4 @@
-package org.openscada.ca.ui.connection.creator.net;
+package org.openscada.ca.ui.connection.creator.jaxws;
 
 import org.openscada.ca.client.Connection;
 import org.openscada.ca.client.jaxws.ConnectionImpl;

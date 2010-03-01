@@ -4,9 +4,9 @@
    <extension
          point="org.openscada.core.ui.connection.creator">
       <creator
-            class="org.openscada.ca.ui.connection.creator.net.ConnectionCreatorImpl"
+            class="org.openscada.ca.ui.connection.creator.jaxws.ConnectionCreatorImpl"
             driver="jaxws"
-            id="org.openscada.ca.ui.connection.creator.net.creator"
+            id="org.openscada.ca.ui.connection.creator.jaxws.creator"
             interface="ca">
       </creator>
    </extension>
