@@ -112,7 +112,7 @@ public enum ValueType
         public Variant convertTo ( final String value ) throws NotConvertableException
         {
             final Variant stringValue = new Variant ( value );
-            return new Variant ( stringValue.asBoolean () );
+            return Variant.valueOf ( stringValue.asBoolean () );
         }
     },
     ;
