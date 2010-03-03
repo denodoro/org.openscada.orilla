@@ -149,7 +149,7 @@ public class RealTimeList extends ViewPart implements RealtimeListAdapter
             return;
         }
 
-        value = new Variant ( !value.asBoolean () );
+        value = Variant.valueOf ( !value.asBoolean () );
 
         entry.getDataItem ().write ( value );
     }
