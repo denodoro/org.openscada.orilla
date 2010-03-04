@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2007 inavare GmbH (http://inavare.com)
+ * Copyright (C) 2006-2010 inavare GmbH (http://inavare.com)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.openscada.core.ConnectionInformation;
 import org.openscada.da.core.server.Hive;
+import org.openscada.da.rcp.LocalTestServer.preferences.PreferenceConstants;
 import org.openscada.da.server.net.Exporter;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
@@ -44,10 +45,6 @@ public class Activator extends AbstractUIPlugin
 
     // The plug-in ID
     public static final String PLUGIN_ID = "org.openscada.da.rcp.LocalTestServer";
-
-    public static final short SIM_PORT = 1202;
-
-    public static final short TEST_PORT = 1203;
 
     // The shared instance
     private static Activator plugin;
@@ -112,17 +109,22 @@ public class Activator extends AbstractUIPlugin
         return imageDescriptorFromPlugin ( PLUGIN_ID, path );
     }
 
+    protected int getPort ( final String preferenceName )
+    {
+        return getPreferenceStore ().getInt ( preferenceName );
+    }
+
     public void startLocalServer () throws Exception
     {
         synchronized ( this )
         {
-            checkRunning ( TEST_PORT );
+            checkRunning ( getPort ( PreferenceConstants.P_PORT_TEST ) );
             final org.openscada.da.server.test.Hive testHive = new org.openscada.da.server.test.Hive ();
             testHive.start ();
 
             try
             {
-                exportServer ( testHive, TEST_PORT );
+                exportServer ( testHive, getPort ( PreferenceConstants.P_PORT_TEST ) );
             }
             catch ( final Throwable e )
             {
@@ -136,10 +138,10 @@ public class Activator extends AbstractUIPlugin
     {
         synchronized ( this )
         {
-            checkRunning ( SIM_PORT );
+            checkRunning ( getPort ( PreferenceConstants.P_PORT_SIM ) );
             final org.openscada.da.core.server.Hive hive = new org.openscada.da.server.simulation.component.Hive ();
             hive.start ();
-            exportServer ( hive, SIM_PORT );
+            exportServer ( hive, getPort ( PreferenceConstants.P_PORT_SIM ) );
         }
     }
 

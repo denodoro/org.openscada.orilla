@@ -34,4 +34,19 @@
       </perspectiveExtension>
    </extension>
 
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="org.openscada.da.rcp.LocalTestServer.preferences.StylesPreferencePage"
+            id="org.openscada.da.rcp.LocalTestServer.preferences.StylesPreferencePage"
+            name="Testing Server Preferences">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.openscada.da.rcp.LocalTestServer.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+
 </plugin>
