@@ -9,7 +9,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.eclipse.core.databinding.observable.set.WritableSet;
 import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -26,6 +28,7 @@ import org.openscada.ae.ui.views.CustomizableAction;
 import org.openscada.ae.ui.views.dialog.EventHistorySearchDialog;
 import org.openscada.ae.ui.views.dialog.SearchType;
 import org.openscada.ae.ui.views.model.DecoratedEvent;
+import org.openscada.core.client.ConnectionState;
 import org.openscada.utils.lang.Pair;
 
 public class EventHistoryView extends AbstractAlarmsEventsView
@@ -50,11 +53,15 @@ public class EventHistoryView extends AbstractAlarmsEventsView
 
     private final AtomicReference<Query> queryRef = new AtomicReference<Query> ( null );
 
+    private final AtomicReference<QueryState> queryState = new AtomicReference<QueryState> ( QueryState.DISCONNECTED );
+
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor ();
 
     private final AtomicInteger noOfEvents = new AtomicInteger ( 0 );
 
     private final AtomicBoolean isPaused = new AtomicBoolean ( false );
+
+    private WritableSet events;
 
     /**
      * This is a callback that will allow us to create the viewer and initialize
@@ -138,7 +145,9 @@ public class EventHistoryView extends AbstractAlarmsEventsView
         stateLabel.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, false ) );
         this.stateLabel = stateLabel;
 
-        this.eventsTable = new EventViewTable ( contentPane, SWT.BORDER );
+        this.events = new WritableSet ( SWTObservables.getRealm ( parent.getDisplay () ) );
+
+        this.eventsTable = new EventViewTable ( contentPane, SWT.BORDER, this.events );
         this.eventsTable.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, true, 1, 1 ) );
     }
 
@@ -202,7 +211,7 @@ public class EventHistoryView extends AbstractAlarmsEventsView
         this.resumeAction.setEnabled ( false );
         this.clearAction.setEnabled ( true );
         this.searchAction.setEnabled ( true );
-        this.stateLabel.setText ( "" );
+        updateStatusBar ();
     }
 
     /**
@@ -249,18 +258,10 @@ public class EventHistoryView extends AbstractAlarmsEventsView
         QueryListener queryListener = new QueryListener () {
             public void queryStateChanged ( final QueryState state )
             {
+                EventHistoryView.this.queryState.set ( state );
                 if ( ( state == QueryState.CONNECTED ) && ( !EventHistoryView.this.isPaused.get () ) )
                 {
                     continueLoading ();
-                }
-                else if ( state == QueryState.CONNECTING )
-                {
-                    getSite ().getShell ().getDisplay ().asyncExec ( new Runnable () {
-                        public void run ()
-                        {
-                            EventHistoryView.this.stateLabel.setText ( "loading ..." );
-                        }
-                    } );
                 }
                 else if ( state == QueryState.DISCONNECTED )
                 {
@@ -268,11 +269,11 @@ public class EventHistoryView extends AbstractAlarmsEventsView
                     getSite ().getShell ().getDisplay ().asyncExec ( new Runnable () {
                         public void run ()
                         {
-                            EventHistoryView.this.stateLabel.setText ( "Found " + EventHistoryView.this.noOfEvents.get () + " Events." );
                             EventHistoryView.this.pauseAction.setEnabled ( false );
                         }
                     } );
                 }
+                updateStatusBar ();
             }
 
             public void queryData ( final Event[] events )
@@ -298,7 +299,10 @@ public class EventHistoryView extends AbstractAlarmsEventsView
                     public void run ()
                     {
                         EventHistoryView.this.stateLabel.setText ( "Found " + EventHistoryView.this.noOfEvents.get () + " Events. loading ..." );
-                        EventHistoryView.this.eventsTable.addEvents ( decoratedEvents );
+                        for ( DecoratedEvent decoratedEvent : decoratedEvents )
+                        {
+                            EventHistoryView.this.events.add ( decoratedEvent );
+                        }
                     }
                 } );
             }
@@ -307,7 +311,7 @@ public class EventHistoryView extends AbstractAlarmsEventsView
         if ( isConnected () )
         {
             EventHistoryView.this.isPaused.set ( false );
-            this.queryRef.set ( this.connnection.createQuery ( "client", filter, queryListener ) );
+            this.queryRef.set ( this.getConnection ().createQuery ( "client", filter, queryListener ) );
         }
     }
 
@@ -333,5 +337,57 @@ public class EventHistoryView extends AbstractAlarmsEventsView
 
             }
         }, 50, TimeUnit.MILLISECONDS );
+    }
+
+    @Override
+    protected void updateStatusBar ()
+    {
+        final StringBuilder label = new StringBuilder ();
+        if ( this.getConnection () != null )
+        {
+            if ( this.getConnection ().getState () == ConnectionState.BOUND )
+            {
+                label.append ( "CONNECTED to " );
+            }
+            else
+            {
+                label.append ( "DISCONNECTED from " );
+            }
+            label.append ( this.getConnection ().getConnectionInformation () );
+        }
+        else
+        {
+            label.append ( "DISCONNECTED from " + getConnectionUri () );
+        }
+        if ( this.currentFilter != null )
+        {
+            label.append ( " | filter is " );
+            label.append ( this.currentFilter.second.replace ( "&", "&&" ) );
+        }
+        if ( this.queryState.get () == QueryState.LOADING )
+        {
+            label.append ( " | loading ... " );
+        }
+        getSite ().getShell ().getDisplay ().asyncExec ( new Runnable () {
+            public void run ()
+            {
+                label.append ( " | " );
+                label.append ( EventHistoryView.this.events.size () );
+                label.append ( " events found" );
+                EventHistoryView.this.stateLabel.setText ( label.toString () );
+            }
+        } );
+    }
+
+    @Override
+    protected void watchPool ( final String poolId )
+    {
+        // pass
+    }
+
+    @Override
+    protected void watchMonitors ( final String monitorsId )
+    {
+        // pass
     }
 }

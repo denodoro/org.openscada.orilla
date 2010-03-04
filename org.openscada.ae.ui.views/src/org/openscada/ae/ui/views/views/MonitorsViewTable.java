@@ -1,12 +1,10 @@
 package org.openscada.ae.ui.views.views;
 
 import java.sql.Date;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.core.databinding.observable.set.WritableSet;
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.databinding.viewers.ObservableSetContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
@@ -23,7 +21,6 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.openscada.ae.ConditionStatusInformation;
-import org.openscada.ae.ui.views.model.DecoratedMonitor;
 import org.openscada.core.Variant;
 
 public class MonitorsViewTable extends Composite
@@ -58,8 +55,8 @@ public class MonitorsViewTable extends Composite
         @Override
         public int compare ( final Viewer viewer, final Object e1, final Object e2 )
         {
-            final ConditionStatusInformation m1 = ( (DecoratedMonitor)e1 ).getMonitor ();
-            final ConditionStatusInformation m2 = ( (DecoratedMonitor)e2 ).getMonitor ();
+            final ConditionStatusInformation m1 = ( (ConditionStatusInformation)e1 );
+            final ConditionStatusInformation m2 = ( (ConditionStatusInformation)e2 );
             Comparable v1 = 0;
             Comparable v2 = 0;
             switch ( this.column )
@@ -144,12 +141,12 @@ public class MonitorsViewTable extends Composite
 
     private final Action ackAction;
 
-    public MonitorsViewTable ( final Composite parent, final int style, final Action ackAction )
+    public MonitorsViewTable ( final Composite parent, final int style, final WritableSet monitors, final Action ackAction )
     {
         super ( parent, style );
         this.ackAction = ackAction;
 
-        this.monitors = new WritableSet ( SWTObservables.getRealm ( parent.getDisplay () ) );
+        this.monitors = monitors;
 
         FillLayout layout = new FillLayout ();
         this.setLayout ( layout );
@@ -245,21 +242,13 @@ public class MonitorsViewTable extends Composite
         this.monitors.clear ();
     }
 
-    public void addMonitors ( final Set<DecoratedMonitor> monitors )
-    {
-        for ( DecoratedMonitor decoratedMonitor : monitors )
-        {
-            this.monitors.add ( decoratedMonitor );
-        }
-    }
-
-    public DecoratedMonitor selectedMonitor ()
+    public ConditionStatusInformation selectedMonitor ()
     {
         if ( this.tableRef.get ().getTable ().getSelectionCount () == 0 )
         {
             return null;
         }
-        return (DecoratedMonitor)this.tableRef.get ().getTable ().getSelection ()[0].getData ();
+        return (ConditionStatusInformation)this.tableRef.get ().getTable ().getSelection ()[0].getData ();
     }
 
     /**

@@ -1,14 +1,21 @@
 package org.openscada.ae.ui.views.views;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.TreeSelection;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IMemento;
+import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IViewSite;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
+import org.openscada.ae.BrowserType;
 import org.openscada.ae.client.Connection;
+import org.openscada.ae.ui.connection.data.BrowserEntryBean;
 import org.openscada.ae.ui.views.Activator;
 import org.openscada.core.ConnectionInformation;
 import org.openscada.core.client.ConnectionState;
@@ -19,9 +26,14 @@ import org.openscada.core.connection.provider.ConnectionRequestTracker;
 import org.openscada.core.connection.provider.ConnectionService;
 import org.openscada.core.connection.provider.ConnectionTracker;
 import org.openscada.core.connection.provider.ConnectionTracker.Listener;
+import org.openscada.core.ui.connection.data.ConnectionHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * @author jrose
+ *
+ */
 public abstract class AbstractAlarmsEventsView extends ViewPart
 {
     private static final Logger logger = LoggerFactory.getLogger ( AbstractAlarmsEventsView.class );
@@ -32,14 +44,23 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
 
     private static final int RECONNECT_DELAY = 10000;
 
-    protected String connectionId = null;
+    private String connectionId = null;
 
-    protected String connectionUri = null;
+    private String connectionUri = null;
 
-    protected Connection connnection;
+    private Connection connection;
 
-    protected ConnectionTracker connectionTracker;
+    private ConnectionTracker connectionTracker;
 
+    private ISelectionListener selectionListener;
+
+    private Composite contentPane;
+
+    private Label stateLabel;
+
+    /* (non-Javadoc)
+     * @see org.eclipse.ui.part.ViewPart#saveState(org.eclipse.ui.IMemento)
+     */
     @Override
     public void saveState ( final IMemento memento )
     {
@@ -49,6 +70,9 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
         super.saveState ( memento );
     }
 
+    /* (non-Javadoc)
+     * @see org.eclipse.ui.part.ViewPart#init(org.eclipse.ui.IViewSite, org.eclipse.ui.IMemento)
+     */
     @Override
     public void init ( final IViewSite site, final IMemento memento ) throws PartInitException
     {
@@ -70,31 +94,33 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
             // just reset all values
             this.connectionId = null;
             this.connectionUri = null;
-            this.connnection = null;
+            this.connection = null;
             this.connectionTracker = null;
         }
-
-        // FIXME: remove this, momentarily it is just for testing purposes
-        // --- snip ---------------------------------------------------------------
-        ScheduledExecutorService s = Executors.newSingleThreadScheduledExecutor ();
-        s.schedule ( new Runnable () {
-            public void run ()
-            {
-                try
-                {
-                    setConnectionUri ( "ae:net://localhost:1302" );
-                    //setConnectionUri ( "ae:net://zeroone.local:1302" );
-                    //setConnectionUri ( "ae:net://carlton.local:1302" );
-                }
-                catch ( Exception e )
-                {
-                    e.printStackTrace ();
-                }
-            }
-        }, 2, TimeUnit.SECONDS );
-        // --- snap ---------------------------------------------------------------
     }
 
+    @Override
+    public void createPartControl ( final Composite parent )
+    {
+        addSelectionListener ();
+
+        this.contentPane = new Composite ( parent, SWT.NONE );
+
+        GridLayout layout = new GridLayout ( 1, false );
+        layout.marginWidth = 0;
+        layout.marginHeight = 0;
+        this.contentPane.setLayout ( layout );
+
+        // label which contains no of retrieved events
+        this.stateLabel = new Label ( this.contentPane, SWT.NONE );
+        this.stateLabel.setText ( "" );
+        this.stateLabel.setLayoutData ( new GridData ( SWT.FILL, SWT.CENTER, true, false ) );
+    }
+
+    /**
+     * @param connectionId
+     * @throws Exception
+     */
     public void setConnectionId ( final String connectionId ) throws Exception
     {
         if ( !String.valueOf ( connectionId ).equals ( String.valueOf ( this.connectionId ) ) )
@@ -104,6 +130,10 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
         }
     }
 
+    /**
+     * @param connectionUri
+     * @throws Exception
+     */
     public void setConnectionUri ( final String connectionUri ) throws Exception
     {
         if ( !String.valueOf ( connectionUri ).equals ( String.valueOf ( this.connectionUri ) ) )
@@ -118,6 +148,8 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
      */
     protected void onConnect ()
     {
+        Activator.getConnectionManager ().setConnection ( this.connection );
+        updateStatusBar ();
     }
 
     /**
@@ -126,11 +158,16 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
      */
     protected void onDisconnect ()
     {
+        Activator.getConnectionManager ().setConnection ( null );
+        updateStatusBar ();
     }
 
+    /**
+     * @return
+     */
     protected boolean isConnected ()
     {
-        return ( ( this.connnection != null ) && ( this.connnection.getState () == ConnectionState.BOUND ) );
+        return ( ( this.connection != null ) && ( this.connection.getState () == ConnectionState.BOUND ) );
     }
 
     private void reInitializeConnection () throws Exception
@@ -153,13 +190,13 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
                     // actual check
                     if ( state == ConnectionState.BOUND )
                     {
-                        setConnection ( (Connection)changedConnection );
+                        AbstractAlarmsEventsView.this.connection = ( (Connection)changedConnection );
                         onConnect ();
                     }
                     else
                     {
                         onDisconnect ();
-                        setConnection ( (Connection)null );
+                        AbstractAlarmsEventsView.this.connection = null;
                     }
                 }
                 catch ( Exception e )
@@ -184,7 +221,7 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
                 connectionService.getConnection ().addConnectionStateListener ( connectionStateListener );
                 if ( connectionService.getConnection ().getState () == ConnectionState.BOUND )
                 {
-                    AbstractAlarmsEventsView.this.setConnection ( (Connection)connectionService.getConnection () );
+                    AbstractAlarmsEventsView.this.connection = (Connection)connectionService.getConnection ();
                     onConnect ();
                 }
                 else
@@ -201,6 +238,7 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
         if ( this.connectionId != null )
         {
             this.connectionTracker = new ConnectionIdTracker ( Activator.getDefault ().getBundle ().getBundleContext (), this.connectionId, connectionServiceListener );
+
         }
         else if ( this.connectionUri != null )
         {
@@ -214,8 +252,94 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
         }
     }
 
-    private void setConnection ( final Connection changedConnection )
+    protected void addSelectionListener ()
     {
-        this.connnection = changedConnection;
+        if ( this.selectionListener == null )
+        {
+            getViewSite ().getWorkbenchWindow ().getSelectionService ().addSelectionListener ( this.selectionListener = new ISelectionListener () {
+
+                public void selectionChanged ( final IWorkbenchPart part, final ISelection selection )
+                {
+                    AbstractAlarmsEventsView.this.setSelection ( selection );
+                }
+            } );
+        }
+    }
+
+    protected void setSelection ( final ISelection selection )
+    {
+        if ( ! ( selection instanceof TreeSelection ) || selection.isEmpty () )
+        {
+            return;
+        }
+        TreeSelection treeSelection = (TreeSelection)selection;
+        if ( treeSelection.getFirstElement () instanceof ConnectionHolder )
+        {
+            ConnectionHolder connectionHolder = (ConnectionHolder)treeSelection.getFirstElement ();
+            if ( ( connectionHolder.getConnectionService ().getConnection () != null ) && ( connectionHolder.getConnectionService ().getConnection () instanceof Connection ) )
+            {
+                try
+                {
+                    setConnectionUri ( connectionHolder.getConnectionService ().getConnection ().getConnectionInformation ().toString () );
+                }
+                catch ( Exception e )
+                {
+                    e.printStackTrace ();
+                }
+            }
+        }
+        else if ( treeSelection.getFirstElement () instanceof BrowserEntryBean )
+        {
+            BrowserEntryBean browserEntryBean = (BrowserEntryBean)treeSelection.getFirstElement ();
+            if ( browserEntryBean.getEntry ().getTypes ().contains ( BrowserType.EVENTS ) )
+            {
+                watchPool ( browserEntryBean.getEntry ().getId () );
+            }
+            if ( browserEntryBean.getEntry ().getTypes ().contains ( BrowserType.CONDITIONS ) )
+            {
+                watchMonitors ( browserEntryBean.getEntry ().getId () );
+            }
+        }
+    }
+
+    abstract protected void watchPool ( String poolId );
+
+    abstract protected void watchMonitors ( String monitorsId );
+
+    abstract protected void updateStatusBar ();
+
+    protected void removeSelectionListener ()
+    {
+        if ( this.selectionListener != null )
+        {
+            getViewSite ().getWorkbenchWindow ().getSelectionService ().removeSelectionListener ( this.selectionListener );
+            this.selectionListener = null;
+        }
+    }
+
+    public String getConnectionUri ()
+    {
+        return this.connectionUri;
+    }
+
+    public Connection getConnection ()
+    {
+        return this.connection;
+    }
+
+    public Composite getContentPane ()
+    {
+        return this.contentPane;
+    }
+
+    public Label getStateLabel ()
+    {
+        return this.stateLabel;
+    }
+
+    @Override
+    public void dispose ()
+    {
+        removeSelectionListener ();
     }
 }

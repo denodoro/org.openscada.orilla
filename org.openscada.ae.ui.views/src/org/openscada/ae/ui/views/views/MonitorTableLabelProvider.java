@@ -7,8 +7,8 @@ import java.util.Date;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
+import org.openscada.ae.ConditionStatusInformation;
 import org.openscada.ae.ui.views.Activator;
-import org.openscada.ae.ui.views.model.DecoratedMonitor;
 import org.openscada.core.Variant;
 
 public class MonitorTableLabelProvider extends LabelProvider implements ITableLabelProvider
@@ -47,14 +47,14 @@ public class MonitorTableLabelProvider extends LabelProvider implements ITableLa
 
     public Image getColumnImage ( final Object element, final int columnIndex )
     {
-        if ( ! ( element instanceof DecoratedMonitor ) )
+        if ( ! ( element instanceof ConditionStatusInformation ) )
         {
             return null;
         }
-        DecoratedMonitor monitor = (DecoratedMonitor)element;
+        ConditionStatusInformation monitor = (ConditionStatusInformation)element;
         if ( columnIndex == 1 )
         {
-            switch ( monitor.getMonitor ().getStatus () )
+            switch ( monitor.getStatus () )
             {
             case INACTIVE:
                 return MANUAL_IMG;
@@ -78,25 +78,25 @@ public class MonitorTableLabelProvider extends LabelProvider implements ITableLa
 
     public String getColumnText ( final Object element, final int columnIndex )
     {
-        if ( ! ( element instanceof DecoratedMonitor ) )
+        if ( ! ( element instanceof ConditionStatusInformation ) )
         {
             return "";
         }
-        DecoratedMonitor monitor = (DecoratedMonitor)element;
+        ConditionStatusInformation monitor = (ConditionStatusInformation)element;
         switch ( columnIndex )
         {
         case 0:
-            return monitor.getMonitor ().getId ().toString ();
+            return monitor.getId ().toString ();
         case 1:
-            return monitor.getMonitor ().getStatus ().toString ();
+            return monitor.getStatus ().toString ();
         case 2:
-            return formatDate ( monitor.getMonitor ().getStatusTimestamp () );
+            return formatDate ( monitor.getStatusTimestamp () );
         case 3:
-            return toLabel ( monitor.getMonitor ().getValue () );
+            return toLabel ( monitor.getValue () );
         case 4:
-            return monitor.getMonitor ().getLastAknUser ().toString ();
+            return monitor.getLastAknUser ().toString ();
         case 5:
-            return formatDate ( monitor.getMonitor ().getLastAknTimestamp () );
+            return formatDate ( monitor.getLastAknTimestamp () );
         }
         return "";
     }

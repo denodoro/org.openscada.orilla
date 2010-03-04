@@ -1,14 +1,33 @@
 package org.openscada.ae.ui.views.model;
 
+import org.openscada.ae.ConditionStatusInformation;
 import org.openscada.ae.Event;
 
 public class DecoratedEvent
 {
     private Event event;
 
+    private ConditionStatusInformation monitor;
+
+    public ConditionStatusInformation getMonitor ()
+    {
+        return this.monitor;
+    }
+
+    public void setMonitor ( final ConditionStatusInformation monitor )
+    {
+        this.monitor = monitor;
+    }
+
     public DecoratedEvent ( final Event event )
     {
         this.event = event;
+    }
+
+    public DecoratedEvent ( final Event event, final ConditionStatusInformation monitor )
+    {
+        this.event = event;
+        this.monitor = monitor;
     }
 
     public Event getEvent ()

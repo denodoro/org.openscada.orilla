@@ -1,10 +1,8 @@
 package org.openscada.ae.ui.views.views;
 
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.core.databinding.observable.set.WritableSet;
-import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.databinding.viewers.ObservableSetContentProvider;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
@@ -13,7 +11,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.openscada.ae.Event;
-import org.openscada.ae.ui.views.model.DecoratedEvent;
 
 public class EventViewTable extends Composite
 {
@@ -21,10 +18,10 @@ public class EventViewTable extends Composite
 
     private final WritableSet events;
 
-    public EventViewTable ( final Composite parent, final int style )
+    public EventViewTable ( final Composite parent, final int style, final WritableSet events )
     {
         super ( parent, style );
-        this.events = new WritableSet ( SWTObservables.getRealm ( parent.getDisplay () ) );
+        this.events = events;
 
         FillLayout layout = new FillLayout ();
         this.setLayout ( layout );
@@ -45,13 +42,13 @@ public class EventViewTable extends Composite
         this.events.clear ();
     }
 
-    public void addEvents ( final Set<DecoratedEvent> decoratedEvents )
-    {
-        for ( DecoratedEvent decoratedEvent : decoratedEvents )
-        {
-            this.events.add ( decoratedEvent );
-        }
-    }
+    //    public void addEvents ( final Set<DecoratedEvent> decoratedEvents )
+    //    {
+    //        for ( DecoratedEvent decoratedEvent : decoratedEvents )
+    //        {
+    //            this.events.add ( decoratedEvent );
+    //        }
+    //    }
 
     private void createColumns ( final TableViewer table )
     {
