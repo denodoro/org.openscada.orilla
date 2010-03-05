@@ -103,7 +103,13 @@ public class ToggleServiceImpl implements ToggleService, Runnable
     public void start ()
     {
         this.running = true;
-        triggerNext ();
+        this.display.asyncExec ( new Runnable () {
+
+            public void run ()
+            {
+                triggerNext ();
+            }
+        } );
     }
 
     private void triggerNext ()
