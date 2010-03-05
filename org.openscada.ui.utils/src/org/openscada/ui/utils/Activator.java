@@ -36,14 +36,13 @@ public class Activator extends AbstractUIPlugin
     // The shared instance
     private static Activator plugin;
 
-    private final ToggleServiceImpl toggle;
+    private ToggleServiceImpl toggle;
 
     /**
      * The constructor
      */
     public Activator ()
     {
-        this.toggle = new ToggleServiceImpl ( this.getWorkbench ().getDisplay () );
     }
 
     /*
@@ -54,6 +53,8 @@ public class Activator extends AbstractUIPlugin
     {
         super.start ( context );
         plugin = this;
+
+        this.toggle = new ToggleServiceImpl ( this.getWorkbench ().getDisplay () );
         this.toggle.start ();
 
     }
@@ -65,6 +66,8 @@ public class Activator extends AbstractUIPlugin
     public void stop ( final BundleContext context ) throws Exception
     {
         this.toggle.stop ();
+        this.toggle = null;
+
         plugin = null;
         super.stop ( context );
     }
