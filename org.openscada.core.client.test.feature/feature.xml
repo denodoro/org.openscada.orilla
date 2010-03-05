@@ -19,6 +19,7 @@
    </license>
 
    <requires>
+      <import plugin="com.springsource.org.apache.log4j"/>
       <import plugin="org.apache.mina.core"/>
       <import plugin="org.openscada.net"/>
       <import plugin="org.openscada.utils"/>
@@ -34,7 +35,6 @@
       <import plugin="org.eclipse.core.databinding.beans" version="1.2.0" match="greaterOrEqual"/>
       <import plugin="org.openscada.core.connection.provider" version="0.14.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.expressions"/>
-      <import plugin="org.openscada.ui.databinding" version="1.4.0" match="greaterOrEqual"/>
       <import plugin="org.openscada.core.ui" version="0.14.0" match="greaterOrEqual"/>
       <import plugin="org.openscada.utils.osgi" version="0.14.0" match="greaterOrEqual"/>
       <import plugin="org.openscada.core.ui.connection.creator" version="0.14.0" match="greaterOrEqual"/>
@@ -51,7 +51,9 @@
       <import plugin="org.eclipse.ecf" version="2.0.0" match="greaterOrEqual"/>
       <import plugin="ch.ethz.iks.slp"/>
       <import plugin="org.eclipse.equinox.common" version="3.5.0" match="greaterOrEqual"/>
-      <import plugin="com.springsource.org.apache.log4j"/>
+      <import plugin="org.openscada.ui.databinding" version="0.15.0" match="greaterOrEqual"/>
+      <import plugin="org.openscada.sec"/>
+      <import plugin="org.openscada.sec.osgi"/>
    </requires>
 
    <plugin
