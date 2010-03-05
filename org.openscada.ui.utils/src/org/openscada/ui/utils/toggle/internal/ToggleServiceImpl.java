@@ -39,7 +39,7 @@ public class ToggleServiceImpl implements ToggleService, Runnable
 {
     private static final Logger logger = LoggerFactory.getLogger ( ToggleServiceImpl.class );
 
-    private static final int delay = 100;
+    private static final int delay = Integer.getInteger ( "org.openscada.ui.utils.toggle.delay", 100 );
 
     private final ConcurrentMap<Integer, ToggleInfo> toggleInfos = new ConcurrentHashMap<Integer, ToggleInfo> ();
 
