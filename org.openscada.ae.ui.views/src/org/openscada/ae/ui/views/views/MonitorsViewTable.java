@@ -154,7 +154,6 @@ public class MonitorsViewTable extends Composite
         final TableViewer table = new TableViewer ( this, SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION );
         this.tableRef.set ( table );
         table.setContentProvider ( new ObservableSetContentProvider () );
-        //table.setLabelProvider ( new EventLabelProvider () );
         createColumns ( table );
         table.getTable ().setHeaderVisible ( true );
         table.getTable ().setLinesVisible ( true );

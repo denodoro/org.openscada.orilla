@@ -91,11 +91,13 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
             this.eventPoolListener = new EventListener () {
                 public void statusChanged ( final SubscriptionState state )
                 {
+                    System.err.println ( state );
                     EventPoolView.this.statusChangedEventSubscription ( state );
                 }
 
                 public void dataChanged ( final Event[] addedEvents )
                 {
+                    System.err.println ( "EVENTS " + addedEvents );
                     EventPoolView.this.dataChanged ( addedEvents );
                 }
             };
