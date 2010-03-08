@@ -19,7 +19,16 @@ Require-Bundle: org.eclipse.ui,
  org.openscada.da.ui.widgets;bundle-version="0.15.0"
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
-Export-Package: org.openscada.da.client.dataitem.details,
+Export-Package: org.openscada.da.client.dataitem.details;version="0.15.0";
+  uses:="org.eclipse.ui,
+   org.openscada.da.client,
+   org.eclipse.ui.plugin,
+   org.osgi.framework,
+   org.openscada.da.client.base.action,
+   org.eclipse.ui.part,
+   org.eclipse.swt.widgets,
+   org.openscada.da.client.dataitem.details.part,
+   org.openscada.da.ui.connection.data",
  org.openscada.da.client.dataitem.details.part;version="0.15.0";
   uses:="org.eclipse.ui.services,
    org.openscada.da.client,
