@@ -14,7 +14,6 @@ import org.openscada.ae.ConditionStatusInformation;
 import org.openscada.ae.Event;
 import org.openscada.ae.Event.Fields;
 import org.openscada.ae.client.EventListener;
-import org.openscada.ae.ui.views.Activator;
 import org.openscada.ae.ui.views.model.DecoratedEvent;
 import org.openscada.core.Variant;
 import org.openscada.core.client.ConnectionState;
@@ -100,7 +99,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
                     EventPoolView.this.dataChanged ( addedEvents );
                 }
             };
-            Activator.getConnectionManager ().addEventPoolListener ( this.poolId, this.eventPoolListener );
+            getConnectionService ().getEventManager ().addEventListener ( this.poolId, this.eventPoolListener );
         }
     }
 
@@ -112,7 +111,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
         {
             if ( this.eventPoolListener != null )
             {
-                Activator.getConnectionManager ().removeEventPoolListener ( this.poolId, this.eventPoolListener );
+                getConnectionService ().getEventManager ().removeEventListener ( this.poolId, this.eventPoolListener );
             }
         }
         clear ();

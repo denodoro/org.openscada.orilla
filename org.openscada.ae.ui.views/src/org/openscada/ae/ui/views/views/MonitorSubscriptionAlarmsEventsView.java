@@ -66,7 +66,7 @@ public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarms
                     MonitorSubscriptionAlarmsEventsView.this.dataChanged ( addedOrUpdated, removed );
                 }
             };
-            Activator.getConnectionManager ().addMonitorListener ( this.monitorsId, this.monitorListener );
+            getConnectionService ().getMonitorManager ().addMonitorListener ( this.monitorsId, this.monitorListener );
         }
     }
 
@@ -76,7 +76,7 @@ public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarms
         {
             if ( this.monitorListener != null )
             {
-                Activator.getConnectionManager ().removeMonitorListener ( this.monitorsId, this.monitorListener );
+                getConnectionService ().getMonitorManager ().removeMonitorListener ( this.monitorsId, this.monitorListener );
             }
         }
         clear ();

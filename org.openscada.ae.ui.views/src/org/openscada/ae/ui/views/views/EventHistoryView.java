@@ -15,9 +15,7 @@ import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.ISharedImages;
 import org.openscada.ae.Event;
 import org.openscada.ae.Query;
@@ -36,8 +34,6 @@ public class EventHistoryView extends AbstractAlarmsEventsView
     public static final String ID = "org.openscada.ae.ui.views.views.eventhistory";
 
     private static final int LOAD_NO_OF_ITEMS = 2000;
-
-    private Label stateLabel = null;
 
     private CustomizableAction clearAction = null;
 
@@ -70,12 +66,7 @@ public class EventHistoryView extends AbstractAlarmsEventsView
     @Override
     public void createPartControl ( final Composite parent )
     {
-        Composite contentPane = new Composite ( parent, SWT.NONE );
-
-        GridLayout layout = new GridLayout ( 1, false );
-        layout.marginWidth = 0;
-        layout.marginHeight = 0;
-        contentPane.setLayout ( layout );
+        super.createPartControl ( parent );
 
         // pause Action
         this.pauseAction = new CustomizableAction ();
@@ -141,13 +132,10 @@ public class EventHistoryView extends AbstractAlarmsEventsView
         toolBarManager.add ( this.searchAction );
 
         // label which contains no of retrieved events
-        final Label stateLabel = new Label ( contentPane, SWT.NONE );
-        stateLabel.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, false ) );
-        this.stateLabel = stateLabel;
 
         this.events = new WritableSet ( SWTObservables.getRealm ( parent.getDisplay () ) );
 
-        this.eventsTable = new EventViewTable ( contentPane, SWT.BORDER, this.events );
+        this.eventsTable = new EventViewTable ( getContentPane (), SWT.BORDER, this.events );
         this.eventsTable.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, true, 1, 1 ) );
     }
 
@@ -298,7 +286,7 @@ public class EventHistoryView extends AbstractAlarmsEventsView
                 getSite ().getShell ().getDisplay ().asyncExec ( new Runnable () {
                     public void run ()
                     {
-                        EventHistoryView.this.stateLabel.setText ( "Found " + EventHistoryView.this.noOfEvents.get () + " Events. loading ..." );
+                        updateStatusBar ();
                         for ( DecoratedEvent decoratedEvent : decoratedEvents )
                         {
                             EventHistoryView.this.events.add ( decoratedEvent );
@@ -374,7 +362,7 @@ public class EventHistoryView extends AbstractAlarmsEventsView
                 label.append ( " | " );
                 label.append ( EventHistoryView.this.events.size () );
                 label.append ( " events found" );
-                EventHistoryView.this.stateLabel.setText ( label.toString () );
+                EventHistoryView.this.getStateLabel ().setText ( label.toString () );
             }
         } );
     }

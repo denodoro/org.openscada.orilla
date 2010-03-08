@@ -15,6 +15,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 import org.openscada.ae.BrowserType;
 import org.openscada.ae.client.Connection;
+import org.openscada.ae.connection.provider.ConnectionService;
 import org.openscada.ae.ui.connection.data.BrowserEntryBean;
 import org.openscada.ae.ui.views.Activator;
 import org.openscada.core.ConnectionInformation;
@@ -23,7 +24,6 @@ import org.openscada.core.client.ConnectionStateListener;
 import org.openscada.core.connection.provider.ConnectionIdTracker;
 import org.openscada.core.connection.provider.ConnectionRequest;
 import org.openscada.core.connection.provider.ConnectionRequestTracker;
-import org.openscada.core.connection.provider.ConnectionService;
 import org.openscada.core.connection.provider.ConnectionTracker;
 import org.openscada.core.connection.provider.ConnectionTracker.Listener;
 import org.openscada.core.ui.connection.data.ConnectionHolder;
@@ -48,7 +48,7 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
 
     private String connectionUri = null;
 
-    private Connection connection;
+    private ConnectionService connectionService;
 
     private ConnectionTracker connectionTracker;
 
@@ -94,7 +94,7 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
             // just reset all values
             this.connectionId = null;
             this.connectionUri = null;
-            this.connection = null;
+            this.connectionService = null;
             this.connectionTracker = null;
         }
     }
@@ -123,7 +123,7 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
      */
     public void setConnectionId ( final String connectionId ) throws Exception
     {
-        if ( !String.valueOf ( connectionId ).equals ( String.valueOf ( this.connectionId ) ) )
+        if ( !String.valueOf ( connectionId ).equals ( String.valueOf ( this.connectionId ) ) || ( getConnection () == null ) )
         {
             this.connectionId = connectionId;
             reInitializeConnection ();
@@ -136,7 +136,7 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
      */
     public void setConnectionUri ( final String connectionUri ) throws Exception
     {
-        if ( !String.valueOf ( connectionUri ).equals ( String.valueOf ( this.connectionUri ) ) )
+        if ( !String.valueOf ( connectionUri ).equals ( String.valueOf ( this.connectionUri ) ) || ( getConnection () == null ) )
         {
             this.connectionUri = connectionUri;
             reInitializeConnection ();
@@ -148,7 +148,6 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
      */
     protected void onConnect ()
     {
-        Activator.getConnectionManager ().setConnection ( this.connection );
         updateStatusBar ();
     }
 
@@ -158,7 +157,6 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
      */
     protected void onDisconnect ()
     {
-        Activator.getConnectionManager ().setConnection ( null );
         updateStatusBar ();
     }
 
@@ -167,7 +165,7 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
      */
     protected boolean isConnected ()
     {
-        return ( ( this.connection != null ) && ( this.connection.getState () == ConnectionState.BOUND ) );
+        return ( ( this.connectionService != null ) && ( this.connectionService.getConnection () != null ) && ( this.connectionService.getConnection ().getState () == ConnectionState.BOUND ) );
     }
 
     private void reInitializeConnection () throws Exception
@@ -190,13 +188,11 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
                     // actual check
                     if ( state == ConnectionState.BOUND )
                     {
-                        AbstractAlarmsEventsView.this.connection = ( (Connection)changedConnection );
                         onConnect ();
                     }
                     else
                     {
                         onDisconnect ();
-                        AbstractAlarmsEventsView.this.connection = null;
                     }
                 }
                 catch ( Exception e )
@@ -206,7 +202,7 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
             }
         };
         final ConnectionTracker.Listener connectionServiceListener = new Listener () {
-            public void setConnection ( final ConnectionService connectionService )
+            public void setConnection ( final org.openscada.core.connection.provider.ConnectionService connectionService )
             {
                 if ( connectionService == null )
                 {
@@ -221,7 +217,7 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
                 connectionService.getConnection ().addConnectionStateListener ( connectionStateListener );
                 if ( connectionService.getConnection ().getState () == ConnectionState.BOUND )
                 {
-                    AbstractAlarmsEventsView.this.connection = (Connection)connectionService.getConnection ();
+                    AbstractAlarmsEventsView.this.connectionService = (ConnectionService)connectionService;
                     onConnect ();
                 }
                 else
@@ -324,7 +320,16 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
 
     public Connection getConnection ()
     {
-        return this.connection;
+        if ( this.connectionService != null )
+        {
+            return this.connectionService.getConnection ();
+        }
+        return null;
+    }
+
+    public ConnectionService getConnectionService ()
+    {
+        return this.connectionService;
     }
 
     public Composite getContentPane ()
