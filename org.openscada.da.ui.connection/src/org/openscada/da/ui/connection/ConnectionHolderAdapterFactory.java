@@ -2,7 +2,7 @@ package org.openscada.da.ui.connection;
 
 import org.eclipse.core.runtime.IAdapterFactory;
 import org.openscada.core.ui.connection.data.ConnectionHolder;
-import org.openscada.da.client.connection.service.ConnectionService;
+import org.openscada.da.connection.provider.ConnectionService;
 
 public class ConnectionHolderAdapterFactory implements IAdapterFactory
 {
