@@ -143,6 +143,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
                     }
                     EventPoolView.this.pool.add ( event );
                 }
+                EventPoolView.this.pool.setStale ( true );
             }
         } );
     }
@@ -162,6 +163,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
                 {
                     EventPoolView.this.pool.add ( event );
                 }
+                EventPoolView.this.pool.setStale ( true );
             }
         } );
     }
@@ -213,13 +215,19 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
 
     private void statusChangedEventSubscription ( final SubscriptionState state )
     {
-        System.err.println ( state );
     }
 
     @Override
     protected void acknowledge ()
     {
-        System.err.println ( "Aknnowledge" );
+        if ( ( this.getConnection () != null ) && ( this.getConnection ().getState () == ConnectionState.BOUND ) )
+        {
+            DecoratedEvent event = this.eventsTable.selectedEvent ();
+            if ( event.getMonitor () != null )
+            {
+                this.getConnection ().acknowledge ( event.getMonitor ().getId (), null );
+            }
+        }
     }
 
     @Override

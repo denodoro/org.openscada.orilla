@@ -1,5 +1,6 @@
 package org.openscada.ae.ui.views.model;
 
+import org.openscada.ae.ConditionStatus;
 import org.openscada.ae.ConditionStatusInformation;
 import org.openscada.ae.Event;
 
@@ -83,5 +84,32 @@ public class DecoratedEvent
             return false;
         }
         return true;
+    }
+
+    public boolean isActive ()
+    {
+        if ( this.event == null )
+        {
+            return false;
+        }
+        if ( this.monitor == null )
+        {
+            return false;
+        }
+        if ( this.event.getSourceTimestamp ().compareTo ( this.monitor.getStatusTimestamp () ) >= 0 )
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isAlarm ()
+    {
+        return ( isActive () && ( ( this.monitor.getStatus () == ConditionStatus.NOT_OK ) || ( this.monitor.getStatus () == ConditionStatus.NOT_OK_AKN ) || ( this.monitor.getStatus () == ConditionStatus.NOT_OK_NOT_AKN ) ) );
+    }
+
+    public boolean isAknRequired ()
+    {
+        return ( isActive () && ( ( this.monitor.getStatus () == ConditionStatus.NOT_AKN ) || ( this.monitor.getStatus () == ConditionStatus.NOT_OK_NOT_AKN ) ) );
     }
 }

@@ -1,77 +1,108 @@
 package org.openscada.ae.ui.views.views;
 
-import org.eclipse.jface.viewers.ViewerCell;
+import org.eclipse.swt.graphics.Image;
 import org.openscada.ae.Event;
 import org.openscada.ae.ui.views.model.DecoratedEvent;
 
 public class EventLabelProvider extends BaseLabelProvider
 {
-    @Override
-    public void update ( final ViewerCell cell )
+    public String getColumnText ( final Object element, final int columnIndex )
     {
-        if ( ! ( cell.getElement () instanceof DecoratedEvent ) )
+        if ( ! ( element instanceof DecoratedEvent ) )
         {
-            return;
+            return "";
         }
-        DecoratedEvent event = (DecoratedEvent)cell.getElement ();
-        switch ( cell.getColumnIndex () )
+        DecoratedEvent event = (DecoratedEvent)element;
+        switch ( columnIndex )
         {
         case 0:
-            cell.setText ( event.getEvent ().getId ().toString () );
-            break;
+            return event.getEvent ().getId ().toString ();
+
         case 1:
-            cell.setText ( this.df.format ( event.getEvent ().getSourceTimestamp () ) );
-            break;
+            return this.df.format ( event.getEvent ().getSourceTimestamp () );
+
         case 2:
-            cell.setText ( this.df.format ( event.getEvent ().getEntryTimestamp () ) );
-            break;
+            return this.df.format ( event.getEvent ().getEntryTimestamp () );
+
         case 3:
-            cell.setText ( toLabel ( event, Event.Fields.MONITOR_TYPE ) );
-            break;
+            return toLabel ( event, Event.Fields.MONITOR_TYPE );
+
         case 4:
-            cell.setText ( toLabel ( event, Event.Fields.EVENT_TYPE ) );
-            break;
+            return toLabel ( event, Event.Fields.EVENT_TYPE );
+
         case 5:
-            cell.setText ( toLabel ( event, Event.Fields.VALUE ) );
-            break;
+            return toLabel ( event, Event.Fields.VALUE );
+
         case 6:
-            cell.setText ( toLabel ( event, Event.Fields.MESSAGE ) );
-            break;
+            return toLabel ( event, Event.Fields.MESSAGE );
+
         case 7:
-            cell.setText ( toLabel ( event, Event.Fields.MESSAGE_CODE ) );
-            break;
+            return toLabel ( event, Event.Fields.MESSAGE_CODE );
+
         case 8:
-            cell.setText ( toLabel ( event, Event.Fields.PRIORITY ) );
-            break;
+            return toLabel ( event, Event.Fields.PRIORITY );
+
         case 9:
-            cell.setText ( toLabel ( event, Event.Fields.SOURCE ) );
-            break;
+            return toLabel ( event, Event.Fields.SOURCE );
+
         case 10:
-            cell.setText ( toLabel ( event, Event.Fields.ACTOR_NAME ) );
-            break;
+            return toLabel ( event, Event.Fields.ACTOR_NAME );
+
         case 11:
-            cell.setText ( toLabel ( event, Event.Fields.ACTOR_TYPE ) );
-            break;
+            return toLabel ( event, Event.Fields.ACTOR_TYPE );
+
         case 12:
-            cell.setText ( toLabel ( event, Event.Fields.HIVE ) );
-            break;
+            return toLabel ( event, Event.Fields.HIVE );
+
         case 13:
-            cell.setText ( toLabel ( event, Event.Fields.ITEM ) );
-            break;
+            return toLabel ( event, Event.Fields.ITEM );
+
         case 14:
-            cell.setText ( toLabel ( event, Event.Fields.COMPONENT ) );
-            break;
+            return toLabel ( event, Event.Fields.COMPONENT );
+
         case 15:
-            cell.setText ( toLabel ( event, Event.Fields.SYSTEM ) );
-            break;
+            return toLabel ( event, Event.Fields.SYSTEM );
+
         case 16:
-            cell.setText ( toLabel ( event, Event.Fields.LOCATION ) );
-            break;
+            return toLabel ( event, Event.Fields.LOCATION );
+
         case 17:
-            cell.setText ( toLabel ( event, Event.Fields.COMMENT ) );
-            break;
+            return toLabel ( event, Event.Fields.COMMENT );
+
         default:
-            cell.setText ( "" );
+            return "";
         }
+    }
+
+    @Override
+    public Image getColumnImage ( final Object element, final int columnIndex )
+    {
+        if ( ! ( element instanceof DecoratedEvent ) )
+        {
+            return null;
+        }
+        DecoratedEvent event = (DecoratedEvent)element;
+        if ( ( columnIndex == 4 ) && event.isActive () )
+        {
+            switch ( event.getMonitor ().getStatus () )
+            {
+            case INACTIVE:
+                return MANUAL_IMG;
+            case UNSAFE:
+                return DISCONNECTED_IMG;
+            case OK:
+                return OK_IMG;
+            case NOT_OK:
+                return null;
+            case NOT_OK_AKN:
+                return ALARM_IMG;
+            case NOT_AKN:
+                return ACK_IMG;
+            case NOT_OK_NOT_AKN:
+                return ACK_IMG;
+            }
+            return EMPTY_IMG;
+        }
+        return null;
     }
 }

@@ -4,7 +4,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.core.databinding.observable.set.WritableSet;
 import org.eclipse.jface.databinding.viewers.ObservableSetContentProvider;
-import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
@@ -133,6 +132,7 @@ public class EventViewTable extends Composite
         createColumns ( table );
         table.getTable ().setHeaderVisible ( true );
         table.getTable ().setLinesVisible ( true );
+        table.setLabelProvider ( new EventLabelProvider () );
         table.setUseHashlookup ( true );
         table.setInput ( this.events );
         table.setSorter ( new Sorter ( Columns.SOURCE_TIMESTAMP, SWT.DOWN ) );
@@ -146,7 +146,6 @@ public class EventViewTable extends Composite
 
     private void createColumns ( final TableViewer table )
     {
-        CellLabelProvider labelProvider = new EventLabelProvider ();
         SortListener sortListener = new SortListener ( table );
 
         // id
@@ -155,7 +154,6 @@ public class EventViewTable extends Composite
         idColumn.getColumn ().setWidth ( 0 );
         idColumn.getColumn ().setResizable ( true );
         idColumn.getColumn ().setMoveable ( false );
-        idColumn.setLabelProvider ( labelProvider );
         idColumn.getColumn ().setData ( COLUMN_KEY, Columns.ID );
         idColumn.getColumn ().addSelectionListener ( sortListener );
         // source TS
@@ -164,7 +162,6 @@ public class EventViewTable extends Composite
         sourceTimestampColumn.getColumn ().setWidth ( 140 );
         sourceTimestampColumn.getColumn ().setResizable ( true );
         sourceTimestampColumn.getColumn ().setMoveable ( false );
-        sourceTimestampColumn.setLabelProvider ( labelProvider );
         sourceTimestampColumn.getColumn ().setData ( COLUMN_KEY, Columns.SOURCE_TIMESTAMP );
         sourceTimestampColumn.getColumn ().addSelectionListener ( sortListener );
         // entry TS
@@ -173,7 +170,6 @@ public class EventViewTable extends Composite
         entryTimestampColumn.getColumn ().setWidth ( 140 );
         entryTimestampColumn.getColumn ().setResizable ( true );
         entryTimestampColumn.getColumn ().setMoveable ( false );
-        entryTimestampColumn.setLabelProvider ( labelProvider );
         entryTimestampColumn.getColumn ().setData ( COLUMN_KEY, Columns.ENTRY_TIMESTAMP );
         entryTimestampColumn.getColumn ().addSelectionListener ( sortListener );
 
@@ -184,7 +180,15 @@ public class EventViewTable extends Composite
             fieldColumn.getColumn ().setWidth ( 120 );
             fieldColumn.getColumn ().setResizable ( true );
             fieldColumn.getColumn ().setMoveable ( false );
-            fieldColumn.setLabelProvider ( labelProvider );
         }
+    }
+
+    public DecoratedEvent selectedEvent ()
+    {
+        if ( this.tableRef.get ().getTable ().getSelectionCount () == 0 )
+        {
+            return null;
+        }
+        return (DecoratedEvent)this.tableRef.get ().getTable ().getSelection ()[0].getData ();
     }
 }

@@ -1,50 +1,11 @@
 package org.openscada.ae.ui.views.views;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 import org.openscada.ae.ConditionStatusInformation;
-import org.openscada.ae.ui.views.Activator;
-import org.openscada.core.Variant;
 
-public class MonitorTableLabelProvider extends LabelProvider implements ITableLabelProvider
+public class MonitorTableLabelProvider extends BaseLabelProvider
 {
-    private static final DateFormat df = new SimpleDateFormat ( "yyyy-MM-dd HH:mm:ss.SSS" );
-
-    private static final Image ALARM_IMG = Activator.getImageDescriptor ( "icons/monitor_alarm.png" ).createImage ();
-
-    private static final Image ACK_IMG = Activator.getImageDescriptor ( "icons/monitor_ack.png" ).createImage ();
-
-    private static final Image EMPTY_IMG = Activator.getImageDescriptor ( "icons/monitor_empty.png" ).createImage ();
-
-    private static final Image OK_IMG = Activator.getImageDescriptor ( "icons/monitor_ok.png" ).createImage ();
-
-    private static final Image MANUAL_IMG = Activator.getImageDescriptor ( "icons/monitor_manual.png" ).createImage ();
-
-    private static final Image DISCONNECTED_IMG = Activator.getImageDescriptor ( "icons/monitor_disconnected.png" ).createImage ();
-
-    protected String toLabel ( final Variant value )
-    {
-        if ( value == null )
-        {
-            return "";
-        }
-        return value.toLabel ( "" );
-    }
-
-    protected String formatDate ( final Date date )
-    {
-        if ( date == null )
-        {
-            return "";
-        }
-        return df.format ( date );
-    }
-
+    @Override
     public Image getColumnImage ( final Object element, final int columnIndex )
     {
         if ( ! ( element instanceof ConditionStatusInformation ) )
