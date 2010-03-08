@@ -60,9 +60,9 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.openscada.core.Variant;
 import org.openscada.da.client.base.browser.ValueType;
-import org.openscada.da.client.base.realtime.AttributePair;
 import org.openscada.da.ui.connection.data.Item;
 import org.openscada.da.ui.connection.data.ItemSelectionHelper;
+import org.openscada.da.ui.widgets.realtime.AttributePair;
 
 class WriteAttributesOperationWizardValuePage extends WizardPage implements IWizardPage
 {

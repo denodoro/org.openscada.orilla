@@ -51,19 +51,19 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 import org.openscada.core.Variant;
-import org.openscada.da.client.base.realtime.ItemDropAdapter;
-import org.openscada.da.client.base.realtime.ItemListContentProvider;
-import org.openscada.da.client.base.realtime.ItemListLabelProvider;
-import org.openscada.da.client.base.realtime.ListData;
-import org.openscada.da.client.base.realtime.ListEntry;
-import org.openscada.da.client.base.realtime.ListEntryComparator;
-import org.openscada.da.client.base.realtime.RealtimeListAdapter;
 import org.openscada.da.dataItemList.ItemType;
 import org.openscada.da.dataItemList.ItemsDocument;
 import org.openscada.da.dataItemList.ItemsType;
 import org.openscada.da.project.Activator;
 import org.openscada.da.ui.connection.data.Item;
 import org.openscada.da.ui.connection.dnd.ItemTransfer;
+import org.openscada.da.ui.widgets.realtime.ItemDropAdapter;
+import org.openscada.da.ui.widgets.realtime.ItemListContentProvider;
+import org.openscada.da.ui.widgets.realtime.ItemListLabelProvider;
+import org.openscada.da.ui.widgets.realtime.ListData;
+import org.openscada.da.ui.widgets.realtime.ListEntry;
+import org.openscada.da.ui.widgets.realtime.ListEntryComparator;
+import org.openscada.da.ui.widgets.realtime.RealtimeListAdapter;
 
 public class RealtimeListEditor extends EditorPart implements RealtimeListAdapter
 {

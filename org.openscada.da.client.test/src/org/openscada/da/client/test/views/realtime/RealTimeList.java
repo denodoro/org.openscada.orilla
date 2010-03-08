@@ -47,17 +47,17 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 import org.openscada.core.Variant;
-import org.openscada.da.client.base.realtime.ItemDropAdapter;
-import org.openscada.da.client.base.realtime.ItemListContentProvider;
-import org.openscada.da.client.base.realtime.ItemListLabelProvider;
-import org.openscada.da.client.base.realtime.ListData;
-import org.openscada.da.client.base.realtime.ListEntry;
-import org.openscada.da.client.base.realtime.ListEntryComparator;
-import org.openscada.da.client.base.realtime.RealtimeListAdapter;
-import org.openscada.da.client.base.realtime.RealtimeListDragSourceListener;
-import org.openscada.da.client.base.realtime.RemoveAction;
 import org.openscada.da.ui.connection.data.Item;
 import org.openscada.da.ui.connection.dnd.ItemTransfer;
+import org.openscada.da.ui.widgets.realtime.ItemDropAdapter;
+import org.openscada.da.ui.widgets.realtime.ItemListContentProvider;
+import org.openscada.da.ui.widgets.realtime.ItemListLabelProvider;
+import org.openscada.da.ui.widgets.realtime.ListData;
+import org.openscada.da.ui.widgets.realtime.ListEntry;
+import org.openscada.da.ui.widgets.realtime.ListEntryComparator;
+import org.openscada.da.ui.widgets.realtime.RealtimeListAdapter;
+import org.openscada.da.ui.widgets.realtime.RealtimeListDragSourceListener;
+import org.openscada.da.ui.widgets.realtime.RemoveAction;
 
 public class RealTimeList extends ViewPart implements RealtimeListAdapter
 {

@@ -17,8 +17,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package org.openscada.da.client.base.realtime;
+package org.openscada.da.ui.widgets.realtime;
 
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.resource.LocalResourceManager;
 import org.eclipse.jface.resource.ResourceManager;
@@ -30,7 +31,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.openscada.core.ui.styles.StyleInformation;
-import org.openscada.da.client.base.browser.VariantHelper;
+import org.openscada.da.ui.widgets.Activator;
 
 public class ItemListLabelProvider extends LabelProvider implements ITableLabelProvider, ITableFontProvider, ITableColorProvider
 {
@@ -63,7 +64,7 @@ public class ItemListLabelProvider extends LabelProvider implements ITableLabelP
             case 2:
                 if ( listEntry.getValue () != null )
                 {
-                    return VariantHelper.toValueType ( listEntry.getValue () ).name ();
+                    return listEntry.getValue ().getType ().name ();
                 }
             case 3:
                 if ( listEntry.getValue () != null )
@@ -84,7 +85,7 @@ public class ItemListLabelProvider extends LabelProvider implements ITableLabelP
             case 2:
                 if ( ap.value != null )
                 {
-                    return VariantHelper.toValueType ( ap.value ).name ();
+                    return ap.value.getType ().name ();
                 }
             case 3:
                 if ( ap.value != null )
@@ -117,6 +118,7 @@ public class ItemListLabelProvider extends LabelProvider implements ITableLabelP
         }
         catch ( final Throwable e )
         {
+            Activator.getDefault ().getLog ().log ( new Status ( Status.ERROR, Activator.PLUGIN_ID, "Failed to generate label", e ) );
         }
 
         return null;
@@ -141,6 +143,7 @@ public class ItemListLabelProvider extends LabelProvider implements ITableLabelP
         }
         catch ( final Throwable e )
         {
+            Activator.getDefault ().getLog ().log ( new Status ( Status.ERROR, Activator.PLUGIN_ID, "Failed to generate label", e ) );
         }
 
         return null;
@@ -165,6 +168,7 @@ public class ItemListLabelProvider extends LabelProvider implements ITableLabelP
         }
         catch ( final Throwable e )
         {
+            Activator.getDefault ().getLog ().log ( new Status ( Status.ERROR, Activator.PLUGIN_ID, "Failed to generate label", e ) );
         }
 
         return null;

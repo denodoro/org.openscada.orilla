@@ -387,6 +387,7 @@ POSSIBILITY OF SUCH DAMAGES.
       <import plugin="org.openscada.core.client.net" version="0.14.0" match="greaterOrEqual"/>
       <import plugin="org.openscada.da.net" version="0.14.0" match="greaterOrEqual"/>
       <import plugin="org.apache.mina.core" version="2.0.0" match="greaterOrEqual"/>
+      <import plugin="org.openscada.da.ui.widgets"/>
    </requires>
 
    <plugin

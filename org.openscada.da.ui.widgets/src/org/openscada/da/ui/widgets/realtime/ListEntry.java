@@ -17,7 +17,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-package org.openscada.da.client.base.realtime;
+package org.openscada.da.ui.widgets.realtime;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -32,10 +32,10 @@ import org.eclipse.ui.views.properties.PropertyDescriptor;
 import org.openscada.core.Variant;
 import org.openscada.core.subscription.SubscriptionState;
 import org.openscada.da.client.DataItemValue;
-import org.openscada.da.client.base.Activator;
 import org.openscada.da.ui.connection.data.DataItemHolder;
 import org.openscada.da.ui.connection.data.DataSourceListener;
 import org.openscada.da.ui.connection.data.Item;
+import org.openscada.da.ui.widgets.Activator;
 
 public class ListEntry extends Observable implements IAdaptable, IPropertySource, DataSourceListener
 {

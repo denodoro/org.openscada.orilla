@@ -24,19 +24,7 @@ Export-Package: org.openscada.da.client.base.action;version="0.15.0";
    org.eclipse.jface.viewers,
    org.openscada.da.ui.connection.data",
  org.openscada.da.client.base.browser;version="0.15.0";uses:="org.openscada.core",
- org.openscada.da.client.base.connection;version="0.15.0";uses:="org.openscada.core.client,org.openscada.da.client,org.openscada.core",
- org.openscada.da.client.base.realtime;version="0.15.0";
-  uses:="org.eclipse.core.runtime,
-   org.eclipse.ui,
-   org.eclipse.ui.views.properties,
-   org.openscada.core.subscription,
-   org.openscada.da.ui.connection.data,
-   org.eclipse.jface.action,
-   org.eclipse.swt.dnd,
-   org.openscada.da.client,
-   org.eclipse.swt.graphics,
-   org.eclipse.jface.viewers,
-   org.openscada.core"
+ org.openscada.da.client.base.connection;version="0.15.0";uses:="org.openscada.core.client,org.openscada.da.client,org.openscada.core"
 Bundle-Localization: plugin
 Import-Package: org.slf4j;version="1.5.8"
 Bundle-Vendor: inavare GmbH
