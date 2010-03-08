@@ -33,7 +33,6 @@ import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
-import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseListener;
@@ -44,13 +43,11 @@ import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.jface.resource.ColorDescriptor;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.resource.LocalResourceManager;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.openscada.core.Variant;
 import org.openscada.core.ui.styles.Style;
 import org.openscada.core.ui.styles.StyleInformation;
-import org.openscada.da.client.dataitem.details.part.AbstractBaseDetailsPart;
 import org.openscada.da.ui.styles.Activator;
 
 /**
@@ -58,7 +55,7 @@ import org.openscada.da.ui.styles.Activator;
  * @author Jens Reimann
  *
  */
-public class ManualOverride extends AbstractBaseDetailsPart
+public class ManualOverride extends AbstractBaseDraw2DDetailsPart
 {
 
     private Canvas canvas;
@@ -99,20 +96,15 @@ public class ManualOverride extends AbstractBaseDetailsPart
 
     public void createPart ( final Composite parent )
     {
-        this.baseStyle = new StyleInformation ( null, ColorDescriptor.createFrom ( ColorConstants.lightGray ), null );
 
+        this.baseStyle = new StyleInformation ( null, ColorDescriptor.createFrom ( ColorConstants.lightGray ), null );
         this.resourceManager = new LocalResourceManager ( JFaceResources.getResources () );
 
-        parent.setLayout ( new org.eclipse.swt.layout.GridLayout ( 1, false ) );
+        super.createPart ( parent );
 
-        this.canvas = new Canvas ( parent, SWT.NONE );
-        this.canvas.setLayoutData ( new org.eclipse.swt.layout.GridData ( SWT.FILL, SWT.FILL, true, true ) );
-        final LightweightSystem lws = new LightweightSystem ( this.canvas );
-
-        lws.setContents ( createRoot () );
     }
 
-    private IFigure createRoot ()
+    public IFigure createRoot ()
     {
         final Figure baseFigure = new Figure ();
 
