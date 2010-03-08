@@ -9,6 +9,7 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ColumnPixelData;
+import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.TableLayout;
@@ -100,10 +101,10 @@ public class RealTimeListViewer implements RealtimeListAdapter
         }
         else
         {
-            tableLayout.addColumnData ( new ColumnPixelData ( 200, true ) );
-            tableLayout.addColumnData ( new ColumnPixelData ( 100, true ) );
-            tableLayout.addColumnData ( new ColumnPixelData ( 100, true ) );
-            tableLayout.addColumnData ( new ColumnPixelData ( 500, true ) );
+            tableLayout.addColumnData ( new ColumnWeightData ( 200, true ) );
+            tableLayout.addColumnData ( new ColumnWeightData ( 100, true ) );
+            tableLayout.addColumnData ( new ColumnWeightData ( 100, true ) );
+            tableLayout.addColumnData ( new ColumnWeightData ( 500, true ) );
         }
     }
 
