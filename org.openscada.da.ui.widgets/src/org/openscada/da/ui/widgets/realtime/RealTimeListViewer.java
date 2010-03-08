@@ -104,7 +104,7 @@ public class RealTimeListViewer implements RealtimeListAdapter
             tableLayout.addColumnData ( new ColumnWeightData ( 200, true ) );
             tableLayout.addColumnData ( new ColumnWeightData ( 100, true ) );
             tableLayout.addColumnData ( new ColumnWeightData ( 100, true ) );
-            tableLayout.addColumnData ( new ColumnWeightData ( 500, true ) );
+            tableLayout.addColumnData ( new ColumnWeightData ( 200, true ) );
         }
     }
 
