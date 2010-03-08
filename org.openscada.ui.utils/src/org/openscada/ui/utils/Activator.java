@@ -99,7 +99,11 @@ public class Activator extends AbstractUIPlugin
 
     public static void removeDefaultToggle ( final ToggleCallback callback )
     {
-        getDefault ().removeToggle ( callback );
+        final Activator defaultInstance = getDefault ();
+        if ( defaultInstance != null )
+        {
+            defaultInstance.removeToggle ( callback );
+        }
     }
 
 }
