@@ -28,10 +28,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.openscada.da.client.dataitem.details.part.AbstractBaseDetailsPart;
-import org.openscada.da.client.dataitem.details.part.DetailsPart;
 import org.openscada.da.ui.connection.data.DataItemHolder;
 
-public class OverviewDetailsPart extends AbstractBaseDetailsPart implements DetailsPart
+public class OverviewDetailsPart extends AbstractBaseDetailsPart
 {
 
     private Text connectionUriText;
@@ -58,44 +57,44 @@ public class OverviewDetailsPart extends AbstractBaseDetailsPart implements Deta
 
         // connection uri
         label = new Label ( parent, SWT.NONE );
-        label.setText ( "Connection: " );
+        label.setText ( Messages.OverviewDetailsPart_ConnectionLabel );
         this.connectionUriText = new Text ( parent, SWT.READ_ONLY | SWT.BORDER );
         this.connectionUriText.setLayoutData ( new GridData ( SWT.FILL, SWT.BEGINNING, true, false ) );
 
         // item id
         label = new Label ( parent, SWT.NONE );
-        label.setText ( "Item ID: " );
+        label.setText ( Messages.OverviewDetailsPart_ItemIdLabel );
         this.itemIdText = new Text ( parent, SWT.READ_ONLY | SWT.BORDER );
         this.itemIdText.setLayoutData ( new GridData ( SWT.FILL, SWT.BEGINNING, true, false ) );
 
         // item state
         label = new Label ( parent, SWT.NONE );
-        label.setText ( "Subscription State:" );
+        label.setText ( Messages.OverviewDetailsPart_SubscriptionStateLabel );
         this.stateText = new Text ( parent, SWT.READ_ONLY | SWT.BORDER );
         this.stateText.setLayoutData ( new GridData ( SWT.FILL, SWT.BEGINNING, true, false ) );
 
         label = new Label ( parent, SWT.NONE );
-        label.setText ( "Alarm:" );
+        label.setText ( Messages.OverviewDetailsPart_AlarmLabel );
         this.alarmText = new Text ( parent, SWT.READ_ONLY | SWT.BORDER );
         this.alarmText.setLayoutData ( new GridData ( SWT.FILL, SWT.BEGINNING, true, false ) );
 
         label = new Label ( parent, SWT.NONE );
-        label.setText ( "Error:" );
+        label.setText ( Messages.OverviewDetailsPart_ErrorLabel );
         this.errorText = new Text ( parent, SWT.READ_ONLY | SWT.BORDER );
         this.errorText.setLayoutData ( new GridData ( SWT.FILL, SWT.BEGINNING, true, false ) );
 
         label = new Label ( parent, SWT.NONE );
-        label.setText ( "Manual:" );
+        label.setText ( Messages.OverviewDetailsPart_ManualLabel );
         this.manualText = new Text ( parent, SWT.READ_ONLY | SWT.BORDER );
         this.manualText.setLayoutData ( new GridData ( SWT.FILL, SWT.BEGINNING, true, false ) );
 
         label = new Label ( parent, SWT.NONE );
-        label.setText ( "Value:" );
+        label.setText ( Messages.OverviewDetailsPart_ValueLabel );
         this.valueText = new Text ( parent, SWT.READ_ONLY | SWT.BORDER );
         this.valueText.setLayoutData ( new GridData ( SWT.FILL, SWT.BEGINNING, true, false ) );
 
         label = new Label ( parent, SWT.NONE );
-        label.setText ( "Timestamp:" );
+        label.setText ( Messages.OverviewDetailsPart_TimestampLabel );
         this.timestampText = new Text ( parent, SWT.READ_ONLY | SWT.BORDER );
         this.timestampText.setLayoutData ( new GridData ( SWT.FILL, SWT.BEGINNING, true, false ) );
     }
@@ -112,14 +111,14 @@ public class OverviewDetailsPart extends AbstractBaseDetailsPart implements Deta
         }
         else
         {
-            this.connectionUriText.setText ( "" );
-            this.itemIdText.setText ( "" );
-            this.stateText.setText ( "" );
-            this.alarmText.setText ( "" );
-            this.errorText.setText ( "" );
-            this.manualText.setText ( "" );
-            this.valueText.setText ( "" );
-            this.timestampText.setText ( "" );
+            this.connectionUriText.setText ( "" ); //$NON-NLS-1$
+            this.itemIdText.setText ( "" ); //$NON-NLS-1$
+            this.stateText.setText ( "" ); //$NON-NLS-1$
+            this.alarmText.setText ( "" ); //$NON-NLS-1$
+            this.errorText.setText ( "" ); //$NON-NLS-1$
+            this.manualText.setText ( "" ); //$NON-NLS-1$
+            this.valueText.setText ( "" ); //$NON-NLS-1$
+            this.timestampText.setText ( "" ); //$NON-NLS-1$
         }
     }
 
@@ -137,15 +136,15 @@ public class OverviewDetailsPart extends AbstractBaseDetailsPart implements Deta
         }
         else
         {
-            this.stateText.setText ( String.format ( "%s (%s)", this.value.getSubscriptionState ().name (), this.value.getSubscriptionError ().getMessage () ) );
+            this.stateText.setText ( String.format ( Messages.OverviewDetailsPart_SubscriptionStateFormat, this.value.getSubscriptionState ().name (), this.value.getSubscriptionError ().getMessage () ) );
         }
 
-        this.alarmText.setText ( this.value.isAlarm () ? "alarm active" : "no alarm" );
-        this.errorText.setText ( this.value.isError () ? "error" : "ok" );
-        this.manualText.setText ( this.value.isManual () ? "active" : "not active" );
+        this.alarmText.setText ( this.value.isAlarm () ? Messages.OverviewDetailsPart_AlarmActiveText : Messages.OverviewDetailsPart_AlarmInactiveText );
+        this.errorText.setText ( this.value.isError () ? Messages.OverviewDetailsPart_ErrorActiveText : Messages.OverviewDetailsPart_ErrorInactiveText );
+        this.manualText.setText ( this.value.isManual () ? Messages.OverviewDetailsPart_ManualActiveText : Messages.OverviewDetailsPart_ManualInactiveText );
 
-        this.valueText.setText ( this.value.getValue () != null ? this.value.getValue ().toString () : "<null>" );
+        this.valueText.setText ( this.value.getValue () != null ? this.value.getValue ().toString () : Messages.OverviewDetailsPart_NullText );
         final Calendar c = this.value.getTimestamp ();
-        this.timestampText.setText ( c != null ? String.format ( "%1$tF %1$tT,%1$tL", c ) : "<null>" );
+        this.timestampText.setText ( c != null ? String.format ( Messages.OverviewDetailsPart_TimeFormat, c ) : Messages.OverviewDetailsPart_NullText );
     }
 }

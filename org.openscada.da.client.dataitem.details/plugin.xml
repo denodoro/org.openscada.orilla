@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.2"?>
 <plugin>
-   <extension-point id="org.openscada.da.client.dataitem.details.DetailsViewPart" name="Details View Part" schema="schema/org.openscada.da.client.dataitem.details.DetailsViewPart.exsd"/>
+   <extension-point id="org.openscada.da.client.dataitem.details.DetailsViewPart" name="%extension-point.name" schema="schema/org.openscada.da.client.dataitem.details.DetailsViewPart.exsd"/>
    <extension
          point="org.eclipse.ui.views">
       <view
@@ -47,6 +47,30 @@
             name="%detailsPart.overview.name"
             sortKey="0000">
       </detailsPart>
+      <detailsPart
+            name="%detailsPart.errors.name"
+            sortKey="0500">
+            <class class="org.openscada.da.client.dataitem.details.part.sum.SumDetailsPart">
+            	<parameter name="label" value="%detailsPart.errors.name"/>
+            	<parameter name="suffix" value=".error"/>
+            </class>
+      </detailsPart>
+	<detailsPart
+            name="%detailsPart.alarms.name"
+            sortKey="0501">
+            <class class="org.openscada.da.client.dataitem.details.part.sum.SumDetailsPart">
+            	<parameter name="label" value="%detailsPart.alarms.name"/>
+            	<parameter name="suffix" value=".alarm"/>
+            </class>
+      </detailsPart>
+	<detailsPart
+            name="%detailsPart.acks.name"
+            sortKey="0502">
+            <class class="org.openscada.da.client.dataitem.details.part.sum.SumDetailsPart">
+            	<parameter name="label" value="%detailsPart.acks.name"/>
+            	<parameter name="suffix" value=".ackRequired"/>
+            </class>
+      </detailsPart>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -76,7 +100,7 @@
             locationURI="popup:org.openscada.core.ui.connection.ConnectionView#PopupMenu">
          <command
                commandId="org.openscada.da.client.dataitem.details.openDetails"
-               label="Data Item Details"
+               label="%command.label"
                style="push">
             <visibleWhen
                   checkEnabled="false">
@@ -99,7 +123,7 @@
       <command
             categoryId="org.openscada.da.ui.category"
             id="org.openscada.da.client.dataitem.details.openDetails"
-            name="Data Item Details">
+            name="%command.name">
       </command>
    </extension>
 

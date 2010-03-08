@@ -43,7 +43,6 @@ import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.jface.resource.ColorDescriptor;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.resource.LocalResourceManager;
-import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.openscada.core.Variant;
 import org.openscada.core.ui.styles.Style;
@@ -57,8 +56,6 @@ import org.openscada.da.ui.styles.Activator;
  */
 public class ManualOverride extends AbstractBaseDraw2DDetailsPart
 {
-
-    private Canvas canvas;
 
     private Label pvValue;
 
@@ -96,12 +93,10 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
 
     public void createPart ( final Composite parent )
     {
-
         this.baseStyle = new StyleInformation ( null, ColorDescriptor.createFrom ( ColorConstants.lightGray ), null );
         this.resourceManager = new LocalResourceManager ( JFaceResources.getResources () );
 
         super.createPart ( parent );
-
     }
 
     public IFigure createRoot ()
@@ -430,7 +425,6 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
     @Override
     public void dispose ()
     {
-        this.canvas.dispose ();
         this.resourceManager.dispose ();
         super.dispose ();
     }

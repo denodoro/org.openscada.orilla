@@ -39,7 +39,7 @@ public class OpenDetailsView extends AbstractItemHandler
             }
             catch ( final PartInitException e )
             {
-                throw new ExecutionException ( "Failed to run", e );
+                throw new ExecutionException ( "Failed to run", e ); //$NON-NLS-1$
             }
         }
         return null;

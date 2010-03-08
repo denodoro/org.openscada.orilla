@@ -29,9 +29,9 @@ public class Activator extends AbstractUIPlugin
 {
 
     // The plug-in ID
-    public static final String PLUGIN_ID = "org.openscada.da.client.dataitem.details";
+    public static final String PLUGIN_ID = "org.openscada.da.client.dataitem.details"; //$NON-NLS-1$
 
-    public static final String EXTP_DETAILS_PART = "org.openscada.da.client.dataitem.details.DetailsViewPart";
+    public static final String EXTP_DETAILS_PART = "org.openscada.da.client.dataitem.details.DetailsViewPart"; //$NON-NLS-1$
 
     // The shared instance
     private static Activator plugin;

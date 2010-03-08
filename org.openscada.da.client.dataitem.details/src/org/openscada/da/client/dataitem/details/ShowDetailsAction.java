@@ -28,7 +28,7 @@ public class ShowDetailsAction extends AbstractItemAction
 {
     public ShowDetailsAction ()
     {
-        super ( "Show details" );
+        super ( Messages.ShowDetailsAction_Label );
     }
 
     @Override

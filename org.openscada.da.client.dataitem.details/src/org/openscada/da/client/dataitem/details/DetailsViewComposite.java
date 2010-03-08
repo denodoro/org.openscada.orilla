@@ -113,22 +113,22 @@ public class DetailsViewComposite extends Composite
 
         for ( final IConfigurationElement element : Platform.getExtensionRegistry ().getConfigurationElementsFor ( Activator.EXTP_DETAILS_PART ) )
         {
-            if ( !"detailsPart".equals ( element.getName () ) )
+            if ( !"detailsPart".equals ( element.getName () ) ) //$NON-NLS-1$
             {
                 continue;
             }
             Object o;
-            o = element.createExecutableExtension ( "class" );
+            o = element.createExecutableExtension ( "class" ); //$NON-NLS-1$
 
             if ( ! ( o instanceof DetailsPart ) )
             {
-                throw new CoreException ( new Status ( Status.ERROR, Activator.PLUGIN_ID, "DetailsPart is not of type 'DetailsPart'" ) );
+                throw new CoreException ( new Status ( Status.ERROR, Activator.PLUGIN_ID, "DetailsPart is not of type 'DetailsPart'" ) ); //$NON-NLS-1$
             }
 
             final DetailsPartInformation info = new DetailsPartInformation ();
             info.setDetailsPart ( (DetailsPart)o );
-            info.setLabel ( element.getAttribute ( "name" ) );
-            info.setSortKey ( element.getAttribute ( "sortKey" ) );
+            info.setLabel ( element.getAttribute ( "name" ) ); //$NON-NLS-1$
+            info.setSortKey ( element.getAttribute ( "sortKey" ) ); //$NON-NLS-1$
             result.add ( info );
         }
 
@@ -140,11 +140,11 @@ public class DetailsViewComposite extends Composite
                 String key2 = arg1.getSortKey ();
                 if ( key1 == null )
                 {
-                    key1 = "";
+                    key1 = ""; //$NON-NLS-1$
                 }
                 if ( key2 == null )
                 {
-                    key2 = "";
+                    key2 = ""; //$NON-NLS-1$
                 }
 
                 return key1.compareTo ( key2 );
@@ -161,7 +161,7 @@ public class DetailsViewComposite extends Composite
         this.header.setLayout ( new RowLayout ( SWT.HORIZONTAL ) );
 
         this.headerLabel = new Label ( this.header, SWT.NONE );
-        this.headerLabel.setText ( "Data Item: <none>" );
+        this.headerLabel.setText ( Messages.DetailsViewComposite_EmptyDataItem );
 
         this.headerValueLabel = new Label ( this.header, SWT.NONE );
     }
@@ -191,8 +191,8 @@ public class DetailsViewComposite extends Composite
 
             if ( this.headerLabel != null )
             {
-                this.headerLabel.setText ( String.format ( "Data Item: %s", item.getId () ) );
-                this.headerValueLabel.setText ( "" );
+                this.headerLabel.setText ( String.format ( Messages.DetailsViewComposite_DataItemFormat, item.getId () ) );
+                this.headerValueLabel.setText ( "" ); //$NON-NLS-1$
             }
 
             this.dataItem = new DataItemHolder ( Activator.getDefault ().getBundle ().getBundleContext (), item, new DataSourceListener () {
@@ -212,8 +212,8 @@ public class DetailsViewComposite extends Composite
         {
             if ( this.headerLabel != null )
             {
-                this.headerLabel.setText ( "Data Item: <none>" );
-                this.headerValueLabel.setText ( "" );
+                this.headerLabel.setText ( Messages.DetailsViewComposite_EmptyDataItem );
+                this.headerValueLabel.setText ( "" ); //$NON-NLS-1$
             }
 
             // clear
@@ -250,7 +250,7 @@ public class DetailsViewComposite extends Composite
 
         if ( value == null )
         {
-            this.headerValueLabel.setText ( "<no value>" );
+            this.headerValueLabel.setText ( Messages.DetailsViewComposite_NoValueText );
             this.headerValueLabel.setForeground ( null );
             this.headerLabel.setForeground ( null );
             this.header.setForeground ( null );

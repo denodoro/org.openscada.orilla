@@ -50,6 +50,12 @@ public abstract class AbstractBaseDetailsPart implements DetailsPart
         update ();
     }
 
+    /**
+     * Internal data was updated.
+     * <p>
+     * This method is called inside the display thread.
+     * </p>
+     */
     protected abstract void update ();
 
     /**

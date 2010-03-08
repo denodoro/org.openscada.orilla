@@ -30,7 +30,7 @@ import org.openscada.da.ui.connection.data.Item;
 public class DetailsViewPart extends ViewPart
 {
 
-    public static final String VIEW_ID = "org.openscada.da.client.dataitem.details.DetailsViewPart";
+    public static final String VIEW_ID = "org.openscada.da.client.dataitem.details.DetailsViewPart"; //$NON-NLS-1$
 
     private DetailsViewComposite detailsView;
 
