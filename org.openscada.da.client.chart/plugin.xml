@@ -25,7 +25,7 @@
       <objectContribution
             adaptable="false"
             id="org.openscada.da.client.chart.oc2"
-            objectClass="org.openscada.da.client.base.realtime.ListEntry">
+            objectClass="org.openscada.da.ui.widgets.realtime.ListEntry">
          <action
                class="org.openscada.da.client.chart.action.OpenChartAction"
                id="org.openscada.da.client.chart.OpenChartAction"

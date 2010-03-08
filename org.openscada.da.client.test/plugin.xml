@@ -64,7 +64,7 @@
                style="push"
                toolbarPath="additions">
             <enablement>
-               <objectClass name="org.openscada.da.client.base.realtime.ListEntry"/>
+               <objectClass name="org.openscada.da.ui.widgets.realtime.ListEntry"/>
             </enablement>
          </action>
          <action
@@ -76,7 +76,7 @@
                style="push"
                toolbarPath="additions">
             <enablement>
-               <objectClass name="org.openscada.da.client.base.realtime.ListEntry"/>
+               <objectClass name="org.openscada.da.ui.widgets.realtime.ListEntry"/>
             </enablement>
          </action>
             </viewContribution>
@@ -86,7 +86,7 @@
       <objectContribution
             adaptable="false"
             id="org.openscada.da.client.test.popupMenus.oc3"
-            objectClass="org.openscada.da.client.base.realtime.ListEntry">
+            objectClass="org.openscada.da.ui.widgets.realtime.ListEntry">
          <action
                class="org.openscada.da.client.test.actions.WriteOperationAction"
                icon="icons/16x16/stock_write.png"
@@ -103,7 +103,7 @@
       <objectContribution
             adaptable="false"
             id="org.openscada.da.client.test.popupMenus.oc4"
-            objectClass="org.openscada.da.client.base.realtime.AttributePair">
+            objectClass="org.openscada.da.ui.widgets.realtime.AttributePair">
          <action
                class="org.openscada.da.client.test.actions.WriteAttributesOperationAction"
                icon="icons/16x16/stock_write.png"

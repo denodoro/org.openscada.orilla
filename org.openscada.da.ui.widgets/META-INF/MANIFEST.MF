@@ -18,6 +18,8 @@ Import-Package: org.openscada.core;version="0.15.0",
  org.openscada.da.ui.connection.data;version="0.14.0",
  org.openscada.da.ui.connection.dnd;version="0.14.0",
  org.openscada.da.ui.styles;version="0.15.0",
+ org.openscada.utils.concurrent;version="0.15.0",
+ org.openscada.utils.concurrent.task;version="0.15.0",
  org.slf4j;version="[1.5.8,1.6.0)"
 Bundle-Activator: org.openscada.da.ui.widgets.Activator
 Bundle-ActivationPolicy: lazy

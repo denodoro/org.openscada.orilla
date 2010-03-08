@@ -31,7 +31,7 @@
       <objectContribution
             adaptable="false"
             id="org.openscada.da.client.signalGenerator.objectContribution1"
-            objectClass="org.openscada.da.client.base.realtime.ListEntry">
+            objectClass="org.openscada.da.ui.widgets.realtime.ListEntry">
          <action
                class="org.openscada.da.client.signalgenerator.action.ShowGenerator"
                enablesFor="+"

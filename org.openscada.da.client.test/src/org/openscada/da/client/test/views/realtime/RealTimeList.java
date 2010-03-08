@@ -19,250 +19,58 @@
 
 package org.openscada.da.client.test.views.realtime;
 
-import java.util.Collection;
-
-import org.eclipse.jface.action.IMenuListener;
-import org.eclipse.jface.action.IMenuManager;
-import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.jface.action.MenuManager;
-import org.eclipse.jface.action.Separator;
-import org.eclipse.jface.viewers.ColumnWeightData;
-import org.eclipse.jface.viewers.DoubleClickEvent;
-import org.eclipse.jface.viewers.IDoubleClickListener;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.TableLayout;
-import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.dnd.DND;
-import org.eclipse.swt.dnd.TextTransfer;
-import org.eclipse.swt.dnd.Transfer;
-import org.eclipse.swt.dnd.URLTransfer;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.TreeColumn;
-import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
-import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
-import org.openscada.core.Variant;
-import org.openscada.da.ui.connection.data.Item;
-import org.openscada.da.ui.connection.dnd.ItemTransfer;
-import org.openscada.da.ui.widgets.realtime.ItemDropAdapter;
-import org.openscada.da.ui.widgets.realtime.ItemListContentProvider;
-import org.openscada.da.ui.widgets.realtime.ItemListLabelProvider;
-import org.openscada.da.ui.widgets.realtime.ListData;
-import org.openscada.da.ui.widgets.realtime.ListEntry;
-import org.openscada.da.ui.widgets.realtime.ListEntryComparator;
-import org.openscada.da.ui.widgets.realtime.RealtimeListAdapter;
-import org.openscada.da.ui.widgets.realtime.RealtimeListDragSourceListener;
-import org.openscada.da.ui.widgets.realtime.RemoveAction;
+import org.openscada.da.ui.widgets.realtime.DoubleClickToggleWriteHandler;
+import org.openscada.da.ui.widgets.realtime.RealTimeListViewer;
 
-public class RealTimeList extends ViewPart implements RealtimeListAdapter
+public class RealTimeList extends ViewPart
 {
 
     public static final String VIEW_ID = "org.openscada.da.test.views.RealTimeList";
 
-    private RemoveAction removeAction = null;
-
-    private TreeViewer viewer;
-
-    private final ListData list = new ListData ();
+    private final RealTimeListViewer viewer;
 
     public RealTimeList ()
     {
-        super ();
-        this.removeAction = new RemoveAction ( this );
+        this.viewer = new RealTimeListViewer ();
     }
 
     @Override
     public void createPartControl ( final Composite parent )
     {
-        this.viewer = new TreeViewer ( parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER | SWT.FULL_SELECTION );
-
-        TreeColumn col;
-
-        col = new TreeColumn ( this.viewer.getTree (), SWT.NONE );
-        col.setText ( "ID" );
-        col = new TreeColumn ( this.viewer.getTree (), SWT.NONE );
-        col.setText ( "State" );
-        col = new TreeColumn ( this.viewer.getTree (), SWT.NONE );
-        col.setText ( "Type" );
-        col = new TreeColumn ( this.viewer.getTree (), SWT.NONE );
-        col.setText ( "Value" );
-
-        this.viewer.getTree ().setHeaderVisible ( true );
-
-        final TableLayout tableLayout = new TableLayout ();
-        tableLayout.addColumnData ( new ColumnWeightData ( 100, 100, true ) );
-        tableLayout.addColumnData ( new ColumnWeightData ( 50, 50, true ) );
-        tableLayout.addColumnData ( new ColumnWeightData ( 50, 50, true ) );
-        tableLayout.addColumnData ( new ColumnWeightData ( 75, 75, true ) );
-        this.viewer.getTree ().setLayout ( tableLayout );
-
-        this.viewer.setLabelProvider ( new ItemListLabelProvider () );
-        this.viewer.setContentProvider ( new ItemListContentProvider () );
-        this.viewer.setComparator ( new ListEntryComparator () );
-        this.viewer.setInput ( this.list );
-
-        getViewSite ().setSelectionProvider ( this.viewer );
-
-        this.viewer.addSelectionChangedListener ( this.removeAction );
-        this.viewer.addDoubleClickListener ( new IDoubleClickListener () {
-
-            public void doubleClick ( final DoubleClickEvent event )
-            {
-                RealTimeList.this.handleDoubleClick ( event );
-            }
-        } );
-
-        hookContextMenu ();
-        contributeToActionBars ();
-
-        addDropSupport ();
-        addDragSupport ();
+        this.viewer.createControl ( parent );
+        this.viewer.contribueTo ( getViewSite () );
+        this.viewer.addDoubleClickListener ( new DoubleClickToggleWriteHandler () );
     }
 
-    protected void handleDoubleClick ( final DoubleClickEvent event )
+    @Override
+    public void dispose ()
     {
-        if ( ! ( event.getSelection () instanceof IStructuredSelection ) )
-        {
-            return;
-        }
-
-        final Object o = ( (IStructuredSelection)event.getSelection () ).getFirstElement ();
-        if ( ! ( o instanceof ListEntry ) )
-        {
-            return;
-        }
-
-        final ListEntry entry = (ListEntry)o;
-
-        Variant value = entry.getValue ();
-        if ( value == null )
-        {
-            return;
-        }
-        if ( !value.isBoolean () )
-        {
-            return;
-        }
-
-        value = Variant.valueOf ( !value.asBoolean () );
-
-        entry.getDataItem ().write ( value );
-    }
-
-    private void hookContextMenu ()
-    {
-        final MenuManager menuMgr = new MenuManager ( "#PopupMenu" );
-        menuMgr.setRemoveAllWhenShown ( true );
-        menuMgr.addMenuListener ( new IMenuListener () {
-            public void menuAboutToShow ( final IMenuManager manager )
-            {
-                fillContextMenu ( manager );
-            }
-        } );
-        final Menu menu = menuMgr.createContextMenu ( this.viewer.getControl () );
-        this.viewer.getControl ().setMenu ( menu );
-        getSite ().registerContextMenu ( menuMgr, this.viewer );
-    }
-
-    private void fillContextMenu ( final IMenuManager manager )
-    {
-        // Other plug-ins can contribute there actions here
-
-        manager.add ( this.removeAction );
-        manager.add ( new Separator () );
-        manager.add ( new Separator ( IWorkbenchActionConstants.MB_ADDITIONS ) );
-    }
-
-    private void contributeToActionBars ()
-    {
-        final IActionBars bars = getViewSite ().getActionBars ();
-        fillLocalPullDown ( bars.getMenuManager () );
-        fillLocalToolBar ( bars.getToolBarManager () );
-    }
-
-    private void fillLocalToolBar ( final IToolBarManager manager )
-    {
-        manager.add ( this.removeAction );
-    }
-
-    private void fillLocalPullDown ( final IMenuManager manager )
-    {
-        manager.add ( this.removeAction );
-    }
-
-    private void addDropSupport ()
-    {
-        this.viewer.addDropSupport ( DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_LINK, new Transfer[] { ItemTransfer.getInstance () }, new ItemDropAdapter ( this.viewer, this ) );
-    }
-
-    private void addDragSupport ()
-    {
-        this.viewer.addDragSupport ( DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_LINK, new Transfer[] { ItemTransfer.getInstance (), URLTransfer.getInstance (), TextTransfer.getInstance () }, new RealtimeListDragSourceListener ( this.viewer ) );
+        this.viewer.dispose ();
+        super.dispose ();
     }
 
     @Override
     public void setFocus ()
     {
-        this.viewer.getControl ().setFocus ();
-    }
-
-    /* (non-Javadoc)
-     * @see org.openscada.da.client.test.views.realtime.RealtimeListAdapter#remove(org.openscada.da.client.test.views.realtime.ListEntry)
-     */
-    public void remove ( final ListEntry entry )
-    {
-        this.list.remove ( entry );
-    }
-
-    public void remove ( final Collection<ListEntry> entries )
-    {
-        this.list.removeAll ( entries );
-    }
-
-    public void add ( final ListEntry entry )
-    {
-        this.list.add ( entry );
+        this.viewer.setFocus ();
     }
 
     @Override
     public void saveState ( final IMemento memento )
     {
         super.saveState ( memento );
-
-        if ( memento != null )
-        {
-            for ( final ListEntry entry : this.list.getItems () )
-            {
-                final Item item = entry.getItem ();
-                saveItem ( memento, item );
-            }
-        }
-    }
-
-    private void saveItem ( final IMemento memento, final Item item )
-    {
-        final IMemento child = memento.createChild ( "item" );
-        child.putString ( "id", item.getId () );
-        child.putString ( "connection", item.getConnectionString () );
+        this.viewer.saveTo ( memento );
     }
 
     @Override
     public void init ( final IViewSite site, final IMemento memento ) throws PartInitException
     {
         super.init ( site, memento );
-
-        if ( memento != null )
-        {
-            for ( final IMemento child : memento.getChildren ( "item" ) )
-            {
-                final Item item = new Item ( child.getString ( "connection" ), child.getString ( "id" ) );
-                this.list.add ( item );
-            }
-        }
+        this.viewer.loadFrom ( memento );
     }
 }
