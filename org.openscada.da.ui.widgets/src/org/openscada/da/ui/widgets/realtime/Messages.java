@@ -24,7 +24,7 @@ import java.util.ResourceBundle;
 
 public class Messages
 {
-    private static final String BUNDLE_NAME = "org.openscada.da.client.base.realtime.messages"; //$NON-NLS-1$
+    private static final String BUNDLE_NAME = "org.openscada.da.ui.widgets.realtime"; //$NON-NLS-1$
 
     private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle ( BUNDLE_NAME );
 
