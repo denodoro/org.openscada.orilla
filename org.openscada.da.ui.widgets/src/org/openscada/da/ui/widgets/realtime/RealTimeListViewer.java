@@ -3,6 +3,7 @@ package org.openscada.da.ui.widgets.realtime;
 import java.util.Collection;
 import java.util.LinkedList;
 
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
@@ -30,6 +31,7 @@ import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.openscada.da.ui.connection.data.Item;
 import org.openscada.da.ui.connection.dnd.ItemTransfer;
+import org.openscada.da.ui.widgets.Activator;
 
 public class RealTimeListViewer implements RealtimeListAdapter
 {
@@ -169,25 +171,35 @@ public class RealTimeListViewer implements RealtimeListAdapter
             return;
         }
 
+        try
         {
-            this.initialColWidth = new LinkedList<Integer> ();
-            final IMemento tableMemento = memento.getChild ( "tableCols" );
-            if ( tableMemento != null )
             {
-                int i = 0;
-                Integer w;
-                while ( ( w = tableMemento.getInteger ( "col_" + i ) ) != null )
+                this.initialColWidth = new LinkedList<Integer> ();
+                final IMemento tableMemento = memento.getChild ( "tableCols" );
+                if ( tableMemento != null )
                 {
-                    this.initialColWidth.add ( w );
-                    i++;
+                    int i = 0;
+                    Integer w;
+                    while ( ( w = tableMemento.getInteger ( "col_" + i ) ) != null )
+                    {
+                        this.initialColWidth.add ( w );
+                        i++;
+                    }
+                }
+            }
+
+            for ( final IMemento child : memento.getChildren ( "item" ) )
+            {
+                final Item item = Item.loadFrom ( child );
+                if ( item != null )
+                {
+                    this.list.add ( item );
                 }
             }
         }
-
-        for ( final IMemento child : memento.getChildren ( "item" ) )
+        catch ( final Exception e )
         {
-            final Item item = new Item ( child.getString ( "connection" ), child.getString ( "id" ) );
-            this.list.add ( item );
+            Activator.getDefault ().getLog ().log ( new Status ( Status.ERROR, Activator.PLUGIN_ID, "Failed to load data", e ) );
         }
     }
 
@@ -211,15 +223,8 @@ public class RealTimeListViewer implements RealtimeListAdapter
         for ( final ListEntry entry : this.list.getItems () )
         {
             final Item item = entry.getItem ();
-            saveItem ( memento, item );
+            item.saveTo ( memento.createChild ( "item" ) );
         }
-    }
-
-    private void saveItem ( final IMemento memento, final Item item )
-    {
-        final IMemento child = memento.createChild ( "item" );
-        child.putString ( "id", item.getId () );
-        child.putString ( "connection", item.getConnectionString () );
     }
 
     public void setFocus ()

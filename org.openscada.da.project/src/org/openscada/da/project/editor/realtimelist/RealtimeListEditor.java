@@ -56,6 +56,7 @@ import org.openscada.da.dataItemList.ItemsDocument;
 import org.openscada.da.dataItemList.ItemsType;
 import org.openscada.da.project.Activator;
 import org.openscada.da.ui.connection.data.Item;
+import org.openscada.da.ui.connection.data.Item.Type;
 import org.openscada.da.ui.connection.dnd.ItemTransfer;
 import org.openscada.da.ui.widgets.realtime.ItemDropAdapter;
 import org.openscada.da.ui.widgets.realtime.ItemListContentProvider;
@@ -135,7 +136,7 @@ public class RealtimeListEditor extends EditorPart implements RealtimeListAdapte
 
             for ( final ItemType itemType : doc.getItems ().getItemList () )
             {
-                final Item item = new Item ( itemType.getUri (), itemType.getItemId () );
+                final Item item = new Item ( itemType.getUri (), itemType.getItemId (), Type.URI );
 
                 this.list.add ( item );
             }

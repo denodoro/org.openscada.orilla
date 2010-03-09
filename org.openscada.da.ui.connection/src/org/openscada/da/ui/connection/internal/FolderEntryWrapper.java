@@ -8,6 +8,7 @@ import org.openscada.da.core.browser.DataItemEntry;
 import org.openscada.da.core.browser.Entry;
 import org.openscada.da.core.browser.FolderEntry;
 import org.openscada.da.ui.connection.data.Item;
+import org.openscada.da.ui.connection.data.Item.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -87,7 +88,7 @@ public class FolderEntryWrapper implements IAdaptable
         if ( adapter == Item.class && this.entry instanceof DataItemEntry )
         {
             final DataItemEntry entry = (DataItemEntry)this.entry;
-            return new Item ( getHolder ().getConnectionInformation ().toString (), entry.getId () );
+            return new Item ( getHolder ().getConnectionInformation ().toString (), entry.getId (), Type.URI );
         }
 
         return null;

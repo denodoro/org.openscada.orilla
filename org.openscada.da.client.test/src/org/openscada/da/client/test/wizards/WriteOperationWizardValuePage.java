@@ -41,6 +41,7 @@ import org.openscada.core.Variant;
 import org.openscada.da.client.base.browser.ValueType;
 import org.openscada.da.ui.connection.data.Item;
 import org.openscada.da.ui.connection.data.ItemSelectionHelper;
+import org.openscada.da.ui.connection.data.Item.Type;
 
 class WriteOperationWizardValuePage extends WizardPage implements IWizardPage
 {
@@ -230,7 +231,7 @@ class WriteOperationWizardValuePage extends WizardPage implements IWizardPage
 
     public Item getItem ()
     {
-        return new Item ( this.item.getConnectionString (), this.itemIdText.getText () );
+        return new Item ( this.item.getConnectionString (), this.itemIdText.getText (), Type.URI );
     }
 
     public Variant getValue ()

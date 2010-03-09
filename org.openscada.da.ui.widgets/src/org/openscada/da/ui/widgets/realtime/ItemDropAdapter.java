@@ -28,6 +28,7 @@ import org.eclipse.jface.viewers.ViewerDropAdapter;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.TransferData;
 import org.openscada.da.ui.connection.data.Item;
+import org.openscada.da.ui.connection.data.Item.Type;
 import org.openscada.da.ui.connection.dnd.ItemTransfer;
 
 public class ItemDropAdapter extends ViewerDropAdapter
@@ -70,7 +71,7 @@ public class ItemDropAdapter extends ViewerDropAdapter
                 final URI uri = new URI ( tok );
                 if ( uri.getFragment () != null )
                 {
-                    final Item item = new Item ( uri.toString (), uri.getFragment () );
+                    final Item item = new Item ( uri.toString (), uri.getFragment (), Type.URI );
                     dropItem ( item, viewer );
                 }
 

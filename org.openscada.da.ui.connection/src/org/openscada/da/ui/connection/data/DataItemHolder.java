@@ -6,6 +6,7 @@ import java.util.Observer;
 
 import org.openscada.core.ConnectionInformation;
 import org.openscada.core.Variant;
+import org.openscada.core.connection.provider.ConnectionIdTracker;
 import org.openscada.core.connection.provider.ConnectionRequest;
 import org.openscada.core.connection.provider.ConnectionRequestTracker;
 import org.openscada.core.connection.provider.ConnectionTracker;
@@ -82,13 +83,30 @@ public class DataItemHolder
                 }
             };
 
-            this.tracker = new ConnectionRequestTracker ( this.context, createRequest (), new ConnectionTracker.Listener () {
+            switch ( item.getType () )
+            {
+            case ID:
+                this.tracker = new ConnectionIdTracker ( this.context, item.getConnectionString (), new ConnectionTracker.Listener () {
 
-                public void setConnection ( final org.openscada.core.connection.provider.ConnectionService connectionService )
-                {
-                    DataItemHolder.this.setConnection ( (ConnectionService)connectionService );
-                }
-            } );
+                    public void setConnection ( final org.openscada.core.connection.provider.ConnectionService connectionService )
+                    {
+                        DataItemHolder.this.setConnection ( (ConnectionService)connectionService );
+                    }
+                } );
+                break;
+
+            case URI:
+            default:
+                this.tracker = new ConnectionRequestTracker ( this.context, createRequest (), new ConnectionTracker.Listener () {
+
+                    public void setConnection ( final org.openscada.core.connection.provider.ConnectionService connectionService )
+                    {
+                        DataItemHolder.this.setConnection ( (ConnectionService)connectionService );
+                    }
+                } );
+
+                break;
+            }
         }
         this.tracker.listen ();
 

@@ -31,6 +31,7 @@ import org.eclipse.swt.dnd.DragSourceListener;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.URLTransfer;
 import org.openscada.da.ui.connection.data.Item;
+import org.openscada.da.ui.connection.data.Item.Type;
 import org.openscada.da.ui.connection.dnd.ItemTransfer;
 
 public class RealtimeListDragSourceListener implements DragSourceListener
@@ -52,10 +53,9 @@ public class RealtimeListDragSourceListener implements DragSourceListener
     {
         try
         {
+            final IStructuredSelection selection = (IStructuredSelection)LocalSelectionTransfer.getTransfer ().getSelection ();
             if ( ItemTransfer.getInstance ().isSupportedType ( event.dataType ) )
             {
-                final IStructuredSelection selection = (IStructuredSelection)LocalSelectionTransfer.getTransfer ().getSelection ();
-
                 final List<Item> items = new ArrayList<Item> ();
                 for ( final Iterator<?> i = selection.iterator (); i.hasNext (); )
                 {
@@ -66,12 +66,10 @@ public class RealtimeListDragSourceListener implements DragSourceListener
             }
             else if ( TextTransfer.getInstance ().isSupportedType ( event.dataType ) )
             {
-                final IStructuredSelection selection = (IStructuredSelection)LocalSelectionTransfer.getTransfer ().getSelection ();
                 setItemUriData ( event, selection );
             }
             else if ( URLTransfer.getInstance ().isSupportedType ( event.dataType ) )
             {
-                final IStructuredSelection selection = (IStructuredSelection)LocalSelectionTransfer.getTransfer ().getSelection ();
                 setItemUriData ( event, selection );
             }
         }
@@ -95,9 +93,16 @@ public class RealtimeListDragSourceListener implements DragSourceListener
                 sb.append ( "\n" );
             }
 
-            sb.append ( entry.getItem ().getConnectionString () );
+            final Item item = entry.getItem ();
+
+            if ( item.getType () != Type.URI )
+            {
+                throw new IllegalStateException ( "Item must be a URI item" );
+            }
+
+            sb.append ( item.getConnectionString () );
             sb.append ( "#" );
-            sb.append ( entry.getItem ().getId () );
+            sb.append ( item.getId () );
 
             cnt++;
         }
@@ -115,6 +120,7 @@ public class RealtimeListDragSourceListener implements DragSourceListener
             {
                 sb.append ( "\n" );
             }
+
             sb.append ( entry.getDataItem ().getItem ().getId () );
             cnt++;
         }

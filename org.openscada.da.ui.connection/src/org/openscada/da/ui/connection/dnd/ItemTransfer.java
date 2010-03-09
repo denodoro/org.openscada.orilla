@@ -2,9 +2,9 @@ package org.openscada.da.ui.connection.dnd;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 import org.eclipse.swt.dnd.ByteArrayTransfer;
 import org.eclipse.swt.dnd.TransferData;
@@ -17,7 +17,7 @@ public class ItemTransfer extends ByteArrayTransfer
 {
     private static ItemTransfer instance = new ItemTransfer ();
 
-    private static final String TYPE_NAME = "openscada-da-item-transfer-format"; //$NON-NLS-1$
+    private static final String TYPE_NAME = "openscada-da-item-transfer-format-v2"; //$NON-NLS-1$
 
     private static final int TYPEID = registerType ( TYPE_NAME );
 
@@ -38,26 +38,12 @@ public class ItemTransfer extends ByteArrayTransfer
 
     protected Item[] fromByteArray ( final byte[] bytes )
     {
-        final DataInputStream in = new DataInputStream ( new ByteArrayInputStream ( bytes ) );
-
         try
         {
-            /* read number of gadgets */
-            final int n = in.readInt ();
-            /* read gadgets */
-            final Item[] items = new Item[n];
-            for ( int i = 0; i < n; i++ )
-            {
-                final Item item = readItem ( null, in );
-                if ( item == null )
-                {
-                    return null;
-                }
-                items[i] = item;
-            }
-            return items;
+            final ObjectInputStream in = new ObjectInputStream ( new ByteArrayInputStream ( bytes ) );
+            return (Item[])in.readObject ();
         }
-        catch ( final IOException e )
+        catch ( final Exception e )
         {
             return null;
         }
@@ -104,36 +90,17 @@ public class ItemTransfer extends ByteArrayTransfer
         return fromByteArray ( bytes );
     }
 
-    /**
-     * Reads and returns a single gadget from the given stream.
-     */
-    private Item readItem ( final Item parent, final DataInputStream dataIn ) throws IOException
-    {
-        final Item item = new Item ();
-        item.setConnectionString ( dataIn.readUTF () );
-        item.setId ( dataIn.readUTF () );
-
-        return item;
-    }
-
     protected byte[] toByteArray ( final Item[] items )
     {
 
         final ByteArrayOutputStream byteOut = new ByteArrayOutputStream ();
-        final DataOutputStream out = new DataOutputStream ( byteOut );
 
         byte[] bytes = null;
 
         try
         {
-            /* write number of markers */
-            out.writeInt ( items.length );
-
-            /* write markers */
-            for ( int i = 0; i < items.length; i++ )
-            {
-                writeItem ( items[i], out );
-            }
+            final ObjectOutputStream out = new ObjectOutputStream ( byteOut );
+            out.writeObject ( items );
             out.close ();
             bytes = byteOut.toByteArray ();
         }
@@ -144,12 +111,4 @@ public class ItemTransfer extends ByteArrayTransfer
         return bytes;
     }
 
-    /**
-     * Writes the given item to the stream.
-     */
-    private void writeItem ( final Item item, final DataOutputStream dataOut ) throws IOException
-    {
-        dataOut.writeUTF ( item.getConnectionString () );
-        dataOut.writeUTF ( item.getId () );
-    }
 }
