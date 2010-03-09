@@ -28,7 +28,7 @@ public class ConnectionLabelProvider extends CommonListeningLabelProvider implem
 
     public ConnectionLabelProvider ()
     {
-        super ( "org.openscada.core.ui.connection.provider" );
+        super ( "org.openscada.core.ui.connection.provider" ); //$NON-NLS-1$
     }
 
     @Override
@@ -48,18 +48,18 @@ public class ConnectionLabelProvider extends CommonListeningLabelProvider implem
 
         if ( service != null )
         {
-            str.append ( " [", StyledString.DECORATIONS_STYLER );
+            str.append ( " [", StyledString.DECORATIONS_STYLER ); //$NON-NLS-1$
             final Connection connection = service.getConnection ();
             if ( connection != null )
             {
-                str.append ( String.format ( "%s", holder.getConnectionState () ), StyledString.DECORATIONS_STYLER );
+                str.append ( String.format ( "%s", holder.getConnectionState () ), StyledString.DECORATIONS_STYLER ); //$NON-NLS-1$
             }
-            str.append ( "]", StyledString.DECORATIONS_STYLER );
+            str.append ( "]", StyledString.DECORATIONS_STYLER ); //$NON-NLS-1$
         }
 
         if ( desc.getServiceId () != null )
         {
-            str.append ( " (" + desc.getServiceId () + ")", StyledString.QUALIFIER_STYLER );
+            str.append ( " (" + desc.getServiceId () + ")", StyledString.QUALIFIER_STYLER ); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
         return str;
@@ -79,7 +79,7 @@ public class ConnectionLabelProvider extends CommonListeningLabelProvider implem
         }
         else if ( element instanceof ConnectionHolder )
         {
-            final Image image = this.resource.createImage ( ImageDescriptor.createFromFile ( ConnectionLabelProvider.class, "icons/connection.gif" ) );
+            final Image image = this.resource.createImage ( ImageDescriptor.createFromFile ( ConnectionLabelProvider.class, "icons/connection.gif" ) ); //$NON-NLS-1$
             label.setImage ( image );
             label.setStyledText ( getConnectionString ( (ConnectionHolder)element ) );
         }
@@ -107,7 +107,7 @@ public class ConnectionLabelProvider extends CommonListeningLabelProvider implem
 
     public void propertyChange ( final PropertyChangeEvent evt )
     {
-        logger.debug ( "Detected a property change: {}", evt );
+        logger.debug ( "Detected a property change: {}", evt ); //$NON-NLS-1$
         fireChangeEvent ( Arrays.asList ( evt.getSource () ) );
     }
 

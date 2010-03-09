@@ -23,9 +23,9 @@ public class AddConnectionWizardPage1 extends WizardPage
 
     protected AddConnectionWizardPage1 ()
     {
-        super ( "Add Connection" );
-        setTitle ( "Add connection" );
-        setDescription ( "Add a new connection to the connection store" );
+        super ( Messages.AddConnectionWizardPage1_PageTitle );
+        setTitle ( Messages.AddConnectionWizardPage1_PageTitle );
+        setDescription ( Messages.AddConnectionWizardPage1_PageDescription );
     }
 
     public ConnectionDescriptor getConnectionInformation ()
@@ -43,12 +43,12 @@ public class AddConnectionWizardPage1 extends WizardPage
         // URI
 
         label = new Label ( comp, SWT.NONE );
-        label.setText ( "Connection URI:" );
+        label.setText ( Messages.AddConnectionWizardPage1_ConnectionUriLabel );
         label.setLayoutData ( new GridData ( SWT.BEGINNING, SWT.CENTER, false, false ) );
 
         this.uriText = new Text ( comp, SWT.BORDER );
-        this.uriText.setMessage ( "Enter the connection uri" );
-        this.uriText.setText ( "da:net://localhost:1202" );
+        this.uriText.setMessage ( Messages.AddConnectionWizardPage1_ConnectionUriMessage );
+        this.uriText.setText ( "da:net://localhost:1202" ); //$NON-NLS-1$
         this.uriText.setLayoutData ( new GridData ( SWT.FILL, SWT.CENTER, true, false ) );
         this.uriText.addModifyListener ( new ModifyListener () {
 
@@ -61,11 +61,11 @@ public class AddConnectionWizardPage1 extends WizardPage
         // ID
 
         label = new Label ( comp, SWT.NONE );
-        label.setText ( "Connection ID:" );
+        label.setText ( Messages.AddConnectionWizardPage1_ConnectionIdLabel );
         label.setLayoutData ( new GridData ( SWT.BEGINNING, SWT.CENTER, false, false ) );
 
         this.idText = new Text ( comp, SWT.BORDER );
-        this.idText.setMessage ( "Enter the local ID of the connection (optional)" );
+        this.idText.setMessage ( Messages.AddConnectionWizardPage1_ConnectionIdMessage );
         this.idText.setLayoutData ( new GridData ( SWT.FILL, SWT.CENTER, true, false ) );
         this.idText.addModifyListener ( new ModifyListener () {
 
@@ -86,7 +86,7 @@ public class AddConnectionWizardPage1 extends WizardPage
         try
         {
             String id = this.idText.getText ();
-            if ( "".equals ( id ) )
+            if ( "".equals ( id ) ) //$NON-NLS-1$
             {
                 id = null;
             }
@@ -105,7 +105,7 @@ public class AddConnectionWizardPage1 extends WizardPage
         if ( errorMessage == null )
         {
             setPageComplete ( true );
-            setMessage ( "Add a connection to the connection store", INFORMATION );
+            setMessage ( Messages.AddConnectionWizardPage1_InformationMessage, INFORMATION );
         }
         else
         {

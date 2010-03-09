@@ -47,7 +47,7 @@ public class AddConnectionWizard extends Wizard implements INewWizard
         if ( o != null )
         {
             this.store = (ConnectionStore)Platform.getAdapterManager ().getAdapter ( o, ConnectionStore.class );
-            logger.info ( "Store: {}", this.store );
+            logger.info ( "Store: {}", this.store ); //$NON-NLS-1$
         }
     }
 

@@ -15,7 +15,7 @@ public class ConnectionHolderTester extends PropertyTester
 
         final ConnectionHolder holder = (ConnectionHolder)receiver;
 
-        if ( "stored".equals ( property ) && expectedValue instanceof Boolean )
+        if ( "stored".equals ( property ) && expectedValue instanceof Boolean ) //$NON-NLS-1$
         {
             // check if the connection holder was coming from a store
             if ( (Boolean)expectedValue )
@@ -28,7 +28,7 @@ public class ConnectionHolderTester extends PropertyTester
             }
         }
 
-        if ( "interfaceName".equals ( property ) && expectedValue != null )
+        if ( "interfaceName".equals ( property ) && expectedValue != null ) //$NON-NLS-1$
         {
             return holder.getConnectionInformation ().getConnectionInformation ().getInterface ().equals ( expectedValue );
         }
