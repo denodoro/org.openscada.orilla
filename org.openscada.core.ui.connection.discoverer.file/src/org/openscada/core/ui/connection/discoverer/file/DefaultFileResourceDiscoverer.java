@@ -11,7 +11,7 @@ import org.openscada.core.ui.connection.ConnectionStore;
 
 public class DefaultFileResourceDiscoverer extends ResourceDiscoverer implements ConnectionStore
 {
-    private static final String FILENAME = "connections.txt";
+    private static final String FILENAME = "connections.txt"; //$NON-NLS-1$
 
     @Override
     protected void initialize ()
@@ -45,7 +45,7 @@ public class DefaultFileResourceDiscoverer extends ResourceDiscoverer implements
             {
                 if ( descriptor.getServiceId () != null )
                 {
-                    printer.println ( descriptor.getServiceId () + "=" + descriptor.getConnectionInformation () );
+                    printer.println ( descriptor.getServiceId () + "=" + descriptor.getConnectionInformation () ); //$NON-NLS-1$
                 }
                 else
                 {
@@ -55,7 +55,7 @@ public class DefaultFileResourceDiscoverer extends ResourceDiscoverer implements
         }
         catch ( final IOException e )
         {
-            throw new CoreException ( new Status ( Status.ERROR, Activator.PLUGIN_ID, "Failed to store connections", e ) );
+            throw new CoreException ( new Status ( Status.ERROR, Activator.PLUGIN_ID, Messages.DefaultFileResourceDiscoverer_ErrorStore, e ) );
         }
         finally
         {

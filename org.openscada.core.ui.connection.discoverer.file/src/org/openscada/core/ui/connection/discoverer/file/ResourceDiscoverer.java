@@ -31,7 +31,7 @@ public abstract class ResourceDiscoverer extends AbstractConnectionDiscoverer
 
     protected void load ( final File file )
     {
-        logger.info ( "Loading: {}", file );
+        logger.info ( "Loading: {}", file ); //$NON-NLS-1$
 
         try
         {
@@ -39,7 +39,7 @@ public abstract class ResourceDiscoverer extends AbstractConnectionDiscoverer
         }
         catch ( final FileNotFoundException e )
         {
-            Activator.getDefault ().getLog ().log ( new Status ( Status.INFO, Activator.PLUGIN_ID, "Failed to load storage", e ) );
+            Activator.getDefault ().getLog ().log ( new Status ( Status.INFO, Activator.PLUGIN_ID, Messages.ResourceDiscoverer_ErrorLoad, e ) );
         }
     }
 
@@ -51,7 +51,7 @@ public abstract class ResourceDiscoverer extends AbstractConnectionDiscoverer
         }
         catch ( final Throwable e )
         {
-            Activator.getDefault ().getLog ().log ( new Status ( Status.WARNING, Activator.PLUGIN_ID, "Failed to load storage", e ) );
+            Activator.getDefault ().getLog ().log ( new Status ( Status.WARNING, Activator.PLUGIN_ID, Messages.ResourceDiscoverer_ErrorLoad, e ) );
         }
         finally
         {
@@ -63,7 +63,7 @@ public abstract class ResourceDiscoverer extends AbstractConnectionDiscoverer
                 }
                 catch ( final IOException e )
                 {
-                    Activator.getDefault ().getLog ().log ( new Status ( Status.ERROR, Activator.PLUGIN_ID, "Failed to close stream", e ) );
+                    Activator.getDefault ().getLog ().log ( new Status ( Status.ERROR, Activator.PLUGIN_ID, Messages.ResourceDiscoverer_ErrorCloseStream, e ) );
                 }
             }
         }
@@ -94,7 +94,7 @@ public abstract class ResourceDiscoverer extends AbstractConnectionDiscoverer
 
     private ConnectionDescriptor convert ( final String line )
     {
-        final String tok[] = line.split ( "=", 2 );
+        final String tok[] = line.split ( "=", 2 ); //$NON-NLS-1$
         if ( tok.length == 0 )
         {
             return null;
