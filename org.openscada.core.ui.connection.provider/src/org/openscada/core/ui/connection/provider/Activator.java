@@ -28,7 +28,9 @@ public class Activator extends AbstractUIPlugin
     // The shared instance
     private static Activator plugin;
 
-    private Set<ServiceRegistration> registrations;
+    private final Set<ServiceRegistration> registrations = new HashSet<ServiceRegistration> ();
+
+    private final Set<ConnectionService> services = new HashSet<ConnectionService> ();
 
     /**
      * The constructor
@@ -64,13 +66,6 @@ public class Activator extends AbstractUIPlugin
 
     private void createConnections ()
     {
-        if ( this.registrations != null )
-        {
-            return;
-        }
-
-        this.registrations = new HashSet<ServiceRegistration> ();
-
         for ( final IConfigurationElement ele : Platform.getExtensionRegistry ().getConfigurationElementsFor ( "org.openscada.core.ui.connection.provider.connectionInstance" ) )
         {
             if ( !"connectionInstance".equals ( ele.getName () ) )
@@ -96,7 +91,11 @@ public class Activator extends AbstractUIPlugin
             final ConnectionService service = ConnectionCreatorHelper.createConnection ( ConnectionInformation.fromURI ( uri ), autoReconnectDelay );
             if ( service != null )
             {
-                registerService ( id, service );
+                if ( this.services.add ( service ) )
+                {
+                    service.connect ();
+                    registerService ( id, service );
+                }
             }
             else
             {
@@ -132,6 +131,11 @@ public class Activator extends AbstractUIPlugin
         {
             reg.unregister ();
         }
+        for ( final ConnectionService service : this.services )
+        {
+            service.disconnect ();
+        }
+        this.services.clear ();
         this.registrations.clear ();
     }
 
