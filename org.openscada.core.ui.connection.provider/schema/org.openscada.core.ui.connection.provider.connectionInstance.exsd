@@ -66,18 +66,12 @@
                </documentation>
             </annotation>
          </attribute>
-         <attribute name="autoReconnect">
+         <attribute name="autoReconnect" type="string">
             <annotation>
                <documentation>
-                  
+                  The delay in milliseconds between reconnects. If the value is not specified the connection will not be reconnected. If the value is not an integer a default reconnect of 10 seconds will be used.
                </documentation>
             </annotation>
-            <simpleType>
-               <restriction base="string">
-                  <enumeration value="[0-9]+">
-                  </enumeration>
-               </restriction>
-            </simpleType>
          </attribute>
       </complexType>
    </element>
