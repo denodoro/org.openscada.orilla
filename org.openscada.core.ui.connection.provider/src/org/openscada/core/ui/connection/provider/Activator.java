@@ -94,7 +94,7 @@ public class Activator extends AbstractUIPlugin
                 if ( this.services.add ( service ) )
                 {
                     service.connect ();
-                    registerService ( id, service );
+                    registerService ( id, uri, service );
                 }
             }
             else
@@ -108,10 +108,11 @@ public class Activator extends AbstractUIPlugin
         }
     }
 
-    private void registerService ( final String id, final ConnectionService service )
+    private void registerService ( final String id, final String uri, final ConnectionService service )
     {
         final Dictionary<String, Object> properties = new Hashtable<String, Object> ();
         properties.put ( Constants.SERVICE_PID, id );
+        properties.put ( ConnectionService.CONNECTION_URI, uri );
 
         final Class<?>[] clazzes = service.getSupportedInterfaces ();
 
