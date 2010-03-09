@@ -14,6 +14,7 @@ import org.openscada.core.ConnectionInformation;
 import org.openscada.core.connection.provider.ConnectionService;
 import org.openscada.core.ui.connection.creator.ConnectionCreatorHelper;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
 
 /**
@@ -112,6 +113,7 @@ public class Activator extends Plugin implements IStartup
     private void registerService ( final String id, final ConnectionService service )
     {
         final Dictionary<String, Object> properties = new Hashtable<String, Object> ();
+        properties.put ( Constants.SERVICE_PID, id );
 
         final Class<?>[] clazzes = service.getSupportedInterfaces ();
 
