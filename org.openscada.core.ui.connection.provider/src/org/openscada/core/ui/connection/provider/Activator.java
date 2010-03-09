@@ -78,7 +78,7 @@ public class Activator extends Plugin implements IStartup
             {
                 continue;
             }
-            final String id = ele.getAttribute ( "id" );
+            final String id = ele.getAttribute ( "servicePid" );
             final String uri = ele.getAttribute ( "uri" );
             final String autoReconnect = ele.getAttribute ( "autoReconnect" );
             createConnection ( id, uri, autoReconnect );
