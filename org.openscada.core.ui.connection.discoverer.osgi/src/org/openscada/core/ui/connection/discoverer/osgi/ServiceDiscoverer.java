@@ -6,6 +6,7 @@ import java.util.Set;
 import org.openscada.core.ConnectionInformation;
 import org.openscada.core.connection.provider.ConnectionService;
 import org.openscada.core.ui.connection.AbstractConnectionDiscoverer;
+import org.openscada.core.ui.connection.ConnectionDescriptor;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
@@ -89,13 +90,16 @@ public class ServiceDiscoverer extends AbstractConnectionDiscoverer implements S
      */
     private void update ()
     {
-        final Set<ConnectionInformation> infos = new HashSet<ConnectionInformation> ();
+        final Set<ConnectionDescriptor> infos = new HashSet<ConnectionDescriptor> ();
         for ( final ServiceReference ref : this.references )
         {
             final ConnectionInformation ci = fromReference ( ref );
             if ( ci != null )
             {
-                infos.add ( ci );
+                final Object o = ref.getProperty ( Constants.SERVICE_PID );
+                final String id = o != null ? o.toString () : null;
+                final ConnectionDescriptor cd = new ConnectionDescriptor ( ci, id );
+                infos.add ( cd );
             }
         }
         setConnections ( infos );

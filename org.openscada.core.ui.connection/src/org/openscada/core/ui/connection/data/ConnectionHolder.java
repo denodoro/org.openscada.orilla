@@ -10,17 +10,18 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
-import org.openscada.core.ConnectionInformation;
 import org.openscada.core.client.Connection;
 import org.openscada.core.client.ConnectionState;
 import org.openscada.core.client.ConnectionStateListener;
 import org.openscada.core.connection.provider.ConnectionService;
 import org.openscada.core.ui.connection.Activator;
+import org.openscada.core.ui.connection.ConnectionDescriptor;
 import org.openscada.core.ui.connection.creator.ConnectionCreatorHelper;
 import org.openscada.sec.AuthenticationException;
 import org.openscada.sec.osgi.MultiAuthenticationException;
 import org.openscada.utils.beans.AbstractPropertyChange;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceRegistration;
 import org.slf4j.Logger;
@@ -37,7 +38,7 @@ public class ConnectionHolder extends AbstractPropertyChange implements Connecti
 
     public static final String PROP_CONNECTION_ERROR = "connectionError";
 
-    private final ConnectionInformation info;
+    private final ConnectionDescriptor info;
 
     private final ConnectionDiscovererBean discoverer;
 
@@ -51,7 +52,7 @@ public class ConnectionHolder extends AbstractPropertyChange implements Connecti
 
     private ServiceRegistration serviceRegistration;
 
-    public ConnectionHolder ( final ConnectionDiscovererBean discoverer, final ConnectionInformation info ) throws InvalidSyntaxException
+    public ConnectionHolder ( final ConnectionDiscovererBean discoverer, final ConnectionDescriptor info ) throws InvalidSyntaxException
     {
         this.info = info;
         this.discoverer = discoverer;
@@ -63,7 +64,7 @@ public class ConnectionHolder extends AbstractPropertyChange implements Connecti
 
     private synchronized void createConnection ()
     {
-        final ConnectionService connectionService = ConnectionCreatorHelper.createConnection ( this.info, null );
+        final ConnectionService connectionService = ConnectionCreatorHelper.createConnection ( this.info.getConnectionInformation (), null );
         if ( connectionService != null )
         {
             connectionService.getConnection ().addConnectionStateListener ( this );
@@ -92,7 +93,11 @@ public class ConnectionHolder extends AbstractPropertyChange implements Connecti
         }
 
         final Dictionary<String, String> properties = new Hashtable<String, String> ();
-        properties.put ( ConnectionService.CONNECTION_URI, this.info.toString () );
+        properties.put ( ConnectionService.CONNECTION_URI, this.info.getConnectionInformation ().toString () );
+        if ( this.info.getServiceId () != null )
+        {
+            properties.put ( Constants.SERVICE_PID, this.info.getServiceId () );
+        }
         this.serviceRegistration = this.context.registerService ( clazzes, this.connectionService, properties );
     }
 
@@ -151,7 +156,7 @@ public class ConnectionHolder extends AbstractPropertyChange implements Connecti
         return this.connectionService;
     }
 
-    public ConnectionInformation getConnectionInformation ()
+    public ConnectionDescriptor getConnectionInformation ()
     {
         return this.info;
     }

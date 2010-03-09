@@ -6,7 +6,7 @@ import java.io.PrintWriter;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Status;
-import org.openscada.core.ConnectionInformation;
+import org.openscada.core.ui.connection.ConnectionDescriptor;
 import org.openscada.core.ui.connection.ConnectionStore;
 
 public class DefaultFileResourceDiscoverer extends ResourceDiscoverer implements ConnectionStore
@@ -19,7 +19,7 @@ public class DefaultFileResourceDiscoverer extends ResourceDiscoverer implements
         load ( getFile () );
     }
 
-    public void add ( final ConnectionInformation connectionInformation ) throws CoreException
+    public void add ( final ConnectionDescriptor connectionInformation ) throws CoreException
     {
         if ( addConnection ( connectionInformation ) )
         {
@@ -27,7 +27,7 @@ public class DefaultFileResourceDiscoverer extends ResourceDiscoverer implements
         }
     }
 
-    public void remove ( final ConnectionInformation connectionInformation ) throws CoreException
+    public void remove ( final ConnectionDescriptor connectionInformation ) throws CoreException
     {
         if ( removeConnection ( connectionInformation ) )
         {
@@ -41,9 +41,16 @@ public class DefaultFileResourceDiscoverer extends ResourceDiscoverer implements
         try
         {
             printer = new PrintWriter ( getFile () );
-            for ( final ConnectionInformation info : this.getConnections () )
+            for ( final ConnectionDescriptor descriptor : this.getConnections () )
             {
-                printer.println ( info.toString () );
+                if ( descriptor.getServiceId () != null )
+                {
+                    printer.println ( descriptor.getServiceId () + "=" + descriptor.getConnectionInformation () );
+                }
+                else
+                {
+                    printer.println ( descriptor.getConnectionInformation ().toString () );
+                }
             }
         }
         catch ( final IOException e )

@@ -4,29 +4,27 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.openscada.core.ConnectionInformation;
-
 public abstract class AbstractConnectionDiscoverer implements ConnectionDiscoverer
 {
 
     private final Set<ConnectionDiscoveryListener> listeners = new HashSet<ConnectionDiscoveryListener> ();
 
-    private Set<ConnectionInformation> connections = new HashSet<ConnectionInformation> ();
+    private Set<ConnectionDescriptor> connections = new HashSet<ConnectionDescriptor> ();
 
-    protected synchronized void setConnections ( final Set<ConnectionInformation> result )
+    protected synchronized void setConnections ( final Set<ConnectionDescriptor> result )
     {
-        final Set<ConnectionInformation> added = new HashSet<ConnectionInformation> ( result );
+        final Set<ConnectionDescriptor> added = new HashSet<ConnectionDescriptor> ( result );
         added.removeAll ( this.connections );
 
-        final Set<ConnectionInformation> removed = new HashSet<ConnectionInformation> ( this.connections );
+        final Set<ConnectionDescriptor> removed = new HashSet<ConnectionDescriptor> ( this.connections );
         removed.removeAll ( result );
 
         this.connections = result;
 
-        fireDiscoveryUpdate ( added.toArray ( new ConnectionInformation[0] ), removed.toArray ( new ConnectionInformation[0] ) );
+        fireDiscoveryUpdate ( added.toArray ( new ConnectionDescriptor[0] ), removed.toArray ( new ConnectionDescriptor[0] ) );
     }
 
-    protected synchronized void fireDiscoveryUpdate ( final ConnectionInformation[] added, final ConnectionInformation[] removed )
+    protected synchronized void fireDiscoveryUpdate ( final ConnectionDescriptor[] added, final ConnectionDescriptor[] removed )
     {
         for ( final ConnectionDiscoveryListener listener : this.listeners )
         {
@@ -38,7 +36,7 @@ public abstract class AbstractConnectionDiscoverer implements ConnectionDiscover
     {
         if ( this.listeners.add ( listener ) )
         {
-            listener.discoveryUpdate ( this.connections.toArray ( new ConnectionInformation[0] ), null );
+            listener.discoveryUpdate ( this.connections.toArray ( new ConnectionDescriptor[0] ), null );
         }
     }
 
@@ -58,7 +56,7 @@ public abstract class AbstractConnectionDiscoverer implements ConnectionDiscover
      * @param connectionInformation a new connection
      * @return <code>true</code> if the new connection was added
      */
-    public synchronized boolean addConnection ( final ConnectionInformation connectionInformation )
+    public synchronized boolean addConnection ( final ConnectionDescriptor connectionInformation )
     {
         if ( connectionInformation == null )
         {
@@ -67,7 +65,7 @@ public abstract class AbstractConnectionDiscoverer implements ConnectionDiscover
 
         if ( this.connections.add ( connectionInformation ) )
         {
-            fireDiscoveryUpdate ( new ConnectionInformation[] { connectionInformation }, null );
+            fireDiscoveryUpdate ( new ConnectionDescriptor[] { connectionInformation }, null );
             return true;
         }
         return false;
@@ -84,7 +82,7 @@ public abstract class AbstractConnectionDiscoverer implements ConnectionDiscover
      * @param connectionInformation the connection to remove
      * @return <code>true</code> if the connection was removed
      */
-    public synchronized boolean removeConnection ( final ConnectionInformation connectionInformation )
+    public synchronized boolean removeConnection ( final ConnectionDescriptor connectionInformation )
     {
         if ( connectionInformation == null )
         {
@@ -93,20 +91,20 @@ public abstract class AbstractConnectionDiscoverer implements ConnectionDiscover
 
         if ( this.connections.remove ( connectionInformation ) )
         {
-            fireDiscoveryUpdate ( null, new ConnectionInformation[] { connectionInformation } );
+            fireDiscoveryUpdate ( null, new ConnectionDescriptor[] { connectionInformation } );
             return true;
         }
         return false;
     }
 
-    public Set<ConnectionInformation> getConnections ()
+    public Set<ConnectionDescriptor> getConnections ()
     {
         return Collections.unmodifiableSet ( this.connections );
     }
 
     public synchronized void dispose ()
     {
-        fireDiscoveryUpdate ( null, this.connections.toArray ( new ConnectionInformation[0] ) );
+        fireDiscoveryUpdate ( null, this.connections.toArray ( new ConnectionDescriptor[0] ) );
         this.listeners.clear ();
         this.connections.clear ();
     }

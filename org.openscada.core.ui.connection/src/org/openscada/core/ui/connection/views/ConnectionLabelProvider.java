@@ -12,6 +12,7 @@ import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.swt.graphics.Image;
 import org.openscada.core.client.Connection;
 import org.openscada.core.connection.provider.ConnectionService;
+import org.openscada.core.ui.connection.ConnectionDescriptor;
 import org.openscada.core.ui.connection.data.ConnectionDiscovererBean;
 import org.openscada.core.ui.connection.data.ConnectionHolder;
 import org.openscada.ui.databinding.CommonListeningLabelProvider;
@@ -41,7 +42,9 @@ public class ConnectionLabelProvider extends CommonListeningLabelProvider implem
     {
         final ConnectionService service = holder.getConnectionService ();
 
-        final StyledString str = new StyledString ( holder.toString () );
+        final ConnectionDescriptor desc = holder.getConnectionInformation ();
+
+        final StyledString str = new StyledString ( desc.getConnectionInformation ().toString () );
 
         if ( service != null )
         {
@@ -53,6 +56,12 @@ public class ConnectionLabelProvider extends CommonListeningLabelProvider implem
             }
             str.append ( "]", StyledString.DECORATIONS_STYLER );
         }
+
+        if ( desc.getServiceId () != null )
+        {
+            str.append ( " (" + desc.getServiceId () + ")", StyledString.QUALIFIER_STYLER );
+        }
+
         return str;
     }
 

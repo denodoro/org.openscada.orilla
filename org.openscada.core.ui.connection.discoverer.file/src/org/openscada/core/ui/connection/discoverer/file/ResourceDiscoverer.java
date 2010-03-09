@@ -13,6 +13,7 @@ import java.util.Set;
 import org.eclipse.core.runtime.Status;
 import org.openscada.core.ConnectionInformation;
 import org.openscada.core.ui.connection.AbstractConnectionDiscoverer;
+import org.openscada.core.ui.connection.ConnectionDescriptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,14 +71,14 @@ public abstract class ResourceDiscoverer extends AbstractConnectionDiscoverer
 
     private void performLoad ( final InputStream stream )
     {
-        final Set<ConnectionInformation> result = new HashSet<ConnectionInformation> ();
+        final Set<ConnectionDescriptor> result = new HashSet<ConnectionDescriptor> ();
         final LineNumberReader reader = new LineNumberReader ( new InputStreamReader ( stream ) );
         String line;
         try
         {
             while ( ( line = reader.readLine () ) != null )
             {
-                final ConnectionInformation info = ConnectionInformation.fromURI ( line );
+                final ConnectionDescriptor info = convert ( line );
                 if ( info != null )
                 {
                     result.add ( info );
@@ -91,4 +92,27 @@ public abstract class ResourceDiscoverer extends AbstractConnectionDiscoverer
         setConnections ( result );
     }
 
+    private ConnectionDescriptor convert ( final String line )
+    {
+        final String tok[] = line.split ( "=", 2 );
+        if ( tok.length == 0 )
+        {
+            return null;
+        }
+
+        ConnectionDescriptor cd;
+        if ( tok.length == 1 )
+        {
+            cd = new ConnectionDescriptor ( ConnectionInformation.fromURI ( tok[0] ) );
+        }
+        else
+        {
+            cd = new ConnectionDescriptor ( ConnectionInformation.fromURI ( tok[1] ), tok[0] );
+        }
+        if ( cd.getConnectionInformation () == null )
+        {
+            return null;
+        }
+        return cd;
+    }
 }

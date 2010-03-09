@@ -10,6 +10,7 @@ import org.eclipse.ecf.discovery.IServiceInfo;
 import org.eclipse.ecf.discovery.IServiceListener;
 import org.openscada.core.ConnectionInformation;
 import org.openscada.core.ui.connection.AbstractConnectionDiscoverer;
+import org.openscada.core.ui.connection.ConnectionDescriptor;
 
 public class ConnectionDiscovererImpl extends AbstractConnectionDiscoverer implements IServiceListener
 {
@@ -68,14 +69,14 @@ public class ConnectionDiscovererImpl extends AbstractConnectionDiscoverer imple
 
     private void serviceDiscovered ( final IServiceInfo serviceInfo )
     {
-        final ConnectionInformation info = makeConnectionInformation ( serviceInfo );
+        final ConnectionDescriptor info = makeConnectionInformation ( serviceInfo );
         if ( info != null )
         {
             addConnection ( info );
         }
     }
 
-    private ConnectionInformation makeConnectionInformation ( final IServiceInfo serviceInfo )
+    private ConnectionDescriptor makeConnectionInformation ( final IServiceInfo serviceInfo )
     {
         final String host = serviceInfo.getLocation ().getHost ();
         final int port = serviceInfo.getLocation ().getPort ();
@@ -108,7 +109,7 @@ public class ConnectionDiscovererImpl extends AbstractConnectionDiscoverer imple
 
         final String scheme = String.format ( "%s:%s", stoks[2], stoks[3] );
 
-        return ConnectionInformation.fromURI ( String.format ( "%s://%s:%s", scheme, host, port ) );
+        return new ConnectionDescriptor ( ConnectionInformation.fromURI ( String.format ( "%s://%s:%s", scheme, host, port ) ) );
     }
 
     public void serviceUndiscovered ( final IServiceEvent anEvent )
@@ -118,7 +119,7 @@ public class ConnectionDiscovererImpl extends AbstractConnectionDiscoverer imple
 
     private void serviceUndiscovered ( final IServiceInfo serviceInfo )
     {
-        final ConnectionInformation info = makeConnectionInformation ( serviceInfo );
+        final ConnectionDescriptor info = makeConnectionInformation ( serviceInfo );
         if ( info != null )
         {
             removeConnection ( info );

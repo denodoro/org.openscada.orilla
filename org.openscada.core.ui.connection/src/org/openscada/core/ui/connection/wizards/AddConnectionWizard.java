@@ -6,7 +6,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
-import org.openscada.core.ConnectionInformation;
+import org.openscada.core.ui.connection.ConnectionDescriptor;
 import org.openscada.core.ui.connection.ConnectionStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +23,7 @@ public class AddConnectionWizard extends Wizard implements INewWizard
     @Override
     public boolean performFinish ()
     {
-        final ConnectionInformation connectionInformation = this.entryPage.getConnectionInformation ();
+        final ConnectionDescriptor connectionInformation = this.entryPage.getConnectionInformation ();
 
         try
         {

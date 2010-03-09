@@ -9,7 +9,7 @@ import org.eclipse.core.databinding.observable.set.WritableSet;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IActionFilter;
-import org.openscada.core.ConnectionInformation;
+import org.openscada.core.ui.connection.ConnectionDescriptor;
 import org.openscada.core.ui.connection.ConnectionDiscoverer;
 import org.openscada.core.ui.connection.ConnectionDiscoveryListener;
 import org.openscada.core.ui.connection.ConnectionStore;
@@ -32,7 +32,7 @@ public class ConnectionDiscovererBean implements IAdaptable, ConnectionDiscovery
 
     private final WritableSet knownConnections = new WritableSet ();
 
-    private final Map<ConnectionInformation, ConnectionHolder> connections = new HashMap<ConnectionInformation, ConnectionHolder> ();
+    private final Map<ConnectionDescriptor, ConnectionHolder> connections = new HashMap<ConnectionDescriptor, ConnectionHolder> ();
 
     public ConnectionDiscovererBean ( final String id, final String name, final ImageDescriptor imageDescriptor, final ConnectionDiscoverer discoverer )
     {
@@ -94,7 +94,7 @@ public class ConnectionDiscovererBean implements IAdaptable, ConnectionDiscovery
         return null;
     }
 
-    public void discoveryUpdate ( final ConnectionInformation[] added, final ConnectionInformation[] removed )
+    public void discoveryUpdate ( final ConnectionDescriptor[] added, final ConnectionDescriptor[] removed )
     {
         this.knownConnections.getRealm ().asyncExec ( new Runnable () {
 
@@ -106,12 +106,12 @@ public class ConnectionDiscovererBean implements IAdaptable, ConnectionDiscovery
 
     }
 
-    protected void handleDiscoveryUpdate ( final ConnectionInformation[] added, final ConnectionInformation[] removed )
+    protected void handleDiscoveryUpdate ( final ConnectionDescriptor[] added, final ConnectionDescriptor[] removed )
     {
 
         if ( removed != null )
         {
-            for ( final ConnectionInformation info : removed )
+            for ( final ConnectionDescriptor info : removed )
             {
                 final ConnectionHolder holder = this.connections.get ( info );
                 if ( holder != null )
@@ -123,7 +123,7 @@ public class ConnectionDiscovererBean implements IAdaptable, ConnectionDiscovery
         }
         if ( added != null )
         {
-            for ( final ConnectionInformation info : added )
+            for ( final ConnectionDescriptor info : added )
             {
                 try
                 {

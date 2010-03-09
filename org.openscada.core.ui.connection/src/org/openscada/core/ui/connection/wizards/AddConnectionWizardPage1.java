@@ -10,13 +10,16 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.openscada.core.ConnectionInformation;
+import org.openscada.core.ui.connection.ConnectionDescriptor;
 
 public class AddConnectionWizardPage1 extends WizardPage
 {
 
     private Text uriText;
 
-    private ConnectionInformation connectionInformation;
+    private ConnectionDescriptor connectionInformation;
+
+    private Text idText;
 
     protected AddConnectionWizardPage1 ()
     {
@@ -25,7 +28,7 @@ public class AddConnectionWizardPage1 extends WizardPage
         setDescription ( "Add a new connection to the connection store" );
     }
 
-    public ConnectionInformation getConnectionInformation ()
+    public ConnectionDescriptor getConnectionInformation ()
     {
         return this.connectionInformation;
     }
@@ -36,6 +39,9 @@ public class AddConnectionWizardPage1 extends WizardPage
         comp.setLayout ( new GridLayout ( 2, false ) );
 
         Label label;
+
+        // URI
+
         label = new Label ( comp, SWT.NONE );
         label.setText ( "Connection URI:" );
         label.setLayoutData ( new GridData ( SWT.BEGINNING, SWT.CENTER, false, false ) );
@@ -45,6 +51,23 @@ public class AddConnectionWizardPage1 extends WizardPage
         this.uriText.setText ( "da:net://localhost:1202" );
         this.uriText.setLayoutData ( new GridData ( SWT.FILL, SWT.CENTER, true, false ) );
         this.uriText.addModifyListener ( new ModifyListener () {
+
+            public void modifyText ( final ModifyEvent e )
+            {
+                update ();
+            }
+        } );
+
+        // ID
+
+        label = new Label ( comp, SWT.NONE );
+        label.setText ( "Connection ID:" );
+        label.setLayoutData ( new GridData ( SWT.BEGINNING, SWT.CENTER, false, false ) );
+
+        this.idText = new Text ( comp, SWT.BORDER );
+        this.idText.setMessage ( "Enter the local ID of the connection (optional)" );
+        this.idText.setLayoutData ( new GridData ( SWT.FILL, SWT.CENTER, true, false ) );
+        this.idText.addModifyListener ( new ModifyListener () {
 
             public void modifyText ( final ModifyEvent e )
             {
@@ -62,7 +85,13 @@ public class AddConnectionWizardPage1 extends WizardPage
 
         try
         {
-            this.connectionInformation = ConnectionInformation.fromURI ( this.uriText.getText () );
+            String id = this.idText.getText ();
+            if ( "".equals ( id ) )
+            {
+                id = null;
+            }
+
+            this.connectionInformation = new ConnectionDescriptor ( ConnectionInformation.fromURI ( this.uriText.getText () ), id );
         }
         catch ( final Throwable e )
         {
