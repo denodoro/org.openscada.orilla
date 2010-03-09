@@ -123,6 +123,8 @@
   	<openscada.builder.copyPlugin id="org.openscada.core.ui.connection.discoverer.file" />
   	<openscada.builder.copyPlugin id="org.openscada.core.ui.connection.discoverer.osgi" />
   	<openscada.builder.copyPlugin id="org.openscada.core.ui.connection.discoverer.ecf" />
+  	<openscada.builder.copyPlugin id="org.openscada.core.ui.connection.provider" />
+  	
   	<openscada.builder.copyPlugin id="org.openscada.core.ui.styles"/>
 
 	<!-- OpenSCADA DA UI -->
