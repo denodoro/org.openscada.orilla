@@ -7,9 +7,8 @@ import java.util.Set;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.ui.IStartup;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.openscada.core.ConnectionInformation;
 import org.openscada.core.connection.provider.ConnectionService;
 import org.openscada.core.ui.connection.creator.ConnectionCreatorHelper;
@@ -20,7 +19,7 @@ import org.osgi.framework.ServiceRegistration;
 /**
  * The activator class controls the plug-in life cycle
  */
-public class Activator extends Plugin implements IStartup
+public class Activator extends AbstractUIPlugin
 {
 
     // The plug-in ID
@@ -144,9 +143,5 @@ public class Activator extends Plugin implements IStartup
     public static Activator getDefault ()
     {
         return plugin;
-    }
-
-    public void earlyStartup ()
-    {
     }
 }

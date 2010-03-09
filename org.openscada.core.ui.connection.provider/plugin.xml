@@ -4,7 +4,8 @@
    <extension-point id="org.openscada.core.ui.connection.provider.connectionInstance" name="connectionInstance" schema="schema/org.openscada.core.ui.connection.provider.connectionInstance.exsd"/>
    <extension
          point="org.eclipse.ui.startup">
-      <startup></startup>
+      <startup
+            class="org.openscada.core.ui.connection.provider.StartupImpl"></startup>
    </extension>
 
 </plugin>
