@@ -19,6 +19,7 @@
 
    <requires>
       <import feature="org.openscada.atlantis" version="0.15.0.qualifier"/>
+      <import plugin="org.eclipse.draw2d"/>
    </requires>
 
    <plugin
