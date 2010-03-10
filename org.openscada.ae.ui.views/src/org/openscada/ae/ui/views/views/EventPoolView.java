@@ -15,6 +15,8 @@ import org.openscada.ae.Event;
 import org.openscada.ae.Event.Fields;
 import org.openscada.ae.client.EventListener;
 import org.openscada.ae.ui.views.model.DecoratedEvent;
+import org.openscada.ae.ui.views.model.DecoratedMonitor;
+import org.openscada.ae.ui.views.model.MonitorData;
 import org.openscada.core.Variant;
 import org.openscada.core.client.ConnectionState;
 import org.openscada.core.subscription.SubscriptionState;
@@ -91,13 +93,11 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
             this.eventPoolListener = new EventListener () {
                 public void statusChanged ( final SubscriptionState state )
                 {
-                    System.err.println ( state );
                     EventPoolView.this.statusChangedEventSubscription ( state );
                 }
 
                 public void dataChanged ( final Event[] addedEvents )
                 {
-                    System.err.println ( "EVENTS " + addedEvents );
                     EventPoolView.this.dataChanged ( addedEvents );
                 }
             };
@@ -128,7 +128,8 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
                 {
                     return;
                 }
-                for ( DecoratedEvent event : decorateEvents ( addedEvents ) )
+                Set<DecoratedEvent> decoratedEvents = decorateEvents ( addedEvents );
+                for ( DecoratedEvent event : decoratedEvents )
                 {
                     final Variant source = event.getEvent ().getField ( Fields.SOURCE );
                     if ( ( source != null ) && !source.isNull () && ( source.asString ( "" ).length () > 0 ) )
@@ -141,9 +142,8 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
                         }
                         d.add ( event );
                     }
-                    EventPoolView.this.pool.add ( event );
                 }
-                EventPoolView.this.pool.setStale ( true );
+                EventPoolView.this.pool.addAll ( decoratedEvents );
             }
         } );
     }
@@ -159,11 +159,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
                 {
                     return;
                 }
-                for ( DecoratedEvent event : decorateEvents ( addedOrUpdated ) )
-                {
-                    EventPoolView.this.pool.add ( event );
-                }
-                EventPoolView.this.pool.setStale ( true );
+                EventPoolView.this.pool.addAll ( decorateEvents ( addedOrUpdated ) );
             }
         } );
     }
@@ -174,10 +170,13 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
         for ( ConditionStatusInformation conditionStatusInformation : monitors )
         {
             Set<DecoratedEvent> d = this.poolMap.get ( conditionStatusInformation.getId () );
-            for ( DecoratedEvent event : d )
+            if ( d != null )
             {
-                event.setMonitor ( conditionStatusInformation );
-                result.add ( event );
+                for ( DecoratedEvent event : d )
+                {
+                    event.setMonitor ( new MonitorData ( conditionStatusInformation ) );
+                    result.add ( event );
+                }
             }
         }
         return result;
@@ -189,10 +188,18 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
         for ( Event event : events )
         {
             final Variant source = event.getField ( Fields.SOURCE );
-            final ConditionStatusInformation monitor;
+            final MonitorData monitor;
             if ( ( source != null ) && !source.isNull () && source.isString () )
             {
-                monitor = this.monitorsMap.get ( source.asString ( "" ) );
+                DecoratedMonitor decoratedMonitor = (DecoratedMonitor)this.monitorsMap.get ( source.asString ( "" ) );
+                if ( decoratedMonitor != null )
+                {
+                    monitor = decoratedMonitor.getMonitor ();
+                }
+                else
+                {
+                    monitor = null;
+                }
             }
             else
             {
@@ -282,6 +289,9 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
         getSite ().getShell ().getDisplay ().asyncExec ( new Runnable () {
             public void run ()
             {
+                label.append ( " | " );
+                label.append ( EventPoolView.this.pool.size () );
+                label.append ( " events found" );
                 EventPoolView.this.getStateLabel ().setText ( label.toString () );
             }
         } );

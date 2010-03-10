@@ -58,6 +58,65 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
 
     private Label stateLabel;
 
+    // we are only interested if the connection is actually there
+    final ConnectionStateListener connectionStateListener = new ConnectionStateListener () {
+        public void stateChange ( final org.openscada.core.client.Connection changedConnection, final ConnectionState state, final Throwable error )
+        {
+            try
+            {
+                // preconditions
+                if ( changedConnection == null )
+                {
+                    throw new IllegalArgumentException ( "changedConnection must not be null" );
+                }
+                if ( ! ( changedConnection instanceof Connection ) )
+                {
+                    throw new IllegalArgumentException ( "changedConnection must be of type " + Connection.class.getName () );
+                }
+                // actual check
+                if ( state == ConnectionState.BOUND )
+                {
+                    onConnect ();
+                }
+                else
+                {
+                    onDisconnect ();
+                }
+            }
+            catch ( Exception e )
+            {
+                logger.warn ( "reInitializeConnection ()", e );
+            }
+        }
+    };
+
+    final ConnectionTracker.Listener connectionServiceListener = new Listener () {
+        public void setConnection ( final org.openscada.core.connection.provider.ConnectionService connectionService )
+        {
+            if ( connectionService == null )
+            {
+                onDisconnect ();
+                AbstractAlarmsEventsView.this.connectionService = null;
+                return;
+            }
+            AbstractAlarmsEventsView.this.connectionService = (ConnectionService)connectionService;
+            if ( connectionService.getConnection () == null )
+            {
+                onDisconnect ();
+                return;
+            }
+            connectionService.getConnection ().addConnectionStateListener ( AbstractAlarmsEventsView.this.connectionStateListener );
+            if ( connectionService.getConnection ().getState () == ConnectionState.BOUND )
+            {
+                onConnect ();
+            }
+            else
+            {
+                onDisconnect ();
+            }
+        }
+    };
+
     /* (non-Javadoc)
      * @see org.eclipse.ui.part.ViewPart#saveState(org.eclipse.ui.IMemento)
      */
@@ -86,7 +145,7 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
         try
         {
             // it is OK to fail at this stage
-            reInitializeConnection ();
+            reInitializeConnection ( this.connectionId, this.connectionUri );
         }
         catch ( Exception e )
         {
@@ -123,11 +182,7 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
      */
     public void setConnectionId ( final String connectionId ) throws Exception
     {
-        if ( !String.valueOf ( connectionId ).equals ( String.valueOf ( this.connectionId ) ) || ( getConnection () == null ) )
-        {
-            this.connectionId = connectionId;
-            reInitializeConnection ();
-        }
+        reInitializeConnection ( connectionId, null );
     }
 
     /**
@@ -136,11 +191,7 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
      */
     public void setConnectionUri ( final String connectionUri ) throws Exception
     {
-        if ( !String.valueOf ( connectionUri ).equals ( String.valueOf ( this.connectionUri ) ) || ( getConnection () == null ) )
-        {
-            this.connectionUri = connectionUri;
-            reInitializeConnection ();
-        }
+        reInitializeConnection ( null, connectionUri );
     }
 
     /**
@@ -168,84 +219,68 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
         return ( ( this.connectionService != null ) && ( this.connectionService.getConnection () != null ) && ( this.connectionService.getConnection ().getState () == ConnectionState.BOUND ) );
     }
 
-    private void reInitializeConnection () throws Exception
+    private void reInitializeConnection ( final String connectionId, final String connectionUri ) throws Exception
     {
-        // we are only interested if the connection is actually there
-        final ConnectionStateListener connectionStateListener = new ConnectionStateListener () {
-            public void stateChange ( final org.openscada.core.client.Connection changedConnection, final ConnectionState state, final Throwable error )
-            {
-                try
-                {
-                    // preconditions
-                    if ( changedConnection == null )
-                    {
-                        throw new IllegalArgumentException ( "changedConnection must not be null" );
-                    }
-                    if ( ! ( changedConnection instanceof Connection ) )
-                    {
-                        throw new IllegalArgumentException ( "changedConnection must be of type " + Connection.class.getName () );
-                    }
-                    // actual check
-                    if ( state == ConnectionState.BOUND )
-                    {
-                        onConnect ();
-                    }
-                    else
-                    {
-                        onDisconnect ();
-                    }
-                }
-                catch ( Exception e )
-                {
-                    logger.warn ( "reInitializeConnection ()", e );
-                }
-            }
-        };
-        final ConnectionTracker.Listener connectionServiceListener = new Listener () {
-            public void setConnection ( final org.openscada.core.connection.provider.ConnectionService connectionService )
-            {
-                if ( connectionService == null )
-                {
-                    onDisconnect ();
-                    return;
-                }
-                if ( connectionService.getConnection () == null )
-                {
-                    onDisconnect ();
-                    return;
-                }
-                connectionService.getConnection ().addConnectionStateListener ( connectionStateListener );
-                if ( connectionService.getConnection ().getState () == ConnectionState.BOUND )
-                {
-                    AbstractAlarmsEventsView.this.connectionService = (ConnectionService)connectionService;
-                    onConnect ();
-                }
-                else
-                {
-                    onDisconnect ();
-                }
-            }
-        };
-        if ( this.connectionTracker != null )
+        if ( this.connectionTracker == null )
         {
-            this.connectionTracker.close ();
-            this.connectionTracker = null;
+            if ( connectionId != null )
+            {
+                trackIdConnection ( connectionId );
+            }
+            else if ( connectionUri != null )
+            {
+                trackUriConnection ( connectionUri );
+            }
         }
-        if ( this.connectionId != null )
+        else
         {
-            this.connectionTracker = new ConnectionIdTracker ( Activator.getDefault ().getBundle ().getBundleContext (), this.connectionId, connectionServiceListener );
+            if ( this.connectionTracker instanceof ConnectionIdTracker )
+            {
+                if ( ! ( (ConnectionIdTracker)this.connectionTracker ).getConnectionId ().equals ( connectionId ) )
+                {
+                    this.connectionTracker.close ();
+                    this.connectionTracker = null;
+                    trackIdConnection ( connectionId );
+                }
+            }
+            else if ( this.connectionTracker instanceof ConnectionRequestTracker )
+            {
+                if ( ! ( (ConnectionRequestTracker)this.connectionTracker ).getConnectionInformation ().toString ().equals ( connectionUri ) )
+                {
+                    this.connectionTracker.close ();
+                    this.connectionTracker = null;
+                    trackUriConnection ( connectionUri );
+                }
+            }
+        }
+    }
 
-        }
-        else if ( this.connectionUri != null )
+    private void trackIdConnection ( final String connectionId )
+    {
+        if ( connectionId == null )
         {
-            ConnectionInformation ci = ConnectionInformation.fromURI ( this.connectionUri );
-            ConnectionRequest request = new ConnectionRequest ( null, ci, RECONNECT_DELAY, true );
-            this.connectionTracker = new ConnectionRequestTracker ( Activator.getDefault ().getBundle ().getBundleContext (), request, connectionServiceListener );
+            return;
         }
-        if ( this.connectionTracker != null )
+        this.connectionTracker = new ConnectionIdTracker ( Activator.getDefault ().getBundle ().getBundleContext (), connectionId, this.connectionServiceListener );
+        this.connectionId = connectionId;
+        this.connectionUri = null;
+        this.connectionService = null;
+        this.connectionTracker.open ();
+    }
+
+    private void trackUriConnection ( final String connectionUri )
+    {
+        if ( connectionUri == null )
         {
-            this.connectionTracker.open ();
+            return;
         }
+        ConnectionInformation ci = ConnectionInformation.fromURI ( connectionUri );
+        ConnectionRequest request = new ConnectionRequest ( null, ci, RECONNECT_DELAY, true );
+        this.connectionTracker = new ConnectionRequestTracker ( Activator.getDefault ().getBundle ().getBundleContext (), request, this.connectionServiceListener );
+        this.connectionId = null;
+        this.connectionUri = connectionUri;
+        this.connectionService = null;
+        this.connectionTracker.open ();
     }
 
     protected void addSelectionListener ()
@@ -287,6 +322,17 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
         else if ( treeSelection.getFirstElement () instanceof BrowserEntryBean )
         {
             BrowserEntryBean browserEntryBean = (BrowserEntryBean)treeSelection.getFirstElement ();
+            if ( ( browserEntryBean.getConnection () != null ) && ( browserEntryBean.getConnection ().getConnection () != null ) )
+            {
+                try
+                {
+                    setConnectionUri ( browserEntryBean.getConnection ().getConnection ().getConnectionInformation ().toString () );
+                }
+                catch ( Exception e )
+                {
+                    e.printStackTrace ();
+                }
+            }
             if ( browserEntryBean.getEntry ().getTypes ().contains ( BrowserType.EVENTS ) )
             {
                 watchPool ( browserEntryBean.getEntry ().getId () );

@@ -39,7 +39,7 @@ public class MonitorsView extends MonitorSubscriptionAlarmsEventsView
     {
         if ( ( this.getConnection () != null ) && ( this.getConnection ().getState () == ConnectionState.BOUND ) )
         {
-            ConditionStatusInformation monitor = this.monitorsTable.selectedMonitor ();
+            ConditionStatusInformation monitor = this.monitorsTable.selectedMonitor ().getMonitor ();
             this.getConnection ().acknowledge ( monitor.getId (), null );
         }
     }

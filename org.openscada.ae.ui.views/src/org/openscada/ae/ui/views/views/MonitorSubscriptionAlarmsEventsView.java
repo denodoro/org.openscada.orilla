@@ -1,20 +1,23 @@
 package org.openscada.ae.ui.views.views;
 
-import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
+import org.eclipse.core.databinding.observable.map.IMapChangeListener;
+import org.eclipse.core.databinding.observable.map.MapChangeEvent;
+import org.eclipse.core.databinding.observable.map.WritableMap;
 import org.eclipse.core.databinding.observable.set.WritableSet;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Composite;
-import org.openscada.ae.ConditionStatus;
 import org.openscada.ae.ConditionStatusInformation;
 import org.openscada.ae.client.ConditionListener;
 import org.openscada.ae.ui.views.Activator;
 import org.openscada.ae.ui.views.CustomizableAction;
-import org.openscada.core.Variant;
+import org.openscada.ae.ui.views.model.DecoratedMonitor;
 import org.openscada.core.subscription.SubscriptionState;
 
 public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarmsEventsView
@@ -25,7 +28,7 @@ public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarms
 
     protected WritableSet monitors;
 
-    protected Map<String, ConditionStatusInformation> monitorsMap = new HashMap<String, ConditionStatusInformation> ();
+    protected WritableMap monitorsMap;
 
     private ConditionListener monitorListener = null;
 
@@ -84,10 +87,11 @@ public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarms
 
     private void clear ()
     {
-        getSite ().getShell ().getDisplay ().asyncExec ( new Runnable () {
+        getSite ().getShell ().getDisplay ().syncExec ( new Runnable () {
             public void run ()
             {
                 MonitorSubscriptionAlarmsEventsView.this.monitors.clear ();
+                MonitorSubscriptionAlarmsEventsView.this.monitorsMap.clear ();
             }
         } );
     }
@@ -118,20 +122,39 @@ public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarms
             {
                 if ( removed != null )
                 {
-                    final Date now = new Date ();
                     for ( String id : removed )
                     {
                         MonitorSubscriptionAlarmsEventsView.this.monitorsMap.remove ( id );
-                        MonitorSubscriptionAlarmsEventsView.this.monitors.remove ( new ConditionStatusInformation ( id, ConditionStatus.UNSAFE, now, Variant.NULL, now, "" ) );
                     }
                 }
                 if ( addedOrUpdated != null )
                 {
+                    // do it in 2 steps
+                    // 1. add all missing
+                    Map<String, DecoratedMonitor> missing = new HashMap<String, DecoratedMonitor> ();
                     for ( ConditionStatusInformation conditionStatusInformation : addedOrUpdated )
                     {
-                        MonitorSubscriptionAlarmsEventsView.this.monitorsMap.put ( conditionStatusInformation.getId (), conditionStatusInformation );
-                        MonitorSubscriptionAlarmsEventsView.this.monitors.remove ( conditionStatusInformation );
-                        MonitorSubscriptionAlarmsEventsView.this.monitors.add ( conditionStatusInformation );
+                        if ( !MonitorSubscriptionAlarmsEventsView.this.monitorsMap.containsKey ( conditionStatusInformation.getId () ) )
+                        {
+                            missing.put ( conditionStatusInformation.getId (), new DecoratedMonitor ( conditionStatusInformation ) );
+                        }
+                    }
+                    MonitorSubscriptionAlarmsEventsView.this.monitorsMap.putAll ( missing );
+                    // 2. update data                    
+                    for ( ConditionStatusInformation conditionStatusInformation : addedOrUpdated )
+                    {
+                        if ( !missing.keySet ().contains ( conditionStatusInformation.getId () ) )
+                        {
+                            DecoratedMonitor dm = (DecoratedMonitor)MonitorSubscriptionAlarmsEventsView.this.monitorsMap.get ( conditionStatusInformation.getId () );
+                            if ( dm == null )
+                            {
+                                MonitorSubscriptionAlarmsEventsView.this.monitorsMap.put ( conditionStatusInformation.getId (), new DecoratedMonitor ( conditionStatusInformation ) );
+                            }
+                            else
+                            {
+                                dm.setMonitor ( conditionStatusInformation );
+                            }
+                        }
                     }
                 }
             }
@@ -158,7 +181,32 @@ public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarms
         IToolBarManager toolBarManager = getViewSite ().getActionBars ().getToolBarManager ();
         toolBarManager.add ( this.ackAction );
 
+        this.monitorsMap = new WritableMap ( SWTObservables.getRealm ( parent.getDisplay () ) );
         this.monitors = new WritableSet ( SWTObservables.getRealm ( parent.getDisplay () ) );
+        this.monitorsMap.addMapChangeListener ( new IMapChangeListener () {
+            public void handleMapChange ( final MapChangeEvent event )
+            {
+                Set<DecoratedMonitor> toRemove = new HashSet<DecoratedMonitor> ();
+                for ( Object key : event.diff.getRemovedKeys () )
+                {
+                    toRemove.add ( new DecoratedMonitor ( (String)key ) );
+                }
+                MonitorSubscriptionAlarmsEventsView.this.monitors.removeAll ( toRemove );
+
+                Set<DecoratedMonitor> toAdd = new HashSet<DecoratedMonitor> ();
+                for ( Object key : event.diff.getAddedKeys () )
+                {
+                    toAdd.add ( (DecoratedMonitor)event.diff.getNewValue ( key ) );
+                }
+                MonitorSubscriptionAlarmsEventsView.this.monitors.addAll ( toAdd );
+
+                for ( Object key : event.diff.getChangedKeys () )
+                {
+                    MonitorSubscriptionAlarmsEventsView.this.monitors.remove ( event.diff.getOldValue ( key ) );
+                    MonitorSubscriptionAlarmsEventsView.this.monitors.add ( event.diff.getNewValue ( key ) );
+                }
+            }
+        } );
     }
 
     abstract protected void acknowledge ();

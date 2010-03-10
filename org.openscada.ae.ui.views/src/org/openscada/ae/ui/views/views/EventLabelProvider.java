@@ -1,11 +1,24 @@
 package org.openscada.ae.ui.views.views;
 
+import org.eclipse.core.databinding.observable.map.IObservableMap;
+import org.eclipse.jface.databinding.viewers.ObservableMapLabelProvider;
 import org.eclipse.swt.graphics.Image;
 import org.openscada.ae.Event;
 import org.openscada.ae.ui.views.model.DecoratedEvent;
 
-public class EventLabelProvider extends BaseLabelProvider
+public class EventLabelProvider extends ObservableMapLabelProvider
 {
+    public EventLabelProvider ( final IObservableMap attributeMap )
+    {
+        super ( attributeMap );
+    }
+
+    public EventLabelProvider ( final IObservableMap[] attributeMaps )
+    {
+        super ( attributeMaps );
+    }
+
+    @Override
     public String getColumnText ( final Object element, final int columnIndex )
     {
         if ( ! ( element instanceof DecoratedEvent ) )
@@ -19,55 +32,55 @@ public class EventLabelProvider extends BaseLabelProvider
             return event.getEvent ().getId ().toString ();
 
         case 1:
-            return this.df.format ( event.getEvent ().getSourceTimestamp () );
+            return LabelProviderSupport.df.format ( event.getEvent ().getSourceTimestamp () );
 
         case 2:
-            return this.df.format ( event.getEvent ().getEntryTimestamp () );
+            return LabelProviderSupport.df.format ( event.getEvent ().getEntryTimestamp () );
 
         case 3:
-            return toLabel ( event, Event.Fields.MONITOR_TYPE );
+            return LabelProviderSupport.toLabel ( event, Event.Fields.MONITOR_TYPE );
 
         case 4:
-            return toLabel ( event, Event.Fields.EVENT_TYPE );
+            return LabelProviderSupport.toLabel ( event, Event.Fields.EVENT_TYPE );
 
         case 5:
-            return toLabel ( event, Event.Fields.VALUE );
+            return LabelProviderSupport.toLabel ( event, Event.Fields.VALUE );
 
         case 6:
-            return toLabel ( event, Event.Fields.MESSAGE );
+            return LabelProviderSupport.toLabel ( event, Event.Fields.MESSAGE );
 
         case 7:
-            return toLabel ( event, Event.Fields.MESSAGE_CODE );
+            return LabelProviderSupport.toLabel ( event, Event.Fields.MESSAGE_CODE );
 
         case 8:
-            return toLabel ( event, Event.Fields.PRIORITY );
+            return LabelProviderSupport.toLabel ( event, Event.Fields.PRIORITY );
 
         case 9:
-            return toLabel ( event, Event.Fields.SOURCE );
+            return LabelProviderSupport.toLabel ( event, Event.Fields.SOURCE );
 
         case 10:
-            return toLabel ( event, Event.Fields.ACTOR_NAME );
+            return LabelProviderSupport.toLabel ( event, Event.Fields.ACTOR_NAME );
 
         case 11:
-            return toLabel ( event, Event.Fields.ACTOR_TYPE );
+            return LabelProviderSupport.toLabel ( event, Event.Fields.ACTOR_TYPE );
 
         case 12:
-            return toLabel ( event, Event.Fields.HIVE );
+            return LabelProviderSupport.toLabel ( event, Event.Fields.HIVE );
 
         case 13:
-            return toLabel ( event, Event.Fields.ITEM );
+            return LabelProviderSupport.toLabel ( event, Event.Fields.ITEM );
 
         case 14:
-            return toLabel ( event, Event.Fields.COMPONENT );
+            return LabelProviderSupport.toLabel ( event, Event.Fields.COMPONENT );
 
         case 15:
-            return toLabel ( event, Event.Fields.SYSTEM );
+            return LabelProviderSupport.toLabel ( event, Event.Fields.SYSTEM );
 
         case 16:
-            return toLabel ( event, Event.Fields.LOCATION );
+            return LabelProviderSupport.toLabel ( event, Event.Fields.LOCATION );
 
         case 17:
-            return toLabel ( event, Event.Fields.COMMENT );
+            return LabelProviderSupport.toLabel ( event, Event.Fields.COMMENT );
 
         default:
             return "";
@@ -86,22 +99,15 @@ public class EventLabelProvider extends BaseLabelProvider
         {
             switch ( event.getMonitor ().getStatus () )
             {
-            case INACTIVE:
-                return MANUAL_IMG;
-            case UNSAFE:
-                return DISCONNECTED_IMG;
-            case OK:
-                return OK_IMG;
             case NOT_OK:
                 return null;
             case NOT_OK_AKN:
-                return ALARM_IMG;
+                return LabelProviderSupport.ALARM_IMG;
             case NOT_AKN:
-                return ACK_IMG;
+                return LabelProviderSupport.ACK_IMG;
             case NOT_OK_NOT_AKN:
-                return ACK_IMG;
+                return LabelProviderSupport.ACK_IMG;
             }
-            return EMPTY_IMG;
         }
         return null;
     }

@@ -2,7 +2,9 @@ package org.openscada.ae.ui.views.views;
 
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.eclipse.core.databinding.beans.BeanProperties;
 import org.eclipse.core.databinding.observable.set.WritableSet;
+import org.eclipse.core.databinding.property.Properties;
 import org.eclipse.jface.databinding.viewers.ObservableSetContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
@@ -128,15 +130,17 @@ public class EventViewTable extends Composite
 
         final TableViewer table = new TableViewer ( this, SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION );
         this.tableRef.set ( table );
-        table.setContentProvider ( new ObservableSetContentProvider () );
         createColumns ( table );
         table.getTable ().setHeaderVisible ( true );
         table.getTable ().setLinesVisible ( true );
-        table.setLabelProvider ( new EventLabelProvider () );
         table.setUseHashlookup ( true );
-        table.setInput ( this.events );
         table.setSorter ( new Sorter ( Columns.SOURCE_TIMESTAMP, SWT.DOWN ) );
         table.getTable ().setSortDirection ( SWT.DOWN );
+
+        ObservableSetContentProvider contentProvider = new ObservableSetContentProvider ();
+        table.setContentProvider ( contentProvider );
+        table.setLabelProvider ( new EventLabelProvider ( Properties.observeEach ( contentProvider.getKnownElements (), BeanProperties.values ( new String[] { "id", "monitor" } ) ) ) );
+        table.setInput ( this.events );
     }
 
     public void clear ()

@@ -1,23 +1,31 @@
 package org.openscada.ae.ui.views.model;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+import java.io.Serializable;
+
 import org.openscada.ae.ConditionStatus;
 import org.openscada.ae.ConditionStatusInformation;
 import org.openscada.ae.Event;
 
-public class DecoratedEvent
+public class DecoratedEvent implements Serializable
 {
+    private static final long serialVersionUID = -565152685009234585L;
+
+    transient private final PropertyChangeSupport changes = new PropertyChangeSupport ( this );
+
     private Event event;
 
-    private ConditionStatusInformation monitor;
+    private MonitorData monitor;
 
     public ConditionStatusInformation getMonitor ()
     {
         return this.monitor;
     }
 
-    public void setMonitor ( final ConditionStatusInformation monitor )
+    public void setMonitor ( final MonitorData monitor )
     {
-        this.monitor = monitor;
+        this.changes.firePropertyChange ( "monitor", this.monitor, this.monitor = monitor );
     }
 
     public DecoratedEvent ( final Event event )
@@ -25,7 +33,7 @@ public class DecoratedEvent
         this.event = event;
     }
 
-    public DecoratedEvent ( final Event event, final ConditionStatusInformation monitor )
+    public DecoratedEvent ( final Event event, final MonitorData monitor )
     {
         this.event = event;
         this.monitor = monitor;
@@ -38,7 +46,7 @@ public class DecoratedEvent
 
     public void setEvent ( final Event event )
     {
-        this.event = event;
+        this.changes.firePropertyChange ( "event", this.event, this.event = event );
     }
 
     @Override
@@ -111,5 +119,15 @@ public class DecoratedEvent
     public boolean isAknRequired ()
     {
         return ( isActive () && ( ( this.monitor.getStatus () == ConditionStatus.NOT_AKN ) || ( this.monitor.getStatus () == ConditionStatus.NOT_OK_NOT_AKN ) ) );
+    }
+
+    public void addPropertyChangeListener ( final PropertyChangeListener listener )
+    {
+        this.changes.addPropertyChangeListener ( listener );
+    }
+
+    public void removePropertyChangeListener ( final PropertyChangeListener listener )
+    {
+        this.changes.removePropertyChangeListener ( listener );
     }
 }

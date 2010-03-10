@@ -3,7 +3,9 @@ package org.openscada.ae.ui.views.views;
 import java.sql.Date;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.eclipse.core.databinding.beans.BeanProperties;
 import org.eclipse.core.databinding.observable.set.WritableSet;
+import org.eclipse.core.databinding.property.Properties;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.databinding.viewers.ObservableSetContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
@@ -21,6 +23,7 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.openscada.ae.ConditionStatusInformation;
+import org.openscada.ae.ui.views.model.DecoratedMonitor;
 import org.openscada.core.Variant;
 
 public class MonitorsViewTable extends Composite
@@ -55,8 +58,8 @@ public class MonitorsViewTable extends Composite
         @Override
         public int compare ( final Viewer viewer, final Object e1, final Object e2 )
         {
-            final ConditionStatusInformation m1 = ( (ConditionStatusInformation)e1 );
-            final ConditionStatusInformation m2 = ( (ConditionStatusInformation)e2 );
+            final ConditionStatusInformation m1 = ( (DecoratedMonitor)e1 ).getMonitor ();
+            final ConditionStatusInformation m2 = ( (DecoratedMonitor)e2 ).getMonitor ();
             Comparable v1 = 0;
             Comparable v2 = 0;
             switch ( this.column )
@@ -151,19 +154,20 @@ public class MonitorsViewTable extends Composite
         FillLayout layout = new FillLayout ();
         this.setLayout ( layout );
 
-        final TableViewer table = new TableViewer ( this, SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION );
-        this.tableRef.set ( table );
-        table.setContentProvider ( new ObservableSetContentProvider () );
-        createColumns ( table );
-        table.getTable ().setHeaderVisible ( true );
-        table.getTable ().setLinesVisible ( true );
-        table.setLabelProvider ( new MonitorTableLabelProvider () );
-        table.setUseHashlookup ( true );
-        table.setInput ( this.monitors );
-        table.setSorter ( new Sorter ( Columns.ID, SWT.UP ) );
-        table.getTable ().setSortDirection ( SWT.UP );
+        final TableViewer tableViewer = new TableViewer ( this, SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION );
+        this.tableRef.set ( tableViewer );
+        createColumns ( tableViewer );
+        tableViewer.getTable ().setHeaderVisible ( true );
+        tableViewer.getTable ().setLinesVisible ( true );
+        tableViewer.setUseHashlookup ( true );
+        tableViewer.setSorter ( new Sorter ( Columns.ID, SWT.UP ) );
+        tableViewer.getTable ().setSortDirection ( SWT.UP );
+        tableViewer.getTable ().setMenu ( createContextMenu ( tableViewer.getTable () ) );
 
-        table.getTable ().setMenu ( createContextMenu ( table.getTable () ) );
+        ObservableSetContentProvider contentProvider = new ObservableSetContentProvider ();
+        tableViewer.setContentProvider ( contentProvider );
+        tableViewer.setLabelProvider ( new MonitorTableLabelProvider ( Properties.observeEach ( contentProvider.getKnownElements (), BeanProperties.values ( new String[] { "id", "monitor" } ) ) ) );
+        tableViewer.setInput ( this.monitors );
     }
 
     private Menu createContextMenu ( final Control parent )
@@ -241,13 +245,13 @@ public class MonitorsViewTable extends Composite
         this.monitors.clear ();
     }
 
-    public ConditionStatusInformation selectedMonitor ()
+    public DecoratedMonitor selectedMonitor ()
     {
         if ( this.tableRef.get ().getTable ().getSelectionCount () == 0 )
         {
             return null;
         }
-        return (ConditionStatusInformation)this.tableRef.get ().getTable ().getSelection ()[0].getData ();
+        return (DecoratedMonitor)this.tableRef.get ().getTable ().getSelection ()[0].getData ();
     }
 
     /**
