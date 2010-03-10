@@ -8,7 +8,7 @@ Bundle-Vendor: %Bundle-Vendor
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.openscada.da.client.base;bundle-version="0.14.0",
- org.openscada.da.client.common;bundle-version="0.14.0",
+ org.openscada.da.client;bundle-version="0.14.0",
  org.openscada.core.client;bundle-version="0.14.0",
  org.openscada.da.ui;bundle-version="0.14.0",
  org.openscada.da.ui.connection;bundle-version="0.14.0",
