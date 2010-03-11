@@ -88,7 +88,7 @@ public class FolderEntryWrapper implements IAdaptable
         if ( adapter == Item.class && this.entry instanceof DataItemEntry )
         {
             final DataItemEntry entry = (DataItemEntry)this.entry;
-            return new Item ( getHolder ().getConnectionInformation ().toString (), entry.getId (), Type.URI );
+            return new Item ( getHolder ().getConnectionInformation ().getConnectionInformation ().toString (), entry.getId (), Type.URI );
         }
 
         return null;

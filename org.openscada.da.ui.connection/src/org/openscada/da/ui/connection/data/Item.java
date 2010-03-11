@@ -65,7 +65,15 @@ public class Item implements Serializable
     {
         this.connectionString = connectionString;
         this.id = id;
-        this.type = type;
+
+        if ( type == null )
+        {
+            this.type = Item.Type.URI;
+        }
+        else
+        {
+            this.type = type;
+        }
     }
 
     public Item ( final Item item )
