@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="org.openscada.core.ui.connection.login.context" name="context" schema="schema/org.openscada.core.ui.connection.login.context.exsd"/>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="toolbar:org.eclipse.ui.trim.status">
+         <toolbar
+               id="org.openscada.core.ui.connection.login.verticalTrim">
+            <command
+                  commandId="org.openscada.core.ui.connection.login.LoginDialogCommand"
+                  label="Login"
+                  style="push">
+            </command>
+            <control
+                  class="org.openscada.core.ui.connection.login.toolbar.LoginStatusControl">
+            </control>
+            <command
+                  commandId="org.openscada.core.ui.connection.login.LogoutCommand"
+                  label="Logout"
+                  style="push">
+            </command>
+         </toolbar>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            categoryId="org.openscada.da.ui.category"
+            description="Shows the login dialog"
+            id="org.openscada.core.ui.connection.login.LoginDialogCommand"
+            name="Login Dialog">
+      </command>
+      <command
+            categoryId="org.openscada.da.ui.category"
+            description="Logs the current user out"
+            id="org.openscada.core.ui.connection.login.LogoutCommand"
+            name="Logout">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="org.openscada.core.ui.connection.login.handler.LoginDialogHandler"
+            commandId="org.openscada.core.ui.connection.login.LoginDialogCommand">
+      </handler>
+      <handler
+            class="org.openscada.core.ui.connection.login.handler.LogoutHandler"
+            commandId="org.openscada.core.ui.connection.login.LogoutCommand">
+      </handler>
+   </extension>
+
+</plugin>
