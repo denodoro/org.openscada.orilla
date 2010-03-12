@@ -14,6 +14,10 @@ public class ConnectionCreatorImpl implements ConnectionCreator
     public ConnectionService createConnection ( final ConnectionInformation connectionInformation, final Integer autoReconnectDelay )
     {
         final DriverInformation di = new DriverFactoryImpl ().getDriverInformation ( connectionInformation );
+        if ( di == null )
+        {
+            return null;
+        }
         final Connection c = (Connection)di.create ( connectionInformation );
         return new ConnectionServiceImpl ( c, autoReconnectDelay );
     }
