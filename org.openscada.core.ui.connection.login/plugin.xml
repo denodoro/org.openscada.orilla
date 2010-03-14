@@ -12,6 +12,9 @@
                   commandId="org.openscada.core.ui.connection.login.LoginDialogCommand"
                   label="Login"
                   style="push">
+               <visibleWhen
+                     checkEnabled="true">
+               </visibleWhen>
             </command>
             <control
                   class="org.openscada.core.ui.connection.login.toolbar.LoginStatusControl">
@@ -20,6 +23,9 @@
                   commandId="org.openscada.core.ui.connection.login.LogoutCommand"
                   label="Logout"
                   style="push">
+               <visibleWhen
+                     checkEnabled="true">
+               </visibleWhen>
             </command>
          </toolbar>
       </menuContribution>
@@ -44,11 +50,35 @@
       <handler
             class="org.openscada.core.ui.connection.login.handler.LoginDialogHandler"
             commandId="org.openscada.core.ui.connection.login.LoginDialogCommand">
+         <enabledWhen>
+            <with
+                  variable="org.openscada.core.ui.connection.login.sessionState">
+               <equals
+                     value="loggedOut">
+               </equals>
+            </with></enabledWhen>
       </handler>
       <handler
             class="org.openscada.core.ui.connection.login.handler.LogoutHandler"
             commandId="org.openscada.core.ui.connection.login.LogoutCommand">
+         <enabledWhen>
+            <with
+                  variable="org.openscada.core.ui.connection.login.sessionState">
+               <equals
+                     value="loggedIn">
+               </equals>
+            </with></enabledWhen>
       </handler>
+   </extension>
+   <extension
+         point="org.eclipse.ui.services">
+      <sourceProvider
+            provider="org.openscada.core.ui.connection.login.LoginSessionProvider">
+         <variable
+               name="org.openscada.core.ui.connection.login.sessionState"
+               priorityLevel="workbench">
+         </variable>
+      </sourceProvider>
    </extension>
 
 </plugin>

@@ -8,9 +8,11 @@ import java.util.Map;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.openscada.core.ConnectionInformation;
 import org.openscada.core.connection.provider.ConnectionService;
+import org.openscada.core.ui.connection.login.internal.SessionManagerImpl;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -25,7 +27,7 @@ public class Activator extends AbstractUIPlugin
     // The shared instance
     private static Activator plugin;
 
-    private LoginSession session;
+    private SessionManager sessionManager;
 
     /**
      * The constructor
@@ -41,6 +43,7 @@ public class Activator extends AbstractUIPlugin
     public void start ( final BundleContext context ) throws Exception
     {
         super.start ( context );
+        this.sessionManager = new SessionManagerImpl ( SWTObservables.getRealm ( getWorkbench ().getDisplay () ) );
         plugin = this;
     }
 
@@ -51,6 +54,16 @@ public class Activator extends AbstractUIPlugin
     public void stop ( final BundleContext context ) throws Exception
     {
         plugin = null;
+
+        this.sessionManager.getRealm ().exec ( new Runnable () {
+
+            public void run ()
+            {
+                Activator.this.sessionManager.dispose ();
+                Activator.this.sessionManager = null;
+            }
+        } );
+
         super.stop ( context );
     }
 
@@ -134,22 +147,19 @@ public class Activator extends AbstractUIPlugin
         }
     }
 
-    public void setLoginSession ( final LoginSession session )
+    public synchronized void setLoginSession ( final LoginSession session )
     {
-        if ( this.session != null )
-        {
-            this.session.stop ();
-        }
-        this.session = session;
-        if ( this.session != null )
-        {
-            this.session.start ();
-        }
+        this.sessionManager.setSession ( session );
     }
 
-    public void setLoginSession ( final String username, final String password, final Map<LoginConnection, ConnectionService> result )
+    public void setLoginSession ( final String username, final String password, final LoginContext loginContext, final Map<LoginConnection, ConnectionService> result )
     {
-        setLoginSession ( new LoginSession ( getBundle ().getBundleContext (), username, password, result ) );
+        setLoginSession ( new LoginSession ( getBundle ().getBundleContext (), username, password, loginContext, result ) );
+    }
+
+    public SessionManager getSessionManager ()
+    {
+        return this.sessionManager;
     }
 
 }

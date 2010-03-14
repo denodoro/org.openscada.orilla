@@ -297,7 +297,7 @@ public class LoginDialog extends TitleAreaDialog
         }
         else
         {
-            Activator.getDefault ().setLoginSession ( "", "", result );
+            Activator.getDefault ().setLoginSession ( this.user, this.password, this.loginContext, result );
             super.okPressed ();
         }
     }

@@ -24,12 +24,15 @@ public class LoginSession
 
     private final BundleContext context;
 
-    public LoginSession ( final BundleContext context, final String username, final String password, final Map<LoginConnection, ConnectionService> connections )
+    private final LoginContext loginContext;
+
+    public LoginSession ( final BundleContext context, final String username, final String password, final LoginContext loginContext, final Map<LoginConnection, ConnectionService> connections )
     {
         this.context = context;
         this.username = username;
         this.password = password;
         this.connections = connections;
+        this.loginContext = loginContext;
     }
 
     public String getPassword ()
@@ -40,6 +43,11 @@ public class LoginSession
     public String getUsername ()
     {
         return this.username;
+    }
+
+    public LoginContext getLoginContext ()
+    {
+        return this.loginContext;
     }
 
     public void start ()
