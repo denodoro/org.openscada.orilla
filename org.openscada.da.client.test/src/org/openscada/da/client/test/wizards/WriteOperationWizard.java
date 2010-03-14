@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2009 inavare GmbH (http://inavare.com)
+ * Copyright (C) 2006-2010 inavare GmbH (http://inavare.com)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,7 +41,7 @@ import org.openscada.utils.concurrent.NotifyFuture;
 public class WriteOperationWizard extends Wizard implements INewWizard
 {
 
-    private static Logger log = Logger.getLogger ( WriteOperationWizard.class );
+    private static Logger logger = Logger.getLogger ( WriteOperationWizard.class );
 
     private WriteOperationWizardValuePage page = null;
 
@@ -86,7 +86,7 @@ public class WriteOperationWizard extends Wizard implements INewWizard
         }
         catch ( final InvocationTargetException e )
         {
-            log.warn ( "Failed to perform write operation", e );
+            logger.warn ( "Failed to perform write operation", e );
             final Throwable realException = e.getTargetException ();
             MessageDialog.openError ( getShell (), "Error writing to item", realException.getMessage () );
             return false;
@@ -134,7 +134,7 @@ public class WriteOperationWizard extends Wizard implements INewWizard
 
             public void run ()
             {
-                ErrorDialog.openError ( getShell (), "Failed to write", e.getMessage (), new Status ( Status.ERROR, Activator.PLUGIN_ID, e.getMessage (), e ) );
+                ErrorDialog.openError ( getShell (), "Failed to write", "Failed to write to the data item", new Status ( Status.ERROR, Activator.PLUGIN_ID, e.getMessage (), e ) );
             }
         } );
 
