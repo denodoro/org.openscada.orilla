@@ -7,11 +7,18 @@ import java.util.Set;
 import org.eclipse.core.databinding.observable.map.IMapChangeListener;
 import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.core.databinding.observable.map.MapChangeEvent;
+import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.jface.resource.LocalResourceManager;
+import org.eclipse.jface.resource.ResourceManager;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.LabelProviderChangedEvent;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.openscada.ae.Event;
+import org.openscada.ae.Event.Fields;
 import org.openscada.core.Variant;
+import org.openscada.core.ui.styles.Activator;
+import org.openscada.core.ui.styles.Style;
+import org.openscada.core.ui.styles.StyleInformation;
 
 public class EventsLabelProvider extends CellLabelProvider
 {
@@ -31,6 +38,8 @@ public class EventsLabelProvider extends CellLabelProvider
     private final IObservableMap[] attributeMaps;
 
     private final DateFormat dateFormat;
+
+    private final ResourceManager resourceManager = new LocalResourceManager ( JFaceResources.getResources () );
 
     public EventsLabelProvider ( final IObservableMap... attributeMaps )
     {
@@ -52,7 +61,10 @@ public class EventsLabelProvider extends CellLabelProvider
         {
             this.attributeMaps[i].removeMapChangeListener ( this.mapChangeListener );
         }
+
         super.dispose ();
+
+        this.resourceManager.dispose ();
     }
 
     private Variant getAttributes ( final Event event, final String key )
@@ -80,6 +92,22 @@ public class EventsLabelProvider extends CellLabelProvider
         if ( o instanceof Event )
         {
             final Event info = (Event)o;
+
+            StyleInformation style;
+
+            if ( isAlarm ( info ) )
+            {
+                style = Activator.getStyle ( Style.ALARM );
+            }
+            else
+            {
+                style = Activator.getStyle ( Style.OK );
+            }
+
+            cell.setBackground ( style.createBackground ( this.resourceManager ) );
+            cell.setFont ( style.createFont ( this.resourceManager ) );
+            cell.setForeground ( style.createForeground ( this.resourceManager ) );
+
             switch ( cell.getColumnIndex () )
             {
             case 0:
@@ -108,5 +136,11 @@ public class EventsLabelProvider extends CellLabelProvider
                 break;
             }
         }
+    }
+
+    private boolean isAlarm ( final Event info )
+    {
+        final long priority = info.getField ( Fields.PRIORITY ).asLong ( 0L );
+        return priority > 500;
     }
 }
