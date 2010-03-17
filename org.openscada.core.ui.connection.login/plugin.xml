@@ -34,13 +34,13 @@
          point="org.eclipse.ui.commands">
       <command
             categoryId="org.openscada.da.ui.category"
-            description="Shows the login dialog"
+            description="Open the login dialog"
             id="org.openscada.core.ui.connection.login.LoginDialogCommand"
             name="Login Dialog">
       </command>
       <command
             categoryId="org.openscada.da.ui.category"
-            description="Logs the current user out"
+            description="Log out the current session"
             id="org.openscada.core.ui.connection.login.LogoutCommand"
             name="Logout">
       </command>

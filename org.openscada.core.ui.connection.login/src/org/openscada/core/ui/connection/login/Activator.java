@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.databinding.swt.SWTObservables;
@@ -89,13 +90,14 @@ public class Activator extends AbstractUIPlugin
             }
 
             final String name = ele.getAttribute ( "label" );
+            String id = ele.getAttribute ( "id" );
 
             final Collection<LoginConnection> connections = new LinkedList<LoginConnection> ();
             fillConnections ( connections, ele );
 
-            if ( name != null && !connections.isEmpty () )
+            if ( id != null && name != null && !connections.isEmpty () )
             {
-                result.add ( new LoginContext ( name, connections ) );
+                result.add ( new LoginContext ( id, name, connections ) );
             }
 
         }
@@ -142,7 +144,7 @@ public class Activator extends AbstractUIPlugin
             }
             catch ( final Exception e )
             {
-                getLog ().log ( new Status ( Status.WARNING, PLUGIN_ID, "Failed to parse connection", e ) );
+                getLog ().log ( new Status ( IStatus.WARNING, PLUGIN_ID, "Failed to parse connection", e ) );
             }
         }
     }

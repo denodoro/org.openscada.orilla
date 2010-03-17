@@ -6,7 +6,7 @@
          <meta.schema plugin="org.openscada.core.ui.connection.login" id="org.openscada.core.ui.connection.login.context" name="context"/>
       </appinfo>
       <documentation>
-         [Enter description of this extension point.]
+         
       </documentation>
    </annotation>
 
@@ -55,10 +55,20 @@
          <attribute name="label" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  The label shown to end users when showing the login context.
                </documentation>
                <appinfo>
                   <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The ID of the login context. Used for referencing.
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="identifier"/>
                </appinfo>
             </annotation>
          </attribute>
@@ -98,41 +108,9 @@
       </complexType>
    </element>
 
-   <annotation>
-      <appinfo>
-         <meta.section type="since"/>
-      </appinfo>
-      <documentation>
-         [Enter the first release in which this extension point appears.]
-      </documentation>
-   </annotation>
 
-   <annotation>
-      <appinfo>
-         <meta.section type="examples"/>
-      </appinfo>
-      <documentation>
-         [Enter extension point usage example here.]
-      </documentation>
-   </annotation>
 
-   <annotation>
-      <appinfo>
-         <meta.section type="apiinfo"/>
-      </appinfo>
-      <documentation>
-         [Enter API information here.]
-      </documentation>
-   </annotation>
 
-   <annotation>
-      <appinfo>
-         <meta.section type="implementation"/>
-      </appinfo>
-      <documentation>
-         [Enter information about supplied implementation of this extension point.]
-      </documentation>
-   </annotation>
 
 
 </schema>

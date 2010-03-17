@@ -7,6 +7,7 @@ import java.util.Map;
 import org.eclipse.core.databinding.observable.Realm;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -16,6 +17,7 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -59,6 +61,8 @@ public class LoginDialog extends TitleAreaDialog
 
     private String password;
 
+    private final IDialogSettings dialogSettings;
+
     public LoginDialog ( final Shell parentShell )
     {
         super ( parentShell );
@@ -67,6 +71,49 @@ public class LoginDialog extends TitleAreaDialog
         setHelpAvailable ( false );
 
         this.contexts = Activator.getDefault ().getContextList ();
+        this.dialogSettings = getDialogSection ();
+    }
+
+    private IDialogSettings getDialogSection ()
+    {
+        IDialogSettings section = Activator.getDefault ().getDialogSettings ().getSection ( "LoginDialog" );
+        if ( section == null )
+        {
+            section = Activator.getDefault ().getDialogSettings ().addNewSection ( "LoginDialog" );
+        }
+        return section;
+    }
+
+    /**
+     * Save current state to the dialog settings
+     */
+    private void saveTo ()
+    {
+        if ( this.loginContext != null && this.user != null )
+        {
+            this.dialogSettings.put ( "context", this.loginContext.getId () );
+            this.dialogSettings.put ( "user", this.user );
+        }
+    }
+
+    /**
+     * Load the current state from the dialog settings
+     */
+    private void loadFrom ()
+    {
+        String user = this.dialogSettings.get ( "user" );
+        String contextId = this.dialogSettings.get ( "context" );
+        if ( user != null && contextId != null )
+        {
+            this.userText.setText ( user );
+            for ( LoginContext context : this.contexts )
+            {
+                if ( context.getId ().equals ( contextId ) )
+                {
+                    this.contextSelector.setSelection ( new StructuredSelection ( context ), true );
+                }
+            }
+        }
     }
 
     private void update ()
@@ -142,6 +189,8 @@ public class LoginDialog extends TitleAreaDialog
         Dialog.applyDialogFont ( wrapper );
 
         setTitle ( "Log on to system" );
+
+        loadFrom ();
 
         return wrapper;
     }
@@ -272,7 +321,7 @@ public class LoginDialog extends TitleAreaDialog
             connections.add ( new LoginConnection ( ci, c.getServicePid (), c.getAutoReconnectDelay (), c.getPriority () ) );
         }
 
-        return new LoginContext ( loginContext.getName (), connections );
+        return new LoginContext ( loginContext.getId (), loginContext.getName (), connections );
     }
 
     protected void handleComplete ( final Map<LoginConnection, ConnectionService> result )
@@ -297,6 +346,7 @@ public class LoginDialog extends TitleAreaDialog
         }
         else
         {
+            saveTo ();
             Activator.getDefault ().setLoginSession ( this.user, this.password, this.loginContext, result );
             super.okPressed ();
         }
