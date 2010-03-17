@@ -113,6 +113,11 @@ public class LoginDialog extends TitleAreaDialog
                     this.contextSelector.setSelection ( new StructuredSelection ( context ), true );
                 }
             }
+            this.passwordText.setFocus ();
+        }
+        else
+        {
+            this.contextSelector.getControl ().setFocus ();
         }
     }
 
@@ -190,8 +195,6 @@ public class LoginDialog extends TitleAreaDialog
 
         setTitle ( "Log on to system" );
 
-        loadFrom ();
-
         return wrapper;
     }
 
@@ -201,6 +204,7 @@ public class LoginDialog extends TitleAreaDialog
         final Control control = super.createButtonBar ( parent );
 
         update ();
+        loadFrom ();
 
         return control;
     }
