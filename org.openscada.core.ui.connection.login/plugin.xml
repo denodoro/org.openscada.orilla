@@ -10,6 +10,7 @@
                id="org.openscada.core.ui.connection.login.verticalTrim">
             <command
                   commandId="org.openscada.core.ui.connection.login.LoginDialogCommand"
+                  icon="icons/e/connect.gif"
                   label="Login"
                   style="push">
                <visibleWhen
@@ -21,6 +22,8 @@
             </control>
             <command
                   commandId="org.openscada.core.ui.connection.login.LogoutCommand"
+                  disabledIcon="icons/d/disconnect_co.gif"
+                  icon="icons/e/disconnect_co.gif"
                   label="Logout"
                   style="push">
                <visibleWhen
@@ -79,6 +82,15 @@
                priorityLevel="workbench">
          </variable>
       </sourceProvider>
+   </extension>
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="org.openscada.core.ui.connection.login.LoginDialogCommand"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="CTRL+L">
+      </key>
    </extension>
 
 </plugin>
