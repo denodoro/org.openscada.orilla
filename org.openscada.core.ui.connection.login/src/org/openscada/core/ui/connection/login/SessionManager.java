@@ -86,4 +86,9 @@ public abstract class SessionManager
     {
         return Activator.getDefault ().getSessionManager ();
     }
+
+    public LoginSession getSession ()
+    {
+        return this.session;
+    }
 }
