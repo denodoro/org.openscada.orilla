@@ -110,6 +110,11 @@ public class FactoryEditor extends EditorPart
 
     private ConfigurationDescriptor[] convert ( final ConfigurationInformation[] configurations, final String connectionUri )
     {
+        if ( configurations == null )
+        {
+            return null;
+        }
+
         final ConfigurationDescriptor[] result = new ConfigurationDescriptor[configurations.length];
         for ( int i = 0; i < configurations.length; i++ )
         {
