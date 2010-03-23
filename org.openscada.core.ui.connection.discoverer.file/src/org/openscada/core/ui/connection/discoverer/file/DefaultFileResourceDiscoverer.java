@@ -45,7 +45,7 @@ public class DefaultFileResourceDiscoverer extends ResourceDiscoverer implements
             {
                 if ( descriptor.getServiceId () != null )
                 {
-                    printer.println ( descriptor.getServiceId () + "=" + descriptor.getConnectionInformation () ); //$NON-NLS-1$
+                    printer.println ( descriptor.getServiceId () + STORE_ID_DELIM + descriptor.getConnectionInformation () );
                 }
                 else
                 {

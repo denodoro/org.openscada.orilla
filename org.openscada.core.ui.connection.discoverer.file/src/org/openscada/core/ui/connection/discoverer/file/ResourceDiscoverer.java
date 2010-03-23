@@ -92,9 +92,12 @@ public abstract class ResourceDiscoverer extends AbstractConnectionDiscoverer
         setConnections ( result );
     }
 
+    protected static final String STORE_ID_DELIM = "*";
+
     private ConnectionDescriptor convert ( final String line )
     {
-        final String tok[] = line.split ( "=", 2 ); //$NON-NLS-1$
+
+        final String tok[] = line.split ( STORE_ID_DELIM, 2 );
         if ( tok.length == 0 )
         {
             return null;
