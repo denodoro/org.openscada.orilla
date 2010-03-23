@@ -10,6 +10,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.views.properties.IPropertySource;
 import org.openscada.core.client.Connection;
 import org.openscada.core.client.ConnectionState;
 import org.openscada.core.client.ConnectionStateListener;
@@ -266,9 +267,15 @@ public class ConnectionHolder extends AbstractPropertyChange implements Connecti
     @SuppressWarnings ( "unchecked" )
     public Object getAdapter ( final Class adapter )
     {
+        logger.debug ( "Adapting: {}", adapter );
+
         if ( adapter == ConnectionService.class )
         {
             return this.connectionService;
+        }
+        else if ( adapter == IPropertySource.class )
+        {
+            return new PropertySourceWrapper ( this );
         }
         return null;
     }
