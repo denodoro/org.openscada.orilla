@@ -8,9 +8,18 @@ import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 import org.openscada.core.client.Connection;
 import org.openscada.core.connection.provider.ConnectionService;
+import org.openscada.utils.str.StringHelper;
 
 public class PropertySourceWrapper implements IPropertySource
 {
+
+    private static final String CAT_SESSION_PROPERTIES = Messages.PropertySourceWrapper_CatSessionProperties;
+
+    private static final String CAT_CONNECTION_STATE = Messages.PropertySourceWrapper_CatConnectionState;
+
+    private static final String CAT_CONNECTION_SERVICE = Messages.PropertySourceWrapper_CatConnectionService;
+
+    private static final String CAT_CONNECTION_INFORMATION = Messages.PropertySourceWrapper_CatConnectionInformation;
 
     private static enum Properties
     {
@@ -57,23 +66,27 @@ public class PropertySourceWrapper implements IPropertySource
         final Collection<IPropertyDescriptor> properties = new ArrayList<IPropertyDescriptor> ();
 
         {
-            final PropertyDescriptor pd = new PropertyDescriptor ( Properties.URI, "URI" );
-            pd.setCategory ( "Connection Information" );
+            final PropertyDescriptor pd = new PropertyDescriptor ( Properties.URI, Messages.PropertySourceWrapper_UriName );
+            pd.setCategory ( CAT_CONNECTION_INFORMATION );
+            pd.setDescription ( Messages.PropertySourceWrapper_UriDesc );
             properties.add ( pd );
         }
         {
-            final PropertyDescriptor pd = new PropertyDescriptor ( Properties.ID, "ID" );
-            pd.setCategory ( "Connection Information" );
+            final PropertyDescriptor pd = new PropertyDescriptor ( Properties.ID, Messages.PropertySourceWrapper_IdName );
+            pd.setCategory ( CAT_CONNECTION_INFORMATION );
+            pd.setDescription ( Messages.PropertySourceWrapper_IdDesc );
             properties.add ( pd );
         }
         {
-            final PropertyDescriptor pd = new PropertyDescriptor ( Properties.INTERFACES, "Supported interfaces" );
-            pd.setCategory ( "Connection Service" );
+            final PropertyDescriptor pd = new PropertyDescriptor ( Properties.INTERFACES, Messages.PropertySourceWrapper_InterfacesName );
+            pd.setCategory ( CAT_CONNECTION_SERVICE );
+            pd.setDescription ( Messages.PropertySourceWrapper_InterfacesDesc );
             properties.add ( pd );
         }
         {
-            final PropertyDescriptor pd = new PropertyDescriptor ( Properties.STATE, "State" );
-            pd.setCategory ( "Connection State" );
+            final PropertyDescriptor pd = new PropertyDescriptor ( Properties.STATE, Messages.PropertySourceWrapper_StateName );
+            pd.setCategory ( CAT_CONNECTION_STATE );
+            pd.setDescription ( Messages.PropertySourceWrapper_StateDesc );
             properties.add ( pd );
         }
 
@@ -83,7 +96,7 @@ public class PropertySourceWrapper implements IPropertySource
             for ( final String key : connection.getSessionProperties ().keySet () )
             {
                 final PropertyDescriptor pd = new PropertyDescriptor ( new SessionPropertyDescriptor ( key ), key );
-                pd.setCategory ( "Session properties" );
+                pd.setCategory ( CAT_SESSION_PROPERTIES );
                 properties.add ( pd );
             }
         }
@@ -123,7 +136,7 @@ public class PropertySourceWrapper implements IPropertySource
 
         if ( Properties.INTERFACES.equals ( id ) )
         {
-            return service.getSupportedInterfaces ();
+            return String.format ( Messages.PropertySourceWrapper_StateFormat, StringHelper.join ( service.getSupportedInterfaces (), Messages.PropertySourceWrapper_StateFormatDelim ) );
         }
 
         final Connection connection = service.getConnection ();
