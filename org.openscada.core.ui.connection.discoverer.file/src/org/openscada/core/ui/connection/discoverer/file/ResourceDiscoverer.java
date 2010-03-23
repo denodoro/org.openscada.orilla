@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import org.eclipse.core.runtime.Status;
 import org.openscada.core.ConnectionInformation;
@@ -97,25 +98,33 @@ public abstract class ResourceDiscoverer extends AbstractConnectionDiscoverer
     private ConnectionDescriptor convert ( final String line )
     {
 
-        final String tok[] = line.split ( STORE_ID_DELIM, 2 );
-        if ( tok.length == 0 )
+        try
         {
-            return null;
-        }
+            final String tok[] = line.split ( Pattern.quote ( STORE_ID_DELIM ), 2 );
+            if ( tok.length == 0 )
+            {
+                return null;
+            }
 
-        ConnectionDescriptor cd;
-        if ( tok.length == 1 )
-        {
-            cd = new ConnectionDescriptor ( ConnectionInformation.fromURI ( tok[0] ) );
+            ConnectionDescriptor cd;
+            if ( tok.length == 1 )
+            {
+                cd = new ConnectionDescriptor ( ConnectionInformation.fromURI ( tok[0] ) );
+            }
+            else
+            {
+                cd = new ConnectionDescriptor ( ConnectionInformation.fromURI ( tok[1] ), tok[0] );
+            }
+            if ( cd.getConnectionInformation () == null )
+            {
+                return null;
+            }
+            return cd;
         }
-        else
+        catch ( final IllegalArgumentException e )
         {
-            cd = new ConnectionDescriptor ( ConnectionInformation.fromURI ( tok[1] ), tok[0] );
+            logger.warn ( String.format ( "Failed to parse '%s'", line ), e );
         }
-        if ( cd.getConnectionInformation () == null )
-        {
-            return null;
-        }
-        return cd;
+        return null;
     }
 }
