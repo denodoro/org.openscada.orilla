@@ -1,6 +1,8 @@
 package org.openscada.ae.ui.views.views;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -12,7 +14,22 @@ import org.openscada.core.Variant;
 
 public class LabelProviderSupport
 {
+    private enum SpecialDate
+    {
+        PAST,
+        YESTERDAY,
+        TODAY,
+        TOMORROW,
+        FUTURE;
+    }
+
     public static final DateFormat df = new SimpleDateFormat ( "yyyy-MM-dd HH:mm:ss.SSS" );
+
+    public static final DateFormat tf = new SimpleDateFormat ( "HH:mm:ss.SSS" );
+
+    public static final NumberFormat nf3 = new DecimalFormat ( "0.###" );
+
+    public static final NumberFormat nf6 = new DecimalFormat ( "0.######" );
 
     public static final Image ALARM_IMG = Activator.getImageDescriptor ( "icons/monitor_alarm.png" ).createImage ();
 
@@ -32,6 +49,18 @@ public class LabelProviderSupport
         {
             return "";
         }
+        if ( value.isDouble () )
+        {
+            final Double v = value.asDouble ( 0.0 );
+            if ( v < 1000 )
+            {
+                return nf6.format ( v );
+            }
+            else
+            {
+                return nf3.format ( v );
+            }
+        }
         return value.toLabel ( "" );
     }
 
@@ -41,7 +70,15 @@ public class LabelProviderSupport
         {
             return "";
         }
-        return df.format ( date );
+        switch ( toSpecial ( date ) )
+        {
+        case YESTERDAY:
+            return "Yesterday " + tf.format ( date );
+        case TODAY:
+            return "Today " + tf.format ( date );
+        default:
+            return df.format ( date );
+        }
     }
 
     public static String toLabel ( final DecoratedEvent event, final Fields field )
@@ -50,4 +87,36 @@ public class LabelProviderSupport
         return toLabel ( value );
     }
 
+    private static SpecialDate toSpecial ( final Date date )
+    {
+        if ( date == null )
+        {
+            return null;
+        }
+        final long now = System.currentTimeMillis ();
+        final long millisInDay = 1000 * 60 * 60 * 24;
+        final long today = Math.round ( now / ( millisInDay * 1.0d ) ) * millisInDay;
+        final long yesterday = today - millisInDay;
+        final long tomorrow = today + millisInDay;
+        if ( date.getTime () < yesterday )
+        {
+            return SpecialDate.PAST;
+        }
+        else if ( ( date.getTime () >= yesterday ) && ( date.getTime () < today ) )
+        {
+            return SpecialDate.YESTERDAY;
+        }
+        else if ( ( date.getTime () >= today ) && ( date.getTime () < tomorrow ) )
+        {
+            return SpecialDate.TODAY;
+        }
+        else if ( ( date.getTime () >= tomorrow ) && ( date.getTime () < tomorrow + millisInDay ) )
+        {
+            return SpecialDate.TOMORROW;
+        }
+        else
+        {
+            return SpecialDate.FUTURE;
+        }
+    }
 }
