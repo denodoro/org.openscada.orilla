@@ -83,7 +83,7 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
                     onDisconnect ();
                 }
             }
-            catch ( Exception e )
+            catch ( final Exception e )
             {
                 logger.warn ( "reInitializeConnection ()", e );
             }
@@ -147,7 +147,7 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
             // it is OK to fail at this stage
             reInitializeConnection ( this.connectionId, this.connectionUri );
         }
-        catch ( Exception e )
+        catch ( final Exception e )
         {
             logger.warn ( "init () - couldn't recreate connection", e );
             // just reset all values
@@ -165,7 +165,7 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
 
         this.contentPane = new Composite ( parent, SWT.NONE );
 
-        GridLayout layout = new GridLayout ( 1, false );
+        final GridLayout layout = new GridLayout ( 1, false );
         layout.marginWidth = 0;
         layout.marginHeight = 0;
         this.contentPane.setLayout ( layout );
@@ -216,7 +216,7 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
      */
     protected boolean isConnected ()
     {
-        return ( ( this.connectionService != null ) && ( this.connectionService.getConnection () != null ) && ( this.connectionService.getConnection ().getState () == ConnectionState.BOUND ) );
+        return this.connectionService != null && this.connectionService.getConnection () != null && this.connectionService.getConnection ().getState () == ConnectionState.BOUND;
     }
 
     private void reInitializeConnection ( final String connectionId, final String connectionUri ) throws Exception
@@ -274,8 +274,8 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
         {
             return;
         }
-        ConnectionInformation ci = ConnectionInformation.fromURI ( connectionUri );
-        ConnectionRequest request = new ConnectionRequest ( null, ci, RECONNECT_DELAY, true );
+        final ConnectionInformation ci = ConnectionInformation.fromURI ( connectionUri );
+        final ConnectionRequest request = new ConnectionRequest ( null, ci, RECONNECT_DELAY, true );
         this.connectionTracker = new ConnectionRequestTracker ( Activator.getDefault ().getBundle ().getBundleContext (), request, this.connectionServiceListener );
         this.connectionId = null;
         this.connectionUri = connectionUri;
@@ -303,17 +303,17 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
         {
             return;
         }
-        TreeSelection treeSelection = (TreeSelection)selection;
+        final TreeSelection treeSelection = (TreeSelection)selection;
         if ( treeSelection.getFirstElement () instanceof ConnectionHolder )
         {
-            ConnectionHolder connectionHolder = (ConnectionHolder)treeSelection.getFirstElement ();
-            if ( ( connectionHolder.getConnectionService ().getConnection () != null ) && ( connectionHolder.getConnectionService ().getConnection () instanceof Connection ) )
+            final ConnectionHolder connectionHolder = (ConnectionHolder)treeSelection.getFirstElement ();
+            if ( connectionHolder.getConnectionService ().getConnection () != null && connectionHolder.getConnectionService ().getConnection () instanceof Connection )
             {
                 try
                 {
                     setConnectionUri ( connectionHolder.getConnectionService ().getConnection ().getConnectionInformation ().toString () );
                 }
-                catch ( Exception e )
+                catch ( final Exception e )
                 {
                     e.printStackTrace ();
                 }
@@ -321,14 +321,14 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
         }
         else if ( treeSelection.getFirstElement () instanceof BrowserEntryBean )
         {
-            BrowserEntryBean browserEntryBean = (BrowserEntryBean)treeSelection.getFirstElement ();
-            if ( ( browserEntryBean.getConnection () != null ) && ( browserEntryBean.getConnection ().getConnection () != null ) )
+            final BrowserEntryBean browserEntryBean = (BrowserEntryBean)treeSelection.getFirstElement ();
+            if ( browserEntryBean.getConnection () != null && browserEntryBean.getConnection ().getConnection () != null )
             {
                 try
                 {
                     setConnectionUri ( browserEntryBean.getConnection ().getConnection ().getConnectionInformation ().toString () );
                 }
-                catch ( Exception e )
+                catch ( final Exception e )
                 {
                     e.printStackTrace ();
                 }
