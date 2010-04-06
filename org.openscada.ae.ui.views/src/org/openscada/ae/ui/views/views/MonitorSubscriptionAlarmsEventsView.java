@@ -55,7 +55,7 @@ public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarms
 
     protected void subscribe ()
     {
-        if ( ( this.getConnection () != null ) && ( this.monitorsId != null ) )
+        if ( this.getConnection () != null && this.monitorsId != null )
         {
             this.monitorListener = new ConditionListener () {
 
@@ -75,7 +75,7 @@ public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarms
 
     protected void unSubscribe ()
     {
-        if ( ( this.getConnection () != null ) && ( this.monitorsId != null ) )
+        if ( this.getConnection () != null && this.monitorsId != null )
         {
             if ( this.monitorListener != null )
             {
@@ -90,8 +90,14 @@ public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarms
         getSite ().getShell ().getDisplay ().syncExec ( new Runnable () {
             public void run ()
             {
-                MonitorSubscriptionAlarmsEventsView.this.monitors.clear ();
-                MonitorSubscriptionAlarmsEventsView.this.monitorsMap.clear ();
+                if ( MonitorSubscriptionAlarmsEventsView.this.monitors != null )
+                {
+                    MonitorSubscriptionAlarmsEventsView.this.monitors.clear ();
+                }
+                if ( MonitorSubscriptionAlarmsEventsView.this.monitorsMap != null )
+                {
+                    MonitorSubscriptionAlarmsEventsView.this.monitorsMap.clear ();
+                }
             }
         } );
     }
@@ -122,7 +128,7 @@ public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarms
             {
                 if ( removed != null )
                 {
-                    for ( String id : removed )
+                    for ( final String id : removed )
                     {
                         MonitorSubscriptionAlarmsEventsView.this.monitorsMap.remove ( id );
                     }
@@ -131,8 +137,8 @@ public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarms
                 {
                     // do it in 2 steps
                     // 1. add all missing
-                    Map<String, DecoratedMonitor> missing = new HashMap<String, DecoratedMonitor> ();
-                    for ( ConditionStatusInformation conditionStatusInformation : addedOrUpdated )
+                    final Map<String, DecoratedMonitor> missing = new HashMap<String, DecoratedMonitor> ();
+                    for ( final ConditionStatusInformation conditionStatusInformation : addedOrUpdated )
                     {
                         if ( !MonitorSubscriptionAlarmsEventsView.this.monitorsMap.containsKey ( conditionStatusInformation.getId () ) )
                         {
@@ -141,11 +147,11 @@ public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarms
                     }
                     MonitorSubscriptionAlarmsEventsView.this.monitorsMap.putAll ( missing );
                     // 2. update data                    
-                    for ( ConditionStatusInformation conditionStatusInformation : addedOrUpdated )
+                    for ( final ConditionStatusInformation conditionStatusInformation : addedOrUpdated )
                     {
                         if ( !missing.keySet ().contains ( conditionStatusInformation.getId () ) )
                         {
-                            DecoratedMonitor dm = (DecoratedMonitor)MonitorSubscriptionAlarmsEventsView.this.monitorsMap.get ( conditionStatusInformation.getId () );
+                            final DecoratedMonitor dm = (DecoratedMonitor)MonitorSubscriptionAlarmsEventsView.this.monitorsMap.get ( conditionStatusInformation.getId () );
                             if ( dm == null )
                             {
                                 MonitorSubscriptionAlarmsEventsView.this.monitorsMap.put ( conditionStatusInformation.getId (), new DecoratedMonitor ( conditionStatusInformation ) );
@@ -178,7 +184,7 @@ public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarms
             }
         } );
 
-        IToolBarManager toolBarManager = getViewSite ().getActionBars ().getToolBarManager ();
+        final IToolBarManager toolBarManager = getViewSite ().getActionBars ().getToolBarManager ();
         toolBarManager.add ( this.ackAction );
 
         this.monitorsMap = new WritableMap ( SWTObservables.getRealm ( parent.getDisplay () ) );
@@ -186,21 +192,21 @@ public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarms
         this.monitorsMap.addMapChangeListener ( new IMapChangeListener () {
             public void handleMapChange ( final MapChangeEvent event )
             {
-                Set<DecoratedMonitor> toRemove = new HashSet<DecoratedMonitor> ();
-                for ( Object key : event.diff.getRemovedKeys () )
+                final Set<DecoratedMonitor> toRemove = new HashSet<DecoratedMonitor> ();
+                for ( final Object key : event.diff.getRemovedKeys () )
                 {
                     toRemove.add ( new DecoratedMonitor ( (String)key ) );
                 }
                 MonitorSubscriptionAlarmsEventsView.this.monitors.removeAll ( toRemove );
 
-                Set<DecoratedMonitor> toAdd = new HashSet<DecoratedMonitor> ();
-                for ( Object key : event.diff.getAddedKeys () )
+                final Set<DecoratedMonitor> toAdd = new HashSet<DecoratedMonitor> ();
+                for ( final Object key : event.diff.getAddedKeys () )
                 {
                     toAdd.add ( (DecoratedMonitor)event.diff.getNewValue ( key ) );
                 }
                 MonitorSubscriptionAlarmsEventsView.this.monitors.addAll ( toAdd );
 
-                for ( Object key : event.diff.getChangedKeys () )
+                for ( final Object key : event.diff.getChangedKeys () )
                 {
                     MonitorSubscriptionAlarmsEventsView.this.monitors.remove ( event.diff.getOldValue ( key ) );
                     MonitorSubscriptionAlarmsEventsView.this.monitors.add ( event.diff.getNewValue ( key ) );

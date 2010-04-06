@@ -88,7 +88,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
     protected void subscribe ()
     {
         super.subscribe ();
-        if ( ( this.getConnection () != null ) && ( this.poolId != null ) )
+        if ( this.getConnection () != null && this.poolId != null )
         {
             this.eventPoolListener = new EventListener () {
                 public void statusChanged ( final SubscriptionState state )
@@ -109,7 +109,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
     protected void unSubscribe ()
     {
         super.unSubscribe ();
-        if ( ( this.getConnection () != null ) && ( this.poolId != null ) )
+        if ( this.getConnection () != null && this.poolId != null )
         {
             if ( this.eventPoolListener != null )
             {
@@ -128,11 +128,11 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
                 {
                     return;
                 }
-                Set<DecoratedEvent> decoratedEvents = decorateEvents ( addedEvents );
-                for ( DecoratedEvent event : decoratedEvents )
+                final Set<DecoratedEvent> decoratedEvents = decorateEvents ( addedEvents );
+                for ( final DecoratedEvent event : decoratedEvents )
                 {
                     final Variant source = event.getEvent ().getField ( Fields.SOURCE );
-                    if ( ( source != null ) && !source.isNull () && ( source.asString ( "" ).length () > 0 ) )
+                    if ( source != null && !source.isNull () && source.asString ( "" ).length () > 0 )
                     {
                         Set<DecoratedEvent> d = EventPoolView.this.poolMap.get ( source.asString ( "" ) );
                         if ( d == null )
@@ -166,13 +166,13 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
 
     private Set<DecoratedEvent> decorateEvents ( final ConditionStatusInformation[] monitors )
     {
-        Set<DecoratedEvent> result = new HashSet<DecoratedEvent> ();
-        for ( ConditionStatusInformation conditionStatusInformation : monitors )
+        final Set<DecoratedEvent> result = new HashSet<DecoratedEvent> ();
+        for ( final ConditionStatusInformation conditionStatusInformation : monitors )
         {
-            Set<DecoratedEvent> d = this.poolMap.get ( conditionStatusInformation.getId () );
+            final Set<DecoratedEvent> d = this.poolMap.get ( conditionStatusInformation.getId () );
             if ( d != null )
             {
-                for ( DecoratedEvent event : d )
+                for ( final DecoratedEvent event : d )
                 {
                     event.setMonitor ( new MonitorData ( conditionStatusInformation ) );
                     result.add ( event );
@@ -184,14 +184,14 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
 
     private Set<DecoratedEvent> decorateEvents ( final Event[] events )
     {
-        Set<DecoratedEvent> result = new HashSet<DecoratedEvent> ();
-        for ( Event event : events )
+        final Set<DecoratedEvent> result = new HashSet<DecoratedEvent> ();
+        for ( final Event event : events )
         {
             final Variant source = event.getField ( Fields.SOURCE );
             final MonitorData monitor;
-            if ( ( source != null ) && !source.isNull () && source.isString () )
+            if ( source != null && !source.isNull () && source.isString () )
             {
-                DecoratedMonitor decoratedMonitor = (DecoratedMonitor)this.monitorsMap.get ( source.asString ( "" ) );
+                final DecoratedMonitor decoratedMonitor = (DecoratedMonitor)this.monitorsMap.get ( source.asString ( "" ) );
                 if ( decoratedMonitor != null )
                 {
                     monitor = decoratedMonitor.getMonitor ();
@@ -215,7 +215,10 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
         getSite ().getShell ().getDisplay ().asyncExec ( new Runnable () {
             public void run ()
             {
-                EventPoolView.this.pool.clear ();
+                if ( EventPoolView.this.pool != null )
+                {
+                    EventPoolView.this.pool.clear ();
+                }
             }
         } );
     }
@@ -227,9 +230,9 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
     @Override
     protected void acknowledge ()
     {
-        if ( ( this.getConnection () != null ) && ( this.getConnection ().getState () == ConnectionState.BOUND ) )
+        if ( this.getConnection () != null && this.getConnection ().getState () == ConnectionState.BOUND )
         {
-            DecoratedEvent event = this.eventsTable.selectedEvent ();
+            final DecoratedEvent event = this.eventsTable.selectedEvent ();
             if ( event.getMonitor () != null )
             {
                 this.getConnection ().acknowledge ( event.getMonitor ().getId (), null );

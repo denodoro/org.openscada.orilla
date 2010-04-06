@@ -83,16 +83,21 @@ public class LabelProviderSupport
 
     public static String toLabel ( final DecoratedEvent event, final Fields field )
     {
-        Variant value = event.getEvent ().getField ( field );
+        final Variant value = event.getEvent ().getField ( field );
         return toLabel ( value );
     }
 
     private static SpecialDate toSpecial ( final Date date )
     {
+        return SpecialDate.PAST;
+
+        // FIXME: correct implementation later
+        /*
         if ( date == null )
         {
             return null;
         }
+
         final long now = System.currentTimeMillis ();
         final long millisInDay = 1000 * 60 * 60 * 24;
         final long today = Math.round ( now / ( millisInDay * 1.0d ) ) * millisInDay;
@@ -102,15 +107,15 @@ public class LabelProviderSupport
         {
             return SpecialDate.PAST;
         }
-        else if ( ( date.getTime () >= yesterday ) && ( date.getTime () < today ) )
+        else if ( date.getTime () >= yesterday && date.getTime () < today )
         {
             return SpecialDate.YESTERDAY;
         }
-        else if ( ( date.getTime () >= today ) && ( date.getTime () < tomorrow ) )
+        else if ( date.getTime () >= today && date.getTime () < tomorrow )
         {
             return SpecialDate.TODAY;
         }
-        else if ( ( date.getTime () >= tomorrow ) && ( date.getTime () < tomorrow + millisInDay ) )
+        else if ( date.getTime () >= tomorrow && date.getTime () < tomorrow + millisInDay )
         {
             return SpecialDate.TOMORROW;
         }
@@ -118,5 +123,6 @@ public class LabelProviderSupport
         {
             return SpecialDate.FUTURE;
         }
+        */
     }
 }

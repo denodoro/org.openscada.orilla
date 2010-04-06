@@ -25,7 +25,7 @@ public class EventLabelProvider extends ObservableMapLabelProvider
         {
             return "";
         }
-        DecoratedEvent event = (DecoratedEvent)element;
+        final DecoratedEvent event = (DecoratedEvent)element;
         switch ( columnIndex )
         {
         case 0:
@@ -94,8 +94,8 @@ public class EventLabelProvider extends ObservableMapLabelProvider
         {
             return null;
         }
-        DecoratedEvent event = (DecoratedEvent)element;
-        if ( ( columnIndex == 4 ) && event.isActive () )
+        final DecoratedEvent event = (DecoratedEvent)element;
+        if ( columnIndex == 4 && event.isActive () )
         {
             switch ( event.getMonitor ().getStatus () )
             {
