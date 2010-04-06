@@ -140,7 +140,12 @@ public class EventsLabelProvider extends CellLabelProvider
 
     private boolean isAlarm ( final Event info )
     {
-        final long priority = info.getField ( Fields.PRIORITY ).asLong ( 0L );
+        final Variant data = info.getField ( Fields.PRIORITY );
+        if ( data == null )
+        {
+            return false;
+        }
+        final long priority = data.asLong ( 0L );
         return priority > 500;
     }
 }
