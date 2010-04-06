@@ -2,6 +2,7 @@ package org.openscada.core.ui.connection.login.dialog;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.eclipse.core.databinding.observable.Realm;
 import org.openscada.core.ConnectionInformation;
@@ -27,6 +28,8 @@ public class ContextCreator
     private final Realm realm;
 
     private final Map<LoginConnection, ConnectionService> connections = new HashMap<LoginConnection, ConnectionService> ();
+
+    private final Map<ConnectionService, ConnectionStateListener> listeners = new ConcurrentHashMap<ConnectionService, ConnectionStateListener> ();
 
     /**
      * The result map. Contains either a {@link Throwable} or a {@link ConnectionService}
@@ -56,13 +59,15 @@ public class ContextCreator
             {
                 notifyStateChange ( connection.getConnectionInformation (), ConnectionState.CLOSED, null );
                 this.connections.put ( connection, connectionService );
-                connectionService.getConnection ().addConnectionStateListener ( new ConnectionStateListener () {
+                final ConnectionStateListener connectionStateListener = new ConnectionStateListener () {
 
                     public void stateChange ( final Connection connectionInstance, final ConnectionState state, final Throwable error )
                     {
                         handleStateChange ( connection, connectionService, connectionInstance, state, error );
                     }
-                } );
+                };
+                connectionService.getConnection ().addConnectionStateListener ( connectionStateListener );
+                this.listeners.put ( connectionService, connectionStateListener );
             }
             else
             {
@@ -210,6 +215,12 @@ public class ContextCreator
             return;
         }
         this.complete = true;
+
+        // remove all our connection state listeners
+        for ( final Map.Entry<ConnectionService, ConnectionStateListener> entry : this.listeners.entrySet () )
+        {
+            entry.getKey ().getConnection ().removeConnectionStateListener ( entry.getValue () );
+        }
 
         if ( this.resultListener != null )
         {
