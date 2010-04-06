@@ -1,16 +1,13 @@
 package org.openscada.ae.ui.views.model;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 
 import org.openscada.ae.ConditionStatusInformation;
+import org.openscada.utils.beans.AbstractPropertyChange;
 
-public class DecoratedMonitor implements Serializable
+public class DecoratedMonitor extends AbstractPropertyChange implements Serializable
 {
     private static final long serialVersionUID = -5247078232293575375L;
-
-    transient private final PropertyChangeSupport changes = new PropertyChangeSupport ( this );
 
     private final String id;
 
@@ -45,12 +42,12 @@ public class DecoratedMonitor implements Serializable
 
     public void setMonitor ( final ConditionStatusInformation monitor )
     {
-        this.changes.firePropertyChange ( "monitor", this.monitor, this.monitor = new MonitorData ( monitor ) );
+        firePropertyChange ( "monitor", this.monitor, this.monitor = new MonitorData ( monitor ) );
     }
 
     public void setMonitor ( final MonitorData monitor )
     {
-        this.changes.firePropertyChange ( "monitor", this.monitor, this.monitor = monitor );
+        firePropertyChange ( "monitor", this.monitor, this.monitor = monitor );
     }
 
     @Override
@@ -59,13 +56,4 @@ public class DecoratedMonitor implements Serializable
         return "DecoratedMonitor [id=" + this.id + ", monitor=" + this.monitor + "]";
     }
 
-    public void addPropertyChangeListener ( final PropertyChangeListener listener )
-    {
-        this.changes.addPropertyChangeListener ( listener );
-    }
-
-    public void removePropertyChangeListener ( final PropertyChangeListener listener )
-    {
-        this.changes.removePropertyChangeListener ( listener );
-    }
 }

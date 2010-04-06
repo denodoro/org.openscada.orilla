@@ -1,18 +1,15 @@
 package org.openscada.ae.ui.views.model;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 
 import org.openscada.ae.ConditionStatus;
 import org.openscada.ae.ConditionStatusInformation;
 import org.openscada.ae.Event;
+import org.openscada.utils.beans.AbstractPropertyChange;
 
-public class DecoratedEvent implements Serializable
+public class DecoratedEvent extends AbstractPropertyChange implements Serializable
 {
     private static final long serialVersionUID = -565152685009234585L;
-
-    transient private final PropertyChangeSupport changes = new PropertyChangeSupport ( this );
 
     private Event event;
 
@@ -25,7 +22,7 @@ public class DecoratedEvent implements Serializable
 
     public void setMonitor ( final MonitorData monitor )
     {
-        this.changes.firePropertyChange ( "monitor", this.monitor, this.monitor = monitor );
+        firePropertyChange ( "monitor", this.monitor, this.monitor = monitor );
     }
 
     public DecoratedEvent ( final Event event )
@@ -46,7 +43,7 @@ public class DecoratedEvent implements Serializable
 
     public void setEvent ( final Event event )
     {
-        this.changes.firePropertyChange ( "event", this.event, this.event = event );
+        firePropertyChange ( "event", this.event, this.event = event );
     }
 
     @Override
@@ -60,7 +57,7 @@ public class DecoratedEvent implements Serializable
     {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ( ( this.event == null ) ? 0 : this.event.hashCode () );
+        result = prime * result + ( this.event == null ? 0 : this.event.hashCode () );
         return result;
     }
 
@@ -79,7 +76,7 @@ public class DecoratedEvent implements Serializable
         {
             return false;
         }
-        DecoratedEvent other = (DecoratedEvent)obj;
+        final DecoratedEvent other = (DecoratedEvent)obj;
         if ( this.event == null )
         {
             if ( other.event != null )
@@ -113,21 +110,11 @@ public class DecoratedEvent implements Serializable
 
     public boolean isAlarm ()
     {
-        return ( isActive () && ( ( this.monitor.getStatus () == ConditionStatus.NOT_OK ) || ( this.monitor.getStatus () == ConditionStatus.NOT_OK_AKN ) || ( this.monitor.getStatus () == ConditionStatus.NOT_OK_NOT_AKN ) ) );
+        return isActive () && ( this.monitor.getStatus () == ConditionStatus.NOT_OK || this.monitor.getStatus () == ConditionStatus.NOT_OK_AKN || this.monitor.getStatus () == ConditionStatus.NOT_OK_NOT_AKN );
     }
 
     public boolean isAknRequired ()
     {
-        return ( isActive () && ( ( this.monitor.getStatus () == ConditionStatus.NOT_AKN ) || ( this.monitor.getStatus () == ConditionStatus.NOT_OK_NOT_AKN ) ) );
-    }
-
-    public void addPropertyChangeListener ( final PropertyChangeListener listener )
-    {
-        this.changes.addPropertyChangeListener ( listener );
-    }
-
-    public void removePropertyChangeListener ( final PropertyChangeListener listener )
-    {
-        this.changes.removePropertyChangeListener ( listener );
+        return isActive () && ( this.monitor.getStatus () == ConditionStatus.NOT_AKN || this.monitor.getStatus () == ConditionStatus.NOT_OK_NOT_AKN );
     }
 }
