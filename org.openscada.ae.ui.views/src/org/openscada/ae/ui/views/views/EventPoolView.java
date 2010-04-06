@@ -14,15 +14,22 @@ import org.openscada.ae.ConditionStatusInformation;
 import org.openscada.ae.Event;
 import org.openscada.ae.Event.Fields;
 import org.openscada.ae.client.EventListener;
+import org.openscada.ae.ui.views.config.ConfigurationHelper;
+import org.openscada.ae.ui.views.config.EventPoolViewConfiguration;
 import org.openscada.ae.ui.views.model.DecoratedEvent;
 import org.openscada.ae.ui.views.model.DecoratedMonitor;
 import org.openscada.ae.ui.views.model.MonitorData;
 import org.openscada.core.Variant;
 import org.openscada.core.client.ConnectionState;
 import org.openscada.core.subscription.SubscriptionState;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
 {
+
+    private final static Logger logger = LoggerFactory.getLogger ( EventPoolView.class );
+
     public static final String ID = "org.openscada.ae.ui.views.views.eventpool";
 
     private static final String POOL_ID = "all";
@@ -72,7 +79,49 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
         this.eventsTable = new EventViewTable ( this.getContentPane (), SWT.BORDER, this.pool );
         this.eventsTable.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, true, 1, 1 ) );
 
-        setPoolId ( POOL_ID );
+        // setPoolId ( POOL_ID );
+
+        loadConfiguration ();
+    }
+
+    private void loadConfiguration ()
+    {
+        final EventPoolViewConfiguration cfg = ConfigurationHelper.findEventPoolViewConfiguration ( getViewSite ().getSecondaryId () );
+        if ( cfg != null )
+        {
+            try
+            {
+                setConfiguration ( cfg );
+            }
+            catch ( final Exception e )
+            {
+                logger.warn ( "Failed to apply configuration", e );
+            }
+        }
+        else
+        {
+            // FIXME: implement
+        }
+    }
+
+    protected void setConfiguration ( final EventPoolViewConfiguration cfg ) throws Exception
+    {
+        setPoolId ( cfg.getEventPoolQueryId () );
+        setMonitorsId ( cfg.getMonitorQueryId () );
+        switch ( cfg.getConnectionType () )
+        {
+        case URI:
+            setConnectionUri ( cfg.getConnectionString () );
+            break;
+        case ID:
+            setConnectionId ( cfg.getConnectionString () );
+            break;
+        }
+
+        if ( cfg.getLabel () != null )
+        {
+            setPartName ( cfg.getLabel () );
+        }
     }
 
     /**
