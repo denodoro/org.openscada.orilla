@@ -28,4 +28,5 @@ Import-Package: org.openscada.ae,
  org.openscada.utils.filter;version="0.15.0",
  org.openscada.utils.lang,
  org.openscada.utils.propertyeditors,
+ org.openscada.utils.str,
  org.slf4j;version="1.5.8"
