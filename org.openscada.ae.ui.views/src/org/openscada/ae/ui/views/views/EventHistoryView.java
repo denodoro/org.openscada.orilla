@@ -115,7 +115,7 @@ public class EventHistoryView extends AbstractAlarmsEventsView
         this.searchAction.setText ( "Search" );
         this.searchAction.setToolTipText ( "search for events" );
         this.searchAction.setImageDescriptor ( ImageDescriptor.createFromURL ( Activator.getDefault ().getBundle ().getResource ( "icons/search.gif" ) ) );
-        this.searchAction.setDisabledImageDescriptor ( ImageDescriptor.createFromURL ( Activator.getDefault ().getBundle ().getResource ( "icons/saerch_disabled.gif" ) ) );
+        this.searchAction.setDisabledImageDescriptor ( ImageDescriptor.createFromURL ( Activator.getDefault ().getBundle ().getResource ( "icons/search_disabled.gif" ) ) );
         this.searchAction.setEnabled ( false );
         this.searchAction.setRunnable ( new Runnable () {
             public void run ()

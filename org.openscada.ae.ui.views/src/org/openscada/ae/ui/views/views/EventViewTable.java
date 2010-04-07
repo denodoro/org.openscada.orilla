@@ -1,7 +1,5 @@
 package org.openscada.ae.ui.views.views;
 
-import java.util.concurrent.atomic.AtomicReference;
-
 import org.eclipse.core.databinding.beans.BeanProperties;
 import org.eclipse.core.databinding.observable.set.WritableSet;
 import org.eclipse.core.databinding.property.Properties;
@@ -22,13 +20,13 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.openscada.ae.Event;
+import org.openscada.ae.ui.views.dialog.SearchType;
 import org.openscada.ae.ui.views.model.DecoratedEvent;
+import org.openscada.utils.lang.Pair;
 
 public class EventViewTable extends Composite
 {
     private static final String COLUMN_KEY = "org.openscada.ae.ui.views.views.EventViewTable" + ".column.key";
-
-    private final AtomicReference<TableViewer> tableRef = new AtomicReference<TableViewer> ( null );
 
     private final WritableSet events;
 
@@ -128,6 +126,10 @@ public class EventViewTable extends Composite
 
     private final Action commentAction;
 
+    private Pair<SearchType, String> filter;
+
+    private final TableViewer tableViewer;
+
     public EventViewTable ( final Composite parent, final int style, final WritableSet events, final Action ackAction, final Action commentAction )
     {
         super ( parent, style );
@@ -138,20 +140,19 @@ public class EventViewTable extends Composite
         FillLayout layout = new FillLayout ();
         this.setLayout ( layout );
 
-        final TableViewer tableViewer = new TableViewer ( this, SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION );
-        this.tableRef.set ( tableViewer );
-        createColumns ( tableViewer );
-        tableViewer.getTable ().setHeaderVisible ( true );
-        tableViewer.getTable ().setLinesVisible ( true );
-        tableViewer.setUseHashlookup ( true );
-        tableViewer.setSorter ( new Sorter ( Columns.SOURCE_TIMESTAMP, SWT.DOWN ) );
-        tableViewer.getTable ().setSortDirection ( SWT.DOWN );
-        tableViewer.getTable ().setMenu ( createContextMenu ( tableViewer.getTable () ) );
+        this.tableViewer = new TableViewer ( this, SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION );
+        createColumns ( this.tableViewer );
+        this.tableViewer.getTable ().setHeaderVisible ( true );
+        this.tableViewer.getTable ().setLinesVisible ( true );
+        this.tableViewer.setUseHashlookup ( true );
+        this.tableViewer.setSorter ( new Sorter ( Columns.SOURCE_TIMESTAMP, SWT.DOWN ) );
+        this.tableViewer.getTable ().setSortDirection ( SWT.DOWN );
+        this.tableViewer.getTable ().setMenu ( createContextMenu ( this.tableViewer.getTable () ) );
 
         ObservableSetContentProvider contentProvider = new ObservableSetContentProvider ();
-        tableViewer.setContentProvider ( contentProvider );
-        tableViewer.setLabelProvider ( new EventLabelProvider ( Properties.observeEach ( contentProvider.getKnownElements (), BeanProperties.values ( new String[] { "id", "monitor" } ) ) ) );
-        tableViewer.setInput ( this.events );
+        this.tableViewer.setContentProvider ( contentProvider );
+        this.tableViewer.setLabelProvider ( new EventLabelProvider ( Properties.observeEach ( contentProvider.getKnownElements (), BeanProperties.values ( new String[] { "id", "monitor" } ) ) ) );
+        this.tableViewer.setInput ( this.events );
     }
 
     private Menu createContextMenu ( final Control parent )
@@ -177,7 +178,7 @@ public class EventViewTable extends Composite
         if ( this.commentAction != null )
         {
             MenuItem commentMenuItem = new MenuItem ( contextMenu, SWT.NONE );
-            commentMenuItem.setText ( "Set Comment" );
+            commentMenuItem.setText ( this.commentAction.getText () );
             commentMenuItem.setImage ( this.commentAction.getImageDescriptor ().createImage () );
             commentMenuItem.addSelectionListener ( new SelectionAdapter () {
                 @Override
@@ -236,10 +237,28 @@ public class EventViewTable extends Composite
 
     public DecoratedEvent selectedEvent ()
     {
-        if ( this.tableRef.get ().getTable ().getSelectionCount () == 0 )
+        if ( this.tableViewer.getTable ().getSelectionCount () == 0 )
         {
             return null;
         }
-        return (DecoratedEvent)this.tableRef.get ().getTable ().getSelection ()[0].getData ();
+        return (DecoratedEvent)this.tableViewer.getTable ().getSelection ()[0].getData ();
+    }
+
+    public void removeFilter ()
+    {
+        this.filter = null;
+        this.tableViewer.resetFilters ();
+    }
+
+    public void setFilter ( final Pair<SearchType, String> filter )
+    {
+        this.filter = filter;
+        this.tableViewer.resetFilters ();
+        this.tableViewer.addFilter ( new EventViewerFilter ( filter.second ) );
+    }
+
+    public Pair<SearchType, String> getFilter ()
+    {
+        return this.filter;
     }
 }

@@ -218,7 +218,7 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
      */
     protected boolean isConnected ()
     {
-        return this.connectionService != null && this.connectionService.getConnection () != null && this.connectionService.getConnection ().getState () == ConnectionState.BOUND;
+        return ( this.connectionService != null ) && ( this.connectionService.getConnection () != null ) && ( this.connectionService.getConnection ().getState () == ConnectionState.BOUND );
     }
 
     private void reInitializeConnection ( final String connectionId, final String connectionUri ) throws Exception
@@ -309,7 +309,7 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
         if ( treeSelection.getFirstElement () instanceof ConnectionHolder )
         {
             final ConnectionHolder connectionHolder = (ConnectionHolder)treeSelection.getFirstElement ();
-            if ( connectionHolder.getConnectionService ().getConnection () != null && connectionHolder.getConnectionService ().getConnection () instanceof Connection )
+            if ( ( connectionHolder.getConnectionService ().getConnection () != null ) && ( connectionHolder.getConnectionService ().getConnection () instanceof Connection ) )
             {
                 try
                 {
@@ -324,7 +324,7 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
         else if ( treeSelection.getFirstElement () instanceof BrowserEntryBean )
         {
             final BrowserEntryBean browserEntryBean = (BrowserEntryBean)treeSelection.getFirstElement ();
-            if ( browserEntryBean.getConnection () != null && browserEntryBean.getConnection ().getConnection () != null )
+            if ( ( browserEntryBean.getConnection () != null ) && ( browserEntryBean.getConnection ().getConnection () != null ) )
             {
                 try
                 {
@@ -399,9 +399,10 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
     protected CustomizableAction createCommentAction ( final Runnable runnable )
     {
         CustomizableAction action = new CustomizableAction ();
-        action.setText ( "Set Comment" );
-        action.setToolTipText ( "Set Comment" );
-        action.setImageDescriptor ( ImageDescriptor.createFromURL ( Activator.getDefault ().getBundle ().getResource ( "icons/acknowledge.gif" ) ) );
+        action.setText ( "Set Comment (NOT IMPLEMENTED!)" );
+        action.setToolTipText ( "set or change comment for selected event" );
+        action.setDescription ( "Set or change comment for currently selected event." );
+        action.setImageDescriptor ( ImageDescriptor.createFromURL ( Activator.getDefault ().getBundle ().getResource ( "icons/event_comment.gif" ) ) );
         action.setRunnable ( runnable );
         return action;
     }

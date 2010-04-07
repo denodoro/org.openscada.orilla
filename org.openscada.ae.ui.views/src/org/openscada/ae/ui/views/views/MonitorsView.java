@@ -50,7 +50,7 @@ public class MonitorsView extends MonitorSubscriptionAlarmsEventsView
         }
         else
         {
-            // FIXME: implement
+            logger.info ( "no configuration found" );
         }
     }
 
@@ -85,7 +85,7 @@ public class MonitorsView extends MonitorSubscriptionAlarmsEventsView
     @Override
     protected void acknowledge ()
     {
-        if ( this.getConnection () != null && this.getConnection ().getState () == ConnectionState.BOUND )
+        if ( ( this.getConnection () != null ) && ( this.getConnection ().getState () == ConnectionState.BOUND ) )
         {
             final ConditionStatusInformation monitor = this.monitorsTable.selectedMonitor ().getMonitor ();
             this.getConnection ().acknowledge ( monitor.getId (), null );

@@ -6,8 +6,10 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.databinding.observable.set.WritableSet;
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.dialogs.InputDialog;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -16,15 +18,19 @@ import org.openscada.ae.ConditionStatusInformation;
 import org.openscada.ae.Event;
 import org.openscada.ae.Event.Fields;
 import org.openscada.ae.client.EventListener;
+import org.openscada.ae.ui.views.Activator;
 import org.openscada.ae.ui.views.CustomizableAction;
 import org.openscada.ae.ui.views.config.ConfigurationHelper;
 import org.openscada.ae.ui.views.config.EventPoolViewConfiguration;
+import org.openscada.ae.ui.views.dialog.EventHistorySearchDialog;
+import org.openscada.ae.ui.views.dialog.SearchType;
 import org.openscada.ae.ui.views.model.DecoratedEvent;
 import org.openscada.ae.ui.views.model.DecoratedMonitor;
 import org.openscada.ae.ui.views.model.MonitorData;
 import org.openscada.core.Variant;
 import org.openscada.core.client.ConnectionState;
 import org.openscada.core.subscription.SubscriptionState;
+import org.openscada.utils.lang.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,8 +40,6 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
     private final static Logger logger = LoggerFactory.getLogger ( EventPoolView.class );
 
     public static final String ID = "org.openscada.ae.ui.views.views.eventpool";
-
-    private static final String POOL_ID = "all";
 
     private String poolId;
 
@@ -79,25 +83,51 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
 
         this.pool = new WritableSet ( SWTObservables.getRealm ( parent.getDisplay () ) );
 
-        CustomizableAction commentAction = createCommentAction ( new Runnable () {
+        final CustomizableAction commentAction = createCommentAction ( null );
+        commentAction.setRunnable ( new Runnable () {
             public void run ()
             {
                 DecoratedEvent event = EventPoolView.this.eventsTable.selectedEvent ();
                 Variant comment = event.getEvent ().getField ( Fields.COMMENT );
-                InputDialog dlg = new InputDialog ( parent.getShell (), "Set Comment (NOT IMPLEMENTED)", "Set or change comment for selected event", comment == null ? "" : comment.asString ( "" ), null );
+                InputDialog dlg = new InputDialog ( parent.getShell (), commentAction.getText (), commentAction.getDescription (), comment == null ? "" : comment.asString ( "" ), null );
                 if ( dlg.open () == Window.OK )
                 {
                     comment = new Variant ( dlg.getValue () );
                     Event updatedEvent = Event.create ().event ( event.getEvent () ).attribute ( Fields.COMMENT, comment ).build ();
-                    System.err.println ( "comment updated " + updatedEvent );
+                    // FIXME: implement "set comment" in client interface
+                    logger.info ( "comment updated " + updatedEvent );
                 }
             }
         } );
 
+        final CustomizableAction setFilterAction = new CustomizableAction ();
+        setFilterAction.setText ( "Filter" );
+        setFilterAction.setToolTipText ( "Set/Modify Filter" );
+        setFilterAction.setImageDescriptor ( ImageDescriptor.createFromURL ( Activator.getDefault ().getBundle ().getResource ( "icons/search.gif" ) ) );
+        setFilterAction.setRunnable ( new Runnable () {
+            public void run ()
+            {
+                Pair<SearchType, String> result = EventHistorySearchDialog.open ( parent.getShell (), EventPoolView.this.eventsTable.getFilter () );
+                EventPoolView.this.eventsTable.setFilter ( result );
+            }
+        } );
+        final CustomizableAction removeFilterAction = new CustomizableAction ();
+        removeFilterAction.setText ( "Remove Filter" );
+        removeFilterAction.setToolTipText ( "Remove Filter" );
+        removeFilterAction.setImageDescriptor ( ImageDescriptor.createFromURL ( Activator.getDefault ().getBundle ().getResource ( "icons/clear_search.gif" ) ) );
+        removeFilterAction.setRunnable ( new Runnable () {
+            public void run ()
+            {
+                EventPoolView.this.eventsTable.removeFilter ();
+            }
+        } );
+
+        final IToolBarManager toolBarManager = getViewSite ().getActionBars ().getToolBarManager ();
+        toolBarManager.add ( setFilterAction );
+        toolBarManager.add ( removeFilterAction );
+
         this.eventsTable = new EventViewTable ( this.getContentPane (), SWT.BORDER, this.pool, this.ackAction, commentAction );
         this.eventsTable.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, true, 1, 1 ) );
-
-        // setPoolId ( POOL_ID );
 
         loadConfiguration ();
     }
@@ -118,7 +148,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
         }
         else
         {
-            // FIXME: implement
+            logger.info ( "no configuration found" );
         }
     }
 
