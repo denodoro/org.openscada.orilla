@@ -198,7 +198,7 @@ public class QueryControlView extends QueryViewPart implements PropertyChangeLis
 
         // action button
 
-        this.requestButton = new Button ( group, SWT.BORDER | SWT.PUSH );
+        this.requestButton = new Button ( group, SWT.PUSH );
         this.requestButton.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, false, 2, 1 ) );
         this.requestButton.setText ( Messages.QueryControlView_Request_Button_Text );
         this.requestButton.addSelectionListener ( new SelectionAdapter () {
@@ -215,7 +215,7 @@ public class QueryControlView extends QueryViewPart implements PropertyChangeLis
     private void createControlButton ( final Composite compControl, final String label, final int secondsOffset, final int secondsScale )
     {
         Button button;
-        button = new Button ( compControl, SWT.BORDER | SWT.PUSH );
+        button = new Button ( compControl, SWT.PUSH );
         button.setText ( label );
         button.addSelectionListener ( new SelectionAdapter () {
             @Override
