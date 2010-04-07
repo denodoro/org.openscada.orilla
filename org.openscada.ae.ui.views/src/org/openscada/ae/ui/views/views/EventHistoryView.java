@@ -125,6 +125,14 @@ public class EventHistoryView extends AbstractAlarmsEventsView
             }
         } );
 
+        // comment Action
+        CustomizableAction commentAction = createCommentAction ( new Runnable () {
+            public void run ()
+            {
+                System.err.println ( "comment" );
+            }
+        } );
+
         IToolBarManager toolBarManager = getViewSite ().getActionBars ().getToolBarManager ();
         toolBarManager.add ( this.pauseAction );
         toolBarManager.add ( this.resumeAction );
@@ -135,7 +143,7 @@ public class EventHistoryView extends AbstractAlarmsEventsView
 
         this.events = new WritableSet ( SWTObservables.getRealm ( parent.getDisplay () ) );
 
-        this.eventsTable = new EventViewTable ( getContentPane (), SWT.BORDER, this.events );
+        this.eventsTable = new EventViewTable ( getContentPane (), SWT.BORDER, this.events, null, commentAction );
         this.eventsTable.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, true, 1, 1 ) );
     }
 

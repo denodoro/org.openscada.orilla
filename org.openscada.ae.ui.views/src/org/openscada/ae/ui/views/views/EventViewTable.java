@@ -5,6 +5,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.eclipse.core.databinding.beans.BeanProperties;
 import org.eclipse.core.databinding.observable.set.WritableSet;
 import org.eclipse.core.databinding.property.Properties;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.databinding.viewers.ObservableSetContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
@@ -15,6 +16,9 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.openscada.ae.Event;
@@ -120,27 +124,70 @@ public class EventViewTable extends Composite
         }
     }
 
-    public EventViewTable ( final Composite parent, final int style, final WritableSet events )
+    private final Action ackAction;
+
+    private final Action commentAction;
+
+    public EventViewTable ( final Composite parent, final int style, final WritableSet events, final Action ackAction, final Action commentAction )
     {
         super ( parent, style );
+        this.ackAction = ackAction;
+        this.commentAction = commentAction;
         this.events = events;
 
         FillLayout layout = new FillLayout ();
         this.setLayout ( layout );
 
-        final TableViewer table = new TableViewer ( this, SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION );
-        this.tableRef.set ( table );
-        createColumns ( table );
-        table.getTable ().setHeaderVisible ( true );
-        table.getTable ().setLinesVisible ( true );
-        table.setUseHashlookup ( true );
-        table.setSorter ( new Sorter ( Columns.SOURCE_TIMESTAMP, SWT.DOWN ) );
-        table.getTable ().setSortDirection ( SWT.DOWN );
+        final TableViewer tableViewer = new TableViewer ( this, SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION );
+        this.tableRef.set ( tableViewer );
+        createColumns ( tableViewer );
+        tableViewer.getTable ().setHeaderVisible ( true );
+        tableViewer.getTable ().setLinesVisible ( true );
+        tableViewer.setUseHashlookup ( true );
+        tableViewer.setSorter ( new Sorter ( Columns.SOURCE_TIMESTAMP, SWT.DOWN ) );
+        tableViewer.getTable ().setSortDirection ( SWT.DOWN );
+        tableViewer.getTable ().setMenu ( createContextMenu ( tableViewer.getTable () ) );
 
         ObservableSetContentProvider contentProvider = new ObservableSetContentProvider ();
-        table.setContentProvider ( contentProvider );
-        table.setLabelProvider ( new EventLabelProvider ( Properties.observeEach ( contentProvider.getKnownElements (), BeanProperties.values ( new String[] { "id", "monitor" } ) ) ) );
-        table.setInput ( this.events );
+        tableViewer.setContentProvider ( contentProvider );
+        tableViewer.setLabelProvider ( new EventLabelProvider ( Properties.observeEach ( contentProvider.getKnownElements (), BeanProperties.values ( new String[] { "id", "monitor" } ) ) ) );
+        tableViewer.setInput ( this.events );
+    }
+
+    private Menu createContextMenu ( final Control parent )
+    {
+        if ( ( this.ackAction == null ) && ( this.commentAction == null ) )
+        {
+            return null;
+        }
+        Menu contextMenu = new Menu ( parent );
+        if ( this.ackAction != null )
+        {
+            MenuItem ackMenuItem = new MenuItem ( contextMenu, SWT.NONE );
+            ackMenuItem.setText ( "Acknowledge" );
+            ackMenuItem.setImage ( this.ackAction.getImageDescriptor ().createImage () );
+            ackMenuItem.addSelectionListener ( new SelectionAdapter () {
+                @Override
+                public void widgetSelected ( final SelectionEvent e )
+                {
+                    EventViewTable.this.ackAction.run ();
+                }
+            } );
+        }
+        if ( this.commentAction != null )
+        {
+            MenuItem commentMenuItem = new MenuItem ( contextMenu, SWT.NONE );
+            commentMenuItem.setText ( "Set Comment" );
+            commentMenuItem.setImage ( this.commentAction.getImageDescriptor ().createImage () );
+            commentMenuItem.addSelectionListener ( new SelectionAdapter () {
+                @Override
+                public void widgetSelected ( final SelectionEvent e )
+                {
+                    EventViewTable.this.commentAction.run ();
+                }
+            } );
+        }
+        return contextMenu;
     }
 
     public void clear ()

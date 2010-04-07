@@ -1,5 +1,6 @@
 package org.openscada.ae.ui.views.views;
 
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.swt.SWT;
@@ -18,6 +19,7 @@ import org.openscada.ae.client.Connection;
 import org.openscada.ae.connection.provider.ConnectionService;
 import org.openscada.ae.ui.connection.data.BrowserEntryBean;
 import org.openscada.ae.ui.views.Activator;
+import org.openscada.ae.ui.views.CustomizableAction;
 import org.openscada.core.ConnectionInformation;
 import org.openscada.core.client.ConnectionState;
 import org.openscada.core.client.ConnectionStateListener;
@@ -392,5 +394,15 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
     public void dispose ()
     {
         removeSelectionListener ();
+    }
+
+    protected CustomizableAction createCommentAction ( final Runnable runnable )
+    {
+        CustomizableAction action = new CustomizableAction ();
+        action.setText ( "Set Comment" );
+        action.setToolTipText ( "Set Comment" );
+        action.setImageDescriptor ( ImageDescriptor.createFromURL ( Activator.getDefault ().getBundle ().getResource ( "icons/acknowledge.gif" ) ) );
+        action.setRunnable ( runnable );
+        return action;
     }
 }

@@ -7,6 +7,8 @@ import java.util.Set;
 
 import org.eclipse.core.databinding.observable.set.WritableSet;
 import org.eclipse.jface.databinding.swt.SWTObservables;
+import org.eclipse.jface.dialogs.InputDialog;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -14,6 +16,7 @@ import org.openscada.ae.ConditionStatusInformation;
 import org.openscada.ae.Event;
 import org.openscada.ae.Event.Fields;
 import org.openscada.ae.client.EventListener;
+import org.openscada.ae.ui.views.CustomizableAction;
 import org.openscada.ae.ui.views.config.ConfigurationHelper;
 import org.openscada.ae.ui.views.config.EventPoolViewConfiguration;
 import org.openscada.ae.ui.views.model.DecoratedEvent;
@@ -76,7 +79,22 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
 
         this.pool = new WritableSet ( SWTObservables.getRealm ( parent.getDisplay () ) );
 
-        this.eventsTable = new EventViewTable ( this.getContentPane (), SWT.BORDER, this.pool );
+        CustomizableAction commentAction = createCommentAction ( new Runnable () {
+            public void run ()
+            {
+                DecoratedEvent event = EventPoolView.this.eventsTable.selectedEvent ();
+                Variant comment = event.getEvent ().getField ( Fields.COMMENT );
+                InputDialog dlg = new InputDialog ( parent.getShell (), "Set Comment (NOT IMPLEMENTED)", "Set or change comment for selected event", comment == null ? "" : comment.asString ( "" ), null );
+                if ( dlg.open () == Window.OK )
+                {
+                    comment = new Variant ( dlg.getValue () );
+                    Event updatedEvent = Event.create ().event ( event.getEvent () ).attribute ( Fields.COMMENT, comment ).build ();
+                    System.err.println ( "comment updated " + updatedEvent );
+                }
+            }
+        } );
+
+        this.eventsTable = new EventViewTable ( this.getContentPane (), SWT.BORDER, this.pool, this.ackAction, commentAction );
         this.eventsTable.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, true, 1, 1 ) );
 
         // setPoolId ( POOL_ID );
@@ -137,7 +155,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
     protected void subscribe ()
     {
         super.subscribe ();
-        if ( this.getConnection () != null && this.poolId != null )
+        if ( ( this.getConnection () != null ) && ( this.poolId != null ) )
         {
             this.eventPoolListener = new EventListener () {
                 public void statusChanged ( final SubscriptionState state )
@@ -158,7 +176,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
     protected void unSubscribe ()
     {
         super.unSubscribe ();
-        if ( this.getConnection () != null && this.poolId != null )
+        if ( ( this.getConnection () != null ) && ( this.poolId != null ) )
         {
             if ( this.eventPoolListener != null )
             {
@@ -181,7 +199,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
                 for ( final DecoratedEvent event : decoratedEvents )
                 {
                     final Variant source = event.getEvent ().getField ( Fields.SOURCE );
-                    if ( source != null && !source.isNull () && source.asString ( "" ).length () > 0 )
+                    if ( ( source != null ) && !source.isNull () && ( source.asString ( "" ).length () > 0 ) )
                     {
                         Set<DecoratedEvent> d = EventPoolView.this.poolMap.get ( source.asString ( "" ) );
                         if ( d == null )
@@ -201,13 +219,13 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
     public void dataChanged ( final ConditionStatusInformation[] addedOrUpdated, final String[] removed )
     {
         super.dataChanged ( addedOrUpdated, removed );
-        getSite ().getShell ().getDisplay ().asyncExec ( new Runnable () {
+        if ( addedOrUpdated == null )
+        {
+            return;
+        }
+        EventPoolView.this.pool.getRealm ().asyncExec ( new Runnable () {
             public void run ()
             {
-                if ( addedOrUpdated == null )
-                {
-                    return;
-                }
                 EventPoolView.this.pool.addAll ( decorateEvents ( addedOrUpdated ) );
             }
         } );
@@ -238,7 +256,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
         {
             final Variant source = event.getField ( Fields.SOURCE );
             final MonitorData monitor;
-            if ( source != null && !source.isNull () && source.isString () )
+            if ( ( source != null ) && !source.isNull () && source.isString () )
             {
                 final DecoratedMonitor decoratedMonitor = (DecoratedMonitor)this.monitorsMap.get ( source.asString ( "" ) );
                 if ( decoratedMonitor != null )
@@ -279,7 +297,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
     @Override
     protected void acknowledge ()
     {
-        if ( this.getConnection () != null && this.getConnection ().getState () == ConnectionState.BOUND )
+        if ( ( this.getConnection () != null ) && ( this.getConnection ().getState () == ConnectionState.BOUND ) )
         {
             final DecoratedEvent event = this.eventsTable.selectedEvent ();
             if ( event.getMonitor () != null )
