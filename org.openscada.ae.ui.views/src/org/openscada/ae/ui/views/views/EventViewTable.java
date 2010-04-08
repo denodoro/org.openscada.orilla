@@ -252,8 +252,17 @@ public class EventViewTable extends Composite
 
     public void setFilter ( final Pair<SearchType, String> filter )
     {
-        this.filter = filter;
+        // filter hasn't changed
+        if ( filter == null )
+        {
+            return;
+        }
+        if ( filter.equals ( this.filter ) )
+        {
+            return;
+        }
         this.tableViewer.resetFilters ();
+        this.filter = filter;
         this.tableViewer.addFilter ( new EventViewerFilter ( filter.second ) );
     }
 

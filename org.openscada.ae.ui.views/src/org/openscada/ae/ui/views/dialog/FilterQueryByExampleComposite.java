@@ -2,6 +2,9 @@ package org.openscada.ae.ui.views.dialog;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,6 +33,7 @@ import org.openscada.utils.filter.FilterParser;
 import org.openscada.utils.filter.Operator;
 import org.openscada.utils.lang.Pair;
 import org.openscada.utils.propertyeditors.DateEditor;
+import org.openscada.utils.str.StringHelper;
 
 public class FilterQueryByExampleComposite extends Composite
 {
@@ -199,7 +203,7 @@ public class FilterQueryByExampleComposite extends Composite
             FilterAssertion assertion = null;
             if ( this.textText.getText ().contains ( "*" ) )
             {
-                assertion = new FilterAssertion ( this.field, Assertion.SUBSTRING, this.textText.getText ().split ( "\\*" ) );
+                assertion = new FilterAssertion ( this.field, Assertion.SUBSTRING, toCollection ( this.textText.getText () ) );
             }
             else
             {
@@ -412,7 +416,15 @@ public class FilterQueryByExampleComposite extends Composite
         if ( fieldEntry instanceof TextFieldEntry )
         {
             VariantEditor ve = new VariantEditor ();
-            ve.setAsText ( (String)filter.getValue () );
+            // special case if filter is substring
+            if ( filter.getValue () instanceof String )
+            {
+                ve.setAsText ( (String)filter.getValue () );
+            }
+            else if ( filter.getValue () instanceof Collection<?> )
+            {
+                ve.setAsText ( StringHelper.join ( (Collection<?>)filter.getValue (), "*" ) );
+            }
             Variant value = (Variant)ve.getValue ();
             ( (TextFieldEntry)fieldEntry ).setValue ( value.toLabel ( "" ) );
             ( (TextFieldEntry)fieldEntry ).setNegation ( negate );
@@ -445,5 +457,16 @@ public class FilterQueryByExampleComposite extends Composite
             }
         }
         return filter;
+    }
+
+    private static Collection<String> toCollection ( final String text )
+    {
+        ArrayList<String> result = new ArrayList<String> ();
+        result.addAll ( Arrays.asList ( text.split ( "\\*" ) ) );
+        if ( text.endsWith ( "*" ) )
+        {
+            result.add ( "" );
+        }
+        return result;
     }
 }
