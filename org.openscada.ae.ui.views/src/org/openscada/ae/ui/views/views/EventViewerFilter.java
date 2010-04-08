@@ -2,7 +2,8 @@ package org.openscada.ae.ui.views.views;
 
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
-import org.openscada.ae.ui.views.internal.EventMatcher;
+import org.openscada.ae.filter.EventMatcher;
+import org.openscada.ae.filter.internal.EventMatcherImpl;
 import org.openscada.ae.ui.views.model.DecoratedEvent;
 
 public class EventViewerFilter extends ViewerFilter
@@ -12,7 +13,7 @@ public class EventViewerFilter extends ViewerFilter
     public EventViewerFilter ( final String filter )
     {
         System.err.println ( "new filter was set with " + filter );
-        this.eventMatcher = new EventMatcher ( filter );
+        this.eventMatcher = new EventMatcherImpl ( filter );
     }
 
     @Override
@@ -36,5 +37,4 @@ public class EventViewerFilter extends ViewerFilter
         }
         return false;
     }
-
 }

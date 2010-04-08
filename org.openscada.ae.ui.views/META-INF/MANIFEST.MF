@@ -18,6 +18,8 @@ Bundle-ActivationPolicy: lazy
 Import-Package: org.openscada.ae,
  org.openscada.ae.client,
  org.openscada.ae.connection.provider,
+ org.openscada.ae.filter,
+ org.openscada.ae.filter.internal,
  org.openscada.ae.ui.connection.data,
  org.openscada.core;version="0.15.0",
  org.openscada.core.client;version="0.14.0",
