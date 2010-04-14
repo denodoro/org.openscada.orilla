@@ -91,6 +91,7 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
 
     private StyleInformation baseStyle;
 
+    @Override
     public void createPart ( final Composite parent )
     {
         this.baseStyle = new StyleInformation ( null, ColorDescriptor.createFrom ( ColorConstants.lightGray ), null );
@@ -99,6 +100,7 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
         super.createPart ( parent );
     }
 
+    @Override
     public IFigure createRoot ()
     {
         final Figure baseFigure = new Figure ();
@@ -182,11 +184,13 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
 
         this.rmvRect.addMouseMotionListener ( new MouseMotionListener.Stub () {
 
+            @Override
             public void mouseEntered ( final MouseEvent me )
             {
                 ManualOverride.this.rmvRect.setLineWidth ( 2 );
             }
 
+            @Override
             public void mouseExited ( final MouseEvent me )
             {
                 ManualOverride.this.rmvRect.setLineWidth ( 1 );
@@ -225,7 +229,17 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
 
     protected void handleSetRemoteManualValue ()
     {
-        final Variant value = new VariantEntryDialog ( this.shell ).getValue ();
+        Variant var = null;
+        try
+        {
+            var = this.value.getAttributes ().get ( "remote.manual.value" );
+        }
+        catch ( final Exception e )
+        {
+            var = null; //just call the editor with his default configuration
+        }
+
+        final Variant value = new VariantEntryDialog ( this.shell, var ).getValue ();
         if ( value != null )
         {
             final Map<String, Variant> attributes = new HashMap<String, Variant> ();
@@ -251,11 +265,13 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
 
         this.mvRect.addMouseMotionListener ( new MouseMotionListener.Stub () {
 
+            @Override
             public void mouseEntered ( final MouseEvent me )
             {
                 ManualOverride.this.mvRect.setLineWidth ( 2 );
             }
 
+            @Override
             public void mouseExited ( final MouseEvent me )
             {
                 ManualOverride.this.mvRect.setLineWidth ( 1 );
@@ -328,11 +344,13 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
 
         this.rpvRect.addMouseMotionListener ( new MouseMotionListener.Stub () {
 
+            @Override
             public void mouseEntered ( final MouseEvent me )
             {
                 ManualOverride.this.rpvRect.setLineWidth ( 2 );
             }
 
+            @Override
             public void mouseExited ( final MouseEvent me )
             {
                 ManualOverride.this.rpvRect.setLineWidth ( 1 );
@@ -376,11 +394,13 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
 
         this.pvRect.addMouseMotionListener ( new MouseMotionListener.Stub () {
 
+            @Override
             public void mouseEntered ( final MouseEvent me )
             {
                 ManualOverride.this.pvRect.setLineWidth ( 2 );
             }
 
+            @Override
             public void mouseExited ( final MouseEvent me )
             {
                 ManualOverride.this.pvRect.setLineWidth ( 1 );
@@ -410,7 +430,15 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
      */
     protected void enterManualValue ()
     {
-        final VariantEntryDialog dlg = new VariantEntryDialog ( this.shell );
+        final VariantEntryDialog dlg;
+        if ( this.value != null )
+        {
+            dlg = new VariantEntryDialog ( this.shell, this.value.getValue () );
+        }
+        else
+        {
+            dlg = new VariantEntryDialog ( this.shell );
+        }
         this.manualValue = dlg.getValue ();
     }
 

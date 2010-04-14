@@ -27,14 +27,18 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.openscada.core.NotConvertableException;
+import org.openscada.core.NullValueException;
 import org.openscada.core.Variant;
 import org.openscada.da.client.base.browser.ValueType;
 
@@ -48,10 +52,20 @@ public class VariantEntryDialog extends TitleAreaDialog
 
     private Combo valueTypeSelect;
 
+    private Variant variant;
+
+    private Button buttonTrue;
+
     public VariantEntryDialog ( final Shell parentShell )
     {
         super ( parentShell );
         setBlockOnOpen ( true );
+    }
+
+    public VariantEntryDialog ( final Shell parentShell, final Variant variant )
+    {
+        this ( parentShell );
+        this.variant = variant;
     }
 
     public Variant getValue ()
@@ -81,6 +95,40 @@ public class VariantEntryDialog extends TitleAreaDialog
 
         comp.setLayout ( new GridLayout ( 2, false ) );
 
+        if ( this.variant != null )
+        {
+            if ( this.variant.isBoolean () )
+            {
+                new Label ( comp, SWT.NONE ).setText ( "Boolean Value:" );
+                this.buttonTrue = new Button ( comp, SWT.CHECK );
+                this.buttonTrue.setText ( "set true" );
+                this.buttonTrue.addSelectionListener ( new SelectionListener () {
+                    public void widgetSelected ( final SelectionEvent arg0 )
+                    {
+                        if ( VariantEntryDialog.this.buttonTrue.getSelection () )
+                        {
+                            if ( VariantEntryDialog.this.valueText != null )
+                            {
+                                VariantEntryDialog.this.valueText.setText ( "true" );
+                            }
+                        }
+                        else
+                        {
+                            if ( VariantEntryDialog.this.valueText != null )
+                            {
+                                VariantEntryDialog.this.valueText.setText ( "false" );
+                            }
+                        }
+                    }
+
+                    public void widgetDefaultSelected ( final SelectionEvent arg0 )
+                    {
+                    }
+                } );
+            }
+        }
+
+        new Label ( comp, SWT.NONE ).setText ( "Value:" );
         this.valueText = new Text ( comp, SWT.BORDER | SWT.MULTI );
         this.valueText.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, true, 1, 1 ) );
         this.valueText.addModifyListener ( new ModifyListener () {
@@ -91,7 +139,9 @@ public class VariantEntryDialog extends TitleAreaDialog
             }
         } );
 
+        new Label ( comp, SWT.NONE ).setText ( "Type:" );
         this.valueTypeSelect = new Combo ( comp, SWT.DROP_DOWN | SWT.READ_ONLY );
+        this.valueTypeSelect.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, false, 1, 1 ) );
         for ( final ValueType vt : ValueType.values () )
         {
             this.valueTypeSelect.add ( vt.label (), vt.ordinal () );
@@ -103,11 +153,52 @@ public class VariantEntryDialog extends TitleAreaDialog
                 VariantEntryDialog.this.dialogChanged ();
             }
         } );
-        this.valueTypeSelect.select ( ValueType.STRING.ordinal () );
-        this.valueTypeSelect.setLayoutData ( new GridData ( SWT.BEGINNING, SWT.BEGINNING, false, false, 1, 1 ) );
+        try
+        {
+            if ( !this.variant.isNull () )
+            {
+                this.valueTypeSelect.select ( ValueType.fromVariantType ( this.variant.getType () ).ordinal () );
+            }
+            else
+            {
+                this.valueTypeSelect.select ( ValueType.STRING.ordinal () );
+            }
+        }
+        catch ( final Exception e )
+        {
+            this.valueTypeSelect.select ( ValueType.STRING.ordinal () );
+        }
 
+        new Label ( comp, SWT.NONE ).setText ( "Converted text:" );
         this.convertText = new Text ( comp, SWT.BORDER | SWT.MULTI | SWT.READ_ONLY );
-        this.convertText.setLayoutData ( new GridData ( GridData.FILL, GridData.FILL, true, true, 2, 1 ) );
+        this.convertText.setLayoutData ( new GridData ( GridData.FILL, GridData.FILL, true, true, 1, 1 ) );
+
+        //at last fill final the dialogs fields final with information
+
+        if ( this.buttonTrue != null )
+        {
+            try
+            {
+                this.buttonTrue.setSelection ( this.variant.asBoolean () );
+            }
+            catch ( final NullPointerException e )
+            {
+                this.buttonTrue.setSelection ( false );
+            }
+        }
+
+        if ( this.variant != null )
+        {
+            try
+            {
+                this.valueText.setText ( this.variant.asString () );
+                this.valueText.selectAll ();
+            }
+            catch ( final NullValueException e1 )
+            {
+                //don't show any text
+            }
+        }
 
         return comp;
     }

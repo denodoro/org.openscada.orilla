@@ -323,6 +323,7 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
     protected void attachActivate ( final Figure figure, final String tag )
     {
         figure.addMouseListener ( new MouseListener.Stub () {
+            @Override
             public void mouseReleased ( final MouseEvent event )
             {
                 GenericLevelPresets.this.activate ( tag );
@@ -362,7 +363,15 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
     {
         try
         {
-            final Variant value = new VariantEntryDialog ( this.shell ).getValue ();
+            final Variant value;
+            if ( this.value != null )
+            {
+                value = new VariantEntryDialog ( this.shell, this.value.getValue () ).getValue ();
+            }
+            else
+            {
+                value = new VariantEntryDialog ( this.shell ).getValue ();
+            }
 
             if ( value != null )
             {
