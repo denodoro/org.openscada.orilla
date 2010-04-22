@@ -1,6 +1,8 @@
 package org.openscada.ae.ui.views.views;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.core.databinding.beans.BeanProperties;
@@ -22,6 +24,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 import org.openscada.ae.ConditionStatusInformation;
 import org.openscada.ae.ui.views.model.DecoratedMonitor;
 import org.openscada.core.Variant;
@@ -154,7 +157,7 @@ public class MonitorsViewTable extends Composite
         FillLayout layout = new FillLayout ();
         this.setLayout ( layout );
 
-        final TableViewer tableViewer = new TableViewer ( this, SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION );
+        final TableViewer tableViewer = new TableViewer ( this, SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.MULTI );
         this.tableRef.set ( tableViewer );
         createColumns ( tableViewer );
         tableViewer.getTable ().setHeaderVisible ( true );
@@ -245,13 +248,21 @@ public class MonitorsViewTable extends Composite
         this.monitors.clear ();
     }
 
-    public DecoratedMonitor selectedMonitor ()
+    public List<DecoratedMonitor> selectedMonitors ()
     {
         if ( this.tableRef.get ().getTable ().getSelectionCount () == 0 )
         {
-            return null;
+            return new ArrayList<DecoratedMonitor> ();
         }
-        return (DecoratedMonitor)this.tableRef.get ().getTable ().getSelection ()[0].getData ();
+        List<DecoratedMonitor> result = new ArrayList<DecoratedMonitor> ();
+        for ( TableItem row : this.tableRef.get ().getTable ().getSelection () )
+        {
+            if ( row.getData () instanceof DecoratedMonitor )
+            {
+                result.add ( (DecoratedMonitor)row.getData () );
+            }
+        }
+        return result;
     }
 
     /**

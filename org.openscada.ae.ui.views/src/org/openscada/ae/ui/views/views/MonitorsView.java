@@ -3,9 +3,9 @@ package org.openscada.ae.ui.views.views;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
-import org.openscada.ae.ConditionStatusInformation;
 import org.openscada.ae.ui.views.config.ConfigurationHelper;
 import org.openscada.ae.ui.views.config.MonitorViewConfiguration;
+import org.openscada.ae.ui.views.model.DecoratedMonitor;
 import org.openscada.core.client.ConnectionState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,8 +87,10 @@ public class MonitorsView extends MonitorSubscriptionAlarmsEventsView
     {
         if ( ( this.getConnection () != null ) && ( this.getConnection ().getState () == ConnectionState.BOUND ) )
         {
-            final ConditionStatusInformation monitor = this.monitorsTable.selectedMonitor ().getMonitor ();
-            this.getConnection ().acknowledge ( monitor.getId (), null );
+            for ( DecoratedMonitor monitor : this.monitorsTable.selectedMonitors () )
+            {
+                this.getConnection ().acknowledge ( monitor.getMonitor ().getId (), null );
+            }
         }
     }
 

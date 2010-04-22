@@ -87,15 +87,22 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
         commentAction.setRunnable ( new Runnable () {
             public void run ()
             {
-                DecoratedEvent event = EventPoolView.this.eventsTable.selectedEvent ();
+                if ( EventPoolView.this.eventsTable.selectedEvents ().size () == 0 )
+                {
+                    return;
+                }
+                DecoratedEvent event = EventPoolView.this.eventsTable.selectedEvents ().get ( 0 );
                 Variant comment = event.getEvent ().getField ( Fields.COMMENT );
                 InputDialog dlg = new InputDialog ( parent.getShell (), commentAction.getText (), commentAction.getDescription (), comment == null ? "" : comment.asString ( "" ), null );
                 if ( dlg.open () == Window.OK )
                 {
                     comment = new Variant ( dlg.getValue () );
-                    Event updatedEvent = Event.create ().event ( event.getEvent () ).attribute ( Fields.COMMENT, comment ).build ();
-                    // FIXME: implement "set comment" in client interface
-                    logger.info ( "comment updated " + updatedEvent );
+                    for ( DecoratedEvent decoratedEvent : EventPoolView.this.eventsTable.selectedEvents () )
+                    {
+                        Event updatedEvent = Event.create ().event ( decoratedEvent.getEvent () ).attribute ( Fields.COMMENT, comment ).build ();
+                        // FIXME: implement "set comment" in client interface
+                        logger.info ( "comment updated " + updatedEvent );
+                    }
                 }
             }
         } );
@@ -329,10 +336,12 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
     {
         if ( ( this.getConnection () != null ) && ( this.getConnection ().getState () == ConnectionState.BOUND ) )
         {
-            final DecoratedEvent event = this.eventsTable.selectedEvent ();
-            if ( event.getMonitor () != null )
+            for ( DecoratedEvent event : this.eventsTable.selectedEvents () )
             {
-                this.getConnection ().acknowledge ( event.getMonitor ().getId (), null );
+                if ( event.getMonitor () != null )
+                {
+                    this.getConnection ().acknowledge ( event.getMonitor ().getId (), null );
+                }
             }
         }
     }

@@ -1,5 +1,8 @@
 package org.openscada.ae.ui.views.views;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.core.databinding.beans.BeanProperties;
 import org.eclipse.core.databinding.observable.set.WritableSet;
 import org.eclipse.core.databinding.property.Properties;
@@ -19,6 +22,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 import org.openscada.ae.Event;
 import org.openscada.ae.ui.views.dialog.SearchType;
 import org.openscada.ae.ui.views.model.DecoratedEvent;
@@ -140,7 +144,7 @@ public class EventViewTable extends Composite
         FillLayout layout = new FillLayout ();
         this.setLayout ( layout );
 
-        this.tableViewer = new TableViewer ( this, SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION );
+        this.tableViewer = new TableViewer ( this, SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.MULTI );
         createColumns ( this.tableViewer );
         this.tableViewer.getTable ().setHeaderVisible ( true );
         this.tableViewer.getTable ().setLinesVisible ( true );
@@ -235,13 +239,21 @@ public class EventViewTable extends Composite
         }
     }
 
-    public DecoratedEvent selectedEvent ()
+    public List<DecoratedEvent> selectedEvents ()
     {
         if ( this.tableViewer.getTable ().getSelectionCount () == 0 )
         {
-            return null;
+            return new ArrayList<DecoratedEvent> ();
         }
-        return (DecoratedEvent)this.tableViewer.getTable ().getSelection ()[0].getData ();
+        final ArrayList<DecoratedEvent> result = new ArrayList<DecoratedEvent> ();
+        for ( TableItem row : this.tableViewer.getTable ().getSelection () )
+        {
+            if ( row.getData () instanceof DecoratedEvent )
+            {
+                result.add ( (DecoratedEvent)row.getData () );
+            }
+        }
+        return result;
     }
 
     public void removeFilter ()
