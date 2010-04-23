@@ -1,21 +1,27 @@
 package org.openscada.ae.ui.views.views;
 
+import java.util.List;
+
 import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.jface.databinding.viewers.ObservableMapLabelProvider;
 import org.eclipse.swt.graphics.Image;
-import org.openscada.ae.Event;
 import org.openscada.ae.ui.views.model.DecoratedEvent;
+import org.openscada.ae.ui.views.views.EventViewTable.Column;
 
 public class EventLabelProvider extends ObservableMapLabelProvider
 {
-    public EventLabelProvider ( final IObservableMap attributeMap )
+    final private List<Column> columns;
+
+    public EventLabelProvider ( final IObservableMap attributeMap, final List<Column> columns )
     {
         super ( attributeMap );
+        this.columns = columns;
     }
 
-    public EventLabelProvider ( final IObservableMap[] attributeMaps )
+    public EventLabelProvider ( final IObservableMap[] attributeMaps, final List<Column> columns )
     {
         super ( attributeMaps );
+        this.columns = columns;
     }
 
     @Override
@@ -26,65 +32,25 @@ public class EventLabelProvider extends ObservableMapLabelProvider
             return "";
         }
         final DecoratedEvent event = (DecoratedEvent)element;
-        switch ( columnIndex )
+
+        Column column = this.columns.get ( columnIndex );
+        if ( column == Column.reservedColumnId )
         {
-        case 0:
             return event.getEvent ().getId ().toString ();
-
-        case 1:
-            return LabelProviderSupport.df.format ( event.getEvent ().getSourceTimestamp () );
-
-        case 2:
-            return LabelProviderSupport.df.format ( event.getEvent ().getEntryTimestamp () );
-
-        case 3:
-            return LabelProviderSupport.toLabel ( event, Event.Fields.MONITOR_TYPE );
-
-        case 4:
-            return LabelProviderSupport.toLabel ( event, Event.Fields.EVENT_TYPE );
-
-        case 5:
-            return LabelProviderSupport.toLabel ( event, Event.Fields.VALUE );
-
-        case 6:
-            return LabelProviderSupport.toLabel ( event, Event.Fields.MESSAGE );
-
-        case 7:
-            return LabelProviderSupport.toLabel ( event, Event.Fields.MESSAGE_CODE );
-
-        case 8:
-            return LabelProviderSupport.toLabel ( event, Event.Fields.PRIORITY );
-
-        case 9:
-            return LabelProviderSupport.toLabel ( event, Event.Fields.SOURCE );
-
-        case 10:
-            return LabelProviderSupport.toLabel ( event, Event.Fields.ACTOR_NAME );
-
-        case 11:
-            return LabelProviderSupport.toLabel ( event, Event.Fields.ACTOR_TYPE );
-
-        case 12:
-            return LabelProviderSupport.toLabel ( event, Event.Fields.HIVE );
-
-        case 13:
-            return LabelProviderSupport.toLabel ( event, Event.Fields.ITEM );
-
-        case 14:
-            return LabelProviderSupport.toLabel ( event, Event.Fields.COMPONENT );
-
-        case 15:
-            return LabelProviderSupport.toLabel ( event, Event.Fields.SYSTEM );
-
-        case 16:
-            return LabelProviderSupport.toLabel ( event, Event.Fields.LOCATION );
-
-        case 17:
-            return LabelProviderSupport.toLabel ( event, Event.Fields.COMMENT );
-
-        default:
-            return "";
         }
+        if ( column == Column.reservedColumnSourceTimestamp )
+        {
+            return LabelProviderSupport.df.format ( event.getEvent ().getSourceTimestamp () );
+        }
+        if ( column == Column.reservedColumnEntryTimestamp )
+        {
+            return LabelProviderSupport.df.format ( event.getEvent ().getEntryTimestamp () );
+        }
+        if ( columnIndex > this.columns.size () - 1 )
+        {
+            return "ERROR: <index doesn't exist>";
+        }
+        return LabelProviderSupport.toLabel ( event, column.getField () );
     }
 
     @Override
@@ -95,12 +61,12 @@ public class EventLabelProvider extends ObservableMapLabelProvider
             return null;
         }
         final DecoratedEvent event = (DecoratedEvent)element;
-        if ( columnIndex == 4 && event.isActive () )
+        if ( ( columnIndex == 4 ) && event.isActive () )
         {
             switch ( event.getMonitor ().getStatus () )
             {
             case NOT_OK:
-                return null;
+                return LabelProviderSupport.ALARM_IMG;
             case NOT_OK_AKN:
                 return LabelProviderSupport.ALARM_IMG;
             case NOT_AKN:
