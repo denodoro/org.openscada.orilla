@@ -16,33 +16,34 @@ public class BackgroundOverlayPainter implements BackgroundOverlay
 
     final int padding = 10;
 
-    private List<Rectangle> areasToDraw = new LinkedList<Rectangle> ();
+    private final List<Rectangle> areasToDraw = new LinkedList<Rectangle> ();
 
     private Color color;
-    
+
     private boolean invert = false;
 
     public void draw ( final GC gc, final int x, final int y )
     {
-        if (data == null) {
+        if ( this.data == null )
+        {
             return;
         }
-        areasToDraw.clear ();
+        this.areasToDraw.clear ();
         int i = 0;
         int start = -1;
-        for ( double d : data )
+        for ( final double d : this.data )
         {
-            if ( ( invert ? d > threshold : d < threshold ) && ( start == -1 ) )
+            if ( ( this.invert ? d > this.threshold : d < this.threshold ) && start == -1 )
             {
                 start = i;
             }
-            if ( ( invert ? d <= threshold : d >= threshold ) || ( i == data.length - 1 ) )
+            if ( ( this.invert ? d <= this.threshold : d >= this.threshold ) || i == this.data.length - 1 )
             {
                 if ( start > -1 )
                 {
-                    int xcoord1 = (int) ( ( ( (double)start ) / ( (double)data.length ) ) * ( (double) ( x - padding * 2 ) ) ) + padding + 1;
-                    int xcoord2 = (int) ( ( ( (double)i ) / ( (double)data.length ) ) * ( (double) ( x - padding * 2 ) ) ) + padding + 1;
-                    areasToDraw.add ( new Rectangle ( xcoord1, 0, xcoord2 - xcoord1, y ) );
+                    final int xcoord1 = (int) ( (double)start / (double)this.data.length * ( x - this.padding * 2 ) ) + this.padding + 1;
+                    final int xcoord2 = (int) ( (double)i / (double)this.data.length * ( x - this.padding * 2 ) ) + this.padding + 1;
+                    this.areasToDraw.add ( new Rectangle ( xcoord1, 0, xcoord2 - xcoord1, y ) );
                 }
                 start = -1;
             }
@@ -50,11 +51,11 @@ public class BackgroundOverlayPainter implements BackgroundOverlay
         }
 
         // save color
-        int alpha = gc.getAlpha ();
-        Color c = gc.getBackground ();
+        final int alpha = gc.getAlpha ();
+        final Color c = gc.getBackground ();
         gc.setAlpha ( 192 );
-        gc.setBackground ( color );
-        for ( Rectangle rectangle : areasToDraw )
+        gc.setBackground ( this.color );
+        for ( final Rectangle rectangle : this.areasToDraw )
         {
             gc.fillRectangle ( rectangle );
         }
@@ -77,8 +78,8 @@ public class BackgroundOverlayPainter implements BackgroundOverlay
     {
         this.color = color;
     }
-    
-    public void setInvert ( boolean invert )
+
+    public void setInvert ( final boolean invert )
     {
         this.invert = invert;
     }

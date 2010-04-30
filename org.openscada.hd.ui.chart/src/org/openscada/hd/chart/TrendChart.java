@@ -41,21 +41,21 @@ public class TrendChart extends Chart implements PaintListener
 
     private FontData smallFontData;
 
-    private AtomicReference<double[]> quality = new AtomicReference<double[]> (null);
+    private final AtomicReference<double[]> quality = new AtomicReference<double[]> ( null );
 
-    private AtomicReference<Double> qualityThreshold = new AtomicReference<Double> (0.0);
+    private final AtomicReference<Double> qualityThreshold = new AtomicReference<Double> ( 0.0 );
 
-    private AtomicReference<Color> qualityColor = new AtomicReference<Color> (null);
+    private final AtomicReference<Color> qualityColor = new AtomicReference<Color> ( null );
 
-    private AtomicReference<double[]> manual = new AtomicReference<double[]> (null);
+    private final AtomicReference<double[]> manual = new AtomicReference<double[]> ( null );
 
-    private AtomicReference<Double> manualThreshold = new AtomicReference<Double>(0.0);
+    private final AtomicReference<Double> manualThreshold = new AtomicReference<Double> ( 0.0 );
 
-    private AtomicReference<Color> manualColor = new AtomicReference<Color> (null);
+    private final AtomicReference<Color> manualColor = new AtomicReference<Color> ( null );
 
     public DataAtPoint getDataAtPoint ()
     {
-        return dataAtPoint;
+        return this.dataAtPoint;
     }
 
     public void setDataAtPoint ( final DataAtPoint dataAtPoint )
@@ -70,39 +70,39 @@ public class TrendChart extends Chart implements PaintListener
     public TrendChart ( final Composite parent, final int style )
     {
         super ( parent, style );
-        decimalFormat = DecimalFormat.getNumberInstance ();
-        decimalFormat.setGroupingUsed ( true );
-        decimalFormat.setMaximumFractionDigits ( 3 );
-        decimalFormat.setMinimumFractionDigits ( 3 );
-        percentFormat = DecimalFormat.getPercentInstance ();
+        this.decimalFormat = DecimalFormat.getNumberInstance ();
+        this.decimalFormat.setGroupingUsed ( true );
+        this.decimalFormat.setMaximumFractionDigits ( 3 );
+        this.decimalFormat.setMinimumFractionDigits ( 3 );
+        this.percentFormat = DecimalFormat.getPercentInstance ();
 
         this.getPlotArea ().addMouseMoveListener ( new MouseMoveListener () {
             public void mouseMove ( final MouseEvent e )
             {
-                showInfo = false;
-                currentX = e.x;
-                currentY = e.y;
+                TrendChart.this.showInfo = false;
+                TrendChart.this.currentX = e.x;
+                TrendChart.this.currentY = e.y;
                 TrendChart.this.redraw ();
             }
         } );
         this.getPlotArea ().addMouseTrackListener ( new MouseTrackListener () {
             public void mouseHover ( final MouseEvent e )
             {
-                showInfo = true;
+                TrendChart.this.showInfo = true;
                 TrendChart.this.redraw ();
             }
 
             public void mouseExit ( final MouseEvent e )
             {
-                currentX = -1;
-                currentY = -1;
+                TrendChart.this.currentX = -1;
+                TrendChart.this.currentY = -1;
                 TrendChart.this.redraw ();
             }
 
             public void mouseEnter ( final MouseEvent e )
             {
-                currentX = e.x;
-                currentY = e.y;
+                TrendChart.this.currentX = e.x;
+                TrendChart.this.currentY = e.y;
                 TrendChart.this.redraw ();
             }
         } );
@@ -128,26 +128,26 @@ public class TrendChart extends Chart implements PaintListener
         final FontData[] fontDataDefault = getDisplay ().getSystemFont ().getFontData ();
         if ( fontDataList.size () > 0 )
         {
-            smallFontData = fontDataList.get ( 0 );
+            this.smallFontData = fontDataList.get ( 0 );
         }
         else
         {
-            smallFontData = fontDataDefault[0];
+            this.smallFontData = fontDataDefault[0];
         }
-        smallFontData.setHeight ( 8 );
+        this.smallFontData.setHeight ( 8 );
         final BackgroundOverlayPainter qualityBackgroundOverlay = new BackgroundOverlayPainter ();
         final BackgroundOverlayPainter manualBackgroundOverlay = new BackgroundOverlayPainter ();
         manualBackgroundOverlay.setInvert ( true );
         this.setBackgroundOverlay ( new BackgroundOverlay () {
             public void draw ( final GC gc, final int x, final int y )
             {
-                qualityBackgroundOverlay.setData ( quality.get () );
-                qualityBackgroundOverlay.setThreshold ( qualityThreshold.get () );
-                qualityBackgroundOverlay.setColor ( qualityColor.get () );
+                qualityBackgroundOverlay.setData ( TrendChart.this.quality.get () );
+                qualityBackgroundOverlay.setThreshold ( TrendChart.this.qualityThreshold.get () );
+                qualityBackgroundOverlay.setColor ( TrendChart.this.qualityColor.get () );
                 qualityBackgroundOverlay.draw ( gc, x, y );
-                manualBackgroundOverlay.setData ( manual.get () );
-                manualBackgroundOverlay.setThreshold ( manualThreshold.get () );
-                manualBackgroundOverlay.setColor ( manualColor.get () );
+                manualBackgroundOverlay.setData ( TrendChart.this.manual.get () );
+                manualBackgroundOverlay.setThreshold ( TrendChart.this.manualThreshold.get () );
+                manualBackgroundOverlay.setColor ( TrendChart.this.manualColor.get () );
                 manualBackgroundOverlay.draw ( gc, x, y );
             }
         } );
@@ -156,11 +156,11 @@ public class TrendChart extends Chart implements PaintListener
     public void paintControl ( final PaintEvent e )
     {
         final GC gc = e.gc;
-        if ( currentX > -1 )
+        if ( this.currentX > -1 )
         {
-            gc.drawLine ( currentX, 0, currentX, this.getPlotArea ().getBounds ().height - 1 );
+            gc.drawLine ( this.currentX, 0, this.currentX, this.getPlotArea ().getBounds ().height - 1 );
         }
-        if ( showInfo )
+        if ( this.showInfo )
         {
             drawInfo ( gc );
         }
@@ -168,12 +168,12 @@ public class TrendChart extends Chart implements PaintListener
 
     private void drawInfo ( final GC gc )
     {
-        if ( dataAtPoint != null )
+        if ( this.dataAtPoint != null )
         {
-            final double quality = dataAtPoint.getQuality ( currentX );
-            final double manual = dataAtPoint.getManual ( currentX );
-            final Date timestamp = dataAtPoint.getTimestamp ( currentX );
-            final Map<String, Double> data = dataAtPoint.getData ( currentX );
+            final double quality = this.dataAtPoint.getQuality ( this.currentX );
+            final double manual = this.dataAtPoint.getManual ( this.currentX );
+            final Date timestamp = this.dataAtPoint.getTimestamp ( this.currentX );
+            final Map<String, Double> data = this.dataAtPoint.getData ( this.currentX );
             gc.setAntialias ( SWT.ON );
             int xoffset = 10;
             int yoffset = 10;
@@ -181,36 +181,36 @@ public class TrendChart extends Chart implements PaintListener
             final int padding = 5;
             gc.setBackground ( getDisplay ().getSystemColor ( SWT.COLOR_INFO_BACKGROUND ) );
             gc.setForeground ( getDisplay ().getSystemColor ( SWT.COLOR_INFO_FOREGROUND ) );
-            final Font smallFont = new Font ( gc.getDevice (), smallFontData );
+            final Font smallFont = new Font ( gc.getDevice (), this.smallFontData );
             gc.setFont ( smallFont );
             final String timestampText = String.format ( "%-16s: ", Messages.getString ( "TrendChart.timestamp" ) ) + DateFormat.getDateTimeInstance ( DateFormat.LONG, DateFormat.LONG ).format ( timestamp ); //$NON-NLS-1$
-            final String qualityText = String.format ( "%-16s: ", Messages.getString ( "TrendChart.quality" ) ) + percentFormat.format ( quality ); //$NON-NLS-1$
-            final String manualText = String.format ( "%-16s: ", Messages.getString ( "TrendChart.manual" ) ) + percentFormat.format ( manual ); //$NON-NLS-1$
-            final String soureValuesText = String.format ( "%-16s: ", Messages.getString ( "TrendChart.numOfValues" ) ) + dataAtPoint.getSourceValues ( currentX ); //$NON-NLS-1$
+            final String qualityText = String.format ( "%-16s: ", Messages.getString ( "TrendChart.quality" ) ) + this.percentFormat.format ( quality ); //$NON-NLS-1$
+            final String manualText = String.format ( "%-16s: ", Messages.getString ( "TrendChart.manual" ) ) + this.percentFormat.format ( manual ); //$NON-NLS-1$
+            final String soureValuesText = String.format ( "%-16s: ", Messages.getString ( "TrendChart.numOfValues" ) ) + this.dataAtPoint.getSourceValues ( this.currentX ); //$NON-NLS-1$
             final Point textSize = gc.textExtent ( timestampText );
             final int textWidth = textSize.x;
             final int textHeight = textSize.y;
             final int height = textHeight * 5 + ( textHeight + padding ) * data.keySet ().size () + padding * 6;
-            if ( currentY + height > getPlotArea ().getSize ().y )
+            if ( this.currentY + height > getPlotArea ().getSize ().y )
             {
                 yoffset = -10 - height;
             }
             final int width = textWidth + padding * 3;
-            if ( currentX + width > getPlotArea ().getSize ().x )
+            if ( this.currentX + width > getPlotArea ().getSize ().x )
             {
                 xoffset = -10 - width;
             }
-            gc.fillRoundRectangle ( currentX + xoffset, currentY + yoffset, width, height, corner, corner );
-            gc.drawRoundRectangle ( currentX + xoffset, currentY + yoffset, width, height, corner, corner );
-            gc.drawLine ( currentX + xoffset + padding, currentY + yoffset + ( padding + textHeight ) * 5 - padding, currentX + xoffset + width - padding, currentY + yoffset + ( padding + textHeight ) * 5 - padding );
-            gc.drawText ( timestampText, currentX + xoffset + padding, currentY + yoffset + padding );
-            gc.drawText ( qualityText, currentX + xoffset + padding, currentY + yoffset + padding * 2 + textHeight );
-            gc.drawText ( manualText, currentX + xoffset + padding, currentY + yoffset + padding * 3 + textHeight * 2 );
-            gc.drawText ( soureValuesText, currentX + xoffset + padding, currentY + yoffset + padding * 4 + textHeight * 3 );
+            gc.fillRoundRectangle ( this.currentX + xoffset, this.currentY + yoffset, width, height, corner, corner );
+            gc.drawRoundRectangle ( this.currentX + xoffset, this.currentY + yoffset, width, height, corner, corner );
+            gc.drawLine ( this.currentX + xoffset + padding, this.currentY + yoffset + ( padding + textHeight ) * 5 - padding, this.currentX + xoffset + width - padding, this.currentY + yoffset + ( padding + textHeight ) * 5 - padding );
+            gc.drawText ( timestampText, this.currentX + xoffset + padding, this.currentY + yoffset + padding );
+            gc.drawText ( qualityText, this.currentX + xoffset + padding, this.currentY + yoffset + padding * 2 + textHeight );
+            gc.drawText ( manualText, this.currentX + xoffset + padding, this.currentY + yoffset + padding * 3 + textHeight * 2 );
+            gc.drawText ( soureValuesText, this.currentX + xoffset + padding, this.currentY + yoffset + padding * 4 + textHeight * 3 );
             int i = 5;
             for ( final Entry<String, Double> entry : data.entrySet () )
             {
-                gc.drawText ( String.format ( "%16s: ", entry.getKey () ) + String.format ( "%16s", Double.isNaN ( entry.getValue () ) ? "-" : decimalFormat.format ( entry.getValue () ) ), currentX + xoffset + padding, currentY + yoffset + ( padding + textHeight ) * i + padding ); //$NON-NLS-1$ //$NON-NLS-2$
+                gc.drawText ( String.format ( "%16s: ", entry.getKey () ) + String.format ( "%16s", Double.isNaN ( entry.getValue () ) ? "-" : this.decimalFormat.format ( entry.getValue () ) ), this.currentX + xoffset + padding, this.currentY + yoffset + ( padding + textHeight ) * i + padding ); //$NON-NLS-1$ //$NON-NLS-2$
                 i++;
             }
             smallFont.dispose ();
@@ -226,30 +226,30 @@ public class TrendChart extends Chart implements PaintListener
 
     public void setQuality ( final double[] quality )
     {
-        this.quality.set( quality );
+        this.quality.set ( quality );
     }
 
     public void setManual ( final double[] manual )
     {
-        this.manual.set (  manual);
+        this.manual.set ( manual );
     }
 
     public void setQualityThreshold ( final double qualityThreshold )
     {
-        this.qualityThreshold.set(qualityThreshold);
+        this.qualityThreshold.set ( qualityThreshold );
     }
 
     public void setManualThreshold ( final double manualThreshold )
     {
-        this.manualThreshold .set(manualThreshold);
+        this.manualThreshold.set ( manualThreshold );
     }
 
-    public void setQualityColor ( Color qualityColor )
+    public void setQualityColor ( final Color qualityColor )
     {
         this.qualityColor.set ( qualityColor );
     }
 
-    public void setManualColor ( Color manualColor )
+    public void setManualColor ( final Color manualColor )
     {
         this.manualColor.set ( manualColor );
     }

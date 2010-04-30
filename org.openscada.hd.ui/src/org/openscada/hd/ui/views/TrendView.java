@@ -1,3 +1,21 @@
+/*
+ * This file is part of the OpenSCADA project
+ * Copyright (C) 2006-2010 inavare GmbH (http://inavare.com)
+ *
+ * OpenSCADA is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenSCADA is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenSCADA. If not, see
+ * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
+ */
 package org.openscada.hd.ui.views;
 
 import java.io.File;
@@ -505,31 +523,31 @@ public class TrendView extends QueryViewPart implements QueryListener
 
         // add group for scaling
         this.scaleGroup = new Group ( this.panel, SWT.SHADOW_ETCHED_IN );
-        this.scaleGroup.setLayout ( groupLayout );
+        this.scaleGroup.setLayout ( this.groupLayout );
         this.scaleGroup.setText ( Messages.TrendView_Scaling );
 
         this.scaleAutomaticallyCheckbox = new Button ( this.scaleGroup, SWT.CHECK );
         this.scaleAutomaticallyCheckbox.setText ( Messages.TrendView_Automatically );
-        this.scaleAutomaticallyCheckbox.setSelection ( scaleYAutomatically );
+        this.scaleAutomaticallyCheckbox.setSelection ( this.scaleYAutomatically );
         this.scaleAutomaticallyCheckbox.addSelectionListener ( new SelectionListener () {
             public void widgetSelected ( final SelectionEvent e )
             {
-                if ( scaleAutomaticallyCheckbox.getSelection () )
+                if ( TrendView.this.scaleAutomaticallyCheckbox.getSelection () )
                 {
-                    scaleYAutomatically = true;
-                    scaleMinSpinner.setEnabled ( false );
-                    scaleMaxSpinner.setEnabled ( false );
+                    TrendView.this.scaleYAutomatically = true;
+                    TrendView.this.scaleMinSpinner.setEnabled ( false );
+                    TrendView.this.scaleMaxSpinner.setEnabled ( false );
                 }
                 else
                 {
-                    scaleYAutomatically = false;
-                    scaleMinSpinner.setEnabled ( true );
-                    scaleMaxSpinner.setEnabled ( true );
+                    TrendView.this.scaleYAutomatically = false;
+                    TrendView.this.scaleMinSpinner.setEnabled ( true );
+                    TrendView.this.scaleMaxSpinner.setEnabled ( true );
                 }
-                scaleMinSpinner.setSelection ( (int)Math.round ( scaleYMin * 1000 ) );
-                scaleMaxSpinner.setSelection ( (int)Math.round ( scaleYMax * 1000 ) );
+                TrendView.this.scaleMinSpinner.setSelection ( (int)Math.round ( TrendView.this.scaleYMin * 1000 ) );
+                TrendView.this.scaleMaxSpinner.setSelection ( (int)Math.round ( TrendView.this.scaleYMax * 1000 ) );
                 adjustRange ();
-                chart.redraw ();
+                TrendView.this.chart.redraw ();
             }
 
             public void widgetDefaultSelected ( final SelectionEvent e )
@@ -538,15 +556,15 @@ public class TrendView extends QueryViewPart implements QueryListener
         } );
 
         this.scaleMinSpinner = new Spinner ( this.scaleGroup, SWT.BORDER );
-        this.scaleMinSpinner.setEnabled ( !scaleYAutomatically );
+        this.scaleMinSpinner.setEnabled ( !this.scaleYAutomatically );
         this.scaleMinSpinner.setDigits ( 3 );
         this.scaleMinSpinner.setMaximum ( Integer.MAX_VALUE );
         this.scaleMinSpinner.setMinimum ( Integer.MIN_VALUE );
-        this.scaleMinSpinner.setSelection ( (int)Math.round ( ( scaleYMin * 1000 ) ) );
+        this.scaleMinSpinner.setSelection ( (int)Math.round ( ( this.scaleYMin * 1000 ) ) );
         this.scaleMinSpinner.addSelectionListener ( new SelectionListener () {
             public void widgetSelected ( final SelectionEvent e )
             {
-                scalingUpdateJob.get ().schedule ( GUI_RESIZE_JOB_DELAY );
+                TrendView.this.scalingUpdateJob.get ().schedule ( GUI_RESIZE_JOB_DELAY );
             }
 
             public void widgetDefaultSelected ( final SelectionEvent e )
@@ -555,15 +573,15 @@ public class TrendView extends QueryViewPart implements QueryListener
         } );
 
         this.scaleMaxSpinner = new Spinner ( this.scaleGroup, SWT.BORDER );
-        this.scaleMaxSpinner.setEnabled ( !scaleYAutomatically );
+        this.scaleMaxSpinner.setEnabled ( !this.scaleYAutomatically );
         this.scaleMaxSpinner.setDigits ( 3 );
         this.scaleMaxSpinner.setMaximum ( Integer.MAX_VALUE );
         this.scaleMaxSpinner.setMinimum ( Integer.MIN_VALUE );
-        this.scaleMaxSpinner.setSelection ( (int)Math.round ( ( scaleYMax * 1000 ) ) );
+        this.scaleMaxSpinner.setSelection ( (int)Math.round ( ( this.scaleYMax * 1000 ) ) );
         this.scaleMaxSpinner.addSelectionListener ( new SelectionListener () {
             public void widgetSelected ( final SelectionEvent e )
             {
-                scalingUpdateJob.get ().schedule ( GUI_RESIZE_JOB_DELAY );
+                TrendView.this.scalingUpdateJob.get ().schedule ( GUI_RESIZE_JOB_DELAY );
             }
 
             public void widgetDefaultSelected ( final SelectionEvent e )
@@ -765,7 +783,7 @@ public class TrendView extends QueryViewPart implements QueryListener
                 }
                 else
                 {
-                    if ( ( e.button == 1 ) && ( ( e.stateMask & SWT.SHIFT ) == SWT.SHIFT ) )
+                    if ( e.button == 1 && ( e.stateMask & SWT.SHIFT ) == SWT.SHIFT )
                     {
                         // zoom in
                         final DateRange zoomResult = zoomIn ( e.x, 0, TrendView.this.chart.getPlotArea ().getSize ().x, TrendView.this.chartParameters.get ().getStartTime (), TrendView.this.chartParameters.get ().getEndTime () );
@@ -773,7 +791,7 @@ public class TrendView extends QueryViewPart implements QueryListener
                         TrendView.this.chartParameters.set ( parameters );
                         TrendView.this.rangeUpdateJob.get ().schedule ( GUI_JOB_DELAY );
                     }
-                    else if ( ( e.button == 1 ) && ( ( e.stateMask & SWT.ALT ) == SWT.ALT ) )
+                    else if ( e.button == 1 && ( e.stateMask & SWT.ALT ) == SWT.ALT )
                     {
                         // zoom out
                         final DateRange zoomResult = zoomOut ( e.x, 0, TrendView.this.chart.getPlotArea ().getSize ().x, TrendView.this.chartParameters.get ().getStartTime (), TrendView.this.chartParameters.get ().getEndTime () );
@@ -956,7 +974,7 @@ public class TrendView extends QueryViewPart implements QueryListener
                 {
                     Thread.sleep ( 100 );
                 }
-                catch ( InterruptedException e )
+                catch ( final InterruptedException e )
                 {
                     // pass
                 }
@@ -1087,20 +1105,22 @@ public class TrendView extends QueryViewPart implements QueryListener
                     chartValues[i + index] = d;
                     if ( !Double.isInfinite ( d ) && !Double.isNaN ( d ) && d != 0.0 )
                     {
-                        if (currentYMin == null) {
-                            currentYMin = d;
-                        }
-                        if (currentYMax == null) {
-                            currentYMax = d;
-                        }
-                        final double diff = currentYMax - currentYMin;
-                        if ( d > currentYMax )
+                        if ( this.currentYMin == null )
                         {
-                            currentYMax = d + diff * 0.2;
+                            this.currentYMin = d;
                         }
-                        if ( d < currentYMin ) 
+                        if ( this.currentYMax == null )
                         {
-                            currentYMin = d - diff * 0.2;
+                            this.currentYMax = d;
+                        }
+                        final double diff = this.currentYMax - this.currentYMin;
+                        if ( d > this.currentYMax )
+                        {
+                            this.currentYMax = d + diff * 0.2;
+                        }
+                        if ( d < this.currentYMin )
+                        {
+                            this.currentYMin = d - diff * 0.2;
                         }
                     }
                 }
@@ -1156,9 +1176,9 @@ public class TrendView extends QueryViewPart implements QueryListener
                 }
                 // update GUI with new parameters
                 // remove old Series
-                TrendView.this.chart.setQualityColor ( colorRegistry.get ( KEY_QUALITY ) );
+                TrendView.this.chart.setQualityColor ( TrendView.this.colorRegistry.get ( KEY_QUALITY ) );
                 TrendView.this.chart.setQualityThreshold ( TrendView.this.chartParameters.get ().getQuality () / 100.0 );
-                TrendView.this.chart.setManualColor ( colorRegistry.get ( KEY_MANUAL ) );
+                TrendView.this.chart.setManualColor ( TrendView.this.colorRegistry.get ( KEY_MANUAL ) );
                 TrendView.this.chart.setManualThreshold ( TrendView.this.chartParameters.get ().getManual () / 100.0 );
                 final List<String> seriesIds = new ArrayList<String> ();
                 for ( final ISeries series : TrendView.this.chart.getSeriesSet ().getSeries () )
@@ -1318,26 +1338,26 @@ public class TrendView extends QueryViewPart implements QueryListener
         display.asyncExec ( new Runnable () {
             public void run ()
             {
-                double v = scaleMinSpinner.getSelection () / 1000.0;
-                if ( v >= scaleYMax )
+                double v = TrendView.this.scaleMinSpinner.getSelection () / 1000.0;
+                if ( v >= TrendView.this.scaleYMax )
                 {
-                    scaleYMin = scaleYMax - 0.001;
+                    TrendView.this.scaleYMin = TrendView.this.scaleYMax - 0.001;
                 }
                 else
                 {
-                    scaleYMin = v;
+                    TrendView.this.scaleYMin = v;
                 }
-                scaleMinSpinner.setSelection ( (int) ( scaleYMin * 1000 ) );
-                v = scaleMaxSpinner.getSelection () / 1000.0;
-                if ( v <= scaleYMin )
+                TrendView.this.scaleMinSpinner.setSelection ( (int) ( TrendView.this.scaleYMin * 1000 ) );
+                v = TrendView.this.scaleMaxSpinner.getSelection () / 1000.0;
+                if ( v <= TrendView.this.scaleYMin )
                 {
-                    scaleYMax = scaleYMin + 0.001;
+                    TrendView.this.scaleYMax = TrendView.this.scaleYMin + 0.001;
                 }
                 else
                 {
-                    scaleYMax = v;
+                    TrendView.this.scaleYMax = v;
                 }
-                scaleMaxSpinner.setSelection ( (int) ( scaleYMax * 1000 ) );
+                TrendView.this.scaleMaxSpinner.setSelection ( (int) ( TrendView.this.scaleYMax * 1000 ) );
                 adjustRange ();
                 TrendView.this.chart.redraw ();
             }
@@ -1346,18 +1366,18 @@ public class TrendView extends QueryViewPart implements QueryListener
 
     private void adjustRange ()
     {
-        if ( scaleYAutomatically )
+        if ( this.scaleYAutomatically )
         {
-            scaleYMin = ( currentYMin == null ? 0 : currentYMin );
-            scaleYMax = ( currentYMax == null ? 1 : currentYMax );
+            this.scaleYMin = this.currentYMin == null ? 0 : this.currentYMin;
+            this.scaleYMax = this.currentYMax == null ? 1 : this.currentYMax;
         }
-        for ( IAxis axis : TrendView.this.chart.getAxisSet ().getXAxes () )
+        for ( final IAxis axis : TrendView.this.chart.getAxisSet ().getXAxes () )
         {
             axis.adjustRange ();
         }
-        for ( IAxis axis : chart.getAxisSet ().getYAxes () )
+        for ( final IAxis axis : this.chart.getAxisSet ().getYAxes () )
         {
-            axis.setRange ( new Range ( scaleYMin, scaleYMax ) );
+            axis.setRange ( new Range ( this.scaleYMin, this.scaleYMax ) );
         }
     }
 
@@ -1413,7 +1433,7 @@ public class TrendView extends QueryViewPart implements QueryListener
      */
     private Color contrastForeground ( final Color c )
     {
-        int grey = (int) ( ( ( c.getRed () ) * 0.299 ) + ( ( c.getGreen () ) * 0.587 ) + ( ( c.getBlue () ) * 0.114 ) );
+        final int grey = (int) ( c.getRed () * 0.299 + c.getGreen () * 0.587 + c.getBlue () * 0.114 );
         if ( grey > 186 )
         {
             return this.colorRegistry.get ( KEY_BLACK );
