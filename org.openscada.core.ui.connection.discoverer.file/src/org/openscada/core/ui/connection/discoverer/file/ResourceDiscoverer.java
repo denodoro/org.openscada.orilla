@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
+import java.io.Reader;
+import java.nio.charset.Charset;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -46,6 +48,11 @@ public abstract class ResourceDiscoverer extends AbstractConnectionDiscoverer
 
     protected void load ( final InputStream stream )
     {
+        load ( new InputStreamReader ( stream, Charset.forName ( "UTF-8" ) ) );
+    }
+
+    protected void load ( final Reader stream )
+    {
         try
         {
             performLoad ( stream );
@@ -70,10 +77,10 @@ public abstract class ResourceDiscoverer extends AbstractConnectionDiscoverer
         }
     }
 
-    private void performLoad ( final InputStream stream )
+    private void performLoad ( final Reader stream )
     {
         final Set<ConnectionDescriptor> result = new HashSet<ConnectionDescriptor> ();
-        final LineNumberReader reader = new LineNumberReader ( new InputStreamReader ( stream ) );
+        final LineNumberReader reader = new LineNumberReader ( stream );
         String line;
         try
         {

@@ -12,3 +12,8 @@ Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Import-Package: org.openscada.core,
  org.slf4j
+Export-Package: org.openscada.core.ui.connection.discoverer.file;
+  uses:="org.eclipse.osgi.util,
+   org.openscada.core.ui.connection,
+   org.eclipse.ui.plugin,
+   org.osgi.framework"
