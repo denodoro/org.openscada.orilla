@@ -5,7 +5,6 @@ import java.util.Hashtable;
 
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.swt.widgets.Display;
@@ -18,8 +17,6 @@ import org.openscada.core.connection.provider.ConnectionService;
 import org.openscada.core.ui.connection.Activator;
 import org.openscada.core.ui.connection.ConnectionDescriptor;
 import org.openscada.core.ui.connection.creator.ConnectionCreatorHelper;
-import org.openscada.sec.AuthenticationException;
-import org.openscada.sec.osgi.MultiAuthenticationException;
 import org.openscada.utils.beans.AbstractPropertyChange;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -231,37 +228,25 @@ public class ConnectionHolder extends AbstractPropertyChange implements Connecti
 
     private IStatus makeStatus ( final Connection connection, final ConnectionState state, final Throwable error )
     {
-        if ( error instanceof MultiAuthenticationException )
+        int severity;
+        String message;
+        if ( error != null )
         {
-            final MultiStatus status = new MultiStatus ( Activator.PLUGIN_ID, 0, "Failed to establish connection", error );
-            for ( final AuthenticationException e : ( (MultiAuthenticationException)error ).getCauses () )
-            {
-                status.add ( makeStatus ( connection, state, e ) );
-            }
-            return status;
+            message = error.getMessage ();
+            severity = IStatus.ERROR;
+        }
+        else if ( state == ConnectionState.CLOSED )
+        {
+            message = "Connection closed";
+            severity = IStatus.WARNING;
         }
         else
         {
-            int severity;
-            String message;
-            if ( error != null )
-            {
-                message = error.getMessage ();
-                severity = IStatus.ERROR;
-            }
-            else if ( state == ConnectionState.CLOSED )
-            {
-                message = "Connection closed";
-                severity = IStatus.WARNING;
-            }
-            else
-            {
-                message = String.format ( "State changed: %s", state );
-                severity = IStatus.INFO;
-            }
-
-            return new Status ( severity, Activator.PLUGIN_ID, message, error );
+            message = String.format ( "State changed: %s", state );
+            severity = IStatus.INFO;
         }
+
+        return new Status ( severity, Activator.PLUGIN_ID, message, error );
     }
 
     @SuppressWarnings ( "unchecked" )
