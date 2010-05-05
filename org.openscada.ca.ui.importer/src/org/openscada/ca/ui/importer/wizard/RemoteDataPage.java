@@ -21,7 +21,6 @@ package org.openscada.ca.ui.importer.wizard;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicReference;
@@ -79,28 +78,12 @@ public class RemoteDataPage extends WizardPage
             }
         } );
 
-        final Button clearButton = new Button ( wrapper, SWT.PUSH );
-        clearButton.setText ( Messages.RemoteDataPage_CleanButtonText );
-        clearButton.addSelectionListener ( new SelectionAdapter () {
-            @Override
-            public void widgetSelected ( final SelectionEvent e )
-            {
-                performClean ();
-            }
-        } );
-
         this.resultText = new Label ( wrapper, SWT.NONE );
         this.resultText.setLayoutData ( new GridData ( SWT.FILL, SWT.CENTER, true, false ) );
 
         setControl ( wrapper );
 
         update ();
-    }
-
-    protected void performClean ()
-    {
-        // set empty result set
-        setResult ( Collections.<FactoryInformation> emptyList () );
     }
 
     protected void performLoad ()
