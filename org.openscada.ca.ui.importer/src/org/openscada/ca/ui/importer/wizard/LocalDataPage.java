@@ -113,7 +113,7 @@ public class LocalDataPage extends WizardPage
 
     protected void selectFile ()
     {
-        final FileDialog dlg = new FileDialog ( this.getShell () );
+        final FileDialog dlg = new FileDialog ( this.getShell (), SWT.OPEN );
         dlg.setFilterExtensions ( new String[] { "*.oscar", "*.json" } );
         dlg.setFilterNames ( new String[] { "OpenSCADA Configuration Archive", "JSON Configuration Data" } );
 
