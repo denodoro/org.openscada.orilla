@@ -47,6 +47,8 @@ import com.google.common.collect.Iterables;
 public class ImportWizard extends Wizard implements IImportWizard
 {
 
+    private static final int DEFAULT_CHUNK_SIZE = 500;
+
     private ConnectionService connection;
 
     private final DiffController mergeController;
@@ -109,7 +111,7 @@ public class ImportWizard extends Wizard implements IImportWizard
             return;
         }
 
-        final Iterable<List<DiffEntry>> splitted = Iterables.partition ( result, 100 );
+        final Iterable<List<DiffEntry>> splitted = Iterables.partition ( result, DEFAULT_CHUNK_SIZE );
 
         final SubMonitor sub = monitor.newChild ( 90 );
 

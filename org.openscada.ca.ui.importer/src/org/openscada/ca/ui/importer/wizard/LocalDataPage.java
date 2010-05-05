@@ -20,9 +20,13 @@
 package org.openscada.ca.ui.importer.wizard;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -227,12 +231,41 @@ public class LocalDataPage extends WizardPage
         update ();
     }
 
+    protected Map<String, Map<String, Map<String, String>>> loadData ( final File file ) throws Exception
+    {
+        if ( isOscar ( file ) )
+        {
+            return loadOscarData ( file );
+        }
+        else
+        {
+            final InputStream stream = new FileInputStream ( file );
+            try
+            {
+                return loadJsonData ( stream );
+            }
+            finally
+            {
+                stream.close ();
+            }
+        }
+
+    }
+
+    String oscarSuffix = ".oscar";
+
+    private boolean isOscar ( final File file )
+    {
+        final String fileName = file.getName ().toLowerCase ();
+        return fileName.endsWith ( this.oscarSuffix );
+    }
+
     @SuppressWarnings ( "unchecked" )
-    private Map<String, Map<String, Map<String, String>>> loadData ( final File file ) throws Exception
+    private Map<String, Map<String, Map<String, String>>> loadJsonData ( final InputStream stream ) throws Exception
     {
         final ObjectMapper mapper = new ObjectMapper ();
 
-        final Map<String, Map<String, Map<String, Object>>> data = mapper.readValue ( file, HashMap.class );
+        final Map<String, Map<String, Map<String, Object>>> data = mapper.readValue ( stream, HashMap.class );
 
         final Map<String, Map<String, Map<String, String>>> result = new HashMap<String, Map<String, Map<String, String>>> ( data.size () );
 
@@ -252,5 +285,31 @@ public class LocalDataPage extends WizardPage
         }
 
         return result;
+    }
+
+    private Map<String, Map<String, Map<String, String>>> loadOscarData ( final File file ) throws Exception
+    {
+        final ZipFile zfile = new ZipFile ( file );
+        try
+        {
+            final ZipEntry entry = zfile.getEntry ( "data.json" );
+            if ( entry == null )
+            {
+                throw new IllegalArgumentException ( "File is not a valid OSCAR file" );
+            }
+            final InputStream stream = zfile.getInputStream ( entry );
+            try
+            {
+                return loadJsonData ( stream );
+            }
+            finally
+            {
+                stream.close ();
+            }
+        }
+        finally
+        {
+            zfile.close ();
+        }
     }
 }
