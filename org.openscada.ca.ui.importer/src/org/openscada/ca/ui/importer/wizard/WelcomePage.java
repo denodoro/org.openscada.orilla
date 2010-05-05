@@ -226,7 +226,25 @@ public class WelcomePage extends WizardPage
     {
         final ObjectMapper mapper = new ObjectMapper ();
 
-        final Map<String, Map<String, Map<String, String>>> data = mapper.readValue ( file, HashMap.class );
-        return data;
+        final Map<String, Map<String, Map<String, Object>>> data = mapper.readValue ( file, HashMap.class );
+
+        final Map<String, Map<String, Map<String, String>>> result = new HashMap<String, Map<String, Map<String, String>>> ( data.size () );
+
+        for ( final Map.Entry<String, Map<String, Map<String, Object>>> entry : data.entrySet () )
+        {
+            final Map<String, Map<String, String>> newFactory = new HashMap<String, Map<String, String>> ( entry.getValue ().size () );
+            result.put ( entry.getKey (), newFactory );
+            for ( final Map.Entry<String, Map<String, Object>> subEntry : entry.getValue ().entrySet () )
+            {
+                final Map<String, String> newConfiguration = new HashMap<String, String> ( subEntry.getValue ().size () );
+                newFactory.put ( subEntry.getKey (), newConfiguration );
+                for ( final Map.Entry<String, Object> subSubEntry : subEntry.getValue ().entrySet () )
+                {
+                    newConfiguration.put ( subSubEntry.getKey (), subSubEntry.getValue ().toString () );
+                }
+            }
+        }
+
+        return result;
     }
 }

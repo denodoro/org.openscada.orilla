@@ -154,16 +154,6 @@ public class DiffController
 
     private boolean isEqual ( final Map<String, String> localData, final Map<String, String> remoteData )
     {
-        for ( final Map.Entry<String, String> entry : localData.entrySet () )
-        {
-            logger.debug ( String.format ( "Local - %s -> %s (%s)", entry.getKey (), entry.getValue (), entry.getValue ().getClass () ) );
-        }
-
-        for ( final Map.Entry<String, String> entry : remoteData.entrySet () )
-        {
-            logger.debug ( String.format ( "Remote - %s -> %s (%s)", entry.getKey (), entry.getValue (), entry.getValue ().getClass () ) );
-        }
-
         return remoteData.equals ( localData );
     }
 

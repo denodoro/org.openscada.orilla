@@ -103,6 +103,11 @@ public class ImportWizard extends Wizard implements IImportWizard
         monitor.setTaskName ( "Applying configuration" );
 
         final Collection<DiffEntry> result = this.mergeController.merge ( monitor.newChild ( 10 ) );
+        if ( result.isEmpty () )
+        {
+            monitor.done ();
+            return;
+        }
 
         final Iterable<List<DiffEntry>> splitted = Iterables.partition ( result, 100 );
 

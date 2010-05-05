@@ -137,6 +137,7 @@ public class PreviewPage extends WizardPage
             }
             catch ( final Exception e )
             {
+                e.printStackTrace ();
                 final Status status = new Status ( Status.ERROR, Activator.PLUGIN_ID, "Failed to merge data", e );
                 StatusManager.getManager ().handle ( status );
                 ErrorDialog.openError ( getShell (), "Error", "Failed to merge data", status );
