@@ -42,7 +42,7 @@ import org.openscada.ca.connection.provider.ConnectionService;
 import org.openscada.ca.ui.importer.data.DiffController;
 import org.openscada.utils.concurrent.NotifyFuture;
 
-public class LoadPage extends WizardPage
+public class RemoteDataPage extends WizardPage
 {
 
     private final ConnectionService service;
@@ -55,7 +55,7 @@ public class LoadPage extends WizardPage
 
     private long count;
 
-    public LoadPage ( final ConnectionService service, final DiffController mergeController )
+    public RemoteDataPage ( final ConnectionService service, final DiffController mergeController )
     {
         super ( "loadPage" );
         setTitle ( "Loading current data" );
@@ -148,7 +148,7 @@ public class LoadPage extends WizardPage
         final Collection<FactoryInformation> result = new LinkedList<FactoryInformation> ();
         try
         {
-            final NotifyFuture<FactoryInformation[]> future = LoadPage.this.service.getConnection ().getFactories ();
+            final NotifyFuture<FactoryInformation[]> future = RemoteDataPage.this.service.getConnection ().getFactories ();
             final FactoryInformation[] factories = future.get ();
             monitor.beginTask ( "Loading data", factories.length );
             for ( final FactoryInformation factory : factories )

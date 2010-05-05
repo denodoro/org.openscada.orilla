@@ -141,8 +141,8 @@ public class ImportWizard extends Wizard implements IImportWizard
     @Override
     public void addPages ()
     {
-        addPage ( new WelcomePage ( this.mergeController ) );
-        addPage ( new LoadPage ( this.connection, this.mergeController ) );
+        addPage ( new LocalDataPage ( this.mergeController ) );
+        addPage ( new RemoteDataPage ( this.connection, this.mergeController ) );
         addPage ( new PreviewPage ( this.mergeController ) );
     }
 

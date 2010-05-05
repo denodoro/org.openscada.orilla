@@ -46,7 +46,7 @@ import org.eclipse.ui.statushandlers.StatusManager;
 import org.openscada.ca.ui.importer.Activator;
 import org.openscada.ca.ui.importer.data.DiffController;
 
-public class WelcomePage extends WizardPage
+public class LocalDataPage extends WizardPage
 {
 
     private Text fileName;
@@ -57,7 +57,7 @@ public class WelcomePage extends WizardPage
 
     private Label dataLabel;
 
-    protected WelcomePage ( final DiffController mergeController )
+    protected LocalDataPage ( final DiffController mergeController )
     {
         super ( "welcomePage" );
         setTitle ( "Select a file to import" );
@@ -114,8 +114,14 @@ public class WelcomePage extends WizardPage
     protected void selectFile ()
     {
         final FileDialog dlg = new FileDialog ( this.getShell () );
+        dlg.setFilterExtensions ( new String[] { "*.oscar", "*.json" } );
+        dlg.setFilterNames ( new String[] { "OpenSCADA Configuration Archive", "JSON Configuration Data" } );
 
-        dlg.setFileName ( this.fileName.getText () );
+        if ( this.fileName.getText ().length () > 0 )
+        {
+            dlg.setFileName ( this.fileName.getText () );
+        }
+        dlg.setFilterIndex ( 0 );
 
         final String file = dlg.open ();
         if ( file != null )
@@ -198,7 +204,7 @@ public class WelcomePage extends WizardPage
                     try
                     {
                         monitor.beginTask ( "Loading configuration data", IProgressMonitor.UNKNOWN );
-                        WelcomePage.this.data = loadData ( file );
+                        LocalDataPage.this.data = loadData ( file );
                     }
                     catch ( final Exception e )
                     {
