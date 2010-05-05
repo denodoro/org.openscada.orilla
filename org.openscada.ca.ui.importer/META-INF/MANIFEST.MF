@@ -1,0 +1,27 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: OpenSCADA CA Import UI
+Bundle-SymbolicName: org.openscada.ca.ui.importer;singleton:=true
+Bundle-Version: 0.15.0.qualifier
+Bundle-Activator: org.openscada.ca.ui.importer.Activator
+Bundle-Vendor: inavare GmbH
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-ActivationPolicy: lazy
+Import-Package: com.google.common.base;version="1.0.0",
+ com.google.common.collect;version="1.0.0",
+ org.codehaus.jackson;version="1.5.2",
+ org.codehaus.jackson.map;version="1.5.2",
+ org.codehaus.jackson.util;version="1.5.2",
+ org.openscada.ca;version="0.15.0",
+ org.openscada.ca.client;version="0.15.0",
+ org.openscada.ca.connection.provider;version="0.15.0",
+ org.openscada.core.client;version="0.15.0",
+ org.openscada.core.connection.provider;version="0.14.0",
+ org.openscada.ui.databinding;version="0.14.0",
+ org.openscada.ui.utils;version="0.15.0",
+ org.openscada.utils.concurrent;version="0.15.0",
+ org.openscada.utils.concurrent.task;version="0.15.0",
+ org.openscada.utils.lang;version="0.15.0",
+ org.slf4j;version="1.5.8"

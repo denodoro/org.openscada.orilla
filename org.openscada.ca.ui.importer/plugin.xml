@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.commands">
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="popup:org.openscada.core.ui.connection.ConnectionView#PopupMenu">
+         <command
+               commandId="org.eclipse.ui.file.import"
+               label="Import Configuration"
+               style="push">
+            <parameter
+                  name="importWizardId"
+                  value="org.openscada.ca.ui.importer.wizard">
+            </parameter>
+         </command>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.importWizards">
+      <wizard
+            class="org.openscada.ca.ui.importer.wizard.ImportWizard"
+            id="org.openscada.ca.ui.importer.wizard"
+            name="Import Configuration">
+      </wizard>
+   </extension>
+
+</plugin>
