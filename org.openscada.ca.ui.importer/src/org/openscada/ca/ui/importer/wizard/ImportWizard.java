@@ -56,15 +56,15 @@ public class ImportWizard extends Wizard implements IImportWizard
     public ImportWizard ()
     {
         setNeedsProgressMonitor ( true );
-        setWindowTitle ( "Import configuration" );
+        setWindowTitle ( Messages.ImportWizard_Title );
 
-        IDialogSettings settings = Activator.getDefault ().getDialogSettings ().getSection ( "importWizard" );
+        IDialogSettings settings = Activator.getDefault ().getDialogSettings ().getSection ( "importWizard" ); //$NON-NLS-1$
         if ( settings == null )
         {
-            settings = Activator.getDefault ().getDialogSettings ().addNewSection ( "importWizard" );
+            settings = Activator.getDefault ().getDialogSettings ().addNewSection ( "importWizard" ); //$NON-NLS-1$
         }
 
-        setDialogSettings ( Activator.getDefault ().getDialogSettings ().getSection ( "importWizard" ) );
+        setDialogSettings ( Activator.getDefault ().getDialogSettings ().getSection ( "importWizard" ) ); //$NON-NLS-1$
 
         this.mergeController = new DiffController ();
     }
@@ -93,7 +93,7 @@ public class ImportWizard extends Wizard implements IImportWizard
         }
         catch ( final Exception e )
         {
-            final Status status = new Status ( Status.ERROR, Activator.PLUGIN_ID, "Failed to apply diff", e );
+            final Status status = new Status ( Status.ERROR, Activator.PLUGIN_ID, Messages.ImportWizard_StatusErrorFailedToApply, e );
             StatusManager.getManager ().handle ( status, StatusManager.BLOCK );
             return false;
         }
@@ -102,7 +102,7 @@ public class ImportWizard extends Wizard implements IImportWizard
     protected void applyDiff ( final IProgressMonitor parentMonitor ) throws InterruptedException, ExecutionException
     {
         final SubMonitor monitor = SubMonitor.convert ( parentMonitor, 100 );
-        monitor.setTaskName ( "Applying configuration" );
+        monitor.setTaskName ( Messages.ImportWizard_TaskName );
 
         final Collection<DiffEntry> result = this.mergeController.merge ( monitor.newChild ( 10 ) );
         if ( result.isEmpty () )
@@ -118,12 +118,12 @@ public class ImportWizard extends Wizard implements IImportWizard
         try
         {
             final int size = Iterables.size ( splitted );
-            sub.beginTask ( "Apply configuration", size );
+            sub.beginTask ( Messages.ImportWizard_TaskName, size );
 
             int pos = 0;
             for ( final Iterable<DiffEntry> i : splitted )
             {
-                sub.subTask ( String.format ( "Apply chunk: %s of %s", pos, size ) );
+                sub.subTask ( String.format ( Messages.ImportWizard_SubTaskName, pos, size ) );
                 final Collection<DiffEntry> entries = new LinkedList<DiffEntry> ();
                 Iterables.addAll ( entries, i );
                 final NotifyFuture<Void> future = this.connection.getConnection ().applyDiff ( entries );

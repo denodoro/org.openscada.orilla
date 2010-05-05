@@ -57,8 +57,8 @@ public class RemoteDataPage extends WizardPage
 
     public RemoteDataPage ( final ConnectionService service, final DiffController mergeController )
     {
-        super ( "loadPage" );
-        setTitle ( "Loading current data" );
+        super ( "loadPage" ); //$NON-NLS-1$
+        setTitle ( Messages.RemoteDataPage_Title );
         this.service = service;
         this.mergeController = mergeController;
     }
@@ -70,7 +70,7 @@ public class RemoteDataPage extends WizardPage
         wrapper.setLayout ( new GridLayout ( 1, false ) );
 
         final Button loadButton = new Button ( wrapper, SWT.PUSH );
-        loadButton.setText ( "Load from server" );
+        loadButton.setText ( Messages.RemoteDataPage_LoadButtonText );
         loadButton.addSelectionListener ( new SelectionAdapter () {
             @Override
             public void widgetSelected ( final SelectionEvent e )
@@ -80,7 +80,7 @@ public class RemoteDataPage extends WizardPage
         } );
 
         final Button clearButton = new Button ( wrapper, SWT.PUSH );
-        clearButton.setText ( "Clean import" );
+        clearButton.setText ( Messages.RemoteDataPage_CleanButtonText );
         clearButton.addSelectionListener ( new SelectionAdapter () {
             @Override
             public void widgetSelected ( final SelectionEvent e )
@@ -128,11 +128,11 @@ public class RemoteDataPage extends WizardPage
         }
         catch ( final InvocationTargetException e )
         {
-            setError ( "Failed to load: " + e.getMessage () );
+            setError ( Messages.RemoteDataPage_FailedToLoadMessage + e.getMessage () );
         }
         catch ( final InterruptedException e )
         {
-            setError ( "Failed to load: " + e.getMessage () );
+            setError ( Messages.RemoteDataPage_FailedToLoadMessage + e.getMessage () );
         }
     }
 
@@ -150,10 +150,10 @@ public class RemoteDataPage extends WizardPage
         {
             final NotifyFuture<FactoryInformation[]> future = RemoteDataPage.this.service.getConnection ().getFactories ();
             final FactoryInformation[] factories = future.get ();
-            monitor.beginTask ( "Loading data", factories.length );
+            monitor.beginTask ( Messages.RemoteDataPage_TaskName, factories.length );
             for ( final FactoryInformation factory : factories )
             {
-                monitor.subTask ( "Loading: " + factory.getId () );
+                monitor.subTask ( Messages.RemoteDataPage_SubTaskName + factory.getId () );
                 result.add ( this.service.getConnection ().getFactoryWithData ( factory.getId () ).get () );
                 monitor.worked ( 1 );
                 if ( monitor.isCanceled () )
@@ -173,30 +173,30 @@ public class RemoteDataPage extends WizardPage
     {
         if ( this.service == null )
         {
-            setError ( "No service set" );
+            setError ( Messages.RemoteDataPage_ErrorNoService );
         }
         else if ( this.service.getConnection () == null )
         {
-            setError ( "No connection set" );
+            setError ( Messages.RemoteDataPage_ErrorNoConnection );
         }
         else if ( this.result == null )
         {
-            setError ( "No data loaded" );
+            setError ( Messages.RemoteDataPage_ErrorNoData );
         }
         else
         {
             setErrorMessage ( null );
-            setDescription ( "Data is loaded" );
+            setDescription ( Messages.RemoteDataPage_MessageDataLoaded );
             setPageComplete ( true );
         }
 
         if ( this.result != null )
         {
-            this.resultText.setText ( String.format ( "%s factories with %s entries loaded", this.result.size (), this.count ) );
+            this.resultText.setText ( String.format ( Messages.RemoteDataPage_StatusLabelFormat, this.result.size (), this.count ) );
         }
         else
         {
-            this.resultText.setText ( "No data loaded" );
+            this.resultText.setText ( Messages.RemoteDataPage_StatusLabelNoData );
         }
     }
 
@@ -205,7 +205,7 @@ public class RemoteDataPage extends WizardPage
         setPageComplete ( string == null );
         if ( string == null )
         {
-            setDescription ( "Load the data from the factories" );
+            setDescription ( Messages.RemoteDataPage_DescriptionText );
         }
         else
         {

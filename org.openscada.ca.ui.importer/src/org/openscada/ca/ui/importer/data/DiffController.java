@@ -81,7 +81,7 @@ public class DiffController
     {
         try
         {
-            monitor.beginTask ( "Calculating changes", this.localData.size () + this.remoteData.size () );
+            monitor.beginTask ( Messages.DiffController_TaskName, this.localData.size () + this.remoteData.size () );
 
             return processMerge ( monitor );
         }
@@ -117,9 +117,9 @@ public class DiffController
                         final Map<String, String> remoteData = remoteFactory.get ( cfgEntry.getKey () );
                         if ( !isEqual ( cfgEntry.getValue (), remoteData ) )
                         {
-                            logger.debug ( "Detected update" );
-                            logger.debug ( "From: " + remoteData );
-                            logger.debug ( "To: " + cfgEntry.getValue () );
+                            logger.debug ( "Detected update" ); //$NON-NLS-1$
+                            logger.debug ( "From: " + remoteData ); //$NON-NLS-1$
+                            logger.debug ( "To: " + cfgEntry.getValue () ); //$NON-NLS-1$
                             result.add ( new DiffEntry ( factoryEntry.getKey (), cfgEntry.getKey (), Operation.UPDATE, cfgEntry.getValue () ) );
                         }
                     }

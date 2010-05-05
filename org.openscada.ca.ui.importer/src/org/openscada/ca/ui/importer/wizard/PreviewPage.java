@@ -56,8 +56,8 @@ public class PreviewPage extends WizardPage
 
     public PreviewPage ( final DiffController mergeController )
     {
-        super ( "previewPage" );
-        setTitle ( "Preview the prepared opertions" );
+        super ( "previewPage" ); //$NON-NLS-1$
+        setTitle ( Messages.PreviewPage_PageTitle );
         this.mergeController = mergeController;
     }
 
@@ -74,22 +74,22 @@ public class PreviewPage extends WizardPage
 
         TableViewerColumn col;
         col = new TableViewerColumn ( this.viewer, SWT.NONE );
-        col.getColumn ().setText ( "Factory Id" );
+        col.getColumn ().setText ( Messages.PreviewPage_ColFactoryText );
         layout.addColumnData ( new ColumnWeightData ( 10 ) );
         col.setLabelProvider ( new DiffEntryLabelProvider () );
 
         col = new TableViewerColumn ( this.viewer, SWT.NONE );
-        col.getColumn ().setText ( "Configuration Id" );
+        col.getColumn ().setText ( Messages.PreviewPage_ColConfigurationText );
         layout.addColumnData ( new ColumnWeightData ( 20 ) );
         col.setLabelProvider ( new DiffEntryLabelProvider () );
 
         col = new TableViewerColumn ( this.viewer, SWT.NONE );
-        col.getColumn ().setText ( "Operation" );
+        col.getColumn ().setText ( Messages.PreviewPage_ColOperationText );
         layout.addColumnData ( new ColumnWeightData ( 10 ) );
         col.setLabelProvider ( new DiffEntryLabelProvider () );
 
         col = new TableViewerColumn ( this.viewer, SWT.NONE );
-        col.getColumn ().setText ( "Data" );
+        col.getColumn ().setText ( Messages.PreviewPage_ColDataText );
         layout.addColumnData ( new ColumnWeightData ( 20 ) );
         col.setLabelProvider ( new DiffEntryLabelProvider () );
 
@@ -138,9 +138,9 @@ public class PreviewPage extends WizardPage
             catch ( final Exception e )
             {
                 e.printStackTrace ();
-                final Status status = new Status ( Status.ERROR, Activator.PLUGIN_ID, "Failed to merge data", e );
+                final Status status = new Status ( Status.ERROR, Activator.PLUGIN_ID, Messages.PreviewPage_StatusErrorFailedToMerge, e );
                 StatusManager.getManager ().handle ( status );
-                ErrorDialog.openError ( getShell (), "Error", "Failed to merge data", status );
+                ErrorDialog.openError ( getShell (), Messages.PreviewPage_TitleErrorFailedToMerge, Messages.PreviewPage_MessageErrorFailedToMerge, status );
             }
         }
     }
@@ -148,7 +148,7 @@ public class PreviewPage extends WizardPage
     private void setMergeResult ( final Collection<DiffEntry> merge )
     {
         this.viewer.setInput ( merge.toArray ( new DiffEntry[merge.size ()] ) );
-        this.statsLabel.setText ( MessageFormat.format ( "{0,choice,0#nothing|1#1 entry|1<{0} entries} to apply", merge.size () ) );
+        this.statsLabel.setText ( MessageFormat.format ( Messages.PreviewPage_StatusLabel, merge.size () ) );
     }
 
 }

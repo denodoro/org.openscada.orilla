@@ -13,7 +13,7 @@
             locationURI="popup:org.openscada.core.ui.connection.ConnectionView#PopupMenu">
          <command
                commandId="org.eclipse.ui.file.import"
-               label="Import Configuration"
+               label="%importerWizard.command.name"
                style="push">
             <parameter
                   name="importWizardId"
@@ -51,7 +51,7 @@
       <wizard
             class="org.openscada.ca.ui.importer.wizard.ImportWizard"
             id="org.openscada.ca.ui.importer.wizard"
-            name="Import Configuration">
+            name="%importerWizard.wizard.name">
       </wizard>
    </extension>
 

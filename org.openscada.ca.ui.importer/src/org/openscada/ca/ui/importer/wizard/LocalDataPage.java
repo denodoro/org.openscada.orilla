@@ -63,8 +63,8 @@ public class LocalDataPage extends WizardPage
 
     protected LocalDataPage ( final DiffController mergeController )
     {
-        super ( "welcomePage" );
-        setTitle ( "Select a file to import" );
+        super ( "welcomePage" ); //$NON-NLS-1$
+        setTitle ( Messages.LocalDataPage_Title );
 
         this.mergeController = mergeController;
     }
@@ -75,10 +75,10 @@ public class LocalDataPage extends WizardPage
         wrapper.setLayout ( new GridLayout ( 4, false ) );
 
         final Label label = new Label ( wrapper, SWT.NONE );
-        label.setText ( "Import file:" );
+        label.setText ( Messages.LocalDataPage_FileLabel );
 
         this.fileName = new Text ( wrapper, SWT.BORDER );
-        this.fileName.setText ( getWizard ().getDialogSettings ().get ( "welcomePage.file" ) );
+        this.fileName.setText ( getWizard ().getDialogSettings ().get ( "welcomePage.file" ) ); //$NON-NLS-1$
         this.fileName.setLayoutData ( new GridData ( SWT.FILL, SWT.CENTER, true, false ) );
         this.fileName.addModifyListener ( new ModifyListener () {
 
@@ -89,7 +89,7 @@ public class LocalDataPage extends WizardPage
         } );
 
         final Button selectButton = new Button ( wrapper, SWT.PUSH );
-        selectButton.setText ( "Browse..." );
+        selectButton.setText ( Messages.LocalDataPage_BrowseButtonText );
         selectButton.addSelectionListener ( new SelectionAdapter () {
             @Override
             public void widgetSelected ( final SelectionEvent e )
@@ -99,7 +99,7 @@ public class LocalDataPage extends WizardPage
         } );
 
         final Button loadButton = new Button ( wrapper, SWT.PUSH );
-        loadButton.setText ( "Load" );
+        loadButton.setText ( Messages.LocalDataPage_LoadButtonText );
         loadButton.addSelectionListener ( new SelectionAdapter () {
             public void widgetSelected ( final SelectionEvent e )
             {
@@ -118,8 +118,8 @@ public class LocalDataPage extends WizardPage
     protected void selectFile ()
     {
         final FileDialog dlg = new FileDialog ( this.getShell (), SWT.OPEN );
-        dlg.setFilterExtensions ( new String[] { "*.oscar", "*.json", "*.*" } );
-        dlg.setFilterNames ( new String[] { "OpenSCADA Configuration Archive", "JSON Configuration Data", "All types" } );
+        dlg.setFilterExtensions ( new String[] { "*.oscar", "*.json", "*.*" } ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        dlg.setFilterNames ( new String[] { Messages.LocalDataPage_OSCARFilterDescription, Messages.LocalDataPage_JSONFilterDescription, Messages.LocalDataPage_AllFilterDescription } );
 
         if ( this.fileName.getText ().length () > 0 )
         {
@@ -131,7 +131,7 @@ public class LocalDataPage extends WizardPage
         if ( file != null )
         {
             this.fileName.setText ( file );
-            getWizard ().getDialogSettings ().put ( "welcomePage.file", file );
+            getWizard ().getDialogSettings ().put ( "welcomePage.file", file ); //$NON-NLS-1$
         }
     }
 
@@ -152,11 +152,11 @@ public class LocalDataPage extends WizardPage
         this.mergeController.setLocalData ( this.data );
         if ( this.data != null )
         {
-            this.dataLabel.setText ( String.format ( "Loaded %s factories", this.data.size () ) );
+            this.dataLabel.setText ( String.format ( Messages.LocalDataPage_StatusLabelFormat, this.data.size () ) );
         }
         else
         {
-            this.dataLabel.setText ( "No data loaded" );
+            this.dataLabel.setText ( Messages.LocalDataPage_EmptyStatusLabelText );
         }
     }
 
@@ -171,27 +171,27 @@ public class LocalDataPage extends WizardPage
 
         if ( fileName.length () == 0 )
         {
-            throw new IllegalStateException ( "A file must be selected" );
+            throw new IllegalStateException ( Messages.LocalDataPage_ErrorMissingFile );
         }
 
         final File file = new File ( fileName );
 
         if ( !file.exists () )
         {
-            throw new IllegalArgumentException ( String.format ( "'%s' does not exists", fileName ) );
+            throw new IllegalArgumentException ( String.format ( Messages.LocalDataPage_ErrorNonExistingFile, fileName ) );
         }
         if ( !file.isFile () )
         {
-            throw new IllegalArgumentException ( String.format ( "'%s' must be a normal file", fileName ) );
+            throw new IllegalArgumentException ( String.format ( Messages.LocalDataPage_ErrorNormalFile, fileName ) );
         }
         if ( !file.canRead () )
         {
-            throw new IllegalArgumentException ( String.format ( "'%s' can not be read", fileName ) );
+            throw new IllegalArgumentException ( String.format ( Messages.LocalDataPage_ErrorCannotReadFile, fileName ) );
         }
 
         if ( this.data == null )
         {
-            throw new IllegalStateException ( "No data loaded" );
+            throw new IllegalStateException ( Messages.LocalDataPage_ErrorNoData );
         }
     }
 
@@ -207,7 +207,7 @@ public class LocalDataPage extends WizardPage
                 {
                     try
                     {
-                        monitor.beginTask ( "Loading configuration data", IProgressMonitor.UNKNOWN );
+                        monitor.beginTask ( Messages.LocalDataPage_TaskName, IProgressMonitor.UNKNOWN );
                         LocalDataPage.this.data = loadData ( file );
                     }
                     catch ( final Exception e )
@@ -225,7 +225,7 @@ public class LocalDataPage extends WizardPage
         catch ( final Exception e )
         {
             e.printStackTrace ();
-            final Status status = new Status ( Status.OK, Activator.PLUGIN_ID, "Failed to load data", e );
+            final Status status = new Status ( Status.OK, Activator.PLUGIN_ID, Messages.LocalDataPage_StatusErrorFailedToLoad, e );
             StatusManager.getManager ().handle ( status, StatusManager.BLOCK );
         }
         update ();
@@ -252,7 +252,7 @@ public class LocalDataPage extends WizardPage
 
     }
 
-    String oscarSuffix = ".oscar";
+    String oscarSuffix = ".oscar"; //$NON-NLS-1$
 
     private boolean isOscar ( final File file )
     {
@@ -292,10 +292,10 @@ public class LocalDataPage extends WizardPage
         final ZipFile zfile = new ZipFile ( file );
         try
         {
-            final ZipEntry entry = zfile.getEntry ( "data.json" );
+            final ZipEntry entry = zfile.getEntry ( "data.json" ); //$NON-NLS-1$
             if ( entry == null )
             {
-                throw new IllegalArgumentException ( "File is not a valid OSCAR file" );
+                throw new IllegalArgumentException ( Messages.LocalDataPage_ErrorInvalidOscar );
             }
             final InputStream stream = zfile.getInputStream ( entry );
             try
