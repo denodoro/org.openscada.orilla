@@ -77,7 +77,7 @@ public class LocalDataPage extends WizardPage
         final Label label = new Label ( wrapper, SWT.NONE );
         label.setText ( "Import file:" );
 
-        this.fileName = new Text ( wrapper, SWT.NONE );
+        this.fileName = new Text ( wrapper, SWT.BORDER );
         this.fileName.setText ( getWizard ().getDialogSettings ().get ( "welcomePage.file" ) );
         this.fileName.setLayoutData ( new GridData ( SWT.FILL, SWT.CENTER, true, false ) );
         this.fileName.addModifyListener ( new ModifyListener () {

@@ -19,6 +19,30 @@
                   name="importWizardId"
                   value="org.openscada.ca.ui.importer.wizard">
             </parameter>
+            <visibleWhen
+                  checkEnabled="false">
+               <and>
+                  <iterate
+                        ifEmpty="false"
+                        operator="and">
+                     <and>
+                        <or>
+                           <instanceof
+                                 value="org.openscada.core.connection.provider.ConnectionService">
+                           </instanceof>
+                           <adapt
+                                 type="org.openscada.core.connection.provider.ConnectionService">
+                           </adapt>
+                        </or>
+                        <test
+                              forcePluginActivation="true"
+                              property="org.openscada.core.ui.connection.data.ConnectionHolder.interfaceName"
+                              value="ca">
+                        </test>
+                     </and>
+                  </iterate>
+               </and>
+            </visibleWhen>
          </command>
       </menuContribution>
    </extension>
