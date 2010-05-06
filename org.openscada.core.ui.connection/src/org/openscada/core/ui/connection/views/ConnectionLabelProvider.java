@@ -10,6 +10,7 @@ import org.eclipse.jface.resource.LocalResourceManager;
 import org.eclipse.jface.resource.ResourceManager;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.swt.graphics.Image;
+import org.openscada.core.ConnectionInformation;
 import org.openscada.core.client.Connection;
 import org.openscada.core.connection.provider.ConnectionService;
 import org.openscada.core.ui.connection.ConnectionDescriptor;
@@ -44,7 +45,7 @@ public class ConnectionLabelProvider extends CommonListeningLabelProvider implem
 
         final ConnectionDescriptor desc = holder.getConnectionInformation ();
 
-        final StyledString str = new StyledString ( desc.getConnectionInformation ().toString () );
+        final StyledString str = new StyledString ( makeLabel ( desc.getConnectionInformation () ) );
 
         if ( service != null )
         {
@@ -59,10 +60,20 @@ public class ConnectionLabelProvider extends CommonListeningLabelProvider implem
 
         if ( desc.getServiceId () != null )
         {
-            str.append ( " (" + desc.getServiceId () + ")", StyledString.QUALIFIER_STYLER ); //$NON-NLS-1$ //$NON-NLS-2$
+            str.append ( String.format ( " (%s)", desc.getServiceId () ), StyledString.QUALIFIER_STYLER ); //$NON-NLS-1$ 
         }
 
         return str;
+    }
+
+    private String makeLabel ( final ConnectionInformation connectionInformation )
+    {
+        final ConnectionInformation clone = (ConnectionInformation)connectionInformation.clone ();
+        if ( clone.getPassword () != null )
+        {
+            clone.setPassword ( "***" ); //$NON-NLS-1$
+        }
+        return clone.toString ();
     }
 
     @Override
@@ -81,6 +92,7 @@ public class ConnectionLabelProvider extends CommonListeningLabelProvider implem
         {
             final Image image = this.resource.createImage ( ImageDescriptor.createFromFile ( ConnectionLabelProvider.class, "icons/connection.gif" ) ); //$NON-NLS-1$
             label.setImage ( image );
+
             label.setStyledText ( getConnectionString ( (ConnectionHolder)element ) );
         }
     }
