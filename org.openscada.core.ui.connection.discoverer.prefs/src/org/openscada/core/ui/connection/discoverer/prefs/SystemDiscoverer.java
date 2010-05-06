@@ -19,20 +19,16 @@
 
 package org.openscada.core.ui.connection.discoverer.prefs;
 
-import org.eclipse.osgi.util.NLS;
+import java.util.prefs.Preferences;
 
-public class Messages extends NLS
+import org.openscada.core.ui.connection.ConnectionStore;
+
+public class SystemDiscoverer extends AbstractPreferencesDiscoverer
 {
-    private static final String BUNDLE_NAME = "org.openscada.core.ui.connection.discoverer.prefs.messages"; //$NON-NLS-1$
-
-    public static String UserDiscoverer_ErrorStore;
-    static
+    @Override
+    protected Preferences getNode ()
     {
-        // initialize resource bundle
-        NLS.initializeMessages ( BUNDLE_NAME, Messages.class );
+        return Preferences.systemNodeForPackage ( ConnectionStore.class );
     }
 
-    private Messages ()
-    {
-    }
 }

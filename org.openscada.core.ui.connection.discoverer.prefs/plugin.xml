@@ -5,8 +5,15 @@
          point="org.openscada.core.ui.connection.discoverer">
       <discoverer
             class="org.openscada.core.ui.connection.discoverer.prefs.UserDiscoverer"
+            icon="icons/user_obj.gif"
             id="org.openscada.core.ui.connection.discoverer.prefs.UserDiscoverer"
-            name="User Preferences">
+            name="%user.discoverer.name">
+      </discoverer>
+      <discoverer
+            class="org.openscada.core.ui.connection.discoverer.prefs.SystemDiscoverer"
+            icon="icons/console_view.gif"
+            id="org.openscada.core.ui.connection.discoverer.prefs.SystemDiscoverer"
+            name="%system.discoverer.name">
       </discoverer>
    </extension>
 
