@@ -21,7 +21,7 @@ public class UserDiscoverer extends ResourceDiscoverer implements ConnectionStor
     @Override
     protected void initialize ()
     {
-        final String data = getNode ().get ( "connection", "" );
+        final String data = getNode ().get ( "connection", "" ); //$NON-NLS-1$ //$NON-NLS-2$
         final StringReader reader = new StringReader ( data );
         load ( reader );
     }
@@ -68,12 +68,12 @@ public class UserDiscoverer extends ResourceDiscoverer implements ConnectionStor
             printer.close ();
 
             final Preferences node = getNode ();
-            node.put ( "connection", sw.toString () );
+            node.put ( "connection", sw.toString () ); //$NON-NLS-1$
             node.sync ();
         }
         catch ( final Exception e )
         {
-            throw new CoreException ( new Status ( Status.ERROR, Activator.PLUGIN_ID, "Failed to store", e ) );
+            throw new CoreException ( new Status ( Status.ERROR, Activator.PLUGIN_ID, Messages.UserDiscoverer_ErrorStore, e ) );
         }
         finally
         {
