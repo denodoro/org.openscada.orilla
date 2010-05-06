@@ -37,6 +37,8 @@ public abstract class AbstractPreferencesDiscoverer extends ResourceDiscoverer i
 
     private static final String PREF_NAME = "connection"; //$NON-NLS-1$
 
+    private PreferenceChangeListener listener;
+
     public AbstractPreferencesDiscoverer ()
     {
         super ();
@@ -49,7 +51,7 @@ public abstract class AbstractPreferencesDiscoverer extends ResourceDiscoverer i
     {
         loadAll ();
 
-        getNode ().addPreferenceChangeListener ( new PreferenceChangeListener () {
+        getNode ().addPreferenceChangeListener ( this.listener = new PreferenceChangeListener () {
 
             public void preferenceChange ( final PreferenceChangeEvent evt )
             {
@@ -59,6 +61,13 @@ public abstract class AbstractPreferencesDiscoverer extends ResourceDiscoverer i
                 }
             }
         } );
+    }
+
+    @Override
+    public synchronized void dispose ()
+    {
+        getNode ().removePreferenceChangeListener ( this.listener );
+        super.dispose ();
     }
 
     private void loadAll ()
@@ -111,7 +120,7 @@ public abstract class AbstractPreferencesDiscoverer extends ResourceDiscoverer i
 
             final Preferences node = getNode ();
             node.put ( PREF_NAME, sw.toString () );
-            node.sync ();
+            node.flush ();
         }
         catch ( final Exception e )
         {
