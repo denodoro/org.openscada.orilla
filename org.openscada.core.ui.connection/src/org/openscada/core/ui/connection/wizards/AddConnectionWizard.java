@@ -6,6 +6,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.statushandlers.StatusManager;
 import org.openscada.core.ui.connection.ConnectionDescriptor;
 import org.openscada.core.ui.connection.ConnectionStore;
 import org.slf4j.Logger;
@@ -34,6 +35,7 @@ public class AddConnectionWizard extends Wizard implements INewWizard
         }
         catch ( final CoreException e )
         {
+            StatusManager.getManager ().handle ( e.getStatus (), StatusManager.BLOCK );
             return false;
         }
 
