@@ -5,6 +5,7 @@
          point="org.openscada.core.ui.connection.discoverer">
       <discoverer
             class="org.openscada.core.ui.connection.discoverer.ecf.ConnectionDiscovererImpl"
+            icon="icons/agent_obj.gif"
             id="org.openscada.core.ui.connection.discoverer.ecf.discoverer"
             name="Dynamic Service Discovery (ECF)">
       </discoverer>
