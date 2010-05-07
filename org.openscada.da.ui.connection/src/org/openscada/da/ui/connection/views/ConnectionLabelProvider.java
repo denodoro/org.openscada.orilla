@@ -6,6 +6,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.resource.LocalResourceManager;
 import org.eclipse.jface.resource.ResourceManager;
+import org.openscada.core.Variant;
 import org.openscada.da.core.IODirection;
 import org.openscada.da.core.browser.DataItemEntry;
 import org.openscada.da.core.browser.FolderEntry;
@@ -82,5 +83,36 @@ public class ConnectionLabelProvider extends CommonListeningLabelProvider
             folderName = " ";
         }
         label.setText ( folderName );
+    }
+
+    @Override
+    public String getDescription ( final Object anElement )
+    {
+        final DataItemEntry dataItemEntry = (DataItemEntry)AdapterHelper.adapt ( anElement, DataItemEntry.class );
+        if ( dataItemEntry != null )
+        {
+            final String itemId = dataItemEntry.getId ();
+
+            final Variant value = dataItemEntry.getAttributes ().get ( "description" );
+            if ( value != null )
+            {
+                return String.format ( "%s (%s)", itemId, value.asString ( "" ) );
+            }
+            else
+            {
+                return itemId;
+            }
+        }
+
+        final FolderEntry folderEntry = (FolderEntry)AdapterHelper.adapt ( anElement, FolderEntry.class );
+        if ( folderEntry != null )
+        {
+            final Variant value = folderEntry.getAttributes ().get ( "description" );
+            if ( value != null )
+            {
+                return value.asString ( null );
+            }
+        }
+        return super.getDescription ( anElement );
     }
 }
