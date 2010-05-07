@@ -27,6 +27,7 @@ import org.eclipse.draw2d.Connection;
 import org.eclipse.draw2d.ConnectionLayer;
 import org.eclipse.draw2d.ConnectionRouter;
 import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.FlowLayout;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
@@ -122,26 +123,40 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
     @Override
     protected IFigure createRoot ()
     {
-        this.baseFigure = new LayeredPane ();
+        final Figure baseFigure = new LayeredPane ();
 
-        ConnectionLayer connLayer;
+        this.rootFigure = new Layer ();
 
-        final Layer rootFigure = new Layer ();
+        this.connLayer = new ConnectionLayer ();
+        this.connLayer.setAntialias ( 1 );
+        this.connLayer.setConnectionRouter ( ConnectionRouter.NULL );
 
-        connLayer = new ConnectionLayer ();
-        connLayer.setAntialias ( 1 );
-        connLayer.setConnectionRouter ( ConnectionRouter.NULL );
+        baseFigure.add ( this.connLayer );
+        baseFigure.add ( this.rootFigure );
+        baseFigure.add ( createNaPanel () );
 
-        this.baseFigure.add ( connLayer );
-        this.baseFigure.add ( rootFigure );
+        this.rootFigure.setLayoutManager ( new BorderLayout () );
+        this.rootFigure.setBackgroundColor ( ColorConstants.white );
 
-        rootFigure.setLayoutManager ( new BorderLayout () );
-        rootFigure.setBackgroundColor ( ColorConstants.white );
+        this.rootFigure.add ( createArrowFigure (), BorderLayout.RIGHT );
+        this.rootFigure.add ( createEntryGrid ( this.connLayer ), BorderLayout.CENTER );
 
-        rootFigure.add ( createArrowFigure (), BorderLayout.RIGHT );
-        rootFigure.add ( createEntryGrid ( connLayer ), BorderLayout.CENTER );
+        return baseFigure;
+    }
 
-        return this.baseFigure;
+    private IFigure createNaPanel ()
+    {
+        this.naPanel = new Figure ();
+
+        final FlowLayout layout = new FlowLayout ();
+        layout.setHorizontal ( false );
+        layout.setMajorAlignment ( FlowLayout.ALIGN_CENTER );
+        this.naPanel.setLayoutManager ( layout );
+
+        final Label label = new Label ();
+        label.setText ( " Function not available!" );
+        this.naPanel.add ( label );
+        return this.naPanel;
     }
 
     private IFigure createEntryGrid ( final Figure connLayer )
@@ -229,7 +244,11 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
 
     private static final Dimension RECT_DIMENSION = new Dimension ( 50, 15 );
 
-    private Figure baseFigure;
+    private ConnectionLayer connLayer;
+
+    private Layer rootFigure;
+
+    private Figure naPanel;
 
     public GenericLevelPresets ()
     {
@@ -397,24 +416,27 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
                 var = this.value.getAttributes ().get ( "remote.level.high.alarm" );
                 if ( var == null )
                 {
-                    if ( this.baseFigure != null )
-                    {
-                        this.baseFigure.setVisible ( false );
-                    }
+                    this.connLayer.setVisible ( false );
+                    this.rootFigure.setVisible ( false );
+                    this.naPanel.setVisible ( true );
                 }
                 else
                 {
-                    if ( this.baseFigure != null )
-                    {
-                        this.baseFigure.setVisible ( true );
-                    }
+                    this.connLayer.setVisible ( true );
+                    this.rootFigure.setVisible ( true );
+                    this.naPanel.setVisible ( false );
                 }
-
             }
             catch ( final NullPointerException e )
             {
-                this.baseFigure.setVisible ( false );
+                //maybe there is no value or no view. Just keep everything as it is.
             }
+        }
+        else
+        {
+            this.connLayer.setVisible ( true );
+            this.rootFigure.setVisible ( true );
+            this.naPanel.setVisible ( false );
         }
 
         if ( this.value == null )
