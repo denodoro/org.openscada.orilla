@@ -122,7 +122,7 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
     @Override
     protected IFigure createRoot ()
     {
-        final Figure baseFigure = new LayeredPane ();
+        this.baseFigure = new LayeredPane ();
 
         ConnectionLayer connLayer;
 
@@ -132,8 +132,8 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
         connLayer.setAntialias ( 1 );
         connLayer.setConnectionRouter ( ConnectionRouter.NULL );
 
-        baseFigure.add ( connLayer );
-        baseFigure.add ( rootFigure );
+        this.baseFigure.add ( connLayer );
+        this.baseFigure.add ( rootFigure );
 
         rootFigure.setLayoutManager ( new BorderLayout () );
         rootFigure.setBackgroundColor ( ColorConstants.white );
@@ -141,7 +141,7 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
         rootFigure.add ( createArrowFigure (), BorderLayout.RIGHT );
         rootFigure.add ( createEntryGrid ( connLayer ), BorderLayout.CENTER );
 
-        return baseFigure;
+        return this.baseFigure;
     }
 
     private IFigure createEntryGrid ( final Figure connLayer )
@@ -228,6 +228,8 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
     }
 
     private static final Dimension RECT_DIMENSION = new Dimension ( 50, 15 );
+
+    private Figure baseFigure;
 
     public GenericLevelPresets ()
     {
@@ -387,6 +389,34 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
     @Override
     protected void update ()
     {
+        if ( this instanceof RemoteLevelPresets )
+        {
+            Variant var;
+            try
+            {
+                var = this.value.getAttributes ().get ( "remote.level.high.alarm" );
+                if ( var == null )
+                {
+                    if ( this.baseFigure != null )
+                    {
+                        this.baseFigure.setVisible ( false );
+                    }
+                }
+                else
+                {
+                    if ( this.baseFigure != null )
+                    {
+                        this.baseFigure.setVisible ( true );
+                    }
+                }
+
+            }
+            catch ( final NullPointerException e )
+            {
+                this.baseFigure.setVisible ( false );
+            }
+        }
+
         if ( this.value == null )
         {
             return;
