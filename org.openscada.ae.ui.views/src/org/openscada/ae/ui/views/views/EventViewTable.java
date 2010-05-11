@@ -244,7 +244,7 @@ public class EventViewTable extends Composite
         columns.add ( Column.reservedColumnEntryTimestamp );
     }
 
-    public EventViewTable ( final Composite parent, final int style, final WritableSet events, final Action ackAction, final Action commentAction )
+    public EventViewTable ( final Composite parent, final int style, final WritableSet events, final Action ackAction, final Action commentAction, final List<ColumnProperties> columnSettings )
     {
         super ( parent, style );
         this.ackAction = ackAction;
@@ -256,6 +256,7 @@ public class EventViewTable extends Composite
 
         this.tableViewer = new TableViewer ( this, SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.MULTI );
         createColumns ( this.tableViewer );
+        applyColumSettings ( columnSettings );
         this.tableViewer.getTable ().setHeaderVisible ( true );
         this.tableViewer.getTable ().setLinesVisible ( true );
         this.tableViewer.setUseHashlookup ( true );
@@ -267,6 +268,37 @@ public class EventViewTable extends Composite
         this.tableViewer.setContentProvider ( contentProvider );
         this.tableViewer.setLabelProvider ( new EventLabelProvider ( Properties.observeEach ( contentProvider.getKnownElements (), BeanProperties.values ( new String[] { "id", "monitor" } ) ), columns ) );
         this.tableViewer.setInput ( this.events );
+    }
+
+    private void applyColumSettings ( final List<ColumnProperties> columnSettings )
+    {
+        if ( columnSettings == null )
+        {
+            return;
+        }
+        int[] colOrder = this.tableViewer.getTable ().getColumnOrder ();
+        int i = 0;
+        for ( ColumnProperties p : columnSettings )
+        {
+            if ( i >= colOrder.length )
+            {
+                break;
+            }
+            colOrder[i] = p.getNo ();
+            i += 1;
+        }
+        this.tableViewer.getTable ().setColumnOrder ( colOrder );
+        i = 0;
+        for ( ColumnProperties p : columnSettings )
+        {
+            if ( i >= this.tableViewer.getTable ().getColumnCount () )
+            {
+                break;
+            }
+            TableColumn col = this.tableViewer.getTable ().getColumn ( i );
+            col.setWidth ( p.getWidth () );
+            i += 1;
+        }
     }
 
     private Menu createContextMenu ( final Control parent )
@@ -377,5 +409,18 @@ public class EventViewTable extends Composite
     public Pair<SearchType, String> getFilter ()
     {
         return this.filter;
+    }
+
+    public List<ColumnProperties> getColumnSettings ()
+    {
+        List<ColumnProperties> result = new ArrayList<ColumnProperties> ();
+        int i = 0;
+        int[] order = this.tableViewer.getTable ().getColumnOrder ();
+        for ( TableColumn col : this.tableViewer.getTable ().getColumns () )
+        {
+            result.add ( new ColumnProperties ( order[i], col.getWidth () ) );
+            i += 1;
+        }
+        return result;
     }
 }

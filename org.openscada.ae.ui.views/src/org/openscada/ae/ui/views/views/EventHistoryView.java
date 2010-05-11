@@ -1,6 +1,7 @@
 package org.openscada.ae.ui.views.views;
 
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -16,7 +17,10 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IMemento;
 import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.IViewSite;
+import org.eclipse.ui.PartInitException;
 import org.openscada.ae.Event;
 import org.openscada.ae.Query;
 import org.openscada.ae.QueryListener;
@@ -28,6 +32,10 @@ import org.openscada.ae.ui.views.dialog.SearchType;
 import org.openscada.ae.ui.views.model.DecoratedEvent;
 import org.openscada.core.client.ConnectionState;
 import org.openscada.utils.lang.Pair;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 public class EventHistoryView extends AbstractAlarmsEventsView
 {
@@ -58,6 +66,10 @@ public class EventHistoryView extends AbstractAlarmsEventsView
     private final AtomicBoolean isPaused = new AtomicBoolean ( false );
 
     private WritableSet events;
+
+    private List<ColumnProperties> initialColumnSettings = null;
+
+    private final Gson gson = new GsonBuilder ().create ();
 
     /**
      * This is a callback that will allow us to create the viewer and initialize
@@ -143,7 +155,7 @@ public class EventHistoryView extends AbstractAlarmsEventsView
 
         this.events = new WritableSet ( SWTObservables.getRealm ( parent.getDisplay () ) );
 
-        this.eventsTable = new EventViewTable ( getContentPane (), SWT.BORDER, this.events, null, commentAction );
+        this.eventsTable = new EventViewTable ( getContentPane (), SWT.BORDER, this.events, null, commentAction, this.initialColumnSettings );
         this.eventsTable.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, true, 1, 1 ) );
     }
 
@@ -385,5 +397,24 @@ public class EventHistoryView extends AbstractAlarmsEventsView
     protected void watchMonitors ( final String monitorsId )
     {
         // pass
+    }
+
+    @Override
+    public void init ( final IViewSite site, final IMemento memento ) throws PartInitException
+    {
+        super.init ( site, memento );
+
+        String s = memento.getString ( "columnSettings" );
+        if ( s != null )
+        {
+            this.initialColumnSettings = this.gson.fromJson ( s, new TypeToken<List<ColumnProperties>> () {}.getType () );
+        }
+    }
+
+    @Override
+    public void saveState ( final IMemento memento )
+    {
+        memento.putString ( "columnSettings", this.gson.toJson ( this.eventsTable.getColumnSettings () ) );
+        super.saveState ( memento );
     }
 }

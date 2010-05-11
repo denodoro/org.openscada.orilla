@@ -2,6 +2,7 @@ package org.openscada.ae.ui.views.views;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -14,6 +15,9 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IMemento;
+import org.eclipse.ui.IViewSite;
+import org.eclipse.ui.PartInitException;
 import org.openscada.ae.ConditionStatusInformation;
 import org.openscada.ae.Event;
 import org.openscada.ae.Event.Fields;
@@ -34,6 +38,10 @@ import org.openscada.utils.lang.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+
 public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
 {
 
@@ -51,6 +59,10 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
 
     private EventViewTable eventsTable;
 
+    private List<ColumnProperties> initialColumnSettings = null;
+
+    private final Gson gson = new GsonBuilder ().create ();
+
     public String getPoolId ()
     {
         return this.poolId;
@@ -58,6 +70,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
 
     public void setPoolId ( final String poolId )
     {
+        System.err.println ( "SET " + poolId );
         if ( poolId == null )
         {
             unSubscribe ();
@@ -133,7 +146,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
         toolBarManager.add ( setFilterAction );
         toolBarManager.add ( removeFilterAction );
 
-        this.eventsTable = new EventViewTable ( this.getContentPane (), SWT.BORDER, this.pool, this.ackAction, commentAction );
+        this.eventsTable = new EventViewTable ( this.getContentPane (), SWT.BORDER, this.pool, this.ackAction, commentAction, this.initialColumnSettings );
         this.eventsTable.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, true, 1, 1 ) );
 
         loadConfiguration ();
@@ -197,15 +210,18 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
             this.eventPoolListener = new EventListener () {
                 public void statusChanged ( final SubscriptionState state )
                 {
+                    System.err.println ( "statusChanged" );
                     EventPoolView.this.statusChangedEventSubscription ( state );
                 }
 
                 public void dataChanged ( final Event[] addedEvents )
                 {
+                    System.err.println ( "dataChanged" );
                     EventPoolView.this.dataChanged ( addedEvents );
                 }
             };
             getConnectionService ().getEventManager ().addEventListener ( this.poolId, this.eventPoolListener );
+            System.err.println ( "SUBSCRIBED" );
         }
     }
 
@@ -218,6 +234,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
             if ( this.eventPoolListener != null )
             {
                 getConnectionService ().getEventManager ().removeEventListener ( this.poolId, this.eventPoolListener );
+                System.err.println ( "UN-SUBSCRIBED" );
             }
         }
         clear ();
@@ -329,6 +346,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
 
     private void statusChangedEventSubscription ( final SubscriptionState state )
     {
+        System.err.println ( state );
     }
 
     @Override
@@ -404,5 +422,24 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
                 EventPoolView.this.getStateLabel ().setText ( label.toString () );
             }
         } );
+    }
+
+    @Override
+    public void init ( final IViewSite site, final IMemento memento ) throws PartInitException
+    {
+        super.init ( site, memento );
+
+        String s = memento.getString ( "columnSettings" );
+        if ( s != null )
+        {
+            this.initialColumnSettings = this.gson.fromJson ( s, new TypeToken<List<ColumnProperties>> () {}.getType () );
+        }
+    }
+
+    @Override
+    public void saveState ( final IMemento memento )
+    {
+        memento.putString ( "columnSettings", this.gson.toJson ( this.eventsTable.getColumnSettings () ) );
+        super.saveState ( memento );
     }
 }
