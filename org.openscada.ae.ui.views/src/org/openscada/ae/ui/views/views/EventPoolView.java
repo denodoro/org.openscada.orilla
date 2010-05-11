@@ -70,7 +70,6 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
 
     public void setPoolId ( final String poolId )
     {
-        System.err.println ( "SET " + poolId );
         if ( poolId == null )
         {
             unSubscribe ();
@@ -210,18 +209,15 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
             this.eventPoolListener = new EventListener () {
                 public void statusChanged ( final SubscriptionState state )
                 {
-                    System.err.println ( "statusChanged" );
                     EventPoolView.this.statusChangedEventSubscription ( state );
                 }
 
                 public void dataChanged ( final Event[] addedEvents )
                 {
-                    System.err.println ( "dataChanged" );
                     EventPoolView.this.dataChanged ( addedEvents );
                 }
             };
             getConnectionService ().getEventManager ().addEventListener ( this.poolId, this.eventPoolListener );
-            System.err.println ( "SUBSCRIBED" );
         }
     }
 
@@ -234,7 +230,6 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
             if ( this.eventPoolListener != null )
             {
                 getConnectionService ().getEventManager ().removeEventListener ( this.poolId, this.eventPoolListener );
-                System.err.println ( "UN-SUBSCRIBED" );
             }
         }
         clear ();
@@ -346,7 +341,6 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
 
     private void statusChangedEventSubscription ( final SubscriptionState state )
     {
-        System.err.println ( state );
     }
 
     @Override
