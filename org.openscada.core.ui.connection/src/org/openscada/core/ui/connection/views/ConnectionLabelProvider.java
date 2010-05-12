@@ -68,12 +68,7 @@ public class ConnectionLabelProvider extends CommonListeningLabelProvider implem
 
     private String makeLabel ( final ConnectionInformation connectionInformation )
     {
-        final ConnectionInformation clone = (ConnectionInformation)connectionInformation.clone ();
-        if ( clone.getPassword () != null )
-        {
-            clone.setPassword ( "***" ); //$NON-NLS-1$
-        }
-        return clone.toString ();
+        return connectionInformation.toMaskedString ();
     }
 
     @Override
