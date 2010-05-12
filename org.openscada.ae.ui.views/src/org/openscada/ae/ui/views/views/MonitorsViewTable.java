@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.core.databinding.beans.BeanProperties;
+import org.eclipse.core.databinding.observable.set.ISetChangeListener;
+import org.eclipse.core.databinding.observable.set.SetChangeEvent;
 import org.eclipse.core.databinding.observable.set.WritableSet;
 import org.eclipse.core.databinding.property.Properties;
 import org.eclipse.jface.action.Action;
@@ -147,6 +149,10 @@ public class MonitorsViewTable extends Composite
 
     private final Action ackAction;
 
+    private final TableViewer tableViewer;
+
+    private volatile boolean scrollLock = false;
+
     public MonitorsViewTable ( final Composite parent, final int style, final WritableSet monitors, final Action ackAction )
     {
         super ( parent, style );
@@ -157,20 +163,30 @@ public class MonitorsViewTable extends Composite
         FillLayout layout = new FillLayout ();
         this.setLayout ( layout );
 
-        final TableViewer tableViewer = new TableViewer ( this, SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.MULTI );
-        this.tableRef.set ( tableViewer );
-        createColumns ( tableViewer );
-        tableViewer.getTable ().setHeaderVisible ( true );
-        tableViewer.getTable ().setLinesVisible ( true );
-        tableViewer.setUseHashlookup ( true );
-        tableViewer.setSorter ( new Sorter ( Columns.ID, SWT.UP ) );
-        tableViewer.getTable ().setSortDirection ( SWT.UP );
-        tableViewer.getTable ().setMenu ( createContextMenu ( tableViewer.getTable () ) );
+        this.tableViewer = new TableViewer ( this, SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.MULTI );
+        this.tableRef.set ( this.tableViewer );
+        createColumns ( this.tableViewer );
+        this.tableViewer.getTable ().setHeaderVisible ( true );
+        this.tableViewer.getTable ().setLinesVisible ( true );
+        this.tableViewer.setUseHashlookup ( true );
+        this.tableViewer.setSorter ( new Sorter ( Columns.TIMESTAMP, SWT.DOWN ) );
+        this.tableViewer.getTable ().setSortDirection ( SWT.DOWN );
+        this.tableViewer.getTable ().setMenu ( createContextMenu ( this.tableViewer.getTable () ) );
 
         ObservableSetContentProvider contentProvider = new ObservableSetContentProvider ();
-        tableViewer.setContentProvider ( contentProvider );
-        tableViewer.setLabelProvider ( new MonitorTableLabelProvider ( Properties.observeEach ( contentProvider.getKnownElements (), BeanProperties.values ( new String[] { "id", "monitor" } ) ) ) );
-        tableViewer.setInput ( this.monitors );
+        this.tableViewer.setContentProvider ( contentProvider );
+        this.tableViewer.setLabelProvider ( new MonitorTableLabelProvider ( Properties.observeEach ( contentProvider.getKnownElements (), BeanProperties.values ( new String[] { "id", "monitor" } ) ) ) );
+        this.tableViewer.setInput ( this.monitors );
+
+        contentProvider.getRealizedElements ().addSetChangeListener ( new ISetChangeListener () {
+            public void handleSetChange ( final SetChangeEvent event )
+            {
+                if ( !MonitorsViewTable.this.scrollLock )
+                {
+                    MonitorsViewTable.this.tableViewer.getTable ().setTopIndex ( 0 );
+                }
+            }
+        } );
     }
 
     private Menu createContextMenu ( final Control parent )
