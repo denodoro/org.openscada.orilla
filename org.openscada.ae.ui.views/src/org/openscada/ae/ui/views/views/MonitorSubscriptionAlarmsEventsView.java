@@ -195,7 +195,7 @@ public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarms
                 final Set<DecoratedMonitor> toRemove = new HashSet<DecoratedMonitor> ();
                 for ( final Object key : event.diff.getRemovedKeys () )
                 {
-                    toRemove.add ( new DecoratedMonitor ( (String)key ) );
+                    toRemove.add ( (DecoratedMonitor)event.diff.getOldValue ( key ) );
                 }
                 MonitorSubscriptionAlarmsEventsView.this.monitors.removeAll ( toRemove );
 
@@ -216,5 +216,4 @@ public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarms
     }
 
     abstract protected void acknowledge ();
-
 }
