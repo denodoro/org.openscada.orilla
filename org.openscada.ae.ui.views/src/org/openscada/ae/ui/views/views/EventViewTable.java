@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.databinding.beans.BeanProperties;
+import org.eclipse.core.databinding.observable.set.ISetChangeListener;
+import org.eclipse.core.databinding.observable.set.SetChangeEvent;
 import org.eclipse.core.databinding.observable.set.WritableSet;
 import org.eclipse.core.databinding.property.Properties;
 import org.eclipse.jface.action.Action;
@@ -36,6 +38,8 @@ public class EventViewTable extends Composite
     private static final String COLUMN_KEY = "org.openscada.ae.ui.views.views.EventViewTable" + ".column.key";
 
     private final WritableSet events;
+
+    private volatile boolean scrollLock = false;
 
     @Immutable
     public static class Column implements Serializable
@@ -268,6 +272,16 @@ public class EventViewTable extends Composite
         this.tableViewer.setContentProvider ( contentProvider );
         this.tableViewer.setLabelProvider ( new EventLabelProvider ( Properties.observeEach ( contentProvider.getKnownElements (), BeanProperties.values ( new String[] { "id", "monitor" } ) ), columns ) );
         this.tableViewer.setInput ( this.events );
+
+        contentProvider.getRealizedElements ().addSetChangeListener ( new ISetChangeListener () {
+            public void handleSetChange ( final SetChangeEvent event )
+            {
+                if ( !EventViewTable.this.scrollLock )
+                {
+                    EventViewTable.this.tableViewer.getTable ().setTopIndex ( 0 );
+                }
+            }
+        } );
     }
 
     private void applyColumSettings ( final List<ColumnProperties> columnSettings )

@@ -55,7 +55,7 @@ public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarms
 
     protected void subscribe ()
     {
-        if ( this.getConnection () != null && this.monitorsId != null )
+        if ( ( this.getConnection () != null ) && ( this.monitorsId != null ) )
         {
             this.monitorListener = new ConditionListener () {
 
@@ -75,7 +75,7 @@ public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarms
 
     protected void unSubscribe ()
     {
-        if ( this.getConnection () != null && this.monitorsId != null )
+        if ( ( this.getConnection () != null ) && ( this.monitorsId != null ) )
         {
             if ( this.monitorListener != null )
             {
@@ -87,7 +87,7 @@ public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarms
 
     private void clear ()
     {
-        getSite ().getShell ().getDisplay ().syncExec ( new Runnable () {
+        this.monitors.getRealm ().asyncExec ( new Runnable () {
             public void run ()
             {
                 if ( MonitorSubscriptionAlarmsEventsView.this.monitors != null )
@@ -123,7 +123,7 @@ public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarms
 
     public void dataChanged ( final ConditionStatusInformation[] addedOrUpdated, final String[] removed )
     {
-        getSite ().getShell ().getDisplay ().asyncExec ( new Runnable () {
+        this.monitors.getRealm ().asyncExec ( new Runnable () {
             public void run ()
             {
                 if ( removed != null )

@@ -237,7 +237,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
 
     protected void dataChanged ( final Event[] addedEvents )
     {
-        getSite ().getShell ().getDisplay ().asyncExec ( new Runnable () {
+        EventPoolView.this.pool.getRealm ().asyncExec ( new Runnable () {
             public void run ()
             {
                 if ( addedEvents == null )
@@ -328,7 +328,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
 
     private void clear ()
     {
-        getSite ().getShell ().getDisplay ().asyncExec ( new Runnable () {
+        EventPoolView.this.pool.getRealm ().asyncExec ( new Runnable () {
             public void run ()
             {
                 if ( EventPoolView.this.pool != null )
