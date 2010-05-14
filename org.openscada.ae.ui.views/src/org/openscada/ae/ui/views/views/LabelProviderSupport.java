@@ -43,6 +43,10 @@ public class LabelProviderSupport
 
     public static final Image DISCONNECTED_IMG = Activator.getImageDescriptor ( "icons/monitor_disconnected.png" ).createImage ();
 
+    public static final Image USER_IMG = Activator.getImageDescriptor ( "icons/user_icon.png" ).createImage ();
+
+    public static final Image SYSTEM_IMG = Activator.getImageDescriptor ( "icons/system_icon.png" ).createImage ();
+
     public static String toLabel ( final Variant value )
     {
         if ( value == null )

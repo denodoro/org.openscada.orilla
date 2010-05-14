@@ -120,11 +120,11 @@ public class MonitorsView extends MonitorSubscriptionAlarmsEventsView
             {
                 label.append ( "DISCONNECTED from " );
             }
-            label.append ( this.getConnection ().getConnectionInformation () );
+            label.append ( this.getConnection ().getConnectionInformation ().toMaskedString () );
         }
         else
         {
-            label.append ( "DISCONNECTED from " + getConnectionUri () );
+            label.append ( "DISCONNECTED from " + this.getConnection ().getConnectionInformation ().toMaskedString () );
         }
         if ( this.monitorsId != null )
         {

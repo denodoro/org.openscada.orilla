@@ -37,7 +37,7 @@ public class MonitorTableLabelProvider extends ObservableMapLabelProvider
             case OK:
                 return LabelProviderSupport.OK_IMG;
             case NOT_OK:
-                return null;
+                return LabelProviderSupport.ALARM_IMG;
             case NOT_OK_AKN:
                 return LabelProviderSupport.ALARM_IMG;
             case NOT_AKN:

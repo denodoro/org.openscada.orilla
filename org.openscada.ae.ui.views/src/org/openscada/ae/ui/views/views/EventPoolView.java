@@ -384,7 +384,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
             {
                 label.append ( "DISCONNECTED from " );
             }
-            label.append ( this.getConnection ().getConnectionInformation () );
+            label.append ( this.getConnection ().getConnectionInformation ().toMaskedString () );
         }
         else
         {

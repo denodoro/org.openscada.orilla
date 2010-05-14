@@ -5,8 +5,10 @@ import java.util.List;
 import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.jface.databinding.viewers.ObservableMapLabelProvider;
 import org.eclipse.swt.graphics.Image;
+import org.openscada.ae.Event.Fields;
 import org.openscada.ae.ui.views.model.DecoratedEvent;
 import org.openscada.ae.ui.views.views.EventViewTable.Column;
+import org.openscada.core.Variant;
 
 public class EventLabelProvider extends ObservableMapLabelProvider
 {
@@ -50,7 +52,20 @@ public class EventLabelProvider extends ObservableMapLabelProvider
         {
             return "ERROR: <index doesn't exist>";
         }
+        if ( columnIndex == 8 )
+        {
+            final String value = Variant.valueOf ( event.getEvent ().getField ( Fields.ACTOR_TYPE ) ).asString ( "" );
+            if ( "USER".equalsIgnoreCase ( value ) )
+            {
+                return "";
+            }
+            else if ( "SYSTEM".equalsIgnoreCase ( value ) )
+            {
+                return "";
+            }
+        }
         return LabelProviderSupport.toLabel ( event, column.getField () );
+
     }
 
     @Override
@@ -73,6 +88,18 @@ public class EventLabelProvider extends ObservableMapLabelProvider
                 return LabelProviderSupport.ACK_IMG;
             case NOT_OK_NOT_AKN:
                 return LabelProviderSupport.ACK_IMG;
+            }
+        }
+        if ( columnIndex == 8 )
+        {
+            final String value = Variant.valueOf ( event.getEvent ().getField ( Fields.ACTOR_TYPE ) ).asString ( "" );
+            if ( "USER".equalsIgnoreCase ( value ) )
+            {
+                return LabelProviderSupport.USER_IMG;
+            }
+            else if ( "SYSTEM".equalsIgnoreCase ( value ) )
+            {
+                return LabelProviderSupport.SYSTEM_IMG;
             }
         }
         return null;
