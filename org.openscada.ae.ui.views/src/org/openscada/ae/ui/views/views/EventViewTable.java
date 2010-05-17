@@ -335,6 +335,8 @@ public class EventViewTable extends Composite
                 }
             } );
         }
+        /*
+        FIXME: comment in when comment can be set
         if ( this.commentAction != null )
         {
             MenuItem commentMenuItem = new MenuItem ( contextMenu, SWT.NONE );
@@ -348,6 +350,7 @@ public class EventViewTable extends Composite
                 }
             } );
         }
+        */
         return contextMenu;
     }
 
