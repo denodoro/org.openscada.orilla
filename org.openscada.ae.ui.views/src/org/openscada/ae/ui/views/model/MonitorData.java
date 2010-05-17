@@ -1,6 +1,7 @@
 package org.openscada.ae.ui.views.model;
 
 import java.util.Date;
+import java.util.Map;
 
 import org.openscada.ae.ConditionStatus;
 import org.openscada.ae.ConditionStatusInformation;
@@ -15,14 +16,14 @@ public class MonitorData extends ConditionStatusInformation
 {
     private static final long serialVersionUID = 6727349873713785401L;
 
-    public MonitorData ( final String id, final ConditionStatus status, final Date statusTimestamp, final Variant value, final Date lastAknTimestamp, final String lastAknUser )
+    public MonitorData ( final String id, final ConditionStatus status, final Date statusTimestamp, final Variant value, final Date lastAknTimestamp, final String lastAknUser, final Map<String, Variant> attributes )
     {
-        super ( id, status, statusTimestamp, value, lastAknTimestamp, lastAknUser );
+        super ( id, status, statusTimestamp, value, lastAknTimestamp, lastAknUser, attributes );
     }
 
     public MonitorData ( final ConditionStatusInformation monitor )
     {
-        super ( monitor.getId (), monitor.getStatus (), monitor.getStatusTimestamp (), monitor.getValue (), monitor.getLastAknTimestamp (), monitor.getLastAknUser () );
+        super ( monitor.getId (), monitor.getStatus (), monitor.getStatusTimestamp (), monitor.getValue (), monitor.getLastAknTimestamp (), monitor.getLastAknUser (), monitor.getAttributes () );
     }
 
     @Override
@@ -30,12 +31,12 @@ public class MonitorData extends ConditionStatusInformation
     {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ( ( getId () == null ) ? 0 : getId ().hashCode () );
-        result = prime * result + ( ( getLastAknTimestamp () == null ) ? 0 : getLastAknTimestamp ().hashCode () );
-        result = prime * result + ( ( getLastAknUser () == null ) ? 0 : getLastAknUser ().hashCode () );
-        result = prime * result + ( ( getStatus () == null ) ? 0 : getStatus ().hashCode () );
-        result = prime * result + ( ( this.getStatusTimestamp () == null ) ? 0 : this.getStatusTimestamp ().hashCode () );
-        result = prime * result + ( ( this.getValue () == null ) ? 0 : this.getValue ().hashCode () );
+        result = prime * result + ( getId () == null ? 0 : getId ().hashCode () );
+        result = prime * result + ( getLastAknTimestamp () == null ? 0 : getLastAknTimestamp ().hashCode () );
+        result = prime * result + ( getLastAknUser () == null ? 0 : getLastAknUser ().hashCode () );
+        result = prime * result + ( getStatus () == null ? 0 : getStatus ().hashCode () );
+        result = prime * result + ( getStatusTimestamp () == null ? 0 : getStatusTimestamp ().hashCode () );
+        result = prime * result + ( getValue () == null ? 0 : getValue ().hashCode () );
         return result;
     }
 
@@ -54,7 +55,7 @@ public class MonitorData extends ConditionStatusInformation
         {
             return false;
         }
-        ConditionStatusInformation other = (ConditionStatusInformation)obj;
+        final ConditionStatusInformation other = (ConditionStatusInformation)obj;
         if ( this.getId () == null )
         {
             if ( other.getId () != null )
