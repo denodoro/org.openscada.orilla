@@ -89,7 +89,7 @@ public class MonitorsView extends MonitorSubscriptionAlarmsEventsView
         {
             for ( DecoratedMonitor monitor : this.monitorsTable.selectedMonitors () )
             {
-                this.getConnection ().acknowledge ( monitor.getMonitor ().getId (), null );
+                this.getConnection ().acknowledge ( monitor.getMonitor ().getId (), monitor.getMonitor ().getStatusTimestamp () );
             }
         }
     }

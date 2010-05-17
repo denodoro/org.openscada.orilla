@@ -352,7 +352,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
             {
                 if ( event.getMonitor () != null )
                 {
-                    this.getConnection ().acknowledge ( event.getMonitor ().getId (), null );
+                    this.getConnection ().acknowledge ( event.getMonitor ().getId (), event.getMonitor ().getStatusTimestamp () );
                 }
             }
         }
