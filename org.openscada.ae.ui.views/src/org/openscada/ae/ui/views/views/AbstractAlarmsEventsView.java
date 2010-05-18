@@ -1,3 +1,22 @@
+/*
+ * This file is part of the OpenSCADA project
+ * Copyright (C) 2006-2010 inavare GmbH (http://inavare.com)
+ *
+ * OpenSCADA is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenSCADA is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenSCADA. If not, see
+ * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
+ */
+
 package org.openscada.ae.ui.views.views;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -218,7 +237,7 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
      */
     protected boolean isConnected ()
     {
-        return ( this.connectionService != null ) && ( this.connectionService.getConnection () != null ) && ( this.connectionService.getConnection ().getState () == ConnectionState.BOUND );
+        return this.connectionService != null && this.connectionService.getConnection () != null && this.connectionService.getConnection ().getState () == ConnectionState.BOUND;
     }
 
     private void reInitializeConnection ( final String connectionId, final String connectionUri ) throws Exception
@@ -309,7 +328,7 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
         if ( treeSelection.getFirstElement () instanceof ConnectionHolder )
         {
             final ConnectionHolder connectionHolder = (ConnectionHolder)treeSelection.getFirstElement ();
-            if ( ( connectionHolder.getConnectionService ().getConnection () != null ) && ( connectionHolder.getConnectionService ().getConnection () instanceof Connection ) )
+            if ( connectionHolder.getConnectionService ().getConnection () != null && connectionHolder.getConnectionService ().getConnection () instanceof Connection )
             {
                 try
                 {
@@ -324,7 +343,7 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
         else if ( treeSelection.getFirstElement () instanceof BrowserEntryBean )
         {
             final BrowserEntryBean browserEntryBean = (BrowserEntryBean)treeSelection.getFirstElement ();
-            if ( ( browserEntryBean.getConnection () != null ) && ( browserEntryBean.getConnection ().getConnection () != null ) )
+            if ( browserEntryBean.getConnection () != null && browserEntryBean.getConnection ().getConnection () != null )
             {
                 try
                 {
@@ -398,7 +417,7 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
 
     protected CustomizableAction createCommentAction ( final Runnable runnable )
     {
-        CustomizableAction action = new CustomizableAction ();
+        final CustomizableAction action = new CustomizableAction ();
         action.setText ( "Set Comment (NOT IMPLEMENTED!)" );
         action.setToolTipText ( "set or change comment for selected event" );
         action.setDescription ( "Set or change comment for currently selected event." );

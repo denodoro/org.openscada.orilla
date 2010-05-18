@@ -1,3 +1,22 @@
+/*
+ * This file is part of the OpenSCADA project
+ * Copyright (C) 2006-2010 inavare GmbH (http://inavare.com)
+ *
+ * OpenSCADA is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenSCADA is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenSCADA. If not, see
+ * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
+ */
+
 package org.openscada.ae.ui.views.views;
 
 import java.util.LinkedHashSet;
@@ -138,14 +157,14 @@ public class EventHistoryView extends AbstractAlarmsEventsView
         } );
 
         // comment Action
-        CustomizableAction commentAction = createCommentAction ( new Runnable () {
+        final CustomizableAction commentAction = createCommentAction ( new Runnable () {
             public void run ()
             {
                 System.err.println ( "comment" );
             }
         } );
 
-        IToolBarManager toolBarManager = getViewSite ().getActionBars ().getToolBarManager ();
+        final IToolBarManager toolBarManager = getViewSite ().getActionBars ().getToolBarManager ();
         toolBarManager.add ( this.pauseAction );
         toolBarManager.add ( this.resumeAction );
         toolBarManager.add ( this.clearAction );
@@ -200,7 +219,7 @@ public class EventHistoryView extends AbstractAlarmsEventsView
                 }
             } );
         }
-        catch ( Exception e )
+        catch ( final Exception e )
         {
         }
     }
@@ -227,7 +246,7 @@ public class EventHistoryView extends AbstractAlarmsEventsView
      */
     private void startEventsRetrieval ()
     {
-        Pair<SearchType, String> filter = EventHistorySearchDialog.open ( getSite ().getShell (), this.currentFilter );
+        final Pair<SearchType, String> filter = EventHistorySearchDialog.open ( getSite ().getShell (), this.currentFilter );
         if ( filter != null )
         {
             this.currentFilter = filter;
@@ -263,11 +282,11 @@ public class EventHistoryView extends AbstractAlarmsEventsView
 
     private void retrieveData ( final String filter )
     {
-        QueryListener queryListener = new QueryListener () {
+        final QueryListener queryListener = new QueryListener () {
             public void queryStateChanged ( final QueryState state )
             {
                 EventHistoryView.this.queryState.set ( state );
-                if ( ( state == QueryState.CONNECTED ) && ( !EventHistoryView.this.isPaused.get () ) )
+                if ( state == QueryState.CONNECTED && !EventHistoryView.this.isPaused.get () )
                 {
                     continueLoading ();
                 }
@@ -297,7 +316,7 @@ public class EventHistoryView extends AbstractAlarmsEventsView
                     // which should be a bit more efficient, because the space
                     // for the given events has to be reserved anyway
                     decoratedEvents = new LinkedHashSet<DecoratedEvent> ( events.length + 1 );
-                    for ( Event event : events )
+                    for ( final Event event : events )
                     {
                         decoratedEvents.add ( new DecoratedEvent ( event ) );
                     }
@@ -307,7 +326,7 @@ public class EventHistoryView extends AbstractAlarmsEventsView
                     public void run ()
                     {
                         updateStatusBar ();
-                        for ( DecoratedEvent decoratedEvent : decoratedEvents )
+                        for ( final DecoratedEvent decoratedEvent : decoratedEvents )
                         {
                             EventHistoryView.this.events.add ( decoratedEvent );
                         }
@@ -404,7 +423,7 @@ public class EventHistoryView extends AbstractAlarmsEventsView
     {
         super.init ( site, memento );
 
-        String s = memento.getString ( "columnSettings" );
+        final String s = memento.getString ( "columnSettings" );
         if ( s != null )
         {
             this.initialColumnSettings = this.gson.fromJson ( s, new TypeToken<List<ColumnProperties>> () {}.getType () );

@@ -1,3 +1,22 @@
+/*
+ * This file is part of the OpenSCADA project
+ * Copyright (C) 2006-2010 inavare GmbH (http://inavare.com)
+ *
+ * OpenSCADA is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenSCADA is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenSCADA. If not, see
+ * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
+ */
+
 package org.openscada.ae.ui.views.dialog;
 
 import java.text.DateFormat;
@@ -73,7 +92,7 @@ public class FilterQueryByExampleComposite extends Composite
 
         public DateFieldEntry ( final Composite parent, final String field, final String caption, final FilterModified filterModified )
         {
-            GridData dateLayoutData = new GridData ();
+            final GridData dateLayoutData = new GridData ();
             dateLayoutData.widthHint = 180;
             this.field = field;
             this.captionLabel = new Label ( parent, SWT.NONE );
@@ -107,7 +126,7 @@ public class FilterQueryByExampleComposite extends Composite
         {
             FilterAssertion assertionFrom = null;
             FilterAssertion assertionTo = null;
-            FilterExpression expression = new FilterExpression ();
+            final FilterExpression expression = new FilterExpression ();
             expression.setOperator ( Operator.AND );
             if ( this.fromDate.getSelection () != null )
             {
@@ -124,7 +143,7 @@ public class FilterQueryByExampleComposite extends Composite
 
         public boolean isEmpty ()
         {
-            return ( this.fromDate.getSelection () == null ) && ( this.toDate.getSelection () == null );
+            return this.fromDate.getSelection () == null && this.toDate.getSelection () == null;
         }
 
         public void clear ()
@@ -177,7 +196,7 @@ public class FilterQueryByExampleComposite extends Composite
                 }
             } );
             this.textText = new Text ( parent, SWT.BORDER );
-            GridData layoutData = new GridData ();
+            final GridData layoutData = new GridData ();
             layoutData.horizontalAlignment = GridData.FILL;
             layoutData.horizontalSpan = 4;
             layoutData.grabExcessHorizontalSpace = true;
@@ -255,17 +274,17 @@ public class FilterQueryByExampleComposite extends Composite
             FilterAssertion assertion = null;
             try
             {
-                Long l = Long.parseLong ( this.textText.getText () );
+                final Long l = Long.parseLong ( this.textText.getText () );
                 assertion = new FilterAssertion ( this.field, Assertion.EQUALITY, new Variant ( l ).toString () );
             }
-            catch ( NumberFormatException el )
+            catch ( final NumberFormatException el )
             {
                 try
                 {
-                    Double d = Double.parseDouble ( this.textText.getText () );
+                    final Double d = Double.parseDouble ( this.textText.getText () );
                     assertion = new FilterAssertion ( this.field, Assertion.EQUALITY, new Variant ( d ).toString () );
                 }
-                catch ( NumberFormatException ed )
+                catch ( final NumberFormatException ed )
                 {
                     assertion = new FilterAssertion ( this.field, Assertion.EQUALITY, new Variant ( this.textText.getText () ) );
                 }
@@ -287,16 +306,16 @@ public class FilterQueryByExampleComposite extends Composite
     {
         super ( parent, style );
 
-        GridLayout layout = new GridLayout ();
+        final GridLayout layout = new GridLayout ();
         layout.numColumns = 6;
         layout.marginHeight = 12;
         layout.marginWidth = 12;
         this.setLayout ( layout );
 
-        FilterModified filterModified = new FilterModified () {
+        final FilterModified filterModified = new FilterModified () {
             public void onModified ()
             {
-                String filterString = toFilter ().toString ();
+                final String filterString = toFilter ().toString ();
                 filterChangedListener.onFilterChanged ( new Pair<SearchType, String> ( SearchType.SIMPLE, filterString ) );
             };
         };
@@ -315,7 +334,7 @@ public class FilterQueryByExampleComposite extends Composite
         // clear button
         this.clearButton = new Button ( this, SWT.PUSH );
         this.clearButton.setText ( "Clear" );
-        GridData clearButtonLayoutData = new GridData ();
+        final GridData clearButtonLayoutData = new GridData ();
         clearButtonLayoutData.horizontalAlignment = SWT.BEGINNING;
         clearButtonLayoutData.horizontalSpan = 6;
         this.clearButton.setLayoutData ( clearButtonLayoutData );
@@ -323,7 +342,7 @@ public class FilterQueryByExampleComposite extends Composite
             @Override
             public void widgetSelected ( final SelectionEvent e )
             {
-                for ( FieldEntry fieldEntry : FilterQueryByExampleComposite.this.fields.values () )
+                for ( final FieldEntry fieldEntry : FilterQueryByExampleComposite.this.fields.values () )
                 {
                     fieldEntry.clear ();
                 }
@@ -339,23 +358,23 @@ public class FilterQueryByExampleComposite extends Composite
     private void populateFromFilter ( final String filterString )
     {
         // no filter given
-        if ( ( filterString == null ) || ( filterString.length () == 0 ) )
+        if ( filterString == null || filterString.length () == 0 )
         {
             return;
         }
         // it has to be an expression
-        Filter filter = new FilterParser ( filterString ).getFilter ();
+        final Filter filter = new FilterParser ( filterString ).getFilter ();
         if ( !filter.isExpression () )
         {
             return;
         }
-        FilterExpression filterExpression = (FilterExpression)filter;
+        final FilterExpression filterExpression = (FilterExpression)filter;
         // and it has to be a and conjunction 
         if ( filterExpression.getOperator () != Operator.AND )
         {
             return;
         }
-        for ( Filter subFilter : filterExpression.getFilterSet () )
+        for ( final Filter subFilter : filterExpression.getFilterSet () )
         {
             if ( subFilter.isAssertion () )
             {
@@ -365,10 +384,10 @@ public class FilterQueryByExampleComposite extends Composite
             else if ( subFilter.isExpression () )
             {
                 // negation
-                FilterExpression subFilterExpression = (FilterExpression)subFilter;
+                final FilterExpression subFilterExpression = (FilterExpression)subFilter;
                 if ( subFilterExpression.getOperator () == Operator.NOT )
                 {
-                    if ( ( subFilterExpression.getFilterSet ().size () == 1 ) && subFilterExpression.getFilterSet ().get ( 0 ).isAssertion () )
+                    if ( subFilterExpression.getFilterSet ().size () == 1 && subFilterExpression.getFilterSet ().get ( 0 ).isAssertion () )
                     {
                         populateFromAssertion ( true, (FilterAssertion)subFilterExpression.getFilterSet ().get ( 0 ) );
                     }
@@ -379,27 +398,27 @@ public class FilterQueryByExampleComposite extends Composite
                     String attribute = null;
                     String from = null;
                     String to = null;
-                    if ( ( subFilterExpression.getFilterSet ().size () == 1 ) || ( ( subFilterExpression.getFilterSet ().size () == 2 ) && subFilterExpression.getFilterSet ().get ( 0 ).isAssertion () ) )
+                    if ( subFilterExpression.getFilterSet ().size () == 1 || subFilterExpression.getFilterSet ().size () == 2 && subFilterExpression.getFilterSet ().get ( 0 ).isAssertion () )
                     {
-                        FilterAssertion filterAssertion = (FilterAssertion)subFilterExpression.getFilterSet ().get ( 0 );
+                        final FilterAssertion filterAssertion = (FilterAssertion)subFilterExpression.getFilterSet ().get ( 0 );
                         attribute = filterAssertion.getAttribute ();
-                        if ( ( filterAssertion != null ) && ( filterAssertion.getAssertion () == Assertion.GREATEREQ ) )
+                        if ( filterAssertion != null && filterAssertion.getAssertion () == Assertion.GREATEREQ )
                         {
                             from = (String)filterAssertion.getValue ();
                         }
-                        else if ( ( filterAssertion != null ) && ( filterAssertion.getAssertion () == Assertion.LESSEQ ) )
+                        else if ( filterAssertion != null && filterAssertion.getAssertion () == Assertion.LESSEQ )
                         {
                             to = (String)filterAssertion.getValue ();
                         }
                     }
-                    if ( ( subFilterExpression.getFilterSet ().size () == 2 ) && subFilterExpression.getFilterSet ().get ( 1 ).isAssertion () )
+                    if ( subFilterExpression.getFilterSet ().size () == 2 && subFilterExpression.getFilterSet ().get ( 1 ).isAssertion () )
                     {
-                        FilterAssertion filterAssertion = (FilterAssertion)subFilterExpression.getFilterSet ().get ( 1 );
-                        if ( ( filterAssertion != null ) && ( filterAssertion.getAssertion () == Assertion.GREATEREQ ) )
+                        final FilterAssertion filterAssertion = (FilterAssertion)subFilterExpression.getFilterSet ().get ( 1 );
+                        if ( filterAssertion != null && filterAssertion.getAssertion () == Assertion.GREATEREQ )
                         {
                             from = (String)filterAssertion.getValue ();
                         }
-                        else if ( ( filterAssertion != null ) && ( filterAssertion.getAssertion () == Assertion.LESSEQ ) )
+                        else if ( filterAssertion != null && filterAssertion.getAssertion () == Assertion.LESSEQ )
                         {
                             to = (String)filterAssertion.getValue ();
                         }
@@ -412,10 +431,10 @@ public class FilterQueryByExampleComposite extends Composite
 
     private void populateFromAssertion ( final boolean negate, final FilterAssertion filter )
     {
-        FieldEntry fieldEntry = this.fields.get ( filter.getAttribute () );
+        final FieldEntry fieldEntry = this.fields.get ( filter.getAttribute () );
         if ( fieldEntry instanceof TextFieldEntry )
         {
-            VariantEditor ve = new VariantEditor ();
+            final VariantEditor ve = new VariantEditor ();
             // special case if filter is substring
             if ( filter.getValue () instanceof String )
             {
@@ -425,7 +444,7 @@ public class FilterQueryByExampleComposite extends Composite
             {
                 ve.setAsText ( StringHelper.join ( (Collection<?>)filter.getValue (), "*" ) );
             }
-            Variant value = (Variant)ve.getValue ();
+            final Variant value = (Variant)ve.getValue ();
             ( (TextFieldEntry)fieldEntry ).setValue ( value.toLabel ( "" ) );
             ( (TextFieldEntry)fieldEntry ).setNegation ( negate );
         }
@@ -433,11 +452,11 @@ public class FilterQueryByExampleComposite extends Composite
 
     private void populateFromDate ( final String fieldName, final String from, final String to )
     {
-        FieldEntry fieldEntry = this.fields.get ( fieldName );
+        final FieldEntry fieldEntry = this.fields.get ( fieldName );
         if ( fieldEntry instanceof DateFieldEntry )
         {
-            DateEditor dateEditor = new DateEditor ();
-            DateFieldEntry dateFieldEntry = (DateFieldEntry)fieldEntry;
+            final DateEditor dateEditor = new DateEditor ();
+            final DateFieldEntry dateFieldEntry = (DateFieldEntry)fieldEntry;
             dateEditor.setAsText ( from );
             dateFieldEntry.setFrom ( (Date)dateEditor.getValue () );
             dateEditor.setAsText ( to );
@@ -447,9 +466,9 @@ public class FilterQueryByExampleComposite extends Composite
 
     private Filter toFilter ()
     {
-        FilterExpression filter = new FilterExpression ();
+        final FilterExpression filter = new FilterExpression ();
         filter.setOperator ( Operator.AND );
-        for ( FieldEntry fieldEntry : this.fields.values () )
+        for ( final FieldEntry fieldEntry : this.fields.values () )
         {
             if ( !fieldEntry.isEmpty () )
             {
@@ -461,7 +480,7 @@ public class FilterQueryByExampleComposite extends Composite
 
     private static Collection<String> toCollection ( final String text )
     {
-        ArrayList<String> result = new ArrayList<String> ();
+        final ArrayList<String> result = new ArrayList<String> ();
         result.addAll ( Arrays.asList ( text.split ( "\\*" ) ) );
         if ( text.endsWith ( "*" ) )
         {

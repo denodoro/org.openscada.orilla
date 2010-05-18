@@ -1,3 +1,22 @@
+/*
+ * This file is part of the OpenSCADA project
+ * Copyright (C) 2006-2010 inavare GmbH (http://inavare.com)
+ *
+ * OpenSCADA is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenSCADA is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenSCADA. If not, see
+ * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
+ */
+
 package org.openscada.ae.ui.views.dialog;
 
 import org.eclipse.jface.dialogs.TitleAreaDialog;
@@ -32,30 +51,30 @@ public class EventHistorySearchDialog extends TitleAreaDialog implements FilterC
         this.setHelpAvailable ( true );
 
         // initialize content
-        Composite rootComposite = (Composite)super.createDialogArea ( parent );
+        final Composite rootComposite = (Composite)super.createDialogArea ( parent );
 
         String filterString = "";
-        if ( ( this.initialFilter != null ) && ( this.initialFilter.second != null ) )
+        if ( this.initialFilter != null && this.initialFilter.second != null )
         {
             filterString = this.initialFilter.second;
         }
 
         // create tabfolder and add each from separately
-        TabFolder tabFolder = new TabFolder ( rootComposite, SWT.NONE );
+        final TabFolder tabFolder = new TabFolder ( rootComposite, SWT.NONE );
         // add QBE filter form
-        TabItem qbeTab = new TabItem ( tabFolder, SWT.NULL );
+        final TabItem qbeTab = new TabItem ( tabFolder, SWT.NULL );
         qbeTab.setText ( "Query by Example" );
         qbeTab.setControl ( new FilterQueryByExampleComposite ( this, tabFolder, SWT.NONE, filterString ) );
         // add advanced filter form
-        TabItem advancedTab = new TabItem ( tabFolder, SWT.NULL );
+        final TabItem advancedTab = new TabItem ( tabFolder, SWT.NULL );
         advancedTab.setText ( "Advanced Query" );
         advancedTab.setControl ( new FilterAdvancedComposite ( this, tabFolder, SWT.NONE ) );
         // add free from filter form
-        TabItem freeformTab = new TabItem ( tabFolder, SWT.NULL );
+        final TabItem freeformTab = new TabItem ( tabFolder, SWT.NULL );
         freeformTab.setControl ( new FilterFreeFormComposite ( this, tabFolder, SWT.NONE, filterString ) );
         freeformTab.setText ( "Free Query" );
 
-        GridData layoutData = new GridData ();
+        final GridData layoutData = new GridData ();
         layoutData.horizontalAlignment = GridData.FILL;
         layoutData.grabExcessHorizontalSpace = true;
         layoutData.verticalAlignment = GridData.FILL;
@@ -101,7 +120,7 @@ public class EventHistorySearchDialog extends TitleAreaDialog implements FilterC
 
     public static Pair<SearchType, String> open ( final Shell parentShell, final Pair<SearchType, String> filter )
     {
-        EventHistorySearchDialog dialog = new EventHistorySearchDialog ( parentShell, filter );
+        final EventHistorySearchDialog dialog = new EventHistorySearchDialog ( parentShell, filter );
         dialog.open ();
         return dialog.getFilter ();
     }

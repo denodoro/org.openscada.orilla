@@ -1,3 +1,22 @@
+/*
+ * This file is part of the OpenSCADA project
+ * Copyright (C) 2006-2010 inavare GmbH (http://inavare.com)
+ *
+ * OpenSCADA is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenSCADA is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenSCADA. If not, see
+ * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
+ */
+
 package org.openscada.ae.ui.views.views;
 
 import java.sql.Date;
@@ -99,12 +118,12 @@ public class MonitorsViewTable extends Composite
             // use given order for sorting
             result = this.dir == SWT.DOWN ? -result : result;
             // if values are the same, order by timestamp in descending order
-            if ( ( this.column != Columns.TIMESTAMP ) && ( result == 0 ) )
+            if ( this.column != Columns.TIMESTAMP && result == 0 )
             {
                 result = m2.getStatusTimestamp ().compareTo ( m1.getStatusTimestamp () );
             }
             // if values are still the same, order by id in ascending order
-            if ( ( this.column != Columns.ID ) && ( result == 0 ) )
+            if ( this.column != Columns.ID && result == 0 )
             {
                 result = m1.getId ().compareTo ( m2.getId () );
             }
@@ -128,11 +147,11 @@ public class MonitorsViewTable extends Composite
             final TableColumn newColumn = (TableColumn)e.widget;
             final TableColumn currentColumn = table.getSortColumn ();
 
-            int currentDir = table.getSortDirection ();
+            final int currentDir = table.getSortDirection ();
             int newDir = SWT.UP;
             if ( newColumn == currentColumn )
             {
-                newDir = ( currentDir == SWT.UP ) ? SWT.DOWN : SWT.UP;
+                newDir = currentDir == SWT.UP ? SWT.DOWN : SWT.UP;
             }
             else
             {
@@ -160,7 +179,7 @@ public class MonitorsViewTable extends Composite
 
         this.monitors = monitors;
 
-        FillLayout layout = new FillLayout ();
+        final FillLayout layout = new FillLayout ();
         this.setLayout ( layout );
 
         this.tableViewer = new TableViewer ( this, SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.MULTI );
@@ -173,7 +192,7 @@ public class MonitorsViewTable extends Composite
         this.tableViewer.getTable ().setSortDirection ( SWT.DOWN );
         this.tableViewer.getTable ().setMenu ( createContextMenu ( this.tableViewer.getTable () ) );
 
-        ObservableSetContentProvider contentProvider = new ObservableSetContentProvider ();
+        final ObservableSetContentProvider contentProvider = new ObservableSetContentProvider ();
         this.tableViewer.setContentProvider ( contentProvider );
         this.tableViewer.setLabelProvider ( new MonitorTableLabelProvider ( Properties.observeEach ( contentProvider.getKnownElements (), BeanProperties.values ( new String[] { "id", "monitor" } ) ) ) );
         this.tableViewer.setInput ( this.monitors );
@@ -191,8 +210,8 @@ public class MonitorsViewTable extends Composite
 
     private Menu createContextMenu ( final Control parent )
     {
-        Menu ackMenu = new Menu ( parent );
-        MenuItem ackMenuItem = new MenuItem ( ackMenu, SWT.NONE );
+        final Menu ackMenu = new Menu ( parent );
+        final MenuItem ackMenuItem = new MenuItem ( ackMenu, SWT.NONE );
         ackMenuItem.setText ( "Acknowledge" );
         ackMenuItem.setImage ( this.ackAction.getImageDescriptor ().createImage () );
         ackMenuItem.addSelectionListener ( new SelectionAdapter () {
@@ -207,10 +226,10 @@ public class MonitorsViewTable extends Composite
 
     private void createColumns ( final TableViewer table )
     {
-        SortListener sortListener = new SortListener ( table );
+        final SortListener sortListener = new SortListener ( table );
 
         // id
-        TableViewerColumn idColumn = new TableViewerColumn ( table, SWT.NONE );
+        final TableViewerColumn idColumn = new TableViewerColumn ( table, SWT.NONE );
         idColumn.getColumn ().setText ( "ID" );
         idColumn.getColumn ().setData ( COLUMN_KEY, Columns.ID );
         idColumn.getColumn ().setWidth ( 450 );
@@ -218,7 +237,7 @@ public class MonitorsViewTable extends Composite
         idColumn.getColumn ().setMoveable ( false );
         idColumn.getColumn ().addSelectionListener ( sortListener );
         // state
-        TableViewerColumn stateColumn = new TableViewerColumn ( table, SWT.NONE );
+        final TableViewerColumn stateColumn = new TableViewerColumn ( table, SWT.NONE );
         stateColumn.getColumn ().setText ( "State" );
         stateColumn.getColumn ().setData ( COLUMN_KEY, Columns.STATE );
         stateColumn.getColumn ().setWidth ( 150 );
@@ -226,7 +245,7 @@ public class MonitorsViewTable extends Composite
         stateColumn.getColumn ().setMoveable ( false );
         stateColumn.getColumn ().addSelectionListener ( sortListener );
         // timestamp
-        TableViewerColumn timestampColumn = new TableViewerColumn ( table, SWT.NONE );
+        final TableViewerColumn timestampColumn = new TableViewerColumn ( table, SWT.NONE );
         timestampColumn.getColumn ().setText ( "Timestamp" );
         timestampColumn.getColumn ().setData ( COLUMN_KEY, Columns.TIMESTAMP );
         timestampColumn.getColumn ().setWidth ( 180 );
@@ -234,7 +253,7 @@ public class MonitorsViewTable extends Composite
         timestampColumn.getColumn ().setMoveable ( false );
         timestampColumn.getColumn ().addSelectionListener ( sortListener );
         // value
-        TableViewerColumn valueColumn = new TableViewerColumn ( table, SWT.NONE );
+        final TableViewerColumn valueColumn = new TableViewerColumn ( table, SWT.NONE );
         valueColumn.getColumn ().setText ( "Value" );
         valueColumn.getColumn ().setData ( COLUMN_KEY, Columns.VALUE );
         valueColumn.getColumn ().setWidth ( 100 );
@@ -242,7 +261,7 @@ public class MonitorsViewTable extends Composite
         valueColumn.getColumn ().setMoveable ( false );
         valueColumn.getColumn ().addSelectionListener ( sortListener );
         // akn user
-        TableViewerColumn aknUserColumn = new TableViewerColumn ( table, SWT.NONE );
+        final TableViewerColumn aknUserColumn = new TableViewerColumn ( table, SWT.NONE );
         aknUserColumn.getColumn ().setText ( "Ack User" );
         aknUserColumn.getColumn ().setData ( COLUMN_KEY, Columns.ACK_USER );
         aknUserColumn.getColumn ().setWidth ( 150 );
@@ -250,7 +269,7 @@ public class MonitorsViewTable extends Composite
         aknUserColumn.getColumn ().setMoveable ( false );
         aknUserColumn.getColumn ().addSelectionListener ( sortListener );
         // akn timestamp
-        TableViewerColumn aknTimestampColumn = new TableViewerColumn ( table, SWT.NONE );
+        final TableViewerColumn aknTimestampColumn = new TableViewerColumn ( table, SWT.NONE );
         aknTimestampColumn.getColumn ().setText ( "Ack Timestamp" );
         aknTimestampColumn.getColumn ().setData ( COLUMN_KEY, Columns.ACK_TIMESTAMP );
         aknTimestampColumn.getColumn ().setWidth ( 180 );
@@ -270,8 +289,8 @@ public class MonitorsViewTable extends Composite
         {
             return new ArrayList<DecoratedMonitor> ();
         }
-        List<DecoratedMonitor> result = new ArrayList<DecoratedMonitor> ();
-        for ( TableItem row : this.tableRef.get ().getTable ().getSelection () )
+        final List<DecoratedMonitor> result = new ArrayList<DecoratedMonitor> ();
+        for ( final TableItem row : this.tableRef.get ().getTable ().getSelection () )
         {
             if ( row.getData () instanceof DecoratedMonitor )
             {

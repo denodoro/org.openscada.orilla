@@ -1,3 +1,22 @@
+/*
+ * This file is part of the OpenSCADA project
+ * Copyright (C) 2006-2010 inavare GmbH (http://inavare.com)
+ *
+ * OpenSCADA is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenSCADA is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenSCADA. If not, see
+ * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
+ */
+
 package org.openscada.ae.ui.views.views;
 
 import java.io.Serializable;
@@ -83,8 +102,8 @@ public class EventViewTable extends Composite
         {
             final int prime = 31;
             int result = 1;
-            result = prime * result + ( ( this.column == null ) ? 0 : this.column.hashCode () );
-            result = prime * result + ( ( this.field == null ) ? 0 : this.field.hashCode () );
+            result = prime * result + ( this.column == null ? 0 : this.column.hashCode () );
+            result = prime * result + ( this.field == null ? 0 : this.field.hashCode () );
             return result;
         }
 
@@ -103,7 +122,7 @@ public class EventViewTable extends Composite
             {
                 return false;
             }
-            Column other = (Column)obj;
+            final Column other = (Column)obj;
             if ( this.column == null )
             {
                 if ( other.column != null )
@@ -197,14 +216,14 @@ public class EventViewTable extends Composite
             final TableColumn newColumn = (TableColumn)e.widget;
             final TableColumn currentColumn = table.getSortColumn ();
 
-            Column column = (Column)newColumn.getData ( COLUMN_KEY );
-            if ( ( column == Column.reservedColumnSourceTimestamp ) || ( column == Column.reservedColumnEntryTimestamp ) )
+            final Column column = (Column)newColumn.getData ( COLUMN_KEY );
+            if ( column == Column.reservedColumnSourceTimestamp || column == Column.reservedColumnEntryTimestamp )
             {
-                int currentDir = table.getSortDirection ();
+                final int currentDir = table.getSortDirection ();
                 int newDir = SWT.UP;
                 if ( newColumn == currentColumn )
                 {
-                    newDir = ( currentDir == SWT.UP ) ? SWT.DOWN : SWT.UP;
+                    newDir = currentDir == SWT.UP ? SWT.DOWN : SWT.UP;
                 }
                 else
                 {
@@ -237,10 +256,10 @@ public class EventViewTable extends Composite
         columns.add ( new Column ( Fields.MESSAGE ) );
         columns.add ( new Column ( Fields.ACTOR_NAME ) );
         columns.add ( new Column ( Fields.ACTOR_TYPE ) );
-        for ( Fields field : Fields.values () )
+        for ( final Fields field : Fields.values () )
         {
             final Column column = new Column ( field );
-            if ( ! ( columns.contains ( column ) ) )
+            if ( !columns.contains ( column ) )
             {
                 columns.add ( column );
             }
@@ -255,7 +274,7 @@ public class EventViewTable extends Composite
         this.commentAction = commentAction;
         this.events = events;
 
-        FillLayout layout = new FillLayout ();
+        final FillLayout layout = new FillLayout ();
         this.setLayout ( layout );
 
         this.tableViewer = new TableViewer ( this, SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.MULTI );
@@ -268,7 +287,7 @@ public class EventViewTable extends Composite
         this.tableViewer.getTable ().setSortDirection ( SWT.DOWN );
         this.tableViewer.getTable ().setMenu ( createContextMenu ( this.tableViewer.getTable () ) );
 
-        ObservableSetContentProvider contentProvider = new ObservableSetContentProvider ();
+        final ObservableSetContentProvider contentProvider = new ObservableSetContentProvider ();
         this.tableViewer.setContentProvider ( contentProvider );
         this.tableViewer.setLabelProvider ( new EventLabelProvider ( Properties.observeEach ( contentProvider.getKnownElements (), BeanProperties.values ( new String[] { "id", "monitor" } ) ), columns ) );
         this.tableViewer.setInput ( this.events );
@@ -290,9 +309,9 @@ public class EventViewTable extends Composite
         {
             return;
         }
-        int[] colOrder = this.tableViewer.getTable ().getColumnOrder ();
+        final int[] colOrder = this.tableViewer.getTable ().getColumnOrder ();
         int i = 0;
-        for ( ColumnProperties p : columnSettings )
+        for ( final ColumnProperties p : columnSettings )
         {
             if ( i >= colOrder.length )
             {
@@ -303,13 +322,13 @@ public class EventViewTable extends Composite
         }
         this.tableViewer.getTable ().setColumnOrder ( colOrder );
         i = 0;
-        for ( ColumnProperties p : columnSettings )
+        for ( final ColumnProperties p : columnSettings )
         {
             if ( i >= this.tableViewer.getTable ().getColumnCount () )
             {
                 break;
             }
-            TableColumn col = this.tableViewer.getTable ().getColumn ( i );
+            final TableColumn col = this.tableViewer.getTable ().getColumn ( i );
             col.setWidth ( p.getWidth () );
             i += 1;
         }
@@ -317,14 +336,14 @@ public class EventViewTable extends Composite
 
     private Menu createContextMenu ( final Control parent )
     {
-        if ( ( this.ackAction == null ) && ( this.commentAction == null ) )
+        if ( this.ackAction == null && this.commentAction == null )
         {
             return null;
         }
-        Menu contextMenu = new Menu ( parent );
+        final Menu contextMenu = new Menu ( parent );
         if ( this.ackAction != null )
         {
-            MenuItem ackMenuItem = new MenuItem ( contextMenu, SWT.NONE );
+            final MenuItem ackMenuItem = new MenuItem ( contextMenu, SWT.NONE );
             ackMenuItem.setText ( "Acknowledge" );
             ackMenuItem.setImage ( this.ackAction.getImageDescriptor ().createImage () );
             ackMenuItem.addSelectionListener ( new SelectionAdapter () {
@@ -339,7 +358,7 @@ public class EventViewTable extends Composite
         FIXME: comment in when comment can be set
         if ( this.commentAction != null )
         {
-            MenuItem commentMenuItem = new MenuItem ( contextMenu, SWT.NONE );
+            final MenuItem commentMenuItem = new MenuItem ( contextMenu, SWT.NONE );
             commentMenuItem.setText ( this.commentAction.getText () );
             commentMenuItem.setImage ( this.commentAction.getImageDescriptor ().createImage () );
             commentMenuItem.addSelectionListener ( new SelectionAdapter () {
@@ -361,11 +380,11 @@ public class EventViewTable extends Composite
 
     private void createColumns ( final TableViewer table )
     {
-        SortListener sortListener = new SortListener ( table );
+        final SortListener sortListener = new SortListener ( table );
 
-        for ( Column column : columns )
+        for ( final Column column : columns )
         {
-            TableViewerColumn fieldColumn = new TableViewerColumn ( table, SWT.NONE );
+            final TableViewerColumn fieldColumn = new TableViewerColumn ( table, SWT.NONE );
             fieldColumn.getColumn ().setText ( column.getColumn () );
             fieldColumn.getColumn ().setWidth ( 120 );
             fieldColumn.getColumn ().setResizable ( true );
@@ -376,7 +395,7 @@ public class EventViewTable extends Composite
                 fieldColumn.getColumn ().setWidth ( 0 );
                 fieldColumn.getColumn ().addSelectionListener ( sortListener );
             }
-            if ( ( column == Column.reservedColumnSourceTimestamp ) || ( column == Column.reservedColumnEntryTimestamp ) )
+            if ( column == Column.reservedColumnSourceTimestamp || column == Column.reservedColumnEntryTimestamp )
             {
                 fieldColumn.getColumn ().setWidth ( 140 );
                 fieldColumn.getColumn ().addSelectionListener ( sortListener );
@@ -391,7 +410,7 @@ public class EventViewTable extends Composite
             return new ArrayList<DecoratedEvent> ();
         }
         final ArrayList<DecoratedEvent> result = new ArrayList<DecoratedEvent> ();
-        for ( TableItem row : this.tableViewer.getTable ().getSelection () )
+        for ( final TableItem row : this.tableViewer.getTable ().getSelection () )
         {
             if ( row.getData () instanceof DecoratedEvent )
             {
@@ -430,10 +449,10 @@ public class EventViewTable extends Composite
 
     public List<ColumnProperties> getColumnSettings ()
     {
-        List<ColumnProperties> result = new ArrayList<ColumnProperties> ();
+        final List<ColumnProperties> result = new ArrayList<ColumnProperties> ();
         int i = 0;
-        int[] order = this.tableViewer.getTable ().getColumnOrder ();
-        for ( TableColumn col : this.tableViewer.getTable ().getColumns () )
+        final int[] order = this.tableViewer.getTable ().getColumnOrder ();
+        for ( final TableColumn col : this.tableViewer.getTable ().getColumns () )
         {
             result.add ( new ColumnProperties ( order[i], col.getWidth () ) );
             i += 1;

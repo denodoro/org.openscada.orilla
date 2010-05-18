@@ -1,3 +1,22 @@
+/*
+ * This file is part of the OpenSCADA project
+ * Copyright (C) 2006-2010 inavare GmbH (http://inavare.com)
+ *
+ * OpenSCADA is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenSCADA is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenSCADA. If not, see
+ * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
+ */
+
 package org.openscada.ae.ui.views.dialog;
 
 import java.util.ArrayList;
@@ -77,7 +96,7 @@ public class FilterAdvancedComposite extends Composite
             this.addButton = createAddButton ();
 
             // layout
-            RowLayout layout = new RowLayout ();
+            final RowLayout layout = new RowLayout ();
             this.setLayout ( layout );
         }
 
@@ -86,7 +105,7 @@ public class FilterAdvancedComposite extends Composite
             final Combo c = new Combo ( this, SWT.NONE );
             c.add ( "sourceTimestamp" );
             c.add ( "entryTimestamp" );
-            for ( Event.Fields field : Event.Fields.values () )
+            for ( final Event.Fields field : Event.Fields.values () )
             {
                 c.add ( field.getName () );
             }
@@ -98,7 +117,7 @@ public class FilterAdvancedComposite extends Composite
         private Combo createTypeCombo ()
         {
             final Combo c = new Combo ( this, SWT.NONE );
-            for ( Type type : Type.values () )
+            for ( final Type type : Type.values () )
             {
                 c.add ( type.name () );
             }
@@ -167,7 +186,7 @@ public class FilterAdvancedComposite extends Composite
             this.removeButton = createRemoveButton ();
 
             // layout
-            RowLayout layout = new RowLayout ();
+            final RowLayout layout = new RowLayout ();
             layout.center = true;
             this.setLayout ( layout );
 
@@ -190,8 +209,8 @@ public class FilterAdvancedComposite extends Composite
 
         private Text createAttributeText ( final String attribute )
         {
-            Text t = new Text ( this, SWT.BORDER );
-            Fields field = Fields.byField ( attribute );
+            final Text t = new Text ( this, SWT.BORDER );
+            final Fields field = Fields.byField ( attribute );
             if ( field == null )
             {
                 t.setEditable ( true );
@@ -209,7 +228,7 @@ public class FilterAdvancedComposite extends Composite
                     AssertionComposite.this.orCondition.updateFilter ();
                 };
             } );
-            RowData rowData = new RowData ();
+            final RowData rowData = new RowData ();
             rowData.width = 132;
             t.setLayoutData ( rowData );
             return t;
@@ -217,15 +236,15 @@ public class FilterAdvancedComposite extends Composite
 
         private Label createFieldTypeLabel ( final Type type )
         {
-            Label l = new Label ( this, SWT.NONE );
+            final Label l = new Label ( this, SWT.NONE );
             l.setText ( type.name () );
             return l;
         }
 
         private Combo createAssertionCombo ()
         {
-            Combo c = new Combo ( this, SWT.NONE );
-            for ( Assertion assertion : Assertion.values () )
+            final Combo c = new Combo ( this, SWT.NONE );
+            for ( final Assertion assertion : Assertion.values () )
             {
                 c.add ( assertion.toString () );
             }
@@ -237,7 +256,7 @@ public class FilterAdvancedComposite extends Composite
                     AssertionComposite.this.orCondition.updateFilter ();
                 }
             } );
-            RowData rowData = new RowData ();
+            final RowData rowData = new RowData ();
             rowData.width = 75;
             c.setLayoutData ( rowData );
             return c;
@@ -245,7 +264,7 @@ public class FilterAdvancedComposite extends Composite
 
         private Text createValueText ()
         {
-            Text t = new Text ( this, SWT.BORDER );
+            final Text t = new Text ( this, SWT.BORDER );
             t.setMessage ( "argument" );
             t.addKeyListener ( new KeyAdapter () {
                 @Override
@@ -254,7 +273,7 @@ public class FilterAdvancedComposite extends Composite
                     AssertionComposite.this.orCondition.updateFilter ();
                 }
             } );
-            RowData rowData = new RowData ();
+            final RowData rowData = new RowData ();
             rowData.width = 132;
             t.setLayoutData ( rowData );
             return t;
@@ -262,7 +281,7 @@ public class FilterAdvancedComposite extends Composite
 
         private Button createRemoveButton ()
         {
-            Button b = new Button ( this, SWT.PUSH );
+            final Button b = new Button ( this, SWT.PUSH );
             b.setText ( "Remove" );
             b.addSelectionListener ( new SelectionAdapter () {
                 @Override
@@ -276,10 +295,10 @@ public class FilterAdvancedComposite extends Composite
 
         public Filter getExpression ()
         {
-            String attr = this.attributeText.getText ();
-            String ass = this.assertionCombo.getText ();
-            String val = this.valueText.getText ();
-            FilterAssertion assertion = new FilterAssertion ( attr, Assertion.fromString ( ass ), val );
+            final String attr = this.attributeText.getText ();
+            final String ass = this.assertionCombo.getText ();
+            final String val = this.valueText.getText ();
+            final FilterAssertion assertion = new FilterAssertion ( attr, Assertion.fromString ( ass ), val );
             if ( val.contains ( "*" ) )
             {
                 assertion.setAssertion ( Assertion.SUBSTRING );
@@ -329,7 +348,7 @@ public class FilterAdvancedComposite extends Composite
             this.assertionScrolledComposite.setContent ( this.assertionComposite );
 
             // layout
-            GridLayout layout = new GridLayout ();
+            final GridLayout layout = new GridLayout ();
             layout.marginLeft = 6;
             layout.marginRight = 6;
             layout.marginTop = 6;
@@ -337,12 +356,12 @@ public class FilterAdvancedComposite extends Composite
             layout.verticalSpacing = 12;
             this.tabContent.setLayout ( layout );
 
-            GridData addAssertionCompositeLayoutData = new GridData ();
+            final GridData addAssertionCompositeLayoutData = new GridData ();
             addAssertionCompositeLayoutData.grabExcessHorizontalSpace = true;
             addAssertionCompositeLayoutData.horizontalAlignment = GridData.FILL;
             this.addAssertionComposite.setLayoutData ( addAssertionCompositeLayoutData );
 
-            GridData assertionCompositeLayoutData = new GridData ();
+            final GridData assertionCompositeLayoutData = new GridData ();
             assertionCompositeLayoutData.grabExcessHorizontalSpace = true;
             assertionCompositeLayoutData.horizontalAlignment = GridData.FILL;
             assertionCompositeLayoutData.grabExcessVerticalSpace = true;
@@ -350,13 +369,13 @@ public class FilterAdvancedComposite extends Composite
             this.assertionScrolledComposite.setLayoutData ( assertionCompositeLayoutData );
             this.assertionScrolledComposite.setExpandHorizontal ( true );
 
-            RowLayout innerlayout = new RowLayout ( SWT.VERTICAL );
+            final RowLayout innerlayout = new RowLayout ( SWT.VERTICAL );
             innerlayout.wrap = false;
             this.assertionComposite.setLayout ( innerlayout );
             this.assertionComposite.addListener ( SWT.Resize, new Listener () {
                 public void handleEvent ( final org.eclipse.swt.widgets.Event event )
                 {
-                    Point s = OrCondition.this.assertionComposite.computeSize ( SWT.DEFAULT, SWT.DEFAULT );
+                    final Point s = OrCondition.this.assertionComposite.computeSize ( SWT.DEFAULT, SWT.DEFAULT );
                     OrCondition.this.assertionComposite.setSize ( s.x, s.y );
                     refreshGUI ();
                 }
@@ -388,9 +407,9 @@ public class FilterAdvancedComposite extends Composite
 
         public FilterExpression getExpression ()
         {
-            FilterExpression expression = new FilterExpression ();
+            final FilterExpression expression = new FilterExpression ();
             expression.setOperator ( Operator.AND );
-            for ( AssertionComposite assertionComposite : this.assertionComposites )
+            for ( final AssertionComposite assertionComposite : this.assertionComposites )
             {
                 expression.getFilterSet ().add ( assertionComposite.getExpression () );
             }
@@ -415,7 +434,7 @@ public class FilterAdvancedComposite extends Composite
         addOrCondition ();
 
         // layout
-        GridLayout layout = new GridLayout ( 1, true );
+        final GridLayout layout = new GridLayout ( 1, true );
         layout.marginLeft = 6;
         layout.marginRight = 6;
         layout.marginTop = 6;
@@ -423,7 +442,7 @@ public class FilterAdvancedComposite extends Composite
         layout.verticalSpacing = 12;
         this.setLayout ( layout );
 
-        GridData tabFolderLayoutData = new GridData ();
+        final GridData tabFolderLayoutData = new GridData ();
         tabFolderLayoutData.horizontalAlignment = GridData.FILL;
         tabFolderLayoutData.grabExcessHorizontalSpace = true;
         tabFolderLayoutData.verticalAlignment = GridData.FILL;
@@ -431,14 +450,14 @@ public class FilterAdvancedComposite extends Composite
         this.tabFolder.setLayoutData ( tabFolderLayoutData );
         this.tabFolder.setBackgroundMode ( SWT.INHERIT_FORCE );
 
-        GridData addOrConditionButtonLayoutdata = new GridData ();
+        final GridData addOrConditionButtonLayoutdata = new GridData ();
         addOrConditionButtonLayoutdata.horizontalAlignment = GridData.END;
         this.addOrConditionButton.setLayoutData ( addOrConditionButtonLayoutdata );
     }
 
     private Button creteAddOrConditionButton ()
     {
-        Button b = new Button ( this, SWT.PUSH );
+        final Button b = new Button ( this, SWT.PUSH );
         b.setText ( "Add OR Condition" );
         b.addSelectionListener ( new SelectionAdapter () {
             @Override
@@ -450,7 +469,7 @@ public class FilterAdvancedComposite extends Composite
         b.addDisposeListener ( new DisposeListener () {
             public void widgetDisposed ( final DisposeEvent e )
             {
-                int i = FilterAdvancedComposite.this.tabFolder.getSelectionIndex ();
+                final int i = FilterAdvancedComposite.this.tabFolder.getSelectionIndex ();
                 FilterAdvancedComposite.this.orConditions.remove ( i );
             }
         } );

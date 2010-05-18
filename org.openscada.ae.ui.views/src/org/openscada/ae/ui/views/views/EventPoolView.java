@@ -1,3 +1,22 @@
+/*
+ * This file is part of the OpenSCADA project
+ * Copyright (C) 2006-2010 inavare GmbH (http://inavare.com)
+ *
+ * OpenSCADA is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenSCADA is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenSCADA. If not, see
+ * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
+ */
+
 package org.openscada.ae.ui.views.views;
 
 import java.util.HashMap;
@@ -103,15 +122,15 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
                 {
                     return;
                 }
-                DecoratedEvent event = EventPoolView.this.eventsTable.selectedEvents ().get ( 0 );
+                final DecoratedEvent event = EventPoolView.this.eventsTable.selectedEvents ().get ( 0 );
                 Variant comment = event.getEvent ().getField ( Fields.COMMENT );
-                InputDialog dlg = new InputDialog ( parent.getShell (), commentAction.getText (), commentAction.getDescription (), comment == null ? "" : comment.asString ( "" ), null );
+                final InputDialog dlg = new InputDialog ( parent.getShell (), commentAction.getText (), commentAction.getDescription (), comment == null ? "" : comment.asString ( "" ), null );
                 if ( dlg.open () == Window.OK )
                 {
                     comment = new Variant ( dlg.getValue () );
-                    for ( DecoratedEvent decoratedEvent : EventPoolView.this.eventsTable.selectedEvents () )
+                    for ( final DecoratedEvent decoratedEvent : EventPoolView.this.eventsTable.selectedEvents () )
                     {
-                        Event updatedEvent = Event.create ().event ( decoratedEvent.getEvent () ).attribute ( Fields.COMMENT, comment ).build ();
+                        final Event updatedEvent = Event.create ().event ( decoratedEvent.getEvent () ).attribute ( Fields.COMMENT, comment ).build ();
                         // FIXME: implement "set comment" in client interface
                         logger.info ( "comment updated " + updatedEvent );
                     }
@@ -126,7 +145,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
         setFilterAction.setRunnable ( new Runnable () {
             public void run ()
             {
-                Pair<SearchType, String> result = EventHistorySearchDialog.open ( parent.getShell (), EventPoolView.this.eventsTable.getFilter () );
+                final Pair<SearchType, String> result = EventHistorySearchDialog.open ( parent.getShell (), EventPoolView.this.eventsTable.getFilter () );
                 EventPoolView.this.eventsTable.setFilter ( result );
             }
         } );
@@ -204,7 +223,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
     protected void subscribe ()
     {
         super.subscribe ();
-        if ( ( this.getConnection () != null ) && ( this.poolId != null ) )
+        if ( this.getConnection () != null && this.poolId != null )
         {
             this.eventPoolListener = new EventListener () {
                 public void statusChanged ( final SubscriptionState state )
@@ -225,7 +244,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
     protected void unSubscribe ()
     {
         super.unSubscribe ();
-        if ( ( this.getConnection () != null ) && ( this.poolId != null ) )
+        if ( this.getConnection () != null && this.poolId != null )
         {
             if ( this.eventPoolListener != null )
             {
@@ -248,7 +267,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
                 for ( final DecoratedEvent event : decoratedEvents )
                 {
                     final Variant source = event.getEvent ().getField ( Fields.SOURCE );
-                    if ( ( source != null ) && !source.isNull () && ( source.asString ( "" ).length () > 0 ) )
+                    if ( source != null && !source.isNull () && source.asString ( "" ).length () > 0 )
                     {
                         Set<DecoratedEvent> d = EventPoolView.this.poolMap.get ( source.asString ( "" ) );
                         if ( d == null )
@@ -305,7 +324,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
         {
             final Variant source = event.getField ( Fields.SOURCE );
             final MonitorData monitor;
-            if ( ( source != null ) && !source.isNull () && source.isString () )
+            if ( source != null && !source.isNull () && source.isString () )
             {
                 final DecoratedMonitor decoratedMonitor = (DecoratedMonitor)this.monitorsMap.get ( source.asString ( "" ) );
                 if ( decoratedMonitor != null )
@@ -346,9 +365,9 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
     @Override
     protected void acknowledge ()
     {
-        if ( ( this.getConnection () != null ) && ( this.getConnection ().getState () == ConnectionState.BOUND ) )
+        if ( this.getConnection () != null && this.getConnection ().getState () == ConnectionState.BOUND )
         {
-            for ( DecoratedEvent event : this.eventsTable.selectedEvents () )
+            for ( final DecoratedEvent event : this.eventsTable.selectedEvents () )
             {
                 if ( event.getMonitor () != null )
                 {
@@ -423,7 +442,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
     {
         super.init ( site, memento );
 
-        String s = memento.getString ( "columnSettings" );
+        final String s = memento.getString ( "columnSettings" );
         if ( s != null )
         {
             this.initialColumnSettings = this.gson.fromJson ( s, new TypeToken<List<ColumnProperties>> () {}.getType () );
