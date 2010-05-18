@@ -118,7 +118,7 @@ public class ItemListLabelProvider extends LabelProvider implements ITableLabelP
         }
         catch ( final Throwable e )
         {
-            Activator.getDefault ().getLog ().log ( new Status ( Status.ERROR, Activator.PLUGIN_ID, "Failed to generate label", e ) );
+            Activator.getDefault ().getLog ().log ( new Status ( Status.ERROR, Activator.PLUGIN_ID, Messages.ItemListLabelProvider_LabelError, e ) );
         }
 
         return null;
@@ -143,7 +143,7 @@ public class ItemListLabelProvider extends LabelProvider implements ITableLabelP
         }
         catch ( final Throwable e )
         {
-            Activator.getDefault ().getLog ().log ( new Status ( Status.ERROR, Activator.PLUGIN_ID, "Failed to generate label", e ) );
+            Activator.getDefault ().getLog ().log ( new Status ( Status.ERROR, Activator.PLUGIN_ID, Messages.ItemListLabelProvider_LabelError, e ) );
         }
 
         return null;
@@ -168,7 +168,7 @@ public class ItemListLabelProvider extends LabelProvider implements ITableLabelP
         }
         catch ( final Throwable e )
         {
-            Activator.getDefault ().getLog ().log ( new Status ( Status.ERROR, Activator.PLUGIN_ID, "Failed to generate label", e ) );
+            Activator.getDefault ().getLog ().log ( new Status ( Status.ERROR, Activator.PLUGIN_ID, Messages.ItemListLabelProvider_LabelError, e ) );
         }
 
         return null;

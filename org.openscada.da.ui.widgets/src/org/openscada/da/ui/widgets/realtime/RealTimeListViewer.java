@@ -67,13 +67,13 @@ public class RealTimeListViewer implements RealtimeListAdapter
         TreeColumn col;
 
         col = new TreeColumn ( this.viewer.getTree (), SWT.NONE );
-        col.setText ( "ID" );
+        col.setText ( Messages.RealTimeListViewer_Col_Text_Id );
         col = new TreeColumn ( this.viewer.getTree (), SWT.NONE );
-        col.setText ( "State" );
+        col.setText ( Messages.RealTimeListViewer_Col_Text_State );
         col = new TreeColumn ( this.viewer.getTree (), SWT.NONE );
-        col.setText ( "Type" );
+        col.setText ( Messages.RealTimeListViewer_Col_Text_Type );
         col = new TreeColumn ( this.viewer.getTree (), SWT.NONE );
-        col.setText ( "Value" );
+        col.setText ( Messages.RealTimeListViewer_Col_Text_Value );
 
         this.viewer.getTree ().setHeaderVisible ( true );
 
@@ -175,12 +175,12 @@ public class RealTimeListViewer implements RealtimeListAdapter
         {
             {
                 this.initialColWidth = new LinkedList<Integer> ();
-                final IMemento tableMemento = memento.getChild ( "tableCols" );
+                final IMemento tableMemento = memento.getChild ( "tableCols" ); //$NON-NLS-1$
                 if ( tableMemento != null )
                 {
                     int i = 0;
                     Integer w;
-                    while ( ( w = tableMemento.getInteger ( "col_" + i ) ) != null )
+                    while ( ( w = tableMemento.getInteger ( "col_" + i ) ) != null ) //$NON-NLS-1$
                     {
                         this.initialColWidth.add ( w );
                         i++;
@@ -188,7 +188,7 @@ public class RealTimeListViewer implements RealtimeListAdapter
                 }
             }
 
-            for ( final IMemento child : memento.getChildren ( "item" ) )
+            for ( final IMemento child : memento.getChildren ( "item" ) ) //$NON-NLS-1$
             {
                 final Item item = Item.loadFrom ( child );
                 if ( item != null )
@@ -199,7 +199,7 @@ public class RealTimeListViewer implements RealtimeListAdapter
         }
         catch ( final Exception e )
         {
-            Activator.getDefault ().getLog ().log ( new Status ( Status.ERROR, Activator.PLUGIN_ID, "Failed to load data", e ) );
+            Activator.getDefault ().getLog ().log ( new Status ( Status.ERROR, Activator.PLUGIN_ID, Messages.RealTimeListViewer_ErrorLoadingData, e ) );
         }
     }
 
@@ -211,19 +211,19 @@ public class RealTimeListViewer implements RealtimeListAdapter
         }
 
         {
-            final IMemento tableMemento = memento.createChild ( "tableCols" );
+            final IMemento tableMemento = memento.createChild ( "tableCols" ); //$NON-NLS-1$
 
             for ( int i = 0; i < this.viewer.getTree ().getColumnCount (); i++ )
             {
                 final TreeColumn col = this.viewer.getTree ().getColumn ( i );
-                tableMemento.putInteger ( "col_" + i, col.getWidth () );
+                tableMemento.putInteger ( "col_" + i, col.getWidth () ); //$NON-NLS-1$
             }
         }
 
         for ( final ListEntry entry : this.list.getItems () )
         {
             final Item item = entry.getItem ();
-            item.saveTo ( memento.createChild ( "item" ) );
+            item.saveTo ( memento.createChild ( "item" ) ); //$NON-NLS-1$
         }
     }
 
@@ -234,7 +234,7 @@ public class RealTimeListViewer implements RealtimeListAdapter
 
     private void hookContextMenu ( final IViewSite viewSite )
     {
-        final MenuManager menuMgr = new MenuManager ( "#PopupMenu" );
+        final MenuManager menuMgr = new MenuManager ( "#PopupMenu" ); //$NON-NLS-1$
         menuMgr.setRemoveAllWhenShown ( true );
         menuMgr.addMenuListener ( new IMenuListener () {
             public void menuAboutToShow ( final IMenuManager manager )

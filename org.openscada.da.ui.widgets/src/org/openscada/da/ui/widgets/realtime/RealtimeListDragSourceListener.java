@@ -90,18 +90,18 @@ public class RealtimeListDragSourceListener implements DragSourceListener
 
             if ( cnt > 0 )
             {
-                sb.append ( "\n" );
+                sb.append ( "\n" ); //$NON-NLS-1$
             }
 
             final Item item = entry.getItem ();
 
             if ( item.getType () != Type.URI )
             {
-                throw new IllegalStateException ( "Item must be a URI item" );
+                throw new IllegalStateException ( Messages.RealtimeListDragSourceListener_TypeError );
             }
 
             sb.append ( item.getConnectionString () );
-            sb.append ( "#" );
+            sb.append ( "#" ); //$NON-NLS-1$
             sb.append ( item.getId () );
 
             cnt++;
@@ -118,7 +118,7 @@ public class RealtimeListDragSourceListener implements DragSourceListener
             final ListEntry entry = (ListEntry)i.next ();
             if ( cnt > 0 )
             {
-                sb.append ( "\n" );
+                sb.append ( "\n" ); //$NON-NLS-1$
             }
 
             sb.append ( entry.getDataItem ().getItem ().getId () );

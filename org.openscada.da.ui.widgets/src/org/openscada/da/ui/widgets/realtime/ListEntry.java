@@ -177,26 +177,26 @@ public class ListEntry extends Observable implements IAdaptable, IPropertySource
         final List<IPropertyDescriptor> result = new LinkedList<IPropertyDescriptor> ();
 
         {
-            final PropertyDescriptor pd = new PropertyDescriptor ( Properties.ITEM_ID, "ID" );
-            pd.setCategory ( "Item" );
+            final PropertyDescriptor pd = new PropertyDescriptor ( Properties.ITEM_ID, Messages.ListEntry_Property_Name_Id );
+            pd.setCategory ( Messages.ListEntry_Property_Category_Id );
             pd.setAlwaysIncompatible ( true );
             result.add ( pd );
         }
         {
-            final PropertyDescriptor pd = new PropertyDescriptor ( Properties.CONNECTION_URI, "Connection" );
-            pd.setCategory ( "Item" );
+            final PropertyDescriptor pd = new PropertyDescriptor ( Properties.CONNECTION_URI, Messages.ListEntry_Property_Name_Connection );
+            pd.setCategory ( Messages.ListEntry_Property_Category_Connection );
             pd.setAlwaysIncompatible ( true );
             result.add ( pd );
         }
         {
-            final PropertyDescriptor pd = new PropertyDescriptor ( Properties.VALUE, "Value" );
-            pd.setCategory ( "State" );
+            final PropertyDescriptor pd = new PropertyDescriptor ( Properties.VALUE, Messages.ListEntry_Property_Name_Value );
+            pd.setCategory ( Messages.ListEntry_Property_Category_Value );
             pd.setAlwaysIncompatible ( true );
             result.add ( pd );
         }
         {
-            final PropertyDescriptor pd = new PropertyDescriptor ( Properties.SUBSCRIPTION_STATE, "Subscription" );
-            pd.setCategory ( "State" );
+            final PropertyDescriptor pd = new PropertyDescriptor ( Properties.SUBSCRIPTION_STATE, Messages.ListEntry_Property_Name_Subscription );
+            pd.setCategory ( Messages.ListEntry_Property_Category_State );
             pd.setAlwaysIncompatible ( true );
             result.add ( pd );
         }

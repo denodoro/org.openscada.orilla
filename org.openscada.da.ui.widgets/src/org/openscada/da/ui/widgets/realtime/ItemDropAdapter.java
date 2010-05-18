@@ -63,7 +63,7 @@ public class ItemDropAdapter extends ViewerDropAdapter
     private void dropString ( final Object data )
     {
         final TreeViewer viewer = (TreeViewer)getViewer ();
-        final String toks[] = ( (String)data ).split ( "[\\n\\r]+" );
+        final String toks[] = ( (String)data ).split ( "[\\n\\r]+" ); //$NON-NLS-1$
         for ( final String tok : toks )
         {
             try
