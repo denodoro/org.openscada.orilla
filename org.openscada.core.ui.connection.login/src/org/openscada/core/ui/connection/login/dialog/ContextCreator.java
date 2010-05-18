@@ -71,7 +71,7 @@ public class ContextCreator
             }
             else
             {
-                notifyStateChange ( connection.getConnectionInformation (), ConnectionState.CLOSED, new IllegalArgumentException ( "Failed to create connection service" ).fillInStackTrace () );
+                notifyStateChange ( connection.getConnectionInformation (), ConnectionState.CLOSED, new IllegalArgumentException ( Messages.ContextCreator_ErrorConnectionService ).fillInStackTrace () );
             }
         }
 
@@ -131,9 +131,9 @@ public class ContextCreator
 
     private boolean isComplete ( final Map<LoginConnection, ConnectionService> result )
     {
-        logger.debug ( "Check complete" );
-        logger.debug ( "Results: {}", this.results );
-        logger.debug ( "Connections: {}", this.connections );
+        logger.debug ( "Check complete" ); //$NON-NLS-1$
+        logger.debug ( "Results: {}", this.results ); //$NON-NLS-1$
+        logger.debug ( "Connections: {}", this.connections ); //$NON-NLS-1$
 
         if ( this.results.size () == this.connections.size () )
         {
@@ -170,7 +170,7 @@ public class ContextCreator
 
     public void stop ()
     {
-        logger.warn ( "Request to stop" );
+        logger.warn ( "Request to stop" ); //$NON-NLS-1$
         for ( final ConnectionService service : this.connections.values () )
         {
             service.dispose ();
@@ -196,7 +196,7 @@ public class ContextCreator
     {
         if ( this.listener != null )
         {
-            logger.info ( "Fire state change - connection: {}, state: {}, error: {}", new Object[] { connectionInformation, state, error } );
+            logger.info ( "Fire state change - connection: {}, state: {}, error: {}", new Object[] { connectionInformation, state, error } ); //$NON-NLS-1$
             this.realm.asyncExec ( new Runnable () {
 
                 public void run ()
@@ -211,7 +211,7 @@ public class ContextCreator
     {
         if ( this.complete )
         {
-            logger.warn ( "Somehow we wanted to send the result twice. Skipping!" );
+            logger.warn ( "Somehow we wanted to send the result twice. Skipping!" ); //$NON-NLS-1$
             return;
         }
         this.complete = true;

@@ -127,15 +127,15 @@ public class ConnectionAnalyzer extends Composite implements ContextCreatorListe
         TableViewerColumn col;
 
         col = new TableViewerColumn ( this.tableViewer, SWT.NONE );
-        col.getColumn ().setText ( "URI" );
+        col.getColumn ().setText ( Messages.ConnectionAnalyzer_Column_Text_Uri );
         col.setLabelProvider ( new LabelProvider () );
 
         col = new TableViewerColumn ( this.tableViewer, SWT.NONE );
-        col.getColumn ().setText ( "State" );
+        col.getColumn ().setText ( Messages.ConnectionAnalyzer_Column_Text_State );
         col.setLabelProvider ( new LabelProvider () );
 
         col = new TableViewerColumn ( this.tableViewer, SWT.NONE );
-        col.getColumn ().setText ( "Error" );
+        col.getColumn ().setText ( Messages.ConnectionAnalyzer_Column_Text_Error );
         col.setLabelProvider ( new LabelProvider () );
 
         final TableLayout tableLayout = new TableLayout ();
