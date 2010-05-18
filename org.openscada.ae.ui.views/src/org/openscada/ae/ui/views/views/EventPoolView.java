@@ -223,7 +223,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
     protected void subscribe ()
     {
         super.subscribe ();
-        if ( this.getConnection () != null && this.poolId != null )
+        if ( ( this.getConnection () != null ) && ( this.poolId != null ) )
         {
             this.eventPoolListener = new EventListener () {
                 public void statusChanged ( final SubscriptionState state )
@@ -244,7 +244,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
     protected void unSubscribe ()
     {
         super.unSubscribe ();
-        if ( this.getConnection () != null && this.poolId != null )
+        if ( ( this.getConnection () != null ) && ( this.poolId != null ) )
         {
             if ( this.eventPoolListener != null )
             {
@@ -267,7 +267,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
                 for ( final DecoratedEvent event : decoratedEvents )
                 {
                     final Variant source = event.getEvent ().getField ( Fields.SOURCE );
-                    if ( source != null && !source.isNull () && source.asString ( "" ).length () > 0 )
+                    if ( ( source != null ) && !source.isNull () && ( source.asString ( "" ).length () > 0 ) )
                     {
                         Set<DecoratedEvent> d = EventPoolView.this.poolMap.get ( source.asString ( "" ) );
                         if ( d == null )
@@ -324,7 +324,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
         {
             final Variant source = event.getField ( Fields.SOURCE );
             final MonitorData monitor;
-            if ( source != null && !source.isNull () && source.isString () )
+            if ( ( source != null ) && !source.isNull () && source.isString () )
             {
                 final DecoratedMonitor decoratedMonitor = (DecoratedMonitor)this.monitorsMap.get ( source.asString ( "" ) );
                 if ( decoratedMonitor != null )
@@ -365,7 +365,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
     @Override
     protected void acknowledge ()
     {
-        if ( this.getConnection () != null && this.getConnection ().getState () == ConnectionState.BOUND )
+        if ( ( this.getConnection () != null ) && ( this.getConnection ().getState () == ConnectionState.BOUND ) )
         {
             for ( final DecoratedEvent event : this.eventsTable.selectedEvents () )
             {
@@ -442,10 +442,13 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
     {
         super.init ( site, memento );
 
-        final String s = memento.getString ( "columnSettings" );
-        if ( s != null )
+        if ( memento != null )
         {
-            this.initialColumnSettings = this.gson.fromJson ( s, new TypeToken<List<ColumnProperties>> () {}.getType () );
+            final String s = memento.getString ( "columnSettings" );
+            if ( s != null )
+            {
+                this.initialColumnSettings = this.gson.fromJson ( s, new TypeToken<List<ColumnProperties>> () {}.getType () );
+            }
         }
     }
 
