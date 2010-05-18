@@ -78,6 +78,7 @@ public class FilterQueryByExampleComposite extends Composite
 
         private final Label captionLabel;
 
+        @SuppressWarnings ( "unused" )
         private final Label spacerLabel;
 
         private final Label fromLabel;
