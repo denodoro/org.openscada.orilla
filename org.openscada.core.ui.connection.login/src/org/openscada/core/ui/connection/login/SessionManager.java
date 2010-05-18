@@ -38,7 +38,7 @@ public abstract class SessionManager
 
     protected void checkRealm ()
     {
-        Assert.isTrue ( this.realm.isCurrent (), "This operation must be run in the managers realm" );
+        Assert.isTrue ( this.realm.isCurrent (), Messages.SessionManager_ErrorRealm );
     }
 
     /**

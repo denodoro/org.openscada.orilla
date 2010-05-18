@@ -67,7 +67,7 @@ public class LoginDialog extends TitleAreaDialog
     {
         super ( parentShell );
         setBlockOnOpen ( true );
-        setTitle ( "Log on to system" );
+        setTitle ( Messages.LoginDialog_Dlg_Title );
         setHelpAvailable ( false );
 
         this.contexts = Activator.getDefault ().getContextList ();
@@ -76,10 +76,10 @@ public class LoginDialog extends TitleAreaDialog
 
     private IDialogSettings getDialogSection ()
     {
-        IDialogSettings section = Activator.getDefault ().getDialogSettings ().getSection ( "LoginDialog" );
+        IDialogSettings section = Activator.getDefault ().getDialogSettings ().getSection ( "LoginDialog" ); //$NON-NLS-1$
         if ( section == null )
         {
-            section = Activator.getDefault ().getDialogSettings ().addNewSection ( "LoginDialog" );
+            section = Activator.getDefault ().getDialogSettings ().addNewSection ( "LoginDialog" ); //$NON-NLS-1$
         }
         return section;
     }
@@ -91,8 +91,8 @@ public class LoginDialog extends TitleAreaDialog
     {
         if ( this.loginContext != null && this.user != null )
         {
-            this.dialogSettings.put ( "context", this.loginContext.getId () );
-            this.dialogSettings.put ( "user", this.user );
+            this.dialogSettings.put ( "context", this.loginContext.getId () ); //$NON-NLS-1$
+            this.dialogSettings.put ( "user", this.user ); //$NON-NLS-1$
         }
     }
 
@@ -101,8 +101,8 @@ public class LoginDialog extends TitleAreaDialog
      */
     private void loadFrom ()
     {
-        String user = this.dialogSettings.get ( "user" );
-        String contextId = this.dialogSettings.get ( "context" );
+        String user = this.dialogSettings.get ( "user" ); //$NON-NLS-1$
+        String contextId = this.dialogSettings.get ( "context" ); //$NON-NLS-1$
         if ( user != null && contextId != null )
         {
             this.userText.setText ( user );
@@ -126,7 +126,7 @@ public class LoginDialog extends TitleAreaDialog
         final Button button = getButton ( OK );
         try
         {
-            setMessage ( "Enter your login information", IMessageProvider.INFORMATION );
+            setMessage ( Messages.LoginDialog_DefaultMessage, IMessageProvider.INFORMATION );
             validate ();
 
             button.setEnabled ( true );
@@ -160,20 +160,20 @@ public class LoginDialog extends TitleAreaDialog
 
         if ( this.loginContext == null )
         {
-            throw new IllegalStateException ( "No login context selected" );
+            throw new IllegalStateException ( Messages.LoginDialog_Error_NoLoginContext );
         }
 
         if ( this.password == null || this.password.length () == 0 )
         {
             // set to null in case this is an empty string
             this.password = null;
-            setMessage ( "Empty password", IMessageProvider.WARNING );
+            setMessage ( Messages.LoginDialog_Message_EmptyPassword, IMessageProvider.WARNING );
         }
         if ( this.user == null || this.user.length () == 0 )
         {
             // set to null in case this is an empty string
             this.user = null;
-            setMessage ( "Empty user name", IMessageProvider.WARNING );
+            setMessage ( Messages.LoginDialog_Message_EmptyUsername, IMessageProvider.WARNING );
         }
     }
 
@@ -181,7 +181,7 @@ public class LoginDialog extends TitleAreaDialog
     protected void configureShell ( final Shell newShell )
     {
         super.configureShell ( newShell );
-        newShell.setText ( "Logon" );
+        newShell.setText ( Messages.LoginDialog_Shell_Text );
     }
 
     protected Control createDialogArea ( final Composite parent )
@@ -193,7 +193,7 @@ public class LoginDialog extends TitleAreaDialog
         contents.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, true ) );
         Dialog.applyDialogFont ( wrapper );
 
-        setTitle ( "Log on to system" );
+        setTitle ( Messages.LoginDialog_Dlg_Title );
 
         return wrapper;
     }
@@ -219,7 +219,7 @@ public class LoginDialog extends TitleAreaDialog
 
         // context
         label = new Label ( contents, SWT.NONE );
-        label.setText ( "Context:" );
+        label.setText ( Messages.LoginDialog_Label_Context_Text );
         this.contextSelector = new ComboViewer ( contents, SWT.READ_ONLY );
         this.contextSelector.setContentProvider ( new ArrayContentProvider () );
         this.contextSelector.setLabelProvider ( new LabelProvider () {
@@ -241,9 +241,9 @@ public class LoginDialog extends TitleAreaDialog
 
         // username
         label = new Label ( contents, SWT.NONE );
-        label.setText ( "User:" );
+        label.setText ( Messages.LoginDialog_Label_User_Text );
         this.userText = new Text ( contents, SWT.BORDER );
-        this.userText.setMessage ( "Enter username" );
+        this.userText.setMessage ( Messages.LoginDialog_Text_User_Message );
         applyLayout ( this.userText );
         this.userText.addModifyListener ( new ModifyListener () {
 
@@ -255,9 +255,9 @@ public class LoginDialog extends TitleAreaDialog
 
         // password
         label = new Label ( contents, SWT.NONE );
-        label.setText ( "Password:" );
+        label.setText ( Messages.LoginDialog_Label_Password_Text );
         this.passwordText = new Text ( contents, SWT.BORDER | SWT.PASSWORD );
-        this.passwordText.setMessage ( "Enter password" );
+        this.passwordText.setMessage ( Messages.LoginDialog_Text_Password_Message );
         applyLayout ( this.passwordText );
         this.passwordText.addModifyListener ( new ModifyListener () {
 
@@ -289,7 +289,7 @@ public class LoginDialog extends TitleAreaDialog
     {
         if ( this.creator != null )
         {
-            logger.error ( "Found pre-existing creator instance. This should not happen!" );
+            logger.error ( "Found pre-existing creator instance. This should not happen!" ); //$NON-NLS-1$
             this.creator.dispose ();
             this.creator = null;
         }
@@ -332,7 +332,7 @@ public class LoginDialog extends TitleAreaDialog
     {
         if ( this.creator == null )
         {
-            logger.error ( "Creating is null but we got a result. This should also never happen!" );
+            logger.error ( "Creating is null but we got a result. This should also never happen!" ); //$NON-NLS-1$
             return;
         }
 

@@ -9,7 +9,7 @@ import org.eclipse.ui.ISources;
 public class LoginSessionProvider extends AbstractSourceProvider
 {
 
-    public static final String SESSION_STATE = "org.openscada.core.ui.connection.login.sessionState";
+    public static final String SESSION_STATE = "org.openscada.core.ui.connection.login.sessionState"; //$NON-NLS-1$
 
     private LoginSession session;
 
@@ -31,7 +31,7 @@ public class LoginSessionProvider extends AbstractSourceProvider
 
     private String getSessionState ()
     {
-        return this.session != null ? "loggedIn" : "loggedOut";
+        return this.session != null ? "loggedIn" : "loggedOut"; //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     public void setLoginSession ( final LoginSession session )

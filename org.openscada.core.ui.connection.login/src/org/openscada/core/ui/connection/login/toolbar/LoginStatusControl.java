@@ -42,7 +42,7 @@ public class LoginStatusControl extends WorkbenchWindowControlContribution imple
 
         this.statusLabel = new Label ( wrapper, SWT.NONE );
 
-        this.statusLabel.setText ( "<unknown>" );
+        this.statusLabel.setText ( Messages.LoginStatusControl_StatusLabel_Text );
         this.statusLabel.setLayoutData ( new GridData ( SWT.BEGINNING, SWT.CENTER, false, false ) );
 
         SessionManager.getDefault ().addListener ( this );
@@ -54,11 +54,11 @@ public class LoginStatusControl extends WorkbenchWindowControlContribution imple
     {
         if ( session == null )
         {
-            this.statusLabel.setText ( "<no session>" );
+            this.statusLabel.setText ( Messages.LoginStatusControl_StatusLabel_NoSession );
         }
         else
         {
-            this.statusLabel.setText ( String.format ( "%s on %s", getUserName ( session.getUsername () ), session.getLoginContext ().getName () ) );
+            this.statusLabel.setText ( String.format ( Messages.LoginStatusControl_StatusLabel_SessionFormat, getUserName ( session.getUsername () ), session.getLoginContext ().getName () ) );
             this.statusLabel.getParent ().pack ();
         }
     }
@@ -67,7 +67,7 @@ public class LoginStatusControl extends WorkbenchWindowControlContribution imple
     {
         if ( username == null )
         {
-            return "Anonymous";
+            return Messages.LoginStatusControl_Text_Anonymous;
         }
         else
         {

@@ -23,7 +23,7 @@ public class Activator extends AbstractUIPlugin
 {
 
     // The plug-in ID
-    public static final String PLUGIN_ID = "org.openscada.core.ui.connection.login";
+    public static final String PLUGIN_ID = "org.openscada.core.ui.connection.login"; //$NON-NLS-1$
 
     // The shared instance
     private static Activator plugin;
@@ -82,15 +82,15 @@ public class Activator extends AbstractUIPlugin
     {
         final List<LoginContext> result = new LinkedList<LoginContext> ();
 
-        for ( final IConfigurationElement ele : Platform.getExtensionRegistry ().getConfigurationElementsFor ( "org.openscada.core.ui.connection.login.context" ) )
+        for ( final IConfigurationElement ele : Platform.getExtensionRegistry ().getConfigurationElementsFor ( "org.openscada.core.ui.connection.login.context" ) ) //$NON-NLS-1$
         {
-            if ( !"context".equals ( ele.getName () ) )
+            if ( !"context".equals ( ele.getName () ) ) //$NON-NLS-1$
             {
                 continue;
             }
 
-            final String name = ele.getAttribute ( "label" );
-            String id = ele.getAttribute ( "id" );
+            final String name = ele.getAttribute ( "label" ); //$NON-NLS-1$
+            final String id = ele.getAttribute ( "id" ); //$NON-NLS-1$
 
             final Collection<LoginConnection> connections = new LinkedList<LoginConnection> ();
             fillConnections ( connections, ele );
@@ -107,16 +107,16 @@ public class Activator extends AbstractUIPlugin
 
     private void fillConnections ( final Collection<LoginConnection> connections, final IConfigurationElement ele )
     {
-        for ( final IConfigurationElement child : ele.getChildren ( "connection" ) )
+        for ( final IConfigurationElement child : ele.getChildren ( "connection" ) ) //$NON-NLS-1$
         {
             try
             {
-                final String uri = child.getAttribute ( "uri" );
+                final String uri = child.getAttribute ( "uri" ); //$NON-NLS-1$
                 final ConnectionInformation ci = ConnectionInformation.fromURI ( uri );
 
-                final String servicePid = child.getAttribute ( "servicePid" );
-                final String autoReconnectDelayStr = child.getAttribute ( "autoReconnectDelay" );
-                final String priorityStr = child.getAttribute ( "servicePriority" );
+                final String servicePid = child.getAttribute ( "servicePid" ); //$NON-NLS-1$
+                final String autoReconnectDelayStr = child.getAttribute ( "autoReconnectDelay" ); //$NON-NLS-1$
+                final String priorityStr = child.getAttribute ( "servicePriority" ); //$NON-NLS-1$
 
                 Integer autoReconnectDelay;
                 if ( autoReconnectDelayStr == null )
@@ -144,7 +144,7 @@ public class Activator extends AbstractUIPlugin
             }
             catch ( final Exception e )
             {
-                getLog ().log ( new Status ( IStatus.WARNING, PLUGIN_ID, "Failed to parse connection", e ) );
+                getLog ().log ( new Status ( IStatus.WARNING, PLUGIN_ID, Messages.Activator_ErrorParse, e ) );
             }
         }
     }
