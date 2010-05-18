@@ -98,7 +98,7 @@ public class ConnectionAnalyzer extends Composite implements ContextCreatorListe
             switch ( cell.getColumnIndex () )
             {
             case 0:
-                cell.setText ( entry.getConnectionInformation ().toString () );
+                cell.setText ( entry.getConnectionInformation ().toMaskedString () );
                 break;
             case 1:
                 cell.setText ( entry.getState ().toString () );
