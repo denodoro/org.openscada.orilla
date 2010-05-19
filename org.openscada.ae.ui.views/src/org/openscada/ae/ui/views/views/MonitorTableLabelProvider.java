@@ -91,6 +91,10 @@ public class MonitorTableLabelProvider extends ObservableMapLabelProvider
             return monitor.getLastAknUser ().toString ();
         case 5:
             return LabelProviderSupport.formatDate ( monitor.getLastAknTimestamp () );
+        case 6:
+            return LabelProviderSupport.toLabel ( monitor.getAttributes ().get ( "item" ) );
+        case 7:
+            return LabelProviderSupport.toLabel ( monitor.getAttributes ().get ( "message" ) );
         }
         return "";
     }

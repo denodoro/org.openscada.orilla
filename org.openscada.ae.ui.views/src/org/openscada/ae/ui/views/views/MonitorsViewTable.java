@@ -64,7 +64,9 @@ public class MonitorsViewTable extends Composite
         TIMESTAMP,
         VALUE,
         ACK_USER,
-        ACK_TIMESTAMP;
+        ACK_TIMESTAMP,
+        ITEM,
+        MESSAGE;
     }
 
     private static class Sorter extends ViewerSorter
@@ -113,18 +115,26 @@ public class MonitorsViewTable extends Composite
                 v1 = m1.getLastAknTimestamp () == null ? DEFAULT_DATE : m1.getLastAknTimestamp ();
                 v2 = m2.getLastAknTimestamp () == null ? DEFAULT_DATE : m2.getLastAknTimestamp ();
                 break;
+            case ITEM:
+                v1 = m1.getAttributes ().get ( "item" ) == null ? Variant.NULL : m1.getAttributes ().get ( "item" );
+                v2 = m2.getAttributes ().get ( "item" ) == null ? Variant.NULL : m2.getAttributes ().get ( "item" );
+                break;
+            case MESSAGE:
+                v1 = m1.getAttributes ().get ( "message" ) == null ? Variant.NULL : m1.getAttributes ().get ( "message" );
+                v2 = m2.getAttributes ().get ( "message" ) == null ? Variant.NULL : m2.getAttributes ().get ( "message" );
+                break;
             }
             // first compare the given column
             int result = v1.compareTo ( v2 );
             // use given order for sorting
             result = this.dir == SWT.DOWN ? -result : result;
             // if values are the same, order by timestamp in descending order
-            if ( this.column != Columns.TIMESTAMP && result == 0 )
+            if ( ( this.column != Columns.TIMESTAMP ) && ( result == 0 ) )
             {
                 result = m2.getStatusTimestamp ().compareTo ( m1.getStatusTimestamp () );
             }
             // if values are still the same, order by id in ascending order
-            if ( this.column != Columns.ID && result == 0 )
+            if ( ( this.column != Columns.ID ) && ( result == 0 ) )
             {
                 result = m1.getId ().compareTo ( m2.getId () );
             }
@@ -277,6 +287,22 @@ public class MonitorsViewTable extends Composite
         aknTimestampColumn.getColumn ().setResizable ( true );
         aknTimestampColumn.getColumn ().setMoveable ( false );
         aknTimestampColumn.getColumn ().addSelectionListener ( sortListener );
+
+        final TableViewerColumn itemColumn = new TableViewerColumn ( table, SWT.NONE );
+        itemColumn.getColumn ().setText ( Messages.Item );
+        itemColumn.getColumn ().setData ( COLUMN_KEY, Columns.ITEM );
+        itemColumn.getColumn ().setWidth ( 180 );
+        itemColumn.getColumn ().setResizable ( true );
+        itemColumn.getColumn ().setMoveable ( false );
+        itemColumn.getColumn ().addSelectionListener ( sortListener );
+
+        final TableViewerColumn messageColumn = new TableViewerColumn ( table, SWT.NONE );
+        messageColumn.getColumn ().setText ( Messages.Message );
+        messageColumn.getColumn ().setData ( COLUMN_KEY, Columns.MESSAGE );
+        messageColumn.getColumn ().setWidth ( 180 );
+        messageColumn.getColumn ().setResizable ( true );
+        messageColumn.getColumn ().setMoveable ( false );
+        messageColumn.getColumn ().addSelectionListener ( sortListener );
     }
 
     public void clear ()
