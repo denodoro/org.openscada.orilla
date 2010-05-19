@@ -27,8 +27,10 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.openscada.core.ConnectionInformation;
 import org.openscada.da.client.dataitem.details.part.AbstractBaseDetailsPart;
 import org.openscada.da.ui.connection.data.DataItemHolder;
+import org.openscada.da.ui.connection.data.Item;
 
 public class OverviewDetailsPart extends AbstractBaseDetailsPart
 {
@@ -106,7 +108,7 @@ public class OverviewDetailsPart extends AbstractBaseDetailsPart
 
         if ( item != null )
         {
-            this.connectionUriText.setText ( item.getItem ().getConnectionString () );
+            this.connectionUriText.setText ( getConnectionString ( item ) );
             this.itemIdText.setText ( item.getItem ().getId () );
         }
         else
@@ -119,6 +121,27 @@ public class OverviewDetailsPart extends AbstractBaseDetailsPart
             this.manualText.setText ( "" ); //$NON-NLS-1$
             this.valueText.setText ( "" ); //$NON-NLS-1$
             this.timestampText.setText ( "" ); //$NON-NLS-1$
+        }
+    }
+
+    private String getConnectionString ( final DataItemHolder itemHolder )
+    {
+        if ( itemHolder == null || itemHolder.getItem () == null )
+        {
+            return "";
+        }
+
+        final Item item = itemHolder.getItem ();
+        final String str = item.getConnectionString ();
+
+        try
+        {
+            final ConnectionInformation ci = ConnectionInformation.fromURI ( str );
+            return ci.toMaskedString ();
+        }
+        catch ( final Exception e )
+        {
+            return str;
         }
     }
 
