@@ -27,6 +27,10 @@ public class Messages extends NLS
 
     public static String Value;
 
+    public static String Item;
+
+    public static String Message;
+
     static
     {
         // initialize resource bundle
