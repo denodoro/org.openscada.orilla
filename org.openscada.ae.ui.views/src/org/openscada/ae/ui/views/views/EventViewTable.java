@@ -50,6 +50,7 @@ import org.openscada.ae.Event.Fields;
 import org.openscada.ae.ui.views.Messages;
 import org.openscada.ae.ui.views.dialog.SearchType;
 import org.openscada.ae.ui.views.model.DecoratedEvent;
+import org.openscada.core.VariantComparator;
 import org.openscada.utils.lang.Immutable;
 import org.openscada.utils.lang.Pair;
 
@@ -167,37 +168,38 @@ public class EventViewTable extends Composite
         {
             final Event e1 = ( (DecoratedEvent)o1 ).getEvent ();
             final Event e2 = ( (DecoratedEvent)o2 ).getEvent ();
+
+            int cmpId = e1.getId ().compareTo ( e2.getId () );
+            int cmpSourceTs = e1.getSourceTimestamp ().compareTo ( e2.getSourceTimestamp () );
+            int cmpEntryTs = e1.getEntryTimestamp ().compareTo ( e2.getEntryTimestamp () );
+            int cmpSequence = new VariantComparator ().compare ( e1.getAttributes ().get ( "sequence" ), e2.getAttributes ().get ( "sequence" ) );
             int result = 0;
+
             if ( this.column == Column.reservedColumnId )
             {
-                result = ( this.dir == SWT.DOWN ? -1 : 1 ) * e1.getId ().compareTo ( e2.getId () );
-                if ( result == 0 )
-                {
-                    result = ( this.dir == SWT.DOWN ? -1 : 1 ) * e1.getSourceTimestamp ().compareTo ( e2.getSourceTimestamp () );
-                    if ( result == 0 )
-                    {
-                        return ( this.dir == SWT.DOWN ? -1 : 1 ) * e1.getEntryTimestamp ().compareTo ( e2.getEntryTimestamp () );
-                    }
-                }
+                result = chainCompare ( cmpId, cmpSourceTs, cmpSequence, cmpEntryTs );
             }
             else if ( this.column == Column.reservedColumnSourceTimestamp )
             {
-
-                result = ( this.dir == SWT.DOWN ? -1 : 1 ) * e1.getSourceTimestamp ().compareTo ( e2.getSourceTimestamp () );
-                if ( result == 0 )
-                {
-                    return ( this.dir == SWT.DOWN ? -1 : 1 ) * e1.getEntryTimestamp ().compareTo ( e2.getEntryTimestamp () );
-                }
+                result = chainCompare ( cmpSourceTs, cmpSequence, cmpEntryTs, cmpId );
             }
             else if ( this.column == Column.reservedColumnEntryTimestamp )
             {
-                result = ( this.dir == SWT.DOWN ? -1 : 1 ) * e1.getEntryTimestamp ().compareTo ( e2.getEntryTimestamp () );
-                if ( result == 0 )
-                {
-                    return ( this.dir == SWT.DOWN ? -1 : 1 ) * e1.getSourceTimestamp ().compareTo ( e2.getSourceTimestamp () );
-                }
+                result = chainCompare ( cmpEntryTs, cmpSourceTs, cmpSequence, cmpId );
             }
             return result;
+        }
+
+        private int chainCompare ( final int... cmp )
+        {
+            for ( int i : cmp )
+            {
+                if ( i != 0 )
+                {
+                    return ( this.dir == SWT.DOWN ? -1 : 1 ) * i;
+                }
+            }
+            return 0;
         }
     }
 
@@ -218,7 +220,7 @@ public class EventViewTable extends Composite
             final TableColumn currentColumn = table.getSortColumn ();
 
             final Column column = (Column)newColumn.getData ( COLUMN_KEY );
-            if ( column == Column.reservedColumnSourceTimestamp || column == Column.reservedColumnEntryTimestamp )
+            if ( ( column == Column.reservedColumnSourceTimestamp ) || ( column == Column.reservedColumnEntryTimestamp ) )
             {
                 final int currentDir = table.getSortDirection ();
                 int newDir = SWT.UP;
@@ -337,7 +339,7 @@ public class EventViewTable extends Composite
 
     private Menu createContextMenu ( final Control parent )
     {
-        if ( this.ackAction == null && this.commentAction == null )
+        if ( ( this.ackAction == null ) && ( this.commentAction == null ) )
         {
             return null;
         }
@@ -396,7 +398,7 @@ public class EventViewTable extends Composite
                 fieldColumn.getColumn ().setWidth ( 0 );
                 fieldColumn.getColumn ().addSelectionListener ( sortListener );
             }
-            if ( column == Column.reservedColumnSourceTimestamp || column == Column.reservedColumnEntryTimestamp )
+            if ( ( column == Column.reservedColumnSourceTimestamp ) || ( column == Column.reservedColumnEntryTimestamp ) )
             {
                 fieldColumn.getColumn ().setWidth ( 140 );
                 fieldColumn.getColumn ().addSelectionListener ( sortListener );
@@ -459,5 +461,16 @@ public class EventViewTable extends Composite
             i += 1;
         }
         return result;
+    }
+
+    public void setScrollLock ( final boolean scrollLock )
+    {
+        this.scrollLock = scrollLock;
+        System.err.println ( scrollLock );
+    }
+
+    public boolean isScrollLock ()
+    {
+        return this.scrollLock;
     }
 }
