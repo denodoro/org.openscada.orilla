@@ -95,7 +95,7 @@ public class EventLabelProvider extends ObservableMapLabelProvider
             return null;
         }
         final DecoratedEvent event = (DecoratedEvent)element;
-        if ( columnIndex == 4 && event.isActive () )
+        if ( ( columnIndex == 2 ) && event.isActive () )
         {
             switch ( event.getMonitor ().getStatus () )
             {
