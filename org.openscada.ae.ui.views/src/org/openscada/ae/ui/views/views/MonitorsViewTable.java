@@ -47,12 +47,13 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.openscada.ae.ConditionStatusInformation;
+import org.openscada.ae.ui.views.Messages;
 import org.openscada.ae.ui.views.model.DecoratedMonitor;
 import org.openscada.core.Variant;
 
 public class MonitorsViewTable extends Composite
 {
-    private static final String COLUMN_KEY = "org.openscada.ae.ui.views.views.MonitorsViewTable" + ".column.key";
+    private static final String COLUMN_KEY = "org.openscada.ae.ui.views.views.MonitorsViewTable" + ".column.key"; //$NON-NLS-1$ //$NON-NLS-2$
 
     private static final Date DEFAULT_DATE = new Date ( 0 );
 
@@ -105,8 +106,8 @@ public class MonitorsViewTable extends Composite
                 v2 = m2.getStatusTimestamp ();
                 break;
             case ACK_USER:
-                v1 = m1.getLastAknUser () == null ? "" : m1.getLastAknUser ();
-                v2 = m2.getLastAknUser () == null ? "" : m2.getLastAknUser ();
+                v1 = m1.getLastAknUser () == null ? "" : m1.getLastAknUser (); //$NON-NLS-1$
+                v2 = m2.getLastAknUser () == null ? "" : m2.getLastAknUser (); //$NON-NLS-1$
                 break;
             case ACK_TIMESTAMP:
                 v1 = m1.getLastAknTimestamp () == null ? DEFAULT_DATE : m1.getLastAknTimestamp ();
@@ -194,7 +195,7 @@ public class MonitorsViewTable extends Composite
 
         final ObservableSetContentProvider contentProvider = new ObservableSetContentProvider ();
         this.tableViewer.setContentProvider ( contentProvider );
-        this.tableViewer.setLabelProvider ( new MonitorTableLabelProvider ( Properties.observeEach ( contentProvider.getKnownElements (), BeanProperties.values ( new String[] { "id", "monitor" } ) ) ) );
+        this.tableViewer.setLabelProvider ( new MonitorTableLabelProvider ( Properties.observeEach ( contentProvider.getKnownElements (), BeanProperties.values ( new String[] { "id", "monitor" } ) ) ) ); //$NON-NLS-1$ //$NON-NLS-2$
         this.tableViewer.setInput ( this.monitors );
 
         contentProvider.getRealizedElements ().addSetChangeListener ( new ISetChangeListener () {
@@ -212,7 +213,7 @@ public class MonitorsViewTable extends Composite
     {
         final Menu ackMenu = new Menu ( parent );
         final MenuItem ackMenuItem = new MenuItem ( ackMenu, SWT.NONE );
-        ackMenuItem.setText ( "Acknowledge" );
+        ackMenuItem.setText ( Messages.Acknowledge );
         ackMenuItem.setImage ( this.ackAction.getImageDescriptor ().createImage () );
         ackMenuItem.addSelectionListener ( new SelectionAdapter () {
             @Override
@@ -230,7 +231,7 @@ public class MonitorsViewTable extends Composite
 
         // id
         final TableViewerColumn idColumn = new TableViewerColumn ( table, SWT.NONE );
-        idColumn.getColumn ().setText ( "ID" );
+        idColumn.getColumn ().setText ( Messages.ID );
         idColumn.getColumn ().setData ( COLUMN_KEY, Columns.ID );
         idColumn.getColumn ().setWidth ( 450 );
         idColumn.getColumn ().setResizable ( true );
@@ -238,7 +239,7 @@ public class MonitorsViewTable extends Composite
         idColumn.getColumn ().addSelectionListener ( sortListener );
         // state
         final TableViewerColumn stateColumn = new TableViewerColumn ( table, SWT.NONE );
-        stateColumn.getColumn ().setText ( "State" );
+        stateColumn.getColumn ().setText ( Messages.State );
         stateColumn.getColumn ().setData ( COLUMN_KEY, Columns.STATE );
         stateColumn.getColumn ().setWidth ( 150 );
         stateColumn.getColumn ().setResizable ( true );
@@ -246,7 +247,7 @@ public class MonitorsViewTable extends Composite
         stateColumn.getColumn ().addSelectionListener ( sortListener );
         // timestamp
         final TableViewerColumn timestampColumn = new TableViewerColumn ( table, SWT.NONE );
-        timestampColumn.getColumn ().setText ( "Timestamp" );
+        timestampColumn.getColumn ().setText ( Messages.Timestamp );
         timestampColumn.getColumn ().setData ( COLUMN_KEY, Columns.TIMESTAMP );
         timestampColumn.getColumn ().setWidth ( 180 );
         timestampColumn.getColumn ().setResizable ( true );
@@ -254,7 +255,7 @@ public class MonitorsViewTable extends Composite
         timestampColumn.getColumn ().addSelectionListener ( sortListener );
         // value
         final TableViewerColumn valueColumn = new TableViewerColumn ( table, SWT.NONE );
-        valueColumn.getColumn ().setText ( "Value" );
+        valueColumn.getColumn ().setText ( Messages.Value );
         valueColumn.getColumn ().setData ( COLUMN_KEY, Columns.VALUE );
         valueColumn.getColumn ().setWidth ( 100 );
         valueColumn.getColumn ().setResizable ( true );
@@ -262,7 +263,7 @@ public class MonitorsViewTable extends Composite
         valueColumn.getColumn ().addSelectionListener ( sortListener );
         // akn user
         final TableViewerColumn aknUserColumn = new TableViewerColumn ( table, SWT.NONE );
-        aknUserColumn.getColumn ().setText ( "Ack User" );
+        aknUserColumn.getColumn ().setText ( Messages.AckUser );
         aknUserColumn.getColumn ().setData ( COLUMN_KEY, Columns.ACK_USER );
         aknUserColumn.getColumn ().setWidth ( 150 );
         aknUserColumn.getColumn ().setResizable ( true );
@@ -270,7 +271,7 @@ public class MonitorsViewTable extends Composite
         aknUserColumn.getColumn ().addSelectionListener ( sortListener );
         // akn timestamp
         final TableViewerColumn aknTimestampColumn = new TableViewerColumn ( table, SWT.NONE );
-        aknTimestampColumn.getColumn ().setText ( "Ack Timestamp" );
+        aknTimestampColumn.getColumn ().setText ( Messages.AckTimestamp );
         aknTimestampColumn.getColumn ().setData ( COLUMN_KEY, Columns.ACK_TIMESTAMP );
         aknTimestampColumn.getColumn ().setWidth ( 180 );
         aknTimestampColumn.getColumn ().setResizable ( true );

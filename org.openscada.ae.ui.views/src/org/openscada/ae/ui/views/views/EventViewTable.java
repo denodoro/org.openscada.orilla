@@ -47,6 +47,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.openscada.ae.Event;
 import org.openscada.ae.Event.Fields;
+import org.openscada.ae.ui.views.Messages;
 import org.openscada.ae.ui.views.dialog.SearchType;
 import org.openscada.ae.ui.views.model.DecoratedEvent;
 import org.openscada.utils.lang.Immutable;
@@ -54,7 +55,7 @@ import org.openscada.utils.lang.Pair;
 
 public class EventViewTable extends Composite
 {
-    private static final String COLUMN_KEY = "org.openscada.ae.ui.views.views.EventViewTable" + ".column.key";
+    private static final String COLUMN_KEY = "org.openscada.ae.ui.views.views.EventViewTable" + ".column.key"; //$NON-NLS-1$ //$NON-NLS-2$
 
     private final WritableSet events;
 
@@ -69,11 +70,11 @@ public class EventViewTable extends Composite
 
         private final Fields field;
 
-        public static Column reservedColumnId = new Column ( "id" );
+        public static Column reservedColumnId = new Column ( "id" ); //$NON-NLS-1$
 
-        public static Column reservedColumnSourceTimestamp = new Column ( "sourceTimestamp" );
+        public static Column reservedColumnSourceTimestamp = new Column ( "sourceTimestamp" ); //$NON-NLS-1$
 
-        public static Column reservedColumnEntryTimestamp = new Column ( "entryTimestamp" );
+        public static Column reservedColumnEntryTimestamp = new Column ( "entryTimestamp" ); //$NON-NLS-1$
 
         public Column ( final String column )
         {
@@ -289,7 +290,7 @@ public class EventViewTable extends Composite
 
         final ObservableSetContentProvider contentProvider = new ObservableSetContentProvider ();
         this.tableViewer.setContentProvider ( contentProvider );
-        this.tableViewer.setLabelProvider ( new EventLabelProvider ( Properties.observeEach ( contentProvider.getKnownElements (), BeanProperties.values ( new String[] { "id", "monitor" } ) ), columns ) );
+        this.tableViewer.setLabelProvider ( new EventLabelProvider ( Properties.observeEach ( contentProvider.getKnownElements (), BeanProperties.values ( new String[] { "id", "monitor" } ) ), columns ) ); //$NON-NLS-1$ //$NON-NLS-2$
         this.tableViewer.setInput ( this.events );
 
         contentProvider.getRealizedElements ().addSetChangeListener ( new ISetChangeListener () {
@@ -344,7 +345,7 @@ public class EventViewTable extends Composite
         if ( this.ackAction != null )
         {
             final MenuItem ackMenuItem = new MenuItem ( contextMenu, SWT.NONE );
-            ackMenuItem.setText ( "Acknowledge" );
+            ackMenuItem.setText ( Messages.Acknowledge );
             ackMenuItem.setImage ( this.ackAction.getImageDescriptor ().createImage () );
             ackMenuItem.addSelectionListener ( new SelectionAdapter () {
                 @Override
@@ -385,7 +386,7 @@ public class EventViewTable extends Composite
         for ( final Column column : columns )
         {
             final TableViewerColumn fieldColumn = new TableViewerColumn ( table, SWT.NONE );
-            fieldColumn.getColumn ().setText ( column.getColumn () );
+            fieldColumn.getColumn ().setText ( Messages.getString ( column.getColumn () ) );
             fieldColumn.getColumn ().setWidth ( 120 );
             fieldColumn.getColumn ().setResizable ( true );
             fieldColumn.getColumn ().setMoveable ( true );
