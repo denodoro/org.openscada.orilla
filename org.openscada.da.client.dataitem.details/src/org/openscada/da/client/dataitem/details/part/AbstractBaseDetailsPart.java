@@ -131,4 +131,23 @@ public abstract class AbstractBaseDetailsPart implements DetailsPart
         return defaultValue;
     }
 
+    /**
+     * Checks if the current value has the attribute set
+     * @param attributeName the attribute name to check
+     * @return <code>true</code> if the current value is available and the attribute is set
+     */
+    protected boolean hasAttribute ( final String attributeName )
+    {
+        final DataItemValue value = this.value;
+        if ( value == null )
+        {
+            return false;
+        }
+        if ( value.getAttributes () == null )
+        {
+            return false;
+        }
+        return value.getAttributes ().containsKey ( attributeName );
+    }
+
 }

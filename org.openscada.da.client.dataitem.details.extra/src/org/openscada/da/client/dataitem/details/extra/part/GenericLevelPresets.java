@@ -27,7 +27,6 @@ import org.eclipse.draw2d.Connection;
 import org.eclipse.draw2d.ConnectionLayer;
 import org.eclipse.draw2d.ConnectionRouter;
 import org.eclipse.draw2d.Figure;
-import org.eclipse.draw2d.FlowLayout;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
@@ -68,17 +67,17 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
         }
     }
 
-    private static final String TAG_FLOOR = "floor";
+    private static final String TAG_FLOOR = "floor"; //$NON-NLS-1$
 
-    private static final String TAG_LL = "lowlow";
+    private static final String TAG_LL = "lowlow"; //$NON-NLS-1$
 
-    private static final String TAG_L = "low";
+    private static final String TAG_L = "low"; //$NON-NLS-1$
 
-    private static final String TAG_H = "high";
+    private static final String TAG_H = "high"; //$NON-NLS-1$
 
-    private static final String TAG_HH = "highhigh";
+    private static final String TAG_HH = "highhigh"; //$NON-NLS-1$
 
-    private static final String TAG_CEIL = "ceil";
+    private static final String TAG_CEIL = "ceil"; //$NON-NLS-1$
 
     private Triangle triHH;
 
@@ -148,14 +147,12 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
     {
         this.naPanel = new Figure ();
 
-        final FlowLayout layout = new FlowLayout ();
-        layout.setHorizontal ( false );
-        layout.setMajorAlignment ( FlowLayout.ALIGN_CENTER );
+        final BorderLayout layout = new BorderLayout ();
         this.naPanel.setLayoutManager ( layout );
 
         final Label label = new Label ();
-        label.setText ( " Function not available!" );
-        this.naPanel.add ( label );
+        label.setText ( Messages.GenericLevelPresets_Label_NotAvail_Text );
+        this.naPanel.add ( label, BorderLayout.CENTER );
         return this.naPanel;
     }
 
@@ -405,32 +402,21 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
         }
     }
 
+    /**
+     * Check if the functionality of this tab is available or not
+     * @return <code>true</code> if the functionality can be provided,
+     * <code>false</code> otherwise
+     */
+    protected abstract boolean isAvailable ();
+
     @Override
     protected void update ()
     {
-        if ( this instanceof RemoteLevelPresets )
+        if ( !isAvailable () )
         {
-            Variant var;
-            try
-            {
-                var = this.value.getAttributes ().get ( "remote.level.high.alarm" );
-                if ( var == null )
-                {
-                    this.connLayer.setVisible ( false );
-                    this.rootFigure.setVisible ( false );
-                    this.naPanel.setVisible ( true );
-                }
-                else
-                {
-                    this.connLayer.setVisible ( true );
-                    this.rootFigure.setVisible ( true );
-                    this.naPanel.setVisible ( false );
-                }
-            }
-            catch ( final NullPointerException e )
-            {
-                //maybe there is no value or no view. Just keep everything as it is.
-            }
+            this.connLayer.setVisible ( false );
+            this.rootFigure.setVisible ( false );
+            this.naPanel.setVisible ( true );
         }
         else
         {

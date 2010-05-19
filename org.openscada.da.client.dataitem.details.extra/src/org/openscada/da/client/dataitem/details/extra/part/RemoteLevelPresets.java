@@ -82,4 +82,9 @@ public class RemoteLevelPresets extends GenericLevelPresets
         this.item.writeAtrtibutes ( attributes );
     }
 
+    @Override
+    protected boolean isAvailable ()
+    {
+        return hasAttribute ( "remote.level.high.alarm" ) || hasAttribute ( "remote.level.low.alarm" ) || hasAttribute ( "remote.level.highhigh.alarm" ) || hasAttribute ( "remote.level.lowlow.alarm" );
+    }
 }

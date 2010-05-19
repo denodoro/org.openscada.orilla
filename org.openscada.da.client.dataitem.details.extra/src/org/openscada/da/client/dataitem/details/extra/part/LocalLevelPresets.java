@@ -81,4 +81,12 @@ public class LocalLevelPresets extends GenericLevelPresets
 
         this.item.writeAtrtibutes ( attributes );
     }
+
+    @Override
+    protected boolean isAvailable ()
+    {
+        // FIXME: no method for now to identit
+        return true;
+    }
+
 }

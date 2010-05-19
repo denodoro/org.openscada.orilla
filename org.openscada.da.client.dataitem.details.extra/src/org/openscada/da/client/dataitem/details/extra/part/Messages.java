@@ -25,6 +25,8 @@ public class Messages extends NLS
 {
     private static final String BUNDLE_NAME = "org.openscada.da.client.dataitem.details.extra.part.messages"; //$NON-NLS-1$
 
+    public static String GenericLevelPresets_Label_NotAvail_Text;
+
     public static String LevelPresets_EmtyNum;
 
     public static String LevelPresets_InitialLabel;

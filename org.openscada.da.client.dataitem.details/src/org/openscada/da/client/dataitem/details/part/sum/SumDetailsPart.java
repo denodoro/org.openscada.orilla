@@ -12,6 +12,7 @@ import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.openscada.core.Variant;
@@ -90,6 +91,8 @@ public class SumDetailsPart extends AbstractBaseDetailsPart implements IExecutab
         col.getColumn ().setText ( Messages.SumDetailsPart_ColStateName );
         col.setLabelProvider ( new SumEntryLabelProvider () );
 
+        // sort by label
+        this.viewer.setComparator ( new ViewerComparator () );
         this.viewer.getTable ().setHeaderVisible ( true );
 
         final TableLayout layout = new TableLayout ();

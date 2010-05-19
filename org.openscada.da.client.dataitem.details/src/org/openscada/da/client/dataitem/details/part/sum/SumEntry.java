@@ -10,9 +10,9 @@ public class SumEntry
 
     private Variant value;
 
-    public SumEntry ( final String key, final Variant value )
+    public SumEntry ( final String attributeName, final Variant value )
     {
-        this.attributeName = key;
+        this.attributeName = attributeName;
         this.value = value;
     }
 
@@ -83,6 +83,12 @@ public class SumEntry
             return false;
         }
         return true;
+    }
+
+    @Override
+    public String toString ()
+    {
+        return this.attributeName;
     }
 
 }
