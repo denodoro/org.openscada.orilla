@@ -20,6 +20,7 @@
 package org.openscada.ae.ui.views;
 
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
 
 public class CustomizableAction extends Action implements IWorkbenchAction
@@ -47,5 +48,25 @@ public class CustomizableAction extends Action implements IWorkbenchAction
         {
             this.runnable.run ();
         }
+    }
+
+    public CustomizableAction ()
+    {
+        super ();
+    }
+
+    public CustomizableAction ( final String text, final ImageDescriptor image )
+    {
+        super ( text, image );
+    }
+
+    public CustomizableAction ( final String text, final int style )
+    {
+        super ( text, style );
+    }
+
+    public CustomizableAction ( final String text )
+    {
+        super ( text );
     }
 }
