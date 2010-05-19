@@ -19,6 +19,7 @@
 
 package org.openscada.da.client.dataitem.details.extra.part;
 
+import org.eclipse.core.runtime.Status;
 import org.eclipse.draw2d.BendpointConnectionRouter;
 import org.eclipse.draw2d.BorderLayout;
 import org.eclipse.draw2d.ChopboxAnchor;
@@ -41,6 +42,7 @@ import org.eclipse.draw2d.Shape;
 import org.eclipse.draw2d.Triangle;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.jface.resource.ColorDescriptor;
+import org.eclipse.ui.statushandlers.StatusManager;
 import org.openscada.core.Variant;
 import org.openscada.core.ui.styles.Style;
 import org.openscada.core.ui.styles.StyleInformation;
@@ -381,10 +383,10 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
     {
         try
         {
-            final Variant value;
-            if ( this.value != null )
+            Variant value = Variant.valueOf ( getPreset ( string ) );
+            if ( !value.isNull () )
             {
-                value = new VariantEntryDialog ( this.shell, this.value.getValue () ).getValue ();
+                value = new VariantEntryDialog ( this.shell, value ).getValue ();
             }
             else
             {
@@ -398,7 +400,7 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
         }
         catch ( final Throwable e )
         {
-            e.printStackTrace ();
+            StatusManager.getManager ().handle ( new Status ( Status.ERROR, Activator.PLUGIN_ID, "Failed to show dialog", e ) );
         }
     }
 
