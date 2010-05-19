@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.databinding.observable.set.WritableSet;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.dialogs.InputDialog;
@@ -138,6 +139,16 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
             }
         } );
 
+        final CustomizableAction scrollLockAction = new CustomizableAction ( "Scroll Lock", IAction.AS_CHECK_BOX );
+        scrollLockAction.setToolTipText ( "Scroll Lock" );
+        scrollLockAction.setImageDescriptor ( ImageDescriptor.createFromURL ( Activator.getDefault ().getBundle ().getResource ( "icons/scroll_lock.gif" ) ) );
+        scrollLockAction.setRunnable ( new Runnable () {
+            public void run ()
+            {
+                EventPoolView.this.eventsTable.setScrollLock ( scrollLockAction.isChecked () );
+            }
+        } );
+
         final CustomizableAction setFilterAction = new CustomizableAction ();
         setFilterAction.setText ( "Filter" );
         setFilterAction.setToolTipText ( "Set/Modify Filter" );
@@ -161,6 +172,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
         } );
 
         final IToolBarManager toolBarManager = getViewSite ().getActionBars ().getToolBarManager ();
+        toolBarManager.add ( scrollLockAction );
         toolBarManager.add ( setFilterAction );
         toolBarManager.add ( removeFilterAction );
 
