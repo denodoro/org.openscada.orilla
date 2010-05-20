@@ -54,6 +54,12 @@ public class AddConnectionWizard extends Wizard implements INewWizard
     }
 
     @Override
+    public boolean canFinish ()
+    {
+        return this.store != null;
+    }
+
+    @Override
     public void addPages ()
     {
         super.addPages ();
