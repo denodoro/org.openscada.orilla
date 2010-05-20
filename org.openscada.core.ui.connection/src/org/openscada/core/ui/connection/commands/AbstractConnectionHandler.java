@@ -27,7 +27,7 @@ public abstract class AbstractConnectionHandler extends AbstractSelectionHandler
             {
                 final Object o = i.next ();
 
-                logger.debug ( "Try to add: {}", o.getClass () );
+                logger.debug ( "Try to add: {}", o.getClass () ); //$NON-NLS-1$
 
                 final ConnectionHolder holder = (ConnectionHolder)AdapterHelper.adapt ( o, ConnectionHolder.class );
                 if ( holder != null )

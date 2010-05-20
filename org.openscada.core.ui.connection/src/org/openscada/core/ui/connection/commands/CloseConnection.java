@@ -12,7 +12,7 @@ public class CloseConnection extends AbstractConnectionHandler
 
     public Object execute ( final ExecutionEvent event ) throws ExecutionException
     {
-        logger.info ( "Execute command: {}", event );
+        logger.info ( "Execute command: {}", event ); //$NON-NLS-1$
 
         for ( final ConnectionHolder holder : getConnections () )
         {
