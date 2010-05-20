@@ -22,35 +22,6 @@
       </command>
    </extension>
    <extension
-         point="org.eclipse.ui.bindings">
-      <key
-            commandId="org.eclipse.ui.file.exit"
-            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="CTRL+X">
-      </key>
-   </extension>
-   <extension
-         id="product"
-         name="OpenSCADA DA Test Client"
-         point="org.eclipse.core.runtime.products">
-      <product
-            application="org.openscada.rcp.client.application"
-            name="OpenSCADA Client">
-         <property
-               name="aboutText"
-               value="%aboutText"/>
-         <property
-               name="aboutImage"
-               value="about.png"/>
-         <property
-               name="preferenceCustomization"
-               value="plugin_customization.ini"/>
-         <property
-               name="windowImages"
-               value="icons/app/Sign_open-Scada_16px.png,icons/app/Sign_open-Scada_32px.png,icons/app/Sign_open-Scada_48px.png,icons/app/Sign_open-Scada_64px.png,icons/app/Sign_open-Scada_128px.png"/>
-      </product>
-   </extension>
-   <extension
          point="org.eclipse.ui.viewActions">
       <viewContribution
             id="org.openscada.da.test.views.RealTimeList.vc1"

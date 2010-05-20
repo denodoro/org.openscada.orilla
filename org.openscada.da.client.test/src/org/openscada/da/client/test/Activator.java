@@ -25,7 +25,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -49,23 +48,6 @@ public class Activator extends AbstractUIPlugin
     public Activator ()
     {
         plugin = this;
-    }
-
-    @Override
-    protected void initializeImageRegistry ( final ImageRegistry reg )
-    {
-        super.initializeImageRegistry ( reg );
-
-        getImageRegistry ().put ( ISharedImages.IMG_HIVE_CONNECTION, getImageDescriptor ( "icons/stock_channel.png" ) );
-        getImageRegistry ().put ( ISharedImages.IMG_HIVE_CONNECTED, getImageDescriptor ( "icons/stock_connect.png" ) );
-        getImageRegistry ().put ( ISharedImages.IMG_HIVE_DISCONNECTED, getImageDescriptor ( "icons/stock_disconnect.png" ) );
-
-        getImageRegistry ().put ( ISharedImages.IMG_HIVE_ITEM, getImageDescriptor ( "icons/16x16/stock_dataitem.png" ) );
-        getImageRegistry ().put ( ISharedImages.IMG_HIVE_ITEM_I, getImageDescriptor ( "icons/16x16/stock_dataitem_i.png" ) );
-        getImageRegistry ().put ( ISharedImages.IMG_HIVE_ITEM_O, getImageDescriptor ( "icons/16x16/stock_dataitem_o.png" ) );
-        getImageRegistry ().put ( ISharedImages.IMG_HIVE_ITEM_IO, getImageDescriptor ( "icons/16x16/stock_dataitem_io.png" ) );
-
-        getImageRegistry ().put ( ISharedImages.IMG_HIVE_FOLDER, getImageDescriptor ( "icons/16x16/stock_folder.png" ) );
     }
 
     /**
