@@ -1,3 +1,22 @@
+/*
+ * This file is part of the OpenSCADA project
+ * Copyright (C) 2006-2010 inavare GmbH (http://inavare.com)
+ *
+ * OpenSCADA is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenSCADA is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenSCADA. If not, see
+ * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
+ */
+
 package org.openscada.da.project.wizards;
 
 import org.eclipse.core.resources.IContainer;
@@ -102,7 +121,7 @@ public class RealtimeListNewWizardPage extends WizardPage
 
     private void initialize ()
     {
-        if ( ( this.selection != null ) && ( this.selection.isEmpty () == false ) && ( this.selection instanceof IStructuredSelection ) )
+        if ( this.selection != null && this.selection.isEmpty () == false && this.selection instanceof IStructuredSelection )
         {
             final IStructuredSelection ssel = (IStructuredSelection)this.selection;
             if ( ssel.size () > 1 )
@@ -159,7 +178,7 @@ public class RealtimeListNewWizardPage extends WizardPage
             updateStatus ( "File container must be specified" );
             return;
         }
-        if ( ( container == null ) || ( ( container.getType () & ( IResource.PROJECT | IResource.FOLDER ) ) == 0 ) )
+        if ( container == null || ( container.getType () & ( IResource.PROJECT | IResource.FOLDER ) ) == 0 )
         {
             updateStatus ( "File container must exist" );
             return;
