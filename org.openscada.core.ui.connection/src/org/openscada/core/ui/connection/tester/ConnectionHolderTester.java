@@ -2,18 +2,23 @@ package org.openscada.core.ui.connection.tester;
 
 import org.eclipse.core.expressions.PropertyTester;
 import org.openscada.core.ui.connection.data.ConnectionHolder;
+import org.openscada.ui.databinding.AdapterHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ConnectionHolderTester extends PropertyTester
 {
 
+    private final static Logger logger = LoggerFactory.getLogger ( ConnectionHolderTester.class );
+
     public boolean test ( final Object receiver, final String property, final Object[] args, final Object expectedValue )
     {
-        if ( ! ( receiver instanceof ConnectionHolder ) )
+        logger.debug ( "Testing: {} for {}", receiver, property );
+        final ConnectionHolder holder = (ConnectionHolder)AdapterHelper.adapt ( receiver, ConnectionHolder.class );
+        if ( holder == null )
         {
             return false;
         }
-
-        final ConnectionHolder holder = (ConnectionHolder)receiver;
 
         if ( "stored".equals ( property ) && expectedValue instanceof Boolean ) //$NON-NLS-1$
         {
