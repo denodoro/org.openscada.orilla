@@ -1,20 +1,20 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2008 inavare GmbH (http://inavare.com)
+ * Copyright (C) 2006-2010 inavare GmbH (http://inavare.com)
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
-
- * This program is distributed in the hope that it will be useful,
+ * OpenSCADA is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenSCADA is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenSCADA. If not, see
+ * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
 package org.openscada.da.client.base.browser;
@@ -23,15 +23,17 @@ import org.openscada.core.Variant;
 
 public class VariantHelper
 {
-    protected static String toString ( Variant variant )
+    protected static String toString ( final Variant variant )
     {
-        ValueType vt = toValueType ( variant );
+        final ValueType vt = toValueType ( variant );
         try
         {
             if ( vt == null )
+            {
                 return "VT_UNKNOWN"; //$NON-NLS-1$
+            }
 
-            StringBuffer str = new StringBuffer ();
+            final StringBuffer str = new StringBuffer ();
             str.append ( vt.toString () );
             str.append ( "[" ); //$NON-NLS-1$
             switch ( vt )
@@ -58,28 +60,42 @@ public class VariantHelper
             str.append ( "]" ); //$NON-NLS-1$
             return str.toString ();
         }
-        catch ( Exception e )
+        catch ( final Exception e )
         {
             return "VT_ERROR[" + e.getMessage () + "]"; //$NON-NLS-1$ //$NON-NLS-2$
         }
     }
 
-    public static ValueType toValueType ( Variant variant )
+    public static ValueType toValueType ( final Variant variant )
     {
         if ( variant.isNull () )
+        {
             return ValueType.NULL;
+        }
         else if ( variant.isBoolean () )
+        {
             return ValueType.BOOLEAN;
+        }
         else if ( variant.isDouble () )
+        {
             return ValueType.DOUBLE;
+        }
         else if ( variant.isLong () )
+        {
             return ValueType.LONG;
+        }
         else if ( variant.isInteger () )
+        {
             return ValueType.INT;
+        }
         else if ( variant.isString () )
+        {
             return ValueType.STRING;
+        }
         else
+        {
             return null;
+        }
     }
 
 }
