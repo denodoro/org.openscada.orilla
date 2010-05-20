@@ -60,6 +60,10 @@ public class AddConnectionWizard extends Wizard implements INewWizard
         final ConnectionHolder holder = (ConnectionHolder)AdapterHelper.adapt ( o, ConnectionHolder.class );
         if ( holder != null )
         {
+            if ( this.store == null )
+            {
+                this.store = (ConnectionStore)AdapterHelper.adapt ( holder.getDiscoverer (), ConnectionStore.class );
+            }
             this.preset = holder.getConnectionInformation ();
         }
         logger.info ( "Preset is: {}", this.preset ); //$NON-NLS-1$
