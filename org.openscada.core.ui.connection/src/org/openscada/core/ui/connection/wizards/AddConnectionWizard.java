@@ -1,7 +1,6 @@
 package org.openscada.core.ui.connection.wizards;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
@@ -9,6 +8,8 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.statushandlers.StatusManager;
 import org.openscada.core.ui.connection.ConnectionDescriptor;
 import org.openscada.core.ui.connection.ConnectionStore;
+import org.openscada.core.ui.connection.data.ConnectionHolder;
+import org.openscada.ui.databinding.AdapterHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,6 +21,8 @@ public class AddConnectionWizard extends Wizard implements INewWizard
     private AddConnectionWizardPage1 entryPage;
 
     private ConnectionStore store;
+
+    private ConnectionDescriptor preset;
 
     @Override
     public boolean performFinish ()
@@ -46,11 +49,20 @@ public class AddConnectionWizard extends Wizard implements INewWizard
     {
         final Object o = selection.getFirstElement ();
 
-        if ( o != null )
+        if ( o == null )
         {
-            this.store = (ConnectionStore)Platform.getAdapterManager ().getAdapter ( o, ConnectionStore.class );
-            logger.info ( "Store: {}", this.store ); //$NON-NLS-1$
+            return;
         }
+
+        this.store = (ConnectionStore)AdapterHelper.adapt ( o, ConnectionStore.class );
+        logger.info ( "Store is: {}", this.store ); //$NON-NLS-1$
+
+        final ConnectionHolder holder = (ConnectionHolder)AdapterHelper.adapt ( o, ConnectionHolder.class );
+        if ( holder != null )
+        {
+            this.preset = holder.getConnectionInformation ();
+        }
+        logger.info ( "Preset is: {}", this.preset ); //$NON-NLS-1$
     }
 
     @Override
@@ -63,7 +75,7 @@ public class AddConnectionWizard extends Wizard implements INewWizard
     public void addPages ()
     {
         super.addPages ();
-        addPage ( this.entryPage = new AddConnectionWizardPage1 () );
+        addPage ( this.entryPage = new AddConnectionWizardPage1 ( this.preset ) );
     }
 
 }

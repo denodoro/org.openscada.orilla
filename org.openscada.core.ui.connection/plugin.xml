@@ -93,6 +93,9 @@
          <selection
                class="org.openscada.core.ui.connection.ConnectionStore">
          </selection>
+         <selection
+               class="org.openscada.core.ui.connection.data.ConnectionHolder">
+         </selection>
       </wizard>
    </extension>
    <extension

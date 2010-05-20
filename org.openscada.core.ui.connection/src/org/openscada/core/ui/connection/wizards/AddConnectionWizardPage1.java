@@ -21,11 +21,12 @@ public class AddConnectionWizardPage1 extends WizardPage
 
     private Text idText;
 
-    protected AddConnectionWizardPage1 ()
+    protected AddConnectionWizardPage1 ( final ConnectionDescriptor preset )
     {
         super ( Messages.AddConnectionWizardPage1_PageTitle );
         setTitle ( Messages.AddConnectionWizardPage1_PageTitle );
         setDescription ( Messages.AddConnectionWizardPage1_PageDescription );
+        this.connectionInformation = preset;
     }
 
     public ConnectionDescriptor getConnectionInformation ()
@@ -48,7 +49,6 @@ public class AddConnectionWizardPage1 extends WizardPage
 
         this.uriText = new Text ( comp, SWT.BORDER );
         this.uriText.setMessage ( Messages.AddConnectionWizardPage1_ConnectionUriMessage );
-        this.uriText.setText ( "da:net://localhost:1202" ); //$NON-NLS-1$
         this.uriText.setLayoutData ( new GridData ( SWT.FILL, SWT.CENTER, true, false ) );
         this.uriText.addModifyListener ( new ModifyListener () {
 
@@ -74,6 +74,19 @@ public class AddConnectionWizardPage1 extends WizardPage
                 update ();
             }
         } );
+
+        if ( this.connectionInformation != null && this.connectionInformation.getConnectionInformation () != null )
+        {
+            this.uriText.setText ( this.connectionInformation.getConnectionInformation ().toMaskedString () );
+            if ( this.connectionInformation.getServiceId () != null )
+            {
+                this.idText.setText ( this.connectionInformation.getServiceId () );
+            }
+        }
+        else
+        {
+            this.uriText.setText ( "da:net://localhost:1202" ); //$NON-NLS-1$
+        }
 
         setControl ( comp );
         update ();
