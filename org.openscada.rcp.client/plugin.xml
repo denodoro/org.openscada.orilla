@@ -14,6 +14,14 @@
       </application>
    </extension>
    <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="org.eclipse.ui.file.exit"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="CTRL+X">
+      </key>
+   </extension>
+   <extension
          point="org.eclipse.ui.perspectives">
       <perspective
             name="%perspective.clientApp.name"
