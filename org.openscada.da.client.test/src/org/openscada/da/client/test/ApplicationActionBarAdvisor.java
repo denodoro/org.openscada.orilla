@@ -1,20 +1,20 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006 inavare GmbH (http://inavare.com)
+ * Copyright (C) 2006-2010 inavare GmbH (http://inavare.com)
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
-
- * This program is distributed in the hope that it will be useful,
+ * OpenSCADA is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenSCADA is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenSCADA. If not, see
+ * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
 package org.openscada.da.client.test;
@@ -46,10 +46,12 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor
     // in the fill methods. This ensures that the actions aren't recreated
     // when fillActionBars is called with FILL_PROXY.
     private IWorkbenchAction exitAction;
+
     private IWorkbenchAction aboutAction;
+
     private IWorkbenchAction newWindowAction;
 
-    public ApplicationActionBarAdvisor ( IActionBarConfigurer configurer )
+    public ApplicationActionBarAdvisor ( final IActionBarConfigurer configurer )
     {
         super ( configurer );
     }
@@ -62,14 +64,14 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor
         // Registering also provides automatic disposal of the actions when
         // the window is closed.
 
-        exitAction = ActionFactory.QUIT.create ( window );
-        register ( exitAction );
+        this.exitAction = ActionFactory.QUIT.create ( window );
+        register ( this.exitAction );
 
-        aboutAction = ActionFactory.ABOUT.create ( window );
-        register ( aboutAction );
+        this.aboutAction = ActionFactory.ABOUT.create ( window );
+        register ( this.aboutAction );
 
-        newWindowAction = ActionFactory.OPEN_NEW_WINDOW.create ( window );
-        register ( newWindowAction );
+        this.newWindowAction = ActionFactory.OPEN_NEW_WINDOW.create ( window );
+        register ( this.newWindowAction );
 
         register ( ActionFactory.NEW_EDITOR.create ( window ) );
 
@@ -78,10 +80,10 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor
         register ( ActionFactory.NEW.create ( window ) );
     }
 
-    protected void fillMenuBar ( IMenuManager menuBar )
+    protected void fillMenuBar ( final IMenuManager menuBar )
     {
-        MenuManager fileMenu = new MenuManager ( "&File", IWorkbenchActionConstants.M_FILE );
-        MenuManager helpMenu = new MenuManager ( "&Help", IWorkbenchActionConstants.M_HELP );
+        final MenuManager fileMenu = new MenuManager ( "&File", IWorkbenchActionConstants.M_FILE );
+        final MenuManager helpMenu = new MenuManager ( "&Help", IWorkbenchActionConstants.M_HELP );
 
         menuBar.add ( fileMenu );
         // Add a group marker indicating where action set menus will appear.
@@ -89,20 +91,20 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor
         menuBar.add ( helpMenu );
 
         // File
-        fileMenu.add ( newWindowAction );
+        fileMenu.add ( this.newWindowAction );
         fileMenu.add ( getAction ( ActionFactory.NEW_EDITOR.getId () ) );
         fileMenu.add ( new Separator () );
         fileMenu.add ( getAction ( ActionFactory.NEW.getId () ) );
         fileMenu.add ( new Separator () );
-        fileMenu.add ( exitAction );
+        fileMenu.add ( this.exitAction );
 
         // Help
-        helpMenu.add ( aboutAction );
+        helpMenu.add ( this.aboutAction );
     }
 
-    protected void fillCoolBar ( ICoolBarManager coolBar )
+    protected void fillCoolBar ( final ICoolBarManager coolBar )
     {
-        IToolBarManager toolbar = new ToolBarManager ( SWT.FLAT | SWT.RIGHT );
+        final IToolBarManager toolbar = new ToolBarManager ( SWT.FLAT | SWT.RIGHT );
         coolBar.add ( new ToolBarContributionItem ( toolbar, "main" ) );
         toolbar.add ( getAction ( ActionFactory.NEW_WIZARD_DROP_DOWN.getId () ) );
     }
