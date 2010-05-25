@@ -40,7 +40,7 @@ public class Item implements Serializable
         ID;
     }
 
-    private Type type = Type.URI;
+    private Type type;
 
     private String connectionString;
 
@@ -222,6 +222,12 @@ public class Item implements Serializable
             return false;
         }
         return true;
+    }
+
+    @Override
+    public String toString ()
+    {
+        return String.format ( "[%s: %s#%s]", this.type, this.connectionString, this.id );
     }
 
 }
