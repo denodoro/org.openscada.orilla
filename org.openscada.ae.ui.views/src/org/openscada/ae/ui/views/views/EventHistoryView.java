@@ -29,6 +29,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.eclipse.core.databinding.observable.Realm;
 import org.eclipse.core.databinding.observable.set.WritableSet;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.databinding.swt.SWTObservables;
@@ -188,6 +189,16 @@ public class EventHistoryView extends AbstractAlarmsEventsView
     }
 
     @Override
+    protected Realm getRealm ()
+    {
+        if ( this.events != null )
+        {
+            return this.events.getRealm ();
+        }
+        return SWTObservables.getRealm ( getSite ().getShell ().getDisplay () );
+    }
+
+    @Override
     protected void onConnect ()
     {
         super.onConnect ();
@@ -286,7 +297,7 @@ public class EventHistoryView extends AbstractAlarmsEventsView
             public void queryStateChanged ( final QueryState state )
             {
                 EventHistoryView.this.queryState.set ( state );
-                if ( state == QueryState.CONNECTED && !EventHistoryView.this.isPaused.get () )
+                if ( ( state == QueryState.CONNECTED ) && !EventHistoryView.this.isPaused.get () )
                 {
                     continueLoading ();
                 }

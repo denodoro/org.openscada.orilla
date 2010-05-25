@@ -19,15 +19,24 @@
 
 package org.openscada.ae.ui.views.views;
 
+import java.util.List;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IMemento;
+import org.eclipse.ui.IViewSite;
+import org.eclipse.ui.PartInitException;
 import org.openscada.ae.ui.views.config.ConfigurationHelper;
 import org.openscada.ae.ui.views.config.MonitorViewConfiguration;
 import org.openscada.ae.ui.views.model.DecoratedMonitor;
 import org.openscada.core.client.ConnectionState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 public class MonitorsView extends MonitorSubscriptionAlarmsEventsView
 {
@@ -38,6 +47,10 @@ public class MonitorsView extends MonitorSubscriptionAlarmsEventsView
 
     private MonitorsViewTable monitorsTable = null;
 
+    private List<ColumnProperties> initialColumnSettings = null;
+
+    private final Gson gson = new GsonBuilder ().create ();
+
     /**
      * This is a callback that will allow us to create the viewer and initialize
      * it.
@@ -47,7 +60,7 @@ public class MonitorsView extends MonitorSubscriptionAlarmsEventsView
     {
         super.createPartControl ( parent );
 
-        this.monitorsTable = new MonitorsViewTable ( this.getContentPane (), SWT.BORDER, this.monitors, this.ackAction );
+        this.monitorsTable = new MonitorsViewTable ( this.getContentPane (), SWT.BORDER, this.monitors, this.ackAction, this.initialColumnSettings );
         this.monitorsTable.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, true, 1, 1 ) );
 
         loadConfiguration ();
@@ -104,7 +117,7 @@ public class MonitorsView extends MonitorSubscriptionAlarmsEventsView
     @Override
     protected void acknowledge ()
     {
-        if ( this.getConnection () != null && this.getConnection ().getState () == ConnectionState.BOUND )
+        if ( ( this.getConnection () != null ) && ( this.getConnection ().getState () == ConnectionState.BOUND ) )
         {
             for ( final DecoratedMonitor monitor : this.monitorsTable.selectedMonitors () )
             {
@@ -128,40 +141,67 @@ public class MonitorsView extends MonitorSubscriptionAlarmsEventsView
     @Override
     protected void updateStatusBar ()
     {
-        final StringBuilder label = new StringBuilder ();
-        if ( this.getConnection () != null )
-        {
-            if ( this.getConnection ().getState () == ConnectionState.BOUND )
-            {
-                label.append ( "CONNECTED to " );
-            }
-            else
-            {
-                label.append ( "DISCONNECTED from " );
-            }
-            label.append ( this.getConnection ().getConnectionInformation ().toMaskedString () );
-        }
-        else
-        {
-            label.append ( "DISCONNECTED from " + this.getConnection ().getConnectionInformation ().toMaskedString () );
-        }
-        if ( this.monitorsId != null )
-        {
-            label.append ( " | watching monitors: " + this.monitorsId );
-        }
-        else
-        {
-            label.append ( " | watching no monitors" );
-        }
-
-        getSite ().getShell ().getDisplay ().asyncExec ( new Runnable () {
+        scheduleJob ( new Runnable () {
             public void run ()
             {
+                final StringBuilder label = new StringBuilder ();
+                if ( getConnection () != null )
+                {
+                    if ( getConnection ().getState () == ConnectionState.BOUND )
+                    {
+                        label.append ( "CONNECTED to " );
+                    }
+                    else
+                    {
+                        label.append ( "DISCONNECTED from " );
+                    }
+                    label.append ( getConnection ().getConnectionInformation ().toMaskedString () );
+                }
+                else
+                {
+                    label.append ( "DISCONNECTED from " + getConnection ().getConnectionInformation ().toMaskedString () );
+                }
+                if ( MonitorsView.this.monitorsId != null )
+                {
+                    label.append ( " | watching monitors: " + MonitorsView.this.monitorsId );
+                }
+                else
+                {
+                    label.append ( " | watching no monitors" );
+                }
                 label.append ( " | " );
                 label.append ( MonitorsView.this.monitors.size () );
                 label.append ( " monitors found" );
-                MonitorsView.this.getStateLabel ().setText ( label.toString () );
+
+                getSite ().getShell ().getDisplay ().syncExec ( new Runnable () {
+                    public void run ()
+                    {
+                        MonitorsView.this.getStateLabel ().setText ( label.toString () );
+                    }
+                } );
             }
         } );
+    }
+
+    @Override
+    public void init ( final IViewSite site, final IMemento memento ) throws PartInitException
+    {
+        super.init ( site, memento );
+
+        if ( memento != null )
+        {
+            final String s = memento.getString ( "columnSettings" );
+            if ( s != null )
+            {
+                this.initialColumnSettings = this.gson.fromJson ( s, new TypeToken<List<ColumnProperties>> () {}.getType () );
+            }
+        }
+    }
+
+    @Override
+    public void saveState ( final IMemento memento )
+    {
+        memento.putString ( "columnSettings", this.gson.toJson ( this.monitorsTable.getColumnSettings () ) );
+        super.saveState ( memento );
     }
 }

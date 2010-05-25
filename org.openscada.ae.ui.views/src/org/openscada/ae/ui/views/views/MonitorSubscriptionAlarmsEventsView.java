@@ -24,6 +24,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.core.databinding.observable.ChangeEvent;
+import org.eclipse.core.databinding.observable.IChangeListener;
+import org.eclipse.core.databinding.observable.Realm;
 import org.eclipse.core.databinding.observable.map.IMapChangeListener;
 import org.eclipse.core.databinding.observable.map.MapChangeEvent;
 import org.eclipse.core.databinding.observable.map.WritableMap;
@@ -51,6 +54,16 @@ public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarms
 
     private ConditionListener monitorListener = null;
 
+    @Override
+    protected Realm getRealm ()
+    {
+        if ( this.monitors != null )
+        {
+            return this.monitors.getRealm ();
+        }
+        return SWTObservables.getRealm ( getSite ().getShell ().getDisplay () );
+    }
+
     public void setMonitorsId ( final String monitorsId )
     {
         if ( monitorsId == null )
@@ -74,7 +87,7 @@ public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarms
 
     protected void subscribe ()
     {
-        if ( this.getConnection () != null && this.monitorsId != null )
+        if ( ( this.getConnection () != null ) && ( this.monitorsId != null ) )
         {
             this.monitorListener = new ConditionListener () {
 
@@ -94,7 +107,7 @@ public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarms
 
     protected void unSubscribe ()
     {
-        if ( this.getConnection () != null && this.monitorsId != null )
+        if ( ( this.getConnection () != null ) && ( this.monitorsId != null ) )
         {
             if ( this.monitorListener != null )
             {
@@ -140,51 +153,55 @@ public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarms
         updateStatusBar ();
     }
 
-    public void dataChanged ( final ConditionStatusInformation[] addedOrUpdated, final String[] removed )
+    protected void dataChanged ( final ConditionStatusInformation[] addedOrUpdated, final String[] removed )
     {
-        this.monitors.getRealm ().asyncExec ( new Runnable () {
+        scheduleJob ( new Runnable () {
             public void run ()
             {
-                if ( removed != null )
+                performDataChanged ( addedOrUpdated, removed );
+            }
+        } );
+    }
+
+    private void performDataChanged ( final ConditionStatusInformation[] addedOrUpdated, final String[] removed )
+    {
+        if ( removed != null )
+        {
+            for ( final String id : removed )
+            {
+                MonitorSubscriptionAlarmsEventsView.this.monitorsMap.remove ( id );
+            }
+        }
+        if ( addedOrUpdated != null )
+        {
+            // do it in 2 steps
+            // 1. add all missing
+            final Map<String, DecoratedMonitor> missing = new HashMap<String, DecoratedMonitor> ();
+            for ( final ConditionStatusInformation conditionStatusInformation : addedOrUpdated )
+            {
+                if ( !MonitorSubscriptionAlarmsEventsView.this.monitorsMap.containsKey ( conditionStatusInformation.getId () ) )
                 {
-                    for ( final String id : removed )
-                    {
-                        MonitorSubscriptionAlarmsEventsView.this.monitorsMap.remove ( id );
-                    }
+                    missing.put ( conditionStatusInformation.getId (), new DecoratedMonitor ( conditionStatusInformation ) );
                 }
-                if ( addedOrUpdated != null )
+            }
+            MonitorSubscriptionAlarmsEventsView.this.monitorsMap.putAll ( missing );
+            // 2. update data                    
+            for ( final ConditionStatusInformation conditionStatusInformation : addedOrUpdated )
+            {
+                if ( !missing.keySet ().contains ( conditionStatusInformation.getId () ) )
                 {
-                    // do it in 2 steps
-                    // 1. add all missing
-                    final Map<String, DecoratedMonitor> missing = new HashMap<String, DecoratedMonitor> ();
-                    for ( final ConditionStatusInformation conditionStatusInformation : addedOrUpdated )
+                    final DecoratedMonitor dm = (DecoratedMonitor)MonitorSubscriptionAlarmsEventsView.this.monitorsMap.get ( conditionStatusInformation.getId () );
+                    if ( dm == null )
                     {
-                        if ( !MonitorSubscriptionAlarmsEventsView.this.monitorsMap.containsKey ( conditionStatusInformation.getId () ) )
-                        {
-                            missing.put ( conditionStatusInformation.getId (), new DecoratedMonitor ( conditionStatusInformation ) );
-                        }
+                        MonitorSubscriptionAlarmsEventsView.this.monitorsMap.put ( conditionStatusInformation.getId (), new DecoratedMonitor ( conditionStatusInformation ) );
                     }
-                    MonitorSubscriptionAlarmsEventsView.this.monitorsMap.putAll ( missing );
-                    // 2. update data                    
-                    for ( final ConditionStatusInformation conditionStatusInformation : addedOrUpdated )
+                    else
                     {
-                        if ( !missing.keySet ().contains ( conditionStatusInformation.getId () ) )
-                        {
-                            final DecoratedMonitor dm = (DecoratedMonitor)MonitorSubscriptionAlarmsEventsView.this.monitorsMap.get ( conditionStatusInformation.getId () );
-                            if ( dm == null )
-                            {
-                                MonitorSubscriptionAlarmsEventsView.this.monitorsMap.put ( conditionStatusInformation.getId (), new DecoratedMonitor ( conditionStatusInformation ) );
-                            }
-                            else
-                            {
-                                dm.setMonitor ( conditionStatusInformation );
-                            }
-                        }
+                        dm.setMonitor ( conditionStatusInformation );
                     }
                 }
             }
-        } );
-        updateStatusBar ();
+        }
     }
 
     @Override
@@ -230,6 +247,12 @@ public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarms
                     MonitorSubscriptionAlarmsEventsView.this.monitors.remove ( event.diff.getOldValue ( key ) );
                     MonitorSubscriptionAlarmsEventsView.this.monitors.add ( event.diff.getNewValue ( key ) );
                 }
+            }
+        } );
+        this.monitors.addChangeListener ( new IChangeListener () {
+            public void handleChange ( final ChangeEvent event )
+            {
+                updateStatusBar ();
             }
         } );
     }

@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.core.databinding.observable.ChangeEvent;
+import org.eclipse.core.databinding.observable.IChangeListener;
 import org.eclipse.core.databinding.observable.set.WritableSet;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IToolBarManager;
@@ -114,6 +116,12 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
         super.createPartControl ( parent );
 
         this.pool = new WritableSet ( SWTObservables.getRealm ( parent.getDisplay () ) );
+        this.pool.addChangeListener ( new IChangeListener () {
+            public void handleChange ( final ChangeEvent event )
+            {
+                updateStatusBar ();
+            }
+        } );
 
         final CustomizableAction commentAction = createCommentAction ( null );
         commentAction.setRunnable ( new Runnable () {
@@ -268,31 +276,36 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
 
     protected void dataChanged ( final Event[] addedEvents )
     {
-        EventPoolView.this.pool.getRealm ().asyncExec ( new Runnable () {
+        scheduleJob ( new Runnable () {
             public void run ()
             {
-                if ( addedEvents == null )
-                {
-                    return;
-                }
-                final Set<DecoratedEvent> decoratedEvents = decorateEvents ( addedEvents );
-                for ( final DecoratedEvent event : decoratedEvents )
-                {
-                    final Variant source = event.getEvent ().getField ( Fields.SOURCE );
-                    if ( ( source != null ) && !source.isNull () && ( source.asString ( "" ).length () > 0 ) )
-                    {
-                        Set<DecoratedEvent> d = EventPoolView.this.poolMap.get ( source.asString ( "" ) );
-                        if ( d == null )
-                        {
-                            d = new HashSet<DecoratedEvent> ();
-                            EventPoolView.this.poolMap.put ( source.asString ( "" ), d );
-                        }
-                        d.add ( event );
-                    }
-                }
-                EventPoolView.this.pool.addAll ( decoratedEvents );
+                performDataChanged ( addedEvents );
             }
         } );
+    }
+
+    private void performDataChanged ( final Event[] addedEvents )
+    {
+        if ( addedEvents == null )
+        {
+            return;
+        }
+        final Set<DecoratedEvent> decoratedEvents = decorateEvents ( addedEvents );
+        for ( final DecoratedEvent event : decoratedEvents )
+        {
+            final Variant source = event.getEvent ().getField ( Fields.SOURCE );
+            if ( ( source != null ) && !source.isNull () && ( source.asString ( "" ).length () > 0 ) )
+            {
+                Set<DecoratedEvent> d = EventPoolView.this.poolMap.get ( source.asString ( "" ) );
+                if ( d == null )
+                {
+                    d = new HashSet<DecoratedEvent> ();
+                    EventPoolView.this.poolMap.put ( source.asString ( "" ), d );
+                }
+                d.add ( event );
+            }
+        }
+        EventPoolView.this.pool.addAll ( decoratedEvents );
     }
 
     @Override
@@ -303,12 +316,17 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
         {
             return;
         }
-        EventPoolView.this.pool.getRealm ().asyncExec ( new Runnable () {
+        scheduleJob ( new Runnable () {
             public void run ()
             {
-                EventPoolView.this.pool.addAll ( decorateEvents ( addedOrUpdated ) );
+                performDataChanged ( addedOrUpdated, removed );
             }
         } );
+    }
+
+    private void performDataChanged ( final ConditionStatusInformation[] addedOrUpdated, final String[] removed )
+    {
+        EventPoolView.this.pool.addAll ( decorateEvents ( addedOrUpdated ) );
     }
 
     private Set<DecoratedEvent> decorateEvents ( final ConditionStatusInformation[] monitors )
@@ -404,47 +422,60 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
     @Override
     protected void updateStatusBar ()
     {
-        final StringBuilder label = new StringBuilder ();
-        if ( this.getConnection () != null )
-        {
-            if ( this.getConnection ().getState () == ConnectionState.BOUND )
-            {
-                label.append ( "CONNECTED to " );
-            }
-            else
-            {
-                label.append ( "DISCONNECTED from " );
-            }
-            label.append ( this.getConnection ().getConnectionInformation ().toMaskedString () );
-        }
-        else
-        {
-            label.append ( "DISCONNECTED from " + getConnectionUri () );
-        }
-        if ( this.poolId != null )
-        {
-            label.append ( " | watching pool: " + this.poolId );
-        }
-        else
-        {
-            label.append ( " | watching no pool" );
-        }
-        if ( this.monitorsId != null )
-        {
-            label.append ( " | decorating with monitors: " + this.monitorsId );
-        }
-        else
-        {
-            label.append ( " | no decoration" );
-        }
-
-        getSite ().getShell ().getDisplay ().asyncExec ( new Runnable () {
+        System.err.println ( "updateStatusbar" );
+        scheduleJob ( new Runnable () {
             public void run ()
             {
-                label.append ( " | " );
-                label.append ( EventPoolView.this.pool.size () );
-                label.append ( " events found" );
-                EventPoolView.this.getStateLabel ().setText ( label.toString () );
+                final StringBuilder label = new StringBuilder ();
+                if ( getConnection () != null )
+                {
+                    if ( getConnection ().getState () == ConnectionState.BOUND )
+                    {
+                        label.append ( "CONNECTED to " );
+                    }
+                    else
+                    {
+                        label.append ( "DISCONNECTED from " );
+                    }
+                    label.append ( getConnection ().getConnectionInformation ().toMaskedString () );
+                }
+                else
+                {
+                    label.append ( "DISCONNECTED from " + getConnectionUri () );
+                }
+                if ( EventPoolView.this.poolId != null )
+                {
+                    label.append ( " | watching pool: " + EventPoolView.this.poolId );
+                }
+                else
+                {
+                    label.append ( " | watching no pool" );
+                }
+                if ( EventPoolView.this.monitorsId != null )
+                {
+                    label.append ( " | decorating with monitors: " + EventPoolView.this.monitorsId );
+                }
+                else
+                {
+                    label.append ( " | no decoration" );
+                }
+                try
+                {
+                    label.append ( " | " );
+                    label.append ( EventPoolView.this.pool.size () );
+                    label.append ( " events found" );
+                }
+                catch ( Exception e )
+                {
+                    e.printStackTrace ();
+                }
+
+                getSite ().getShell ().getDisplay ().syncExec ( new Runnable () {
+                    public void run ()
+                    {
+                        EventPoolView.this.getStateLabel ().setText ( label.toString () );
+                    }
+                } );
             }
         } );
     }

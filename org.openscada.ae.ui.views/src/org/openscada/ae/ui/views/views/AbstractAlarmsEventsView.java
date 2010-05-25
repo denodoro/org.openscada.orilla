@@ -19,6 +19,10 @@
 
 package org.openscada.ae.ui.views.views;
 
+import java.util.Collection;
+import java.util.LinkedList;
+
+import org.eclipse.core.databinding.observable.Realm;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.TreeSelection;
@@ -237,7 +241,7 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
      */
     protected boolean isConnected ()
     {
-        return this.connectionService != null && this.connectionService.getConnection () != null && this.connectionService.getConnection ().getState () == ConnectionState.BOUND;
+        return ( this.connectionService != null ) && ( this.connectionService.getConnection () != null ) && ( this.connectionService.getConnection ().getState () == ConnectionState.BOUND );
     }
 
     private void reInitializeConnection ( final String connectionId, final String connectionUri ) throws Exception
@@ -328,7 +332,7 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
         if ( treeSelection.getFirstElement () instanceof ConnectionHolder )
         {
             final ConnectionHolder connectionHolder = (ConnectionHolder)treeSelection.getFirstElement ();
-            if ( connectionHolder.getConnectionService ().getConnection () != null && connectionHolder.getConnectionService ().getConnection () instanceof Connection )
+            if ( ( connectionHolder.getConnectionService ().getConnection () != null ) && ( connectionHolder.getConnectionService ().getConnection () instanceof Connection ) )
             {
                 try
                 {
@@ -343,7 +347,7 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
         else if ( treeSelection.getFirstElement () instanceof BrowserEntryBean )
         {
             final BrowserEntryBean browserEntryBean = (BrowserEntryBean)treeSelection.getFirstElement ();
-            if ( browserEntryBean.getConnection () != null && browserEntryBean.getConnection ().getConnection () != null )
+            if ( ( browserEntryBean.getConnection () != null ) && ( browserEntryBean.getConnection ().getConnection () != null ) )
             {
                 try
                 {
@@ -424,5 +428,60 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
         action.setImageDescriptor ( ImageDescriptor.createFromURL ( Activator.getDefault ().getBundle ().getResource ( "icons/event_comment.gif" ) ) );
         action.setRunnable ( runnable );
         return action;
+    }
+
+    private Collection<Runnable> taskList = null;
+
+    protected abstract Realm getRealm ();
+
+    protected void scheduleJob ( final Runnable runnable )
+    {
+        synchronized ( this )
+        {
+            boolean created = false;
+            if ( this.taskList == null )
+            {
+                created = true;
+                this.taskList = new LinkedList<Runnable> ();
+            }
+            this.taskList.add ( runnable );
+            if ( created )
+            {
+                if ( getRealm () != null )
+                {
+                    getRealm ().asyncExec ( new Runnable () {
+
+                        public void run ()
+                        {
+                            AbstractAlarmsEventsView.this.getRealm ().timerExec ( 1000, new Runnable () {
+
+                                public void run ()
+                                {
+                                    processQueue ();
+                                }
+                            } );
+                        }
+                    } );
+                }
+            }
+        }
+    }
+
+    private void processQueue ()
+    {
+        Collection<Runnable> list = null;
+        synchronized ( this )
+        {
+            list = this.taskList;
+            this.taskList = null;
+        }
+
+        if ( list != null )
+        {
+            for ( final Runnable r : list )
+            {
+                r.run ();
+            }
+        }
     }
 }

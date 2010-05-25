@@ -183,7 +183,7 @@ public class MonitorsViewTable extends Composite
 
     private volatile boolean scrollLock = false;
 
-    public MonitorsViewTable ( final Composite parent, final int style, final WritableSet monitors, final Action ackAction )
+    public MonitorsViewTable ( final Composite parent, final int style, final WritableSet monitors, final Action ackAction, final List<ColumnProperties> columnSettings )
     {
         super ( parent, style );
         this.ackAction = ackAction;
@@ -196,6 +196,7 @@ public class MonitorsViewTable extends Composite
         this.tableViewer = new TableViewer ( this, SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.MULTI );
         this.tableRef.set ( this.tableViewer );
         createColumns ( this.tableViewer );
+        applyColumSettings ( columnSettings );
         this.tableViewer.getTable ().setHeaderVisible ( true );
         this.tableViewer.getTable ().setLinesVisible ( true );
         this.tableViewer.setUseHashlookup ( true );
@@ -245,7 +246,7 @@ public class MonitorsViewTable extends Composite
         idColumn.getColumn ().setData ( COLUMN_KEY, Columns.ID );
         idColumn.getColumn ().setWidth ( 450 );
         idColumn.getColumn ().setResizable ( true );
-        idColumn.getColumn ().setMoveable ( false );
+        idColumn.getColumn ().setMoveable ( true );
         idColumn.getColumn ().addSelectionListener ( sortListener );
         // state
         final TableViewerColumn stateColumn = new TableViewerColumn ( table, SWT.NONE );
@@ -253,7 +254,7 @@ public class MonitorsViewTable extends Composite
         stateColumn.getColumn ().setData ( COLUMN_KEY, Columns.STATE );
         stateColumn.getColumn ().setWidth ( 150 );
         stateColumn.getColumn ().setResizable ( true );
-        stateColumn.getColumn ().setMoveable ( false );
+        stateColumn.getColumn ().setMoveable ( true );
         stateColumn.getColumn ().addSelectionListener ( sortListener );
         // timestamp
         final TableViewerColumn timestampColumn = new TableViewerColumn ( table, SWT.NONE );
@@ -261,7 +262,7 @@ public class MonitorsViewTable extends Composite
         timestampColumn.getColumn ().setData ( COLUMN_KEY, Columns.TIMESTAMP );
         timestampColumn.getColumn ().setWidth ( 180 );
         timestampColumn.getColumn ().setResizable ( true );
-        timestampColumn.getColumn ().setMoveable ( false );
+        timestampColumn.getColumn ().setMoveable ( true );
         timestampColumn.getColumn ().addSelectionListener ( sortListener );
         // value
         final TableViewerColumn valueColumn = new TableViewerColumn ( table, SWT.NONE );
@@ -269,7 +270,7 @@ public class MonitorsViewTable extends Composite
         valueColumn.getColumn ().setData ( COLUMN_KEY, Columns.VALUE );
         valueColumn.getColumn ().setWidth ( 100 );
         valueColumn.getColumn ().setResizable ( true );
-        valueColumn.getColumn ().setMoveable ( false );
+        valueColumn.getColumn ().setMoveable ( true );
         valueColumn.getColumn ().addSelectionListener ( sortListener );
         // akn user
         final TableViewerColumn aknUserColumn = new TableViewerColumn ( table, SWT.NONE );
@@ -285,7 +286,7 @@ public class MonitorsViewTable extends Composite
         aknTimestampColumn.getColumn ().setData ( COLUMN_KEY, Columns.ACK_TIMESTAMP );
         aknTimestampColumn.getColumn ().setWidth ( 180 );
         aknTimestampColumn.getColumn ().setResizable ( true );
-        aknTimestampColumn.getColumn ().setMoveable ( false );
+        aknTimestampColumn.getColumn ().setMoveable ( true );
         aknTimestampColumn.getColumn ().addSelectionListener ( sortListener );
 
         final TableViewerColumn itemColumn = new TableViewerColumn ( table, SWT.NONE );
@@ -293,7 +294,7 @@ public class MonitorsViewTable extends Composite
         itemColumn.getColumn ().setData ( COLUMN_KEY, Columns.ITEM );
         itemColumn.getColumn ().setWidth ( 180 );
         itemColumn.getColumn ().setResizable ( true );
-        itemColumn.getColumn ().setMoveable ( false );
+        itemColumn.getColumn ().setMoveable ( true );
         itemColumn.getColumn ().addSelectionListener ( sortListener );
 
         final TableViewerColumn messageColumn = new TableViewerColumn ( table, SWT.NONE );
@@ -301,7 +302,7 @@ public class MonitorsViewTable extends Composite
         messageColumn.getColumn ().setData ( COLUMN_KEY, Columns.MESSAGE );
         messageColumn.getColumn ().setWidth ( 180 );
         messageColumn.getColumn ().setResizable ( true );
-        messageColumn.getColumn ().setMoveable ( false );
+        messageColumn.getColumn ().setMoveable ( true );
         messageColumn.getColumn ().addSelectionListener ( sortListener );
     }
 
@@ -334,5 +335,49 @@ public class MonitorsViewTable extends Composite
     public int numOfEntries ()
     {
         return this.monitors.size ();
+    }
+
+    private void applyColumSettings ( final List<ColumnProperties> columnSettings )
+    {
+        if ( columnSettings == null )
+        {
+            return;
+        }
+        final int[] colOrder = this.tableViewer.getTable ().getColumnOrder ();
+        int i = 0;
+        for ( final ColumnProperties p : columnSettings )
+        {
+            if ( i >= colOrder.length )
+            {
+                break;
+            }
+            colOrder[i] = p.getNo ();
+            i += 1;
+        }
+        this.tableViewer.getTable ().setColumnOrder ( colOrder );
+        i = 0;
+        for ( final ColumnProperties p : columnSettings )
+        {
+            if ( i >= this.tableViewer.getTable ().getColumnCount () )
+            {
+                break;
+            }
+            final TableColumn col = this.tableViewer.getTable ().getColumn ( i );
+            col.setWidth ( p.getWidth () );
+            i += 1;
+        }
+    }
+
+    public List<ColumnProperties> getColumnSettings ()
+    {
+        final List<ColumnProperties> result = new ArrayList<ColumnProperties> ();
+        int i = 0;
+        final int[] order = this.tableViewer.getTable ().getColumnOrder ();
+        for ( final TableColumn col : this.tableViewer.getTable ().getColumns () )
+        {
+            result.add ( new ColumnProperties ( order[i], col.getWidth () ) );
+            i += 1;
+        }
+        return result;
     }
 }
