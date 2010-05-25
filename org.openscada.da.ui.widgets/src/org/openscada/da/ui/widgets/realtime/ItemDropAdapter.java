@@ -30,9 +30,13 @@ import org.eclipse.swt.dnd.TransferData;
 import org.openscada.da.ui.connection.data.Item;
 import org.openscada.da.ui.connection.data.Item.Type;
 import org.openscada.da.ui.connection.dnd.ItemTransfer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ItemDropAdapter extends ViewerDropAdapter
 {
+
+    private final static Logger logger = LoggerFactory.getLogger ( ItemDropAdapter.class );
 
     private final RealtimeListAdapter list;
 
@@ -47,6 +51,8 @@ public class ItemDropAdapter extends ViewerDropAdapter
     @Override
     public boolean performDrop ( final Object data )
     {
+        logger.debug ( "Dropping: " + data );
+
         if ( data instanceof Item[] )
         {
             dropItems ( ( (Item[])data ) );
@@ -69,7 +75,13 @@ public class ItemDropAdapter extends ViewerDropAdapter
             try
             {
                 final URI uri = new URI ( tok );
-                if ( uri.getFragment () != null )
+                if ( uri.getScheme () == null )
+                {
+                    final String[] stoks = tok.split ( "#" );
+                    final Item item = new Item ( stoks[0], stoks[1], Type.ID );
+                    dropItem ( item, viewer );
+                }
+                else if ( uri.getFragment () != null )
                 {
                     final Item item = new Item ( uri.toString (), uri.getFragment (), Type.URI );
                     dropItem ( item, viewer );
@@ -78,6 +90,9 @@ public class ItemDropAdapter extends ViewerDropAdapter
             }
             catch ( final URISyntaxException e )
             {
+                final String[] stoks = tok.split ( "#" );
+                final Item item = new Item ( stoks[0], stoks[1], Type.ID );
+                dropItem ( item, viewer );
             }
         }
     }
@@ -88,19 +103,14 @@ public class ItemDropAdapter extends ViewerDropAdapter
 
         for ( final Item item : items )
         {
-            try
-            {
-                dropItem ( item, viewer );
-            }
-            catch ( final URISyntaxException e )
-            {
-                e.printStackTrace ();
-            }
+            dropItem ( item, viewer );
         }
     }
 
-    private void dropItem ( final Item item, final TreeViewer viewer ) throws URISyntaxException
+    private void dropItem ( final Item item, final TreeViewer viewer )
     {
+        logger.info ( "Dropped item: {} ({})", item, item.getType () );
+
         final ListEntry entry = new ListEntry ();
         entry.setDataItem ( new Item ( item ) );
         this.list.add ( entry );
