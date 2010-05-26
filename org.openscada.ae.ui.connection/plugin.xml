@@ -8,7 +8,7 @@
             contentProvider="org.openscada.ae.ui.connection.navigator.ConnectionContentProvider"
             id="org.openscada.ae.ui.connection.provider"
             labelProvider="org.openscada.ae.ui.connection.navigator.ConnectionLabelProvider"
-            name="AE Connections"
+            name="%navigatorContent.ae.name"
             priority="normal"
             providesSaveables="false">
          <triggerPoints>
@@ -61,7 +61,7 @@
             locationURI="popup:org.openscada.ae.ui.testing.views.MonitorsView">
          <command
                commandId="org.openscada.ae.ui.connection.command.aknowledge"
-               label="Aknowledge"
+               label="%command.akn.label"
                style="push">
                <!--
             <visibleWhen
@@ -80,7 +80,7 @@
       <command
             categoryId="org.openscada.ae.ui.category"
             id="org.openscada.ae.ui.connection.command.aknowledge"
-            name="Aknowledge">
+            name="%command.akn.name">
       </command>
    </extension>
 
