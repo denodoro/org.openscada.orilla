@@ -32,7 +32,7 @@ public class ConfigurationHelper
 
     private final static Logger logger = LoggerFactory.getLogger ( ConfigurationHelper.class );
 
-    private static final String EXTP_CFG_ID = "org.openscada.ae.ui.views.configuration";
+    private static final String EXTP_CFG_ID = "org.openscada.ae.ui.views.configuration"; //$NON-NLS-1$
 
     public static MonitorViewConfiguration findMonitorViewConfiguration ( final String configurationId )
     {
@@ -58,7 +58,7 @@ public class ConfigurationHelper
 
         for ( final IConfigurationElement ele : Platform.getExtensionRegistry ().getConfigurationElementsFor ( EXTP_CFG_ID ) )
         {
-            if ( !"monitorView".equals ( ele.getName () ) )
+            if ( !"monitorView".equals ( ele.getName () ) ) //$NON-NLS-1$
             {
                 continue;
             }
@@ -77,17 +77,17 @@ public class ConfigurationHelper
     {
         try
         {
-            final String id = ele.getAttribute ( "id" );
-            final String monitorQueryId = ele.getAttribute ( "monitorQueryId" );
-            final String connectionString = ele.getAttribute ( "connectionString" );
-            final ConnectionType connectionType = ConnectionType.valueOf ( ele.getAttribute ( "connectionType" ) );
-            final String label = ele.getAttribute ( "label" );
+            final String id = ele.getAttribute ( "id" ); //$NON-NLS-1$
+            final String monitorQueryId = ele.getAttribute ( "monitorQueryId" ); //$NON-NLS-1$
+            final String connectionString = ele.getAttribute ( "connectionString" ); //$NON-NLS-1$
+            final ConnectionType connectionType = ConnectionType.valueOf ( ele.getAttribute ( "connectionType" ) ); //$NON-NLS-1$
+            final String label = ele.getAttribute ( "label" ); //$NON-NLS-1$
 
             return new MonitorViewConfiguration ( id, monitorQueryId, connectionString, connectionType, label );
         }
         catch ( final Exception e )
         {
-            logger.warn ( "Failed to convert monitor configuration: {}", ele );
+            logger.warn ( "Failed to convert monitor configuration: {}", ele ); //$NON-NLS-1$
             return null;
         }
     }
@@ -116,7 +116,7 @@ public class ConfigurationHelper
 
         for ( final IConfigurationElement ele : Platform.getExtensionRegistry ().getConfigurationElementsFor ( EXTP_CFG_ID ) )
         {
-            if ( !"eventPoolView".equals ( ele.getName () ) )
+            if ( !"eventPoolView".equals ( ele.getName () ) ) //$NON-NLS-1$
             {
                 continue;
             }
@@ -135,18 +135,18 @@ public class ConfigurationHelper
     {
         try
         {
-            final String id = ele.getAttribute ( "id" );
-            final String monitorQueryId = ele.getAttribute ( "monitorQueryId" );
-            final String connectionString = ele.getAttribute ( "connectionString" );
-            final String eventPoolQueryId = ele.getAttribute ( "eventPoolQueryId" );
-            final ConnectionType connectionType = ConnectionType.valueOf ( ele.getAttribute ( "connectionType" ) );
-            final String label = ele.getAttribute ( "label" );
+            final String id = ele.getAttribute ( "id" ); //$NON-NLS-1$
+            final String monitorQueryId = ele.getAttribute ( "monitorQueryId" ); //$NON-NLS-1$
+            final String connectionString = ele.getAttribute ( "connectionString" ); //$NON-NLS-1$
+            final String eventPoolQueryId = ele.getAttribute ( "eventPoolQueryId" ); //$NON-NLS-1$
+            final ConnectionType connectionType = ConnectionType.valueOf ( ele.getAttribute ( "connectionType" ) ); //$NON-NLS-1$
+            final String label = ele.getAttribute ( "label" ); //$NON-NLS-1$
 
             return new EventPoolViewConfiguration ( id, monitorQueryId, eventPoolQueryId, connectionString, connectionType, label );
         }
         catch ( final Exception e )
         {
-            logger.warn ( "Failed to convert event pool configuration: {}", ele );
+            logger.warn ( "Failed to convert event pool configuration: {}", ele ); //$NON-NLS-1$
             return null;
         }
     }

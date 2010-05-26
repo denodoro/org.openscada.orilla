@@ -50,7 +50,7 @@ public class EventLabelProvider extends ObservableMapLabelProvider
     {
         if ( ! ( element instanceof DecoratedEvent ) )
         {
-            return "";
+            return Messages.EventLabelProvider_EmptyString;
         }
         final DecoratedEvent event = (DecoratedEvent)element;
 
@@ -69,18 +69,18 @@ public class EventLabelProvider extends ObservableMapLabelProvider
         }
         if ( columnIndex > this.columns.size () - 1 )
         {
-            return "ERROR: <index doesn't exist>";
+            return Messages.EventLabelProvider_Error;
         }
         if ( columnIndex == 8 )
         {
-            final String value = Variant.valueOf ( event.getEvent ().getField ( Fields.ACTOR_TYPE ) ).asString ( "" );
-            if ( "USER".equalsIgnoreCase ( value ) )
+            final String value = Variant.valueOf ( event.getEvent ().getField ( Fields.ACTOR_TYPE ) ).asString ( Messages.EventLabelProvider_EmptyString );
+            if ( "USER".equalsIgnoreCase ( value ) ) //$NON-NLS-1$
             {
-                return "";
+                return Messages.EventLabelProvider_EmptyString;
             }
-            else if ( "SYSTEM".equalsIgnoreCase ( value ) )
+            else if ( "SYSTEM".equalsIgnoreCase ( value ) ) //$NON-NLS-1$
             {
-                return "";
+                return Messages.EventLabelProvider_EmptyString;
             }
         }
         return LabelProviderSupport.toLabel ( event, column.getField () );
@@ -111,12 +111,12 @@ public class EventLabelProvider extends ObservableMapLabelProvider
         }
         if ( columnIndex == 8 )
         {
-            final String value = Variant.valueOf ( event.getEvent ().getField ( Fields.ACTOR_TYPE ) ).asString ( "" );
-            if ( "USER".equalsIgnoreCase ( value ) )
+            final String value = Variant.valueOf ( event.getEvent ().getField ( Fields.ACTOR_TYPE ) ).asString ( Messages.EventLabelProvider_EmptyString );
+            if ( "USER".equalsIgnoreCase ( value ) ) //$NON-NLS-1$
             {
                 return LabelProviderSupport.USER_IMG;
             }
-            else if ( "SYSTEM".equalsIgnoreCase ( value ) )
+            else if ( "SYSTEM".equalsIgnoreCase ( value ) ) //$NON-NLS-1$
             {
                 return LabelProviderSupport.SYSTEM_IMG;
             }

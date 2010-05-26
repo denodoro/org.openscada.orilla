@@ -116,12 +116,12 @@ public class MonitorsViewTable extends Composite
                 v2 = m2.getLastAknTimestamp () == null ? DEFAULT_DATE : m2.getLastAknTimestamp ();
                 break;
             case ITEM:
-                v1 = m1.getAttributes ().get ( "item" ) == null ? Variant.NULL : m1.getAttributes ().get ( "item" );
-                v2 = m2.getAttributes ().get ( "item" ) == null ? Variant.NULL : m2.getAttributes ().get ( "item" );
+                v1 = m1.getAttributes ().get ( "item" ) == null ? Variant.NULL : m1.getAttributes ().get ( "item" ); //$NON-NLS-1$ //$NON-NLS-2$
+                v2 = m2.getAttributes ().get ( "item" ) == null ? Variant.NULL : m2.getAttributes ().get ( "item" ); //$NON-NLS-1$ //$NON-NLS-2$
                 break;
             case MESSAGE:
-                v1 = m1.getAttributes ().get ( "message" ) == null ? Variant.NULL : m1.getAttributes ().get ( "message" );
-                v2 = m2.getAttributes ().get ( "message" ) == null ? Variant.NULL : m2.getAttributes ().get ( "message" );
+                v1 = m1.getAttributes ().get ( "message" ) == null ? Variant.NULL : m1.getAttributes ().get ( "message" ); //$NON-NLS-1$ //$NON-NLS-2$
+                v2 = m2.getAttributes ().get ( "message" ) == null ? Variant.NULL : m2.getAttributes ().get ( "message" ); //$NON-NLS-1$ //$NON-NLS-2$
                 break;
             }
             // first compare the given column

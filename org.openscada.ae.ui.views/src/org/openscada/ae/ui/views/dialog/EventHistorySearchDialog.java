@@ -46,14 +46,14 @@ public class EventHistorySearchDialog extends TitleAreaDialog implements FilterC
     protected Control createDialogArea ( final Composite parent )
     {
         // initialize header area
-        this.setTitle ( "Search for Events" );
-        this.setMessage ( "Create a search using one of the available forms." );
+        this.setTitle ( Messages.EventHistorySearchDialog_Title );
+        this.setMessage ( Messages.EventHistorySearchDialog_DefaultMessage );
         this.setHelpAvailable ( true );
 
         // initialize content
         final Composite rootComposite = (Composite)super.createDialogArea ( parent );
 
-        String filterString = "";
+        String filterString = ""; //$NON-NLS-1$
         if ( this.initialFilter != null && this.initialFilter.second != null )
         {
             filterString = this.initialFilter.second;
@@ -63,16 +63,16 @@ public class EventHistorySearchDialog extends TitleAreaDialog implements FilterC
         final TabFolder tabFolder = new TabFolder ( rootComposite, SWT.NONE );
         // add QBE filter form
         final TabItem qbeTab = new TabItem ( tabFolder, SWT.NULL );
-        qbeTab.setText ( "Query by Example" );
+        qbeTab.setText ( Messages.EventHistorySearchDialog_Tab_QueryByExample_Text );
         qbeTab.setControl ( new FilterQueryByExampleComposite ( this, tabFolder, SWT.NONE, filterString ) );
         // add advanced filter form
         final TabItem advancedTab = new TabItem ( tabFolder, SWT.NULL );
-        advancedTab.setText ( "Advanced Query" );
+        advancedTab.setText ( Messages.EventHistorySearchDialog_Tab_Advanced_Text );
         advancedTab.setControl ( new FilterAdvancedComposite ( this, tabFolder, SWT.NONE ) );
         // add free from filter form
         final TabItem freeformTab = new TabItem ( tabFolder, SWT.NULL );
         freeformTab.setControl ( new FilterFreeFormComposite ( this, tabFolder, SWT.NONE, filterString ) );
-        freeformTab.setText ( "Free Query" );
+        freeformTab.setText ( Messages.EventHistorySearchDialog_Tab_Free_Text );
 
         final GridData layoutData = new GridData ();
         layoutData.horizontalAlignment = GridData.FILL;

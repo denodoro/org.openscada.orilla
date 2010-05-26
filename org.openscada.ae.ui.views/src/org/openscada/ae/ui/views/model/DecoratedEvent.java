@@ -41,7 +41,7 @@ public class DecoratedEvent extends AbstractPropertyChange implements Serializab
 
     public void setMonitor ( final MonitorData monitor )
     {
-        firePropertyChange ( "monitor", this.monitor, this.monitor = monitor );
+        firePropertyChange ( "monitor", this.monitor, this.monitor = monitor ); //$NON-NLS-1$
     }
 
     public DecoratedEvent ( final Event event )
@@ -62,7 +62,7 @@ public class DecoratedEvent extends AbstractPropertyChange implements Serializab
 
     public void setEvent ( final Event event )
     {
-        firePropertyChange ( "event", this.event, this.event = event );
+        firePropertyChange ( "event", this.event, this.event = event ); //$NON-NLS-1$
     }
 
     @Override

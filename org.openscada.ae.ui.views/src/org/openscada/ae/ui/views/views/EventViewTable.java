@@ -172,7 +172,7 @@ public class EventViewTable extends Composite
             int cmpId = e1.getId ().compareTo ( e2.getId () );
             int cmpSourceTs = e1.getSourceTimestamp ().compareTo ( e2.getSourceTimestamp () );
             int cmpEntryTs = e1.getEntryTimestamp ().compareTo ( e2.getEntryTimestamp () );
-            int cmpSequence = new VariantComparator ().compare ( e1.getAttributes ().get ( "sequence" ), e2.getAttributes ().get ( "sequence" ) );
+            int cmpSequence = new VariantComparator ().compare ( e1.getAttributes ().get ( "sequence" ), e2.getAttributes ().get ( "sequence" ) ); //$NON-NLS-1$ //$NON-NLS-2$
             int result = 0;
 
             if ( this.column == Column.reservedColumnId )

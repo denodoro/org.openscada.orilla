@@ -74,7 +74,7 @@ public class MonitorTableLabelProvider extends ObservableMapLabelProvider
     {
         if ( ! ( element instanceof DecoratedMonitor ) )
         {
-            return "";
+            return Messages.MonitorTableLabelProvider_EmptyString;
         }
         final ConditionStatusInformation monitor = ( (DecoratedMonitor)element ).getMonitor ();
         switch ( columnIndex )
@@ -92,10 +92,10 @@ public class MonitorTableLabelProvider extends ObservableMapLabelProvider
         case 5:
             return LabelProviderSupport.formatDate ( monitor.getLastAknTimestamp () );
         case 6:
-            return LabelProviderSupport.toLabel ( monitor.getAttributes ().get ( "item" ) );
+            return LabelProviderSupport.toLabel ( monitor.getAttributes ().get ( "item" ) ); //$NON-NLS-1$
         case 7:
-            return LabelProviderSupport.toLabel ( monitor.getAttributes ().get ( "message" ) );
+            return LabelProviderSupport.toLabel ( monitor.getAttributes ().get ( "message" ) ); //$NON-NLS-1$
         }
-        return "";
+        return Messages.MonitorTableLabelProvider_EmptyString;
     }
 }

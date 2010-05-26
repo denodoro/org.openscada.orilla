@@ -63,9 +63,9 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
 {
     private static final Logger logger = LoggerFactory.getLogger ( AbstractAlarmsEventsView.class );
 
-    private static final String CONNECTION_ID = "connection.id";
+    private static final String CONNECTION_ID = "connection.id"; //$NON-NLS-1$
 
-    private static final String CONNECTION_URI = "connection.uri";
+    private static final String CONNECTION_URI = "connection.uri"; //$NON-NLS-1$
 
     private static final int RECONNECT_DELAY = 10000;
 
@@ -94,11 +94,11 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
                 // preconditions
                 if ( changedConnection == null )
                 {
-                    throw new IllegalArgumentException ( "changedConnection must not be null" );
+                    throw new IllegalArgumentException ( Messages.AbstractAlarmsEventsView_IllegalArgument_changedConnection );
                 }
                 if ( ! ( changedConnection instanceof Connection ) )
                 {
-                    throw new IllegalArgumentException ( "changedConnection must be of type " + Connection.class.getName () );
+                    throw new IllegalArgumentException ( Messages.AbstractAlarmsEventsView_IllegalArgument_changedConnection_Type + Connection.class.getName () );
                 }
                 // actual check
                 if ( state == ConnectionState.BOUND )
@@ -112,7 +112,7 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
             }
             catch ( final Exception e )
             {
-                logger.warn ( "reInitializeConnection ()", e );
+                logger.warn ( "reInitializeConnection ()", e ); //$NON-NLS-1$
             }
         }
     };
@@ -176,7 +176,7 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
         }
         catch ( final Exception e )
         {
-            logger.warn ( "init () - couldn't recreate connection", e );
+            logger.warn ( "init () - couldn't recreate connection", e ); //$NON-NLS-1$
             // just reset all values
             this.connectionId = null;
             this.connectionUri = null;
@@ -199,7 +199,6 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
 
         // label which contains no of retrieved events
         this.stateLabel = new Label ( this.contentPane, SWT.NONE );
-        this.stateLabel.setText ( "" );
         this.stateLabel.setLayoutData ( new GridData ( SWT.FILL, SWT.CENTER, true, false ) );
     }
 
@@ -424,10 +423,10 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
     protected CustomizableAction createCommentAction ( final Runnable runnable )
     {
         final CustomizableAction action = new CustomizableAction ();
-        action.setText ( "Set Comment (NOT IMPLEMENTED!)" );
-        action.setToolTipText ( "set or change comment for selected event" );
-        action.setDescription ( "Set or change comment for currently selected event." );
-        action.setImageDescriptor ( ImageDescriptor.createFromURL ( Activator.getDefault ().getBundle ().getResource ( "icons/event_comment.gif" ) ) );
+        action.setText ( Messages.AbstractAlarmsEventsView_SetCommentAction_Text );
+        action.setToolTipText ( Messages.AbstractAlarmsEventsView_SetCommentAction_ToolTip );
+        action.setDescription ( Messages.AbstractAlarmsEventsView_SetCommentAction_Description );
+        action.setImageDescriptor ( ImageDescriptor.createFromURL ( Activator.getDefault ().getBundle ().getResource ( "icons/event_comment.gif" ) ) ); //$NON-NLS-1$
         action.setRunnable ( runnable );
         return action;
     }

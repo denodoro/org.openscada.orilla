@@ -97,13 +97,13 @@ public class FilterAdvancedComposite extends Composite
         private Combo createAttributeCombo ()
         {
             final Combo c = new Combo ( this, SWT.NONE );
-            c.add ( "sourceTimestamp" );
-            c.add ( "entryTimestamp" );
+            c.add ( "sourceTimestamp" ); //$NON-NLS-1$
+            c.add ( "entryTimestamp" ); //$NON-NLS-1$
             for ( final Event.Fields field : Event.Fields.values () )
             {
                 c.add ( field.getName () );
             }
-            c.add ( "custom field ..." );
+            c.add ( Messages.FilterAdvancedComposite_ComboEntry_CustomField );
             c.select ( 0 );
             return c;
         }
@@ -122,7 +122,7 @@ public class FilterAdvancedComposite extends Composite
         private Button createAddButton ()
         {
             final Button b = new Button ( this, SWT.PUSH );
-            b.setText ( "Add Assertion" );
+            b.setText ( Messages.FilterAdvancedComposite_AddButton_Text );
             b.addSelectionListener ( new SelectionAdapter () {
                 @Override
                 public void widgetSelected ( final SelectionEvent e )
@@ -177,7 +177,7 @@ public class FilterAdvancedComposite extends Composite
         private Button createNotCheck ()
         {
             final Button b = new Button ( this, SWT.CHECK );
-            b.setText ( "not" );
+            b.setText ( Messages.FilterAdvancedComposite_NotButton_Text );
             b.addSelectionListener ( new SelectionAdapter () {
                 @Override
                 public void widgetSelected ( final SelectionEvent e )
@@ -195,7 +195,7 @@ public class FilterAdvancedComposite extends Composite
             if ( field == null )
             {
                 t.setEditable ( true );
-                t.setMessage ( "custom field ..." );
+                t.setMessage ( Messages.FilterAdvancedComposite_CustomFieldText_Message );
             }
             else
             {
@@ -246,7 +246,7 @@ public class FilterAdvancedComposite extends Composite
         private Text createValueText ()
         {
             final Text t = new Text ( this, SWT.BORDER );
-            t.setMessage ( "argument" );
+            t.setMessage ( Messages.FilterAdvancedComposite_ArgumentText_Message );
             t.addKeyListener ( new KeyAdapter () {
                 @Override
                 public void keyReleased ( final KeyEvent e )
@@ -263,7 +263,7 @@ public class FilterAdvancedComposite extends Composite
         private Button createRemoveButton ()
         {
             final Button b = new Button ( this, SWT.PUSH );
-            b.setText ( "Remove" );
+            b.setText ( Messages.FilterAdvancedComposite_RemoveButton_Text );
             b.addSelectionListener ( new SelectionAdapter () {
                 @Override
                 public void widgetSelected ( final SelectionEvent e )
@@ -280,10 +280,10 @@ public class FilterAdvancedComposite extends Composite
             final String ass = this.assertionCombo.getText ();
             final String val = this.valueText.getText ();
             final FilterAssertion assertion = new FilterAssertion ( attr, Assertion.fromString ( ass ), val );
-            if ( val.contains ( "*" ) )
+            if ( val.contains ( "*" ) ) //$NON-NLS-1$
             {
                 assertion.setAssertion ( Assertion.SUBSTRING );
-                assertion.setValue ( val.split ( "\\*" ) );
+                assertion.setValue ( val.split ( "\\*" ) ); //$NON-NLS-1$
             }
             if ( this.notCheck.getSelection () )
             {
@@ -318,7 +318,7 @@ public class FilterAdvancedComposite extends Composite
             // fields
             this.filterAdvancedComposite = filterAdvancedComposite;
             this.tabItem = new CTabItem ( tabFolder, SWT.NULL );
-            this.tabItem.setText ( "a condition" );
+            this.tabItem.setText ( Messages.FilterAdvancedComposite_TabItem_Text );
             this.tabContent = new Composite ( tabFolder, SWT.NONE );
             this.tabItem.setControl ( this.tabContent );
 
@@ -382,7 +382,7 @@ public class FilterAdvancedComposite extends Composite
             refreshGUI ();
             if ( this.assertionComposites.size () == 0 )
             {
-                this.tabItem.setText ( "a condition" );
+                this.tabItem.setText ( Messages.FilterAdvancedComposite_TabItem_Text );
             }
         }
 
@@ -399,7 +399,7 @@ public class FilterAdvancedComposite extends Composite
 
         private void updateFilter ()
         {
-            this.tabItem.setText ( getExpression ().toString ().replace ( "&", "&&" ) );
+            this.tabItem.setText ( getExpression ().toString ().replace ( "&", "&&" ) ); //$NON-NLS-1$ //$NON-NLS-2$
         }
     }
 
@@ -438,7 +438,7 @@ public class FilterAdvancedComposite extends Composite
     private Button creteAddOrConditionButton ()
     {
         final Button b = new Button ( this, SWT.PUSH );
-        b.setText ( "Add OR Condition" );
+        b.setText ( Messages.FilterAdvancedComposite_OrButton_Text );
         b.addSelectionListener ( new SelectionAdapter () {
             @Override
             public void widgetSelected ( final SelectionEvent e )

@@ -41,7 +41,7 @@ public class FilterFreeFormComposite extends Composite
         super ( parent, style );
         if ( filter == null )
         {
-            throw new IllegalArgumentException ( "'filter' must not be null" );
+            throw new IllegalArgumentException ( Messages.FilterFreeFormComposite_IllegalArgument_filter );
         }
         this.filterChangedListener = filterChangedListener;
         this.filter = filter;
@@ -76,7 +76,7 @@ public class FilterFreeFormComposite extends Composite
         }
         catch ( final FilterParseException e )
         {
-            this.filterChangedListener.onFilterParseError ( new Pair<SearchType, String> ( SearchType.FREEFORM, "" + e.getMessage () ) );
+            this.filterChangedListener.onFilterParseError ( new Pair<SearchType, String> ( SearchType.FREEFORM, "" + e.getMessage () ) ); //$NON-NLS-1$
             return false;
         }
         catch ( final Exception e )

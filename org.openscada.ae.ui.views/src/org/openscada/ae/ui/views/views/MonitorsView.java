@@ -43,7 +43,7 @@ public class MonitorsView extends MonitorSubscriptionAlarmsEventsView
 
     private final static Logger logger = LoggerFactory.getLogger ( MonitorsView.class );
 
-    public static final String ID = "org.openscada.ae.ui.views.views.monitors";
+    public static final String ID = "org.openscada.ae.ui.views.views.monitors"; //$NON-NLS-1$
 
     private MonitorsViewTable monitorsTable = null;
 
@@ -77,12 +77,12 @@ public class MonitorsView extends MonitorSubscriptionAlarmsEventsView
             }
             catch ( final Exception e )
             {
-                logger.warn ( "Failed to apply configuration", e );
+                logger.warn ( "Failed to apply configuration", e ); //$NON-NLS-1$
             }
         }
         else
         {
-            logger.info ( "no configuration found" );
+            logger.info ( "no configuration found" ); //$NON-NLS-1$
         }
     }
 
@@ -190,7 +190,7 @@ public class MonitorsView extends MonitorSubscriptionAlarmsEventsView
 
         if ( memento != null )
         {
-            final String s = memento.getString ( "columnSettings" );
+            final String s = memento.getString ( "columnSettings" ); //$NON-NLS-1$
             if ( s != null )
             {
                 this.initialColumnSettings = this.gson.fromJson ( s, new TypeToken<List<ColumnProperties>> () {}.getType () );
@@ -201,7 +201,7 @@ public class MonitorsView extends MonitorSubscriptionAlarmsEventsView
     @Override
     public void saveState ( final IMemento memento )
     {
-        memento.putString ( "columnSettings", this.gson.toJson ( this.monitorsTable.getColumnSettings () ) );
+        memento.putString ( "columnSettings", this.gson.toJson ( this.monitorsTable.getColumnSettings () ) ); //$NON-NLS-1$
         super.saveState ( memento );
     }
 }

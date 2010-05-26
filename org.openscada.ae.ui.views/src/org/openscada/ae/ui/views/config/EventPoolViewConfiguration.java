@@ -48,23 +48,23 @@ public class EventPoolViewConfiguration
 
         if ( this.id == null )
         {
-            throw new IllegalArgumentException ( "'id' must not be null" );
+            throw new IllegalArgumentException ( Messages.EventPoolViewConfiguration_IllegalArgument_id );
         }
         if ( this.monitorQueryId == null )
         {
-            throw new IllegalArgumentException ( "'monitorQueryId' must not be null" );
+            throw new IllegalArgumentException ( Messages.EventPoolViewConfiguration_IllegalArgument_monitorQueryId );
         }
         if ( this.connectionString == null )
         {
-            throw new IllegalArgumentException ( "'connectionString' must not be null" );
+            throw new IllegalArgumentException ( Messages.EventPoolViewConfiguration_IllegalArgument_connectionString );
         }
         if ( this.connectionType == null )
         {
-            throw new IllegalArgumentException ( "'connectionType' must not be null" );
+            throw new IllegalArgumentException ( Messages.EventPoolViewConfiguration_IllegalArgument_connectionType );
         }
         if ( this.eventPoolQueryId == null )
         {
-            throw new IllegalArgumentException ( "'eventPoolQueryId' must not be null" );
+            throw new IllegalArgumentException ( Messages.EventPoolViewConfiguration_IllegalArgument_eventPoolQueryId );
         }
     }
 

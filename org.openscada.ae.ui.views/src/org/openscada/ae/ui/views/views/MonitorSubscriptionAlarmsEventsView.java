@@ -219,9 +219,9 @@ public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarms
         super.createPartControl ( parent );
 
         this.ackAction = new CustomizableAction ();
-        this.ackAction.setText ( "Acknowledge" );
-        this.ackAction.setToolTipText ( "Acknowledge" );
-        this.ackAction.setImageDescriptor ( ImageDescriptor.createFromURL ( Activator.getDefault ().getBundle ().getResource ( "icons/acknowledge.gif" ) ) );
+        this.ackAction.setText ( Messages.MonitorSubscriptionAlarmsEventsView_AknAction_Text );
+        this.ackAction.setToolTipText ( Messages.MonitorSubscriptionAlarmsEventsView_AknAction_ToolTip );
+        this.ackAction.setImageDescriptor ( ImageDescriptor.createFromURL ( Activator.getDefault ().getBundle ().getResource ( "icons/acknowledge.gif" ) ) ); //$NON-NLS-1$
         this.ackAction.setRunnable ( new Runnable () {
             public void run ()
             {

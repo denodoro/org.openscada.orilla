@@ -101,6 +101,6 @@ public class EventViewerFilter extends ViewerFilter
     @Override
     public String toString ()
     {
-        return "EventViewerFilter [filter=" + this.filter + "]";
+        return "EventViewerFilter [filter=" + this.filter + "]"; //$NON-NLS-1$ //$NON-NLS-2$
     }
 }

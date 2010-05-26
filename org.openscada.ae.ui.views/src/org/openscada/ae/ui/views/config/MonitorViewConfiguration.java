@@ -45,19 +45,19 @@ public class MonitorViewConfiguration
 
         if ( this.id == null )
         {
-            throw new IllegalArgumentException ( "'id' must not be null" );
+            throw new IllegalArgumentException ( Messages.MonitorViewConfiguration_IllegalArgument_id );
         }
         if ( this.monitorQueryId == null )
         {
-            throw new IllegalArgumentException ( "'monitorQueryId' must not be null" );
+            throw new IllegalArgumentException ( Messages.MonitorViewConfiguration_IllegalArgument_monitorQueryId );
         }
         if ( this.connectionString == null )
         {
-            throw new IllegalArgumentException ( "'connectionString' must not be null" );
+            throw new IllegalArgumentException ( Messages.MonitorViewConfiguration_IllegalArgument_connectionString );
         }
         if ( this.connectionType == null )
         {
-            throw new IllegalArgumentException ( "'connectionType' must not be null" );
+            throw new IllegalArgumentException ( Messages.MonitorViewConfiguration_IllegalArgument_connectionType );
         }
     }
 

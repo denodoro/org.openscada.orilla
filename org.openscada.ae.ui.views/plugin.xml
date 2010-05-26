@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension-point id="org.openscada.ae.ui.views.configuration" name="View Configuration" schema="schema/org.openscada.ae.ui.views.configuration.exsd"/>
+   <extension-point id="org.openscada.ae.ui.views.configuration" name="%extension-point.viewConfiguration.name" schema="schema/org.openscada.ae.ui.views.configuration.exsd"/>
 
    <extension
          point="org.eclipse.ui.views">
@@ -11,7 +11,7 @@
             class="org.openscada.ae.ui.views.views.MonitorsView"
             icon="icons/monitors.gif"
             id="org.openscada.ae.ui.views.views.monitors"
-            name="Monitors"
+            name="%view.monitors.name"
             restorable="true">
       </view>
       <view
@@ -20,7 +20,7 @@
             class="org.openscada.ae.ui.views.views.EventPoolView"
             icon="icons/eventpool.gif"
             id="org.openscada.ae.ui.views.views.eventpool"
-            name="Event Pool"
+            name="%view.eventPool.name"
             restorable="true">
       </view>
       <view
@@ -29,7 +29,7 @@
             class="org.openscada.ae.ui.views.views.EventHistoryView"
             icon="icons/eventhistory.png"
             id="org.openscada.ae.ui.views.views.eventhistory"
-            name="Event History"
+            name="%view.eventQuery.name"
             restorable="true">
       </view>
    </extension>

@@ -61,18 +61,18 @@ public class DecoratedMonitor extends AbstractPropertyChange implements Serializ
 
     public void setMonitor ( final ConditionStatusInformation monitor )
     {
-        firePropertyChange ( "monitor", this.monitor, this.monitor = new MonitorData ( monitor ) );
+        firePropertyChange ( "monitor", this.monitor, this.monitor = new MonitorData ( monitor ) ); //$NON-NLS-1$
     }
 
     public void setMonitor ( final MonitorData monitor )
     {
-        firePropertyChange ( "monitor", this.monitor, this.monitor = monitor );
+        firePropertyChange ( "monitor", this.monitor, this.monitor = monitor ); //$NON-NLS-1$
     }
 
     @Override
     public String toString ()
     {
-        return "DecoratedMonitor [id=" + this.id + ", monitor=" + this.monitor + "]";
+        return "DecoratedMonitor [id=" + this.id + ", monitor=" + this.monitor + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
 
 }
