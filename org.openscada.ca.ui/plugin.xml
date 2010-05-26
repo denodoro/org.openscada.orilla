@@ -5,6 +5,7 @@
          point="org.eclipse.ui.perspectives">
       <perspective
             class="org.openscada.ca.ui.perspectives.PerspectiveFactory"
+            icon="icons/perspective.gif"
             id="org.openscada.ca.ui.perspectives.perspective"
             name="CA">
       </perspective>
