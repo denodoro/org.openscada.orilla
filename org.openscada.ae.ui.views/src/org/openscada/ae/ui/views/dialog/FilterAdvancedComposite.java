@@ -59,8 +59,6 @@ public class FilterAdvancedComposite extends Composite
 
     private final Button addOrConditionButton;
 
-    private final FilterChangedListener filterChangedListener;
-
     private enum Type
     {
         Text,
@@ -80,10 +78,6 @@ public class FilterAdvancedComposite extends Composite
         // widgets
         private final Combo attributeCombo;
 
-        private final Combo typeCombo;
-
-        private final Button addButton;
-
         public AddAssertionComposite ( final OrCondition orCondition, final Composite parent )
         {
             // fields
@@ -92,8 +86,8 @@ public class FilterAdvancedComposite extends Composite
 
             // widgets
             this.attributeCombo = createAttributeCombo ();
-            this.typeCombo = createTypeCombo ();
-            this.addButton = createAddButton ();
+            createTypeCombo ();
+            createAddButton ();
 
             // layout
             final RowLayout layout = new RowLayout ();
@@ -149,41 +143,28 @@ public class FilterAdvancedComposite extends Composite
         // fields
         private final OrCondition orCondition;
 
-        private final Composite parent;
-
-        private final String attribute;
-
-        private final Type type;
-
         // widgets
         private final Button notCheck;
 
         private final Text attributeText;
 
-        private final Label fieldTypeLabel;
-
         private final Text valueText;
 
         private final Combo assertionCombo;
-
-        private final Button removeButton;
 
         public AssertionComposite ( final OrCondition orCondition, final Composite parent, final String attribute, final Type type )
         {
             // final fields
             super ( parent, SWT.NONE );
             this.orCondition = orCondition;
-            this.parent = parent;
-            this.attribute = attribute;
-            this.type = type;
 
             // widgets
             this.notCheck = createNotCheck ();
             this.attributeText = createAttributeText ( attribute );
-            this.fieldTypeLabel = createFieldTypeLabel ( type );
+            createFieldTypeLabel ( type );
             this.assertionCombo = createAssertionCombo ();
             this.valueText = createValueText ();
-            this.removeButton = createRemoveButton ();
+            createRemoveButton ();
 
             // layout
             final RowLayout layout = new RowLayout ();
@@ -426,7 +407,6 @@ public class FilterAdvancedComposite extends Composite
     {
         // fields
         super ( parent, style );
-        this.filterChangedListener = filterChangedListener;
 
         // widgets
         this.tabFolder = new CTabFolder ( this, SWT.TOP | SWT.BORDER | SWT.CLOSE );
