@@ -83,6 +83,8 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
 
     private Label stateLabel;
 
+    private final Object jobLock = new Object ();
+
     // we are only interested if the connection is actually there
     final ConnectionStateListener connectionStateListener = new ConnectionStateListener () {
         public void stateChange ( final org.openscada.core.client.Connection changedConnection, final ConnectionState state, final Throwable error )
@@ -241,7 +243,7 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
      */
     protected boolean isConnected ()
     {
-        return ( this.connectionService != null ) && ( this.connectionService.getConnection () != null ) && ( this.connectionService.getConnection ().getState () == ConnectionState.BOUND );
+        return this.connectionService != null && this.connectionService.getConnection () != null && this.connectionService.getConnection ().getState () == ConnectionState.BOUND;
     }
 
     private void reInitializeConnection ( final String connectionId, final String connectionUri ) throws Exception
@@ -332,7 +334,7 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
         if ( treeSelection.getFirstElement () instanceof ConnectionHolder )
         {
             final ConnectionHolder connectionHolder = (ConnectionHolder)treeSelection.getFirstElement ();
-            if ( ( connectionHolder.getConnectionService ().getConnection () != null ) && ( connectionHolder.getConnectionService ().getConnection () instanceof Connection ) )
+            if ( connectionHolder.getConnectionService ().getConnection () != null && connectionHolder.getConnectionService ().getConnection () instanceof Connection )
             {
                 try
                 {
@@ -347,7 +349,7 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
         else if ( treeSelection.getFirstElement () instanceof BrowserEntryBean )
         {
             final BrowserEntryBean browserEntryBean = (BrowserEntryBean)treeSelection.getFirstElement ();
-            if ( ( browserEntryBean.getConnection () != null ) && ( browserEntryBean.getConnection ().getConnection () != null ) )
+            if ( browserEntryBean.getConnection () != null && browserEntryBean.getConnection ().getConnection () != null )
             {
                 try
                 {
@@ -436,7 +438,7 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
 
     protected void scheduleJob ( final Runnable runnable )
     {
-        synchronized ( this )
+        synchronized ( this.jobLock )
         {
             boolean created = false;
             if ( this.taskList == null )
@@ -470,7 +472,7 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
     private void processQueue ()
     {
         Collection<Runnable> list = null;
-        synchronized ( this )
+        synchronized ( this.jobLock )
         {
             list = this.taskList;
             this.taskList = null;

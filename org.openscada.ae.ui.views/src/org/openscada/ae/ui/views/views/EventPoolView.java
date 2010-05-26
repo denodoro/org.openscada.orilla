@@ -19,6 +19,9 @@
 
 package org.openscada.ae.ui.views.views;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -84,6 +87,10 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
     private List<ColumnProperties> initialColumnSettings = null;
 
     private final Gson gson = new GsonBuilder ().create ();
+
+    private final Object jobLock = new Object ();
+
+    private Collection<Event> eventList;
 
     public String getPoolId ()
     {
@@ -276,15 +283,52 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
 
     protected void dataChanged ( final Event[] addedEvents )
     {
-        scheduleJob ( new Runnable () {
-            public void run ()
+        synchronized ( this.jobLock )
+        {
+            boolean created = false;
+            if ( this.eventList == null )
             {
-                performDataChanged ( addedEvents );
+                this.eventList = new ArrayList<Event> ();
+                created = true;
             }
-        } );
+
+            this.eventList.addAll ( Arrays.asList ( addedEvents ) );
+
+            if ( created )
+            {
+                getRealm ().asyncExec ( new Runnable () {
+
+                    public void run ()
+                    {
+                        getRealm ().timerExec ( 1000, new Runnable () {
+                            public void run ()
+                            {
+                                processEvents ();
+                            }
+                        } );
+                    }
+                } );
+            }
+        }
     }
 
-    private void performDataChanged ( final Event[] addedEvents )
+    protected void processEvents ()
+    {
+        final Collection<Event> list;
+
+        synchronized ( this.jobLock )
+        {
+            list = this.eventList;
+            this.eventList = null;
+        }
+
+        if ( list != null )
+        {
+            performDataChanged ( list );
+        }
+    }
+
+    private void performDataChanged ( final Collection<Event> addedEvents )
     {
         if ( addedEvents == null )
         {
@@ -296,11 +340,12 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
             final Variant source = event.getEvent ().getField ( Fields.SOURCE );
             if ( source != null && !source.isNull () && source.asString ( "" ).length () > 0 )
             {
-                Set<DecoratedEvent> d = EventPoolView.this.poolMap.get ( source.asString ( "" ) );
+                final String str = source.asString ( "" );
+                Set<DecoratedEvent> d = EventPoolView.this.poolMap.get ( str );
                 if ( d == null )
                 {
                     d = new HashSet<DecoratedEvent> ();
-                    EventPoolView.this.poolMap.put ( source.asString ( "" ), d );
+                    EventPoolView.this.poolMap.put ( str, d );
                 }
                 d.add ( event );
             }
@@ -347,7 +392,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
         return result;
     }
 
-    private Set<DecoratedEvent> decorateEvents ( final Event[] events )
+    private Set<DecoratedEvent> decorateEvents ( final Collection<Event> events )
     {
         final Set<DecoratedEvent> result = new HashSet<DecoratedEvent> ();
         for ( final Event event : events )
@@ -377,7 +422,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
 
     private void clear ()
     {
-        EventPoolView.this.pool.getRealm ().asyncExec ( new Runnable () {
+        this.pool.getRealm ().asyncExec ( new Runnable () {
             public void run ()
             {
                 if ( EventPoolView.this.pool != null )
@@ -466,15 +511,10 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
                 }
                 catch ( final Exception e )
                 {
-                    e.printStackTrace ();
+                    logger.warn ( "Failed to create status information", e );
                 }
 
-                getSite ().getShell ().getDisplay ().syncExec ( new Runnable () {
-                    public void run ()
-                    {
-                        EventPoolView.this.getStateLabel ().setText ( label.toString () );
-                    }
-                } );
+                EventPoolView.this.getStateLabel ().setText ( label.toString () );
             }
         } );
     }
