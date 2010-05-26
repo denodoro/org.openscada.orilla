@@ -38,7 +38,7 @@ public class ConnectionLabelProvider extends CommonListeningLabelProvider
 
     public ConnectionLabelProvider ()
     {
-        super ( "org.openscada.ae.ui.connection.provider" );
+        super ( "org.openscada.ae.ui.connection.provider" ); //$NON-NLS-1$
     }
 
     @Override
@@ -51,7 +51,7 @@ public class ConnectionLabelProvider extends CommonListeningLabelProvider
     @Override
     public void updateLabel ( final StyledViewerLabel label, final Object element )
     {
-        logger.debug ( "Update label: {}", element );
+        logger.debug ( "Update label: {}", element ); //$NON-NLS-1$
 
         if ( element instanceof BrowserEntryBean )
         {
