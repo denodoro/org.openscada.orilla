@@ -38,6 +38,7 @@
          point="org.eclipse.ui.perspectives">
       <perspective
             class="org.openscada.da.ui.PerspectiveFactory"
+            icon="icons/perspective.gif"
             id="org.openscada.da.ui.perspective"
             name="DA">
       </perspective>
