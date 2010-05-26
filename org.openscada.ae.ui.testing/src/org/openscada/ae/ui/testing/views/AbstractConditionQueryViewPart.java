@@ -20,8 +20,8 @@
 package org.openscada.ae.ui.testing.views;
 
 import org.openscada.ae.BrowserType;
-import org.openscada.ae.ConditionStatusInformation;
-import org.openscada.ae.client.ConditionListener;
+import org.openscada.ae.MonitorStatusInformation;
+import org.openscada.ae.client.MonitorListener;
 import org.openscada.ae.ui.connection.data.BrowserEntryBean;
 import org.openscada.core.subscription.SubscriptionState;
 import org.slf4j.Logger;
@@ -31,7 +31,7 @@ public abstract class AbstractConditionQueryViewPart extends AbstractEntryViewPa
 {
     private final static Logger logger = LoggerFactory.getLogger ( AbstractConditionQueryViewPart.class );
 
-    protected final class ConditionListenerImpl implements ConditionListener
+    protected final class ConditionListenerImpl implements MonitorListener
     {
         private boolean disposed = false;
 
@@ -48,7 +48,7 @@ public abstract class AbstractConditionQueryViewPart extends AbstractEntryViewPa
             }
         }
 
-        public synchronized void dataChanged ( final ConditionStatusInformation[] addedOrUpdated, final String[] removed )
+        public synchronized void dataChanged ( final MonitorStatusInformation[] addedOrUpdated, final String[] removed )
         {
             if ( !this.disposed )
             {
@@ -79,7 +79,7 @@ public abstract class AbstractConditionQueryViewPart extends AbstractEntryViewPa
         this.entry.getConnection ().getConnection ().setConditionListener ( this.entry.getEntry ().getId (), this.listener = new ConditionListenerImpl () );
     }
 
-    protected abstract void handleDataChanged ( final ConditionStatusInformation[] addedOrUpdated, final String[] removed, final boolean full );
+    protected abstract void handleDataChanged ( final MonitorStatusInformation[] addedOrUpdated, final String[] removed, final boolean full );
 
     protected abstract void handleStatusChanged ( final SubscriptionState state );
 

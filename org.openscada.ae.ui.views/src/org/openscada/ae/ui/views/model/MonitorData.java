@@ -22,8 +22,8 @@ package org.openscada.ae.ui.views.model;
 import java.util.Date;
 import java.util.Map;
 
-import org.openscada.ae.ConditionStatus;
-import org.openscada.ae.ConditionStatusInformation;
+import org.openscada.ae.MonitorStatus;
+import org.openscada.ae.MonitorStatusInformation;
 import org.openscada.core.Variant;
 import org.openscada.utils.lang.Immutable;
 
@@ -31,16 +31,16 @@ import org.openscada.utils.lang.Immutable;
  * @author jrose
  */
 @Immutable
-public class MonitorData extends ConditionStatusInformation
+public class MonitorData extends MonitorStatusInformation
 {
     private static final long serialVersionUID = 6727349873713785401L;
 
-    public MonitorData ( final String id, final ConditionStatus status, final Date statusTimestamp, final Variant value, final Date lastAknTimestamp, final String lastAknUser, final Map<String, Variant> attributes )
+    public MonitorData ( final String id, final MonitorStatus status, final Date statusTimestamp, final Variant value, final Date lastAknTimestamp, final String lastAknUser, final Map<String, Variant> attributes )
     {
         super ( id, status, statusTimestamp, value, lastAknTimestamp, lastAknUser, attributes );
     }
 
-    public MonitorData ( final ConditionStatusInformation monitor )
+    public MonitorData ( final MonitorStatusInformation monitor )
     {
         super ( monitor.getId (), monitor.getStatus (), monitor.getStatusTimestamp (), monitor.getValue (), monitor.getLastAknTimestamp (), monitor.getLastAknUser (), monitor.getAttributes () );
     }
@@ -74,7 +74,7 @@ public class MonitorData extends ConditionStatusInformation
         {
             return false;
         }
-        final ConditionStatusInformation other = (ConditionStatusInformation)obj;
+        final MonitorStatusInformation other = (MonitorStatusInformation)obj;
         if ( this.getId () == null )
         {
             if ( other.getId () != null )

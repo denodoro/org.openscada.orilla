@@ -22,7 +22,7 @@ package org.openscada.ae.ui.views.views;
 import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.jface.databinding.viewers.ObservableMapLabelProvider;
 import org.eclipse.swt.graphics.Image;
-import org.openscada.ae.ConditionStatusInformation;
+import org.openscada.ae.MonitorStatusInformation;
 import org.openscada.ae.ui.views.model.DecoratedMonitor;
 
 public class MonitorTableLabelProvider extends ObservableMapLabelProvider
@@ -44,7 +44,7 @@ public class MonitorTableLabelProvider extends ObservableMapLabelProvider
         {
             return null;
         }
-        final ConditionStatusInformation monitor = ( (DecoratedMonitor)element ).getMonitor ();
+        final MonitorStatusInformation monitor = ( (DecoratedMonitor)element ).getMonitor ();
         if ( columnIndex == 1 )
         {
             switch ( monitor.getStatus () )
@@ -76,7 +76,7 @@ public class MonitorTableLabelProvider extends ObservableMapLabelProvider
         {
             return Messages.MonitorTableLabelProvider_EmptyString;
         }
-        final ConditionStatusInformation monitor = ( (DecoratedMonitor)element ).getMonitor ();
+        final MonitorStatusInformation monitor = ( (DecoratedMonitor)element ).getMonitor ();
         switch ( columnIndex )
         {
         case 0:

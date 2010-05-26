@@ -21,7 +21,7 @@ package org.openscada.ae.ui.views.model;
 
 import java.io.Serializable;
 
-import org.openscada.ae.ConditionStatusInformation;
+import org.openscada.ae.MonitorStatusInformation;
 import org.openscada.utils.beans.AbstractPropertyChange;
 
 public class DecoratedMonitor extends AbstractPropertyChange implements Serializable
@@ -37,13 +37,13 @@ public class DecoratedMonitor extends AbstractPropertyChange implements Serializ
         this.id = id;
     }
 
-    public DecoratedMonitor ( final String id, final ConditionStatusInformation monitor )
+    public DecoratedMonitor ( final String id, final MonitorStatusInformation monitor )
     {
         this.id = id;
         this.monitor = new MonitorData ( monitor );
     }
 
-    public DecoratedMonitor ( final ConditionStatusInformation monitor )
+    public DecoratedMonitor ( final MonitorStatusInformation monitor )
     {
         this.id = monitor.getId ();
         this.monitor = new MonitorData ( monitor );
@@ -59,7 +59,7 @@ public class DecoratedMonitor extends AbstractPropertyChange implements Serializ
         return this.monitor;
     }
 
-    public void setMonitor ( final ConditionStatusInformation monitor )
+    public void setMonitor ( final MonitorStatusInformation monitor )
     {
         firePropertyChange ( "monitor", this.monitor, this.monitor = new MonitorData ( monitor ) ); //$NON-NLS-1$
     }

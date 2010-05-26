@@ -21,8 +21,8 @@ package org.openscada.ae.ui.views.model;
 
 import java.io.Serializable;
 
-import org.openscada.ae.ConditionStatus;
-import org.openscada.ae.ConditionStatusInformation;
+import org.openscada.ae.MonitorStatus;
+import org.openscada.ae.MonitorStatusInformation;
 import org.openscada.ae.Event;
 import org.openscada.utils.beans.AbstractPropertyChange;
 
@@ -34,7 +34,7 @@ public class DecoratedEvent extends AbstractPropertyChange implements Serializab
 
     private MonitorData monitor;
 
-    public ConditionStatusInformation getMonitor ()
+    public MonitorStatusInformation getMonitor ()
     {
         return this.monitor;
     }
@@ -129,11 +129,11 @@ public class DecoratedEvent extends AbstractPropertyChange implements Serializab
 
     public boolean isAlarm ()
     {
-        return isActive () && ( this.monitor.getStatus () == ConditionStatus.NOT_OK || this.monitor.getStatus () == ConditionStatus.NOT_OK_AKN || this.monitor.getStatus () == ConditionStatus.NOT_OK_NOT_AKN );
+        return isActive () && ( this.monitor.getStatus () == MonitorStatus.NOT_OK || this.monitor.getStatus () == MonitorStatus.NOT_OK_AKN || this.monitor.getStatus () == MonitorStatus.NOT_OK_NOT_AKN );
     }
 
     public boolean isAknRequired ()
     {
-        return isActive () && ( this.monitor.getStatus () == ConditionStatus.NOT_AKN || this.monitor.getStatus () == ConditionStatus.NOT_OK_NOT_AKN );
+        return isActive () && ( this.monitor.getStatus () == MonitorStatus.NOT_AKN || this.monitor.getStatus () == MonitorStatus.NOT_OK_NOT_AKN );
     }
 }

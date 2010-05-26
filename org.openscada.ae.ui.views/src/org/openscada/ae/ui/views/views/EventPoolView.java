@@ -43,7 +43,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
-import org.openscada.ae.ConditionStatusInformation;
+import org.openscada.ae.MonitorStatusInformation;
 import org.openscada.ae.Event;
 import org.openscada.ae.Event.Fields;
 import org.openscada.ae.client.EventListener;
@@ -354,7 +354,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
     }
 
     @Override
-    public void dataChanged ( final ConditionStatusInformation[] addedOrUpdated, final String[] removed )
+    public void dataChanged ( final MonitorStatusInformation[] addedOrUpdated, final String[] removed )
     {
         super.dataChanged ( addedOrUpdated, removed );
         if ( addedOrUpdated == null )
@@ -369,22 +369,22 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
         } );
     }
 
-    private void performDataChanged ( final ConditionStatusInformation[] addedOrUpdated, final String[] removed )
+    private void performDataChanged ( final MonitorStatusInformation[] addedOrUpdated, final String[] removed )
     {
         EventPoolView.this.pool.addAll ( decorateEvents ( addedOrUpdated ) );
     }
 
-    private Set<DecoratedEvent> decorateEvents ( final ConditionStatusInformation[] monitors )
+    private Set<DecoratedEvent> decorateEvents ( final MonitorStatusInformation[] monitors )
     {
         final Set<DecoratedEvent> result = new HashSet<DecoratedEvent> ();
-        for ( final ConditionStatusInformation conditionStatusInformation : monitors )
+        for ( final MonitorStatusInformation monitorStatusInformation : monitors )
         {
-            final Set<DecoratedEvent> d = this.poolMap.get ( conditionStatusInformation.getId () );
+            final Set<DecoratedEvent> d = this.poolMap.get ( monitorStatusInformation.getId () );
             if ( d != null )
             {
                 for ( final DecoratedEvent event : d )
                 {
-                    event.setMonitor ( new MonitorData ( conditionStatusInformation ) );
+                    event.setMonitor ( new MonitorData ( monitorStatusInformation ) );
                     result.add ( event );
                 }
             }

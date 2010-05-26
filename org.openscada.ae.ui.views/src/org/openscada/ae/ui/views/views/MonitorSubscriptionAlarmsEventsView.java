@@ -35,8 +35,8 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Composite;
-import org.openscada.ae.ConditionStatusInformation;
-import org.openscada.ae.client.ConditionListener;
+import org.openscada.ae.MonitorStatusInformation;
+import org.openscada.ae.client.MonitorListener;
 import org.openscada.ae.ui.views.Activator;
 import org.openscada.ae.ui.views.CustomizableAction;
 import org.openscada.ae.ui.views.model.DecoratedMonitor;
@@ -52,7 +52,7 @@ public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarms
 
     protected WritableMap monitorsMap;
 
-    private ConditionListener monitorListener = null;
+    private MonitorListener monitorListener = null;
 
     @Override
     protected Realm getRealm ()
@@ -89,14 +89,14 @@ public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarms
     {
         if ( this.getConnection () != null && this.monitorsId != null )
         {
-            this.monitorListener = new ConditionListener () {
+            this.monitorListener = new MonitorListener () {
 
                 public void statusChanged ( final SubscriptionState state )
                 {
                     statusChangedMonitorSubscription ( state );
                 }
 
-                public void dataChanged ( final ConditionStatusInformation[] addedOrUpdated, final String[] removed )
+                public void dataChanged ( final MonitorStatusInformation[] addedOrUpdated, final String[] removed )
                 {
                     MonitorSubscriptionAlarmsEventsView.this.dataChanged ( addedOrUpdated, removed );
                 }
@@ -153,7 +153,7 @@ public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarms
         updateStatusBar ();
     }
 
-    protected void dataChanged ( final ConditionStatusInformation[] addedOrUpdated, final String[] removed )
+    protected void dataChanged ( final MonitorStatusInformation[] addedOrUpdated, final String[] removed )
     {
         scheduleJob ( new Runnable () {
             public void run ()
@@ -163,7 +163,7 @@ public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarms
         } );
     }
 
-    private void performDataChanged ( final ConditionStatusInformation[] addedOrUpdated, final String[] removed )
+    private void performDataChanged ( final MonitorStatusInformation[] addedOrUpdated, final String[] removed )
     {
         try
         {
@@ -181,27 +181,27 @@ public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarms
                 // do it in 2 steps
                 // 1. add all missing
                 final Map<String, DecoratedMonitor> missing = new HashMap<String, DecoratedMonitor> ();
-                for ( final ConditionStatusInformation conditionStatusInformation : addedOrUpdated )
+                for ( final MonitorStatusInformation monitorStatusInformation : addedOrUpdated )
                 {
-                    if ( !MonitorSubscriptionAlarmsEventsView.this.monitorsMap.containsKey ( conditionStatusInformation.getId () ) )
+                    if ( !MonitorSubscriptionAlarmsEventsView.this.monitorsMap.containsKey ( monitorStatusInformation.getId () ) )
                     {
-                        missing.put ( conditionStatusInformation.getId (), new DecoratedMonitor ( conditionStatusInformation ) );
+                        missing.put ( monitorStatusInformation.getId (), new DecoratedMonitor ( monitorStatusInformation ) );
                     }
                 }
                 MonitorSubscriptionAlarmsEventsView.this.monitorsMap.putAll ( missing );
                 // 2. update data                    
-                for ( final ConditionStatusInformation conditionStatusInformation : addedOrUpdated )
+                for ( final MonitorStatusInformation monitorStatusInformation : addedOrUpdated )
                 {
-                    if ( !missing.keySet ().contains ( conditionStatusInformation.getId () ) )
+                    if ( !missing.keySet ().contains ( monitorStatusInformation.getId () ) )
                     {
-                        final DecoratedMonitor dm = (DecoratedMonitor)MonitorSubscriptionAlarmsEventsView.this.monitorsMap.get ( conditionStatusInformation.getId () );
+                        final DecoratedMonitor dm = (DecoratedMonitor)MonitorSubscriptionAlarmsEventsView.this.monitorsMap.get ( monitorStatusInformation.getId () );
                         if ( dm == null )
                         {
-                            MonitorSubscriptionAlarmsEventsView.this.monitorsMap.put ( conditionStatusInformation.getId (), new DecoratedMonitor ( conditionStatusInformation ) );
+                            MonitorSubscriptionAlarmsEventsView.this.monitorsMap.put ( monitorStatusInformation.getId (), new DecoratedMonitor ( monitorStatusInformation ) );
                         }
                         else
                         {
-                            dm.setMonitor ( conditionStatusInformation );
+                            dm.setMonitor ( monitorStatusInformation );
                         }
                     }
                 }

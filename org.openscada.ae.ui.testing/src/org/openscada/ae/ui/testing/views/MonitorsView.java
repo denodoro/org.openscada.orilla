@@ -47,7 +47,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IWorkbenchActionConstants;
-import org.openscada.ae.ConditionStatusInformation;
+import org.openscada.ae.MonitorStatusInformation;
 import org.openscada.ae.ui.connection.data.MonitorStatusBean;
 import org.openscada.core.subscription.SubscriptionState;
 import org.slf4j.Logger;
@@ -195,7 +195,7 @@ public class MonitorsView extends AbstractConditionQueryViewPart
     }
 
     @Override
-    public void handleDataChanged ( final ConditionStatusInformation[] addedOrUpdated, final String[] removed, final boolean full )
+    public void handleDataChanged ( final MonitorStatusInformation[] addedOrUpdated, final String[] removed, final boolean full )
     {
         scheduleJob ( new Runnable () {
 
@@ -206,7 +206,7 @@ public class MonitorsView extends AbstractConditionQueryViewPart
         } );
     }
 
-    protected void performDataChanged ( final ConditionStatusInformation[] addedOrUpdated, final String[] removed )
+    protected void performDataChanged ( final MonitorStatusInformation[] addedOrUpdated, final String[] removed )
     {
         logger.debug ( "Got data change" );
 
@@ -231,7 +231,7 @@ public class MonitorsView extends AbstractConditionQueryViewPart
 
             if ( addedOrUpdated != null )
             {
-                for ( final ConditionStatusInformation info : addedOrUpdated )
+                for ( final MonitorStatusInformation info : addedOrUpdated )
                 {
                     if ( this.monitorSet.containsKey ( info.getId () ) )
                     {

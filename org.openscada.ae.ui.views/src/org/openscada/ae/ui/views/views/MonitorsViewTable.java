@@ -46,7 +46,7 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.openscada.ae.ConditionStatusInformation;
+import org.openscada.ae.MonitorStatusInformation;
 import org.openscada.ae.ui.views.Messages;
 import org.openscada.ae.ui.views.model.DecoratedMonitor;
 import org.openscada.core.Variant;
@@ -85,8 +85,8 @@ public class MonitorsViewTable extends Composite
         @Override
         public int compare ( final Viewer viewer, final Object e1, final Object e2 )
         {
-            final ConditionStatusInformation m1 = ( (DecoratedMonitor)e1 ).getMonitor ();
-            final ConditionStatusInformation m2 = ( (DecoratedMonitor)e2 ).getMonitor ();
+            final MonitorStatusInformation m1 = ( (DecoratedMonitor)e1 ).getMonitor ();
+            final MonitorStatusInformation m2 = ( (DecoratedMonitor)e2 ).getMonitor ();
             Comparable v1 = 0;
             Comparable v2 = 0;
             switch ( this.column )

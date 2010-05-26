@@ -21,8 +21,8 @@ package org.openscada.ae.ui.connection.data;
 
 import java.util.Date;
 
-import org.openscada.ae.ConditionStatus;
-import org.openscada.ae.ConditionStatusInformation;
+import org.openscada.ae.MonitorStatus;
+import org.openscada.ae.MonitorStatusInformation;
 import org.openscada.ae.connection.provider.ConnectionService;
 import org.openscada.core.Variant;
 import org.openscada.utils.beans.AbstractPropertyChange;
@@ -53,7 +53,7 @@ public class MonitorStatusBean extends AbstractPropertyChange
 
     private final String id;
 
-    private ConditionStatus status;
+    private MonitorStatus status;
 
     private Date statusTimestamp;
 
@@ -69,7 +69,7 @@ public class MonitorStatusBean extends AbstractPropertyChange
         this.id = id;
     }
 
-    public MonitorStatusBean ( final ConnectionService connection, final ConditionStatusInformation information )
+    public MonitorStatusBean ( final ConnectionService connection, final MonitorStatusInformation information )
     {
         this ( connection, information.getId () );
         this.status = information.getStatus ();
@@ -89,19 +89,19 @@ public class MonitorStatusBean extends AbstractPropertyChange
         return this.connection;
     }
 
-    public ConditionStatus getStatus ()
+    public MonitorStatus getStatus ()
     {
         return this.status;
     }
 
-    public void setStatus ( final ConditionStatus status )
+    public void setStatus ( final MonitorStatus status )
     {
-        final ConditionStatus oldStatus = this.status;
+        final MonitorStatus oldStatus = this.status;
         this.status = status;
         firePropertyChange ( PROP_STATUS, oldStatus, status );
     }
 
-    public void update ( final ConditionStatusInformation info )
+    public void update ( final MonitorStatusInformation info )
     {
         setStatus ( info.getStatus () );
         setStatusTimestamp ( info.getStatusTimestamp () );
