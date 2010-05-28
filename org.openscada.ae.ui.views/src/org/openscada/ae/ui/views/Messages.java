@@ -31,6 +31,38 @@ public class Messages extends NLS
 
     public static String Message;
 
+    public static String from;
+
+    public static String to;
+
+    public static String search_for_events;
+
+    public static String search_for_events_description;
+
+    public static String QBE;
+
+    public static String advanced_query;
+
+    public static String free_form_query;
+
+    public static String filter_must_not_be_null;
+
+    public static String custom_field;
+
+    public static String add_assertion;
+
+    public static String not;
+
+    public static String argument;
+
+    public static String remove;
+
+    public static String a_condition;
+
+    public static String add_or_condition;
+
+    public static String clear;
+
     static
     {
         // initialize resource bundle

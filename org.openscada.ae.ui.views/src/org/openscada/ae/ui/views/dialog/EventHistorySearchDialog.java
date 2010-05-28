@@ -27,6 +27,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
+import org.openscada.ae.ui.views.Messages;
 import org.openscada.utils.lang.Pair;
 
 public class EventHistorySearchDialog extends TitleAreaDialog implements FilterChangedListener
@@ -46,15 +47,15 @@ public class EventHistorySearchDialog extends TitleAreaDialog implements FilterC
     protected Control createDialogArea ( final Composite parent )
     {
         // initialize header area
-        this.setTitle ( Messages.EventHistorySearchDialog_Title );
-        this.setMessage ( Messages.EventHistorySearchDialog_DefaultMessage );
+        this.setTitle ( Messages.search_for_events );
+        this.setMessage ( Messages.search_for_events_description );
         this.setHelpAvailable ( true );
 
         // initialize content
         final Composite rootComposite = (Composite)super.createDialogArea ( parent );
 
         String filterString = ""; //$NON-NLS-1$
-        if ( this.initialFilter != null && this.initialFilter.second != null )
+        if ( ( this.initialFilter != null ) && ( this.initialFilter.second != null ) )
         {
             filterString = this.initialFilter.second;
         }
@@ -63,16 +64,16 @@ public class EventHistorySearchDialog extends TitleAreaDialog implements FilterC
         final TabFolder tabFolder = new TabFolder ( rootComposite, SWT.NONE );
         // add QBE filter form
         final TabItem qbeTab = new TabItem ( tabFolder, SWT.NULL );
-        qbeTab.setText ( Messages.EventHistorySearchDialog_Tab_QueryByExample_Text );
+        qbeTab.setText ( Messages.QBE );
         qbeTab.setControl ( new FilterQueryByExampleComposite ( this, tabFolder, SWT.NONE, filterString ) );
         // add advanced filter form
-        final TabItem advancedTab = new TabItem ( tabFolder, SWT.NULL );
-        advancedTab.setText ( Messages.EventHistorySearchDialog_Tab_Advanced_Text );
-        advancedTab.setControl ( new FilterAdvancedComposite ( this, tabFolder, SWT.NONE ) );
+        //        final TabItem advancedTab = new TabItem ( tabFolder, SWT.NULL );
+        //        advancedTab.setText ( Messages.advanced_query );
+        //        advancedTab.setControl ( new FilterAdvancedComposite ( this, tabFolder, SWT.NONE ) );
         // add free from filter form
         final TabItem freeformTab = new TabItem ( tabFolder, SWT.NULL );
         freeformTab.setControl ( new FilterFreeFormComposite ( this, tabFolder, SWT.NONE, filterString ) );
-        freeformTab.setText ( Messages.EventHistorySearchDialog_Tab_Free_Text );
+        freeformTab.setText ( Messages.free_form_query );
 
         final GridData layoutData = new GridData ();
         layoutData.horizontalAlignment = GridData.FILL;

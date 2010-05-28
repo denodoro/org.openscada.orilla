@@ -45,6 +45,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.openscada.ae.Event;
 import org.openscada.ae.Event.Fields;
+import org.openscada.ae.ui.views.Messages;
 import org.openscada.utils.filter.Assertion;
 import org.openscada.utils.filter.Filter;
 import org.openscada.utils.filter.FilterAssertion;
@@ -103,7 +104,7 @@ public class FilterAdvancedComposite extends Composite
             {
                 c.add ( field.getName () );
             }
-            c.add ( Messages.FilterAdvancedComposite_ComboEntry_CustomField );
+            c.add ( Messages.custom_field );
             c.select ( 0 );
             return c;
         }
@@ -122,7 +123,7 @@ public class FilterAdvancedComposite extends Composite
         private Button createAddButton ()
         {
             final Button b = new Button ( this, SWT.PUSH );
-            b.setText ( Messages.FilterAdvancedComposite_AddButton_Text );
+            b.setText ( Messages.add_assertion );
             b.addSelectionListener ( new SelectionAdapter () {
                 @Override
                 public void widgetSelected ( final SelectionEvent e )
@@ -177,7 +178,7 @@ public class FilterAdvancedComposite extends Composite
         private Button createNotCheck ()
         {
             final Button b = new Button ( this, SWT.CHECK );
-            b.setText ( Messages.FilterAdvancedComposite_NotButton_Text );
+            b.setText ( Messages.not );
             b.addSelectionListener ( new SelectionAdapter () {
                 @Override
                 public void widgetSelected ( final SelectionEvent e )
@@ -195,7 +196,7 @@ public class FilterAdvancedComposite extends Composite
             if ( field == null )
             {
                 t.setEditable ( true );
-                t.setMessage ( Messages.FilterAdvancedComposite_CustomFieldText_Message );
+                t.setMessage ( Messages.custom_field );
             }
             else
             {
@@ -246,7 +247,7 @@ public class FilterAdvancedComposite extends Composite
         private Text createValueText ()
         {
             final Text t = new Text ( this, SWT.BORDER );
-            t.setMessage ( Messages.FilterAdvancedComposite_ArgumentText_Message );
+            t.setMessage ( Messages.argument );
             t.addKeyListener ( new KeyAdapter () {
                 @Override
                 public void keyReleased ( final KeyEvent e )
@@ -263,7 +264,7 @@ public class FilterAdvancedComposite extends Composite
         private Button createRemoveButton ()
         {
             final Button b = new Button ( this, SWT.PUSH );
-            b.setText ( Messages.FilterAdvancedComposite_RemoveButton_Text );
+            b.setText ( Messages.remove );
             b.addSelectionListener ( new SelectionAdapter () {
                 @Override
                 public void widgetSelected ( final SelectionEvent e )
@@ -318,7 +319,7 @@ public class FilterAdvancedComposite extends Composite
             // fields
             this.filterAdvancedComposite = filterAdvancedComposite;
             this.tabItem = new CTabItem ( tabFolder, SWT.NULL );
-            this.tabItem.setText ( Messages.FilterAdvancedComposite_TabItem_Text );
+            this.tabItem.setText ( Messages.a_condition );
             this.tabContent = new Composite ( tabFolder, SWT.NONE );
             this.tabItem.setControl ( this.tabContent );
 
@@ -382,7 +383,7 @@ public class FilterAdvancedComposite extends Composite
             refreshGUI ();
             if ( this.assertionComposites.size () == 0 )
             {
-                this.tabItem.setText ( Messages.FilterAdvancedComposite_TabItem_Text );
+                this.tabItem.setText ( Messages.a_condition );
             }
         }
 
@@ -438,7 +439,7 @@ public class FilterAdvancedComposite extends Composite
     private Button creteAddOrConditionButton ()
     {
         final Button b = new Button ( this, SWT.PUSH );
-        b.setText ( Messages.FilterAdvancedComposite_OrButton_Text );
+        b.setText ( Messages.add_or_condition );
         b.addSelectionListener ( new SelectionAdapter () {
             @Override
             public void widgetSelected ( final SelectionEvent e )

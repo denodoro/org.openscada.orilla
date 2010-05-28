@@ -42,6 +42,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.openscada.ae.ui.views.Messages;
 import org.openscada.core.Variant;
 import org.openscada.core.VariantEditor;
 import org.openscada.utils.filter.Assertion;
@@ -100,7 +101,7 @@ public class FilterQueryByExampleComposite extends Composite
             this.captionLabel.setText ( caption );
             this.spacerLabel = new Label ( parent, SWT.NONE );
             this.fromLabel = new Label ( parent, SWT.NONE );
-            this.fromLabel.setText ( Messages.FilterQueryByExampleComposite_FromLabel_Text );
+            this.fromLabel.setText ( Messages.from );
             this.fromDate = new CDateTime ( parent, CDT.BORDER | CDT.DATE_MEDIUM | CDT.TIME_MEDIUM | CDT.SPINNER | CDT.CLOCK_24_HOUR | CDT.MULTI | CDT.DROP_DOWN );
             this.fromDate.setLayoutData ( dateLayoutData );
             this.fromDate.addSelectionListener ( new SelectionAdapter () {
@@ -111,7 +112,7 @@ public class FilterQueryByExampleComposite extends Composite
                 }
             } );
             this.toLabel = new Label ( parent, SWT.NONE );
-            this.toLabel.setText ( Messages.FilterQueryByExampleComposite_ToLabel_Text );
+            this.toLabel.setText ( Messages.to );
             this.toDate = new CDateTime ( parent, CDT.BORDER | CDT.DATE_MEDIUM | CDT.TIME_MEDIUM | CDT.SPINNER | CDT.CLOCK_24_HOUR | CDT.MULTI | CDT.DROP_DOWN );
             this.toDate.setLayoutData ( dateLayoutData );
             this.toDate.addSelectionListener ( new SelectionAdapter () {
@@ -144,7 +145,7 @@ public class FilterQueryByExampleComposite extends Composite
 
         public boolean isEmpty ()
         {
-            return this.fromDate.getSelection () == null && this.toDate.getSelection () == null;
+            return ( this.fromDate.getSelection () == null ) && ( this.toDate.getSelection () == null );
         }
 
         public void clear ()
@@ -185,7 +186,7 @@ public class FilterQueryByExampleComposite extends Composite
             this.captionLabel = new Label ( parent, SWT.NONE );
             this.captionLabel.setText ( caption );
             this.notCheckBox = new Button ( parent, SWT.CHECK );
-            this.notCheckBox.setText ( Messages.FilterQueryByExampleComposite_NotCheckbox_Text );
+            this.notCheckBox.setText ( Messages.not );
             this.notCheckBox.addSelectionListener ( new SelectionListener () {
                 public void widgetSelected ( final SelectionEvent e )
                 {
@@ -243,7 +244,7 @@ public class FilterQueryByExampleComposite extends Composite
 
         public void clear ()
         {
-            this.textText.setText ( Messages.FilterQueryByExampleComposite_EmptyString );
+            this.textText.setText ( "" );//$NON-NLS-1$
         }
 
         public void focus ()
@@ -320,21 +321,23 @@ public class FilterQueryByExampleComposite extends Composite
                 filterChangedListener.onFilterChanged ( new Pair<SearchType, String> ( SearchType.SIMPLE, filterString ) );
             };
         };
-        this.fields.put ( "sourceTimestamp", new DateFieldEntry ( this, "sourceTimestamp", Messages.FilterQueryByExampleComposite_Field_sourceTimestamp_Text, filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$
-        this.fields.put ( "entryTimestamp", new DateFieldEntry ( this, "entryTimestamp", Messages.FilterQueryByExampleComposite_Field_entryTimestamp_Text, filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$
+        this.fields.put ( "sourceTimestamp", new DateFieldEntry ( this, "sourceTimestamp", Messages.getString ( "sourceTimestamp" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        this.fields.put ( "entryTimestamp", new DateFieldEntry ( this, "entryTimestamp", Messages.getString ( "entryTimestamp" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-        this.fields.put ( "message", new TextFieldEntry ( this, "message", Messages.FilterQueryByExampleComposite_Field_message_Text, filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$
-        this.fields.put ( "monitorType", new TextFieldEntry ( this, "monitorType", Messages.FilterQueryByExampleComposite_Field_monitorType_Text, filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$
-        this.fields.put ( "eventType", new TextFieldEntry ( this, "eventType", Messages.FilterQueryByExampleComposite_Field_eventType_Text, filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$
-        this.fields.put ( "value", new NumberFieldEntry ( this, "value", Messages.FilterQueryByExampleComposite_Field_value_Text, filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$
-        this.fields.put ( "priority", new NumberFieldEntry ( this, "priority", Messages.FilterQueryByExampleComposite_Field_priority_Text, filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$
-        this.fields.put ( "source", new TextFieldEntry ( this, "source", Messages.FilterQueryByExampleComposite_Field_source_Text, filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$
-        this.fields.put ( "actorType", new TextFieldEntry ( this, "actorType", Messages.FilterQueryByExampleComposite_Field_actorType_Text, filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$
-        this.fields.put ( "actorName", new TextFieldEntry ( this, "actorName", Messages.FilterQueryByExampleComposite_Field_actorName_Text, filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$
+        this.fields.put ( "message", new TextFieldEntry ( this, "message", Messages.getString ( "message" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        this.fields.put ( "monitorType", new TextFieldEntry ( this, "monitorType", Messages.getString ( "monitorType" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        this.fields.put ( "eventType", new TextFieldEntry ( this, "eventType", Messages.getString ( "eventType" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        this.fields.put ( "value", new NumberFieldEntry ( this, "value", Messages.getString ( "value" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        this.fields.put ( "priority", new NumberFieldEntry ( this, "priority", Messages.getString ( "priority" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        this.fields.put ( "source", new TextFieldEntry ( this, "source", Messages.getString ( "source" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        this.fields.put ( "actorType", new TextFieldEntry ( this, "actorType", Messages.getString ( "actorType" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        this.fields.put ( "actorName", new TextFieldEntry ( this, "actorName", Messages.getString ( "actorName" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        this.fields.put ( "component", new TextFieldEntry ( this, "component", Messages.getString ( "component" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        this.fields.put ( "system", new TextFieldEntry ( this, "system", Messages.getString ( "system" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
         // clear button
         this.clearButton = new Button ( this, SWT.PUSH );
-        this.clearButton.setText ( Messages.FilterQueryByExampleComposite_ClearButton_Text );
+        this.clearButton.setText ( Messages.clear );
         final GridData clearButtonLayoutData = new GridData ();
         clearButtonLayoutData.horizontalAlignment = SWT.BEGINNING;
         clearButtonLayoutData.horizontalSpan = 6;
@@ -359,7 +362,7 @@ public class FilterQueryByExampleComposite extends Composite
     private void populateFromFilter ( final String filterString )
     {
         // no filter given
-        if ( filterString == null || filterString.length () == 0 )
+        if ( ( filterString == null ) || ( filterString.length () == 0 ) )
         {
             return;
         }
@@ -388,7 +391,7 @@ public class FilterQueryByExampleComposite extends Composite
                 final FilterExpression subFilterExpression = (FilterExpression)subFilter;
                 if ( subFilterExpression.getOperator () == Operator.NOT )
                 {
-                    if ( subFilterExpression.getFilterSet ().size () == 1 && subFilterExpression.getFilterSet ().get ( 0 ).isAssertion () )
+                    if ( ( subFilterExpression.getFilterSet ().size () == 1 ) && subFilterExpression.getFilterSet ().get ( 0 ).isAssertion () )
                     {
                         populateFromAssertion ( true, (FilterAssertion)subFilterExpression.getFilterSet ().get ( 0 ) );
                     }
@@ -399,27 +402,27 @@ public class FilterQueryByExampleComposite extends Composite
                     String attribute = null;
                     String from = null;
                     String to = null;
-                    if ( subFilterExpression.getFilterSet ().size () == 1 || subFilterExpression.getFilterSet ().size () == 2 && subFilterExpression.getFilterSet ().get ( 0 ).isAssertion () )
+                    if ( ( subFilterExpression.getFilterSet ().size () == 1 ) || ( ( subFilterExpression.getFilterSet ().size () == 2 ) && subFilterExpression.getFilterSet ().get ( 0 ).isAssertion () ) )
                     {
                         final FilterAssertion filterAssertion = (FilterAssertion)subFilterExpression.getFilterSet ().get ( 0 );
                         attribute = filterAssertion.getAttribute ();
-                        if ( filterAssertion != null && filterAssertion.getAssertion () == Assertion.GREATEREQ )
+                        if ( ( filterAssertion != null ) && ( filterAssertion.getAssertion () == Assertion.GREATEREQ ) )
                         {
                             from = (String)filterAssertion.getValue ();
                         }
-                        else if ( filterAssertion != null && filterAssertion.getAssertion () == Assertion.LESSEQ )
+                        else if ( ( filterAssertion != null ) && ( filterAssertion.getAssertion () == Assertion.LESSEQ ) )
                         {
                             to = (String)filterAssertion.getValue ();
                         }
                     }
-                    if ( subFilterExpression.getFilterSet ().size () == 2 && subFilterExpression.getFilterSet ().get ( 1 ).isAssertion () )
+                    if ( ( subFilterExpression.getFilterSet ().size () == 2 ) && subFilterExpression.getFilterSet ().get ( 1 ).isAssertion () )
                     {
                         final FilterAssertion filterAssertion = (FilterAssertion)subFilterExpression.getFilterSet ().get ( 1 );
-                        if ( filterAssertion != null && filterAssertion.getAssertion () == Assertion.GREATEREQ )
+                        if ( ( filterAssertion != null ) && ( filterAssertion.getAssertion () == Assertion.GREATEREQ ) )
                         {
                             from = (String)filterAssertion.getValue ();
                         }
-                        else if ( filterAssertion != null && filterAssertion.getAssertion () == Assertion.LESSEQ )
+                        else if ( ( filterAssertion != null ) && ( filterAssertion.getAssertion () == Assertion.LESSEQ ) )
                         {
                             to = (String)filterAssertion.getValue ();
                         }
@@ -446,7 +449,7 @@ public class FilterQueryByExampleComposite extends Composite
                 ve.setAsText ( StringHelper.join ( (Collection<?>)filter.getValue (), "*" ) ); //$NON-NLS-1$
             }
             final Variant value = (Variant)ve.getValue ();
-            ( (TextFieldEntry)fieldEntry ).setValue ( value.toLabel ( Messages.FilterQueryByExampleComposite_EmptyString ) );
+            ( (TextFieldEntry)fieldEntry ).setValue ( value.toLabel ( "" ) ); //$NON-NLS-1$
             ( (TextFieldEntry)fieldEntry ).setNegation ( negate );
         }
     }

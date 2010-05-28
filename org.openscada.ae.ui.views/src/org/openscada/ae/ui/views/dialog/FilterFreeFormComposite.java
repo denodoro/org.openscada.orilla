@@ -25,6 +25,7 @@ import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
+import org.openscada.ae.ui.views.Messages;
 import org.openscada.utils.filter.Filter;
 import org.openscada.utils.filter.FilterParseException;
 import org.openscada.utils.filter.FilterParser;
@@ -41,7 +42,7 @@ public class FilterFreeFormComposite extends Composite
         super ( parent, style );
         if ( filter == null )
         {
-            throw new IllegalArgumentException ( Messages.FilterFreeFormComposite_IllegalArgument_filter );
+            throw new IllegalArgumentException ( Messages.filter_must_not_be_null );
         }
         this.filterChangedListener = filterChangedListener;
         this.filter = filter;
