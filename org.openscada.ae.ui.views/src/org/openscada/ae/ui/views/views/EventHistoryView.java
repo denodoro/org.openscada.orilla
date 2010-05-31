@@ -47,11 +47,15 @@ import org.openscada.ae.QueryListener;
 import org.openscada.ae.QueryState;
 import org.openscada.ae.ui.views.Activator;
 import org.openscada.ae.ui.views.CustomizableAction;
+import org.openscada.ae.ui.views.config.ConfigurationHelper;
+import org.openscada.ae.ui.views.config.EventHistoryViewConfiguration;
 import org.openscada.ae.ui.views.dialog.EventHistorySearchDialog;
 import org.openscada.ae.ui.views.dialog.SearchType;
 import org.openscada.ae.ui.views.model.DecoratedEvent;
 import org.openscada.core.client.ConnectionState;
 import org.openscada.utils.lang.Pair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -59,6 +63,8 @@ import com.google.gson.reflect.TypeToken;
 
 public class EventHistoryView extends AbstractAlarmsEventsView
 {
+    private final static Logger logger = LoggerFactory.getLogger ( EventHistoryView.class );
+
     public static final String ID = "org.openscada.ae.ui.views.views.eventhistory";
 
     private static final int LOAD_NO_OF_ITEMS = 2000;
@@ -177,6 +183,46 @@ public class EventHistoryView extends AbstractAlarmsEventsView
 
         this.eventsTable = new EventViewTable ( getContentPane (), SWT.BORDER, this.events, null, commentAction, this.initialColumnSettings );
         this.eventsTable.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, true, 1, 1 ) );
+
+        loadConfiguration ();
+    }
+
+    private void loadConfiguration ()
+    {
+        final EventHistoryViewConfiguration cfg = ConfigurationHelper.findEventHistoryViewConfiguration ( getViewSite ().getSecondaryId () );
+        if ( cfg != null )
+        {
+            try
+            {
+                setConfiguration ( cfg );
+            }
+            catch ( final Exception e )
+            {
+                logger.warn ( "Failed to apply configuration", e );
+            }
+        }
+        else
+        {
+            logger.info ( "no configuration found" );
+        }
+    }
+
+    protected void setConfiguration ( final EventHistoryViewConfiguration cfg ) throws Exception
+    {
+        switch ( cfg.getConnectionType () )
+        {
+        case URI:
+            setConnectionUri ( cfg.getConnectionString () );
+            break;
+        case ID:
+            setConnectionId ( cfg.getConnectionString () );
+            break;
+        }
+
+        if ( cfg.getLabel () != null )
+        {
+            setPartName ( cfg.getLabel () );
+        }
     }
 
     /**

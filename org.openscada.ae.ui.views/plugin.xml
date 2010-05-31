@@ -27,7 +27,7 @@
             allowMultiple="true"
             category="org.openscada.ae.ui.category"
             class="org.openscada.ae.ui.views.views.EventHistoryView"
-            icon="icons/eventhistory.png"
+            icon="icons/eventhistory.gif"
             id="org.openscada.ae.ui.views.views.eventhistory"
             name="%view.eventQuery.name"
             restorable="true">

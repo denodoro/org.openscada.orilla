@@ -23,6 +23,13 @@ public class Messages extends NLS
     public static String MonitorViewConfiguration_IllegalArgument_id;
 
     public static String MonitorViewConfiguration_IllegalArgument_monitorQueryId;
+
+    public static String EventHistoryViewConfiguration_IllegalArgument_id;
+
+    public static String EventHistoryViewConfiguration_IllegalArgument_connectionString;
+
+    public static String EventHistoryViewConfiguration_IllegalArgument_connectionType;
+
     static
     {
         // initialize resource bundle

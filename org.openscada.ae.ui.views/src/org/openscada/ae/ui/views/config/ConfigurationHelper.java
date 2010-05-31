@@ -150,4 +150,61 @@ public class ConfigurationHelper
             return null;
         }
     }
+
+    public static EventHistoryViewConfiguration findEventHistoryViewConfiguration ( final String configurationId )
+    {
+        if ( configurationId == null )
+        {
+            return null;
+        }
+
+        for ( final EventHistoryViewConfiguration cfg : loadAllEventHistoryConfigurations () )
+        {
+            if ( configurationId.equals ( cfg.getId () ) )
+            {
+                return cfg;
+            }
+        }
+
+        return null;
+    }
+
+    public static List<EventHistoryViewConfiguration> loadAllEventHistoryConfigurations ()
+    {
+        final List<EventHistoryViewConfiguration> result = new ArrayList<EventHistoryViewConfiguration> ();
+
+        for ( final IConfigurationElement ele : Platform.getExtensionRegistry ().getConfigurationElementsFor ( EXTP_CFG_ID ) )
+        {
+            if ( !"eventHistoryView".equals ( ele.getName () ) ) //$NON-NLS-1$
+            {
+                continue;
+            }
+
+            final EventHistoryViewConfiguration cfg = convertEventHistory ( ele );
+            if ( cfg != null )
+            {
+                result.add ( cfg );
+            }
+        }
+
+        return result;
+    }
+
+    private static EventHistoryViewConfiguration convertEventHistory ( final IConfigurationElement ele )
+    {
+        try
+        {
+            final String id = ele.getAttribute ( "id" ); //$NON-NLS-1$
+            final String connectionString = ele.getAttribute ( "connectionString" ); //$NON-NLS-1$
+            final ConnectionType connectionType = ConnectionType.valueOf ( ele.getAttribute ( "connectionType" ) ); //$NON-NLS-1$
+            final String label = ele.getAttribute ( "label" ); //$NON-NLS-1$
+
+            return new EventHistoryViewConfiguration ( id, connectionString, connectionType, label );
+        }
+        catch ( final Exception e )
+        {
+            logger.warn ( "Failed to convert event history configuration: {}", ele ); //$NON-NLS-1$
+            return null;
+        }
+    }
 }
