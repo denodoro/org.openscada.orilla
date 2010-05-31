@@ -434,10 +434,13 @@ public class EventHistoryView extends AbstractAlarmsEventsView
     {
         super.init ( site, memento );
 
-        final String s = memento.getString ( "columnSettings" );
-        if ( s != null )
+        if ( memento != null )
         {
-            this.initialColumnSettings = this.gson.fromJson ( s, new TypeToken<List<ColumnProperties>> () {}.getType () );
+            final String s = memento.getString ( "columnSettings" );
+            if ( s != null )
+            {
+                this.initialColumnSettings = this.gson.fromJson ( s, new TypeToken<List<ColumnProperties>> () {}.getType () );
+            }
         }
     }
 
