@@ -93,6 +93,11 @@ public class PreviewPage extends WizardPage
         layout.addColumnData ( new ColumnWeightData ( 20 ) );
         col.setLabelProvider ( new DiffEntryLabelProvider () );
 
+        col = new TableViewerColumn ( this.viewer, SWT.NONE );
+        col.getColumn ().setText ( "Current Data" );
+        layout.addColumnData ( new ColumnWeightData ( 20 ) );
+        col.setLabelProvider ( new DiffEntryLabelProvider () );
+
         this.viewer.getTable ().setHeaderVisible ( true );
         this.viewer.setContentProvider ( new ArrayContentProvider () );
 

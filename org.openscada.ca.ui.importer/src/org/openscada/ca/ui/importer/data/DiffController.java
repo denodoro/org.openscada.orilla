@@ -120,7 +120,7 @@ public class DiffController
                             logger.debug ( "Detected update" ); //$NON-NLS-1$
                             logger.debug ( "From: " + remoteData ); //$NON-NLS-1$
                             logger.debug ( "To: " + cfgEntry.getValue () ); //$NON-NLS-1$
-                            result.add ( new DiffEntry ( factoryEntry.getKey (), cfgEntry.getKey (), Operation.UPDATE_SET, cfgEntry.getValue () ) );
+                            result.add ( new DiffEntry ( factoryEntry.getKey (), cfgEntry.getKey (), Operation.UPDATE_SET, remoteData, cfgEntry.getValue () ) );
                         }
                     }
                 }

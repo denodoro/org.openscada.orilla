@@ -56,6 +56,10 @@ public class DiffEntryLabelProvider extends CellLabelProvider
         case 3:
             cell.setText ( formatData ( entry.getNewData () ) );
             break;
+
+        case 4:
+            cell.setText ( formatData ( entry.getOldData () ) );
+            break;
         }
 
     }
