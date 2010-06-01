@@ -20,6 +20,8 @@
          <choice minOccurs="0" maxOccurs="unbounded">
             <element ref="eventPoolView"/>
             <element ref="monitorView"/>
+            <element ref="eventHistoryView"/>
+            <element ref="alarmNotifier"/>
          </choice>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -204,6 +206,78 @@
                </documentation>
                <appinfo>
                   <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="alarmNotifier">
+      <complexType>
+         <sequence>
+            <element ref="ackAlarmsAvailableCommand"/>
+            <element ref="alarmsAvailableCommand"/>
+         </sequence>
+      </complexType>
+   </element>
+
+   <element name="parameter">
+      <annotation>
+         <documentation>
+            A parameter to either an executable extension or a command -- depending on where it appears in the extension.
+         </documentation>
+      </annotation>
+      <complexType>
+         <attribute name="name" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The name is either the name of the parameter to pass to the executable extension, or the identifier of the parameter for the command.
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="identifier" basedOn="org.eclipse.ui.commands/command/commandParameter/@id"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="value" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The value to pass for this parameter.
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="alarmsAvailableCommand">
+      <complexType>
+         <sequence minOccurs="0" maxOccurs="unbounded">
+            <element ref="parameter"/>
+         </sequence>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="identifier" basedOn="org.eclipse.ui.commands/command/@id"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="ackAlarmsAvailableCommand">
+      <complexType>
+         <sequence minOccurs="0" maxOccurs="unbounded">
+            <element ref="parameter"/>
+         </sequence>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="identifier" basedOn="org.eclipse.ui.commands/command/@id"/>
                </appinfo>
             </annotation>
          </attribute>
