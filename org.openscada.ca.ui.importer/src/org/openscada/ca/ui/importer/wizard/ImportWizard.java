@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.jface.dialogs.IDialogSettings;
@@ -93,7 +94,7 @@ public class ImportWizard extends Wizard implements IImportWizard
         }
         catch ( final Exception e )
         {
-            final Status status = new Status ( Status.ERROR, Activator.PLUGIN_ID, Messages.ImportWizard_StatusErrorFailedToApply, e );
+            final Status status = new Status ( IStatus.ERROR, Activator.PLUGIN_ID, Messages.ImportWizard_StatusErrorFailedToApply, e );
             StatusManager.getManager ().handle ( status, StatusManager.BLOCK );
             return false;
         }
@@ -145,6 +146,7 @@ public class ImportWizard extends Wizard implements IImportWizard
     {
         addPage ( new LocalDataPage ( this.mergeController ) );
         addPage ( new RemoteDataPage ( this.connection, this.mergeController ) );
+        addPage ( new IgnorePage ( this.mergeController ) );
         addPage ( new PreviewPage ( this.mergeController ) );
     }
 

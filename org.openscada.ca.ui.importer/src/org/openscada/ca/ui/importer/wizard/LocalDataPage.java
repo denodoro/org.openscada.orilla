@@ -23,13 +23,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
-import org.codehaus.jackson.map.ObjectMapper;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -52,12 +49,9 @@ import org.openscada.ca.ui.importer.data.DiffController;
 
 public class LocalDataPage extends WizardPage
 {
-
     private Text fileName;
 
     private final DiffController mergeController;
-
-    private Map<String, Map<String, Map<String, String>>> data;
 
     private Label dataLabel;
 
@@ -101,6 +95,7 @@ public class LocalDataPage extends WizardPage
         final Button loadButton = new Button ( wrapper, SWT.PUSH );
         loadButton.setText ( Messages.LocalDataPage_LoadButtonText );
         loadButton.addSelectionListener ( new SelectionAdapter () {
+            @Override
             public void widgetSelected ( final SelectionEvent e )
             {
                 loadFile ();
@@ -149,10 +144,10 @@ public class LocalDataPage extends WizardPage
             setPageComplete ( false );
         }
 
-        this.mergeController.setLocalData ( this.data );
-        if ( this.data != null )
+        final Map<String, Map<String, Map<String, String>>> localData = this.mergeController.getLocalData ();
+        if ( localData != null )
         {
-            this.dataLabel.setText ( String.format ( Messages.LocalDataPage_StatusLabelFormat, this.data.size () ) );
+            this.dataLabel.setText ( String.format ( Messages.LocalDataPage_StatusLabelFormat, localData.size () ) );
         }
         else
         {
@@ -189,7 +184,7 @@ public class LocalDataPage extends WizardPage
             throw new IllegalArgumentException ( String.format ( Messages.LocalDataPage_ErrorCannotReadFile, fileName ) );
         }
 
-        if ( this.data == null )
+        if ( this.mergeController.getLocalData () == null )
         {
             throw new IllegalStateException ( Messages.LocalDataPage_ErrorNoData );
         }
@@ -199,7 +194,8 @@ public class LocalDataPage extends WizardPage
     {
         try
         {
-            this.data = null;
+            this.mergeController.setLocalData ( null );
+
             final File file = getFile ();
             getContainer ().run ( true, false, new IRunnableWithProgress () {
 
@@ -208,7 +204,7 @@ public class LocalDataPage extends WizardPage
                     try
                     {
                         monitor.beginTask ( Messages.LocalDataPage_TaskName, IProgressMonitor.UNKNOWN );
-                        LocalDataPage.this.data = loadData ( file );
+                        loadData ( file );
                     }
                     catch ( final Exception e )
                     {
@@ -225,91 +221,32 @@ public class LocalDataPage extends WizardPage
         catch ( final Exception e )
         {
             e.printStackTrace ();
-            final Status status = new Status ( Status.OK, Activator.PLUGIN_ID, Messages.LocalDataPage_StatusErrorFailedToLoad, e );
+            final Status status = new Status ( IStatus.OK, Activator.PLUGIN_ID, Messages.LocalDataPage_StatusErrorFailedToLoad, e );
             StatusManager.getManager ().handle ( status, StatusManager.BLOCK );
         }
         update ();
     }
 
-    protected Map<String, Map<String, Map<String, String>>> loadData ( final File file ) throws Exception
+    protected void loadData ( final File file ) throws Exception
     {
-        if ( isOscar ( file ) )
+        if ( OscarLoader.isOscar ( file ) )
         {
-            return loadOscarData ( file );
+            final OscarLoader loader = new OscarLoader ( file );
+            this.mergeController.setLocalData ( loader.getData () );
+            this.mergeController.setIgnoreFields ( loader.getIgnoreFields () );
         }
         else
         {
             final InputStream stream = new FileInputStream ( file );
             try
             {
-                return loadJsonData ( stream );
+                this.mergeController.setLocalData ( OscarLoader.loadJsonData ( stream ) );
             }
             finally
             {
                 stream.close ();
             }
         }
-
     }
 
-    String oscarSuffix = ".oscar"; //$NON-NLS-1$
-
-    private boolean isOscar ( final File file )
-    {
-        final String fileName = file.getName ().toLowerCase ();
-        return fileName.endsWith ( this.oscarSuffix );
-    }
-
-    @SuppressWarnings ( "unchecked" )
-    private Map<String, Map<String, Map<String, String>>> loadJsonData ( final InputStream stream ) throws Exception
-    {
-        final ObjectMapper mapper = new ObjectMapper ();
-
-        final Map<String, Map<String, Map<String, Object>>> data = mapper.readValue ( stream, HashMap.class );
-
-        final Map<String, Map<String, Map<String, String>>> result = new HashMap<String, Map<String, Map<String, String>>> ( data.size () );
-
-        for ( final Map.Entry<String, Map<String, Map<String, Object>>> entry : data.entrySet () )
-        {
-            final Map<String, Map<String, String>> newFactory = new HashMap<String, Map<String, String>> ( entry.getValue ().size () );
-            result.put ( entry.getKey (), newFactory );
-            for ( final Map.Entry<String, Map<String, Object>> subEntry : entry.getValue ().entrySet () )
-            {
-                final Map<String, String> newConfiguration = new HashMap<String, String> ( subEntry.getValue ().size () );
-                newFactory.put ( subEntry.getKey (), newConfiguration );
-                for ( final Map.Entry<String, Object> subSubEntry : subEntry.getValue ().entrySet () )
-                {
-                    newConfiguration.put ( subSubEntry.getKey (), subSubEntry.getValue ().toString () );
-                }
-            }
-        }
-
-        return result;
-    }
-
-    private Map<String, Map<String, Map<String, String>>> loadOscarData ( final File file ) throws Exception
-    {
-        final ZipFile zfile = new ZipFile ( file );
-        try
-        {
-            final ZipEntry entry = zfile.getEntry ( "data.json" ); //$NON-NLS-1$
-            if ( entry == null )
-            {
-                throw new IllegalArgumentException ( Messages.LocalDataPage_ErrorInvalidOscar );
-            }
-            final InputStream stream = zfile.getInputStream ( entry );
-            try
-            {
-                return loadJsonData ( stream );
-            }
-            finally
-            {
-                stream.close ();
-            }
-        }
-        finally
-        {
-            zfile.close ();
-        }
-    }
 }

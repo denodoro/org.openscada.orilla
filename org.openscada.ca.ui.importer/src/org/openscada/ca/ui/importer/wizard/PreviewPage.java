@@ -24,6 +24,7 @@ import java.text.MessageFormat;
 import java.util.Collection;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -94,7 +95,7 @@ public class PreviewPage extends WizardPage
         col.setLabelProvider ( new DiffEntryLabelProvider () );
 
         col = new TableViewerColumn ( this.viewer, SWT.NONE );
-        col.getColumn ().setText ( "Current Data" );
+        col.getColumn ().setText ( Messages.PreviewPage_ColCurrentDataText );
         layout.addColumnData ( new ColumnWeightData ( 20 ) );
         col.setLabelProvider ( new DiffEntryLabelProvider () );
 
@@ -143,7 +144,7 @@ public class PreviewPage extends WizardPage
             catch ( final Exception e )
             {
                 e.printStackTrace ();
-                final Status status = new Status ( Status.ERROR, Activator.PLUGIN_ID, Messages.PreviewPage_StatusErrorFailedToMerge, e );
+                final Status status = new Status ( IStatus.ERROR, Activator.PLUGIN_ID, Messages.PreviewPage_StatusErrorFailedToMerge, e );
                 StatusManager.getManager ().handle ( status );
                 ErrorDialog.openError ( getShell (), Messages.PreviewPage_TitleErrorFailedToMerge, Messages.PreviewPage_MessageErrorFailedToMerge, status );
             }

@@ -25,6 +25,12 @@ public class Messages extends NLS
 {
     private static final String BUNDLE_NAME = "org.openscada.ca.ui.importer.wizard.messages"; //$NON-NLS-1$
 
+    public static String IgnorePage_TabItem_Factories_Text;
+
+    public static String IgnorePage_TabItem_Fields_Text;
+
+    public static String IgnorePage_Title;
+
     public static String ImportWizard_StatusErrorFailedToApply;
 
     public static String ImportWizard_SubTaskName;
@@ -72,6 +78,8 @@ public class Messages extends NLS
     public static String PreviewPage_ColDataText;
 
     public static String PreviewPage_ColFactoryText;
+
+    public static String PreviewPage_ColCurrentDataText;
 
     public static String PreviewPage_ColOperationText;
 
