@@ -38,7 +38,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IMemento;
-import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 import org.openscada.ae.Event;
@@ -138,8 +137,7 @@ public class EventHistoryView extends AbstractAlarmsEventsView
         this.clearAction = new CustomizableAction ();
         this.clearAction.setText ( "Clear" );
         this.clearAction.setToolTipText ( "clear table" );
-        this.clearAction.setImageDescriptor ( getSite ().getWorkbenchWindow ().getWorkbench ().getSharedImages ().getImageDescriptor ( ISharedImages.IMG_ETOOL_DELETE ) );
-        this.clearAction.setDisabledImageDescriptor ( getSite ().getWorkbenchWindow ().getWorkbench ().getSharedImages ().getImageDescriptor ( ISharedImages.IMG_ETOOL_DELETE_DISABLED ) );
+        this.clearAction.setImageDescriptor ( ImageDescriptor.createFromURL ( Activator.getDefault ().getBundle ().getResource ( "icons/clear_search.gif" ) ) );
         this.clearAction.setEnabled ( false );
         this.clearAction.setRunnable ( new Runnable () {
             public void run ()
@@ -174,8 +172,8 @@ public class EventHistoryView extends AbstractAlarmsEventsView
         final IToolBarManager toolBarManager = getViewSite ().getActionBars ().getToolBarManager ();
         toolBarManager.add ( this.pauseAction );
         toolBarManager.add ( this.resumeAction );
-        toolBarManager.add ( this.clearAction );
         toolBarManager.add ( this.searchAction );
+        toolBarManager.add ( this.clearAction );
 
         // label which contains no of retrieved events
 
