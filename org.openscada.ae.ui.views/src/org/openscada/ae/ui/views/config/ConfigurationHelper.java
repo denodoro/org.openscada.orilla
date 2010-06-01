@@ -22,8 +22,16 @@ package org.openscada.ae.ui.views.config;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.commands.Command;
+import org.eclipse.core.commands.IParameter;
+import org.eclipse.core.commands.Parameterization;
+import org.eclipse.core.commands.ParameterizedCommand;
+import org.eclipse.core.commands.common.NotDefinedException;
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.InvalidRegistryObjectException;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.commands.ICommandService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -206,5 +214,52 @@ public class ConfigurationHelper
             logger.warn ( "Failed to convert event history configuration: {}", ele ); //$NON-NLS-1$
             return null;
         }
+    }
+
+    public static AlarmNotifierConfiguration findAlarmNotifierConfiguration ()
+    {
+        for ( final IConfigurationElement ele : Platform.getExtensionRegistry ().getConfigurationElementsFor ( EXTP_CFG_ID ) )
+        {
+            if ( !"alarmNotifier".equals ( ele.getName () ) ) //$NON-NLS-1$
+            {
+                continue;
+            }
+
+            final AlarmNotifierConfiguration cfg = convertAlarmNotifier ( ele );
+            if ( cfg != null )
+            {
+                return cfg;
+            }
+        }
+        return null;
+    }
+
+    private static AlarmNotifierConfiguration convertAlarmNotifier ( final IConfigurationElement ele )
+    {
+        try
+        {
+            ParameterizedCommand ackAlarmsAvailableCommand = convertCommand ( ele.getChildren ( "ackAlarmsAvailableCommand" )[0] );
+            ParameterizedCommand alarmsAvailableCommand = convertCommand ( ele.getChildren ( "alarmsAvailableCommand" )[0] );
+            return new AlarmNotifierConfiguration ( ackAlarmsAvailableCommand, alarmsAvailableCommand );
+        }
+        catch ( final Exception e )
+        {
+            logger.warn ( "Failed to convert alarm notifier configuration: {}", ele ); //$NON-NLS-1$
+            return null;
+        }
+    }
+
+    private static ParameterizedCommand convertCommand ( final IConfigurationElement commandElement ) throws NotDefinedException, InvalidRegistryObjectException
+    {
+        ICommandService commandService = (ICommandService)PlatformUI.getWorkbench ().getService ( ICommandService.class );
+        Command command = commandService.getCommand ( commandElement.getAttribute ( "id" ) );
+        List<Parameterization> parameters = new ArrayList<Parameterization> ();
+        for ( IConfigurationElement parameter : commandElement.getChildren ( "parameter" ) )
+        {
+            IParameter name = command.getParameter ( parameter.getAttribute ( "name" ) );
+            String value = parameter.getAttribute ( "value" );
+            parameters.add ( new Parameterization ( name, value ) );
+        }
+        return new ParameterizedCommand ( command, parameters.toArray ( new Parameterization[] {} ) );
     }
 }
