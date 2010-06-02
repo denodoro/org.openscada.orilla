@@ -25,6 +25,10 @@ public class Messages extends NLS
 {
     private static final String BUNDLE_NAME = "org.openscada.ca.ui.importer.wizard.messages"; //$NON-NLS-1$
 
+    public static String IgnorePage_DeselectAll_Text;
+
+    public static String IgnorePage_SelectAll_Text;
+
     public static String IgnorePage_TabItem_Factories_Text;
 
     public static String IgnorePage_TabItem_Fields_Text;

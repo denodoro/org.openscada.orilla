@@ -166,9 +166,9 @@ public class IgnorePage extends WizardPage
             {
                 if ( element instanceof Map.Entry<?, ?> )
                 {
-                    return String.format ( "%s", ( (Map.Entry<?, ?>)element ).getKey () );
+                    return String.format ( "%s", ( (Map.Entry<?, ?>)element ).getKey () ); //$NON-NLS-1$
                 }
-                return String.format ( "%s", element );
+                return String.format ( "%s", element ); //$NON-NLS-1$
             }
         } );
         this.fieldsViewer.setAutoExpandLevel ( TreeViewer.ALL_LEVELS );
@@ -200,7 +200,7 @@ public class IgnorePage extends WizardPage
         buttonBar.setLayout ( layout );
 
         final Button selectButton = new Button ( buttonBar, SWT.PUSH );
-        selectButton.setText ( "Select All" );
+        selectButton.setText ( Messages.IgnorePage_SelectAll_Text );
         selectButton.addSelectionListener ( new SelectionAdapter () {
             @Override
             public void widgetSelected ( final SelectionEvent e )
@@ -210,7 +210,7 @@ public class IgnorePage extends WizardPage
         } );
 
         final Button deselectButton = new Button ( buttonBar, SWT.PUSH );
-        deselectButton.setText ( "Deselect All" );
+        deselectButton.setText ( Messages.IgnorePage_DeselectAll_Text );
         deselectButton.addSelectionListener ( new SelectionAdapter () {
             @Override
             public void widgetSelected ( final SelectionEvent e )
