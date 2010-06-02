@@ -1,3 +1,22 @@
+/*
+ * This file is part of the OpenSCADA project
+ * Copyright (C) 2006-2010 inavare GmbH (http://inavare.com)
+ *
+ * OpenSCADA is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenSCADA is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenSCADA. If not, see
+ * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
+ */
+
 package org.openscada.ca.ui.importer.wizard;
 
 import java.util.Collection;
@@ -11,9 +30,16 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
@@ -152,8 +178,12 @@ public class IgnorePage extends WizardPage
 
     private Control createFactoriesTab ( final Composite parent )
     {
-        this.factoriesViewer = new TableViewer ( parent, SWT.H_SCROLL | SWT.V_SCROLL | SWT.CHECK );
+        final Composite wrapper = new Composite ( parent, SWT.NONE );
+        wrapper.setLayout ( new GridLayout ( 1, true ) );
 
+        this.factoriesViewer = new TableViewer ( wrapper, SWT.H_SCROLL | SWT.V_SCROLL | SWT.CHECK | SWT.BORDER );
+
+        this.factoriesViewer.setComparator ( new ViewerComparator () );
         this.factoriesViewer.setContentProvider ( new ArrayContentProvider () );
         this.factoriesViewer.getControl ().addListener ( SWT.Selection, new Listener () {
             public void handleEvent ( final Event event )
@@ -161,8 +191,43 @@ public class IgnorePage extends WizardPage
                 IgnorePage.this.mergeController.setIgnoreFactories ( gatherIgnoredFactories () );
             }
         } );
+        this.factoriesViewer.getControl ().setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, true ) );
 
-        return this.factoriesViewer.getControl ();
+        final Composite buttonBar = new Composite ( wrapper, SWT.NONE );
+        buttonBar.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, false ) );
+        final RowLayout layout = new RowLayout ( SWT.HORIZONTAL );
+        layout.wrap = false;
+        buttonBar.setLayout ( layout );
+
+        final Button selectButton = new Button ( buttonBar, SWT.PUSH );
+        selectButton.setText ( "Select All" );
+        selectButton.addSelectionListener ( new SelectionAdapter () {
+            @Override
+            public void widgetSelected ( final SelectionEvent e )
+            {
+                setFieldSelection ( true );
+            }
+        } );
+
+        final Button deselectButton = new Button ( buttonBar, SWT.PUSH );
+        deselectButton.setText ( "Deselect All" );
+        deselectButton.addSelectionListener ( new SelectionAdapter () {
+            @Override
+            public void widgetSelected ( final SelectionEvent e )
+            {
+                setFieldSelection ( false );
+            }
+        } );
+
+        return wrapper;
+    }
+
+    protected void setFieldSelection ( final boolean state )
+    {
+        for ( final TableItem item : this.factoriesViewer.getTable ().getItems () )
+        {
+            item.setChecked ( state );
+        }
     }
 
     protected Set<String> gatherIgnoredFactories ()

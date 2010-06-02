@@ -37,7 +37,6 @@ import org.slf4j.LoggerFactory;
 
 public class DiffController
 {
-
     private final static Logger logger = LoggerFactory.getLogger ( DiffController.class );
 
     private Map<String, Map<String, Map<String, String>>> localData = Collections.emptyMap ();
@@ -140,8 +139,8 @@ public class DiffController
                         if ( !isEqual ( cfgEntry.getValue (), remoteData ) )
                         {
                             logger.debug ( "Detected update" ); //$NON-NLS-1$
-                            logger.debug ( "From: " + remoteData ); //$NON-NLS-1$
-                            logger.debug ( "To: " + cfgEntry.getValue () ); //$NON-NLS-1$
+                            logger.debug ( "From: {}", remoteData ); //$NON-NLS-1$
+                            logger.debug ( "To: {}", cfgEntry.getValue () ); //$NON-NLS-1$
                             final DiffEntry diffEntry = makeDiffEntry ( factoryEntry.getKey (), cfgEntry.getKey (), remoteData, cfgEntry.getValue () );
                             if ( diffEntry != null )
                             {
