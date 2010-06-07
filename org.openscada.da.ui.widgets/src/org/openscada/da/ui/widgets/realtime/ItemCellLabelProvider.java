@@ -24,8 +24,6 @@ import org.eclipse.jface.resource.LocalResourceManager;
 import org.eclipse.jface.resource.ResourceManager;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ViewerCell;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Font;
 import org.openscada.core.ui.styles.StyleInformation;
 
 public class ItemCellLabelProvider extends CellLabelProvider
@@ -79,7 +77,7 @@ public class ItemCellLabelProvider extends CellLabelProvider
         {
             if ( si.getBackground () != null )
             {
-                cell.setBackground ( (Color)this.resourceManager.get ( si.getBackground () ) );
+                cell.setBackground ( this.resourceManager.createColor ( si.getBackground () ) );
             }
             else
             {
@@ -88,7 +86,7 @@ public class ItemCellLabelProvider extends CellLabelProvider
 
             if ( si.getForeground () != null )
             {
-                cell.setForeground ( (Color)this.resourceManager.get ( si.getForeground () ) );
+                cell.setForeground ( this.resourceManager.createColor ( si.getForeground () ) );
             }
             else
             {
@@ -97,7 +95,7 @@ public class ItemCellLabelProvider extends CellLabelProvider
 
             if ( si.getFont () != null )
             {
-                cell.setFont ( (Font)this.resourceManager.get ( si.getFont () ) );
+                cell.setFont ( this.resourceManager.createFont ( si.getFont () ) );
             }
             else
             {
