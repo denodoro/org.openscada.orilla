@@ -22,6 +22,7 @@ package org.openscada.da.ui.widgets.realtime;
 import java.util.Collection;
 import java.util.LinkedList;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -34,6 +35,7 @@ import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.TextTransfer;
@@ -60,8 +62,6 @@ public class RealTimeListViewer implements RealtimeListAdapter
 
     private final ListData list = new ListData ();
 
-    private ItemListLabelProvider labelProvider;
-
     private ItemListContentProvider contentProvider;
 
     private LinkedList<Integer> initialColWidth;
@@ -83,16 +83,23 @@ public class RealTimeListViewer implements RealtimeListAdapter
 
         this.viewer = new TreeViewer ( parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER | SWT.FULL_SELECTION );
 
-        TreeColumn col;
+        TreeViewerColumn col;
 
-        col = new TreeColumn ( this.viewer.getTree (), SWT.NONE );
-        col.setText ( Messages.RealTimeListViewer_Col_Text_Id );
-        col = new TreeColumn ( this.viewer.getTree (), SWT.NONE );
-        col.setText ( Messages.RealTimeListViewer_Col_Text_State );
-        col = new TreeColumn ( this.viewer.getTree (), SWT.NONE );
-        col.setText ( Messages.RealTimeListViewer_Col_Text_Type );
-        col = new TreeColumn ( this.viewer.getTree (), SWT.NONE );
-        col.setText ( Messages.RealTimeListViewer_Col_Text_Value );
+        col = new TreeViewerColumn ( this.viewer, SWT.NONE );
+        col.getColumn ().setText ( Messages.RealTimeListViewer_Col_Text_Id );
+        col.setLabelProvider ( new ItemCellLabelProvider () );
+
+        col = new TreeViewerColumn ( this.viewer, SWT.NONE );
+        col.getColumn ().setText ( Messages.RealTimeListViewer_Col_Text_State );
+        col.setLabelProvider ( new ItemCellLabelProvider () );
+
+        col = new TreeViewerColumn ( this.viewer, SWT.NONE );
+        col.getColumn ().setText ( Messages.RealTimeListViewer_Col_Text_Type );
+        col.setLabelProvider ( new ItemCellLabelProvider () );
+
+        col = new TreeViewerColumn ( this.viewer, SWT.NONE );
+        col.getColumn ().setText ( Messages.RealTimeListViewer_Col_Text_Value );
+        col.setLabelProvider ( new ItemCellLabelProvider () );
 
         this.viewer.getTree ().setHeaderVisible ( true );
 
@@ -100,7 +107,6 @@ public class RealTimeListViewer implements RealtimeListAdapter
         applyInitialColWidth ( tableLayout );
         this.viewer.getTree ().setLayout ( tableLayout );
 
-        this.viewer.setLabelProvider ( this.labelProvider = new ItemListLabelProvider () );
         this.viewer.setContentProvider ( this.contentProvider = new ItemListContentProvider () );
         this.viewer.setComparator ( new ListEntryComparator () );
         this.viewer.setInput ( this.list );
@@ -140,7 +146,6 @@ public class RealTimeListViewer implements RealtimeListAdapter
 
         this.list.clear ();
         this.contentProvider.dispose ();
-        this.labelProvider.dispose ();
     }
 
     public void remove ( final ListEntry entry )
@@ -218,7 +223,7 @@ public class RealTimeListViewer implements RealtimeListAdapter
         }
         catch ( final Exception e )
         {
-            Activator.getDefault ().getLog ().log ( new Status ( Status.ERROR, Activator.PLUGIN_ID, Messages.RealTimeListViewer_ErrorLoadingData, e ) );
+            Activator.getDefault ().getLog ().log ( new Status ( IStatus.ERROR, Activator.PLUGIN_ID, Messages.RealTimeListViewer_ErrorLoadingData, e ) );
         }
     }
 
