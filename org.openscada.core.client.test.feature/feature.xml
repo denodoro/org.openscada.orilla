@@ -202,13 +202,13 @@ Library.
    </license>
 
    <requires>
+      <import plugin="org.openscada.utils"/>
+      <import plugin="slf4j.api"/>
       <import plugin="com.springsource.org.apache.log4j"/>
       <import plugin="org.apache.mina.core"/>
       <import plugin="org.openscada.net"/>
-      <import plugin="org.openscada.utils"/>
       <import plugin="org.openscada.utils.osgi"/>
       <import plugin="org.eclipse.osgi"/>
-      <import plugin="slf4j.api"/>
       <import plugin="org.apache.mina.filter.compression"/>
       <import plugin="org.eclipse.ui"/>
       <import plugin="org.eclipse.core.runtime"/>
@@ -218,25 +218,19 @@ Library.
       <import plugin="org.eclipse.core.databinding.beans" version="1.2.0" match="greaterOrEqual"/>
       <import plugin="org.openscada.core.connection.provider" version="0.14.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.expressions"/>
+      <import plugin="org.openscada.ui.databinding" version="0.15.0" match="greaterOrEqual"/>
       <import plugin="org.openscada.core.ui" version="0.14.0" match="greaterOrEqual"/>
       <import plugin="org.openscada.utils.osgi" version="0.14.0" match="greaterOrEqual"/>
       <import plugin="org.openscada.core.ui.connection.creator" version="0.14.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.views" version="3.4.1" match="greaterOrEqual"/>
+      <import plugin="org.openscada.sec"/>
+      <import plugin="org.openscada.sec.osgi"/>
       <import plugin="org.openscada.core.ui.connection" version="0.14.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.runtime" version="3.5.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui" version="3.5.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.ecf.discovery" version="3.0.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.ecf" version="3.0.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.equinox.common"/>
-      <import plugin="org.eclipse.equinox.registry"/>
-      <import plugin="org.eclipse.core.jobs"/>
-      <import plugin="org.eclipse.osgi.services"/>
-      <import plugin="org.eclipse.ecf.identity" version="2.1.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.ecf" version="2.0.0" match="greaterOrEqual"/>
-      <import plugin="ch.ethz.iks.slp"/>
-      <import plugin="org.eclipse.equinox.common" version="3.5.0" match="greaterOrEqual"/>
-      <import plugin="org.openscada.ui.databinding" version="0.15.0" match="greaterOrEqual"/>
-      <import plugin="org.openscada.sec"/>
-      <import plugin="org.openscada.sec.osgi"/>
+      <import plugin="org.openscada.core.client" version="0.15.0" match="greaterOrEqual"/>
+      <import plugin="org.openscada.core" version="0.15.0" match="greaterOrEqual"/>
+      <import plugin="org.openscada.core.ui.connection" version="0.15.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin
@@ -332,111 +326,6 @@ Library.
 
    <plugin
          id="org.openscada.core.ui.connection.creator"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.openscada.core.ui.connection.discoverer.ecf"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.ecf"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.ecf.discovery"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.ecf.provider.discovery"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.ecf.provider.jmdns"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.ecf.provider.jslp"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.ecf.provider.localdiscovery"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.ecf.osgi.services.discovery"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.ecf.provider.remoteservice"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.ecf.remoteservice"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.ecf.remoteservice.eventadmin"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.ecf.sharedobject"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.ecf.provider"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.ecf.identity"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.equinox.concurrent"
          download-size="0"
          install-size="0"
          version="0.0.0"
