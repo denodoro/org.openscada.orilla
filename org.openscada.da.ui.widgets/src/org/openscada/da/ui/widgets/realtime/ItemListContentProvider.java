@@ -22,6 +22,7 @@ package org.openscada.da.ui.widgets.realtime;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.swt.widgets.Display;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,6 +34,8 @@ public class ItemListContentProvider implements ITreeContentProvider, Listener
     private Viewer viewer = null;
 
     private ListData data = null;
+
+    private Display display;
 
     public Object[] getChildren ( final Object parentElement )
     {
@@ -99,6 +102,10 @@ public class ItemListContentProvider implements ITreeContentProvider, Listener
         unsubscribe ();
 
         this.viewer = viewer;
+        if ( viewer != null )
+        {
+            this.display = viewer.getControl ().getDisplay ();
+        }
 
         if ( newInput != null )
         {
@@ -132,7 +139,7 @@ public class ItemListContentProvider implements ITreeContentProvider, Listener
         {
             if ( this.viewer != null )
             {
-                this.viewer.getControl ().getDisplay ().asyncExec ( new Runnable () {
+                this.display.asyncExec ( new Runnable () {
                     public void run ()
                     {
                         performAdded ( entries );
@@ -169,7 +176,7 @@ public class ItemListContentProvider implements ITreeContentProvider, Listener
         {
             if ( this.viewer != null )
             {
-                this.viewer.getControl ().getDisplay ().asyncExec ( new Runnable () {
+                this.display.asyncExec ( new Runnable () {
                     public void run ()
                     {
                         performRemoved ( entries );
@@ -206,7 +213,7 @@ public class ItemListContentProvider implements ITreeContentProvider, Listener
         {
             if ( this.viewer != null )
             {
-                this.viewer.getControl ().getDisplay ().asyncExec ( new Runnable () {
+                this.display.asyncExec ( new Runnable () {
                     public void run ()
                     {
                         performUpdated ( entries );
