@@ -19,6 +19,7 @@
 
 package org.openscada.ae.ui.views.config;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -238,9 +239,12 @@ public class ConfigurationHelper
     {
         try
         {
-            ParameterizedCommand ackAlarmsAvailableCommand = convertCommand ( ele.getChildren ( "ackAlarmsAvailableCommand" )[0] );
-            ParameterizedCommand alarmsAvailableCommand = convertCommand ( ele.getChildren ( "alarmsAvailableCommand" )[0] );
-            return new AlarmNotifierConfiguration ( ackAlarmsAvailableCommand, alarmsAvailableCommand );
+            final String connectionId = ele.getAttribute ( "connectionId" ); //$NON-NLS-1$
+            final String prefix = ele.getAttribute ( "prefix" ) == null ? "ae.server.info" : ele.getAttribute ( "prefix" ); //$NON-NLS-1$ $NON-NLS-2$
+            final URL soundFile = Platform.getBundle ( ele.getContributor ().getName () ).getEntry ( ele.getAttribute ( "soundFile" ) );
+            final ParameterizedCommand ackAlarmsAvailableCommand = convertCommand ( ele.getChildren ( "ackAlarmsAvailableCommand" )[0] );
+            final ParameterizedCommand alarmsAvailableCommand = convertCommand ( ele.getChildren ( "alarmsAvailableCommand" )[0] );
+            return new AlarmNotifierConfiguration ( connectionId, prefix, soundFile, ackAlarmsAvailableCommand, alarmsAvailableCommand );
         }
         catch ( final Exception e )
         {

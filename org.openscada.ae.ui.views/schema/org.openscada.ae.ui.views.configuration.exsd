@@ -76,10 +76,10 @@
                </documentation>
             </annotation>
          </attribute>
-         <attribute name="connectionType" use="required">
+         <attribute name="connectionType">
             <annotation>
                <documentation>
-                  The type of the connection string: can be URI or ID.
+                  
                </documentation>
             </annotation>
             <simpleType>
@@ -218,6 +218,30 @@
             <element ref="ackAlarmsAvailableCommand"/>
             <element ref="alarmsAvailableCommand"/>
          </sequence>
+         <attribute name="connectionId" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="prefix" type="string" use="default" value="ae.server.info">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="soundFile" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="resource"/>
+               </appinfo>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 

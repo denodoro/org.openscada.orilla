@@ -28,9 +28,12 @@ Import-Package: com.google.gson;version="1.4.0",
  org.openscada.core.connection.provider;version="0.14.0",
  org.openscada.core.subscription;version="0.15.0",
  org.openscada.core.ui.connection.data,
+ org.openscada.da.client,
+ org.openscada.da.connection.provider,
  org.openscada.utils.beans;version="0.15.0",
  org.openscada.utils.filter;version="0.15.0",
  org.openscada.utils.lang,
  org.openscada.utils.propertyeditors,
  org.openscada.utils.str,
  org.slf4j;version="1.5.8"
+Export-Package: org.openscada.ae.ui.views.contributions
