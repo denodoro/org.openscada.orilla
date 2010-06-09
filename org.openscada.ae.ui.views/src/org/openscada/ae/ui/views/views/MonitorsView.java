@@ -27,9 +27,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
+import org.openscada.ae.client.Connection;
 import org.openscada.ae.ui.views.config.ConfigurationHelper;
 import org.openscada.ae.ui.views.config.MonitorViewConfiguration;
 import org.openscada.ae.ui.views.model.DecoratedMonitor;
+import org.openscada.core.ConnectionInformation;
 import org.openscada.core.client.ConnectionState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -117,7 +119,7 @@ public class MonitorsView extends MonitorSubscriptionAlarmsEventsView
     @Override
     protected void acknowledge ()
     {
-        if ( ( this.getConnection () != null ) && ( this.getConnection ().getState () == ConnectionState.BOUND ) )
+        if ( this.getConnection () != null && this.getConnection ().getState () == ConnectionState.BOUND )
         {
             for ( final DecoratedMonitor monitor : this.monitorsTable.selectedMonitors () )
             {
@@ -155,11 +157,11 @@ public class MonitorsView extends MonitorSubscriptionAlarmsEventsView
                     {
                         label.append ( "DISCONNECTED from " );
                     }
-                    label.append ( getConnection ().getConnectionInformation ().toMaskedString () );
+                    label.append ( makeString ( getConnection () ) );
                 }
                 else
                 {
-                    label.append ( "DISCONNECTED from " + getConnection ().getConnectionInformation ().toMaskedString () );
+                    label.append ( "DISCONNECTED from " + makeString ( getConnection () ) );
                 }
                 if ( MonitorsView.this.monitorsId != null )
                 {
@@ -179,6 +181,20 @@ public class MonitorsView extends MonitorSubscriptionAlarmsEventsView
                         MonitorsView.this.getStateLabel ().setText ( label.toString () );
                     }
                 } );
+            }
+
+            private String makeString ( final Connection connection )
+            {
+                if ( connection == null )
+                {
+                    return "<none>";
+                }
+                final ConnectionInformation ci = connection.getConnectionInformation ();
+                if ( ci == null )
+                {
+                    return "<none>";
+                }
+                return ci.toMaskedString ();
             }
         } );
     }
