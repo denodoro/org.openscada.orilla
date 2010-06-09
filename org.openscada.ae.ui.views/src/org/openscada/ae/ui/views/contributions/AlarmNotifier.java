@@ -78,6 +78,8 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution implements
 
     private URL soundFile;
 
+    private volatile boolean connected = false;
+
     public AlarmNotifier ()
     {
         super ();
@@ -237,6 +239,7 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution implements
         this.listeners.put ( id, new ItemUpdateListener () {
             public void notifySubscriptionChange ( final SubscriptionState subscriptionState, final Throwable subscriptionError )
             {
+                AlarmNotifier.this.connected = subscriptionState == SubscriptionState.CONNECTED;
             }
 
             public void notifyDataChange ( final Variant value, final Map<String, Variant> attributes, final boolean cache )
@@ -309,9 +312,12 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution implements
         getWorkbenchWindow ().getShell ().getDisplay ().asyncExec ( new Runnable () {
             public void run ()
             {
-                AlarmNotifier.this.panel.setBackground ( getColor () );
-                AlarmNotifier.this.label.setBackground ( getColor () );
-                AlarmNotifier.this.label.setText ( getLabel () );
+                if ( !AlarmNotifier.this.panel.isDisposed () && !AlarmNotifier.this.label.isDisposed () )
+                {
+                    AlarmNotifier.this.panel.setBackground ( getColor () );
+                    AlarmNotifier.this.label.setBackground ( getColor () );
+                    AlarmNotifier.this.label.setText ( getLabel () );
+                }
             }
         } );
     }
@@ -366,6 +372,10 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution implements
 
     private String getLabel ()
     {
+        if ( ( this.connectionService == null ) || ( this.connectionService.getConnection ().getState () != ConnectionState.BOUND ) )
+        {
+            return "disconnected";
+        }
         if ( numberOfAlarms () + numberOfAckAlarms () == 0 )
         {
             return "no Alarm";
@@ -375,7 +385,7 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution implements
 
     private Color getColor ()
     {
-        if ( ( this.connectionService == null ) || ( this.connectionService.getConnection ().getState () != ConnectionState.BOUND ) )
+        if ( !this.connected )
         {
             return this.getWorkbenchWindow ().getWorkbench ().getDisplay ().getSystemColor ( SWT.COLOR_MAGENTA );
         }
