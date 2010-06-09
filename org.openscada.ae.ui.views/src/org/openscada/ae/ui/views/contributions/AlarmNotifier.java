@@ -25,6 +25,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
@@ -77,6 +78,10 @@ import org.slf4j.LoggerFactory;
 
 public class AlarmNotifier extends WorkbenchWindowControlContribution
 {
+    private static final List<String> ALARM_STATES = Arrays.asList ( new String[] { "NOT_OK", "NOT_OK_AKN", "NOT_OK_NOT_AKN" } );
+
+    private static final List<String> ACK_STATES = Arrays.asList ( new String[] { "NOT_AKN", "NOT_OK_NOT_AKN" } );
+
     private final static Logger logger = LoggerFactory.getLogger ( AlarmNotifier.class );
 
     public static final String ID = "org.openscada.ae.ui.views.contributions.alarmnotifier";
@@ -460,7 +465,7 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution
         int alarms = 0;
         for ( final Entry<String, AtomicInteger> entry : this.monitorStatus.entrySet () )
         {
-            if ( Arrays.asList ( new String[] { "NOT_AKN", "NOT_OK_NOT_AKN" } ).contains ( entry.getKey () ) )
+            if ( ACK_STATES.contains ( entry.getKey () ) )
             {
                 alarms += entry.getValue ().get ();
             }
@@ -473,7 +478,7 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution
         int alarms = 0;
         for ( final Entry<String, AtomicInteger> entry : this.monitorStatus.entrySet () )
         {
-            if ( Arrays.asList ( new String[] { "NOT_OK", "NOT_OK_AKN", "NOT_OK_NOT_AKN" } ).contains ( entry.getKey () ) )
+            if ( ALARM_STATES.contains ( entry.getKey () ) )
             {
                 alarms += entry.getValue ().get ();
             }
