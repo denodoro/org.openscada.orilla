@@ -23,7 +23,6 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -54,10 +53,13 @@ import org.openscada.da.client.chart.Activator;
 import org.openscada.da.client.chart.Messages;
 import org.openscada.da.ui.connection.data.DataItemHolder;
 import org.openscada.da.ui.connection.data.DataSourceListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ChartView2 extends ViewPart
 {
-    private static Logger log = Logger.getLogger ( ChartView2.class );
+
+    private final static Logger logger = LoggerFactory.getLogger ( ChartView2.class );
 
     public final static String VIEW_ID = "org.openscada.da.client.chart.ChartView"; //$NON-NLS-1$
 
@@ -117,9 +119,10 @@ public class ChartView2 extends ViewPart
             }
         }
 
-        public void performUpdate ()
+        public void performUpdate ( final DataItemValue value )
         {
-            final Number n = convertToNumber ( this.value );
+            this.value = value;
+            final Number n = convertToNumber ( value );
 
             final RegularTimePeriod time = new FixedMillisecond ( Calendar.getInstance ().getTime () );
 
@@ -135,8 +138,7 @@ public class ChartView2 extends ViewPart
 
         public void updateData ( final DataItemValue value )
         {
-            this.value = value;
-            this.chartView.update ();
+            this.chartView.update ( this, value );
         }
     }
 
@@ -163,7 +165,7 @@ public class ChartView2 extends ViewPart
         }
         catch ( final Throwable e )
         {
-            log.debug ( "Failed", e ); //$NON-NLS-1$
+            logger.debug ( "Failed", e ); //$NON-NLS-1$
         }
     }
 
@@ -267,6 +269,29 @@ public class ChartView2 extends ViewPart
 
     }
 
+    protected void triggerUpdate ( final Item item, final DataItemValue value )
+    {
+        if ( !this.display.isDisposed () )
+        {
+            final ChartComposite frame = this.frame;
+            if ( frame != null )
+            {
+                frame.getDisplay ().asyncExec ( new Runnable () {
+
+                    public void run ()
+                    {
+                        if ( !ChartView2.this.frame.isDisposed () )
+                        {
+                            item.performUpdate ( value );
+                            ChartView2.this.frame.forceRedraw ();
+                        }
+                    }
+                } );
+            }
+        }
+
+    }
+
     protected static Number convertToNumber ( final DataItemValue div )
     {
         if ( div == null )
@@ -344,16 +369,15 @@ public class ChartView2 extends ViewPart
     {
         for ( final Item item : this.items )
         {
-            item.performUpdate ();
+            item.performUpdate ( item.value );
         }
 
         // update
         this.frame.forceRedraw ();
     }
 
-    public void update ()
+    public void update ( final Item item, final DataItemValue value )
     {
-        triggerUpdate ();
+        triggerUpdate ( item, value );
     }
-
 }

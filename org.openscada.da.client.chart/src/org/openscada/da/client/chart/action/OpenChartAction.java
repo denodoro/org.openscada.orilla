@@ -19,7 +19,6 @@
 
 package org.openscada.da.client.chart.action;
 
-import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.IAction;
@@ -37,10 +36,13 @@ import org.openscada.da.client.chart.Messages;
 import org.openscada.da.client.chart.view.ChartView2;
 import org.openscada.da.ui.connection.data.Item;
 import org.openscada.da.ui.connection.data.ItemSelectionHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class OpenChartAction implements IViewActionDelegate, IObjectActionDelegate
 {
-    private static Logger logger = Logger.getLogger ( OpenChartAction.class );
+
+    private final static Logger logger = LoggerFactory.getLogger ( OpenChartAction.class );
 
     private IWorkbenchPartSite site = null;
 
