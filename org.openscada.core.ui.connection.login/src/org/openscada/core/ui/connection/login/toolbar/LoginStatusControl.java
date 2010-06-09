@@ -20,7 +20,6 @@
 package org.openscada.core.ui.connection.login.toolbar;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -55,14 +54,17 @@ public class LoginStatusControl extends WorkbenchWindowControlContribution imple
     @Override
     protected Control createControl ( final Composite parent )
     {
-        parent.setLayout ( new FillLayout () );
         final Composite wrapper = new Composite ( parent, SWT.NONE );
-        wrapper.setLayout ( new GridLayout ( 1, true ) );
+
+        final GridLayout layout = new GridLayout ( 1, true );
+        layout.marginHeight = layout.marginWidth = 0;
+
+        wrapper.setLayout ( layout );
 
         this.statusLabel = new Label ( wrapper, SWT.NONE );
 
         this.statusLabel.setText ( Messages.LoginStatusControl_StatusLabel_Text );
-        final GridData gd = new GridData ( SWT.BEGINNING, SWT.CENTER, false, false );
+        final GridData gd = new GridData ( SWT.FILL, SWT.CENTER, false, true );
         gd.widthHint = 150;
         this.statusLabel.setLayoutData ( gd );
 
@@ -80,7 +82,6 @@ public class LoginStatusControl extends WorkbenchWindowControlContribution imple
         else
         {
             this.statusLabel.setText ( String.format ( Messages.LoginStatusControl_StatusLabel_SessionFormat, getUserName ( session.getUsername () ), session.getLoginContext ().getName () ) );
-            this.statusLabel.getParent ().pack ();
         }
     }
 
