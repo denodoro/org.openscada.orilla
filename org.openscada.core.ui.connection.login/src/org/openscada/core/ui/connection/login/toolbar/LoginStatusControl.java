@@ -62,7 +62,9 @@ public class LoginStatusControl extends WorkbenchWindowControlContribution imple
         this.statusLabel = new Label ( wrapper, SWT.NONE );
 
         this.statusLabel.setText ( Messages.LoginStatusControl_StatusLabel_Text );
-        this.statusLabel.setLayoutData ( new GridData ( SWT.BEGINNING, SWT.CENTER, false, false ) );
+        final GridData gd = new GridData ( SWT.BEGINNING, SWT.CENTER, false, false );
+        gd.widthHint = 150;
+        this.statusLabel.setLayoutData ( gd );
 
         SessionManager.getDefault ().addListener ( this );
 
