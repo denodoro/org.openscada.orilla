@@ -283,7 +283,7 @@ public class ChartView2 extends ViewPart
                         if ( !ChartView2.this.frame.isDisposed () )
                         {
                             item.performUpdate ( value );
-                            ChartView2.this.frame.forceRedraw ();
+                            // ChartView2.this.frame.forceRedraw ();
                         }
                     }
                 } );
