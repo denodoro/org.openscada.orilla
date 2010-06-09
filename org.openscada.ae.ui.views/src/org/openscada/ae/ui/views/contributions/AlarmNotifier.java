@@ -156,7 +156,7 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution
             this.monitorStatus.put ( ms.name (), new AtomicInteger ( 0 ) );
         }
 
-        this.panel = new Composite ( parent, SWT.BORDER );
+        this.panel = new Composite ( parent, SWT.NONE );
         this.panel.setBackgroundMode ( SWT.INHERIT_DEFAULT );
         final GridLayout layout = new GridLayout ( 2, false );
         layout.marginHeight = layout.marginWidth = 0;
