@@ -72,7 +72,11 @@ public class LocalDataPage extends WizardPage
         label.setText ( Messages.LocalDataPage_FileLabel );
 
         this.fileName = new Text ( wrapper, SWT.BORDER );
-        this.fileName.setText ( getWizard ().getDialogSettings ().get ( "welcomePage.file" ) ); //$NON-NLS-1$
+        final String file = getWizard ().getDialogSettings ().get ( "welcomePage.file" );
+        if ( file != null )
+        {
+            this.fileName.setText ( file );
+        }
         this.fileName.setLayoutData ( new GridData ( SWT.FILL, SWT.CENTER, true, false ) );
         this.fileName.addModifyListener ( new ModifyListener () {
 
@@ -112,7 +116,7 @@ public class LocalDataPage extends WizardPage
 
     protected void selectFile ()
     {
-        final FileDialog dlg = new FileDialog ( this.getShell (), SWT.OPEN );
+        final FileDialog dlg = new FileDialog ( getShell (), SWT.OPEN );
         dlg.setFilterExtensions ( new String[] { "*.oscar", "*.json", "*.*" } ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         dlg.setFilterNames ( new String[] { Messages.LocalDataPage_OSCARFilterDescription, Messages.LocalDataPage_JSONFilterDescription, Messages.LocalDataPage_AllFilterDescription } );
 
