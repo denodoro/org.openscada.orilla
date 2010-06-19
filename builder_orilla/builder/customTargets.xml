@@ -155,6 +155,7 @@
   	<openscada.builder.copyPlugin id="org.openscada.ae.ui.views"/>
   	<openscada.builder.copyPlugin id="org.openscada.ae.ui.connection" />
   	<openscada.builder.copyPlugin id="org.openscada.ae.ui.connection.creator.net" />
+  	<openscada.builder.copyPlugin id="org.openscada.ae.ui.views.export.excel"/>
   	
   	<!-- OpenSCADA HD UI -->
 
