@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="toolbar:org.openscada.ae.ui.views.views.eventpool">
+         <command
+               commandId="org.eclipse.ui.file.export"
+               label="Export"
+               style="push">
+            <parameter
+                  name="exportWizardId"
+                  value="org.openscada.ae.ui.views.export.excel.ExportWizard">
+            </parameter>
+         </command>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.exportWizards">
+      <wizard
+            category="org.openscada.ae"
+            class="org.openscada.ae.ui.views.export.excel.ExportWizard"
+            id="org.openscada.ae.ui.views.export.excel.ExportWizard"
+            name="Excel Export">
+         <description>
+            Export selected events to an Excel sheet.
+         </description>
+      </wizard>
+   </extension>
+
+</plugin>
