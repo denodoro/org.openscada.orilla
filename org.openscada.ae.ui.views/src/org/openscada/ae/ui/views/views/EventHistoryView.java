@@ -182,6 +182,8 @@ public class EventHistoryView extends AbstractAlarmsEventsView
         this.eventsTable = new EventViewTable ( getContentPane (), SWT.BORDER, this.events, null, commentAction, this.initialColumnSettings );
         this.eventsTable.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, true, 1, 1 ) );
 
+        getSite ().setSelectionProvider ( this.eventsTable.getTableViewer () );
+
         loadConfiguration ();
     }
 
@@ -246,7 +248,7 @@ public class EventHistoryView extends AbstractAlarmsEventsView
     protected void onConnect ()
     {
         super.onConnect ();
-        this.getSite ().getShell ().getDisplay ().asyncExec ( new Runnable () {
+        getSite ().getShell ().getDisplay ().asyncExec ( new Runnable () {
             public void run ()
             {
                 EventHistoryView.this.pauseAction.setEnabled ( false );
@@ -263,7 +265,7 @@ public class EventHistoryView extends AbstractAlarmsEventsView
         super.onDisconnect ();
         try
         {
-            this.getSite ().getShell ().getDisplay ().asyncExec ( new Runnable () {
+            getSite ().getShell ().getDisplay ().asyncExec ( new Runnable () {
                 public void run ()
                 {
                     clearData ();
@@ -341,7 +343,7 @@ public class EventHistoryView extends AbstractAlarmsEventsView
             public void queryStateChanged ( final QueryState state )
             {
                 EventHistoryView.this.queryState.set ( state );
-                if ( ( state == QueryState.CONNECTED ) && !EventHistoryView.this.isPaused.get () )
+                if ( state == QueryState.CONNECTED && !EventHistoryView.this.isPaused.get () )
                 {
                     continueLoading ();
                 }
@@ -393,7 +395,7 @@ public class EventHistoryView extends AbstractAlarmsEventsView
         if ( isConnected () )
         {
             EventHistoryView.this.isPaused.set ( false );
-            this.queryRef.set ( this.getConnection ().createQuery ( "client", filter, queryListener ) );
+            this.queryRef.set ( getConnection ().createQuery ( "client", filter, queryListener ) );
         }
     }
 
@@ -425,9 +427,9 @@ public class EventHistoryView extends AbstractAlarmsEventsView
     protected void updateStatusBar ()
     {
         final StringBuilder label = new StringBuilder ();
-        if ( this.getConnection () != null )
+        if ( getConnection () != null )
         {
-            if ( this.getConnection ().getState () == ConnectionState.BOUND )
+            if ( getConnection ().getState () == ConnectionState.BOUND )
             {
                 label.append ( "CONNECTED to " );
             }
@@ -435,7 +437,7 @@ public class EventHistoryView extends AbstractAlarmsEventsView
             {
                 label.append ( "DISCONNECTED from " );
             }
-            label.append ( this.getConnection ().getConnectionInformation () );
+            label.append ( getConnection ().getConnectionInformation () );
         }
         else
         {

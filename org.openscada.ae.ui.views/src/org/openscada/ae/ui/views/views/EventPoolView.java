@@ -191,8 +191,10 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
         toolBarManager.add ( setFilterAction );
         toolBarManager.add ( removeFilterAction );
 
-        this.eventsTable = new EventViewTable ( this.getContentPane (), SWT.BORDER, this.pool, this.ackAction, commentAction, this.initialColumnSettings );
+        this.eventsTable = new EventViewTable ( getContentPane (), SWT.BORDER, this.pool, this.ackAction, commentAction, this.initialColumnSettings );
         this.eventsTable.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, true, 1, 1 ) );
+
+        getSite ().setSelectionProvider ( this.eventsTable.getTableViewer () );
 
         loadConfiguration ();
     }
@@ -250,7 +252,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
     protected void subscribe ()
     {
         super.subscribe ();
-        if ( this.getConnection () != null && this.poolId != null )
+        if ( getConnection () != null && this.poolId != null )
         {
             this.eventPoolListener = new EventListener () {
                 public void statusChanged ( final SubscriptionState state )
@@ -271,7 +273,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
     protected void unSubscribe ()
     {
         super.unSubscribe ();
-        if ( this.getConnection () != null && this.poolId != null )
+        if ( getConnection () != null && this.poolId != null )
         {
             if ( this.eventPoolListener != null )
             {
@@ -440,13 +442,13 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
     @Override
     protected void acknowledge ()
     {
-        if ( this.getConnection () != null && this.getConnection ().getState () == ConnectionState.BOUND )
+        if ( getConnection () != null && getConnection ().getState () == ConnectionState.BOUND )
         {
             for ( final DecoratedEvent event : this.eventsTable.selectedEvents () )
             {
                 if ( event.getMonitor () != null )
                 {
-                    this.getConnection ().acknowledge ( event.getMonitor ().getId (), event.getMonitor ().getStatusTimestamp () );
+                    getConnection ().acknowledge ( event.getMonitor ().getId (), event.getMonitor ().getStatusTimestamp () );
                 }
             }
         }

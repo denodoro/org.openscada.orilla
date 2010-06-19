@@ -38,4 +38,11 @@ Import-Package: com.google.gson;version="1.4.0",
  org.openscada.utils.propertyeditors;version="0.15.0",
  org.openscada.utils.str;version="0.15.0",
  org.slf4j;version="[1.5.0,1.6.0)"
-Export-Package: org.openscada.ae.ui.views.contributions
+Export-Package: org.openscada.ae.ui.views.contributions;version="0.15.0";
+  uses:="org.openscada.da.connection.provider,
+   org.openscada.da.client,
+   org.eclipse.ui.menus,
+   org.eclipse.swt.widgets,
+   org.openscada.ui.utils.blink,
+   org.openscada.ae",
+ org.openscada.ae.ui.views.model;version="0.15.0";uses:="org.openscada.utils.beans,org.openscada.core,org.openscada.ae"

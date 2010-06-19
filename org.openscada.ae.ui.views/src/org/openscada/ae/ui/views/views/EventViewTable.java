@@ -170,10 +170,10 @@ public class EventViewTable extends Composite
             final Event e1 = ( (DecoratedEvent)o1 ).getEvent ();
             final Event e2 = ( (DecoratedEvent)o2 ).getEvent ();
 
-            int cmpId = e1.getId ().compareTo ( e2.getId () );
-            int cmpSourceTs = e1.getSourceTimestamp ().compareTo ( e2.getSourceTimestamp () );
-            int cmpEntryTs = e1.getEntryTimestamp ().compareTo ( e2.getEntryTimestamp () );
-            int cmpSequence = new VariantComparator ().compare ( e1.getAttributes ().get ( "sequence" ), e2.getAttributes ().get ( "sequence" ) ); //$NON-NLS-1$ //$NON-NLS-2$
+            final int cmpId = e1.getId ().compareTo ( e2.getId () );
+            final int cmpSourceTs = e1.getSourceTimestamp ().compareTo ( e2.getSourceTimestamp () );
+            final int cmpEntryTs = e1.getEntryTimestamp ().compareTo ( e2.getEntryTimestamp () );
+            final int cmpSequence = new VariantComparator ().compare ( e1.getAttributes ().get ( "sequence" ), e2.getAttributes ().get ( "sequence" ) ); //$NON-NLS-1$ //$NON-NLS-2$
             int result = 0;
 
             if ( this.column == Column.reservedColumnId )
@@ -193,7 +193,7 @@ public class EventViewTable extends Composite
 
         private int chainCompare ( final int... cmp )
         {
-            for ( int i : cmp )
+            for ( final int i : cmp )
             {
                 if ( i != 0 )
                 {
@@ -221,7 +221,7 @@ public class EventViewTable extends Composite
             final TableColumn currentColumn = table.getSortColumn ();
 
             final Column column = (Column)newColumn.getData ( COLUMN_KEY );
-            if ( ( column == Column.reservedColumnSourceTimestamp ) || ( column == Column.reservedColumnEntryTimestamp ) )
+            if ( column == Column.reservedColumnSourceTimestamp || column == Column.reservedColumnEntryTimestamp )
             {
                 final int currentDir = table.getSortDirection ();
                 int newDir = SWT.UP;
@@ -279,7 +279,7 @@ public class EventViewTable extends Composite
         this.events = events;
 
         final FillLayout layout = new FillLayout ();
-        this.setLayout ( layout );
+        setLayout ( layout );
 
         this.tableViewer = new TableViewer ( this, SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.MULTI );
         createColumns ( this.tableViewer );
@@ -305,6 +305,11 @@ public class EventViewTable extends Composite
                 }
             }
         } );
+    }
+
+    public TableViewer getTableViewer ()
+    {
+        return this.tableViewer;
     }
 
     private void applyColumSettings ( final List<ColumnProperties> columnSettings )
@@ -340,7 +345,7 @@ public class EventViewTable extends Composite
 
     private Menu createContextMenu ( final Control parent )
     {
-        if ( ( this.ackAction == null ) && ( this.commentAction == null ) )
+        if ( this.ackAction == null && this.commentAction == null )
         {
             return null;
         }
@@ -399,7 +404,7 @@ public class EventViewTable extends Composite
                 fieldColumn.getColumn ().setWidth ( 0 );
                 fieldColumn.getColumn ().addSelectionListener ( sortListener );
             }
-            if ( ( column == Column.reservedColumnSourceTimestamp ) || ( column == Column.reservedColumnEntryTimestamp ) )
+            if ( column == Column.reservedColumnSourceTimestamp || column == Column.reservedColumnEntryTimestamp )
             {
                 fieldColumn.getColumn ().setWidth ( 140 );
                 fieldColumn.getColumn ().addSelectionListener ( sortListener );

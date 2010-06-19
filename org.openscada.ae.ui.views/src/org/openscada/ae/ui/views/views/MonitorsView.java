@@ -62,7 +62,7 @@ public class MonitorsView extends MonitorSubscriptionAlarmsEventsView
     {
         super.createPartControl ( parent );
 
-        this.monitorsTable = new MonitorsViewTable ( this.getContentPane (), SWT.BORDER, this.monitors, this.ackAction, this.initialColumnSettings );
+        this.monitorsTable = new MonitorsViewTable ( getContentPane (), SWT.BORDER, this.monitors, this.ackAction, this.initialColumnSettings );
         this.monitorsTable.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, true, 1, 1 ) );
 
         loadConfiguration ();
@@ -119,11 +119,11 @@ public class MonitorsView extends MonitorSubscriptionAlarmsEventsView
     @Override
     protected void acknowledge ()
     {
-        if ( this.getConnection () != null && this.getConnection ().getState () == ConnectionState.BOUND )
+        if ( getConnection () != null && getConnection ().getState () == ConnectionState.BOUND )
         {
             for ( final DecoratedMonitor monitor : this.monitorsTable.selectedMonitors () )
             {
-                this.getConnection ().acknowledge ( monitor.getMonitor ().getId (), monitor.getMonitor ().getStatusTimestamp () );
+                getConnection ().acknowledge ( monitor.getMonitor ().getId (), monitor.getMonitor ().getStatusTimestamp () );
             }
         }
     }

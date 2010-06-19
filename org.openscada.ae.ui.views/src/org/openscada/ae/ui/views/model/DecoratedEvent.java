@@ -21,12 +21,13 @@ package org.openscada.ae.ui.views.model;
 
 import java.io.Serializable;
 
+import org.eclipse.core.runtime.IAdaptable;
+import org.openscada.ae.Event;
 import org.openscada.ae.MonitorStatus;
 import org.openscada.ae.MonitorStatusInformation;
-import org.openscada.ae.Event;
 import org.openscada.utils.beans.AbstractPropertyChange;
 
-public class DecoratedEvent extends AbstractPropertyChange implements Serializable
+public class DecoratedEvent extends AbstractPropertyChange implements Serializable, IAdaptable
 {
     private static final long serialVersionUID = -565152685009234585L;
 
@@ -135,5 +136,15 @@ public class DecoratedEvent extends AbstractPropertyChange implements Serializab
     public boolean isAknRequired ()
     {
         return isActive () && ( this.monitor.getStatus () == MonitorStatus.NOT_AKN || this.monitor.getStatus () == MonitorStatus.NOT_OK_NOT_AKN );
+    }
+
+    @SuppressWarnings ( "unchecked" )
+    public Object getAdapter ( final Class adapter )
+    {
+        if ( adapter == Event.class )
+        {
+            return this.event;
+        }
+        return null;
     }
 }
