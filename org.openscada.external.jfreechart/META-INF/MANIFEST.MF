@@ -2,15 +2,8 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: JFreeChart
 Bundle-SymbolicName: org.openscada.external.jfreechart
-Bundle-Version: 1.0.4
+Bundle-Version: 1.0.13
 Bundle-Vendor: Object Refinery Limited
-Bundle-ClassPath: gnujaxp.jar,
- itext-1.4.8.jar,
- jcommon-1.0.8.jar,
- jfreechart-1.0.4.jar,
- jfreechart-1.0.4-swt.jar,
- swtgraphics2d.jar,
- .
 Export-Package: org.jfree,
  org.jfree.base,
  org.jfree.base.config,
@@ -28,7 +21,9 @@ Export-Package: org.jfree,
  org.jfree.chart.imagemap,
  org.jfree.chart.labels,
  org.jfree.chart.needle,
+ org.jfree.chart.panel,
  org.jfree.chart.plot,
+ org.jfree.chart.plot.dial,
  org.jfree.chart.renderer,
  org.jfree.chart.renderer.category,
  org.jfree.chart.renderer.xy,
@@ -69,3 +64,9 @@ Export-Package: org.jfree,
  org.jfree.util
 Require-Bundle: org.eclipse.swt
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-ClassPath: gnujaxp.jar,
+ iText-2.1.5.jar,
+ jcommon-1.0.16.jar,
+ jfreechart-1.0.13-swt.jar,
+ jfreechart-1.0.13.jar,
+ swtgraphics2d.jar
