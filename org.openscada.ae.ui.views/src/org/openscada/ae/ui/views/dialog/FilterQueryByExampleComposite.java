@@ -327,6 +327,7 @@ public class FilterQueryByExampleComposite extends Composite
         this.fields.put ( "message", new TextFieldEntry ( this, "message", Messages.getString ( "message" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         this.fields.put ( "monitorType", new TextFieldEntry ( this, "monitorType", Messages.getString ( "monitorType" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         this.fields.put ( "eventType", new TextFieldEntry ( this, "eventType", Messages.getString ( "eventType" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        this.fields.put ( "item" , new TextFieldEntry ( this, "item", Messages.getString ( "item" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         this.fields.put ( "value", new NumberFieldEntry ( this, "value", Messages.getString ( "value" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         this.fields.put ( "priority", new NumberFieldEntry ( this, "priority", Messages.getString ( "priority" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         this.fields.put ( "source", new TextFieldEntry ( this, "source", Messages.getString ( "source" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -334,6 +335,8 @@ public class FilterQueryByExampleComposite extends Composite
         this.fields.put ( "actorName", new TextFieldEntry ( this, "actorName", Messages.getString ( "actorName" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         this.fields.put ( "component", new TextFieldEntry ( this, "component", Messages.getString ( "component" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         this.fields.put ( "system", new TextFieldEntry ( this, "system", Messages.getString ( "system" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        this.fields.put ( "hive", new TextFieldEntry ( this, "hive", Messages.getString ( "hive" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        this.fields.put ( "location", new TextFieldEntry ( this, "location", Messages.getString ( "location" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
         // clear button
         this.clearButton = new Button ( this, SWT.PUSH );
