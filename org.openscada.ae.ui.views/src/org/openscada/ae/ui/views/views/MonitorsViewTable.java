@@ -48,6 +48,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.openscada.ae.MonitorStatusInformation;
 import org.openscada.ae.ui.views.Messages;
+import org.openscada.ae.ui.views.Settings;
 import org.openscada.ae.ui.views.model.DecoratedMonitor;
 import org.openscada.core.Variant;
 
@@ -206,7 +207,7 @@ public class MonitorsViewTable extends Composite
 
         final ObservableSetContentProvider contentProvider = new ObservableSetContentProvider ();
         this.tableViewer.setContentProvider ( contentProvider );
-        this.tableViewer.setLabelProvider ( new MonitorTableLabelProvider ( Properties.observeEach ( contentProvider.getKnownElements (), BeanProperties.values ( new String[] { "id", "monitor" } ) ) ) ); //$NON-NLS-1$ //$NON-NLS-2$
+        this.tableViewer.setLabelProvider ( new MonitorTableLabelProvider ( Properties.observeEach ( contentProvider.getKnownElements (), BeanProperties.values ( new String[] { "id", "monitor" } ) ), Settings.getTimeZone () ) ); //$NON-NLS-1$ //$NON-NLS-2$
         this.tableViewer.setInput ( this.monitors );
 
         contentProvider.getRealizedElements ().addSetChangeListener ( new ISetChangeListener () {

@@ -20,6 +20,7 @@
 package org.openscada.ae.ui.views.views;
 
 import java.util.List;
+import java.util.TimeZone;
 
 import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.jface.databinding.viewers.ObservableMapLabelProvider;
@@ -32,17 +33,21 @@ import org.openscada.core.Variant;
 public class EventLabelProvider extends ObservableMapLabelProvider
 {
     final private List<Column> columns;
+    
+    final private LabelProviderSupport labelProviderSupport;
 
-    public EventLabelProvider ( final IObservableMap attributeMap, final List<Column> columns )
+    public EventLabelProvider ( final IObservableMap attributeMap, final List<Column> columns, TimeZone timeZone )
     {
         super ( attributeMap );
         this.columns = columns;
+        this.labelProviderSupport = new LabelProviderSupport (timeZone);
     }
 
-    public EventLabelProvider ( final IObservableMap[] attributeMaps, final List<Column> columns )
+    public EventLabelProvider ( final IObservableMap[] attributeMaps, final List<Column> columns, TimeZone timeZone )
     {
         super ( attributeMaps );
         this.columns = columns;
+        this.labelProviderSupport = new LabelProviderSupport (timeZone);
     }
 
     @Override
@@ -61,11 +66,11 @@ public class EventLabelProvider extends ObservableMapLabelProvider
         }
         if ( column == Column.reservedColumnSourceTimestamp )
         {
-            return LabelProviderSupport.df.format ( event.getEvent ().getSourceTimestamp () );
+            return labelProviderSupport.getDf ().format ( event.getEvent ().getSourceTimestamp () );
         }
         if ( column == Column.reservedColumnEntryTimestamp )
         {
-            return LabelProviderSupport.df.format ( event.getEvent ().getEntryTimestamp () );
+            return labelProviderSupport.getDf ().format ( event.getEvent ().getEntryTimestamp () );
         }
         if ( columnIndex > this.columns.size () - 1 )
         {
@@ -83,7 +88,7 @@ public class EventLabelProvider extends ObservableMapLabelProvider
                 return Messages.EventLabelProvider_EmptyString;
             }
         }
-        return LabelProviderSupport.toLabel ( event, column.getField () );
+        return labelProviderSupport.toLabel ( event, column.getField () );
 
     }
 

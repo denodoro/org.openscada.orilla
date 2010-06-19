@@ -19,6 +19,8 @@
 
 package org.openscada.ae.ui.views.views;
 
+import java.util.TimeZone;
+
 import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.jface.databinding.viewers.ObservableMapLabelProvider;
 import org.eclipse.swt.graphics.Image;
@@ -27,14 +29,18 @@ import org.openscada.ae.ui.views.model.DecoratedMonitor;
 
 public class MonitorTableLabelProvider extends ObservableMapLabelProvider
 {
-    public MonitorTableLabelProvider ( final IObservableMap attributeMap )
+    final private LabelProviderSupport labelProviderSupport;
+
+    public MonitorTableLabelProvider ( final IObservableMap attributeMap, TimeZone timeZone )
     {
         super ( attributeMap );
+        this.labelProviderSupport = new LabelProviderSupport (timeZone);
     }
 
-    public MonitorTableLabelProvider ( final IObservableMap[] attributeMaps )
+    public MonitorTableLabelProvider ( final IObservableMap[] attributeMaps, TimeZone timeZone )
     {
         super ( attributeMaps );
+        this.labelProviderSupport = new LabelProviderSupport (timeZone);
     }
 
     @Override
@@ -84,17 +90,17 @@ public class MonitorTableLabelProvider extends ObservableMapLabelProvider
         case 1:
             return monitor.getStatus ().toString ();
         case 2:
-            return LabelProviderSupport.formatDate ( monitor.getStatusTimestamp () );
+            return labelProviderSupport.formatDate ( monitor.getStatusTimestamp () );
         case 3:
-            return LabelProviderSupport.toLabel ( monitor.getValue () );
+            return labelProviderSupport.toLabel ( monitor.getValue () );
         case 4:
             return monitor.getLastAknUser ().toString ();
         case 5:
-            return LabelProviderSupport.formatDate ( monitor.getLastAknTimestamp () );
+            return labelProviderSupport.formatDate ( monitor.getLastAknTimestamp () );
         case 6:
-            return LabelProviderSupport.toLabel ( monitor.getAttributes ().get ( "item" ) ); //$NON-NLS-1$
+            return labelProviderSupport.toLabel ( monitor.getAttributes ().get ( "item" ) ); //$NON-NLS-1$
         case 7:
-            return LabelProviderSupport.toLabel ( monitor.getAttributes ().get ( "message" ) ); //$NON-NLS-1$
+            return labelProviderSupport.toLabel ( monitor.getAttributes ().get ( "message" ) ); //$NON-NLS-1$
         }
         return Messages.MonitorTableLabelProvider_EmptyString;
     }

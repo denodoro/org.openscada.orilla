@@ -24,6 +24,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 import org.eclipse.swt.graphics.Image;
 import org.openscada.ae.Event.Fields;
@@ -42,9 +43,9 @@ public class LabelProviderSupport
         FUTURE;
     }
 
-    public static final DateFormat df = new SimpleDateFormat ( "yyyy-MM-dd HH:mm:ss.SSS" );
+    private final DateFormat df;
 
-    public static final DateFormat tf = new SimpleDateFormat ( "HH:mm:ss.SSS" );
+    private final DateFormat tf;
 
     public static final NumberFormat nf3 = new DecimalFormat ( "0.###" );
 
@@ -66,7 +67,25 @@ public class LabelProviderSupport
 
     public static final Image SYSTEM_IMG = Activator.getImageDescriptor ( "icons/system_icon.gif" ).createImage ();
 
-    public static String toLabel ( final Variant value )
+    public LabelProviderSupport ( final TimeZone timeZone )
+    {
+        df = new SimpleDateFormat ( "yyyy-MM-dd HH:mm:ss.SSS");
+        df.setTimeZone ( timeZone );
+        tf = new SimpleDateFormat ( "HH:mm:ss.SSS" );
+        tf.setTimeZone ( timeZone );
+    }
+    
+    public DateFormat getDf ()
+    {
+        return df;
+    }
+    
+    public DateFormat getTf ()
+    {
+        return tf;
+    }
+
+    public String toLabel ( final Variant value )
     {
         if ( value == null )
         {
@@ -87,7 +106,7 @@ public class LabelProviderSupport
         return value.toLabel ( "" );
     }
 
-    public static String formatDate ( final Date date )
+    public String formatDate ( final Date date )
     {
         if ( date == null )
         {
@@ -96,6 +115,7 @@ public class LabelProviderSupport
         switch ( toSpecial ( date ) )
         {
         case YESTERDAY:
+            tf.setTimeZone ( TimeZone.getTimeZone ( "Europe/Sofia" ) );
             return "Yesterday " + tf.format ( date );
         case TODAY:
             return "Today " + tf.format ( date );
@@ -104,13 +124,13 @@ public class LabelProviderSupport
         }
     }
 
-    public static String toLabel ( final DecoratedEvent event, final Fields field )
+    public String toLabel ( final DecoratedEvent event, final Fields field )
     {
         final Variant value = event.getEvent ().getField ( field );
         return toLabel ( value );
     }
 
-    private static SpecialDate toSpecial ( final Date date )
+    private SpecialDate toSpecial ( final Date date )
     {
         return SpecialDate.PAST;
 
