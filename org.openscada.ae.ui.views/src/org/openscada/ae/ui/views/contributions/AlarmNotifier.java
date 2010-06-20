@@ -49,6 +49,7 @@ import org.eclipse.jface.resource.ResourceManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -158,7 +159,6 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution
         }
 
         this.panel = new Composite ( parent, SWT.NONE );
-        this.panel.setBackgroundMode ( SWT.INHERIT_DEFAULT );
         final GridLayout layout = new GridLayout ( 2, false );
         layout.marginHeight = layout.marginWidth = 0;
         this.panel.setLayout ( layout );
@@ -220,22 +220,29 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution
                 switch ( state )
                 {
                 case UNSAFE:
-                    AlarmNotifier.this.panel.setBackground ( AlarmNotifier.this.display.getSystemColor ( SWT.COLOR_MAGENTA ) );
+                    setBackground ( AlarmNotifier.this.display.getSystemColor ( SWT.COLOR_MAGENTA ) );
                     break;
 
                 case ALARM_1:
                 case ALARM:
-                    AlarmNotifier.this.panel.setBackground ( AlarmNotifier.this.display.getSystemColor ( SWT.COLOR_RED ) );
+                    setBackground ( AlarmNotifier.this.display.getSystemColor ( SWT.COLOR_MAGENTA ) );
                     break;
 
                 case NORMAL:
                 case ALARM_0:
                 default:
-                    AlarmNotifier.this.panel.setBackground ( null );
+                    setBackground ( null );
                     break;
                 }
             }
         } );
+    }
+
+    protected void setBackground ( final Color color )
+    {
+        AlarmNotifier.this.panel.setBackground ( color );
+        this.label.setBackground ( color );
+        this.bellIcon.setBackground ( color );
     }
 
     protected void triggerBellSwitch ()
