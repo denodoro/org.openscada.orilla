@@ -240,7 +240,7 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution
 
     protected void setBackground ( final Color color )
     {
-        AlarmNotifier.this.panel.setBackground ( color );
+        this.panel.setBackground ( color );
         this.label.setBackground ( color );
         this.bellIcon.setBackground ( color );
     }
