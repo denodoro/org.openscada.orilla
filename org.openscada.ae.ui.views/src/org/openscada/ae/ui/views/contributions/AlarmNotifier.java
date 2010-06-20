@@ -225,7 +225,7 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution
 
                 case ALARM_1:
                 case ALARM:
-                    setBackground ( AlarmNotifier.this.display.getSystemColor ( SWT.COLOR_MAGENTA ) );
+                    setBackground ( AlarmNotifier.this.display.getSystemColor ( SWT.COLOR_RED ) );
                     break;
 
                 case NORMAL:
