@@ -36,7 +36,9 @@ public class EventPoolViewConfiguration
 
     private final String label;
 
-    public EventPoolViewConfiguration ( final String id, final String monitorQueryId, final String eventPoolQueryId, final String connectionString, final ConnectionType connectionType, final String label )
+    private final Integer maxNumberOfEvents;
+
+    public EventPoolViewConfiguration ( final String id, final String monitorQueryId, final String eventPoolQueryId, final String connectionString, final ConnectionType connectionType, final String label, final int maxNumberOfEvents )
     {
         super ();
         this.id = id;
@@ -45,6 +47,7 @@ public class EventPoolViewConfiguration
         this.connectionString = connectionString;
         this.connectionType = connectionType;
         this.label = label;
+        this.maxNumberOfEvents = maxNumberOfEvents;
 
         if ( this.id == null )
         {
@@ -96,5 +99,10 @@ public class EventPoolViewConfiguration
     public String getLabel ()
     {
         return this.label;
+    }
+    
+    public Integer getMaxNumberOfEvents ()
+    {
+        return maxNumberOfEvents;
     }
 }

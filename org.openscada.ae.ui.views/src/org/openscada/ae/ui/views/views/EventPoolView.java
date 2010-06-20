@@ -22,15 +22,22 @@ package org.openscada.ae.ui.views.views;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import org.eclipse.core.databinding.observable.ChangeEvent;
 import org.eclipse.core.databinding.observable.IChangeListener;
 import org.eclipse.core.databinding.observable.set.WritableSet;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.databinding.swt.SWTObservables;
@@ -59,6 +66,7 @@ import org.openscada.ae.ui.views.model.MonitorData;
 import org.openscada.core.Variant;
 import org.openscada.core.client.ConnectionState;
 import org.openscada.core.subscription.SubscriptionState;
+import org.openscada.utils.concurrent.NamedThreadFactory;
 import org.openscada.utils.lang.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,7 +77,6 @@ import com.google.gson.reflect.TypeToken;
 
 public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
 {
-
     private final static Logger logger = LoggerFactory.getLogger ( EventPoolView.class );
 
     public static final String ID = "org.openscada.ae.ui.views.views.eventpool";
@@ -91,6 +98,10 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
     private final Object jobLock = new Object ();
 
     private Collection<Event> eventList;
+
+    private ScheduledExecutorService scheduler;
+
+    private int maxNumberOfEvents = 0;
 
     public String getPoolId ()
     {
@@ -121,7 +132,19 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
     public void createPartControl ( final Composite parent )
     {
         super.createPartControl ( parent );
-
+        scheduler = Executors.newSingleThreadScheduledExecutor ( new NamedThreadFactory ( "shortenEventPool" ) );
+        scheduler.scheduleAtFixedRate ( new Runnable () {
+            public void run ()
+            {
+                scheduleJob ( new Runnable () {
+                    public void run ()
+                    {
+                        removeEvents ();
+                        updateStatusBar ();
+                    }
+                } );
+            }
+        }, 10, 10, TimeUnit.MINUTES );
         this.pool = new WritableSet ( SWTObservables.getRealm ( parent.getDisplay () ) );
         this.pool.addChangeListener ( new IChangeListener () {
             public void handleChange ( final ChangeEvent event )
@@ -237,6 +260,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
         {
             setPartName ( cfg.getLabel () );
         }
+        maxNumberOfEvents = cfg.getMaxNumberOfEvents ();
     }
 
     /**
@@ -353,6 +377,44 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
             }
         }
         EventPoolView.this.pool.addAll ( decoratedEvents );
+    }
+
+    @SuppressWarnings ( "unchecked" )
+    private void removeEvents ()
+    {
+        if ( maxNumberOfEvents <= 0 )
+        {
+            return;
+        }
+        try
+        {
+            List<DecoratedEvent> tmpList = new ArrayList<DecoratedEvent> ( (Set<DecoratedEvent>)EventPoolView.this.pool );
+            List<DecoratedEvent> toRemove = new ArrayList<DecoratedEvent> ();
+            Collections.sort ( tmpList, new Comparator<DecoratedEvent> () {
+                public int compare ( DecoratedEvent e1, DecoratedEvent e2 )
+                {
+                    return e2.compareTo ( e1 );
+                }
+            } );
+
+            int i = 0;
+            for ( DecoratedEvent event : tmpList )
+            {
+                if ( i > maxNumberOfEvents )
+                {
+                    toRemove.add ( event );
+                }
+                i++;
+            }
+            EventPoolView.this.pool.removeAll ( toRemove );
+            tmpList.clear ();
+            toRemove.clear ();
+        }
+        catch ( Throwable th )
+        {
+            IStatus status = new Status ( IStatus.ERROR, Activator.PLUGIN_ID, 42, "removeEvents () failed", th );
+            Activator.getDefault ().getLog ().log ( status );
+        }
     }
 
     @Override
@@ -541,5 +603,13 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
     {
         memento.putString ( "columnSettings", this.gson.toJson ( this.eventsTable.getColumnSettings () ) );
         super.saveState ( memento );
+    }
+
+    @Override
+    public void dispose ()
+    {
+        super.dispose ();
+        scheduler.shutdownNow ();
+        scheduler = null;
     }
 }

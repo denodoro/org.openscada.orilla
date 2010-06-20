@@ -20,6 +20,7 @@
 package org.openscada.ae.ui.views.model;
 
 import java.io.Serializable;
+import java.util.Comparator;
 
 import org.eclipse.core.runtime.IAdaptable;
 import org.openscada.ae.Event;
@@ -27,10 +28,20 @@ import org.openscada.ae.MonitorStatus;
 import org.openscada.ae.MonitorStatusInformation;
 import org.openscada.utils.beans.AbstractPropertyChange;
 
-public class DecoratedEvent extends AbstractPropertyChange implements Serializable, IAdaptable
+public class DecoratedEvent extends AbstractPropertyChange implements Serializable, IAdaptable, Comparable<DecoratedEvent>
 {
     private static final long serialVersionUID = -565152685009234585L;
 
+    public static class DecoratedEventComparator implements Comparator<DecoratedEvent>
+    {
+        public int compare ( final DecoratedEvent o1, final DecoratedEvent o2 )
+        {
+            return o1.getEvent ().compareTo ( o2.getEvent () );
+        }
+    }
+    
+    public static final DecoratedEventComparator comparator = new DecoratedEventComparator();
+    
     private Event event;
 
     private MonitorData monitor;
@@ -146,5 +157,10 @@ public class DecoratedEvent extends AbstractPropertyChange implements Serializab
             return this.event;
         }
         return null;
+    }
+
+    public int compareTo ( DecoratedEvent o )
+    {
+        return comparator.compare ( this, o );
     }
 }

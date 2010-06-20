@@ -21,6 +21,7 @@ package org.openscada.ae.ui.views.config;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.core.commands.Command;
@@ -150,8 +151,21 @@ public class ConfigurationHelper
             final String eventPoolQueryId = ele.getAttribute ( "eventPoolQueryId" ); //$NON-NLS-1$
             final ConnectionType connectionType = ConnectionType.valueOf ( ele.getAttribute ( "connectionType" ) ); //$NON-NLS-1$
             final String label = ele.getAttribute ( "label" ); //$NON-NLS-1$
+            int maxNumberOfEvents = 0;
+            if ( Arrays.asList ( ele.getAttributeNames () ).contains ( "maxNumberOfEvents" ) )
+            {
+                String s = ele.getAttribute ( "maxNumberOfEvents" );
+                try
+                {
+                    maxNumberOfEvents = Integer.parseInt ( s );
+                }
+                catch ( NumberFormatException e )
+                {
+                    // pass
+                }
+            }
 
-            return new EventPoolViewConfiguration ( id, monitorQueryId, eventPoolQueryId, connectionString, connectionType, label );
+            return new EventPoolViewConfiguration ( id, monitorQueryId, eventPoolQueryId, connectionString, connectionType, label, maxNumberOfEvents );
         }
         catch ( final Exception e )
         {
