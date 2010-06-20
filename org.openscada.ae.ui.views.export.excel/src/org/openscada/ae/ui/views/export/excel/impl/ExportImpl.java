@@ -53,9 +53,13 @@ import org.openscada.ae.ui.views.export.excel.config.DynamicField;
 import org.openscada.ae.ui.views.export.excel.config.Field;
 import org.openscada.ae.ui.views.export.excel.config.StaticField;
 import org.openscada.ui.databinding.AdapterHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ExportImpl
 {
+
+    private final static Logger logger = LoggerFactory.getLogger ( ExportImpl.class );
 
     private IStructuredSelection selection;
 
@@ -121,6 +125,7 @@ public class ExportImpl
         }
         catch ( final Exception e )
         {
+            logger.warn ( "Failed to export", e );
             return new Status ( IStatus.ERROR, Activator.PLUGIN_ID, "Failed to export", e );
         }
     }
