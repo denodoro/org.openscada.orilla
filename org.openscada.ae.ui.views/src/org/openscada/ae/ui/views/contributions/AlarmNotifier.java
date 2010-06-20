@@ -40,6 +40,7 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 import org.eclipse.core.commands.ParameterizedCommand;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.JFaceResources;
@@ -161,7 +162,7 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution
         final GridLayout layout = new GridLayout ( 2, false );
         layout.marginHeight = layout.marginWidth = 0;
         this.panel.setLayout ( layout );
-        this.panel.setCursor ( parent.getDisplay ().getSystemCursor ( SWT.CURSOR_HAND ) );
+        this.panel.setCursor ( this.display.getSystemCursor ( SWT.CURSOR_HAND ) );
         // this.panel.addMouseListener ( this );
 
         this.label = new Label ( this.panel, SWT.NONE );
@@ -245,7 +246,7 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution
         }
         catch ( final Exception e )
         {
-            Activator.getDefault ().getLog ().log ( new Status ( Status.ERROR, Activator.PLUGIN_ID, "Failed to write bell command", e ) );
+            Activator.getDefault ().getLog ().log ( new Status ( IStatus.ERROR, Activator.PLUGIN_ID, "Failed to write bell command", e ) );
         }
     }
 
