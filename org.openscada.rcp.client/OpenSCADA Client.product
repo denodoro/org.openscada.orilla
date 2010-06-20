@@ -50,6 +50,7 @@
       <feature id="org.openscada.ae.client.test" version="0.15.0.qualifier"/>
       <feature id="org.openscada.rcp.client" version="0.15.0.qualifier"/>
       <feature id="org.openscada.da.rcp.LocalTestServer" version="0.15.0.qualifier"/>
+      <feature id="org.openscada.ca.client.test" version="0.15.0.qualifier"/>
    </features>
 
 
