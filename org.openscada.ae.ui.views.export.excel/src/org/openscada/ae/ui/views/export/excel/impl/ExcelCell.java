@@ -42,8 +42,6 @@ public class ExcelCell implements Cell
 
     private final static DateFormat customDateFormat = new DateFormat ( "yyyy-MM-dd hh:mm:ss.SSS" );
 
-    private final static WritableCellFormat dateFormat = new WritableCellFormat ( customDateFormat );
-
     public ExcelCell ( final int row, final int column )
     {
         this.row = row;
@@ -57,7 +55,10 @@ public class ExcelCell implements Cell
 
     public void setDataAsDate ( final Date date )
     {
-        this.cell = new DateTime ( this.column, this.row, date, ExcelCell.dateFormat );
+
+        final WritableCellFormat dateFormat = new WritableCellFormat ( customDateFormat );
+
+        this.cell = new DateTime ( this.column, this.row, date, dateFormat );
     }
 
     public void setDataAsText ( final String text )

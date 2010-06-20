@@ -19,6 +19,8 @@
 
 package org.openscada.ae.ui.views.export.excel.config;
 
+import java.util.Date;
+
 import org.openscada.ae.Event;
 import org.openscada.ae.ui.views.export.excel.Cell;
 import org.openscada.core.Variant;
@@ -81,7 +83,14 @@ public class DynamicField implements Field
         final Variant data = event.getAttributes ().get ( this.attributeName );
         if ( data != null )
         {
-            cell.setDataAsVariant ( data );
+            if ( this.attributeName.contains ( "timestamp" ) && data.isNumber () )
+            {
+                cell.setDataAsDate ( new Date ( data.asLong ( 0L ) ) );
+            }
+            else
+            {
+                cell.setDataAsVariant ( data );
+            }
         }
     }
 }
