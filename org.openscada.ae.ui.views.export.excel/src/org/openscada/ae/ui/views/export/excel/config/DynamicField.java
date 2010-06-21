@@ -83,7 +83,7 @@ public class DynamicField implements Field
         final Variant data = event.getAttributes ().get ( this.attributeName );
         if ( data != null )
         {
-            if ( this.attributeName.contains ( "timestamp" ) && data.isNumber () )
+            if ( this.attributeName.contains ( "timestamp" ) && data.isNumber () ) //$NON-NLS-1$
             {
                 cell.setDataAsDate ( new Date ( data.asLong ( 0L ) ) );
             }

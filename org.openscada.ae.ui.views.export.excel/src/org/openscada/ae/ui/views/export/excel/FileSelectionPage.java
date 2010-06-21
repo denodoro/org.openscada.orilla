@@ -43,9 +43,9 @@ public class FileSelectionPage extends WizardPage
 
     protected FileSelectionPage ( final ExportImpl exporter )
     {
-        super ( "fileSelection" );
-        setTitle ( "Output file selection" );
-        setDescription ( "Select the output file" );
+        super ( "fileSelection" ); //$NON-NLS-1$
+        setTitle ( Messages.FileSelectionPage_Title );
+        setDescription ( Messages.FileSelectionPage_Description );
         this.exporter = exporter;
     }
 
@@ -56,14 +56,14 @@ public class FileSelectionPage extends WizardPage
         wrapper.setLayout ( new GridLayout ( 3, false ) );
 
         final Label label = new Label ( wrapper, SWT.NONE );
-        label.setText ( "Output file:" );
+        label.setText ( Messages.FileSelectionPage_Label_OutputFile );
         label.setLayoutData ( new GridData ( SWT.CENTER, SWT.CENTER, false, false ) );
 
         this.text = new Text ( wrapper, SWT.SINGLE | SWT.BORDER );
         this.text.setLayoutData ( new GridData ( SWT.FILL, SWT.CENTER, true, false ) );
 
         final Button button = new Button ( wrapper, SWT.PUSH );
-        button.setText ( "Browse..." );
+        button.setText ( Messages.FileSelectionPage_Button_Browse );
         button.addSelectionListener ( new SelectionAdapter () {
             @Override
             public void widgetSelected ( final SelectionEvent e )
@@ -80,10 +80,10 @@ public class FileSelectionPage extends WizardPage
     {
         final FileDialog dlg = new FileDialog ( getShell (), SWT.APPLICATION_MODAL | SWT.SAVE );
 
-        dlg.setFilterExtensions ( new String[] { "*.xls" } );
-        dlg.setFilterNames ( new String[] { "Excel Sheet" } );
+        dlg.setFilterExtensions ( new String[] { Messages.FileSelectionPage_FilterExtension } );
+        dlg.setFilterNames ( new String[] { Messages.FileSelectionPage_FilterName } );
         dlg.setOverwrite ( true );
-        dlg.setText ( "Select output file" );
+        dlg.setText ( Messages.FileSelectionPage_FileDialog_Text );
 
         final String fileName = dlg.open ();
         if ( fileName == null )
@@ -106,7 +106,7 @@ public class FileSelectionPage extends WizardPage
         }
         else
         {
-            this.text.setText ( "" );
+            this.text.setText ( "" ); //$NON-NLS-1$
         }
     }
 
@@ -124,11 +124,11 @@ public class FileSelectionPage extends WizardPage
 
         if ( file == null )
         {
-            setMessage ( "No file selected", ERROR );
+            setMessage ( Messages.FileSelectionPage_Message_NoFileSelected, ERROR );
         }
         else
         {
-            setMessage ( "You can proceed exporting the data", INFORMATION );
+            setMessage ( Messages.FileSelectionPage_Message_Ok, INFORMATION );
         }
     }
 }

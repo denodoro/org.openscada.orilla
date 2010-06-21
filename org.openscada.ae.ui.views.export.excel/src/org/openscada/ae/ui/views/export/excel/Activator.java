@@ -29,7 +29,7 @@ public class Activator extends AbstractUIPlugin
 {
 
     // The plug-in ID
-    public static final String PLUGIN_ID = "org.openscada.ae.ui.views.export.excel";
+    public static final String PLUGIN_ID = "org.openscada.ae.ui.views.export.excel"; //$NON-NLS-1$
 
     // The shared instance
     private static Activator plugin;

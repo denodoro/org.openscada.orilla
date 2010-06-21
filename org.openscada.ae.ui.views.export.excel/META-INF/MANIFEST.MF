@@ -1,10 +1,10 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: OpenSCADA AE UI Excel Export
+Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: org.openscada.ae.ui.views.export.excel;singleton:=true
 Bundle-Version: 0.15.0.qualifier
 Bundle-Activator: org.openscada.ae.ui.views.export.excel.Activator
-Bundle-Vendor: inavare GmbH
+Bundle-Vendor: %Bundle-Vendor
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  com.springsource.jxl;bundle-version="2.6.6",

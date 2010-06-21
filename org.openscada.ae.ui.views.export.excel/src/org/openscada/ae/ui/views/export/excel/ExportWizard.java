@@ -40,7 +40,7 @@ public class ExportWizard extends Wizard implements IExportWizard
     public ExportWizard ()
     {
         setNeedsProgressMonitor ( true );
-        setWindowTitle ( "Export data" );
+        setWindowTitle ( Messages.ExportWizard_WindowTitle );
         this.exporter = new ExportImpl ();
     }
 
@@ -60,7 +60,7 @@ public class ExportWizard extends Wizard implements IExportWizard
         }
         catch ( final Exception e )
         {
-            StatusManager.getManager ().handle ( new Status ( IStatus.ERROR, Activator.PLUGIN_ID, "Failed to export", e ) );
+            StatusManager.getManager ().handle ( new Status ( IStatus.ERROR, Activator.PLUGIN_ID, Messages.ExportWizard_ErrorMessage, e ) );
             return false;
         }
     }
@@ -73,7 +73,7 @@ public class ExportWizard extends Wizard implements IExportWizard
         }
         catch ( final Exception e )
         {
-            return new Status ( IStatus.ERROR, Activator.PLUGIN_ID, "Failed to export", e );
+            return new Status ( IStatus.ERROR, Activator.PLUGIN_ID, Messages.ExportWizard_ErrorMessage, e );
         }
     }
 

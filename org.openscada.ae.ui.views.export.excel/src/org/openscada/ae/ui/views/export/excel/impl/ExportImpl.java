@@ -83,11 +83,11 @@ public class ExportImpl
     {
         if ( this.file == null )
         {
-            throw new IllegalStateException ( "No output file selected" );
+            throw new IllegalStateException ( Messages.ExportImpl_ErrorMessage_NoFileSelected );
         }
         if ( this.selection == null )
         {
-            throw new IllegalStateException ( "No events selected" );
+            throw new IllegalStateException ( Messages.ExportImpl_ErrorMessage_NoEventsSelected );
         }
     }
 
@@ -102,7 +102,7 @@ public class ExportImpl
         {
             if ( !this.file.delete () )
             {
-                return new Status ( IStatus.ERROR, Activator.PLUGIN_ID, String.format ( "Failed to delete file: %s", this.file ) );
+                return new Status ( IStatus.ERROR, Activator.PLUGIN_ID, String.format ( Messages.ExportImpl_ErrorMessage_FailedToDeleteFile, this.file ) );
             }
         }
 
@@ -125,8 +125,8 @@ public class ExportImpl
         }
         catch ( final Exception e )
         {
-            logger.warn ( "Failed to export", e );
-            return new Status ( IStatus.ERROR, Activator.PLUGIN_ID, "Failed to export", e );
+            logger.warn ( Messages.ExportImpl_ErrorMessage_FailedToExport, e );
+            return new Status ( IStatus.ERROR, Activator.PLUGIN_ID, Messages.ExportImpl_ErrorMessage_FailedToExport, e );
         }
     }
 
@@ -134,20 +134,20 @@ public class ExportImpl
     {
         final Set<Field> fields = new HashSet<Field> ();
 
-        fields.add ( new StaticField ( "id" ) {
+        fields.add ( new StaticField ( "id" ) { //$NON-NLS-1$
             public void render ( final Event event, final Cell cell )
             {
                 cell.setDataAsText ( event.getId ().toString () );
             }
         } );
-        fields.add ( new StaticField ( "sourceTimestamp" ) {
+        fields.add ( new StaticField ( "sourceTimestamp" ) { //$NON-NLS-1$
 
             public void render ( final Event event, final Cell cell )
             {
                 cell.setDataAsDate ( event.getSourceTimestamp () );
             }
         } );
-        fields.add ( new StaticField ( "entryTimestamp" ) {
+        fields.add ( new StaticField ( "entryTimestamp" ) { //$NON-NLS-1$
             public void render ( final Event event, final Cell cell )
             {
                 cell.setDataAsDate ( event.getEntryTimestamp () );
@@ -168,25 +168,25 @@ public class ExportImpl
     private IStatus storeExcel ( final File file, final List<Event> events, final List<Field> columns, final IProgressMonitor monitor ) throws IOException, WriteException
     {
         final WorkbookSettings settings = new WorkbookSettings ();
-        settings.setEncoding ( "UTF-8" );
+        settings.setEncoding ( "UTF-8" ); //$NON-NLS-1$
         settings.setAutoFilterDisabled ( false );
 
         WritableWorkbook workbook = null;
 
         try
         {
-            monitor.beginTask ( "Exporting events", events.size () + 3 );
+            monitor.beginTask ( Messages.ExportImpl_Progress_ExportingEvents, events.size () + 3 );
 
             try
             {
-                monitor.subTask ( "Creating workbook" );
+                monitor.subTask ( Messages.ExportImpl_Progress_CreateWorkbook );
                 workbook = jxl.Workbook.createWorkbook ( file, settings );
                 monitor.worked ( 1 );
 
                 final WritableSheet sheet = createSheet ( events, workbook, columns );
                 monitor.worked ( 1 );
 
-                monitor.setTaskName ( "Exporting events" );
+                monitor.setTaskName ( Messages.ExportImpl_Progress_ExportEvents );
 
                 for ( int i = 0; i < events.size (); i++ )
                 {
@@ -213,7 +213,7 @@ public class ExportImpl
             }
             finally
             {
-                monitor.subTask ( "Closing file" );
+                monitor.subTask ( Messages.ExportImpl_Progress_CloseFile );
                 if ( workbook != null )
                 {
                     workbook.write ();
@@ -232,22 +232,22 @@ public class ExportImpl
 
     private WritableSheet createSheet ( final List<Event> events, final WritableWorkbook workbook, final List<Field> columns ) throws RowsExceededException, WriteException
     {
-        final WritableSheet sheet = workbook.createSheet ( "Events", 0 );
+        final WritableSheet sheet = workbook.createSheet ( Messages.ExportImpl_ExcelSheet_Name, 0 );
         sheet.setPageSetup ( PageOrientation.LANDSCAPE );
 
         final HeaderFooter header = new HeaderFooter ();
-        header.getLeft ().append ( "A&E data export" );
+        header.getLeft ().append ( Messages.ExportImpl_ExcelSheet_Header );
         header.getRight ().appendDate ();
-        header.getRight ().append ( " " );
+        header.getRight ().append ( " " ); //$NON-NLS-1$
         header.getRight ().appendTime ();
         sheet.getSettings ().setHeader ( header );
 
         final HeaderFooter footer = new HeaderFooter ();
-        footer.getLeft ().append ( String.format ( "%s entries", events.size () ) );
+        footer.getLeft ().append ( String.format ( Messages.ExportImpl_ExcelSheet_Footer_1, events.size () ) );
 
-        footer.getRight ().append ( "Page " );
+        footer.getRight ().append ( Messages.ExportImpl_ExcelSheet_Footer_2 );
         footer.getRight ().appendPageNumber ();
-        footer.getRight ().append ( " of " );
+        footer.getRight ().append ( Messages.ExportImpl_ExcelSheet_Footer_3 );
         footer.getRight ().appendTotalPages ();
 
         sheet.getSettings ().setFooter ( footer );

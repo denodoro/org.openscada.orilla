@@ -40,7 +40,7 @@ public class ExcelCell implements Cell
 
     private final int column;
 
-    private final static DateFormat customDateFormat = new DateFormat ( "yyyy-MM-dd hh:mm:ss.SSS" );
+    private final static DateFormat customDateFormat = new DateFormat ( "yyyy-MM-dd hh:mm:ss.SSS" ); //$NON-NLS-1$
 
     public ExcelCell ( final int row, final int column )
     {
@@ -86,7 +86,7 @@ public class ExcelCell implements Cell
             this.cell = new EmptyCell ( this.column, this.row );
             break;
         case STRING:
-            setDataAsText ( variant.asString ( "" ) );
+            setDataAsText ( variant.asString ( "" ) ); //$NON-NLS-1$
             break;
         }
     }
