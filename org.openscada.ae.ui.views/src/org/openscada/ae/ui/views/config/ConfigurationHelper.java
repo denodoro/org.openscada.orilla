@@ -34,6 +34,7 @@ import org.eclipse.core.runtime.InvalidRegistryObjectException;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
+import org.openscada.ae.ui.views.views.ColumnProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -92,8 +93,9 @@ public class ConfigurationHelper
             final String connectionString = ele.getAttribute ( "connectionString" ); //$NON-NLS-1$
             final ConnectionType connectionType = ConnectionType.valueOf ( ele.getAttribute ( "connectionType" ) ); //$NON-NLS-1$
             final String label = ele.getAttribute ( "label" ); //$NON-NLS-1$
+            List<ColumnProperties> columns = parseColumnSettings ( ele.getAttribute ( "columns" ) );
 
-            return new MonitorViewConfiguration ( id, monitorQueryId, connectionString, connectionType, label );
+            return new MonitorViewConfiguration ( id, monitorQueryId, connectionString, connectionType, label, columns );
         }
         catch ( final Exception e )
         {
@@ -172,6 +174,34 @@ public class ConfigurationHelper
             logger.warn ( "Failed to convert event pool configuration: {}", ele ); //$NON-NLS-1$
             return null;
         }
+    }
+
+    private static List<ColumnProperties> parseColumnSettings ( String columns )
+    {
+        ArrayList<ColumnProperties> result = new ArrayList<ColumnProperties> ();
+        if ( columns == null || "".equals ( columns.trim () ) )
+        {
+            return result;
+        }
+        for ( String col : columns.split ( "," ) )
+        {
+            String[] settings = col.split ( ":" );
+            if ( settings.length == 0 )
+            {
+                continue;
+            }
+            ColumnProperties cp = new ColumnProperties ();
+            if ( settings.length > 0 )
+            {
+                cp.setNo ( Integer.parseInt ( settings[0] ) );
+            }
+            if ( settings.length > 1 )
+            {
+                cp.setWidth ( Integer.parseInt ( settings[1] ) );
+            }
+            result.add ( cp );
+        }
+        return result;
     }
 
     public static EventHistoryViewConfiguration findEventHistoryViewConfiguration ( final String configurationId )

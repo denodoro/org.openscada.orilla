@@ -105,6 +105,9 @@ public class MonitorsView extends MonitorSubscriptionAlarmsEventsView
         {
             setPartName ( cfg.getLabel () );
         }
+        if (initialColumnSettings == null) {
+            this.monitorsTable.applyColumSettings ( cfg.getColumns () );
+        }
     }
 
     /**

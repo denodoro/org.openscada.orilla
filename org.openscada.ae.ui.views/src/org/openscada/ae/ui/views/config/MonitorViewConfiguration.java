@@ -19,6 +19,10 @@
 
 package org.openscada.ae.ui.views.config;
 
+import java.util.Collections;
+import java.util.List;
+
+import org.openscada.ae.ui.views.views.ColumnProperties;
 import org.openscada.utils.lang.Immutable;
 
 @Immutable
@@ -34,7 +38,9 @@ public class MonitorViewConfiguration
 
     private final ConnectionType connectionType;
 
-    public MonitorViewConfiguration ( final String id, final String monitorQueryId, final String connectionString, final ConnectionType connectionType, final String label )
+    private final List<ColumnProperties> columns;
+
+    public MonitorViewConfiguration ( final String id, final String monitorQueryId, final String connectionString, final ConnectionType connectionType, final String label, final List<ColumnProperties> columns )
     {
         super ();
         this.id = id;
@@ -42,6 +48,7 @@ public class MonitorViewConfiguration
         this.connectionString = connectionString;
         this.connectionType = connectionType;
         this.label = label;
+        this.columns = columns;
 
         if ( this.id == null )
         {
@@ -84,5 +91,11 @@ public class MonitorViewConfiguration
     public String getLabel ()
     {
         return this.label;
+    }
+
+    @SuppressWarnings ( "unchecked" )
+    public List<ColumnProperties> getColumns ()
+    {
+        return Collections.unmodifiableList ( columns == null ? Collections.EMPTY_LIST : columns );
     }
 }

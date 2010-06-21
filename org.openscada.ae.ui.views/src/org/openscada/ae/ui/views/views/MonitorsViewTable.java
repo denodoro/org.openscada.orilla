@@ -338,7 +338,7 @@ public class MonitorsViewTable extends Composite
         return this.monitors.size ();
     }
 
-    private void applyColumSettings ( final List<ColumnProperties> columnSettings )
+    public void applyColumSettings ( final List<ColumnProperties> columnSettings )
     {
         if ( columnSettings == null )
         {
