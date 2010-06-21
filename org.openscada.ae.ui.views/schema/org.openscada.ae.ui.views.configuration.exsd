@@ -101,6 +101,13 @@
                </appinfo>
             </annotation>
          </attribute>
+         <attribute name="columns" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 
