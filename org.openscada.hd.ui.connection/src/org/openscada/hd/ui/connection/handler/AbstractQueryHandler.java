@@ -23,15 +23,15 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.openscada.hd.ui.connection.internal.QueryBufferBean;
+import org.openscada.hd.ui.data.QueryBuffer;
 import org.openscada.ui.databinding.AbstractSelectionHandler;
 import org.openscada.ui.databinding.AdapterHelper;
 
 public abstract class AbstractQueryHandler extends AbstractSelectionHandler
 {
-    protected Collection<QueryBufferBean> getQueries ()
+    protected Collection<QueryBuffer> getQueries ()
     {
-        final Collection<QueryBufferBean> result = new LinkedList<QueryBufferBean> ();
+        final Collection<QueryBuffer> result = new LinkedList<QueryBuffer> ();
 
         final IStructuredSelection sel = getSelection ();
 
@@ -41,7 +41,7 @@ public abstract class AbstractQueryHandler extends AbstractSelectionHandler
             {
                 final Object o = i.next ();
 
-                final QueryBufferBean item = (QueryBufferBean)AdapterHelper.adapt ( o, QueryBufferBean.class );
+                final QueryBuffer item = (QueryBuffer)AdapterHelper.adapt ( o, QueryBuffer.class );
                 if ( item != null )
                 {
                     result.add ( item );

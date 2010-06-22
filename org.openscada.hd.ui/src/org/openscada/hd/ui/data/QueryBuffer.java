@@ -156,6 +156,24 @@ public class QueryBuffer extends AbstractPropertyChange
         return this.percentFilled;
     }
 
+    /**
+     * Return the current value information
+     * @return the current value information
+     */
+    public ValueInformation[] getValueInformation ()
+    {
+        return this.valueInformation;
+    }
+
+    /**
+     * Return the current values
+     * @return the current values
+     */
+    public Map<String, Value[]> getValues ()
+    {
+        return new HashMap<String, Value[]> ( this.values );
+    }
+
     protected synchronized void updateData ( final int index, final Map<String, Value[]> values, final ValueInformation[] valueInformation )
     {
         final int count = valueInformation.length;

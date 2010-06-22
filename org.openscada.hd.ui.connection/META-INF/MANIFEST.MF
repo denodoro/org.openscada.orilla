@@ -26,8 +26,9 @@ Bundle-ActivationPolicy: lazy
 Import-Package: org.openscada.core;version="0.14.0",
  org.openscada.core.subscription;version="0.14.0",
  org.slf4j;version="1.5.8"
-Export-Package: org.openscada.hd.ui.connection;version="0.14.0";uses:="org.eclipse.ui.plugin,org.osgi.framework",
- org.openscada.hd.ui.connection.data;version="0.14.0",
- org.openscada.hd.ui.connection.dnd;version="0.14.0",
- org.openscada.hd.ui.connection.views;version="0.14.0"
+Export-Package: org.openscada.hd.ui.connection;version="0.15.0";uses:="org.eclipse.ui.plugin,org.osgi.framework",
+ org.openscada.hd.ui.connection.data;version="0.15.0",
+ org.openscada.hd.ui.connection.dnd;version="0.15.0",
+ org.openscada.hd.ui.connection.handler;version="0.15.0",
+ org.openscada.hd.ui.connection.views;version="0.15.0"
 Bundle-Localization: OSGI-INF/l10n/bundle

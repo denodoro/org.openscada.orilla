@@ -21,15 +21,19 @@ package org.openscada.hd.ui.connection.handler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.openscada.hd.ui.connection.internal.QueryBufferBean;
+import org.openscada.hd.ui.data.QueryBuffer;
 
 public class RemoveQueryHandler extends AbstractQueryHandler
 {
 
     public Object execute ( final ExecutionEvent event ) throws ExecutionException
     {
-        for ( final QueryBufferBean query : getQueries () )
+        for ( final QueryBuffer query : getQueries () )
         {
-            query.remove ();
+            if ( query instanceof QueryBufferBean )
+            {
+                ( (QueryBufferBean)query ).remove ();
+            }
         }
         return null;
     }
