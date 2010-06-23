@@ -132,8 +132,8 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
     public void createPartControl ( final Composite parent )
     {
         super.createPartControl ( parent );
-        scheduler = Executors.newSingleThreadScheduledExecutor ( new NamedThreadFactory ( "shortenEventPool" ) );
-        scheduler.scheduleAtFixedRate ( new Runnable () {
+        this.scheduler = Executors.newSingleThreadScheduledExecutor ( new NamedThreadFactory ( "shortenEventPool" ) );
+        this.scheduler.scheduleAtFixedRate ( new Runnable () {
             public void run ()
             {
                 scheduleJob ( new Runnable () {
@@ -144,7 +144,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
                     }
                 } );
             }
-        }, 10, 10, TimeUnit.MINUTES );
+        }, 10 * 60, 10 * 60, TimeUnit.SECONDS );
         this.pool = new WritableSet ( SWTObservables.getRealm ( parent.getDisplay () ) );
         this.pool.addChangeListener ( new IChangeListener () {
             public void handleChange ( final ChangeEvent event )
@@ -260,7 +260,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
         {
             setPartName ( cfg.getLabel () );
         }
-        maxNumberOfEvents = cfg.getMaxNumberOfEvents ();
+        this.maxNumberOfEvents = cfg.getMaxNumberOfEvents ();
     }
 
     /**
@@ -382,25 +382,25 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
     @SuppressWarnings ( "unchecked" )
     private void removeEvents ()
     {
-        if ( maxNumberOfEvents <= 0 )
+        if ( this.maxNumberOfEvents <= 0 )
         {
             return;
         }
         try
         {
-            List<DecoratedEvent> tmpList = new ArrayList<DecoratedEvent> ( (Set<DecoratedEvent>)EventPoolView.this.pool );
-            List<DecoratedEvent> toRemove = new ArrayList<DecoratedEvent> ();
+            final List<DecoratedEvent> tmpList = new ArrayList<DecoratedEvent> ( EventPoolView.this.pool );
+            final List<DecoratedEvent> toRemove = new ArrayList<DecoratedEvent> ();
             Collections.sort ( tmpList, new Comparator<DecoratedEvent> () {
-                public int compare ( DecoratedEvent e1, DecoratedEvent e2 )
+                public int compare ( final DecoratedEvent e1, final DecoratedEvent e2 )
                 {
                     return e2.compareTo ( e1 );
                 }
             } );
 
             int i = 0;
-            for ( DecoratedEvent event : tmpList )
+            for ( final DecoratedEvent event : tmpList )
             {
-                if ( i > maxNumberOfEvents )
+                if ( i > this.maxNumberOfEvents )
                 {
                     toRemove.add ( event );
                 }
@@ -410,9 +410,9 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
             tmpList.clear ();
             toRemove.clear ();
         }
-        catch ( Throwable th )
+        catch ( final Throwable th )
         {
-            IStatus status = new Status ( IStatus.ERROR, Activator.PLUGIN_ID, 42, "removeEvents () failed", th );
+            final IStatus status = new Status ( IStatus.ERROR, Activator.PLUGIN_ID, 42, "removeEvents () failed", th );
             Activator.getDefault ().getLog ().log ( status );
         }
     }
@@ -609,7 +609,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
     public void dispose ()
     {
         super.dispose ();
-        scheduler.shutdownNow ();
-        scheduler = null;
+        this.scheduler.shutdownNow ();
+        this.scheduler = null;
     }
 }
