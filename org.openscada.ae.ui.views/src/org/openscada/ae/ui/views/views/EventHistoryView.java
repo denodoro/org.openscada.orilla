@@ -72,8 +72,6 @@ public class EventHistoryView extends AbstractAlarmsEventsView
 
     private CustomizableAction searchAction = null;
 
-    private CustomizableAction pauseAction = null;
-
     private CustomizableAction resumeAction = null;
 
     private EventViewTable eventsTable = null;
@@ -104,20 +102,6 @@ public class EventHistoryView extends AbstractAlarmsEventsView
     public void createPartControl ( final Composite parent )
     {
         super.createPartControl ( parent );
-
-        // pause Action
-        this.pauseAction = new CustomizableAction ();
-        this.pauseAction.setText ( "Pause" );
-        this.pauseAction.setToolTipText ( "stop retrieving of events for now" );
-        this.pauseAction.setImageDescriptor ( ImageDescriptor.createFromURL ( Activator.getDefault ().getBundle ().getResource ( "icons/suspend.gif" ) ) );
-        this.pauseAction.setDisabledImageDescriptor ( ImageDescriptor.createFromURL ( Activator.getDefault ().getBundle ().getResource ( "icons/suspend_disabled.gif" ) ) );
-        this.pauseAction.setEnabled ( false );
-        this.pauseAction.setRunnable ( new Runnable () {
-            public void run ()
-            {
-                pauseEventsRetrieval ();
-            }
-        } );
 
         // resume Action
         this.resumeAction = new CustomizableAction ();
@@ -170,7 +154,6 @@ public class EventHistoryView extends AbstractAlarmsEventsView
         } );
 
         final IToolBarManager toolBarManager = getViewSite ().getActionBars ().getToolBarManager ();
-        toolBarManager.add ( this.pauseAction );
         toolBarManager.add ( this.resumeAction );
         toolBarManager.add ( this.searchAction );
         toolBarManager.add ( this.clearAction );
@@ -251,7 +234,6 @@ public class EventHistoryView extends AbstractAlarmsEventsView
         getSite ().getShell ().getDisplay ().asyncExec ( new Runnable () {
             public void run ()
             {
-                EventHistoryView.this.pauseAction.setEnabled ( false );
                 EventHistoryView.this.resumeAction.setEnabled ( false );
                 EventHistoryView.this.clearAction.setEnabled ( true );
                 EventHistoryView.this.searchAction.setEnabled ( true );
@@ -269,7 +251,6 @@ public class EventHistoryView extends AbstractAlarmsEventsView
                 public void run ()
                 {
                     clearData ();
-                    EventHistoryView.this.pauseAction.setEnabled ( false );
                     EventHistoryView.this.resumeAction.setEnabled ( false );
                     EventHistoryView.this.clearAction.setEnabled ( false );
                     EventHistoryView.this.searchAction.setEnabled ( false );
@@ -291,7 +272,6 @@ public class EventHistoryView extends AbstractAlarmsEventsView
         this.noOfEvents.set ( 0 );
         this.eventsTable.clear ();
 
-        this.pauseAction.setEnabled ( false );
         this.resumeAction.setEnabled ( false );
         this.clearAction.setEnabled ( true );
         this.searchAction.setEnabled ( true );
@@ -308,7 +288,6 @@ public class EventHistoryView extends AbstractAlarmsEventsView
         {
             this.currentFilter = filter;
             retrieveData ( filter.second );
-            this.pauseAction.setEnabled ( true );
             this.resumeAction.setEnabled ( false );
         }
     }
@@ -321,7 +300,6 @@ public class EventHistoryView extends AbstractAlarmsEventsView
         this.isPaused.set ( true );
         if ( this.queryRef.get () != null )
         {
-            this.pauseAction.setEnabled ( false );
             this.resumeAction.setEnabled ( true );
         }
     }
@@ -333,7 +311,6 @@ public class EventHistoryView extends AbstractAlarmsEventsView
     {
         this.isPaused.set ( false );
         continueLoading ();
-        this.pauseAction.setEnabled ( true );
         this.resumeAction.setEnabled ( false );
     }
 
@@ -345,7 +322,7 @@ public class EventHistoryView extends AbstractAlarmsEventsView
                 EventHistoryView.this.queryState.set ( state );
                 if ( state == QueryState.CONNECTED && !EventHistoryView.this.isPaused.get () )
                 {
-                    continueLoading ();
+                    EventHistoryView.this.resumeAction.setEnabled ( true );
                 }
                 else if ( state == QueryState.DISCONNECTED )
                 {
@@ -353,7 +330,6 @@ public class EventHistoryView extends AbstractAlarmsEventsView
                     getSite ().getShell ().getDisplay ().asyncExec ( new Runnable () {
                         public void run ()
                         {
-                            EventHistoryView.this.pauseAction.setEnabled ( false );
                         }
                     } );
                 }
