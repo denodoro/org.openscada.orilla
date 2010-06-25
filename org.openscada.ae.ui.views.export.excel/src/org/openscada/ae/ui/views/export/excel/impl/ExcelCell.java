@@ -23,7 +23,6 @@ import java.util.Date;
 
 import jxl.biff.EmptyCell;
 import jxl.write.Boolean;
-import jxl.write.DateFormat;
 import jxl.write.DateTime;
 import jxl.write.Label;
 import jxl.write.Number;
@@ -40,12 +39,13 @@ public class ExcelCell implements Cell
 
     private final int column;
 
-    private final static DateFormat customDateFormat = new DateFormat ( "yyyy-MM-dd hh:mm:ss.SSS" ); //$NON-NLS-1$
+    private final WritableCellFormat dateFormat;
 
-    public ExcelCell ( final int row, final int column )
+    public ExcelCell ( final int row, final int column, final WritableCellFormat dateFormat )
     {
         this.row = row;
         this.column = column;
+        this.dateFormat = dateFormat;
     }
 
     public jxl.write.WritableCell getCell ()
@@ -55,10 +55,7 @@ public class ExcelCell implements Cell
 
     public void setDataAsDate ( final Date date )
     {
-
-        final WritableCellFormat dateFormat = new WritableCellFormat ( customDateFormat );
-
-        this.cell = new DateTime ( this.column, this.row, date, dateFormat );
+        this.cell = new DateTime ( this.column, this.row, date, this.dateFormat );
     }
 
     public void setDataAsText ( final String text )

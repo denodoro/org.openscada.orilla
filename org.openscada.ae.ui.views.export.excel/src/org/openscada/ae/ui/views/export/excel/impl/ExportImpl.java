@@ -33,6 +33,7 @@ import jxl.HeaderFooter;
 import jxl.WorkbookSettings;
 import jxl.format.Colour;
 import jxl.format.PageOrientation;
+import jxl.write.DateFormat;
 import jxl.write.Label;
 import jxl.write.WritableCell;
 import jxl.write.WritableCellFormat;
@@ -189,13 +190,17 @@ public class ExportImpl
 
                 monitor.setTaskName ( Messages.ExportImpl_Progress_ExportEvents );
 
+                final DateFormat customDateFormat = new DateFormat ( "yyyy-MM-dd hh:mm:ss.SSS" ); //$NON-NLS-1$
+
+                final WritableCellFormat dateFormat = new WritableCellFormat ( customDateFormat );
+
                 for ( int i = 0; i < events.size (); i++ )
                 {
                     final Event e = events.get ( i );
                     for ( int j = 0; j < columns.size (); j++ )
                     {
                         final Field field = columns.get ( j );
-                        final ExcelCell cell = new ExcelCell ( i + 1, j );
+                        final ExcelCell cell = new ExcelCell ( i + 1, j, dateFormat );
                         field.render ( e, cell );
 
                         final WritableCell dataCell = cell.getCell ();
