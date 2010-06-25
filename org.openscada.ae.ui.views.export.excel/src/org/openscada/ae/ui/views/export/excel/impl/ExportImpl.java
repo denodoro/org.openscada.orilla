@@ -170,6 +170,7 @@ public class ExportImpl
         final WorkbookSettings settings = new WorkbookSettings ();
         settings.setEncoding ( "UTF-8" ); //$NON-NLS-1$
         settings.setAutoFilterDisabled ( false );
+        settings.setRationalization ( false );
 
         WritableWorkbook workbook = null;
 
