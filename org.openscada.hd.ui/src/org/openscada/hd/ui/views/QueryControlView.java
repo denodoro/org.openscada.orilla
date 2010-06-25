@@ -47,6 +47,7 @@ import org.openscada.hd.QueryState;
 import org.openscada.hd.Value;
 import org.openscada.hd.ValueInformation;
 import org.openscada.hd.ui.data.QueryBuffer;
+import org.openscada.ui.utils.datetime.DateTimeDialog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

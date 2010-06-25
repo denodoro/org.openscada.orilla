@@ -17,7 +17,7 @@
  * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
-package org.openscada.hd.ui.views;
+package org.openscada.ui.utils.datetime;
 
 import java.util.Calendar;
 import java.util.Date;

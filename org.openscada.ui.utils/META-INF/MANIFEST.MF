@@ -12,5 +12,6 @@ Bundle-ActivationPolicy: lazy
 Import-Package: org.openscada.utils.concurrent;version="0.15.0",
  org.slf4j;version="[1.5.8,1.6.0)"
 Export-Package: org.openscada.ui.utils;version="0.15.0",
- org.openscada.ui.utils.toggle;version="0.15.0",
- org.openscada.ui.utils.blink;version="0.15.0"
+ org.openscada.ui.utils.blink;version="0.15.0",
+ org.openscada.ui.utils.datetime;version="0.15.0",
+ org.openscada.ui.utils.toggle;version="0.15.0"
