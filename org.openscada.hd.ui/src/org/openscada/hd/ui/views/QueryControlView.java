@@ -107,6 +107,7 @@ public class QueryControlView extends QueryViewPart implements PropertyChangeLis
         group.setLayout ( new GridLayout ( 2, false ) );
 
         Label label;
+        Button button;
 
         label = new Label ( group, SWT.NONE );
         label.setText ( Messages.QueryControlView_Label_From_Text );
@@ -127,22 +128,68 @@ public class QueryControlView extends QueryViewPart implements PropertyChangeLis
         group = new Group ( parent, SWT.NONE );
         group.setText ( Messages.QueryControlView_Group_Request_Text );
         group.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, false ) );
-        group.setLayout ( new GridLayout ( 2, false ) );
+        group.setLayout ( new GridLayout ( 3, false ) );
 
+        // start timestamp
         label = new Label ( group, SWT.NONE );
         label.setText ( Messages.QueryControlView_Label_From_Text );
         this.startTimestampRequestText = new Text ( group, SWT.BORDER | SWT.READ_ONLY );
         this.startTimestampRequestText.setLayoutData ( new GridData ( SWT.FILL, SWT.CENTER, true, false ) );
+        button = new Button ( group, SWT.PUSH );
+        button.setLayoutData ( new GridData ( SWT.BEGINNING, SWT.BEGINNING, false, false ) );
+        button.setText ( "..." );
+        button.addSelectionListener ( new SelectionAdapter () {
+            public void widgetSelected ( final SelectionEvent e )
+            {
+                final DateTimeDialog dlg = new DateTimeDialog ( getSite ().getShell () );
+                if ( QueryControlView.this.requestParameters != null )
+                {
+                    dlg.setTime ( QueryControlView.this.requestParameters.getStartTimestamp () );
+                }
+                dlg.open ();
+                final Calendar c = dlg.getCalendar ();
+                if ( c == null )
+                {
+                    return;
+                }
 
+                QueryControlView.this.requestParameters = new QueryParameters ( c, QueryControlView.this.requestParameters.getEndTimestamp (), QueryControlView.this.requestParameters.getEntries () );
+                updateRequestParameters ();
+            };
+        } );
+
+        // end timestamp
         label = new Label ( group, SWT.NONE );
         label.setText ( Messages.QueryControlView_Label_To_Text );
         this.endTimestampRequestText = new Text ( group, SWT.BORDER | SWT.READ_ONLY );
         this.endTimestampRequestText.setLayoutData ( new GridData ( SWT.FILL, SWT.CENTER, true, false ) );
+        button = new Button ( group, SWT.PUSH );
+        button.setLayoutData ( new GridData ( SWT.BEGINNING, SWT.BEGINNING, false, false ) );
+        button.setText ( "..." );
+        button.addSelectionListener ( new SelectionAdapter () {
+            public void widgetSelected ( final SelectionEvent e )
+            {
+                final DateTimeDialog dlg = new DateTimeDialog ( getSite ().getShell () );
+                if ( QueryControlView.this.requestParameters != null )
+                {
+                    dlg.setTime ( QueryControlView.this.requestParameters.getEndTimestamp () );
+                }
+                dlg.open ();
+                final Calendar c = dlg.getCalendar ();
+                if ( c == null )
+                {
+                    return;
+                }
+
+                QueryControlView.this.requestParameters = new QueryParameters ( QueryControlView.this.requestParameters.getStartTimestamp (), c, QueryControlView.this.requestParameters.getEntries () );
+                updateRequestParameters ();
+            };
+        } );
 
         label = new Label ( group, SWT.NONE );
         label.setText ( Messages.QueryControlView_Label_Entries_Text );
         this.entriesRequestText = new Text ( group, SWT.BORDER );
-        this.entriesRequestText.setLayoutData ( new GridData ( SWT.FILL, SWT.CENTER, true, false ) );
+        this.entriesRequestText.setLayoutData ( new GridData ( SWT.FILL, SWT.CENTER, true, false, 2, 1 ) );
         this.entriesRequestText.addVerifyListener ( new VerifyListener () {
 
             public void verifyText ( final VerifyEvent e )
@@ -191,7 +238,7 @@ public class QueryControlView extends QueryViewPart implements PropertyChangeLis
 
         // controls
         final Composite compControl1 = new Composite ( group, SWT.NONE );
-        compControl1.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, false, 2, 1 ) );
+        compControl1.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, false, 3, 1 ) );
         compControl1.setLayout ( new FillLayout ( SWT.HORIZONTAL ) );
 
         createControlButton ( compControl1, Messages.QueryControlView_PaneLeft3_Button_Text, - ( 60 * 60 ), 0 );
@@ -203,7 +250,7 @@ public class QueryControlView extends QueryViewPart implements PropertyChangeLis
         createControlButton ( compControl1, Messages.QueryControlView_PaneRight3_Button_Text, 60 * 60, 0 );
 
         final Composite compControl2 = new Composite ( group, SWT.NONE );
-        compControl2.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, false, 2, 1 ) );
+        compControl2.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, false, 3, 1 ) );
         compControl2.setLayout ( new FillLayout ( SWT.HORIZONTAL ) );
 
         createControlButton ( compControl2, Messages.QueryControlView_Add1_Button_Text, 0, 30 );
@@ -217,7 +264,7 @@ public class QueryControlView extends QueryViewPart implements PropertyChangeLis
         // action button
 
         this.requestButton = new Button ( group, SWT.PUSH );
-        this.requestButton.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, false, 2, 1 ) );
+        this.requestButton.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, false, 3, 1 ) );
         this.requestButton.setText ( Messages.QueryControlView_Request_Button_Text );
         this.requestButton.addSelectionListener ( new SelectionAdapter () {
             @Override
