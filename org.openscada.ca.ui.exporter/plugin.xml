@@ -7,11 +7,11 @@
             category="org.openscada.ca.ui.exporter.category"
             class="org.openscada.ca.ui.exporter.wizard.ExportWizard"
             id="org.openscada.ca.ui.exporter.wizard"
-            name="Export Configuration">
+            name="%wizard.export.name">
       </wizard>
       <category
             id="org.openscada.ca.ui.exporter.category"
-            name="OpenSCADA CA">
+            name="%category.export.name">
       </category>
    </extension>
    <extension
@@ -20,7 +20,7 @@
             locationURI="popup:org.openscada.core.ui.connection.ConnectionView#PopupMenu">
          <command
                commandId="org.eclipse.ui.file.export"
-               label="Export Configuration"
+               label="%command.export.label"
                style="push">
             <parameter
                   name="exportWizardId"

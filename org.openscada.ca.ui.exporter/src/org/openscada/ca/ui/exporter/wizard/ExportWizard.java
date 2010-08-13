@@ -56,7 +56,7 @@ public class ExportWizard extends Wizard implements IExportWizard
     public ExportWizard ()
     {
         setNeedsProgressMonitor ( true );
-        setWindowTitle ( "Export" );
+        setWindowTitle ( Messages.ExportWizard_WindowTitle );
 
         IDialogSettings settings = Activator.getDefault ().getDialogSettings ().getSection ( "exportWizard" ); //$NON-NLS-1$
         if ( settings == null )
@@ -99,8 +99,8 @@ public class ExportWizard extends Wizard implements IExportWizard
         }
         catch ( final Exception e )
         {
-            logger.warn ( "Failed to export data", e );
-            final Status status = new Status ( IStatus.ERROR, Activator.PLUGIN_ID, "Failed to export data", e );
+            logger.warn ( "Failed to export data", e ); //$NON-NLS-1$
+            final Status status = new Status ( IStatus.ERROR, Activator.PLUGIN_ID, Messages.ExportWizard_Status_ErrorText, e );
             StatusManager.getManager ().handle ( status, StatusManager.BLOCK );
             return false;
         }

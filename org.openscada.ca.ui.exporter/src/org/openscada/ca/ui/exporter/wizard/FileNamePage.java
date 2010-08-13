@@ -42,12 +42,12 @@ public class FileNamePage extends WizardPage
 
     public FileNamePage ()
     {
-        super ( "fileNamePage" );
+        super ( "fileNamePage" ); //$NON-NLS-1$
     }
 
     public void createControl ( final Composite parent )
     {
-        setDescription ( "Choose export file" );
+        setDescription ( Messages.FileNamePage_Description );
 
         final Composite wrapper = new Composite ( parent, SWT.NONE );
         wrapper.setLayout ( new GridLayout ( 3, false ) );
@@ -55,11 +55,11 @@ public class FileNamePage extends WizardPage
         Label label;
 
         label = new Label ( wrapper, SWT.NONE );
-        label.setText ( "File:" );
+        label.setText ( Messages.FileNamePage_FileLabel );
 
         this.fileName = new Text ( wrapper, SWT.BORDER );
         this.fileName.setLayoutData ( new GridData ( SWT.FILL, SWT.CENTER, true, false ) );
-        final String file = getWizard ().getDialogSettings ().get ( "fileNamePage.file" );
+        final String file = getWizard ().getDialogSettings ().get ( "fileNamePage.file" ); //$NON-NLS-1$
         if ( file != null )
         {
             this.fileName.setText ( file );
@@ -73,7 +73,7 @@ public class FileNamePage extends WizardPage
         } );
 
         final Button selectFile = new Button ( wrapper, SWT.PUSH );
-        selectFile.setText ( "Browse..." );
+        selectFile.setText ( Messages.FileNamePage_BrowseLabel );
         selectFile.addSelectionListener ( new SelectionAdapter () {
             @Override
             public void widgetSelected ( final SelectionEvent e )
@@ -108,18 +108,18 @@ public class FileNamePage extends WizardPage
 
         if ( fileName.length () == 0 )
         {
-            throw new IllegalStateException ( "No file selected" );
+            throw new IllegalStateException ( Messages.FileNamePage_State_NotFileSelected );
         }
 
         final File file = new File ( fileName );
 
         if ( file.exists () && !file.isFile () )
         {
-            throw new IllegalArgumentException ( String.format ( "File %s exists but is not a normal file", fileName ) );
+            throw new IllegalArgumentException ( String.format ( Messages.FileNamePage_State_FileNoFile, fileName ) );
         }
         if ( !file.canWrite () && file.exists () )
         {
-            throw new IllegalArgumentException ( String.format ( "Cannot write to file %s", fileName ) );
+            throw new IllegalArgumentException ( String.format ( Messages.FileNamePage_State_FileCantWrite, fileName ) );
         }
     }
 
@@ -127,7 +127,7 @@ public class FileNamePage extends WizardPage
     {
         final FileDialog dlg = new FileDialog ( getShell (), SWT.SAVE );
         dlg.setFilterExtensions ( new String[] { "*.oscar", "*.*" } ); //$NON-NLS-1$ //$NON-NLS-2$ 
-        dlg.setFilterNames ( new String[] { "OSCAR File", "All types" } );
+        dlg.setFilterNames ( new String[] { Messages.FileNamePage_OSCARFileType, Messages.FileNamePage_AllTypes } );
 
         if ( this.fileName.getText ().length () > 0 )
         {
