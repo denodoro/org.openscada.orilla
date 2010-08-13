@@ -49,10 +49,15 @@
    <extension
          point="org.eclipse.ui.importWizards">
       <wizard
+            category="org.openscada.ca.ui.importer.category"
             class="org.openscada.ca.ui.importer.wizard.ImportWizard"
             id="org.openscada.ca.ui.importer.wizard"
             name="%importerWizard.wizard.name">
       </wizard>
+      <category
+            id="org.openscada.ca.ui.importer.category"
+            name="%category.name">
+      </category>
    </extension>
 
 </plugin>
