@@ -19,12 +19,14 @@
 
 package org.openscada.ca.ui.importer.wizard;
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -34,11 +36,15 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.statushandlers.StatusManager;
 import org.openscada.ca.FactoryInformation;
 import org.openscada.ca.connection.provider.ConnectionService;
+import org.openscada.ca.ui.importer.Activator;
 import org.openscada.ca.ui.importer.data.DiffController;
 import org.openscada.ca.ui.util.ConfigurationHelper;
+import org.openscada.ca.ui.util.OscarLoader;
 
 public class RemoteDataPage extends WizardPage
 {
@@ -46,8 +52,6 @@ public class RemoteDataPage extends WizardPage
     private final ConnectionService service;
 
     private Label resultText;
-
-    private Collection<FactoryInformation> result;
 
     private final DiffController mergeController;
 
@@ -67,6 +71,8 @@ public class RemoteDataPage extends WizardPage
 
         wrapper.setLayout ( new GridLayout ( 1, false ) );
 
+        // remote load
+
         final Button loadButton = new Button ( wrapper, SWT.PUSH );
         loadButton.setText ( Messages.RemoteDataPage_LoadButtonText );
         loadButton.addSelectionListener ( new SelectionAdapter () {
@@ -77,11 +83,80 @@ public class RemoteDataPage extends WizardPage
             }
         } );
 
+        // local load
+
+        final Button loadLocalButton = new Button ( wrapper, SWT.PUSH );
+        loadLocalButton.setText ( "Load local file" );
+        loadLocalButton.addSelectionListener ( new SelectionAdapter () {
+            @Override
+            public void widgetSelected ( final SelectionEvent e )
+            {
+                handleLoadLocal ();
+            }
+        } );
+
         this.resultText = new Label ( wrapper, SWT.NONE );
         this.resultText.setLayoutData ( new GridData ( SWT.FILL, SWT.CENTER, true, false ) );
 
         setControl ( wrapper );
 
+        update ();
+    }
+
+    protected void handleLoadLocal ()
+    {
+        final FileDialog dlg = new FileDialog ( getShell (), SWT.OPEN );
+        dlg.setFilterExtensions ( new String[] { "*.oscar", "*.json", "*.*" } ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        dlg.setFilterNames ( new String[] { Messages.LocalDataPage_OSCARFilterDescription, Messages.LocalDataPage_JSONFilterDescription, Messages.LocalDataPage_AllFilterDescription } );
+
+        final String selectedFileName = getWizard ().getDialogSettings ().get ( "localDataPage.file" );
+
+        if ( selectedFileName != null && selectedFileName.length () > 0 )
+        {
+            dlg.setFileName ( selectedFileName );
+        }
+        dlg.setFilterIndex ( 0 );
+
+        final String file = dlg.open ();
+        if ( file != null )
+        {
+            getWizard ().getDialogSettings ().put ( "localDataPage.file", file ); //$NON-NLS-1$
+            loadFromLocalFile ( file );
+        }
+    }
+
+    private void loadFromLocalFile ( final String file )
+    {
+        try
+        {
+            getContainer ().run ( true, false, new IRunnableWithProgress () {
+
+                public void run ( final IProgressMonitor monitor ) throws InvocationTargetException, InterruptedException
+                {
+                    OscarLoader loader;
+                    try
+                    {
+                        monitor.beginTask ( "Loading data", IProgressMonitor.UNKNOWN );
+                        loader = new OscarLoader ( new File ( file ) );
+                    }
+                    catch ( final Exception e )
+                    {
+                        throw new InvocationTargetException ( e );
+                    }
+                    finally
+                    {
+                        monitor.done ();
+                    }
+                    RemoteDataPage.this.mergeController.setRemoteData ( loader.getData () );
+                    RemoteDataPage.this.count = -1;
+                }
+            } );
+
+        }
+        catch ( final Exception e )
+        {
+            StatusManager.getManager ().handle ( new Status ( Status.ERROR, Activator.PLUGIN_ID, "Failed to load data", e ) );
+        }
         update ();
     }
 
@@ -120,7 +195,6 @@ public class RemoteDataPage extends WizardPage
 
     private void setResult ( final Collection<FactoryInformation> result )
     {
-        this.result = result;
         this.count = this.mergeController.setRemoteData ( result );
         update ();
     }
@@ -140,7 +214,7 @@ public class RemoteDataPage extends WizardPage
         {
             setError ( Messages.RemoteDataPage_ErrorNoConnection );
         }
-        else if ( this.result == null )
+        else if ( this.mergeController.getRemoteData () == null )
         {
             setError ( Messages.RemoteDataPage_ErrorNoData );
         }
@@ -151,9 +225,9 @@ public class RemoteDataPage extends WizardPage
             setPageComplete ( true );
         }
 
-        if ( this.result != null )
+        if ( this.mergeController.getRemoteData () != null )
         {
-            this.resultText.setText ( String.format ( Messages.RemoteDataPage_StatusLabelFormat, this.result.size (), this.count ) );
+            this.resultText.setText ( String.format ( Messages.RemoteDataPage_StatusLabelFormat, this.mergeController.getRemoteData ().size (), this.count ) );
         }
         else
         {
