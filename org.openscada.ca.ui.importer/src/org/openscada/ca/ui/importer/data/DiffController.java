@@ -189,10 +189,14 @@ public class DiffController
         final Set<String> ignoreFields = this.ignoreFields.get ( factoryId );
         if ( ignoreFields == null || ignoreFields.isEmpty () )
         {
+            // nothing to ignore so we can perform an UPDATE_SET operation
             return new DiffEntry ( factoryId, configurationId, Operation.UPDATE_SET, remoteData, localData );
         }
 
+        // from here on we need to check for field updates
+
         final Map<String, String> newData = new HashMap<String, String> ();
+        final Map<String, String> oldData = new HashMap<String, String> ();
 
         // check for updates or additions
         for ( final Map.Entry<String, String> entry : localData.entrySet () )
@@ -207,20 +211,24 @@ public class DiffController
             {
                 if ( !entry.getValue ().equals ( remoteData.get ( entry.getKey () ) ) )
                 {
+                    oldData.put ( entry.getKey (), remoteData.get ( entry.getKey () ) );
                     newData.put ( entry.getKey (), entry.getValue () );
                 }
             }
             else
             {
+                oldData.put ( entry.getKey (), null );
                 newData.put ( entry.getKey (), entry.getValue () );
             }
         }
 
         // check for removals
-        for ( final String key : remoteData.keySet () )
+        for ( final Map.Entry<String, String> entry : remoteData.entrySet () )
         {
+            final String key = entry.getKey ();
             if ( !localData.containsKey ( key ) && !ignoreFields.contains ( key ) )
             {
+                oldData.put ( key, entry.getValue () );
                 newData.put ( key, null );
             }
         }
@@ -231,7 +239,7 @@ public class DiffController
             return null;
         }
 
-        return new DiffEntry ( factoryId, configurationId, Operation.UPDATE_DIFF, remoteData, newData );
+        return new DiffEntry ( factoryId, configurationId, Operation.UPDATE_DIFF, oldData, newData );
     }
 
     /**
