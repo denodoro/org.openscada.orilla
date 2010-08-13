@@ -86,7 +86,7 @@ public class RemoteDataPage extends WizardPage
         // local load
 
         final Button loadLocalButton = new Button ( wrapper, SWT.PUSH );
-        loadLocalButton.setText ( "Load local file" );
+        loadLocalButton.setText ( Messages.RemoteDataPage_ButtonLocalFile );
         loadLocalButton.addSelectionListener ( new SelectionAdapter () {
             @Override
             public void widgetSelected ( final SelectionEvent e )
@@ -109,7 +109,7 @@ public class RemoteDataPage extends WizardPage
         dlg.setFilterExtensions ( new String[] { "*.oscar", "*.json", "*.*" } ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         dlg.setFilterNames ( new String[] { Messages.LocalDataPage_OSCARFilterDescription, Messages.LocalDataPage_JSONFilterDescription, Messages.LocalDataPage_AllFilterDescription } );
 
-        final String selectedFileName = getWizard ().getDialogSettings ().get ( "localDataPage.file" );
+        final String selectedFileName = getWizard ().getDialogSettings ().get ( "localDataPage.file" ); //$NON-NLS-1$
 
         if ( selectedFileName != null && selectedFileName.length () > 0 )
         {
@@ -136,7 +136,7 @@ public class RemoteDataPage extends WizardPage
                     OscarLoader loader;
                     try
                     {
-                        monitor.beginTask ( "Loading data", IProgressMonitor.UNKNOWN );
+                        monitor.beginTask ( Messages.RemoteDataPage_TaskName, IProgressMonitor.UNKNOWN );
                         loader = new OscarLoader ( new File ( file ) );
                     }
                     catch ( final Exception e )
@@ -155,7 +155,7 @@ public class RemoteDataPage extends WizardPage
         }
         catch ( final Exception e )
         {
-            StatusManager.getManager ().handle ( new Status ( Status.ERROR, Activator.PLUGIN_ID, "Failed to load data", e ) );
+            StatusManager.getManager ().handle ( new Status ( Status.ERROR, Activator.PLUGIN_ID, Messages.RemoteDataPage_StatusText, e ) );
         }
         update ();
     }

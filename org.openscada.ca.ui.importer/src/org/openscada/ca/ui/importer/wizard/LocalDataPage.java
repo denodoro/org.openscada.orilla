@@ -73,7 +73,7 @@ public class LocalDataPage extends WizardPage
         label.setText ( Messages.LocalDataPage_FileLabel );
 
         this.fileName = new Text ( wrapper, SWT.BORDER );
-        final String file = getWizard ().getDialogSettings ().get ( "welcomePage.file" );
+        final String file = getWizard ().getDialogSettings ().get ( "welcomePage.file" ); //$NON-NLS-1$
         if ( file != null )
         {
             this.fileName.setText ( file );

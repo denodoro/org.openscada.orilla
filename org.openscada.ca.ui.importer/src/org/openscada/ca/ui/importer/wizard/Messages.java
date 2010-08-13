@@ -97,6 +97,8 @@ public class Messages extends NLS
 
     public static String PreviewPage_TitleErrorFailedToMerge;
 
+    public static String RemoteDataPage_ButtonLocalFile;
+
     public static String RemoteDataPage_DescriptionText;
 
     public static String RemoteDataPage_ErrorNoConnection;
@@ -114,6 +116,10 @@ public class Messages extends NLS
     public static String RemoteDataPage_StatusLabelFormat;
 
     public static String RemoteDataPage_StatusLabelNoData;
+
+    public static String RemoteDataPage_StatusText;
+
+    public static String RemoteDataPage_TaskName;
 
     public static String RemoteDataPage_Title;
     static
