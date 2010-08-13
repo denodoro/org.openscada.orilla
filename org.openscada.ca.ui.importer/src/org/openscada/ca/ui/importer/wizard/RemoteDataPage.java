@@ -21,7 +21,6 @@ package org.openscada.ca.ui.importer.wizard;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -39,7 +38,7 @@ import org.eclipse.swt.widgets.Label;
 import org.openscada.ca.FactoryInformation;
 import org.openscada.ca.connection.provider.ConnectionService;
 import org.openscada.ca.ui.importer.data.DiffController;
-import org.openscada.utils.concurrent.NotifyFuture;
+import org.openscada.ca.ui.util.ConfigurationHelper;
 
 public class RemoteDataPage extends WizardPage
 {
@@ -128,28 +127,7 @@ public class RemoteDataPage extends WizardPage
 
     private Collection<FactoryInformation> loadData ( final IProgressMonitor monitor ) throws InterruptedException, ExecutionException
     {
-        final Collection<FactoryInformation> result = new LinkedList<FactoryInformation> ();
-        try
-        {
-            final NotifyFuture<FactoryInformation[]> future = RemoteDataPage.this.service.getConnection ().getFactories ();
-            final FactoryInformation[] factories = future.get ();
-            monitor.beginTask ( Messages.RemoteDataPage_TaskName, factories.length );
-            for ( final FactoryInformation factory : factories )
-            {
-                monitor.subTask ( Messages.RemoteDataPage_SubTaskName + factory.getId () );
-                result.add ( this.service.getConnection ().getFactoryWithData ( factory.getId () ).get () );
-                monitor.worked ( 1 );
-                if ( monitor.isCanceled () )
-                {
-                    return null;
-                }
-            }
-        }
-        finally
-        {
-            monitor.done ();
-        }
-        return result;
+        return ConfigurationHelper.loadData ( monitor, this.service.getConnection () );
     }
 
     private void update ()

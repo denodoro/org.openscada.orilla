@@ -46,6 +46,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.statushandlers.StatusManager;
 import org.openscada.ca.ui.importer.Activator;
 import org.openscada.ca.ui.importer.data.DiffController;
+import org.openscada.ca.ui.util.OscarLoader;
 
 public class LocalDataPage extends WizardPage
 {

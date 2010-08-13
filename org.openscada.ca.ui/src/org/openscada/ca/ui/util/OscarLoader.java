@@ -17,7 +17,7 @@
  * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
-package org.openscada.ca.ui.importer.wizard;
+package org.openscada.ca.ui.util;
 
 import java.io.File;
 import java.io.IOException;
@@ -57,7 +57,7 @@ public class OscarLoader
         final ZipEntry entry = zfile.getEntry ( "data.json" ); //$NON-NLS-1$
         if ( entry == null )
         {
-            throw new IllegalArgumentException ( Messages.LocalDataPage_ErrorInvalidOscar );
+            throw new IllegalArgumentException ( Messages.OscarHelper_ErrorNoOscarFile );
         }
         final InputStream stream = zfile.getInputStream ( entry );
         try
@@ -147,11 +147,19 @@ public class OscarLoader
         return result;
     }
 
-    private static final String OSCAR_SUFFIX = ".oscar"; //$NON-NLS-1$
+    /**
+     * The oscar file suffix excluding the dot
+     */
+    public static final String OSCAR_SUFFIX = "oscar"; //$NON-NLS-1$
+
+    /**
+     * the oscar file suffix including the dot
+     */
+    public static final String OSCAR_DOT_SUFFIX = ".oscar"; //$NON-NLS-1$
 
     public static boolean isOscar ( final File file )
     {
         final String fileName = file.getName ().toLowerCase ();
-        return fileName.endsWith ( OSCAR_SUFFIX );
+        return fileName.endsWith ( OSCAR_DOT_SUFFIX );
     }
 }

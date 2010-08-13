@@ -115,10 +115,6 @@ public class Messages extends NLS
 
     public static String RemoteDataPage_StatusLabelNoData;
 
-    public static String RemoteDataPage_SubTaskName;
-
-    public static String RemoteDataPage_TaskName;
-
     public static String RemoteDataPage_Title;
     static
     {

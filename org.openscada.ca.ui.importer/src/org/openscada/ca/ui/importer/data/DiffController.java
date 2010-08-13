@@ -28,10 +28,10 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.openscada.ca.ConfigurationInformation;
 import org.openscada.ca.DiffEntry;
 import org.openscada.ca.FactoryInformation;
 import org.openscada.ca.DiffEntry.Operation;
+import org.openscada.ca.ui.util.ConfigurationHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,24 +64,9 @@ public class DiffController
 
     public long setRemoteData ( final Collection<FactoryInformation> remoteData )
     {
-        long count = 0;
         final HashMap<String, Map<String, Map<String, String>>> data = new HashMap<String, Map<String, Map<String, String>>> ();
 
-        // convert to local data type structure
-        for ( final FactoryInformation factory : remoteData )
-        {
-            final Map<String, Map<String, String>> factoryData = new HashMap<String, Map<String, String>> ();
-            data.put ( factory.getId (), factoryData );
-
-            if ( factory.getConfigurations () != null )
-            {
-                for ( final ConfigurationInformation configuration : factory.getConfigurations () )
-                {
-                    factoryData.put ( configuration.getId (), configuration.getData () );
-                    count++;
-                }
-            }
-        }
+        final long count = ConfigurationHelper.convert ( remoteData, data );
 
         setRemoteData ( data );
         return count;
