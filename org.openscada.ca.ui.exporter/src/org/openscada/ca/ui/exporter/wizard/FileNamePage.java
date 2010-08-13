@@ -47,6 +47,8 @@ public class FileNamePage extends WizardPage
 
     public void createControl ( final Composite parent )
     {
+        setDescription ( "Choose export file" );
+
         final Composite wrapper = new Composite ( parent, SWT.NONE );
         wrapper.setLayout ( new GridLayout ( 3, false ) );
 

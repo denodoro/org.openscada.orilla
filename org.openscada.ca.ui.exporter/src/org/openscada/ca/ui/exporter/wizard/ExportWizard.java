@@ -18,6 +18,7 @@
  */
 package org.openscada.ca.ui.exporter.wizard;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -40,9 +41,13 @@ import org.openscada.ca.ui.exporter.Activator;
 import org.openscada.ca.ui.util.ConfigurationHelper;
 import org.openscada.ca.ui.util.OscarWriter;
 import org.openscada.ui.databinding.AdapterHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ExportWizard extends Wizard implements IExportWizard
 {
+
+    private final static Logger logger = LoggerFactory.getLogger ( ExportWizard.class );
 
     private ConnectionService connection;
 
@@ -75,13 +80,14 @@ public class ExportWizard extends Wizard implements IExportWizard
     {
         try
         {
+            final File file = this.page.getFile ();
             getContainer ().run ( true, true, new IRunnableWithProgress () {
 
                 public void run ( final IProgressMonitor monitor ) throws InvocationTargetException, InterruptedException
                 {
                     try
                     {
-                        handleFinish ( monitor );
+                        handleFinish ( monitor, file );
                     }
                     catch ( final Exception e )
                     {
@@ -93,20 +99,21 @@ public class ExportWizard extends Wizard implements IExportWizard
         }
         catch ( final Exception e )
         {
+            logger.warn ( "Failed to export data", e );
             final Status status = new Status ( IStatus.ERROR, Activator.PLUGIN_ID, "Failed to export data", e );
             StatusManager.getManager ().handle ( status, StatusManager.BLOCK );
             return false;
         }
     }
 
-    protected void handleFinish ( final IProgressMonitor monitor ) throws InterruptedException, ExecutionException, FileNotFoundException, IOException
+    protected void handleFinish ( final IProgressMonitor monitor, final File file ) throws InterruptedException, ExecutionException, FileNotFoundException, IOException
     {
         // load data
         final Collection<FactoryInformation> data = ConfigurationHelper.loadData ( monitor, this.connection.getConnection () );
 
         // write to OSCAR
         final OscarWriter writer = new OscarWriter ( ConfigurationHelper.convert ( data ), null );
-        writer.write ( this.page.getFile () );
+        writer.write ( file );
     }
 
     public void init ( final IWorkbench workbench, final IStructuredSelection selection )
