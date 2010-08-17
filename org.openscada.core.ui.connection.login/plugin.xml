@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension-point id="org.openscada.core.ui.connection.login.context" name="context" schema="schema/org.openscada.core.ui.connection.login.context.exsd"/>
+   <extension-point id="context" name="Login Context" schema="schema/org.openscada.core.ui.connection.login.context.exsd"/>
    <extension
          point="org.eclipse.ui.menus">
       <menuContribution
