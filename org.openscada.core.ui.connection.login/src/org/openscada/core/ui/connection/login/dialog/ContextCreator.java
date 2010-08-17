@@ -200,16 +200,25 @@ public class ContextCreator
             handler.setStateListener ( null );
         }
 
-        if ( this.resultListener != null )
+        if ( this.resultListener == null )
         {
-            this.realm.asyncExec ( new Runnable () {
-
-                public void run ()
-                {
-                    ContextCreator.this.resultListener.complete ( result );
-                }
-            } );
+            return;
         }
+
+        // if we have a valid result the receive takes over control
+        if ( result != null )
+        {
+            this.connections.clear ();
+        }
+
+        this.realm.asyncExec ( new Runnable () {
+
+            public void run ()
+            {
+                ContextCreator.this.resultListener.complete ( result );
+            }
+        } );
+
     }
 
 }

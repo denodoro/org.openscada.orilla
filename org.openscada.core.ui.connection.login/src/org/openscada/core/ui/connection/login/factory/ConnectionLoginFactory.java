@@ -19,9 +19,9 @@
 
 package org.openscada.core.ui.connection.login.factory;
 
-import java.util.HashMap;
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.Map;
+import java.util.LinkedList;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -39,7 +39,7 @@ public class ConnectionLoginFactory implements LoginFactory
 {
     public LoginHandler createHandler ( final LoginContext context, final String username, final String password ) throws Exception
     {
-        final Map<LoginConnection, ConnectionService> serviceMap = new HashMap<LoginConnection, ConnectionService> ();
+        final Collection<LoginHandler> handlers = new LinkedList<LoginHandler> ();
 
         for ( final LoginConnection loginConnection : loadConnections ( context.getId () ) )
         {
@@ -50,18 +50,18 @@ public class ConnectionLoginFactory implements LoginFactory
             if ( connectionService == null )
             {
                 // dispose already created first
-                disposeAll ( serviceMap );
+                disposeAll ( handlers );
 
                 // now throw
                 throw new IllegalStateException ( String.format ( "Unable to find connection creator for connection %s", loginConnection.getConnectionInformation ().toMaskedString () ) );
             }
             else
             {
-                serviceMap.put ( loginConnection, connectionService );
+                handlers.add ( new ConnectionLoginHandler ( connectionService, loginConnection ) );
             }
         }
 
-        return new ConnectionLoginHandler ( serviceMap );
+        return new MultiLoginHandler ( handlers );
     }
 
     protected Set<LoginConnection> loadConnections ( final String contextId )
@@ -113,13 +113,13 @@ public class ConnectionLoginFactory implements LoginFactory
         return result;
     }
 
-    private void disposeAll ( final Map<LoginConnection, ConnectionService> services )
+    private void disposeAll ( final Collection<LoginHandler> handler )
     {
-        for ( final ConnectionService service : services.values () )
+        for ( final LoginHandler service : handler )
         {
             service.dispose ();
         }
-        services.clear ();
+        handler.clear ();
     }
 
 }

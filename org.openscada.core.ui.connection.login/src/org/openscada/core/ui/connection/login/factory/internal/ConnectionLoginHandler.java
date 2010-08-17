@@ -19,11 +19,8 @@
 
 package org.openscada.core.ui.connection.login.factory.internal;
 
-import java.util.Collection;
 import java.util.Dictionary;
 import java.util.Hashtable;
-import java.util.LinkedList;
-import java.util.Map;
 
 import org.openscada.core.client.Connection;
 import org.openscada.core.client.ConnectionState;
@@ -39,7 +36,7 @@ import org.osgi.framework.ServiceRegistration;
 public class ConnectionLoginHandler implements LoginHandler
 {
 
-    private final Map<LoginConnection, ConnectionService> connectionService;
+    private ConnectionService connectionService;
 
     private StateListener loginStateListener;
 
@@ -47,15 +44,24 @@ public class ConnectionLoginHandler implements LoginHandler
 
     private volatile boolean ok;
 
-    private String servicePid;
+    private ServiceRegistration registration;
 
-    private Integer priority;
+    private final LoginConnection loginConnection;
 
-    private Collection<ServiceRegistration> registration;
+    private final ConnectionStateListener connectionStateListener;
 
-    public ConnectionLoginHandler ( final Map<LoginConnection, ConnectionService> connectionService )
+    public ConnectionLoginHandler ( final ConnectionService connectionService, final LoginConnection loginConnection )
     {
+        this.loginConnection = loginConnection;
         this.connectionService = connectionService;
+
+        this.connectionStateListener = new ConnectionStateListener () {
+
+            public void stateChange ( final Connection connectionInstance, final ConnectionState state, final Throwable error )
+            {
+                notifyStateChange ( ConnectionLoginHandler.this.connectionService, state, error, true );
+            }
+        };
     }
 
     public void setStateListener ( final StateListener loginStateListener )
@@ -65,20 +71,9 @@ public class ConnectionLoginHandler implements LoginHandler
 
     public void startLogin ()
     {
-        for ( final ConnectionService service : this.connectionService.values () )
-        {
-            final ConnectionStateListener connectionStateListener = new ConnectionStateListener () {
-
-                public void stateChange ( final Connection connectionInstance, final ConnectionState state, final Throwable error )
-                {
-                    notifyStateChange ( service, state, error, true );
-                }
-            };
-
-            notifyStateChange ( service, ConnectionState.CLOSED, null, false );
-            service.getConnection ().addConnectionStateListener ( connectionStateListener );
-            service.connect ();
-        }
+        notifyStateChange ( this.connectionService, ConnectionState.CLOSED, null, false );
+        this.connectionService.getConnection ().addConnectionStateListener ( this.connectionStateListener );
+        this.connectionService.connect ();
     }
 
     private void notifyStateChange ( final ConnectionService service, final ConnectionState state, final Throwable error, final boolean canBeFinal )
@@ -88,18 +83,22 @@ public class ConnectionLoginHandler implements LoginHandler
         case BOUND:
             this.complete = true;
             this.ok = true;
+            this.connectionService.getConnection ().removeConnectionStateListener ( this.connectionStateListener );
             break;
         case CLOSED:
-            this.complete = canBeFinal;
             this.ok = false;
-            dispose ();
+            if ( canBeFinal )
+            {
+                this.complete = true;
+                dispose ();
+            }
             break;
         }
 
         final StateListener loginStateListener = this.loginStateListener;
         if ( loginStateListener != null )
         {
-            loginStateListener.stateChanged ( service.getConnection ().getConnectionInformation ().toMaskedString (), state.toString (), error );
+            loginStateListener.stateChanged ( this.loginConnection.getConnectionInformation ().toMaskedString (), state.toString (), error );
         }
     }
 
@@ -110,47 +109,43 @@ public class ConnectionLoginHandler implements LoginHandler
             return;
         }
 
-        this.registration = new LinkedList<ServiceRegistration> ();
-
-        for ( final ConnectionService service : this.connectionService.values () )
+        final Class<?>[] clazzes = this.connectionService.getSupportedInterfaces ();
+        final String[] str = new String[clazzes.length];
+        for ( int i = 0; i < clazzes.length; i++ )
         {
-            final Class<?>[] clazzes = service.getSupportedInterfaces ();
-            final String[] str = new String[clazzes.length];
-            for ( int i = 0; i < clazzes.length; i++ )
-            {
-                str[i] = clazzes[i].getName ();
-            }
-
-            final Dictionary<String, Object> properties = new Hashtable<String, Object> ();
-
-            properties.put ( ConnectionService.CONNECTION_URI, service.getConnection ().getConnectionInformation ().toString () );
-            properties.put ( Constants.SERVICE_PID, this.servicePid );
-            if ( this.priority != null )
-            {
-                properties.put ( Constants.SERVICE_RANKING, this.priority );
-            }
-
-            this.registration.add ( context.registerService ( str, this.connectionService, properties ) );
+            str[i] = clazzes[i].getName ();
         }
+
+        final Dictionary<String, Object> properties = new Hashtable<String, Object> ();
+
+        properties.put ( ConnectionService.CONNECTION_URI, this.connectionService.getConnection ().getConnectionInformation ().toString () );
+        properties.put ( Constants.SERVICE_PID, this.loginConnection.getServicePid () );
+        if ( this.loginConnection.getPriority () != null )
+        {
+            properties.put ( Constants.SERVICE_RANKING, this.loginConnection.getPriority () );
+        }
+
+        this.registration = context.registerService ( str, this.connectionService, properties );
     }
 
     public synchronized void dispose ()
     {
         if ( this.registration != null )
         {
-            for ( final ServiceRegistration registration : this.registration )
-            {
-                registration.unregister ();
-            }
-            this.registration.clear ();
+            this.registration.unregister ();
             this.registration = null;
         }
 
-        for ( final ConnectionService service : this.connectionService.values () )
+        if ( this.connectionService != null )
         {
-            service.dispose ();
+            if ( this.connectionStateListener != null )
+            {
+                this.connectionService.getConnection ().removeConnectionStateListener ( this.connectionStateListener );
+            }
+
+            this.connectionService.dispose ();
+            this.connectionService = null;
         }
-        this.connectionService.clear ();
     }
 
     public boolean isComplete ()
