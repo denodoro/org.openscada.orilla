@@ -3,7 +3,7 @@
 <schema targetNamespace="org.openscada.core.ui.connection.login" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="org.openscada.core.ui.connection.login" id="org.openscada.core.ui.connection.login.context" name="context"/>
+         <meta.schema plugin="org.openscada.core.ui.connection.login" id="context" name="Login Context"/>
       </appinfo>
       <documentation>
          

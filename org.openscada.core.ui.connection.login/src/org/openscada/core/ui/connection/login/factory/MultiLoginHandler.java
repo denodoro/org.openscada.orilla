@@ -27,8 +27,9 @@ import org.osgi.framework.BundleContext;
 
 public class MultiLoginHandler implements LoginHandler
 {
-
     private final ArrayList<LoginHandler> handler;
+
+    private StateListener stateListener;
 
     public MultiLoginHandler ( final Collection<LoginHandler> handler )
     {
@@ -37,6 +38,7 @@ public class MultiLoginHandler implements LoginHandler
 
     public void setStateListener ( final StateListener stateListener )
     {
+        this.stateListener = stateListener;
         for ( final LoginHandler handler : this.handler )
         {
             handler.setStateListener ( stateListener );
@@ -45,9 +47,21 @@ public class MultiLoginHandler implements LoginHandler
 
     public void startLogin ()
     {
-        for ( final LoginHandler handler : this.handler )
+        if ( this.handler.isEmpty () )
         {
-            handler.startLogin ();
+            // signal that we are complete at once
+            final StateListener listener = this.stateListener;
+            if ( listener != null )
+            {
+                listener.stateChanged ( null, null, null );
+            }
+        }
+        else
+        {
+            for ( final LoginHandler handler : this.handler )
+            {
+                handler.startLogin ();
+            }
         }
     }
 

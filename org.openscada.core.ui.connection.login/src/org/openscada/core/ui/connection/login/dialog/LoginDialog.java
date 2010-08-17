@@ -364,7 +364,8 @@ public class LoginDialog extends TitleAreaDialog
     {
         if ( this.creator != null )
         {
-            this.creator.stop ();
+            this.creator.dispose ();
+            this.creator = null;
             // will receive result
         }
         else

@@ -32,13 +32,13 @@ public class LoginContext
 
     private final String name;
 
-    private final Collection<LoginFactory> connections;
+    private final Collection<LoginFactory> factories;
 
     public LoginContext ( final String id, final String name, final Collection<LoginFactory> connections )
     {
         this.id = id;
         this.name = name;
-        this.connections = new LinkedList<LoginFactory> ( connections );
+        this.factories = new LinkedList<LoginFactory> ( connections );
     }
 
     public String getName ()
@@ -46,9 +46,9 @@ public class LoginContext
         return this.name;
     }
 
-    public Collection<LoginFactory> getConnections ()
+    public Collection<LoginFactory> getFactories ()
     {
-        return Collections.unmodifiableCollection ( this.connections );
+        return Collections.unmodifiableCollection ( this.factories );
     }
 
     public String getId ()

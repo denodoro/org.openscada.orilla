@@ -19,6 +19,7 @@
 
 package org.openscada.core.ui.connection.login.dialog;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -42,7 +43,7 @@ public class ContextCreator
 
     private final Realm realm;
 
-    private final Set<LoginHandler> connections = new HashSet<LoginHandler> ();
+    private final Set<LoginHandler> handlers = new HashSet<LoginHandler> ();
 
     private final ContextCreatorResultListener resultListener;
 
@@ -58,7 +59,7 @@ public class ContextCreator
 
     public void start ( final String username, final String password )
     {
-        for ( final LoginFactory factory : this.context.getConnections () )
+        for ( final LoginFactory factory : this.context.getFactories () )
         {
             try
             {
@@ -76,34 +77,34 @@ public class ContextCreator
                             handleStateChange ( handler, connectionName, state, error );
                         }
                     } );
-                    this.connections.add ( handler );
+                    this.handlers.add ( handler );
                 }
             }
             catch ( final Throwable e )
             {
-                for ( final LoginHandler handler : this.connections )
+                for ( final LoginHandler handler : this.handlers )
                 {
                     handler.dispose ();
                 }
-                this.connections.clear ();
+                this.handlers.clear ();
                 notifyStateChange ( factory.getClass ().getName (), "FAILED", e );
             }
         }
 
-        if ( this.connections.size () != this.context.getConnections ().size () )
+        if ( this.handlers.size () != this.context.getFactories ().size () )
         {
             // some handlers could not be created ... abort
-            for ( final LoginHandler handler : this.connections )
+            for ( final LoginHandler handler : this.handlers )
             {
                 handler.dispose ();
             }
-            this.connections.clear ();
+            this.handlers.clear ();
             notifyResult ( null );
         }
         else
         {
             // all got created now start the login process
-            for ( final LoginHandler handler : this.connections )
+            for ( final LoginHandler handler : this.handlers )
             {
                 handler.startLogin ();
             }
@@ -116,16 +117,16 @@ public class ContextCreator
 
         if ( isComplete () )
         {
-            notifyResult ( allOk () ? this.connections : null );
+            notifyResult ( allOk () ? new ArrayList<LoginHandler> ( this.handlers ) : null );
         }
     }
 
     private boolean isComplete ()
     {
         logger.debug ( "Check complete" ); //$NON-NLS-1$
-        logger.debug ( "Connections: {}", this.connections ); //$NON-NLS-1$
+        logger.debug ( "Handlers: {}", this.handlers ); //$NON-NLS-1$
 
-        for ( final LoginHandler handler : this.connections )
+        for ( final LoginHandler handler : this.handlers )
         {
             if ( !handler.isComplete () )
             {
@@ -137,7 +138,7 @@ public class ContextCreator
 
     private boolean allOk ()
     {
-        for ( final LoginHandler handler : this.connections )
+        for ( final LoginHandler handler : this.handlers )
         {
             if ( !handler.isOk () )
             {
@@ -147,15 +148,6 @@ public class ContextCreator
         return true;
     }
 
-    public void stop ()
-    {
-        logger.warn ( "Request to stop" ); //$NON-NLS-1$
-        for ( final LoginHandler handler : this.connections )
-        {
-            handler.dispose ();
-        }
-    }
-
     public void dispose ()
     {
         if ( !this.complete )
@@ -163,16 +155,16 @@ public class ContextCreator
             notifyResult ( null );
         }
 
-        for ( final LoginHandler handler : this.connections )
+        for ( final LoginHandler handler : this.handlers )
         {
             handler.dispose ();
         }
-        this.connections.clear ();
+        this.handlers.clear ();
     }
 
     private void notifyStateChange ( final String handlerName, final String state, final Throwable error )
     {
-        if ( this.listener != null )
+        if ( this.listener != null && handlerName != null )
         {
             logger.info ( "Fire state change - connection: {}, state: {}, error: {}", new Object[] { handlerName, state, error } ); //$NON-NLS-1$
             this.realm.asyncExec ( new Runnable () {
@@ -187,15 +179,18 @@ public class ContextCreator
 
     private void notifyResult ( final Collection<LoginHandler> result )
     {
-        if ( this.complete )
+        synchronized ( this )
         {
-            logger.warn ( "Somehow we wanted to send the result twice. Skipping!" ); //$NON-NLS-1$
-            return;
+            if ( this.complete )
+            {
+                logger.warn ( "Somehow we wanted to send the result twice. Skipping!" ); //$NON-NLS-1$
+                return;
+            }
+            this.complete = true;
         }
-        this.complete = true;
 
         // remove all our connection state listeners
-        for ( final LoginHandler handler : this.connections )
+        for ( final LoginHandler handler : this.handlers )
         {
             handler.setStateListener ( null );
         }
@@ -208,7 +203,7 @@ public class ContextCreator
         // if we have a valid result the receive takes over control
         if ( result != null )
         {
-            this.connections.clear ();
+            this.handlers.clear ();
         }
 
         this.realm.asyncExec ( new Runnable () {
