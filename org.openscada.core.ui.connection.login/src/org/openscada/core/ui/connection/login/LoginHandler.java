@@ -19,41 +19,20 @@
 
 package org.openscada.core.ui.connection.login;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
+import org.osgi.framework.BundleContext;
 
-import org.openscada.utils.lang.Immutable;
-
-@Immutable
-public class LoginContext
+public interface LoginHandler
 {
-    private final String id;
+    public void setStateListener ( StateListener stateListener );
 
-    private final String name;
+    public void startLogin ();
 
-    private final Collection<LoginFactory> connections;
+    public void register ( BundleContext context );
 
-    public LoginContext ( final String id, final String name, final Collection<LoginFactory> connections )
-    {
-        this.id = id;
-        this.name = name;
-        this.connections = new LinkedList<LoginFactory> ( connections );
-    }
+    public void dispose ();
 
-    public String getName ()
-    {
-        return this.name;
-    }
+    public boolean isOk ();
 
-    public Collection<LoginFactory> getConnections ()
-    {
-        return Collections.unmodifiableCollection ( this.connections );
-    }
-
-    public String getId ()
-    {
-        return this.id;
-    }
+    public boolean isComplete ();
 
 }

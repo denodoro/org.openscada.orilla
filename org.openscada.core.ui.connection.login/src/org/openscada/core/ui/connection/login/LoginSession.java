@@ -19,24 +19,12 @@
 
 package org.openscada.core.ui.connection.login;
 
-import java.util.Collections;
-import java.util.Dictionary;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.Map;
-import java.util.Set;
+import java.util.Collection;
 
-import org.openscada.core.connection.provider.ConnectionService;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.Constants;
-import org.osgi.framework.ServiceRegistration;
 
 public class LoginSession
 {
-    private final Map<LoginConnection, ConnectionService> connections;
-
-    private final Set<ServiceRegistration> registrations = new HashSet<ServiceRegistration> ();
-
     private final String username;
 
     private final String password;
@@ -45,13 +33,15 @@ public class LoginSession
 
     private final LoginContext loginContext;
 
-    public LoginSession ( final BundleContext context, final String username, final String password, final LoginContext loginContext, final Map<LoginConnection, ConnectionService> connections )
+    private final Collection<LoginHandler> handler;
+
+    public LoginSession ( final BundleContext context, final String username, final String password, final LoginContext loginContext, final Collection<LoginHandler> handler )
     {
         this.context = context;
         this.username = username;
         this.password = password;
-        this.connections = connections;
         this.loginContext = loginContext;
+        this.handler = handler;
     }
 
     public String getPassword ()
@@ -69,55 +59,20 @@ public class LoginSession
         return this.loginContext;
     }
 
-    public void start ()
+    public void register ()
     {
-        for ( final Map.Entry<LoginConnection, ConnectionService> entry : this.connections.entrySet () )
+        for ( final LoginHandler handler : this.handler )
         {
-            registerConnection ( entry.getKey (), entry.getValue () );
+            handler.register ( this.context );
         }
     }
 
-    private void registerConnection ( final LoginConnection key, final ConnectionService service )
+    public void dispose ()
     {
-
-        final Class<?>[] clazzes = service.getSupportedInterfaces ();
-        final String[] str = new String[clazzes.length];
-        for ( int i = 0; i < clazzes.length; i++ )
+        for ( final LoginHandler handler : this.handler )
         {
-            str[i] = clazzes[i].getName ();
+            handler.dispose ();
         }
-
-        final Dictionary<String, Object> properties = new Hashtable<String, Object> ();
-
-        properties.put ( ConnectionService.CONNECTION_URI, key.getConnectionInformation ().toString () );
-        properties.put ( Constants.SERVICE_PID, key.getServicePid () );
-        if ( key.getPriority () != null )
-        {
-            properties.put ( Constants.SERVICE_RANKING, key.getPriority () );
-        }
-
-        final ServiceRegistration registration = this.context.registerService ( str, service, properties );
-        this.registrations.add ( registration );
-    }
-
-    public void stop ()
-    {
-        for ( final ServiceRegistration reg : this.registrations )
-        {
-            reg.unregister ();
-        }
-        this.registrations.clear ();
-
-        for ( final ConnectionService service : this.connections.values () )
-        {
-            service.dispose ();
-        }
-        this.connections.clear ();
-    }
-
-    public Map<LoginConnection, ConnectionService> getConnections ()
-    {
-        return Collections.unmodifiableMap ( this.connections );
     }
 
 }

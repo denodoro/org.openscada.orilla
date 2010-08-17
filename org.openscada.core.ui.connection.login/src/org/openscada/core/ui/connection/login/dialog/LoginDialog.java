@@ -19,9 +19,7 @@
 
 package org.openscada.core.ui.connection.login.dialog;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.Collection;
 
 import org.eclipse.core.databinding.observable.Realm;
 import org.eclipse.jface.databinding.swt.SWTObservables;
@@ -49,11 +47,9 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import org.openscada.core.ConnectionInformation;
-import org.openscada.core.connection.provider.ConnectionService;
 import org.openscada.core.ui.connection.login.Activator;
-import org.openscada.core.ui.connection.login.LoginConnection;
 import org.openscada.core.ui.connection.login.LoginContext;
+import org.openscada.core.ui.connection.login.LoginHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -203,6 +199,7 @@ public class LoginDialog extends TitleAreaDialog
         newShell.setText ( Messages.LoginDialog_Shell_Text );
     }
 
+    @Override
     protected Control createDialogArea ( final Composite parent )
     {
         final Composite wrapper = (Composite)super.createDialogArea ( parent );
@@ -242,6 +239,7 @@ public class LoginDialog extends TitleAreaDialog
         this.contextSelector = new ComboViewer ( contents, SWT.READ_ONLY );
         this.contextSelector.setContentProvider ( new ArrayContentProvider () );
         this.contextSelector.setLabelProvider ( new LabelProvider () {
+            @Override
             public String getText ( final Object element )
             {
                 final LoginContext ctx = (LoginContext)element;
@@ -323,31 +321,17 @@ public class LoginDialog extends TitleAreaDialog
         this.analyzer.clear ();
 
         final Realm realm = SWTObservables.getRealm ( getShell ().getDisplay () );
-        this.creator = new ContextCreator ( realm, injectUserInformation ( loginContext ), this.analyzer, new ContextCreatorResultListener () {
+        this.creator = new ContextCreator ( realm, loginContext, this.analyzer, new ContextCreatorResultListener () {
 
-            public void complete ( final Map<LoginConnection, ConnectionService> result )
+            public void complete ( final Collection<LoginHandler> result )
             {
                 handleComplete ( result );
             }
         } );
-        this.creator.start ();
+        this.creator.start ( this.userText.getText (), this.passwordText.getText () );
     }
 
-    private LoginContext injectUserInformation ( final LoginContext loginContext )
-    {
-        final List<LoginConnection> connections = new LinkedList<LoginConnection> ();
-        for ( final LoginConnection c : loginContext.getConnections () )
-        {
-            final ConnectionInformation ci = c.getConnectionInformation ();
-            ci.setUser ( this.user );
-            ci.setPassword ( this.password );
-            connections.add ( new LoginConnection ( ci, c.getServicePid (), c.getAutoReconnectDelay (), c.getPriority () ) );
-        }
-
-        return new LoginContext ( loginContext.getId (), loginContext.getName (), connections );
-    }
-
-    protected void handleComplete ( final Map<LoginConnection, ConnectionService> result )
+    protected void handleComplete ( final Collection<LoginHandler> result )
     {
         if ( this.creator == null )
         {

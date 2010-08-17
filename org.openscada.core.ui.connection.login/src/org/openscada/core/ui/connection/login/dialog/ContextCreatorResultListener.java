@@ -19,12 +19,11 @@
 
 package org.openscada.core.ui.connection.login.dialog;
 
-import java.util.Map;
+import java.util.Collection;
 
-import org.openscada.core.connection.provider.ConnectionService;
-import org.openscada.core.ui.connection.login.LoginConnection;
+import org.openscada.core.ui.connection.login.LoginHandler;
 
 public interface ContextCreatorResultListener
 {
-    public void complete ( Map<LoginConnection, ConnectionService> result );
+    public void complete ( Collection<LoginHandler> handler );
 }

@@ -21,8 +21,14 @@ Import-Package: org.openscada.core;version="0.15.0",
  org.openscada.utils.lang;version="0.15.0",
  org.slf4j;version="1.5.8"
 Export-Package: org.openscada.core.ui.connection.login;version="0.15.0";
-  uses:="org.eclipse.core.databinding.observable,
+  uses:="org.eclipse.osgi.util,
+   org.eclipse.core.databinding.observable,
    org.eclipse.ui,
    org.eclipse.ui.plugin,
    org.osgi.framework,
-   org.openscada.core"
+   org.openscada.core",
+ org.openscada.core.ui.connection.login.factory;version="0.15.0";
+  uses:="org.openscada.core.ui.connection.login,
+   org.eclipse.core.runtime,
+   org.openscada.core.connection.provider,
+   org.osgi.framework"

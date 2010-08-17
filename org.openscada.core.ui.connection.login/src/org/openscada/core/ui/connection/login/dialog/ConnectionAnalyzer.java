@@ -30,30 +30,28 @@ import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.openscada.core.ConnectionInformation;
-import org.openscada.core.client.ConnectionState;
 
 public class ConnectionAnalyzer extends Composite implements ContextCreatorListener
 {
 
     private static class Entry
     {
-        private final ConnectionInformation connectionInformation;
+        private final String handlerName;
 
-        private final ConnectionState state;
+        private final String state;
 
         private final Throwable error;
 
-        public Entry ( final ConnectionInformation connectionInformation, final ConnectionState state, final Throwable error )
+        public Entry ( final String handlerName, final String state, final Throwable error )
         {
-            this.connectionInformation = connectionInformation;
+            this.handlerName = handlerName;
             this.state = state;
             this.error = error;
         }
 
-        public ConnectionInformation getConnectionInformation ()
+        public String getHandlerName ()
         {
-            return this.connectionInformation;
+            return this.handlerName;
         }
 
         public Throwable getError ()
@@ -61,7 +59,7 @@ public class ConnectionAnalyzer extends Composite implements ContextCreatorListe
             return this.error;
         }
 
-        public ConnectionState getState ()
+        public String getState ()
         {
             return this.state;
         }
@@ -71,7 +69,7 @@ public class ConnectionAnalyzer extends Composite implements ContextCreatorListe
         {
             final int prime = 31;
             int result = 1;
-            result = prime * result + ( this.connectionInformation == null ? 0 : this.connectionInformation.hashCode () );
+            result = prime * result + ( this.handlerName == null ? 0 : this.handlerName.hashCode () );
             return result;
         }
 
@@ -91,14 +89,14 @@ public class ConnectionAnalyzer extends Composite implements ContextCreatorListe
                 return false;
             }
             final Entry other = (Entry)obj;
-            if ( this.connectionInformation == null )
+            if ( this.handlerName == null )
             {
-                if ( other.connectionInformation != null )
+                if ( other.handlerName != null )
                 {
                     return false;
                 }
             }
-            else if ( !this.connectionInformation.equals ( other.connectionInformation ) )
+            else if ( !this.handlerName.equals ( other.handlerName ) )
             {
                 return false;
             }
@@ -117,7 +115,7 @@ public class ConnectionAnalyzer extends Composite implements ContextCreatorListe
             switch ( cell.getColumnIndex () )
             {
             case 0:
-                cell.setText ( entry.getConnectionInformation ().toMaskedString () );
+                cell.setText ( entry.getHandlerName () );
                 break;
             case 1:
                 cell.setText ( entry.getState ().toString () );
@@ -179,14 +177,14 @@ public class ConnectionAnalyzer extends Composite implements ContextCreatorListe
         this.dataSet.clear ();
     }
 
-    public void stateChanged ( final ConnectionInformation connectionInformation, final ConnectionState state, final Throwable error )
+    public void stateChanged ( final String handlerName, final String state, final Throwable error )
     {
         if ( isDisposed () )
         {
             return;
         }
 
-        final Entry entry = new Entry ( connectionInformation, state, error );
+        final Entry entry = new Entry ( handlerName, state, error );
 
         try
         {

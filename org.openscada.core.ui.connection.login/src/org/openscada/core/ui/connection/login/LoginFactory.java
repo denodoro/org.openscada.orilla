@@ -19,41 +19,15 @@
 
 package org.openscada.core.ui.connection.login;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
-
-import org.openscada.utils.lang.Immutable;
-
-@Immutable
-public class LoginContext
+public interface LoginFactory
 {
-    private final String id;
-
-    private final String name;
-
-    private final Collection<LoginFactory> connections;
-
-    public LoginContext ( final String id, final String name, final Collection<LoginFactory> connections )
-    {
-        this.id = id;
-        this.name = name;
-        this.connections = new LinkedList<LoginFactory> ( connections );
-    }
-
-    public String getName ()
-    {
-        return this.name;
-    }
-
-    public Collection<LoginFactory> getConnections ()
-    {
-        return Collections.unmodifiableCollection ( this.connections );
-    }
-
-    public String getId ()
-    {
-        return this.id;
-    }
-
+    /**
+     * Creates a new login handler that is not started
+     * <p>
+     * <em>Note:</em> login handlers must at some point be disposed using the
+     * method {@link LoginHandler#dispose()} even if a login was never started.
+     * </p>
+     * @return a new login handler
+     */
+    public LoginHandler createHandler ( LoginContext context, String username, String password ) throws Exception;
 }

@@ -49,8 +49,9 @@
 
    <element name="context">
       <complexType>
-         <choice>
-            <element ref="connection" minOccurs="0" maxOccurs="unbounded"/>
+         <choice minOccurs="0" maxOccurs="unbounded">
+            <element ref="connection"/>
+            <element ref="factory"/>
          </choice>
          <attribute name="label" type="string" use="required">
             <annotation>
@@ -103,6 +104,21 @@
                <documentation>
                   
                </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="factory">
+      <complexType>
+         <attribute name="class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java"/>
+               </appinfo>
             </annotation>
          </attribute>
       </complexType>

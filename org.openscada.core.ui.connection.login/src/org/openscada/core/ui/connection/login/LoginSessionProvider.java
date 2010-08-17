@@ -40,7 +40,7 @@ public class LoginSessionProvider extends AbstractSourceProvider
     {
     }
 
-    @SuppressWarnings ( "unchecked" )
+    @SuppressWarnings ( { "rawtypes" } )
     public Map getCurrentState ()
     {
         final Map<String, String> result = new HashMap<String, String> ( 1 );

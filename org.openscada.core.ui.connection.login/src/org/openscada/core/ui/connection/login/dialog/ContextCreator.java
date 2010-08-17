@@ -19,19 +19,15 @@
 
 package org.openscada.core.ui.connection.login.dialog;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.eclipse.core.databinding.observable.Realm;
-import org.openscada.core.ConnectionInformation;
-import org.openscada.core.client.Connection;
-import org.openscada.core.client.ConnectionState;
-import org.openscada.core.client.ConnectionStateListener;
-import org.openscada.core.connection.provider.ConnectionService;
-import org.openscada.core.ui.connection.creator.ConnectionCreatorHelper;
-import org.openscada.core.ui.connection.login.LoginConnection;
 import org.openscada.core.ui.connection.login.LoginContext;
+import org.openscada.core.ui.connection.login.LoginFactory;
+import org.openscada.core.ui.connection.login.LoginHandler;
+import org.openscada.core.ui.connection.login.StateListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,14 +42,7 @@ public class ContextCreator
 
     private final Realm realm;
 
-    private final Map<LoginConnection, ConnectionService> connections = new HashMap<LoginConnection, ConnectionService> ();
-
-    private final Map<ConnectionService, ConnectionStateListener> listeners = new ConcurrentHashMap<ConnectionService, ConnectionStateListener> ();
-
-    /**
-     * The result map. Contains either a {@link Throwable} or a {@link ConnectionService}
-     */
-    private final Map<LoginConnection, Object> results = new HashMap<LoginConnection, Object> ();
+    private final Set<LoginHandler> connections = new HashSet<LoginHandler> ();
 
     private final ContextCreatorResultListener resultListener;
 
@@ -67,119 +56,90 @@ public class ContextCreator
         this.resultListener = resultListener;
     }
 
-    public void start ()
+    public void start ( final String username, final String password )
     {
-        this.results.clear ();
-
-        for ( final LoginConnection connection : this.context.getConnections () )
+        for ( final LoginFactory factory : this.context.getConnections () )
         {
-            final ConnectionService connectionService = ConnectionCreatorHelper.createConnection ( connection.getConnectionInformation (), connection.getAutoReconnectDelay () );
-            if ( connectionService != null )
+            try
             {
-                notifyStateChange ( connection.getConnectionInformation (), ConnectionState.CLOSED, null );
-                this.connections.put ( connection, connectionService );
-                final ConnectionStateListener connectionStateListener = new ConnectionStateListener () {
+                final LoginHandler handler = factory.createHandler ( this.context, username, password );
+                if ( handler == null )
+                {
+                    notifyStateChange ( factory.getClass ().getName (), "MISSING", null );
+                }
+                else
+                {
+                    handler.setStateListener ( new StateListener () {
 
-                    public void stateChange ( final Connection connectionInstance, final ConnectionState state, final Throwable error )
-                    {
-                        handleStateChange ( connection, connectionService, connectionInstance, state, error );
-                    }
-                };
-                connectionService.getConnection ().addConnectionStateListener ( connectionStateListener );
-                this.listeners.put ( connectionService, connectionStateListener );
+                        public void stateChanged ( final String connectionName, final String state, final Throwable error )
+                        {
+                            handleStateChange ( handler, connectionName, state, error );
+                        }
+                    } );
+                    this.connections.add ( handler );
+                }
             }
-            else
+            catch ( final Throwable e )
             {
-                notifyStateChange ( connection.getConnectionInformation (), ConnectionState.CLOSED, new IllegalArgumentException ( Messages.ContextCreator_ErrorConnectionService ).fillInStackTrace () );
+                for ( final LoginHandler handler : this.connections )
+                {
+                    handler.dispose ();
+                }
+                this.connections.clear ();
+                notifyStateChange ( factory.getClass ().getName (), "FAILED", e );
             }
         }
 
         if ( this.connections.size () != this.context.getConnections ().size () )
         {
-            // dispose what we created
-            for ( final ConnectionService service : this.connections.values () )
+            // some handlers could not be created ... abort
+            for ( final LoginHandler handler : this.connections )
             {
-                service.dispose ();
+                handler.dispose ();
             }
             this.connections.clear ();
-            this.results.clear ();
-
-            // could not create all connections
             notifyResult ( null );
         }
         else
         {
-            for ( final ConnectionService service : this.connections.values () )
+            // all got created now start the login process
+            for ( final LoginHandler handler : this.connections )
             {
-                service.connect ();
+                handler.startLogin ();
             }
         }
     }
 
-    protected synchronized void handleStateChange ( final LoginConnection connection, final ConnectionService connectionService, final Connection connectionInstance, final ConnectionState state, final Throwable error )
+    protected synchronized void handleStateChange ( final LoginHandler handler, final String connectionName, final String state, final Throwable error )
     {
-        notifyStateChange ( connection.getConnectionInformation (), state, error );
+        notifyStateChange ( connectionName, state, error );
 
-        if ( state == ConnectionState.BOUND )
+        if ( isComplete () )
         {
-            this.results.put ( connection, connectionService );
-        }
-        else if ( state == ConnectionState.CLOSED )
-        {
-            connectionService.disconnect ();
-            this.results.put ( connection, error );
-        }
-        else
-        {
-            this.results.remove ( connection );
-        }
-
-        final Map<LoginConnection, ConnectionService> result = new HashMap<LoginConnection, ConnectionService> ();
-        if ( isComplete ( result ) )
-        {
-            if ( result.isEmpty () )
-            {
-                notifyResult ( null );
-            }
-            else
-            {
-                notifyResult ( result );
-            }
+            notifyResult ( allOk () ? this.connections : null );
         }
     }
 
-    private boolean isComplete ( final Map<LoginConnection, ConnectionService> result )
+    private boolean isComplete ()
     {
         logger.debug ( "Check complete" ); //$NON-NLS-1$
-        logger.debug ( "Results: {}", this.results ); //$NON-NLS-1$
         logger.debug ( "Connections: {}", this.connections ); //$NON-NLS-1$
 
-        if ( this.results.size () == this.connections.size () )
+        for ( final LoginHandler handler : this.connections )
         {
-            if ( !allOk () )
+            if ( !handler.isComplete () )
             {
-                for ( final ConnectionService connection : this.connections.values () )
-                {
-                    connection.dispose ();
-                }
+                return false;
             }
-            else
-            {
-                result.putAll ( this.connections );
-            }
-
-            this.results.clear ();
-            this.connections.clear ();
-            return true;
         }
-        return false;
+        return true;
     }
 
     private boolean allOk ()
     {
-        for ( final Object o : this.results.values () )
+        for ( final LoginHandler handler : this.connections )
         {
-            if ( ! ( o instanceof ConnectionService ) )
+            if ( !handler.isOk () )
             {
                 return false;
             }
@@ -190,9 +150,9 @@ public class ContextCreator
     public void stop ()
     {
         logger.warn ( "Request to stop" ); //$NON-NLS-1$
-        for ( final ConnectionService service : this.connections.values () )
+        for ( final LoginHandler handler : this.connections )
         {
-            service.dispose ();
+            handler.dispose ();
         }
     }
 
@@ -203,30 +163,29 @@ public class ContextCreator
             notifyResult ( null );
         }
 
-        for ( final ConnectionService service : this.connections.values () )
+        for ( final LoginHandler handler : this.connections )
         {
-            service.dispose ();
+            handler.dispose ();
         }
         this.connections.clear ();
-        this.results.clear ();
     }
 
-    private void notifyStateChange ( final ConnectionInformation connectionInformation, final ConnectionState state, final Throwable error )
+    private void notifyStateChange ( final String handlerName, final String state, final Throwable error )
     {
         if ( this.listener != null )
         {
-            logger.info ( "Fire state change - connection: {}, state: {}, error: {}", new Object[] { connectionInformation, state, error } ); //$NON-NLS-1$
+            logger.info ( "Fire state change - connection: {}, state: {}, error: {}", new Object[] { handlerName, state, error } ); //$NON-NLS-1$
             this.realm.asyncExec ( new Runnable () {
 
                 public void run ()
                 {
-                    ContextCreator.this.listener.stateChanged ( connectionInformation, state, error );
+                    ContextCreator.this.listener.stateChanged ( handlerName, state, error );
                 }
             } );
         }
     }
 
-    private void notifyResult ( final Map<LoginConnection, ConnectionService> result )
+    private void notifyResult ( final Collection<LoginHandler> result )
     {
         if ( this.complete )
         {
@@ -236,9 +195,9 @@ public class ContextCreator
         this.complete = true;
 
         // remove all our connection state listeners
-        for ( final Map.Entry<ConnectionService, ConnectionStateListener> entry : this.listeners.entrySet () )
+        for ( final LoginHandler handler : this.connections )
         {
-            entry.getKey ().getConnection ().removeConnectionStateListener ( entry.getValue () );
+            handler.setStateListener ( null );
         }
 
         if ( this.resultListener != null )

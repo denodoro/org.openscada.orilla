@@ -41,14 +41,14 @@ public class SessionManagerImpl extends SessionManager
 
         if ( this.session != null )
         {
-            this.session.stop ();
+            this.session.dispose ();
         }
 
         this.session = session;
 
         if ( this.session != null )
         {
-            this.session.start ();
+            this.session.register ();
         }
 
         for ( final IWorkbenchWindow window : PlatformUI.getWorkbench ().getWorkbenchWindows () )
