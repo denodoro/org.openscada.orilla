@@ -22,6 +22,7 @@ package org.openscada.core.ui.connection.login;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.core.expressions.IEvaluationContext;
 import org.eclipse.ui.AbstractSourceProvider;
 import org.eclipse.ui.ISources;
 
@@ -30,7 +31,7 @@ public class LoginSessionProvider extends AbstractSourceProvider
 
     public static final String SESSION_STATE = "org.openscada.core.ui.connection.login.sessionState"; //$NON-NLS-1$
 
-    public static final String SESSION_PROPERTIES = "org.openscada.core.ui.connection.login.sessionProperties"; //$NON-NLS-1$
+    public static final String SESSION = "org.openscada.core.ui.connection.login.session"; //$NON-NLS-1$
 
     private LoginSession session;
 
@@ -47,13 +48,8 @@ public class LoginSessionProvider extends AbstractSourceProvider
     {
         final Map<String, Object> result = new HashMap<String, Object> ( 2 );
         result.put ( SESSION_STATE, getSessionState () );
-        result.put ( SESSION_PROPERTIES, getSessionProperties () );
+        result.put ( SESSION, this.session != null ? this.session : IEvaluationContext.UNDEFINED_VARIABLE );
         return result;
-    }
-
-    private Object getSessionProperties ()
-    {
-        return this.session != null ? this.session.getLoginContext ().getProperties () : null;
     }
 
     private String getSessionState ()
@@ -64,12 +60,12 @@ public class LoginSessionProvider extends AbstractSourceProvider
     public void setLoginSession ( final LoginSession session )
     {
         this.session = session;
-        fireSourceChanged ( ISources.WORKBENCH, SESSION_STATE, getSessionState () );
+        fireSourceChanged ( ISources.WORKBENCH, getCurrentState () );
     }
 
     public String[] getProvidedSourceNames ()
     {
-        return new String[] { SESSION_STATE, SESSION_PROPERTIES };
+        return new String[] { SESSION_STATE, SESSION };
     }
 
 }

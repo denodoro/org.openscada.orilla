@@ -81,6 +81,10 @@
                name="org.openscada.core.ui.connection.login.sessionState"
                priorityLevel="workbench">
          </variable>
+         <variable
+               name="org.openscada.core.ui.connection.login.session"
+               priorityLevel="workbench">
+         </variable>
       </sourceProvider>
    </extension>
    <extension
@@ -91,6 +95,16 @@
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="CTRL+L">
       </key>
+   </extension>
+   <extension
+         point="org.eclipse.core.expressions.propertyTesters">
+      <propertyTester
+            class="org.openscada.core.ui.connection.login.LoginSessionPropertyTester"
+            id="org.openscada.core.ui.connection.login.session"
+            namespace="org.openscada.core.ui.connection.login.session"
+            properties="properties"
+            type="org.openscada.core.ui.connection.login.LoginSession">
+      </propertyTester>
    </extension>
 
 </plugin>
