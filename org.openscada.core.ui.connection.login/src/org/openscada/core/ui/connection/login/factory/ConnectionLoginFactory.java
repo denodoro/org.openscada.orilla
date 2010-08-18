@@ -29,11 +29,11 @@ import org.eclipse.core.runtime.Platform;
 import org.openscada.core.ConnectionInformation;
 import org.openscada.core.connection.provider.ConnectionService;
 import org.openscada.core.ui.connection.creator.ConnectionCreatorHelper;
-import org.openscada.core.ui.connection.login.LoginConnection;
 import org.openscada.core.ui.connection.login.LoginContext;
 import org.openscada.core.ui.connection.login.LoginFactory;
 import org.openscada.core.ui.connection.login.LoginHandler;
 import org.openscada.core.ui.connection.login.factory.internal.ConnectionLoginHandler;
+import org.openscada.core.ui.connection.login.factory.internal.LoginConnection;
 
 public class ConnectionLoginFactory implements LoginFactory
 {

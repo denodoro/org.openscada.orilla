@@ -26,7 +26,6 @@ import org.openscada.core.client.Connection;
 import org.openscada.core.client.ConnectionState;
 import org.openscada.core.client.ConnectionStateListener;
 import org.openscada.core.connection.provider.ConnectionService;
-import org.openscada.core.ui.connection.login.LoginConnection;
 import org.openscada.core.ui.connection.login.LoginHandler;
 import org.openscada.core.ui.connection.login.StateListener;
 import org.osgi.framework.BundleContext;
