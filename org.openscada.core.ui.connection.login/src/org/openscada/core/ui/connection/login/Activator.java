@@ -20,8 +20,10 @@
 package org.openscada.core.ui.connection.login;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IStatus;
@@ -110,12 +112,24 @@ public class Activator extends AbstractUIPlugin
             final String name = ele.getAttribute ( "label" ); //$NON-NLS-1$
             final String id = ele.getAttribute ( "id" ); //$NON-NLS-1$
 
-            final Collection<LoginFactory> connections = new LinkedList<LoginFactory> ();
-            fillFactories ( connections, ele );
-
-            if ( id != null && name != null && !connections.isEmpty () )
+            // get properties
+            final Map<String, String> properties = new HashMap<String, String> ();
+            for ( final IConfigurationElement child : ele.getChildren ( "property" ) )//$NON-NLS-1$
             {
-                result.add ( new LoginContext ( id, name, connections ) );
+                final String key = child.getAttribute ( "key" );//$NON-NLS-1$
+                final String value = child.getAttribute ( "value" );//$NON-NLS-1$
+                if ( key != null && value != null )
+                {
+                    properties.put ( key, value );
+                }
+            }
+
+            final Collection<LoginFactory> factories = new LinkedList<LoginFactory> ();
+            fillFactories ( factories, ele );
+
+            if ( id != null && name != null && !factories.isEmpty () )
+            {
+                result.add ( new LoginContext ( id, name, factories, properties ) );
             }
 
         }
@@ -129,7 +143,7 @@ public class Activator extends AbstractUIPlugin
         {
             try
             {
-                final LoginFactory factory = (LoginFactory)child.createExecutableExtension ( "class" );
+                final LoginFactory factory = (LoginFactory)child.createExecutableExtension ( "class" );//$NON-NLS-1$
                 if ( factory != null )
                 {
                     factories.add ( factory );

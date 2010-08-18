@@ -30,6 +30,8 @@ public class LoginSessionProvider extends AbstractSourceProvider
 
     public static final String SESSION_STATE = "org.openscada.core.ui.connection.login.sessionState"; //$NON-NLS-1$
 
+    public static final String SESSION_PROPERTIES = "org.openscada.core.ui.connection.login.sessionProperties"; //$NON-NLS-1$
+
     private LoginSession session;
 
     public LoginSessionProvider ()
@@ -43,9 +45,15 @@ public class LoginSessionProvider extends AbstractSourceProvider
     @SuppressWarnings ( { "rawtypes" } )
     public Map getCurrentState ()
     {
-        final Map<String, String> result = new HashMap<String, String> ( 1 );
+        final Map<String, Object> result = new HashMap<String, Object> ( 2 );
         result.put ( SESSION_STATE, getSessionState () );
+        result.put ( SESSION_PROPERTIES, getSessionProperties () );
         return result;
+    }
+
+    private Object getSessionProperties ()
+    {
+        return this.session != null ? this.session.getLoginContext ().getProperties () : null;
     }
 
     private String getSessionState ()
@@ -61,7 +69,7 @@ public class LoginSessionProvider extends AbstractSourceProvider
 
     public String[] getProvidedSourceNames ()
     {
-        return new String[] { SESSION_STATE };
+        return new String[] { SESSION_STATE, SESSION_PROPERTIES };
     }
 
 }

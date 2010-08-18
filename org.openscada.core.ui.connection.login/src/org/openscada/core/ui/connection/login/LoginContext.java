@@ -21,7 +21,9 @@ package org.openscada.core.ui.connection.login;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 import org.openscada.utils.lang.Immutable;
 
@@ -34,11 +36,19 @@ public class LoginContext
 
     private final Collection<LoginFactory> factories;
 
-    public LoginContext ( final String id, final String name, final Collection<LoginFactory> connections )
+    private final Map<String, String> properties;
+
+    public LoginContext ( final String id, final String name, final Collection<LoginFactory> connections, final Map<String, String> properties )
     {
         this.id = id;
         this.name = name;
         this.factories = new LinkedList<LoginFactory> ( connections );
+        this.properties = new HashMap<String, String> ( properties );
+    }
+
+    public Map<String, String> getProperties ()
+    {
+        return Collections.unmodifiableMap ( this.properties );
     }
 
     public String getName ()
