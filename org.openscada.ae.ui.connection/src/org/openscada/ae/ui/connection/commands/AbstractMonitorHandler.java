@@ -44,7 +44,7 @@ public abstract class AbstractMonitorHandler extends AbstractSelectionHandler
         while ( i.hasNext () )
         {
             final Object o = i.next ();
-            final MonitorStatusBean bean = (MonitorStatusBean)AdapterHelper.adapt ( o, MonitorStatusBean.class );
+            final MonitorStatusBean bean = AdapterHelper.adapt ( o, MonitorStatusBean.class );
             if ( bean != null )
             {
                 result.add ( bean );
