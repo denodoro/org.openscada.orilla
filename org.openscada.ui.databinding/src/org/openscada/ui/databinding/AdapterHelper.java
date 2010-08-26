@@ -39,16 +39,22 @@ public class AdapterHelper
      * @param adapterClass the target class
      * @return an instance of the target class or <code>null</code> if the object cannot be adapted to the target class
      */
-    public static Object adapt ( final Object target, final Class<?> adapterClass )
+    @SuppressWarnings ( "unchecked" )
+    public static <T> T adapt ( final Object target, final Class<T> adapterClass )
     {
+        if ( target == null )
+        {
+            return null;
+        }
+
         if ( adapterClass.isInstance ( target ) )
         {
-            return target;
+            return (T)target;
         }
         if ( target instanceof IAdaptable )
         {
-            return ( (IAdaptable)target ).getAdapter ( adapterClass );
+            return (T) ( (IAdaptable)target ).getAdapter ( adapterClass );
         }
-        return Platform.getAdapterManager ().getAdapter ( target, adapterClass );
+        return (T)Platform.getAdapterManager ().getAdapter ( target, adapterClass );
     }
 }
