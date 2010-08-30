@@ -43,10 +43,11 @@ public class ConnectionLoginFactory implements LoginFactory
 
         for ( final LoginConnection loginConnection : loadConnections ( context.getId () ) )
         {
-            loginConnection.getConnectionInformation ().setUser ( username );
-            loginConnection.getConnectionInformation ().setPassword ( password );
+            final ConnectionInformation ci = loginConnection.getConnectionInformation ();
+            ci.setUser ( username );
+            ci.setPassword ( password );
 
-            final ConnectionService connectionService = ConnectionCreatorHelper.createConnection ( loginConnection.getConnectionInformation (), loginConnection.getAutoReconnectDelay () );
+            final ConnectionService connectionService = ConnectionCreatorHelper.createConnection ( ci, loginConnection.getAutoReconnectDelay () );
             if ( connectionService == null )
             {
                 // dispose already created first
