@@ -4,7 +4,7 @@ Bundle-Name: OpenSCADA DA Client NET Connector
 Bundle-SymbolicName: org.openscada.da.net.client;singleton:=true
 Bundle-Version: 0.15.0.qualifier
 Bundle-ClassPath: .
-Bundle-Vendor: inavare GmbH
+Bundle-Vendor: TH4 SYSTEMS GmbH
 Export-Package: org.openscada.da.net.client
 Require-Bundle: org.openscada.core.client;bundle-version="0.15.0",
  org.openscada.da.client.connector;bundle-version="0.13.3",

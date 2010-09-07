@@ -20,7 +20,7 @@ Require-Bundle: org.eclipse.rcp,
  org.openscada.core;bundle-version="0.15.0",
  org.openscada.da.ui.widgets;bundle-version="0.15.0"
 Bundle-ActivationPolicy: lazy
-Bundle-Vendor: inavare GmbH
+Bundle-Vendor: TH4 SYSTEMS GmbH
 Export-Package: org.openscada.da.client.test;
   uses:="org.openscada.core,
    org.eclipse.ui.views.properties,

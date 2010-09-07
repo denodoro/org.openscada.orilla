@@ -24,7 +24,7 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.4.0",
  org.openscada.utils;bundle-version="0.14.0",
  org.openscada.core;bundle-version="0.15.0",
  org.openscada.da.ui.widgets;bundle-version="0.15.0"
-Bundle-Vendor: inavare GmbH
+Bundle-Vendor: TH4 SYSTEMS GmbH
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.openscada.da.project.Activator
 Bundle-ClassPath: schemabin/,

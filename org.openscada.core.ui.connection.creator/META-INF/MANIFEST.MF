@@ -4,7 +4,7 @@ Bundle-Name: OpenSCADA Core UI Connection Creator
 Bundle-SymbolicName: org.openscada.core.ui.connection.creator;singleton:=true
 Bundle-Version: 0.14.0.qualifier
 Bundle-Activator: org.openscada.core.ui.connection.creator.Activator
-Bundle-Vendor: inavare GmbH
+Bundle-Vendor: TH4 SYSTEMS GmbH
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.openscada.core.connection.provider;bundle-version="0.14.0"

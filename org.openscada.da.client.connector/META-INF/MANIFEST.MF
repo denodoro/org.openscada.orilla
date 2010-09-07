@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: OpenSCADA DA Client Connector
 Bundle-SymbolicName: org.openscada.da.client.connector;singleton:=true
 Bundle-Version: 0.14.0.qualifier
-Bundle-Vendor: inavare GmbH
+Bundle-Vendor: TH4 SYSTEMS GmbH
 Bundle-ClassPath: .
 Export-Package: org.openscada.da.client.connector;uses:="org.openscada.core.client,org.eclipse.core.runtime,org.openscada.core"
 Require-Bundle: org.eclipse.core.runtime,

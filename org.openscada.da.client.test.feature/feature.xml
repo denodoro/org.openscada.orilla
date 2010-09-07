@@ -3,7 +3,7 @@
       id="org.openscada.da.client.test"
       label="OpenSCADA DA Test Client Feature"
       version="0.15.0.qualifier"
-      provider-name="inavare GmbH"
+      provider-name="TH4 SYSTEMS GmbH"
       plugin="org.openscada.da.ui">
 
    <description url="http://openscada.org">
@@ -14,7 +14,7 @@ The OpenSCADA DA Client Test Feature&lt;/p&gt;
    <copyright url="http://opensource.org/licenses/lgpl-3.0.html">
       &lt;pre&gt;
       This file is part of the OpenSCADA project
-Copyright (C) 2006-2010 inavare GmbH (http://inavare.com)
+Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://inavare.com)
 
 OpenSCADA is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License version 3
@@ -243,14 +243,12 @@ Library.
       <import plugin="org.openscada.core.net"/>
       <import plugin="org.openscada.net"/>
       <import plugin="org.openscada.ca"/>
-      <import plugin="org.openscada.core.ice"/>
       <import plugin="com.springsource.javax.xml.stream"/>
       <import plugin="org.openscada.core.server"/>
       <import plugin="org.openscada.core.client" version="0.15.0" match="greaterOrEqual"/>
       <import plugin="org.openscada.da.client" version="0.13.0" match="greaterOrEqual"/>
       <import plugin="org.openscada.da.client.connector" version="0.13.3" match="greaterOrEqual"/>
       <import plugin="org.openscada.da.core.common" version="0.13.0" match="greaterOrEqual"/>
-      <import plugin="org.openscada.da.client.ice" version="0.13.0" match="greaterOrEqual"/>
       <import plugin="org.openscada.da.server.common"/>
       <import plugin="org.openscada.da.client.net" version="0.13.0" match="greaterOrEqual"/>
       <import plugin="org.openscada.core.client" version="0.14.0" match="greaterOrEqual"/>
@@ -262,8 +260,6 @@ Library.
       <import plugin="org.openscada.core.ui" version="0.14.0" match="greaterOrEqual"/>
       <import plugin="org.openscada.utils.osgi" version="0.14.0" match="greaterOrEqual"/>
       <import plugin="com.springsource.org.apache.commons.beanutils"/>
-      <import plugin="org.openscada.core.ice" version="0.13.0" match="greaterOrEqual"/>
-      <import plugin="org.openscada.da.ice" version="0.15.0" match="greaterOrEqual"/>
       <import plugin="org.openscada.da.datasource"/>
       <import plugin="org.openscada.da.server.common.osgi"/>
       <import plugin="org.openscada.core.ui.connection.creator" version="0.14.0" match="greaterOrEqual"/>
@@ -401,13 +397,6 @@ Library.
          unpack="false"/>
 
    <plugin
-         id="org.openscada.da.client.ice"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.openscada.da.core.common"
          download-size="0"
          install-size="0"
@@ -416,20 +405,6 @@ Library.
 
    <plugin
          id="org.openscada.da.core.server"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.openscada.da.ice"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.openscada.da.ice.client"
          download-size="0"
          install-size="0"
          version="0.0.0"

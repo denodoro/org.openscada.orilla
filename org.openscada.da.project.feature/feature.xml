@@ -3,7 +3,7 @@
       id="org.openscada.da.project"
       label="OpenSCADA DA Project Feature"
       version="0.13.0"
-      provider-name="inavare GmbH"
+      provider-name="TH4 SYSTEMS GmbH"
       plugin="org.openscada.da.project">
 
    <description url="http://openscada.org">
@@ -13,7 +13,7 @@
    <copyright url="http://opensource.org/licenses/lgpl-3.0.html">
       &lt;pre&gt;
       This file is part of the OpenSCADA project
-Copyright (C) 2006-2010 inavare GmbH (http://inavare.com)
+Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://inavare.com)
 
 OpenSCADA is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License version 3
@@ -207,10 +207,6 @@ Library.
 
    <includes
          id="org.openscada.da.client"
-         version="0.0.0"/>
-
-   <includes
-         id="org.openscada.da.ice.client"
          version="0.0.0"/>
 
    <includes

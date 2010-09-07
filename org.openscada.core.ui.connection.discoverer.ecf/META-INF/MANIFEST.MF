@@ -4,7 +4,7 @@ Bundle-Name: OpenSCADA ECF Discoverer
 Bundle-SymbolicName: org.openscada.core.ui.connection.discoverer.ecf;singleton:=true
 Bundle-Version: 0.14.0.qualifier
 Bundle-Activator: org.openscada.core.ui.connection.discoverer.ecf.Activator
-Bundle-Vendor: inavare GmbH
+Bundle-Vendor: TH4 SYSTEMS GmbH
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.ecf.discovery;bundle-version="3.0.0",
