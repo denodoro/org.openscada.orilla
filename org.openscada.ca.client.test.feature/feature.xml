@@ -228,7 +228,7 @@ Library.
       <import plugin="org.openscada.core.ui.connection.creator" version="0.14.0" match="greaterOrEqual"/>
       <import plugin="org.openscada.ca.client.jaxws" version="0.15.0" match="greaterOrEqual"/>
       <import plugin="org.openscada.ca.connection.provider" version="0.15.0" match="greaterOrEqual"/>
-      <import plugin="org.openscada.external.com.google.collections"/>
+      <import plugin="com.google.guava"/>
    </requires>
 
    <plugin
