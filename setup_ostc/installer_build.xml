@@ -61,13 +61,13 @@
     <target name="build" depends="" description="Build the setup">
     	<echo message="Setting version to ${version}"/>
         <copy file="ostc_setup_${platformName}.aip" todir="${builder}"/>
-    	<exec executable="${advinst.base}/AdvancedInstaller.com" dir="${builder}" failonerror="true">
+    	<exec executable="${advinst.base}/bin/x86/AdvancedInstaller.com" dir="${builder}" failonerror="true">
     		<arg value="/edit"/>
     		<arg value="ostc_setup_${platformName}.aip"/>
     		<arg value="/SetVersion"/>
     		<arg value="${version}"/>
     	</exec>
-    	<exec executable="${advinst.base}/AdvancedInstaller.com" dir="${builder}" failonerror="true">
+    	<exec executable="${advinst.base}/bin/x86/AdvancedInstaller.com" dir="${builder}" failonerror="true">
     		<arg value="/build"/>
     		<arg value="ostc_setup_${platformName}.aip"/>
     	</exec>
