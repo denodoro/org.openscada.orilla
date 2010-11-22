@@ -31,7 +31,8 @@ public class ConnectionHolderAdapterFactory implements IAdapterFactory
 
     private final static Logger logger = LoggerFactory.getLogger ( ConnectionHolderAdapterFactory.class );
 
-    @SuppressWarnings ( "unchecked" )
+    @Override
+    @SuppressWarnings ( "rawtypes" )
     public Object getAdapter ( final Object adaptableObject, final Class adapterType )
     {
         logger.debug ( "Adapting: {} to {}", adaptableObject, adapterType );
@@ -47,7 +48,8 @@ public class ConnectionHolderAdapterFactory implements IAdapterFactory
         return null;
     }
 
-    @SuppressWarnings ( "unchecked" )
+    @SuppressWarnings ( "rawtypes" )
+    @Override
     public Class[] getAdapterList ()
     {
         return new Class[] { ConnectionService.class };

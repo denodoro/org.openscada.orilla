@@ -209,6 +209,7 @@ public class ConnectionHolder extends AbstractPropertyChange implements Connecti
         firePropertyChange ( PROP_CONNECTION_ERROR, olcConnectionError, connectionError );
     }
 
+    @Override
     public void stateChange ( final Connection connection, final ConnectionState state, final Throwable error )
     {
         logger.debug ( "Connection state changed: {}", state );
@@ -234,6 +235,7 @@ public class ConnectionHolder extends AbstractPropertyChange implements Connecti
         {
             display.asyncExec ( new Runnable () {
 
+                @Override
                 public void run ()
                 {
                     if ( !display.isDisposed () )
@@ -268,7 +270,8 @@ public class ConnectionHolder extends AbstractPropertyChange implements Connecti
         return new Status ( severity, Activator.PLUGIN_ID, message, error );
     }
 
-    @SuppressWarnings ( "unchecked" )
+    @Override
+    @SuppressWarnings ( "rawtypes" )
     public Object getAdapter ( final Class adapter )
     {
         logger.debug ( "Adapting: {}", adapter );

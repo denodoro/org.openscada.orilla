@@ -26,7 +26,9 @@ import org.openscada.core.ui.connection.ConnectionStore;
 
 public class ConnectionDiscovererAdapterFactory implements IAdapterFactory
 {
-    @SuppressWarnings ( "unchecked" )
+
+    @Override
+    @SuppressWarnings ( "rawtypes" )
     public Object getAdapter ( final Object adaptableObject, final Class adapterType )
     {
         if ( adaptableObject instanceof IAdaptable )
@@ -36,7 +38,8 @@ public class ConnectionDiscovererAdapterFactory implements IAdapterFactory
         return null;
     }
 
-    @SuppressWarnings ( "unchecked" )
+    @Override
+    @SuppressWarnings ( "rawtypes" )
     public Class[] getAdapterList ()
     {
         return new Class[] { ConnectionStore.class, ConnectionDiscoverer.class };

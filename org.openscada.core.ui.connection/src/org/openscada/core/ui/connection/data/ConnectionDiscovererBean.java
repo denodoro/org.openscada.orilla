@@ -94,7 +94,8 @@ public class ConnectionDiscovererBean implements IAdaptable, ConnectionDiscovery
         return this.id;
     }
 
-    @SuppressWarnings ( "unchecked" )
+    @Override
+    @SuppressWarnings ( "rawtypes" )
     public Object getAdapter ( final Class adapter )
     {
         logger.info ( "Get adaper: {}", adapter );
@@ -113,10 +114,12 @@ public class ConnectionDiscovererBean implements IAdaptable, ConnectionDiscovery
         return null;
     }
 
+    @Override
     public void discoveryUpdate ( final ConnectionDescriptor[] added, final ConnectionDescriptor[] removed )
     {
         this.knownConnections.getRealm ().asyncExec ( new Runnable () {
 
+            @Override
             public void run ()
             {
                 ConnectionDiscovererBean.this.handleDiscoveryUpdate ( added, removed );
@@ -173,6 +176,7 @@ public class ConnectionDiscovererBean implements IAdaptable, ConnectionDiscovery
         return this.discoverer instanceof ConnectionStore;
     }
 
+    @Override
     public boolean testAttribute ( final Object target, final String name, final String value )
     {
         if ( "isStore".equals ( name ) )
