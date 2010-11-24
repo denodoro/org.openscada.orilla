@@ -82,7 +82,7 @@ public class MonitorsViewTable extends Composite
             this.dir = dir;
         }
 
-        @SuppressWarnings ( "unchecked" )
+        @SuppressWarnings ( { "unchecked", "rawtypes" } )
         @Override
         public int compare ( final Viewer viewer, final Object e1, final Object e2 )
         {
@@ -130,12 +130,12 @@ public class MonitorsViewTable extends Composite
             // use given order for sorting
             result = this.dir == SWT.DOWN ? -result : result;
             // if values are the same, order by timestamp in descending order
-            if ( ( this.column != Columns.TIMESTAMP ) && ( result == 0 ) )
+            if ( this.column != Columns.TIMESTAMP && result == 0 )
             {
                 result = m2.getStatusTimestamp ().compareTo ( m1.getStatusTimestamp () );
             }
             // if values are still the same, order by id in ascending order
-            if ( ( this.column != Columns.ID ) && ( result == 0 ) )
+            if ( this.column != Columns.ID && result == 0 )
             {
                 result = m1.getId ().compareTo ( m2.getId () );
             }
@@ -192,7 +192,7 @@ public class MonitorsViewTable extends Composite
         this.monitors = monitors;
 
         final FillLayout layout = new FillLayout ();
-        this.setLayout ( layout );
+        setLayout ( layout );
 
         this.tableViewer = new TableViewer ( this, SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.MULTI );
         this.tableRef.set ( this.tableViewer );
@@ -211,6 +211,7 @@ public class MonitorsViewTable extends Composite
         this.tableViewer.setInput ( this.monitors );
 
         contentProvider.getRealizedElements ().addSetChangeListener ( new ISetChangeListener () {
+            @Override
             public void handleSetChange ( final SetChangeEvent event )
             {
                 if ( !MonitorsViewTable.this.scrollLock )
