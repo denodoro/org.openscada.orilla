@@ -15,8 +15,6 @@ public class Messages extends NLS
 
     public static String ID;
 
-    public static String Monitor;
-
     public static String AckTimestamp;
 
     public static String AckUser;
@@ -40,8 +38,6 @@ public class Messages extends NLS
     public static String search_for_events_description;
 
     public static String QBE;
-
-    public static String advanced_query;
 
     public static String free_form_query;
 
@@ -80,7 +76,7 @@ public class Messages extends NLS
         {
             return RESOURCE_BUNDLE.getString ( key );
         }
-        catch ( MissingResourceException e )
+        catch ( final MissingResourceException e )
         {
             return key;
         }
