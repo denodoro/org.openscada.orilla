@@ -34,14 +34,15 @@ public class DecoratedEvent extends AbstractPropertyChange implements Serializab
 
     public static class DecoratedEventComparator implements Comparator<DecoratedEvent>
     {
+        @Override
         public int compare ( final DecoratedEvent o1, final DecoratedEvent o2 )
         {
             return o1.getEvent ().compareTo ( o2.getEvent () );
         }
     }
-    
-    public static final DecoratedEventComparator comparator = new DecoratedEventComparator();
-    
+
+    public static final DecoratedEventComparator comparator = new DecoratedEventComparator ();
+
     private Event event;
 
     private MonitorData monitor;
@@ -149,7 +150,8 @@ public class DecoratedEvent extends AbstractPropertyChange implements Serializab
         return isActive () && ( this.monitor.getStatus () == MonitorStatus.NOT_AKN || this.monitor.getStatus () == MonitorStatus.NOT_OK_NOT_AKN );
     }
 
-    @SuppressWarnings ( "unchecked" )
+    @Override
+    @SuppressWarnings ( "rawtypes" )
     public Object getAdapter ( final Class adapter )
     {
         if ( adapter == Event.class )
@@ -159,7 +161,8 @@ public class DecoratedEvent extends AbstractPropertyChange implements Serializab
         return null;
     }
 
-    public int compareTo ( DecoratedEvent o )
+    @Override
+    public int compareTo ( final DecoratedEvent o )
     {
         return comparator.compare ( this, o );
     }
