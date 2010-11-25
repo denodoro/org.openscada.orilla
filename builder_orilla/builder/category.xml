@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/org.openscada.orilla_0.15.0.qualifier.jar" id="org.openscada.orilla" version="0.15.0.qualifier">
+      <category name="org.openscada.orilla.category"/>
+   </feature>
+   <feature url="features/org.openscada.orilla.sdk_0.15.0.qualifier.jar" id="org.openscada.orilla.sdk" version="0.15.0.qualifier">
+      <category name="org.openscada.orilla.sdk.category"/>
+   </feature>
+   <category-def name="org.openscada.orilla.category" label="OpenSCADA Orilla">
+      <description>
+         User interface components from OpenSCADA
+      </description>
+   </category-def>
+   <category-def name="org.openscada.orilla.sdk.category" label="OpenSCADA Orilla SDK">
+      <description>
+         Binaries and sources of the OpenSCADA Orilla modules.
+      </description>
+   </category-def>
+</site>
