@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: org.openscada.ae.ui.views; singleton:=true
-Bundle-Version: 0.15.0.qualifier
+Bundle-Version: 0.16.0.qualifier
 Bundle-Activator: org.openscada.ae.ui.views.Activator
 Bundle-Vendor: %Bundle-Vendor
 Require-Bundle: org.eclipse.ui,
@@ -31,6 +31,8 @@ Import-Package: com.google.gson;version="1.4.0",
  org.openscada.core.ui.styles,
  org.openscada.da.client;version="0.15.0",
  org.openscada.da.connection.provider;version="0.15.0",
+ org.openscada.da.core;version="0.16.0",
+ org.openscada.sec;version="0.1.0",
  org.openscada.ui.localization;version="0.15.0",
  org.openscada.ui.utils.blink;version="0.15.0",
  org.openscada.utils.beans;version="0.15.0",
@@ -40,11 +42,11 @@ Import-Package: com.google.gson;version="1.4.0",
  org.openscada.utils.propertyeditors;version="0.15.0",
  org.openscada.utils.str;version="0.15.0",
  org.slf4j;version="[1.5.0,1.6.0)"
-Export-Package: org.openscada.ae.ui.views.contributions;version="0.15.0";
+Export-Package: org.openscada.ae.ui.views.contributions;version="0.16.0";
   uses:="org.openscada.da.connection.provider,
    org.openscada.da.client,
    org.eclipse.ui.menus,
    org.eclipse.swt.widgets,
    org.openscada.ui.utils.blink,
    org.openscada.ae",
- org.openscada.ae.ui.views.model;version="0.15.0";uses:="org.openscada.utils.beans,org.openscada.core,org.openscada.ae"
+ org.openscada.ae.ui.views.model;version="0.16.0";uses:="org.openscada.utils.beans,org.openscada.core,org.openscada.ae"

@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://inavare.com)
+ * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://inavare.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -27,9 +27,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.sound.sampled.AudioInputStream;
@@ -194,6 +194,7 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution
 
         this.blinker = new Blinker ( new Handler () {
 
+            @Override
             public void setState ( final State state )
             {
                 AlarmNotifier.this.setBlinkerState ( state );
@@ -210,6 +211,7 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution
     {
         trigger ( new Runnable () {
 
+            @Override
             public void run ()
             {
                 if ( AlarmNotifier.this.panel.isDisposed () )
@@ -249,7 +251,7 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution
     {
         try
         {
-            this.connectionService.getConnection ().write ( getItemId ( "ALERT_ACTIVE" ), Variant.FALSE );
+            this.connectionService.getConnection ().write ( getItemId ( "ALERT_ACTIVE" ), Variant.FALSE, null );
         }
         catch ( final Exception e )
         {
@@ -294,6 +296,7 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution
             return;
         }
         final ConnectionTracker.Listener connectionServiceListener = new Listener () {
+            @Override
             public void setConnection ( final org.openscada.core.connection.provider.ConnectionService connectionService )
             {
                 AlarmNotifier.this.setConnectionService ( connectionService );
@@ -330,6 +333,7 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution
             final DataItem item = new DataItem ( id );
             item.addObserver ( new Observer () {
 
+                @Override
                 public void update ( final Observable o, final Object arg )
                 {
                     updateMonitorStatus ( ms, (DataItemValue)arg );
@@ -343,10 +347,12 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution
         final DataItem item = new DataItem ( id );
         item.addObserver ( new Observer () {
 
+            @Override
             public void update ( final Observable o, final Object arg )
             {
                 trigger ( new Runnable () {
 
+                    @Override
                     public void run ()
                     {
                         updateActiveState ( (DataItemValue)arg );
@@ -401,6 +407,7 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution
         }
         this.display.asyncExec ( new Runnable () {
 
+            @Override
             public void run ()
             {
                 if ( AlarmNotifier.this.display.isDisposed () )
@@ -415,6 +422,7 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution
     private void updateAlarms ()
     {
         trigger ( new Runnable () {
+            @Override
             public void run ()
             {
                 if ( !AlarmNotifier.this.panel.isDisposed () && !AlarmNotifier.this.label.isDisposed () )

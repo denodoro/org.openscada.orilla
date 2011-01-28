@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://inavare.com)
+ * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://inavare.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -34,6 +34,7 @@ import org.openscada.da.client.DataItemValue;
 import org.openscada.da.client.WriteAttributeOperationCallback;
 import org.openscada.da.client.WriteOperationCallback;
 import org.openscada.da.connection.provider.ConnectionService;
+import org.openscada.da.core.OperationParameters;
 import org.openscada.da.core.WriteAttributeResults;
 import org.openscada.utils.concurrent.AbstractFuture;
 import org.openscada.utils.concurrent.NotifyFuture;
@@ -96,6 +97,7 @@ public class DataItemHolder
 
             this.observer = new Observer () {
 
+                @Override
                 public void update ( final Observable o, final Object arg )
                 {
                     DataItemHolder.this.update ( o, arg );
@@ -107,6 +109,7 @@ public class DataItemHolder
             case ID:
                 this.tracker = new ConnectionIdTracker ( this.context, item.getConnectionString (), new ConnectionTracker.Listener () {
 
+                    @Override
                     public void setConnection ( final org.openscada.core.connection.provider.ConnectionService connectionService )
                     {
                         DataItemHolder.this.setConnection ( (ConnectionService)connectionService );
@@ -118,6 +121,7 @@ public class DataItemHolder
             default:
                 this.tracker = new ConnectionRequestTracker ( this.context, createRequest (), new ConnectionTracker.Listener () {
 
+                    @Override
                     public void setConnection ( final org.openscada.core.connection.provider.ConnectionService connectionService )
                     {
                         DataItemHolder.this.setConnection ( (ConnectionService)connectionService );
@@ -197,20 +201,28 @@ public class DataItemHolder
 
     public NotifyFuture<Object> write ( final Variant value )
     {
+        return write ( value, null );
+    }
+
+    public NotifyFuture<Object> write ( final Variant value, final OperationParameters operationParameters )
+    {
         final WriteFuture writeResult = new WriteFuture ();
 
-        this.connection.getConnection ().write ( this.item.getId (), value, new WriteOperationCallback () {
+        this.connection.getConnection ().write ( this.item.getId (), value, operationParameters, new WriteOperationCallback () {
 
+            @Override
             public void failed ( final String error )
             {
                 writeResult.setError ( new RuntimeException ( error ).fillInStackTrace () );
             }
 
+            @Override
             public void error ( final Throwable e )
             {
                 writeResult.setError ( e );
             }
 
+            @Override
             public void complete ()
             {
                 writeResult.setResult ( null );
@@ -222,20 +234,28 @@ public class DataItemHolder
 
     public NotifyFuture<WriteAttributeResults> writeAtrtibutes ( final Map<String, Variant> attributes )
     {
+        return writeAtrtibutes ( attributes, null );
+    }
+
+    public NotifyFuture<WriteAttributeResults> writeAtrtibutes ( final Map<String, Variant> attributes, final OperationParameters operationParameters )
+    {
         final WriteAttributesFuture writeResult = new WriteAttributesFuture ();
 
-        this.connection.getConnection ().writeAttributes ( this.item.getId (), attributes, new WriteAttributeOperationCallback () {
+        this.connection.getConnection ().writeAttributes ( this.item.getId (), attributes, operationParameters, new WriteAttributeOperationCallback () {
 
+            @Override
             public void failed ( final String error )
             {
                 writeResult.setError ( new RuntimeException ( error ).fillInStackTrace () );
             }
 
+            @Override
             public void error ( final Throwable e )
             {
                 writeResult.setError ( e );
             }
 
+            @Override
             public void complete ( final WriteAttributeResults result )
             {
                 writeResult.setResult ( result );

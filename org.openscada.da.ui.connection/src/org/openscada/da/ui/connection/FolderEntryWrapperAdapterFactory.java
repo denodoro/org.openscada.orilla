@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://inavare.com)
+ * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://inavare.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -28,7 +28,8 @@ import org.openscada.da.ui.connection.data.Item;
 public class FolderEntryWrapperAdapterFactory implements IAdapterFactory
 {
 
-    @SuppressWarnings ( "unchecked" )
+    @Override
+    @SuppressWarnings ( "rawtypes" )
     public Object getAdapter ( final Object adaptableObject, final Class adapterType )
     {
         if ( adaptableObject instanceof IAdaptable )
@@ -38,7 +39,8 @@ public class FolderEntryWrapperAdapterFactory implements IAdapterFactory
         return null;
     }
 
-    @SuppressWarnings ( "unchecked" )
+    @Override
+    @SuppressWarnings ( "rawtypes" )
     public Class[] getAdapterList ()
     {
         return new Class[] { DataItemEntry.class, FolderEntry.class, Item.class };

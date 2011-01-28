@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://inavare.com)
+ * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://inavare.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -26,7 +26,8 @@ import org.openscada.da.connection.provider.ConnectionService;
 public class ConnectionHolderAdapterFactory implements IAdapterFactory
 {
 
-    @SuppressWarnings ( "unchecked" )
+    @Override
+    @SuppressWarnings ( "rawtypes" )
     public Object getAdapter ( final Object adaptableObject, final Class adapterType )
     {
         if ( adapterType == ConnectionService.class && adaptableObject instanceof ConnectionHolder )
@@ -41,7 +42,8 @@ public class ConnectionHolderAdapterFactory implements IAdapterFactory
         return null;
     }
 
-    @SuppressWarnings ( "unchecked" )
+    @Override
+    @SuppressWarnings ( "rawtypes" )
     public Class[] getAdapterList ()
     {
         return new Class[] { ConnectionService.class };

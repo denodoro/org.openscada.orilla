@@ -2,13 +2,25 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: OpenSCADA DA UI Widgets
 Bundle-SymbolicName: org.openscada.da.ui.widgets;singleton:=true
-Bundle-Version: 0.15.0.qualifier
+Bundle-Version: 0.16.0.qualifier
 Bundle-Vendor: TH4 SYSTEMS GmbH
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.eclipse.ui;bundle-version="3.5.0",
  org.eclipse.core.runtime;bundle-version="3.5.0",
  org.eclipse.ui.views;bundle-version="3.4.0"
-Export-Package: org.openscada.da.ui.widgets.realtime;version="0.15.0"
+Export-Package: org.openscada.da.ui.widgets.realtime;version="0.16.0";
+  uses:="org.eclipse.core.runtime,
+   org.eclipse.ui,
+   org.eclipse.ui.views.properties,
+   org.openscada.core.subscription,
+   org.openscada.da.ui.connection.data,
+   org.eclipse.jface.action,
+   org.eclipse.osgi.util,
+   org.eclipse.swt.dnd,
+   org.openscada.da.client,
+   org.eclipse.jface.viewers,
+   org.eclipse.swt.widgets,
+   org.openscada.core"
 Import-Package: org.openscada.core;version="0.15.0",
  org.openscada.core.subscription;version="0.15.0",
  org.openscada.core.ui.connection;version="0.15.0",
