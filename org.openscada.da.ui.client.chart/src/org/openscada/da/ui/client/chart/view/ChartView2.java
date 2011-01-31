@@ -17,7 +17,7 @@
  * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
-package org.openscada.da.client.chart.view;
+package org.openscada.da.ui.client.chart.view;
 
 import java.util.Calendar;
 import java.util.Collection;
@@ -49,8 +49,8 @@ import org.openscada.core.NotConvertableException;
 import org.openscada.core.NullValueException;
 import org.openscada.core.Variant;
 import org.openscada.da.client.DataItemValue;
-import org.openscada.da.client.chart.Activator;
-import org.openscada.da.client.chart.Messages;
+import org.openscada.da.ui.client.chart.Activator;
+import org.openscada.da.ui.client.chart.Messages;
 import org.openscada.da.ui.connection.data.DataItemHolder;
 import org.openscada.da.ui.connection.data.DataSourceListener;
 import org.slf4j.Logger;
@@ -61,7 +61,7 @@ public class ChartView2 extends ViewPart
 
     private final static Logger logger = LoggerFactory.getLogger ( ChartView2.class );
 
-    public final static String VIEW_ID = "org.openscada.da.client.chart.ChartView"; //$NON-NLS-1$
+    public final static String VIEW_ID = "org.openscada.da.ui.client.chart.ChartView"; //$NON-NLS-1$
 
     private static final int REFRESH_DELAY = 1000;
 

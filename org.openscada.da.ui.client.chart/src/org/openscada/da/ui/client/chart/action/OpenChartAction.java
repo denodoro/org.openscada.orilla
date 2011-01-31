@@ -17,7 +17,7 @@
  * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
-package org.openscada.da.client.chart.action;
+package org.openscada.da.ui.client.chart.action;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -31,9 +31,9 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.PartInitException;
-import org.openscada.da.client.chart.Activator;
-import org.openscada.da.client.chart.Messages;
-import org.openscada.da.client.chart.view.ChartView2;
+import org.openscada.da.ui.client.chart.Activator;
+import org.openscada.da.ui.client.chart.Messages;
+import org.openscada.da.ui.client.chart.view.ChartView2;
 import org.openscada.da.ui.connection.data.Item;
 import org.openscada.da.ui.connection.data.ItemSelectionHelper;
 import org.slf4j.Logger;

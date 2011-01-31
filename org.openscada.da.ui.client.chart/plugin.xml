@@ -6,7 +6,7 @@
       <view
             allowMultiple="true"
             category="org.openscada.da.ui.category"
-            class="org.openscada.da.client.chart.view.ChartView2"
+            class="org.openscada.da.ui.client.chart.view.ChartView2"
             id="org.openscada.da.client.chart.ChartView"
             name="%view.chartView.name"/>
    </extension>
@@ -17,7 +17,7 @@
             id="org.openscada.da.client.chart.oc1"
             objectClass="org.openscada.da.ui.connection.data.DataItemHolder">
          <action
-               class="org.openscada.da.client.chart.action.OpenChartAction"
+               class="org.openscada.da.ui.client.chart.action.OpenChartAction"
                id="org.openscada.da.client.chart.OpenChartAction"
                label="%action.viewAsChart.label"
                menubarPath="additions"/>
@@ -27,7 +27,7 @@
             id="org.openscada.da.client.chart.oc2"
             objectClass="org.openscada.da.ui.widgets.realtime.ListEntry">
          <action
-               class="org.openscada.da.client.chart.action.OpenChartAction"
+               class="org.openscada.da.ui.client.chart.action.OpenChartAction"
                id="org.openscada.da.client.chart.OpenChartAction"
                label="%action.viewAsChart.label"
                menubarPath="additions"/>
@@ -44,7 +44,7 @@
    <extension
          point="org.eclipse.ui.handlers">
       <handler
-            class="org.openscada.da.client.chart.commands.OpenCharView"
+            class="org.openscada.da.ui.client.chart.commands.OpenCharView"
             commandId="org.openscada.da.client.chart.commands.OpenCharView">
          <enabledWhen>
             <with

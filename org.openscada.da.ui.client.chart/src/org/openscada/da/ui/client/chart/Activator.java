@@ -17,7 +17,7 @@
  * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
-package org.openscada.da.client.chart;
+package org.openscada.da.ui.client.chart;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -29,7 +29,7 @@ public class Activator extends AbstractUIPlugin
 {
 
     // The plug-in ID
-    public static final String PLUGIN_ID = "org.openscada.da.client.chart"; //$NON-NLS-1$
+    public static final String PLUGIN_ID = "org.openscada.da.ui.client.chart"; //$NON-NLS-1$
 
     // The shared instance
     private static Activator plugin;

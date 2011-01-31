@@ -17,7 +17,7 @@
  * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
-package org.openscada.da.client.chart.commands;
+package org.openscada.da.ui.client.chart.commands;
 
 import java.util.Collection;
 
@@ -26,7 +26,7 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
-import org.openscada.da.client.chart.view.ChartView2;
+import org.openscada.da.ui.client.chart.view.ChartView2;
 import org.openscada.da.ui.connection.commands.AbstractItemHandler;
 import org.openscada.da.ui.connection.data.Item;
 
