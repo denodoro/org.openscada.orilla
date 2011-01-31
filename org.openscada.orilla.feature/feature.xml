@@ -2,7 +2,7 @@
 <feature
       id="org.openscada.orilla"
       label="OpenSCADA Orilla"
-      version="0.15.0.qualifier"
+      version="0.16.0.qualifier"
       provider-name="TH4 SYSTEMS GmbH">
 
    <description>
@@ -284,7 +284,7 @@ Library.
          unpack="false"/>
 
    <plugin
-         id="org.openscada.da.client.chart"
+         id="org.openscada.da.ui.client.chart"
          download-size="0"
          install-size="0"
          version="0.0.0"
