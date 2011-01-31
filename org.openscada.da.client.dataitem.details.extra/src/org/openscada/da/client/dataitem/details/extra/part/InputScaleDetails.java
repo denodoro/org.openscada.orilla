@@ -233,6 +233,7 @@ public class InputScaleDetails extends AbstractBaseDraw2DDetailsPart
 
         final Variant factor = this.value.getAttributes ().get ( "org.openscada.da.scale.input.factor" );
         final Variant raw = this.value.getAttributes ().get ( "org.openscada.da.scale.input.raw" );
+        @SuppressWarnings ( "unused" )
         final Variant active = this.value.getAttributes ().get ( "org.openscada.da.scale.input.active" );
         final Variant offset = this.value.getAttributes ().get ( "org.openscada.da.scale.input.offset" );
 
