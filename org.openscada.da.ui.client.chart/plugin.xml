@@ -7,7 +7,7 @@
             allowMultiple="true"
             category="org.openscada.da.ui.category"
             class="org.openscada.da.ui.client.chart.view.ChartView2"
-            id="org.openscada.da.client.chart.ChartView"
+            id="org.openscada.da.ui.client.chart.ChartView"
             name="%view.chartView.name"/>
    </extension>
    <extension

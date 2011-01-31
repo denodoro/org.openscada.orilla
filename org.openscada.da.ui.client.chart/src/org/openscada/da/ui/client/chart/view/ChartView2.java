@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://inavare.com)
+ * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -136,6 +136,7 @@ public class ChartView2 extends ViewPart
             // this.chart.getXYPlot ().addDomainMarker ( new IntervalMarker ( end, now ) );
         }
 
+        @Override
         public void updateData ( final DataItemValue value )
         {
             this.chartView.update ( this, value );
@@ -175,6 +176,7 @@ public class ChartView2 extends ViewPart
         {
             this.display.timerExec ( REFRESH_DELAY, new Runnable () {
 
+                @Override
                 public void run ()
                 {
                     triggerUpdate ();
@@ -256,6 +258,7 @@ public class ChartView2 extends ViewPart
             {
                 frame.getDisplay ().asyncExec ( new Runnable () {
 
+                    @Override
                     public void run ()
                     {
                         if ( !ChartView2.this.frame.isDisposed () )
@@ -278,6 +281,7 @@ public class ChartView2 extends ViewPart
             {
                 frame.getDisplay ().asyncExec ( new Runnable () {
 
+                    @Override
                     public void run ()
                     {
                         if ( !ChartView2.this.frame.isDisposed () )

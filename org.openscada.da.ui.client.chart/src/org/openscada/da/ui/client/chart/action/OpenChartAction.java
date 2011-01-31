@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://inavare.com)
+ * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -48,11 +48,13 @@ public class OpenChartAction implements IViewActionDelegate, IObjectActionDelega
 
     private IStructuredSelection selection = null;
 
+    @Override
     public void init ( final IViewPart view )
     {
         this.site = view.getSite ();
     }
 
+    @Override
     public void run ( final IAction action )
     {
         if ( this.selection == null )
@@ -97,6 +99,7 @@ public class OpenChartAction implements IViewActionDelegate, IObjectActionDelega
 
     }
 
+    @Override
     public void selectionChanged ( final IAction action, final ISelection selection )
     {
         if ( selection instanceof IStructuredSelection )
@@ -109,6 +112,7 @@ public class OpenChartAction implements IViewActionDelegate, IObjectActionDelega
         }
     }
 
+    @Override
     public void setActivePart ( final IAction action, final IWorkbenchPart targetPart )
     {
         this.site = targetPart.getSite ();
