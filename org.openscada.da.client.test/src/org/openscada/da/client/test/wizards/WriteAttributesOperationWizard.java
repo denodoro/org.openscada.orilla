@@ -83,7 +83,7 @@ public class WriteAttributesOperationWizard extends Wizard implements INewWizard
         catch ( final InvocationTargetException e )
         {
             final Throwable realException = e.getTargetException ();
-            MessageDialog.openError ( getShell (), "Error writing to item", realException.getMessage () );
+            MessageDialog.openError ( getShell (), Messages.getString("WriteAttributesOperationWizard.WriteError_Title"), realException.getMessage () ); //$NON-NLS-1$
             return false;
         }
         return true;
@@ -91,7 +91,7 @@ public class WriteAttributesOperationWizard extends Wizard implements INewWizard
 
     private void doFinish ( final IProgressMonitor monitor, final Item item, final Map<String, Variant> attributes ) throws Exception
     {
-        monitor.beginTask ( "Writing attributes to item", 2 );
+        monitor.beginTask ( Messages.getString("WriteAttributesOperationWizard.TaskName"), 2 ); //$NON-NLS-1$
 
         monitor.worked ( 1 );
 
@@ -101,7 +101,7 @@ public class WriteAttributesOperationWizard extends Wizard implements INewWizard
             final DataItemHolder itemHolder = new DataItemHolder ( Activator.getDefault ().getBundle ().getBundleContext (), item, null );
             if ( !itemHolder.waitForConnection ( 5 * 1000 ) )
             {
-                handleError ( new RuntimeException ( "No available connection" ).fillInStackTrace () );
+                handleError ( new RuntimeException ( Messages.getString("WriteAttributesOperationWizard.ErrNoConnection") ).fillInStackTrace () ); //$NON-NLS-1$
                 return;
             }
 
@@ -133,7 +133,7 @@ public class WriteAttributesOperationWizard extends Wizard implements INewWizard
 
             public void run ()
             {
-                ErrorDialog.openError ( getShell (), "Failed to write", e.getMessage (), new Status ( Status.ERROR, Activator.PLUGIN_ID, e.getMessage (), e ) );
+                ErrorDialog.openError ( getShell (), Messages.getString("WriteAttributesOperationWizard.WriteError_Title"), e.getMessage (), new Status ( Status.ERROR, Activator.PLUGIN_ID, e.getMessage (), e ) ); //$NON-NLS-1$
             }
         } );
 
@@ -141,18 +141,18 @@ public class WriteAttributesOperationWizard extends Wizard implements INewWizard
 
     public void handleError ( final Map<String, Variant> attributes, final WriteAttributeResults results )
     {
-        final MultiStatus status = new MultiStatus ( Activator.PLUGIN_ID, 0, "Failed to write attributes", null );
+        final MultiStatus status = new MultiStatus ( Activator.PLUGIN_ID, 0, Messages.getString("WriteAttributesOperationWizard.Status_Message"), null ); //$NON-NLS-1$
 
         if ( attributes.size () != results.size () )
         {
-            status.add ( new OperationStatus ( OperationStatus.WARNING, Activator.PLUGIN_ID, 0, String.format ( "Only %1$d items out of %2$d where processed", results.size (), attributes.size () ), null ) );
+            status.add ( new OperationStatus ( OperationStatus.WARNING, Activator.PLUGIN_ID, 0, String.format ( Messages.getString("WriteAttributesOperationWizard.SummaryText"), results.size (), attributes.size () ), null ) ); //$NON-NLS-1$
         }
 
         for ( final Map.Entry<String, WriteAttributeResult> entry : results.entrySet () )
         {
             if ( entry.getValue ().isError () )
             {
-                status.add ( new OperationStatus ( OperationStatus.ERROR, Activator.PLUGIN_ID, 0, String.format ( "Failed to write attribute '%1$s': %2$s", entry.getKey (), entry.getValue ().getError ().getMessage () ), null ) );
+                status.add ( new OperationStatus ( OperationStatus.ERROR, Activator.PLUGIN_ID, 0, String.format ( Messages.getString("WriteAttributesOperationWizard.EntryMessage"), entry.getKey (), entry.getValue ().getError ().getMessage () ), null ) ); //$NON-NLS-1$
             }
         }
 
@@ -160,11 +160,11 @@ public class WriteAttributesOperationWizard extends Wizard implements INewWizard
         {
             if ( !results.containsKey ( name ) )
             {
-                status.add ( new OperationStatus ( OperationStatus.WARNING, Activator.PLUGIN_ID, 0, String.format ( "Attribute %s is missing in result list", name ), null ) );
+                status.add ( new OperationStatus ( OperationStatus.WARNING, Activator.PLUGIN_ID, 0, String.format ( Messages.getString("WriteAttributesOperationWizard.Message_MissingAttribute"), name ), null ) ); //$NON-NLS-1$
             }
         }
 
-        final ErrorDialog dialog = new ErrorDialog ( getShell (), "Failed write attributes", "The write attributes operation did not complete successfully. There may be one ore more attributes that could not be written. Check the status of each attribute operation using the detailed information.", status, OperationStatus.ERROR | OperationStatus.WARNING );
+        final ErrorDialog dialog = new ErrorDialog ( getShell (), Messages.getString("WriteAttributesOperationWizard.WriteError_Title"), Messages.getString("WriteAttributesOperationWizard.ErrorDialog_Description"), status, OperationStatus.ERROR | OperationStatus.WARNING ); //$NON-NLS-1$ //$NON-NLS-2$
 
         Display.getDefault ().syncExec ( new Runnable () {
 
@@ -178,7 +178,7 @@ public class WriteAttributesOperationWizard extends Wizard implements INewWizard
     public void init ( final IWorkbench workbench, final IStructuredSelection selection )
     {
         setNeedsProgressMonitor ( true );
-        setWindowTitle ( "Write Attributes" );
+        setWindowTitle ( Messages.getString("WriteAttributesOperationWizard.Title") ); //$NON-NLS-1$
 
         this.selection = selection;
     }
