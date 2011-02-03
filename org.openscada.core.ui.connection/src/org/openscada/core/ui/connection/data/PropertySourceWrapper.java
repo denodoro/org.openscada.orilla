@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -70,16 +70,19 @@ public class PropertySourceWrapper implements IPropertySource
         this.connectionHolder = connectionHolder;
     }
 
+    @Override
     public boolean isPropertySet ( final Object id )
     {
         return false;
     }
 
+    @Override
     public Object getEditableValue ()
     {
         return null;
     }
 
+    @Override
     public IPropertyDescriptor[] getPropertyDescriptors ()
     {
         final Collection<IPropertyDescriptor> properties = new ArrayList<IPropertyDescriptor> ();
@@ -136,11 +139,12 @@ public class PropertySourceWrapper implements IPropertySource
         return this.connectionHolder.getConnectionService ().getConnection ();
     }
 
+    @Override
     public Object getPropertyValue ( final Object id )
     {
         if ( Properties.URI.equals ( id ) )
         {
-            return this.connectionHolder.getConnectionInformation ().getConnectionInformation ().toString ();
+            return this.connectionHolder.getConnectionInformation ().getConnectionInformation ().toMaskedString ();
         }
         else if ( Properties.ID.equals ( id ) )
         {
@@ -177,10 +181,12 @@ public class PropertySourceWrapper implements IPropertySource
         return null;
     }
 
+    @Override
     public void resetPropertyValue ( final Object id )
     {
     }
 
+    @Override
     public void setPropertyValue ( final Object id, final Object value )
     {
     }
