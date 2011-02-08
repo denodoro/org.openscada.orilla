@@ -2,7 +2,7 @@
 <feature
       id="org.openscada.ca.client.test"
       label="OpenSCADA CA UI Test Feature"
-      version="0.15.0.qualifier"
+      version="0.16.0.qualifier"
       provider-name="TH4 SYSTEMS GmbH">
 
    <description>
@@ -296,6 +296,13 @@ Library.
 
    <plugin
          id="org.openscada.ca.ui.importer"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.openscada.ca.ui.exporter"
          download-size="0"
          install-size="0"
          version="0.0.0"
