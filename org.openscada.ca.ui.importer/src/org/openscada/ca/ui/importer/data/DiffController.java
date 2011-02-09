@@ -39,7 +39,7 @@ public class DiffController
 {
     private final static Logger logger = LoggerFactory.getLogger ( DiffController.class );
 
-    private Map<String, Map<String, Map<String, String>>> localData = Collections.emptyMap ();
+    private Map<String, Map<String, Map<String, String>>> localData = null;
 
     private Set<String> ignoreFactories = new HashSet<String> ();
 

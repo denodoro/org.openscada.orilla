@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -64,6 +64,7 @@ public class LocalDataPage extends WizardPage
         this.mergeController = mergeController;
     }
 
+    @Override
     public void createControl ( final Composite parent )
     {
         final Composite wrapper = new Composite ( parent, SWT.NONE );
@@ -81,6 +82,7 @@ public class LocalDataPage extends WizardPage
         this.fileName.setLayoutData ( new GridData ( SWT.FILL, SWT.CENTER, true, false ) );
         this.fileName.addModifyListener ( new ModifyListener () {
 
+            @Override
             public void modifyText ( final ModifyEvent e )
             {
                 update ();
@@ -132,6 +134,7 @@ public class LocalDataPage extends WizardPage
         {
             this.fileName.setText ( file );
             getWizard ().getDialogSettings ().put ( "welcomePage.file", file ); //$NON-NLS-1$
+            loadFile ();
         }
     }
 
@@ -141,7 +144,7 @@ public class LocalDataPage extends WizardPage
         {
             validate ();
             setMessage ( null, IMessageProvider.NONE );
-            setPageComplete ( true );
+            setPageComplete ( this.mergeController.getLocalData () != null );
         }
         catch ( final Exception e )
         {
@@ -204,6 +207,7 @@ public class LocalDataPage extends WizardPage
             final File file = getFile ();
             getContainer ().run ( true, false, new IRunnableWithProgress () {
 
+                @Override
                 public void run ( final IProgressMonitor monitor ) throws InvocationTargetException, InterruptedException
                 {
                     try
