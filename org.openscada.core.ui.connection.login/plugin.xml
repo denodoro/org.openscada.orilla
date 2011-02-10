@@ -36,13 +36,13 @@
    <extension
          point="org.eclipse.ui.commands">
       <command
-            categoryId="org.openscada.da.ui.category"
+            categoryId="org.openscada.core.ui.category"
             description="Open the login dialog"
             id="org.openscada.core.ui.connection.login.LoginDialogCommand"
             name="Login Dialog">
       </command>
       <command
-            categoryId="org.openscada.da.ui.category"
+            categoryId="org.openscada.core.ui.category"
             description="Log out the current session"
             id="org.openscada.core.ui.connection.login.LogoutCommand"
             name="Logout">
@@ -103,6 +103,13 @@
             id="org.openscada.core.ui.connection.login.session"
             namespace="org.openscada.core.ui.connection.login.session"
             properties="properties"
+            type="org.openscada.core.ui.connection.login.LoginSession">
+      </propertyTester>
+      <propertyTester
+            class="org.openscada.core.ui.connection.login.LoginSessionRoleTester"
+            id="org.openscada.core.ui.connection.login.session.role"
+            namespace="org.openscada.core.ui.connection.login.session.role"
+            properties="roles"
             type="org.openscada.core.ui.connection.login.LoginSession">
       </propertyTester>
    </extension>

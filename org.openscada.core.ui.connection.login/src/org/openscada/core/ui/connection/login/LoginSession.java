@@ -75,4 +75,23 @@ public class LoginSession
         }
     }
 
+    /**
+     * Checks with all login handler if the session has a role granted
+     * <p>
+     * If no handler grants the role, the default <code>false</code> is returned.
+     * </p>
+     * @param role the role to check
+     * @return <code>true</code> if the role was granted, <code>false</code> otherwise
+     */
+    public boolean hasRole ( final String role )
+    {
+        for ( final LoginHandler handler : this.handler )
+        {
+            if ( handler.hasRole ( role ) )
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }

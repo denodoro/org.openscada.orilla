@@ -35,4 +35,6 @@ public interface LoginHandler
 
     public boolean isComplete ();
 
+    public boolean hasRole ( String role );
+
 }
