@@ -82,7 +82,7 @@ public class EventHistoryView extends AbstractAlarmsEventsView
 
     private final AtomicReference<QueryState> queryState = new AtomicReference<QueryState> ( QueryState.DISCONNECTED );
 
-    private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor ();
+    private ScheduledExecutorService scheduler;
 
     private final AtomicInteger noOfEvents = new AtomicInteger ( 0 );
 
@@ -102,15 +102,17 @@ public class EventHistoryView extends AbstractAlarmsEventsView
     public void createPartControl ( final Composite parent )
     {
         super.createPartControl ( parent );
+        this.scheduler = Executors.newSingleThreadScheduledExecutor ();
 
         // resume Action
-        resumeAction = new CustomizableAction ();
-        resumeAction.setText ( "Resume" );
-        resumeAction.setToolTipText ( "continue retrieving of events" );
-        resumeAction.setImageDescriptor ( ImageDescriptor.createFromURL ( Activator.getDefault ().getBundle ().getResource ( "icons/resume.gif" ) ) );
-        resumeAction.setDisabledImageDescriptor ( ImageDescriptor.createFromURL ( Activator.getDefault ().getBundle ().getResource ( "icons/resume_disabled.gif" ) ) );
-        resumeAction.setEnabled ( false );
-        resumeAction.setRunnable ( new Runnable () {
+        this.resumeAction = new CustomizableAction ();
+        this.resumeAction.setText ( "Resume" );
+        this.resumeAction.setToolTipText ( "continue retrieving of events" );
+        this.resumeAction.setImageDescriptor ( ImageDescriptor.createFromURL ( Activator.getDefault ().getBundle ().getResource ( "icons/resume.gif" ) ) );
+        this.resumeAction.setDisabledImageDescriptor ( ImageDescriptor.createFromURL ( Activator.getDefault ().getBundle ().getResource ( "icons/resume_disabled.gif" ) ) );
+        this.resumeAction.setEnabled ( false );
+        this.resumeAction.setRunnable ( new Runnable () {
+            @Override
             public void run ()
             {
                 resumeEventsRetrieval ();
@@ -118,12 +120,13 @@ public class EventHistoryView extends AbstractAlarmsEventsView
         } );
 
         // clear Action
-        clearAction = new CustomizableAction ();
-        clearAction.setText ( "Clear" );
-        clearAction.setToolTipText ( "clear table" );
-        clearAction.setImageDescriptor ( ImageDescriptor.createFromURL ( Activator.getDefault ().getBundle ().getResource ( "icons/clear_search.gif" ) ) );
-        clearAction.setEnabled ( false );
-        clearAction.setRunnable ( new Runnable () {
+        this.clearAction = new CustomizableAction ();
+        this.clearAction.setText ( "Clear" );
+        this.clearAction.setToolTipText ( "clear table" );
+        this.clearAction.setImageDescriptor ( ImageDescriptor.createFromURL ( Activator.getDefault ().getBundle ().getResource ( "icons/clear_search.gif" ) ) );
+        this.clearAction.setEnabled ( false );
+        this.clearAction.setRunnable ( new Runnable () {
+            @Override
             public void run ()
             {
                 clearData ();
@@ -131,13 +134,14 @@ public class EventHistoryView extends AbstractAlarmsEventsView
         } );
 
         // search Action
-        searchAction = new CustomizableAction ();
-        searchAction.setText ( "Search" );
-        searchAction.setToolTipText ( "search for events" );
-        searchAction.setImageDescriptor ( ImageDescriptor.createFromURL ( Activator.getDefault ().getBundle ().getResource ( "icons/search.gif" ) ) );
-        searchAction.setDisabledImageDescriptor ( ImageDescriptor.createFromURL ( Activator.getDefault ().getBundle ().getResource ( "icons/search_disabled.gif" ) ) );
-        searchAction.setEnabled ( false );
-        searchAction.setRunnable ( new Runnable () {
+        this.searchAction = new CustomizableAction ();
+        this.searchAction.setText ( "Search" );
+        this.searchAction.setToolTipText ( "search for events" );
+        this.searchAction.setImageDescriptor ( ImageDescriptor.createFromURL ( Activator.getDefault ().getBundle ().getResource ( "icons/search.gif" ) ) );
+        this.searchAction.setDisabledImageDescriptor ( ImageDescriptor.createFromURL ( Activator.getDefault ().getBundle ().getResource ( "icons/search_disabled.gif" ) ) );
+        this.searchAction.setEnabled ( false );
+        this.searchAction.setRunnable ( new Runnable () {
+            @Override
             public void run ()
             {
                 pauseEventsRetrieval ();
@@ -147,6 +151,7 @@ public class EventHistoryView extends AbstractAlarmsEventsView
 
         // comment Action
         final CustomizableAction commentAction = createCommentAction ( new Runnable () {
+            @Override
             public void run ()
             {
                 System.err.println ( "comment" );
@@ -154,18 +159,18 @@ public class EventHistoryView extends AbstractAlarmsEventsView
         } );
 
         final IToolBarManager toolBarManager = getViewSite ().getActionBars ().getToolBarManager ();
-        toolBarManager.add ( resumeAction );
-        toolBarManager.add ( searchAction );
-        toolBarManager.add ( clearAction );
+        toolBarManager.add ( this.resumeAction );
+        toolBarManager.add ( this.searchAction );
+        toolBarManager.add ( this.clearAction );
 
         // label which contains no of retrieved events
 
-        events = new WritableSet ( SWTObservables.getRealm ( parent.getDisplay () ) );
+        this.events = new WritableSet ( SWTObservables.getRealm ( parent.getDisplay () ) );
 
-        eventsTable = new EventViewTable ( getContentPane (), SWT.BORDER, events, null, commentAction, initialColumnSettings );
-        eventsTable.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, true, 1, 1 ) );
+        this.eventsTable = new EventViewTable ( getContentPane (), SWT.BORDER, this.events, null, commentAction, this.initialColumnSettings );
+        this.eventsTable.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, true, 1, 1 ) );
 
-        getSite ().setSelectionProvider ( eventsTable.getTableViewer () );
+        getSite ().setSelectionProvider ( this.eventsTable.getTableViewer () );
 
         loadConfiguration ();
     }
@@ -214,15 +219,15 @@ public class EventHistoryView extends AbstractAlarmsEventsView
     @Override
     public void setFocus ()
     {
-        eventsTable.setFocus ();
+        this.eventsTable.setFocus ();
     }
 
     @Override
     protected Realm getRealm ()
     {
-        if ( events != null )
+        if ( this.events != null )
         {
-            return events.getRealm ();
+            return this.events.getRealm ();
         }
         return SWTObservables.getRealm ( getSite ().getShell ().getDisplay () );
     }
@@ -232,11 +237,12 @@ public class EventHistoryView extends AbstractAlarmsEventsView
     {
         super.onConnect ();
         getSite ().getShell ().getDisplay ().asyncExec ( new Runnable () {
+            @Override
             public void run ()
             {
-                resumeAction.setEnabled ( false );
-                clearAction.setEnabled ( true );
-                searchAction.setEnabled ( true );
+                EventHistoryView.this.resumeAction.setEnabled ( false );
+                EventHistoryView.this.clearAction.setEnabled ( true );
+                EventHistoryView.this.searchAction.setEnabled ( true );
             }
         } );
     }
@@ -248,12 +254,13 @@ public class EventHistoryView extends AbstractAlarmsEventsView
         try
         {
             getSite ().getShell ().getDisplay ().asyncExec ( new Runnable () {
+                @Override
                 public void run ()
                 {
                     clearData ();
-                    resumeAction.setEnabled ( false );
-                    clearAction.setEnabled ( false );
-                    searchAction.setEnabled ( false );
+                    EventHistoryView.this.resumeAction.setEnabled ( false );
+                    EventHistoryView.this.clearAction.setEnabled ( false );
+                    EventHistoryView.this.searchAction.setEnabled ( false );
                 }
             } );
         }
@@ -269,12 +276,12 @@ public class EventHistoryView extends AbstractAlarmsEventsView
     {
         cancelQuery ();
         // this.currentFilter = null;
-        noOfEvents.set ( 0 );
-        eventsTable.clear ();
+        this.noOfEvents.set ( 0 );
+        this.eventsTable.clear ();
 
-        resumeAction.setEnabled ( false );
-        clearAction.setEnabled ( true );
-        searchAction.setEnabled ( true );
+        this.resumeAction.setEnabled ( false );
+        this.clearAction.setEnabled ( true );
+        this.searchAction.setEnabled ( true );
         updateStatusBar ();
     }
 
@@ -283,12 +290,12 @@ public class EventHistoryView extends AbstractAlarmsEventsView
      */
     private void startEventsRetrieval ()
     {
-        final Pair<SearchType, String> filter = EventHistorySearchDialog.open ( getSite ().getShell (), currentFilter );
+        final Pair<SearchType, String> filter = EventHistorySearchDialog.open ( getSite ().getShell (), this.currentFilter );
         if ( filter != null )
         {
-            currentFilter = filter;
+            this.currentFilter = filter;
             retrieveData ( filter.second );
-            resumeAction.setEnabled ( false );
+            this.resumeAction.setEnabled ( false );
         }
     }
 
@@ -297,10 +304,10 @@ public class EventHistoryView extends AbstractAlarmsEventsView
      */
     private void pauseEventsRetrieval ()
     {
-        isPaused.set ( true );
-        if ( queryRef.get () != null )
+        this.isPaused.set ( true );
+        if ( this.queryRef.get () != null )
         {
-            resumeAction.setEnabled ( true );
+            this.resumeAction.setEnabled ( true );
         }
     }
 
@@ -309,25 +316,27 @@ public class EventHistoryView extends AbstractAlarmsEventsView
      */
     private void resumeEventsRetrieval ()
     {
-        isPaused.set ( false );
+        this.isPaused.set ( false );
         continueLoading ();
-        resumeAction.setEnabled ( false );
+        this.resumeAction.setEnabled ( false );
     }
 
     private void retrieveData ( final String filter )
     {
         final QueryListener queryListener = new QueryListener () {
+            @Override
             public void queryStateChanged ( final QueryState state )
             {
-                queryState.set ( state );
-                if ( ( state == QueryState.CONNECTED ) && !isPaused.get () )
+                EventHistoryView.this.queryState.set ( state );
+                if ( ( state == QueryState.CONNECTED ) && !EventHistoryView.this.isPaused.get () )
                 {
-                    resumeAction.setEnabled ( true );
+                    EventHistoryView.this.resumeAction.setEnabled ( true );
                 }
                 else if ( state == QueryState.DISCONNECTED )
                 {
-                    queryRef.set ( null );
+                    EventHistoryView.this.queryRef.set ( null );
                     getSite ().getShell ().getDisplay ().asyncExec ( new Runnable () {
+                        @Override
                         public void run ()
                         {
                         }
@@ -336,6 +345,7 @@ public class EventHistoryView extends AbstractAlarmsEventsView
                 updateStatusBar ();
             }
 
+            @Override
             public void queryData ( final Event[] events )
             {
                 final Set<DecoratedEvent> decoratedEvents;
@@ -354,8 +364,9 @@ public class EventHistoryView extends AbstractAlarmsEventsView
                         decoratedEvents.add ( new DecoratedEvent ( event ) );
                     }
                 }
-                noOfEvents.addAndGet ( decoratedEvents.size () );
+                EventHistoryView.this.noOfEvents.addAndGet ( decoratedEvents.size () );
                 getSite ().getShell ().getDisplay ().asyncExec ( new Runnable () {
+                    @Override
                     public void run ()
                     {
                         updateStatusBar ();
@@ -370,29 +381,30 @@ public class EventHistoryView extends AbstractAlarmsEventsView
         clearData ();
         if ( isConnected () )
         {
-            isPaused.set ( false );
-            queryRef.set ( getConnection ().createQuery ( "client", filter, queryListener ) );
+            this.isPaused.set ( false );
+            this.queryRef.set ( getConnection ().createQuery ( "client", filter, queryListener ) );
         }
     }
 
     private void cancelQuery ()
     {
-        isPaused.set ( true );
-        if ( queryRef.get () != null )
+        this.isPaused.set ( true );
+        if ( this.queryRef.get () != null )
         {
-            queryRef.get ().close ();
+            this.queryRef.get ().close ();
         }
-        queryRef.set ( null );
+        this.queryRef.set ( null );
     }
 
     private void continueLoading ()
     {
-        scheduler.schedule ( new Runnable () {
+        this.scheduler.schedule ( new Runnable () {
+            @Override
             public void run ()
             {
-                if ( queryRef.get () != null )
+                if ( EventHistoryView.this.queryRef.get () != null )
                 {
-                    queryRef.get ().loadMore ( LOAD_NO_OF_ITEMS );
+                    EventHistoryView.this.queryRef.get ().loadMore ( LOAD_NO_OF_ITEMS );
                 }
 
             }
@@ -419,20 +431,21 @@ public class EventHistoryView extends AbstractAlarmsEventsView
         {
             label.append ( "DISCONNECTED from " + getConnectionUri () );
         }
-        if ( currentFilter != null )
+        if ( this.currentFilter != null )
         {
             label.append ( " | filter is " );
-            label.append ( currentFilter.second.replace ( "&", "&&" ) );
+            label.append ( this.currentFilter.second.replace ( "&", "&&" ) );
         }
-        if ( queryState.get () == QueryState.LOADING )
+        if ( this.queryState.get () == QueryState.LOADING )
         {
             label.append ( " | loading ... " );
         }
         getSite ().getShell ().getDisplay ().asyncExec ( new Runnable () {
+            @Override
             public void run ()
             {
                 label.append ( " | " );
-                label.append ( events.size () );
+                label.append ( EventHistoryView.this.events.size () );
                 label.append ( " events found" );
                 EventHistoryView.this.getStateLabel ().setText ( label.toString () );
             }
@@ -461,7 +474,7 @@ public class EventHistoryView extends AbstractAlarmsEventsView
             final String s = memento.getString ( "columnSettings" );
             if ( s != null )
             {
-                initialColumnSettings = gson.fromJson ( s, new TypeToken<List<ColumnProperties>> () {}.getType () );
+                this.initialColumnSettings = this.gson.fromJson ( s, new TypeToken<List<ColumnProperties>> () {}.getType () );
             }
         }
     }
@@ -469,7 +482,7 @@ public class EventHistoryView extends AbstractAlarmsEventsView
     @Override
     public void saveState ( final IMemento memento )
     {
-        memento.putString ( "columnSettings", gson.toJson ( eventsTable.getColumnSettings () ) );
+        memento.putString ( "columnSettings", this.gson.toJson ( this.eventsTable.getColumnSettings () ) );
         super.saveState ( memento );
     }
 }
