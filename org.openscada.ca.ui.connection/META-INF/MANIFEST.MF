@@ -19,7 +19,7 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.5.0",
  org.openscada.core.connection.provider;bundle-version="0.14.0",
  org.openscada.core.client;bundle-version="0.14.0",
  org.openscada.ca;bundle-version="0.15.0"
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Import-Package: org.openscada.ca.client;version="0.15.0",
  org.openscada.ca.connection.provider;version="0.15.0",
