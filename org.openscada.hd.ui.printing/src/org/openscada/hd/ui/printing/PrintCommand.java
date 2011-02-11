@@ -15,6 +15,7 @@ import org.openscada.hd.ui.data.QueryBuffer;
 public class PrintCommand extends AbstractQueryHandler
 {
 
+    @Override
     public Object execute ( final ExecutionEvent event ) throws ExecutionException
     {
         for ( final QueryBuffer query : getQueries () )
@@ -32,11 +33,13 @@ public class PrintCommand extends AbstractQueryHandler
         final PrintDialog dlg = new PrintDialog ( getWorkbenchWindow ().getShell () );
 
         final PrinterData printerData = dlg.open ();
-        printerData.orientation = PrinterData.LANDSCAPE;
+
         if ( printerData == null )
         {
             return;
         }
+
+        printerData.orientation = PrinterData.LANDSCAPE;
 
         final Printer printer = new Printer ( printerData );
 

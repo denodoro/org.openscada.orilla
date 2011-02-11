@@ -123,7 +123,7 @@ public class PrintProcessor
         Point lastPoint = null;
         for ( int i = 0; i < size; i++ )
         {
-            final Value v = data[i];
+            // final Value v = data[i];
             final ValueInformation info = this.valueInformation[i];
 
             if ( info.getQuality () > 0.75 )
