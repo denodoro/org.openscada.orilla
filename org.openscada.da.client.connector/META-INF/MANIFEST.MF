@@ -10,7 +10,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.openscada.utils;bundle-version="0.14.0"
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.openscada.da.client.connector.Activator
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: org.apache.log4j,
  org.openscada.core,
  org.openscada.core.client,

@@ -16,7 +16,7 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.5.0",
  org.openscada.da.ui.styles;bundle-version="0.15.0",
  org.openscada.core.ui.styles;bundle-version="0.15.0"
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: org.openscada.da.client.base.action;version="0.15.0";
   uses:="org.eclipse.jface.action,
    org.eclipse.core.runtime,
