@@ -23,8 +23,6 @@
 	
 	<property name="deploy.base" location="${java.io.tmpdir}/deploy-msi"/>
 	
-	<property name="builder" location="build.${platformName}"/>
-	
 	<!-- ================================= 
           target: default              
          ================================= -->
@@ -35,24 +33,26 @@
           target: init              
          ================================= -->
     <target name="init" depends="" description="Initialize">
-        <echo message="Building: ${platformName} / ${version}"/>
+        <echo message="Building: ${version}"/>
     </target>
 	
 	<!-- ================================= 
           target: download              
          ================================= -->
     <target name="download" depends="" description="Download the source package">
-		<mkdir dir="${builder}"/>
-    	<get src="${ostc.download.uri}/ostc-${platformName}.zip" dest="${builder}/ostc.zip"/>
+        <mkdir dir="download"/>
+    	<get src="${ostc.download.uri}/ostc-win32.win32.x86.zip" dest="download/ostc-win32.win32.x86.zip"/>
     	
-    	<unzip dest="${builder}/ostc" src="${builder}/ostc.zip"/>
+        <mkdir dir="unpack/win32.win32.x86/ostc"/>
+    	<unzip dest="unpack/win32.win32.x86/ostc" src="download/ostc-win32.win32.x86.zip"/>
     </target>
 	
 	<!-- ================================= 
           target: clean              
          ================================= -->
     <target name="clean" depends="" description="Clean up">
-    	<delete dir="${builder}" failonerror="false"/>
+    	<delete dir="download" failonerror="false"/>
+        <delete dir="unpack" failonerror="false"/>
     </target>
 
 	<!-- ================================= 
@@ -60,17 +60,23 @@
          ================================= -->
     <target name="build" depends="" description="Build the setup">
     	<echo message="Setting version to ${version}"/>
-        <copy file="ostc_setup_${platformName}.aip" todir="${builder}"/>
-    	<exec executable="${advinst.base}/bin/x86/AdvancedInstaller.com" dir="${builder}" failonerror="true">
+        <exec executable="${advinst.base}/bin/x86/AdvancedInstaller.com" failonerror="true">
     		<arg value="/edit"/>
-    		<arg value="ostc_setup_${platformName}.aip"/>
+    		<arg value="ostc_setup.aip"/>
     		<arg value="/SetVersion"/>
     		<arg value="${version}"/>
     	</exec>
-    	<exec executable="${advinst.base}/bin/x86/AdvancedInstaller.com" dir="${builder}" failonerror="true">
+    	<exec executable="${advinst.base}/bin/x86/AdvancedInstaller.com" failonerror="true">
     		<arg value="/build"/>
-    		<arg value="ostc_setup_${platformName}.aip"/>
+    		<arg value="ostc_setup.aip"/>
     	</exec>
     </target>
+    
+    <!-- ================================= 
+      target: build              
+     ================================= -->
+     <target name="gen.update" description="Generate update file">
+        
+     </target>
 	
 </project>
