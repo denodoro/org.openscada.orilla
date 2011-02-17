@@ -47,6 +47,12 @@ public class Messages extends NLS
 
     public static String OverviewDetailsPart_ManualLabel;
 
+    public static String OverviewDetailsPart_BlockedActiveText;
+
+    public static String OverviewDetailsPart_BlockedInactiveText;
+
+    public static String OverviewDetailsPart_BlockedLabel;
+
     public static String OverviewDetailsPart_NullText;
 
     public static String OverviewDetailsPart_SubscriptionStateFormat;

@@ -71,6 +71,11 @@
             	<parameter name="suffix" value=".ackRequired"/>
             </class>
       </detailsPart>
+ <detailsPart
+       class="org.openscada.da.client.dataitem.details.part.block.BlockDetailsPart"
+       name="Blocking"
+       sortKey="0503">
+ </detailsPart>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">

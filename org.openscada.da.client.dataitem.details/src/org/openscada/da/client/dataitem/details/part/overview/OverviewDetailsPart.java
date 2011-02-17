@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -51,6 +51,9 @@ public class OverviewDetailsPart extends AbstractBaseDetailsPart
 
     private Text manualText;
 
+    private Text blockedText;
+
+    @Override
     public void createPart ( final Composite parent )
     {
         parent.setLayout ( new GridLayout ( 2, false ) );
@@ -91,6 +94,11 @@ public class OverviewDetailsPart extends AbstractBaseDetailsPart
         this.manualText.setLayoutData ( new GridData ( SWT.FILL, SWT.BEGINNING, true, false ) );
 
         label = new Label ( parent, SWT.NONE );
+        label.setText ( Messages.OverviewDetailsPart_BlockedLabel );
+        this.blockedText = new Text ( parent, SWT.READ_ONLY | SWT.BORDER );
+        this.blockedText.setLayoutData ( new GridData ( SWT.FILL, SWT.BEGINNING, true, false ) );
+
+        label = new Label ( parent, SWT.NONE );
         label.setText ( Messages.OverviewDetailsPart_ValueLabel );
         this.valueText = new Text ( parent, SWT.READ_ONLY | SWT.BORDER );
         this.valueText.setLayoutData ( new GridData ( SWT.FILL, SWT.BEGINNING, true, false ) );
@@ -119,6 +127,7 @@ public class OverviewDetailsPart extends AbstractBaseDetailsPart
             this.alarmText.setText ( "" ); //$NON-NLS-1$
             this.errorText.setText ( "" ); //$NON-NLS-1$
             this.manualText.setText ( "" ); //$NON-NLS-1$
+            this.blockedText.setText ( "" ); //$NON-NLS-1$
             this.valueText.setText ( "" ); //$NON-NLS-1$
             this.timestampText.setText ( "" ); //$NON-NLS-1$
         }
@@ -165,6 +174,7 @@ public class OverviewDetailsPart extends AbstractBaseDetailsPart
         this.alarmText.setText ( this.value.isAlarm () ? Messages.OverviewDetailsPart_AlarmActiveText : Messages.OverviewDetailsPart_AlarmInactiveText );
         this.errorText.setText ( this.value.isError () ? Messages.OverviewDetailsPart_ErrorActiveText : Messages.OverviewDetailsPart_ErrorInactiveText );
         this.manualText.setText ( this.value.isManual () ? Messages.OverviewDetailsPart_ManualActiveText : Messages.OverviewDetailsPart_ManualInactiveText );
+        this.blockedText.setText ( this.value.isBlocked () ? Messages.OverviewDetailsPart_BlockedActiveText : Messages.OverviewDetailsPart_BlockedInactiveText );
 
         this.valueText.setText ( this.value.getValue () != null ? this.value.getValue ().toString () : Messages.OverviewDetailsPart_NullText );
         final Calendar c = this.value.getTimestamp ();

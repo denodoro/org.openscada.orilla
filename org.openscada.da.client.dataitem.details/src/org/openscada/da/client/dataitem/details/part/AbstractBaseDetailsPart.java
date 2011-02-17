@@ -35,19 +35,28 @@ public abstract class AbstractBaseDetailsPart implements DetailsPart
 
     protected Shell shell;
 
+    private boolean disposed;
+
+    @Override
     public void setDataItem ( final DataItemHolder item )
     {
         this.item = item;
     }
 
+    @Override
     public void dispose ()
     {
+        this.disposed = true;
     }
 
+    @Override
     public void updateData ( final DataItemValue value )
     {
         this.value = value;
-        update ();
+        if ( !this.disposed )
+        {
+            update ();
+        }
     }
 
     /**
@@ -89,6 +98,11 @@ public abstract class AbstractBaseDetailsPart implements DetailsPart
             return this.value.getAttributes ().get ( name ).asBoolean ();
         }
         return false;
+    }
+
+    protected DataItemValue getValue ()
+    {
+        return this.value;
     }
 
     protected Number getNumberAttribute ( final String name, final Number defaultValue )
