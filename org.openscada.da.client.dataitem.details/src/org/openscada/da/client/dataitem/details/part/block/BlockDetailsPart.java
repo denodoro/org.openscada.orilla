@@ -66,24 +66,24 @@ public class BlockDetailsPart extends AbstractBaseDetailsPart
         Label label;
 
         label = new Label ( parent, SWT.NONE );
-        label.setText ( "State:" );
+        label.setText ( Messages.BlockDetailsPart_Label_State );
         this.stateWidget = new Label ( parent, SWT.NONE );
         this.stateWidget.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, false, false ) );
-        this.stateWidget.setText ( "State" );
+        this.stateWidget.setText ( "State" ); //$NON-NLS-1$
         this.stateWidget.setImage ( Activator.getDefault ().getImageRegistry ().get ( Activator.IMG_BLOCK_DEFAULT ) );
 
         label = new Label ( parent, SWT.NONE );
-        label.setText ( "User:" );
+        label.setText ( Messages.BlockDetailsPart_Label_User );
         this.userText = new Text ( parent, SWT.READ_ONLY | SWT.BORDER );
         this.userText.setLayoutData ( new GridData ( SWT.FILL, SWT.BEGINNING, true, false ) );
 
         label = new Label ( parent, SWT.NONE );
-        label.setText ( "Timestamp:" );
+        label.setText ( Messages.BlockDetailsPart_Label_Timestamp );
         this.timestampText = new Text ( parent, SWT.READ_ONLY | SWT.BORDER );
         this.timestampText.setLayoutData ( new GridData ( SWT.FILL, SWT.BEGINNING, true, false ) );
 
         label = new Label ( parent, SWT.NONE );
-        label.setText ( "Reason:" );
+        label.setText ( Messages.BlockDetailsPart_Label_Reason );
         label.setLayoutData ( new GridData ( SWT.BEGINNING, SWT.BEGINNING, false, false ) );
         this.reasonText = new Text ( parent, SWT.MULTI | SWT.BORDER );
         this.reasonText.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, true ) );
@@ -93,7 +93,7 @@ public class BlockDetailsPart extends AbstractBaseDetailsPart
         buttonBar.setLayoutData ( new GridData ( SWT.FILL, SWT.CENTER, true, false, 2, 1 ) );
 
         this.blockButton = new Button ( buttonBar, SWT.PUSH );
-        this.blockButton.setText ( "Block" );
+        this.blockButton.setText ( Messages.BlockDetailsPart_Text_Block );
         this.blockButton.addSelectionListener ( new SelectionAdapter () {
             @Override
             public void widgetSelected ( final SelectionEvent e )
@@ -102,7 +102,7 @@ public class BlockDetailsPart extends AbstractBaseDetailsPart
             }
         } );
         this.unblockButton = new Button ( buttonBar, SWT.PUSH );
-        this.unblockButton.setText ( "Unblock" );
+        this.unblockButton.setText ( Messages.BlockDetailsPart_Text_Unblock );
         this.unblockButton.addSelectionListener ( new SelectionAdapter () {
             @Override
             public void widgetSelected ( final SelectionEvent e )
@@ -116,7 +116,7 @@ public class BlockDetailsPart extends AbstractBaseDetailsPart
     {
         final Map<String, Variant> attributes = new HashMap<String, Variant> ();
 
-        attributes.put ( "org.openscada.da.master.common.block.active", Variant.FALSE );
+        attributes.put ( "org.openscada.da.master.common.block.active", Variant.FALSE ); //$NON-NLS-1$
 
         this.item.writeAtrtibutes ( attributes );
     }
@@ -127,10 +127,10 @@ public class BlockDetailsPart extends AbstractBaseDetailsPart
 
         final Map<String, Variant> attributes = new HashMap<String, Variant> ();
 
-        attributes.put ( "org.openscada.da.master.common.block.active", Variant.TRUE );
+        attributes.put ( "org.openscada.da.master.common.block.active", Variant.TRUE ); //$NON-NLS-1$
         if ( !text.isEmpty () )
         {
-            attributes.put ( "org.openscada.da.master.common.block.note", Variant.valueOf ( text ) );
+            attributes.put ( "org.openscada.da.master.common.block.note", Variant.valueOf ( text ) ); //$NON-NLS-1$
         }
 
         this.item.writeAtrtibutes ( attributes );
@@ -148,9 +148,9 @@ public class BlockDetailsPart extends AbstractBaseDetailsPart
 
         if ( value != null )
         {
-            timestamp = value.getAsTimestamp ( "org.openscada.da.master.common.block.timestamp" );
-            reason = value.getAttributes ().get ( "org.openscada.da.master.common.block.note" );
-            user = value.getAttributes ().get ( "org.openscada.da.master.common.block.user" );
+            timestamp = value.getAsTimestamp ( "org.openscada.da.master.common.block.timestamp" ); //$NON-NLS-1$
+            reason = value.getAttributes ().get ( "org.openscada.da.master.common.block.note" ); //$NON-NLS-1$
+            user = value.getAttributes ().get ( "org.openscada.da.master.common.block.user" ); //$NON-NLS-1$
             image = Activator.getDefault ().getImageRegistry ().get ( value.isBlocked () ? Activator.IMG_BLOCK_LOCKED : Activator.IMG_BLOCK_UNLOCKED );
         }
         else
@@ -163,16 +163,16 @@ public class BlockDetailsPart extends AbstractBaseDetailsPart
 
         this.stateWidget.setImage ( image );
 
-        this.userText.setText ( String.format ( "%s", user != null ? user.asString ( "" ) : "<none>" ) );
-        this.timestampText.setText ( timestamp != null ? String.format ( "%tc", timestamp ) : "<none>" );
+        this.userText.setText ( String.format ( Messages.BlockDetailsPart_Format_User, user != null ? user.asString ( Messages.BlockDetailsPart_EmtyString ) : Messages.BlockDetailsPart_NoneString ) );
+        this.timestampText.setText ( timestamp != null ? String.format ( Messages.BlockDetailsPart_Format_Date, timestamp ) : Messages.BlockDetailsPart_NoneString );
 
         if ( reason != null )
         {
-            this.reasonText.setText ( reason.asString ( "" ) );
+            this.reasonText.setText ( reason.asString ( Messages.BlockDetailsPart_EmtyString ) );
         }
         else
         {
-            this.reasonText.setText ( "" );
+            this.reasonText.setText ( Messages.BlockDetailsPart_EmtyString );
         }
 
         // states
