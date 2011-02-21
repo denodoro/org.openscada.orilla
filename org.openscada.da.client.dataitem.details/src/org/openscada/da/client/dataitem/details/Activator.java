@@ -74,13 +74,12 @@ public class Activator extends AbstractUIPlugin
     }
 
     @Override
-    protected ImageRegistry createImageRegistry ()
+    protected void initializeImageRegistry ( final ImageRegistry reg )
     {
-        final ImageRegistry result = super.createImageRegistry ();
-        result.put ( IMG_BLOCK_DEFAULT, ImageDescriptor.getMissingImageDescriptor () );
-        result.put ( IMG_BLOCK_LOCKED, ImageDescriptor.createFromFile ( Activator.class, "icons/locked.gif" ) );
-        result.put ( IMG_BLOCK_UNLOCKED, ImageDescriptor.createFromFile ( Activator.class, "icons/unlocked.gif" ) );
-        return result;
+        super.initializeImageRegistry ( reg );
+        reg.put ( IMG_BLOCK_DEFAULT, ImageDescriptor.getMissingImageDescriptor () );
+        reg.put ( IMG_BLOCK_LOCKED, ImageDescriptor.createFromFile ( Activator.class, "icons/locked.gif" ) );
+        reg.put ( IMG_BLOCK_UNLOCKED, ImageDescriptor.createFromFile ( Activator.class, "icons/unlocked.gif" ) );
     }
 
     /**
