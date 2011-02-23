@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -93,7 +93,7 @@ public class ConfigurationHelper
             final String connectionString = ele.getAttribute ( "connectionString" ); //$NON-NLS-1$
             final ConnectionType connectionType = ConnectionType.valueOf ( ele.getAttribute ( "connectionType" ) ); //$NON-NLS-1$
             final String label = ele.getAttribute ( "label" ); //$NON-NLS-1$
-            List<ColumnProperties> columns = parseColumnSettings ( ele.getAttribute ( "columns" ) );
+            final List<ColumnProperties> columns = parseColumnSettings ( ele.getAttribute ( "columns" ) ); //$NON-NLS-1$
 
             return new MonitorViewConfiguration ( id, monitorQueryId, connectionString, connectionType, label, columns );
         }
@@ -154,14 +154,14 @@ public class ConfigurationHelper
             final ConnectionType connectionType = ConnectionType.valueOf ( ele.getAttribute ( "connectionType" ) ); //$NON-NLS-1$
             final String label = ele.getAttribute ( "label" ); //$NON-NLS-1$
             int maxNumberOfEvents = 0;
-            if ( Arrays.asList ( ele.getAttributeNames () ).contains ( "maxNumberOfEvents" ) )
+            if ( Arrays.asList ( ele.getAttributeNames () ).contains ( "maxNumberOfEvents" ) ) //$NON-NLS-1$
             {
-                String s = ele.getAttribute ( "maxNumberOfEvents" );
+                final String s = ele.getAttribute ( "maxNumberOfEvents" ); //$NON-NLS-1$
                 try
                 {
                     maxNumberOfEvents = Integer.parseInt ( s );
                 }
-                catch ( NumberFormatException e )
+                catch ( final NumberFormatException e )
                 {
                     // pass
                 }
@@ -176,21 +176,21 @@ public class ConfigurationHelper
         }
     }
 
-    private static List<ColumnProperties> parseColumnSettings ( String columns )
+    private static List<ColumnProperties> parseColumnSettings ( final String columns )
     {
-        ArrayList<ColumnProperties> result = new ArrayList<ColumnProperties> ();
-        if ( columns == null || "".equals ( columns.trim () ) )
+        final ArrayList<ColumnProperties> result = new ArrayList<ColumnProperties> ();
+        if ( columns == null || "".equals ( columns.trim () ) ) //$NON-NLS-1$
         {
             return result;
         }
-        for ( String col : columns.split ( "," ) )
+        for ( final String col : columns.split ( "," ) ) //$NON-NLS-1$
         {
-            String[] settings = col.split ( ":" );
+            final String[] settings = col.split ( ":" ); //$NON-NLS-1$
             if ( settings.length == 0 )
             {
                 continue;
             }
-            ColumnProperties cp = new ColumnProperties ();
+            final ColumnProperties cp = new ColumnProperties ();
             if ( settings.length > 0 )
             {
                 cp.setNo ( Integer.parseInt ( settings[0] ) );
@@ -284,10 +284,10 @@ public class ConfigurationHelper
         try
         {
             final String connectionId = ele.getAttribute ( "connectionId" ); //$NON-NLS-1$
-            final String prefix = ele.getAttribute ( "prefix" ) == null ? "ae.server.info" : ele.getAttribute ( "prefix" ); //$NON-NLS-1$ $NON-NLS-2$
-            final URL soundFile = Platform.getBundle ( ele.getContributor ().getName () ).getEntry ( ele.getAttribute ( "soundFile" ) );
-            final ParameterizedCommand ackAlarmsAvailableCommand = convertCommand ( ele.getChildren ( "ackAlarmsAvailableCommand" )[0] );
-            final ParameterizedCommand alarmsAvailableCommand = convertCommand ( ele.getChildren ( "alarmsAvailableCommand" )[0] );
+            final String prefix = ele.getAttribute ( "prefix" ) == null ? "ae.server.info" : ele.getAttribute ( "prefix" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ $NON-NLS-2$
+            final URL soundFile = Platform.getBundle ( ele.getContributor ().getName () ).getEntry ( ele.getAttribute ( "soundFile" ) ); //$NON-NLS-1$
+            final ParameterizedCommand ackAlarmsAvailableCommand = convertCommand ( ele.getChildren ( "ackAlarmsAvailableCommand" )[0] ); //$NON-NLS-1$
+            final ParameterizedCommand alarmsAvailableCommand = convertCommand ( ele.getChildren ( "alarmsAvailableCommand" )[0] ); //$NON-NLS-1$
             return new AlarmNotifierConfiguration ( connectionId, prefix, soundFile, ackAlarmsAvailableCommand, alarmsAvailableCommand );
         }
         catch ( final Exception e )
@@ -299,13 +299,13 @@ public class ConfigurationHelper
 
     private static ParameterizedCommand convertCommand ( final IConfigurationElement commandElement ) throws NotDefinedException, InvalidRegistryObjectException
     {
-        ICommandService commandService = (ICommandService)PlatformUI.getWorkbench ().getService ( ICommandService.class );
-        Command command = commandService.getCommand ( commandElement.getAttribute ( "id" ) );
-        List<Parameterization> parameters = new ArrayList<Parameterization> ();
-        for ( IConfigurationElement parameter : commandElement.getChildren ( "parameter" ) )
+        final ICommandService commandService = (ICommandService)PlatformUI.getWorkbench ().getService ( ICommandService.class );
+        final Command command = commandService.getCommand ( commandElement.getAttribute ( "id" ) ); //$NON-NLS-1$
+        final List<Parameterization> parameters = new ArrayList<Parameterization> ();
+        for ( final IConfigurationElement parameter : commandElement.getChildren ( "parameter" ) ) //$NON-NLS-1$
         {
-            IParameter name = command.getParameter ( parameter.getAttribute ( "name" ) );
-            String value = parameter.getAttribute ( "value" );
+            final IParameter name = command.getParameter ( parameter.getAttribute ( "name" ) ); //$NON-NLS-1$
+            final String value = parameter.getAttribute ( "value" ); //$NON-NLS-1$
             parameters.add ( new Parameterization ( name, value ) );
         }
         return new ParameterizedCommand ( command, parameters.toArray ( new Parameterization[] {} ) );

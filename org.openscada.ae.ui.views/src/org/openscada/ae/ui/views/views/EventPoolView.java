@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -51,8 +52,8 @@ import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 import org.openscada.ae.Event;
-import org.openscada.ae.MonitorStatusInformation;
 import org.openscada.ae.Event.Fields;
+import org.openscada.ae.MonitorStatusInformation;
 import org.openscada.ae.client.EventListener;
 import org.openscada.ae.ui.views.Activator;
 import org.openscada.ae.ui.views.CustomizableAction;
@@ -68,6 +69,7 @@ import org.openscada.core.client.ConnectionState;
 import org.openscada.core.subscription.SubscriptionState;
 import org.openscada.utils.concurrent.NamedThreadFactory;
 import org.openscada.utils.lang.Pair;
+import org.openscada.utils.str.StringHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -79,7 +81,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
 {
     private final static Logger logger = LoggerFactory.getLogger ( EventPoolView.class );
 
-    public static final String ID = "org.openscada.ae.ui.views.views.eventpool";
+    public static final String ID = "org.openscada.ae.ui.views.views.eventpool"; //$NON-NLS-1$
 
     private String poolId;
 
@@ -132,11 +134,13 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
     public void createPartControl ( final Composite parent )
     {
         super.createPartControl ( parent );
-        this.scheduler = Executors.newSingleThreadScheduledExecutor ( new NamedThreadFactory ( "shortenEventPool" ) );
+        this.scheduler = Executors.newSingleThreadScheduledExecutor ( new NamedThreadFactory ( "shortenEventPool" ) ); //$NON-NLS-1$
         this.scheduler.scheduleAtFixedRate ( new Runnable () {
+            @Override
             public void run ()
             {
                 scheduleJob ( new Runnable () {
+                    @Override
                     public void run ()
                     {
                         removeEvents ();
@@ -147,6 +151,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
         }, 10 * 60, 10 * 60, TimeUnit.SECONDS );
         this.pool = new WritableSet ( SWTObservables.getRealm ( parent.getDisplay () ) );
         this.pool.addChangeListener ( new IChangeListener () {
+            @Override
             public void handleChange ( final ChangeEvent event )
             {
                 updateStatusBar ();
@@ -155,6 +160,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
 
         final CustomizableAction commentAction = createCommentAction ( null );
         commentAction.setRunnable ( new Runnable () {
+            @Override
             public void run ()
             {
                 if ( EventPoolView.this.eventsTable.selectedEvents ().size () == 0 )
@@ -163,7 +169,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
                 }
                 final DecoratedEvent event = EventPoolView.this.eventsTable.selectedEvents ().get ( 0 );
                 Variant comment = event.getEvent ().getField ( Fields.COMMENT );
-                final InputDialog dlg = new InputDialog ( parent.getShell (), commentAction.getText (), commentAction.getDescription (), comment == null ? "" : comment.asString ( "" ), null );
+                final InputDialog dlg = new InputDialog ( parent.getShell (), commentAction.getText (), commentAction.getDescription (), comment == null ? "" : comment.asString ( "" ), null ); //$NON-NLS-1$ //$NON-NLS-2$
                 if ( dlg.open () == Window.OK )
                 {
                     comment = new Variant ( dlg.getValue () );
@@ -171,16 +177,17 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
                     {
                         final Event updatedEvent = Event.create ().event ( decoratedEvent.getEvent () ).attribute ( Fields.COMMENT, comment ).build ();
                         // FIXME: implement "set comment" in client interface
-                        logger.info ( "comment updated " + updatedEvent );
+                        logger.info ( "comment updated " + updatedEvent ); //$NON-NLS-1$
                     }
                 }
             }
         } );
 
-        final CustomizableAction scrollLockAction = new CustomizableAction ( "Scroll Lock", IAction.AS_CHECK_BOX );
-        scrollLockAction.setToolTipText ( "Scroll Lock" );
-        scrollLockAction.setImageDescriptor ( ImageDescriptor.createFromURL ( Activator.getDefault ().getBundle ().getResource ( "icons/scroll_lock.gif" ) ) );
+        final CustomizableAction scrollLockAction = new CustomizableAction ( Messages.EventPoolView_Action_ScrollLock_Name, IAction.AS_CHECK_BOX );
+        scrollLockAction.setToolTipText ( Messages.EventPoolView_Action_ScrollLock_ToolTip );
+        scrollLockAction.setImageDescriptor ( ImageDescriptor.createFromURL ( Activator.getDefault ().getBundle ().getResource ( "icons/scroll_lock.gif" ) ) ); //$NON-NLS-1$
         scrollLockAction.setRunnable ( new Runnable () {
+            @Override
             public void run ()
             {
                 EventPoolView.this.eventsTable.setScrollLock ( scrollLockAction.isChecked () );
@@ -188,10 +195,11 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
         } );
 
         final CustomizableAction setFilterAction = new CustomizableAction ();
-        setFilterAction.setText ( "Filter" );
-        setFilterAction.setToolTipText ( "Set/Modify Filter" );
-        setFilterAction.setImageDescriptor ( ImageDescriptor.createFromURL ( Activator.getDefault ().getBundle ().getResource ( "icons/search.gif" ) ) );
+        setFilterAction.setText ( Messages.EventPoolView_Action_Filter_Name );
+        setFilterAction.setToolTipText ( Messages.EventPoolView_Action_Filter_ToolTip );
+        setFilterAction.setImageDescriptor ( ImageDescriptor.createFromURL ( Activator.getDefault ().getBundle ().getResource ( "icons/search.gif" ) ) ); //$NON-NLS-1$
         setFilterAction.setRunnable ( new Runnable () {
+            @Override
             public void run ()
             {
                 final Pair<SearchType, String> result = EventHistorySearchDialog.open ( parent.getShell (), EventPoolView.this.eventsTable.getFilter () );
@@ -199,10 +207,11 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
             }
         } );
         final CustomizableAction removeFilterAction = new CustomizableAction ();
-        removeFilterAction.setText ( "Remove Filter" );
-        removeFilterAction.setToolTipText ( "Remove Filter" );
-        removeFilterAction.setImageDescriptor ( ImageDescriptor.createFromURL ( Activator.getDefault ().getBundle ().getResource ( "icons/clear_search.gif" ) ) );
+        removeFilterAction.setText ( Messages.EventPoolView_Action_RemoveFilter_Name );
+        removeFilterAction.setToolTipText ( Messages.EventPoolView_Action_RemoveFilter_ToolTip );
+        removeFilterAction.setImageDescriptor ( ImageDescriptor.createFromURL ( Activator.getDefault ().getBundle ().getResource ( "icons/clear_search.gif" ) ) ); //$NON-NLS-1$
         removeFilterAction.setRunnable ( new Runnable () {
+            @Override
             public void run ()
             {
                 EventPoolView.this.eventsTable.removeFilter ();
@@ -233,12 +242,12 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
             }
             catch ( final Exception e )
             {
-                logger.warn ( "Failed to apply configuration", e );
+                logger.warn ( "Failed to apply configuration", e ); //$NON-NLS-1$
             }
         }
         else
         {
-            logger.info ( "no configuration found" );
+            logger.info ( "no configuration found" ); //$NON-NLS-1$
         }
     }
 
@@ -279,11 +288,13 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
         if ( getConnection () != null && this.poolId != null )
         {
             this.eventPoolListener = new EventListener () {
+                @Override
                 public void statusChanged ( final SubscriptionState state )
                 {
                     EventPoolView.this.statusChangedEventSubscription ( state );
                 }
 
+                @Override
                 public void dataChanged ( final Event[] addedEvents )
                 {
                     EventPoolView.this.dataChanged ( addedEvents );
@@ -324,9 +335,11 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
             {
                 getRealm ().asyncExec ( new Runnable () {
 
+                    @Override
                     public void run ()
                     {
                         getRealm ().timerExec ( 1000, new Runnable () {
+                            @Override
                             public void run ()
                             {
                                 processEvents ();
@@ -364,9 +377,9 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
         for ( final DecoratedEvent event : decoratedEvents )
         {
             final Variant source = event.getEvent ().getField ( Fields.SOURCE );
-            if ( source != null && !source.isNull () && source.asString ( "" ).length () > 0 )
+            if ( source != null && !source.isNull () && source.asString ( "" ).length () > 0 ) //$NON-NLS-1$
             {
-                final String str = source.asString ( "" );
+                final String str = source.asString ( "" ); //$NON-NLS-1$
                 Set<DecoratedEvent> d = EventPoolView.this.poolMap.get ( str );
                 if ( d == null )
                 {
@@ -391,6 +404,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
             final List<DecoratedEvent> tmpList = new ArrayList<DecoratedEvent> ( EventPoolView.this.pool );
             final List<DecoratedEvent> toRemove = new ArrayList<DecoratedEvent> ();
             Collections.sort ( tmpList, new Comparator<DecoratedEvent> () {
+                @Override
                 public int compare ( final DecoratedEvent e1, final DecoratedEvent e2 )
                 {
                     return e2.compareTo ( e1 );
@@ -412,7 +426,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
         }
         catch ( final Throwable th )
         {
-            final IStatus status = new Status ( IStatus.ERROR, Activator.PLUGIN_ID, 42, "removeEvents () failed", th );
+            final IStatus status = new Status ( IStatus.ERROR, Activator.PLUGIN_ID, 42, Messages.EventPoolView_Status_Error_RemoveElement, th );
             Activator.getDefault ().getLog ().log ( status );
         }
     }
@@ -426,6 +440,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
             return;
         }
         scheduleJob ( new Runnable () {
+            @Override
             public void run ()
             {
                 performDataChanged ( addedOrUpdated, removed );
@@ -465,7 +480,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
             final MonitorData monitor;
             if ( source != null && !source.isNull () && source.isString () )
             {
-                final DecoratedMonitor decoratedMonitor = (DecoratedMonitor)this.monitorsMap.get ( source.asString ( "" ) );
+                final DecoratedMonitor decoratedMonitor = (DecoratedMonitor)this.monitorsMap.get ( source.asString ( "" ) ); //$NON-NLS-1$
                 if ( decoratedMonitor != null )
                 {
                     monitor = decoratedMonitor.getMonitor ();
@@ -487,6 +502,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
     private void clear ()
     {
         this.pool.getRealm ().asyncExec ( new Runnable () {
+            @Override
             public void run ()
             {
                 if ( EventPoolView.this.pool != null )
@@ -532,55 +548,40 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
     protected void updateStatusBar ()
     {
         scheduleJob ( new Runnable () {
+            @Override
             public void run ()
             {
-                final StringBuilder label = new StringBuilder ();
-                if ( getConnection () != null )
-                {
-                    if ( getConnection ().getState () == ConnectionState.BOUND )
-                    {
-                        label.append ( "CONNECTED to " );
-                    }
-                    else
-                    {
-                        label.append ( "DISCONNECTED from " );
-                    }
-                    label.append ( getConnection ().getConnectionInformation ().toMaskedString () );
-                }
-                else
-                {
-                    label.append ( "DISCONNECTED from " + getConnectionUri () );
-                }
-                if ( EventPoolView.this.poolId != null )
-                {
-                    label.append ( " | watching pool: " + EventPoolView.this.poolId );
-                }
-                else
-                {
-                    label.append ( " | watching no pool" );
-                }
-                if ( EventPoolView.this.monitorsId != null )
-                {
-                    label.append ( " | decorating with monitors: " + EventPoolView.this.monitorsId );
-                }
-                else
-                {
-                    label.append ( " | no decoration" );
-                }
-                try
-                {
-                    label.append ( " | " );
-                    label.append ( EventPoolView.this.pool.size () );
-                    label.append ( " events found" );
-                }
-                catch ( final Exception e )
-                {
-                    logger.warn ( "Failed to create status information", e );
-                }
-
-                EventPoolView.this.getStateLabel ().setText ( label.toString () );
+                EventPoolView.this.getStateLabel ().setText ( createStatusLabel () );
             }
         } );
+    }
+
+    protected String createStatusLabel ()
+    {
+        final List<String> labels = new LinkedList<String> ();
+        labels.add ( getLabelForConnection () );
+
+        if ( this.poolId != null )
+        {
+            labels.add ( String.format ( Messages.EventPoolView_Label_Format_Pool, this.poolId ) );
+        }
+        else
+        {
+            labels.add ( Messages.EventPoolView_Label_Format_NoPool );
+        }
+
+        if ( this.monitorsId != null )
+        {
+            labels.add ( String.format ( Messages.EventPoolView_Label_Format_Monitors, this.monitorsId ) );
+        }
+        else
+        {
+            labels.add ( Messages.EventPoolView_Label_Format_NoMonitors );
+        }
+
+        labels.add ( String.format ( Messages.EventPoolView_Label_Format_CountEvents, EventPoolView.this.pool.size () ) );
+
+        return StringHelper.join ( labels, Messages.EventPoolView_Sep );
     }
 
     @Override
@@ -590,7 +591,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
 
         if ( memento != null )
         {
-            final String s = memento.getString ( "columnSettings" );
+            final String s = memento.getString ( "columnSettings" ); //$NON-NLS-1$
             if ( s != null )
             {
                 this.initialColumnSettings = this.gson.fromJson ( s, new TypeToken<List<ColumnProperties>> () {}.getType () );
@@ -601,7 +602,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
     @Override
     public void saveState ( final IMemento memento )
     {
-        memento.putString ( "columnSettings", this.gson.toJson ( this.eventsTable.getColumnSettings () ) );
+        memento.putString ( "columnSettings", this.gson.toJson ( this.eventsTable.getColumnSettings () ) ); //$NON-NLS-1$
         super.saveState ( memento );
     }
 

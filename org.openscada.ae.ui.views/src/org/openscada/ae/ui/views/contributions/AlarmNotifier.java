@@ -80,13 +80,13 @@ import org.slf4j.LoggerFactory;
 
 public class AlarmNotifier extends WorkbenchWindowControlContribution
 {
-    private static final List<String> ALARM_STATES = Arrays.asList ( new String[] { "NOT_OK", "NOT_OK_AKN", "NOT_OK_NOT_AKN" } );
+    private static final List<String> ALARM_STATES = Arrays.asList ( new String[] { "NOT_OK", "NOT_OK_AKN", "NOT_OK_NOT_AKN" } ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-    private static final List<String> ACK_STATES = Arrays.asList ( new String[] { "NOT_AKN", "NOT_OK_NOT_AKN" } );
+    private static final List<String> ACK_STATES = Arrays.asList ( new String[] { "NOT_AKN", "NOT_OK_NOT_AKN" } ); //$NON-NLS-1$ //$NON-NLS-2$
 
     private final static Logger logger = LoggerFactory.getLogger ( AlarmNotifier.class );
 
-    public static final String ID = "org.openscada.ae.ui.views.contributions.alarmnotifier";
+    public static final String ID = "org.openscada.ae.ui.views.contributions.alarmnotifier"; //$NON-NLS-1$
 
     private ResourceManager resourceManager;
 
@@ -251,11 +251,11 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution
     {
         try
         {
-            this.connectionService.getConnection ().write ( getItemId ( "ALERT_ACTIVE" ), Variant.FALSE, null );
+            this.connectionService.getConnection ().write ( getItemId ( "ALERT_ACTIVE" ), Variant.FALSE, null ); //$NON-NLS-1$
         }
         catch ( final Exception e )
         {
-            Activator.getDefault ().getLog ().log ( new Status ( IStatus.ERROR, Activator.PLUGIN_ID, "Failed to write bell command", e ) );
+            Activator.getDefault ().getLog ().log ( new Status ( IStatus.ERROR, Activator.PLUGIN_ID, Messages.AlarmNotifier_Status_ErrorWriteBellCommand, e ) );
         }
     }
 
@@ -270,12 +270,12 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution
             }
             catch ( final Exception e )
             {
-                logger.warn ( "Failed to apply configuration", e );
+                logger.warn ( "Failed to apply configuration", e ); //$NON-NLS-1$
             }
         }
         else
         {
-            logger.info ( "no configuration found" );
+            logger.info ( "no configuration found" ); //$NON-NLS-1$
         }
     }
 
@@ -321,7 +321,7 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution
 
     private String getItemId ( final String localId )
     {
-        return this.prefix + "." + localId;
+        return this.prefix + "." + localId; //$NON-NLS-1$
     }
 
     private void onConnect ()
@@ -343,7 +343,7 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution
             this.items.add ( item );
         }
 
-        final String id = getItemId ( "ALERT_ACTIVE" );
+        final String id = getItemId ( "ALERT_ACTIVE" ); //$NON-NLS-1$
         final DataItem item = new DataItem ( id );
         item.addObserver ( new Observer () {
 
@@ -473,7 +473,7 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution
 
     private Image getBellIcon ()
     {
-        return this.resourceManager.createImageWithDefault ( ImageDescriptor.createFromFile ( AlarmNotifier.class, "icons/bell.png" ) );
+        return this.resourceManager.createImageWithDefault ( ImageDescriptor.createFromFile ( AlarmNotifier.class, "icons/bell.png" ) ); //$NON-NLS-1$
     }
 
     private int numberOfAckAlarms ()
@@ -506,13 +506,13 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution
     {
         if ( this.connectionService == null || this.connectionService.getConnection ().getState () != ConnectionState.BOUND )
         {
-            return "disconnected";
+            return Messages.AlarmNotifier_Label_State_Disconnected;
         }
         if ( numberOfAlarms () + numberOfAckAlarms () == 0 )
         {
-            return "no Alarm";
+            return Messages.AlarmNotifier_Label_State_NoAlarm;
         }
-        return numberOfAckAlarms () + "/" + numberOfAlarms () + " Alarms";
+        return String.format ( Messages.AlarmNotifier_Label_State_AlarmsFormat, numberOfAckAlarms (), numberOfAlarms () );
     }
 
     private void setConnectionService ( final org.openscada.core.connection.provider.ConnectionService connectionService )
@@ -550,7 +550,7 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution
             }
             catch ( final Exception e )
             {
-                logger.error ( "could not play sound!", e );
+                logger.error ( "could not play sound!", e ); //$NON-NLS-1$
             }
         }
         else

@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -19,6 +19,7 @@
 
 package org.openscada.ae.ui.views.views;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
@@ -27,12 +28,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
-import org.openscada.ae.client.Connection;
 import org.openscada.ae.ui.views.config.ConfigurationHelper;
 import org.openscada.ae.ui.views.config.MonitorViewConfiguration;
 import org.openscada.ae.ui.views.model.DecoratedMonitor;
-import org.openscada.core.ConnectionInformation;
 import org.openscada.core.client.ConnectionState;
+import org.openscada.utils.str.StringHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -105,7 +105,8 @@ public class MonitorsView extends MonitorSubscriptionAlarmsEventsView
         {
             setPartName ( cfg.getLabel () );
         }
-        if (initialColumnSettings == null) {
+        if ( this.initialColumnSettings == null )
+        {
             this.monitorsTable.applyColumSettings ( cfg.getColumns () );
         }
     }
@@ -147,59 +148,31 @@ public class MonitorsView extends MonitorSubscriptionAlarmsEventsView
     protected void updateStatusBar ()
     {
         scheduleJob ( new Runnable () {
+            @Override
             public void run ()
             {
-                final StringBuilder label = new StringBuilder ();
-                if ( getConnection () != null )
-                {
-                    if ( getConnection ().getState () == ConnectionState.BOUND )
-                    {
-                        label.append ( "CONNECTED to " );
-                    }
-                    else
-                    {
-                        label.append ( "DISCONNECTED from " );
-                    }
-                    label.append ( makeString ( getConnection () ) );
-                }
-                else
-                {
-                    label.append ( "DISCONNECTED from " + makeString ( getConnection () ) );
-                }
-                if ( MonitorsView.this.monitorsId != null )
-                {
-                    label.append ( " | watching monitors: " + MonitorsView.this.monitorsId );
-                }
-                else
-                {
-                    label.append ( " | watching no monitors" );
-                }
-                label.append ( " | " );
-                label.append ( MonitorsView.this.monitors.size () );
-                label.append ( " monitors found" );
-
-                getSite ().getShell ().getDisplay ().syncExec ( new Runnable () {
-                    public void run ()
-                    {
-                        MonitorsView.this.getStateLabel ().setText ( label.toString () );
-                    }
-                } );
-            }
-
-            private String makeString ( final Connection connection )
-            {
-                if ( connection == null )
-                {
-                    return "<none>";
-                }
-                final ConnectionInformation ci = connection.getConnectionInformation ();
-                if ( ci == null )
-                {
-                    return "<none>";
-                }
-                return ci.toMaskedString ();
+                MonitorsView.this.getStateLabel ().setText ( createStatusLabel () );
             }
         } );
+    }
+
+    protected String createStatusLabel ()
+    {
+        final List<String> labels = new LinkedList<String> ();
+        labels.add ( getLabelForConnection () );
+
+        if ( this.monitorsId != null )
+        {
+            labels.add ( String.format ( Messages.MonitorsView_Label_Format_Monitors, this.monitorsId ) );
+        }
+        else
+        {
+            labels.add ( Messages.MonitorsView_Label_Format_NoMonitors );
+        }
+
+        labels.add ( String.format ( Messages.MonitorsView_Label_Format_CountMonitors, MonitorsView.this.monitors.size () ) );
+
+        return StringHelper.join ( labels, Messages.MonitorsView_Sep );
     }
 
     @Override

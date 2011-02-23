@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -87,15 +87,17 @@ public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarms
 
     protected void subscribe ()
     {
-        if ( this.getConnection () != null && this.monitorsId != null )
+        if ( getConnection () != null && this.monitorsId != null )
         {
             this.monitorListener = new MonitorListener () {
 
+                @Override
                 public void statusChanged ( final SubscriptionState state )
                 {
                     statusChangedMonitorSubscription ( state );
                 }
 
+                @Override
                 public void dataChanged ( final MonitorStatusInformation[] addedOrUpdated, final String[] removed )
                 {
                     MonitorSubscriptionAlarmsEventsView.this.dataChanged ( addedOrUpdated, removed );
@@ -107,7 +109,7 @@ public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarms
 
     protected void unSubscribe ()
     {
-        if ( this.getConnection () != null && this.monitorsId != null )
+        if ( getConnection () != null && this.monitorsId != null )
         {
             if ( this.monitorListener != null )
             {
@@ -120,6 +122,7 @@ public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarms
     private void clear ()
     {
         this.monitors.getRealm ().asyncExec ( new Runnable () {
+            @Override
             public void run ()
             {
                 if ( MonitorSubscriptionAlarmsEventsView.this.monitors != null )
@@ -156,6 +159,7 @@ public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarms
     protected void dataChanged ( final MonitorStatusInformation[] addedOrUpdated, final String[] removed )
     {
         scheduleJob ( new Runnable () {
+            @Override
             public void run ()
             {
                 performDataChanged ( addedOrUpdated, removed );
@@ -223,6 +227,7 @@ public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarms
         this.ackAction.setToolTipText ( Messages.MonitorSubscriptionAlarmsEventsView_AknAction_ToolTip );
         this.ackAction.setImageDescriptor ( ImageDescriptor.createFromURL ( Activator.getDefault ().getBundle ().getResource ( "icons/acknowledge.gif" ) ) ); //$NON-NLS-1$
         this.ackAction.setRunnable ( new Runnable () {
+            @Override
             public void run ()
             {
                 acknowledge ();
@@ -235,6 +240,7 @@ public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarms
         this.monitorsMap = new WritableMap ( SWTObservables.getRealm ( parent.getDisplay () ) );
         this.monitors = new WritableSet ( SWTObservables.getRealm ( parent.getDisplay () ) );
         this.monitorsMap.addMapChangeListener ( new IMapChangeListener () {
+            @Override
             public void handleMapChange ( final MapChangeEvent event )
             {
                 final Set<DecoratedMonitor> toRemove = new HashSet<DecoratedMonitor> ();
@@ -259,6 +265,7 @@ public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarms
             }
         } );
         this.monitors.addChangeListener ( new IChangeListener () {
+            @Override
             public void handleChange ( final ChangeEvent event )
             {
                 updateStatusBar ();
@@ -266,5 +273,6 @@ public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarms
         } );
     }
 
-    abstract protected void acknowledge ();
+    protected abstract void acknowledge ();
+
 }

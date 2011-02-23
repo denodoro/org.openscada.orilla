@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -87,6 +87,7 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
 
     // we are only interested if the connection is actually there
     final ConnectionStateListener connectionStateListener = new ConnectionStateListener () {
+        @Override
         public void stateChange ( final org.openscada.core.client.Connection changedConnection, final ConnectionState state, final Throwable error )
         {
             try
@@ -118,6 +119,7 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
     };
 
     final ConnectionTracker.Listener connectionServiceListener = new Listener () {
+        @Override
         public void setConnection ( final org.openscada.core.connection.provider.ConnectionService connectionService )
         {
             if ( connectionService == null )
@@ -315,6 +317,7 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
         {
             getViewSite ().getWorkbenchWindow ().getSelectionService ().addSelectionListener ( this.selectionListener = new ISelectionListener () {
 
+                @Override
                 public void selectionChanged ( final IWorkbenchPart part, final ISelection selection )
                 {
                     AbstractAlarmsEventsView.this.setSelection ( selection );
@@ -452,10 +455,12 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
                 {
                     getRealm ().asyncExec ( new Runnable () {
 
+                        @Override
                         public void run ()
                         {
                             AbstractAlarmsEventsView.this.getRealm ().timerExec ( 1000, new Runnable () {
 
+                                @Override
                                 public void run ()
                                 {
                                     processQueue ();
@@ -484,5 +489,39 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
                 r.run ();
             }
         }
+    }
+
+    protected String getLabelForConnection ()
+    {
+        if ( getConnection () != null )
+        {
+            final ConnectionState state = getConnection ().getState ();
+            if ( state == ConnectionState.BOUND )
+            {
+                return String.format ( Messages.AbstractAlarmsEventsView_Label_Format_Connected, makeStringFromConnection ( getConnection () ) );
+            }
+            else
+            {
+                return String.format ( Messages.AbstractAlarmsEventsView_Label_Format_Disconnected, state, makeStringFromConnection ( getConnection () ) );
+            }
+        }
+        else
+        {
+            return String.format ( Messages.AbstractAlarmsEventsView_Label_Format_NoConnection, makeStringFromConnection ( getConnection () ) );
+        }
+    }
+
+    protected String makeStringFromConnection ( final Connection connection )
+    {
+        if ( connection == null )
+        {
+            return Messages.AbstractAlarmsEventsView_Label_Format_NoConnection_String;
+        }
+        final ConnectionInformation ci = connection.getConnectionInformation ();
+        if ( ci == null )
+        {
+            return Messages.AbstractAlarmsEventsView_Label_Format_NoConnection_String;
+        }
+        return ci.toMaskedString ();
     }
 }
