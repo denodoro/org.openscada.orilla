@@ -50,6 +50,7 @@ import org.openscada.ae.Event.Fields;
 import org.openscada.ae.ui.views.Messages;
 import org.openscada.ae.ui.views.Settings;
 import org.openscada.ae.ui.views.dialog.SearchType;
+import org.openscada.ae.ui.views.filter.EventViewerFilter;
 import org.openscada.ae.ui.views.model.DecoratedEvent;
 import org.openscada.core.VariantComparator;
 import org.openscada.utils.lang.Immutable;
