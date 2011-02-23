@@ -110,7 +110,7 @@ public class FilterQueryByExampleComposite extends Composite
                 @Override
                 public void widgetSelected ( final SelectionEvent e )
                 {
-                    toggle ();
+                    updateFromCheckbox ();
                 }
             } );
 
@@ -134,8 +134,6 @@ public class FilterQueryByExampleComposite extends Composite
             this.fromTime = new DateTime ( wrapper, SWT.TIME | needBorder () );
             this.fromDate.addSelectionListener ( updater );
             this.fromTime.addSelectionListener ( updater );
-            this.fromDate.setEnabled ( false );
-            this.fromTime.setEnabled ( false );
 
             this.toLabel = new Label ( parent, SWT.NONE );
             this.toLabel.setText ( Messages.to );
@@ -148,11 +146,10 @@ public class FilterQueryByExampleComposite extends Composite
             this.toDate.addSelectionListener ( updater );
             this.toTime.addSelectionListener ( updater );
 
-            this.toDate.setEnabled ( false );
-            this.toTime.setEnabled ( false );
+            updateFromCheckbox ();
         }
 
-        protected void toggle ()
+        protected void updateFromCheckbox ()
         {
             final boolean enabled = this.useCheckbox.getSelection ();
             this.fromDate.setEnabled ( enabled );
@@ -211,6 +208,9 @@ public class FilterQueryByExampleComposite extends Composite
 
         public void setFrom ( final Date date )
         {
+            this.useCheckbox.setSelection ( true );
+            updateFromCheckbox ();
+
             final Calendar c = new GregorianCalendar ();
             c.setTime ( date );
 
@@ -220,6 +220,9 @@ public class FilterQueryByExampleComposite extends Composite
 
         public void setTo ( final Date date )
         {
+            this.useCheckbox.setSelection ( true );
+            updateFromCheckbox ();
+
             final Calendar c = new GregorianCalendar ();
             c.setTime ( date );
 
