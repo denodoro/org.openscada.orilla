@@ -19,7 +19,6 @@
 
 package org.openscada.ae.ui.views.views;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,8 +31,6 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.databinding.viewers.ObservableSetContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
-import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -45,15 +42,12 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.openscada.ae.Event;
 import org.openscada.ae.Event.Fields;
 import org.openscada.ae.ui.views.Messages;
 import org.openscada.ae.ui.views.Settings;
 import org.openscada.ae.ui.views.dialog.SearchType;
 import org.openscada.ae.ui.views.filter.EventViewerFilter;
 import org.openscada.ae.ui.views.model.DecoratedEvent;
-import org.openscada.core.VariantComparator;
-import org.openscada.utils.lang.Immutable;
 import org.openscada.utils.lang.Pair;
 
 public class EventViewTable extends Composite
@@ -63,147 +57,6 @@ public class EventViewTable extends Composite
     private final WritableSet events;
 
     private volatile boolean scrollLock = false;
-
-    @Immutable
-    public static class Column implements Serializable
-    {
-        private static final long serialVersionUID = -2535195597442653236L;
-
-        private final String column;
-
-        private final Fields field;
-
-        public static Column reservedColumnId = new Column ( "id" ); //$NON-NLS-1$
-
-        public static Column reservedColumnSourceTimestamp = new Column ( "sourceTimestamp" ); //$NON-NLS-1$
-
-        public static Column reservedColumnEntryTimestamp = new Column ( "entryTimestamp" ); //$NON-NLS-1$
-
-        public Column ( final String column )
-        {
-            this.column = column;
-            this.field = null;
-        }
-
-        public Column ( final Fields field )
-        {
-            this.column = field.getName ();
-            this.field = field;
-        }
-
-        public String getColumn ()
-        {
-            return this.column;
-        }
-
-        public Fields getField ()
-        {
-            return this.field;
-        }
-
-        @Override
-        public int hashCode ()
-        {
-            final int prime = 31;
-            int result = 1;
-            result = prime * result + ( this.column == null ? 0 : this.column.hashCode () );
-            result = prime * result + ( this.field == null ? 0 : this.field.hashCode () );
-            return result;
-        }
-
-        @Override
-        public boolean equals ( final Object obj )
-        {
-            if ( this == obj )
-            {
-                return true;
-            }
-            if ( obj == null )
-            {
-                return false;
-            }
-            if ( getClass () != obj.getClass () )
-            {
-                return false;
-            }
-            final Column other = (Column)obj;
-            if ( this.column == null )
-            {
-                if ( other.column != null )
-                {
-                    return false;
-                }
-            }
-            else if ( !this.column.equals ( other.column ) )
-            {
-                return false;
-            }
-            if ( this.field == null )
-            {
-                if ( other.field != null )
-                {
-                    return false;
-                }
-            }
-            else if ( !this.field.equals ( other.field ) )
-            {
-                return false;
-            }
-            return true;
-        }
-    }
-
-    private static class Sorter extends ViewerSorter
-    {
-        private final Column column;
-
-        private final int dir;
-
-        public Sorter ( final Column column, final int dir )
-        {
-            this.column = column;
-            this.dir = dir;
-        }
-
-        @Override
-        public int compare ( final Viewer viewer, final Object o1, final Object o2 )
-        {
-            final Event e1 = ( (DecoratedEvent)o1 ).getEvent ();
-            final Event e2 = ( (DecoratedEvent)o2 ).getEvent ();
-
-            final int cmpId = e1.getId ().compareTo ( e2.getId () );
-            final int cmpSourceTs = e1.getSourceTimestamp ().compareTo ( e2.getSourceTimestamp () );
-            final int cmpEntryTs = e1.getEntryTimestamp ().compareTo ( e2.getEntryTimestamp () );
-            final int cmpSequence = new VariantComparator ().compare ( e1.getAttributes ().get ( "sequence" ), e2.getAttributes ().get ( "sequence" ) ); //$NON-NLS-1$ //$NON-NLS-2$
-            int result = 0;
-
-            if ( this.column == Column.reservedColumnId )
-            {
-                result = chainCompare ( cmpId, cmpSourceTs, cmpSequence, cmpEntryTs );
-            }
-            else if ( this.column == Column.reservedColumnSourceTimestamp )
-            {
-                result = chainCompare ( cmpSourceTs, cmpSequence, cmpEntryTs, cmpId );
-            }
-            else if ( this.column == Column.reservedColumnEntryTimestamp )
-            {
-                result = chainCompare ( cmpEntryTs, cmpSourceTs, cmpSequence, cmpId );
-            }
-            return result;
-        }
-
-        private int chainCompare ( final int... cmp )
-        {
-            for ( final int i : cmp )
-            {
-                if ( i != 0 )
-                {
-                    return ( this.dir == SWT.DOWN ? -1 : 1 ) * i;
-                }
-            }
-            return 0;
-        }
-    }
 
     private static class SortListener extends SelectionAdapter
     {
@@ -221,8 +74,8 @@ public class EventViewTable extends Composite
             final TableColumn newColumn = (TableColumn)e.widget;
             final TableColumn currentColumn = table.getSortColumn ();
 
-            final Column column = (Column)newColumn.getData ( COLUMN_KEY );
-            if ( column == Column.reservedColumnSourceTimestamp || column == Column.reservedColumnEntryTimestamp )
+            final EventTableColumn column = (EventTableColumn)newColumn.getData ( COLUMN_KEY );
+            if ( column == EventTableColumn.reservedColumnSourceTimestamp || column == EventTableColumn.reservedColumnEntryTimestamp )
             {
                 final int currentDir = table.getSortDirection ();
                 int newDir = SWT.UP;
@@ -235,7 +88,7 @@ public class EventViewTable extends Composite
                     table.setSortColumn ( newColumn );
                 }
                 table.setSortDirection ( newDir );
-                this.tableViewer.setSorter ( new Sorter ( column, newDir ) );
+                this.tableViewer.setSorter ( new EventTableSorter ( column, newDir ) );
             }
         }
     }
@@ -248,28 +101,28 @@ public class EventViewTable extends Composite
 
     private final TableViewer tableViewer;
 
-    private static final List<Column> columns = new ArrayList<Column> ();
+    private static final List<EventTableColumn> columns = new ArrayList<EventTableColumn> ();
 
     static
     {
-        columns.add ( Column.reservedColumnId );
-        columns.add ( Column.reservedColumnSourceTimestamp );
-        columns.add ( new Column ( Fields.EVENT_TYPE ) );
-        columns.add ( new Column ( Fields.VALUE ) );
-        columns.add ( new Column ( Fields.MONITOR_TYPE ) );
-        columns.add ( new Column ( Fields.ITEM ) );
-        columns.add ( new Column ( Fields.MESSAGE ) );
-        columns.add ( new Column ( Fields.ACTOR_NAME ) );
-        columns.add ( new Column ( Fields.ACTOR_TYPE ) );
+        columns.add ( EventTableColumn.reservedColumnId );
+        columns.add ( EventTableColumn.reservedColumnSourceTimestamp );
+        columns.add ( new EventTableColumn ( Fields.EVENT_TYPE ) );
+        columns.add ( new EventTableColumn ( Fields.VALUE ) );
+        columns.add ( new EventTableColumn ( Fields.MONITOR_TYPE ) );
+        columns.add ( new EventTableColumn ( Fields.ITEM ) );
+        columns.add ( new EventTableColumn ( Fields.MESSAGE ) );
+        columns.add ( new EventTableColumn ( Fields.ACTOR_NAME ) );
+        columns.add ( new EventTableColumn ( Fields.ACTOR_TYPE ) );
         for ( final Fields field : Fields.values () )
         {
-            final Column column = new Column ( field );
+            final EventTableColumn column = new EventTableColumn ( field );
             if ( !columns.contains ( column ) )
             {
                 columns.add ( column );
             }
         }
-        columns.add ( Column.reservedColumnEntryTimestamp );
+        columns.add ( EventTableColumn.reservedColumnEntryTimestamp );
     }
 
     public EventViewTable ( final Composite parent, final int style, final WritableSet events, final Action ackAction, final Action commentAction, final List<ColumnProperties> columnSettings )
@@ -288,7 +141,7 @@ public class EventViewTable extends Composite
         this.tableViewer.getTable ().setHeaderVisible ( true );
         this.tableViewer.getTable ().setLinesVisible ( true );
         this.tableViewer.setUseHashlookup ( true );
-        this.tableViewer.setSorter ( new Sorter ( Column.reservedColumnSourceTimestamp, SWT.DOWN ) );
+        this.tableViewer.setSorter ( new EventTableSorter ( EventTableColumn.reservedColumnSourceTimestamp, SWT.DOWN ) );
         this.tableViewer.getTable ().setSortDirection ( SWT.DOWN );
         this.tableViewer.getTable ().setMenu ( createContextMenu ( this.tableViewer.getTable () ) );
 
@@ -298,6 +151,7 @@ public class EventViewTable extends Composite
         this.tableViewer.setInput ( this.events );
 
         contentProvider.getRealizedElements ().addSetChangeListener ( new ISetChangeListener () {
+            @Override
             public void handleSetChange ( final SetChangeEvent event )
             {
                 if ( !EventViewTable.this.scrollLock )
@@ -392,7 +246,7 @@ public class EventViewTable extends Composite
     {
         final SortListener sortListener = new SortListener ( table );
 
-        for ( final Column column : columns )
+        for ( final EventTableColumn column : columns )
         {
             final TableViewerColumn fieldColumn = new TableViewerColumn ( table, SWT.NONE );
             fieldColumn.getColumn ().setText ( Messages.getString ( column.getColumn () ) );
@@ -400,12 +254,12 @@ public class EventViewTable extends Composite
             fieldColumn.getColumn ().setResizable ( true );
             fieldColumn.getColumn ().setMoveable ( true );
             fieldColumn.getColumn ().setData ( COLUMN_KEY, column );
-            if ( column == Column.reservedColumnId )
+            if ( column == EventTableColumn.reservedColumnId )
             {
                 fieldColumn.getColumn ().setWidth ( 0 );
                 fieldColumn.getColumn ().addSelectionListener ( sortListener );
             }
-            if ( column == Column.reservedColumnSourceTimestamp || column == Column.reservedColumnEntryTimestamp )
+            if ( column == EventTableColumn.reservedColumnSourceTimestamp || column == EventTableColumn.reservedColumnEntryTimestamp )
             {
                 fieldColumn.getColumn ().setWidth ( 140 );
                 fieldColumn.getColumn ().addSelectionListener ( sortListener );

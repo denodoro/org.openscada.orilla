@@ -125,8 +125,7 @@ public class LabelProviderSupport
 
     public String toLabel ( final DecoratedEvent event, final Fields field )
     {
-        final Variant value = event.getEvent ().getField ( field );
-        return toLabel ( value );
+        return toLabel ( event.getEvent ().getField ( field ) );
     }
 
     private SpecialDate toSpecial ( final Date date )

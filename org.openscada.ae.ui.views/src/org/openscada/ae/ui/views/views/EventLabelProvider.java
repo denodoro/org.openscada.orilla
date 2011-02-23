@@ -27,23 +27,22 @@ import org.eclipse.jface.databinding.viewers.ObservableMapLabelProvider;
 import org.eclipse.swt.graphics.Image;
 import org.openscada.ae.Event.Fields;
 import org.openscada.ae.ui.views.model.DecoratedEvent;
-import org.openscada.ae.ui.views.views.EventViewTable.Column;
 import org.openscada.core.Variant;
 
 public class EventLabelProvider extends ObservableMapLabelProvider
 {
-    final private List<Column> columns;
+    final private List<EventTableColumn> columns;
 
     final private LabelProviderSupport labelProviderSupport;
 
-    public EventLabelProvider ( final IObservableMap attributeMap, final List<Column> columns, final TimeZone timeZone )
+    public EventLabelProvider ( final IObservableMap attributeMap, final List<EventTableColumn> columns, final TimeZone timeZone )
     {
         super ( attributeMap );
         this.columns = columns;
         this.labelProviderSupport = new LabelProviderSupport ( timeZone );
     }
 
-    public EventLabelProvider ( final IObservableMap[] attributeMaps, final List<Column> columns, final TimeZone timeZone )
+    public EventLabelProvider ( final IObservableMap[] attributeMaps, final List<EventTableColumn> columns, final TimeZone timeZone )
     {
         super ( attributeMaps );
         this.columns = columns;
@@ -59,16 +58,16 @@ public class EventLabelProvider extends ObservableMapLabelProvider
         }
         final DecoratedEvent event = (DecoratedEvent)element;
 
-        final Column column = this.columns.get ( columnIndex );
-        if ( column == Column.reservedColumnId )
+        final EventTableColumn column = this.columns.get ( columnIndex );
+        if ( column == EventTableColumn.reservedColumnId )
         {
             return event.getEvent ().getId ().toString ();
         }
-        if ( column == Column.reservedColumnSourceTimestamp )
+        if ( column == EventTableColumn.reservedColumnSourceTimestamp )
         {
             return this.labelProviderSupport.getDf ().format ( event.getEvent ().getSourceTimestamp () );
         }
-        if ( column == Column.reservedColumnEntryTimestamp )
+        if ( column == EventTableColumn.reservedColumnEntryTimestamp )
         {
             return this.labelProviderSupport.getDf ().format ( event.getEvent ().getEntryTimestamp () );
         }
