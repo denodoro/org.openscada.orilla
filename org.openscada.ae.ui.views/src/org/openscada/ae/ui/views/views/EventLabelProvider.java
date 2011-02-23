@@ -33,21 +33,21 @@ import org.openscada.core.Variant;
 public class EventLabelProvider extends ObservableMapLabelProvider
 {
     final private List<Column> columns;
-    
+
     final private LabelProviderSupport labelProviderSupport;
 
-    public EventLabelProvider ( final IObservableMap attributeMap, final List<Column> columns, TimeZone timeZone )
+    public EventLabelProvider ( final IObservableMap attributeMap, final List<Column> columns, final TimeZone timeZone )
     {
         super ( attributeMap );
         this.columns = columns;
-        this.labelProviderSupport = new LabelProviderSupport (timeZone);
+        this.labelProviderSupport = new LabelProviderSupport ( timeZone );
     }
 
-    public EventLabelProvider ( final IObservableMap[] attributeMaps, final List<Column> columns, TimeZone timeZone )
+    public EventLabelProvider ( final IObservableMap[] attributeMaps, final List<Column> columns, final TimeZone timeZone )
     {
         super ( attributeMaps );
         this.columns = columns;
-        this.labelProviderSupport = new LabelProviderSupport (timeZone);
+        this.labelProviderSupport = new LabelProviderSupport ( timeZone );
     }
 
     @Override
@@ -66,11 +66,11 @@ public class EventLabelProvider extends ObservableMapLabelProvider
         }
         if ( column == Column.reservedColumnSourceTimestamp )
         {
-            return labelProviderSupport.getDf ().format ( event.getEvent ().getSourceTimestamp () );
+            return this.labelProviderSupport.getDf ().format ( event.getEvent ().getSourceTimestamp () );
         }
         if ( column == Column.reservedColumnEntryTimestamp )
         {
-            return labelProviderSupport.getDf ().format ( event.getEvent ().getEntryTimestamp () );
+            return this.labelProviderSupport.getDf ().format ( event.getEvent ().getEntryTimestamp () );
         }
         if ( columnIndex > this.columns.size () - 1 )
         {
@@ -88,7 +88,7 @@ public class EventLabelProvider extends ObservableMapLabelProvider
                 return Messages.EventLabelProvider_EmptyString;
             }
         }
-        return labelProviderSupport.toLabel ( event, column.getField () );
+        return this.labelProviderSupport.toLabel ( event, column.getField () );
 
     }
 
@@ -100,7 +100,7 @@ public class EventLabelProvider extends ObservableMapLabelProvider
             return null;
         }
         final DecoratedEvent event = (DecoratedEvent)element;
-        if ( ( columnIndex == 2 ) && event.isActive () )
+        if ( columnIndex == 2 && event.isActive () )
         {
             switch ( event.getMonitor ().getStatus () )
             {
