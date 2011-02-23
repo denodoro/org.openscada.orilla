@@ -46,6 +46,7 @@ import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IMemento;
@@ -72,7 +73,6 @@ import org.openscada.utils.lang.Pair;
 import org.openscada.utils.str.StringHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.profiler.Profiler;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -374,13 +374,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
         {
             return;
         }
-
-        final Profiler p = new Profiler ( "performDataChanged" );
-
-        p.start ( "Decorate events" );
         final Set<DecoratedEvent> decoratedEvents = decorateEvents ( addedEvents );
-
-        p.start ( "Merge" );
 
         for ( final DecoratedEvent event : decoratedEvents )
         {
@@ -397,10 +391,14 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
                 d.add ( event );
             }
         }
-        p.start ( "add" );
-        EventPoolView.this.pool.addAll ( decoratedEvents );
-        p.stop ();
-        p.print ();
+
+        BusyIndicator.showWhile ( getSite ().getShell ().getDisplay (), new Runnable () {
+            @Override
+            public void run ()
+            {
+                EventPoolView.this.pool.addAll ( decoratedEvents );
+            }
+        } );
     }
 
     @SuppressWarnings ( "unchecked" )
