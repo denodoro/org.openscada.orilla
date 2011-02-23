@@ -23,13 +23,14 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.nebula.widgets.cdatetime.CDT;
-import org.eclipse.nebula.widgets.cdatetime.CDateTime;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
@@ -40,6 +41,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.openscada.ae.ui.views.Messages;
@@ -79,16 +81,19 @@ public class FilterQueryByExampleComposite extends Composite
 
         private final Label captionLabel;
 
-        @SuppressWarnings ( "unused" )
-        private final Label spacerLabel;
-
         private final Label fromLabel;
-
-        private final CDateTime fromDate;
 
         private final Label toLabel;
 
-        private final CDateTime toDate;
+        private final DateTime fromDate;
+
+        private final DateTime fromTime;
+
+        private final DateTime toDate;
+
+        private final DateTime toTime;
+
+        private final Button useCheckbox;
 
         private static final DateFormat isoDateFormat = new SimpleDateFormat ( "yyyy-MM-dd HH:mm:ss" ); //$NON-NLS-1$
 
@@ -99,61 +104,106 @@ public class FilterQueryByExampleComposite extends Composite
             this.field = field;
             this.captionLabel = new Label ( parent, SWT.NONE );
             this.captionLabel.setText ( caption );
-            this.spacerLabel = new Label ( parent, SWT.NONE );
+
+            this.useCheckbox = new Button ( parent, SWT.CHECK );
+            this.useCheckbox.addSelectionListener ( new SelectionAdapter () {
+                @Override
+                public void widgetSelected ( final SelectionEvent e )
+                {
+                    toggle ();
+                }
+            } );
+
             this.fromLabel = new Label ( parent, SWT.NONE );
             this.fromLabel.setText ( Messages.from );
-            this.fromDate = new CDateTime ( parent, CDT.BORDER | CDT.DATE_MEDIUM | CDT.TIME_MEDIUM | CDT.SPINNER | CDT.CLOCK_24_HOUR | CDT.MULTI | CDT.DROP_DOWN );
-            this.fromDate.setLayoutData ( dateLayoutData );
-            this.fromDate.addSelectionListener ( new SelectionAdapter () {
+
+            final SelectionAdapter updater = new SelectionAdapter () {
                 @Override
                 public void widgetSelected ( final SelectionEvent e )
                 {
                     filterModified.onModified ();
                 }
-            } );
+            };
+
+            Composite wrapper;
+
+            wrapper = new Composite ( parent, SWT.NONE );
+            wrapper.setLayout ( new GridLayout ( 2, false ) );
+
+            this.fromDate = new DateTime ( wrapper, SWT.DATE | needBorder () );
+            this.fromTime = new DateTime ( wrapper, SWT.TIME | needBorder () );
+            this.fromDate.addSelectionListener ( updater );
+            this.fromTime.addSelectionListener ( updater );
+            this.fromDate.setEnabled ( false );
+            this.fromTime.setEnabled ( false );
+
             this.toLabel = new Label ( parent, SWT.NONE );
             this.toLabel.setText ( Messages.to );
-            this.toDate = new CDateTime ( parent, CDT.BORDER | CDT.DATE_MEDIUM | CDT.TIME_MEDIUM | CDT.SPINNER | CDT.CLOCK_24_HOUR | CDT.MULTI | CDT.DROP_DOWN );
-            this.toDate.setLayoutData ( dateLayoutData );
-            this.toDate.addSelectionListener ( new SelectionAdapter () {
-                @Override
-                public void widgetSelected ( final SelectionEvent e )
-                {
-                    filterModified.onModified ();
-                }
-            } );
+
+            wrapper = new Composite ( parent, SWT.NONE );
+            wrapper.setLayout ( new GridLayout ( 2, false ) );
+
+            this.toDate = new DateTime ( wrapper, SWT.DATE | needBorder () );
+            this.toTime = new DateTime ( wrapper, SWT.TIME | needBorder () );
+            this.toDate.addSelectionListener ( updater );
+            this.toTime.addSelectionListener ( updater );
+
+            this.toDate.setEnabled ( false );
+            this.toTime.setEnabled ( false );
         }
 
+        protected void toggle ()
+        {
+            final boolean enabled = this.useCheckbox.getSelection ();
+            this.fromDate.setEnabled ( enabled );
+            this.fromTime.setEnabled ( enabled );
+            this.toDate.setEnabled ( enabled );
+            this.toTime.setEnabled ( enabled );
+        }
+
+        @Override
         public Filter asExpression ()
         {
             FilterAssertion assertionFrom = null;
             FilterAssertion assertionTo = null;
             final FilterExpression expression = new FilterExpression ();
             expression.setOperator ( Operator.AND );
-            if ( this.fromDate.getSelection () != null )
+
+            if ( this.useCheckbox.getSelection () )
             {
-                assertionFrom = new FilterAssertion ( this.field, Assertion.GREATEREQ, isoDateFormat.format ( this.fromDate.getSelection () ) );
+                // from
+
+                final Calendar from = new GregorianCalendar ();
+                from.set ( this.fromDate.getYear (), this.fromDate.getMonth (), this.fromDate.getDay (), this.fromTime.getHours (), this.fromTime.getMinutes (), this.fromTime.getSeconds () );
+
+                assertionFrom = new FilterAssertion ( this.field, Assertion.GREATEREQ, isoDateFormat.format ( from.getTime () ) );
                 expression.getFilterSet ().add ( assertionFrom );
-            }
-            if ( this.toDate.getSelection () != null )
-            {
-                assertionTo = new FilterAssertion ( this.field, Assertion.LESSEQ, isoDateFormat.format ( this.toDate.getSelection () ) );
+
+                // to
+
+                final Calendar to = new GregorianCalendar ();
+                to.set ( this.fromDate.getYear (), this.fromDate.getMonth (), this.fromDate.getDay (), this.fromTime.getHours (), this.fromTime.getMinutes (), this.fromTime.getSeconds () );
+
+                assertionTo = new FilterAssertion ( this.field, Assertion.LESSEQ, isoDateFormat.format ( to.getTime () ) );
                 expression.getFilterSet ().add ( assertionTo );
             }
+
             return expression;
         }
 
+        @Override
         public boolean isEmpty ()
         {
-            return ( this.fromDate.getSelection () == null ) && ( this.toDate.getSelection () == null );
+            return !this.useCheckbox.getSelection ();
         }
 
+        @Override
         public void clear ()
         {
-            this.fromDate.setSelection ( null );
-            this.toDate.setSelection ( null );
+            this.useCheckbox.setSelection ( false );
         }
 
+        @Override
         public void focus ()
         {
             this.fromDate.setFocus ();
@@ -161,12 +211,21 @@ public class FilterQueryByExampleComposite extends Composite
 
         public void setFrom ( final Date date )
         {
-            this.fromDate.setSelection ( date );
+            final Calendar c = new GregorianCalendar ();
+            c.setTime ( date );
+
+            this.fromDate.setDate ( c.get ( Calendar.YEAR ), c.get ( Calendar.MONTH ), c.get ( Calendar.DAY_OF_MONTH ) );
+            this.fromTime.setTime ( c.get ( Calendar.HOUR_OF_DAY ), c.get ( Calendar.MINUTE ), c.get ( Calendar.SECOND ) );
         }
 
         public void setTo ( final Date date )
         {
-            this.toDate.setSelection ( date );
+            final Calendar c = new GregorianCalendar ();
+            c.setTime ( date );
+
+            this.toDate.setDate ( c.get ( Calendar.YEAR ), c.get ( Calendar.MONTH ), c.get ( Calendar.DAY_OF_MONTH ) );
+            this.toTime.setTime ( c.get ( Calendar.HOUR_OF_DAY ), c.get ( Calendar.MINUTE ), c.get ( Calendar.SECOND ) );
+
         }
     }
 
@@ -188,11 +247,13 @@ public class FilterQueryByExampleComposite extends Composite
             this.notCheckBox = new Button ( parent, SWT.CHECK );
             this.notCheckBox.setText ( Messages.not );
             this.notCheckBox.addSelectionListener ( new SelectionListener () {
+                @Override
                 public void widgetSelected ( final SelectionEvent e )
                 {
                     filterModified.onModified ();
                 }
 
+                @Override
                 public void widgetDefaultSelected ( final SelectionEvent e )
                 {
                 }
@@ -219,6 +280,7 @@ public class FilterQueryByExampleComposite extends Composite
             } );
         }
 
+        @Override
         public Filter asExpression ()
         {
             FilterAssertion assertion = null;
@@ -237,16 +299,19 @@ public class FilterQueryByExampleComposite extends Composite
             return assertion;
         }
 
+        @Override
         public boolean isEmpty ()
         {
             return this.textText.getText ().trim ().length () == 0;
         }
 
+        @Override
         public void clear ()
         {
             this.textText.setText ( "" );//$NON-NLS-1$
         }
 
+        @Override
         public void focus ()
         {
             this.textText.setFocus ();
@@ -312,9 +377,10 @@ public class FilterQueryByExampleComposite extends Composite
         layout.numColumns = 6;
         layout.marginHeight = 12;
         layout.marginWidth = 12;
-        this.setLayout ( layout );
+        setLayout ( layout );
 
         final FilterModified filterModified = new FilterModified () {
+            @Override
             public void onModified ()
             {
                 final String filterString = toFilter ().toString ();
@@ -327,7 +393,7 @@ public class FilterQueryByExampleComposite extends Composite
         this.fields.put ( "message", new TextFieldEntry ( this, "message", Messages.getString ( "message" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         this.fields.put ( "monitorType", new TextFieldEntry ( this, "monitorType", Messages.getString ( "monitorType" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         this.fields.put ( "eventType", new TextFieldEntry ( this, "eventType", Messages.getString ( "eventType" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-        this.fields.put ( "item" , new TextFieldEntry ( this, "item", Messages.getString ( "item" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        this.fields.put ( "item", new TextFieldEntry ( this, "item", Messages.getString ( "item" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         this.fields.put ( "value", new NumberFieldEntry ( this, "value", Messages.getString ( "value" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         this.fields.put ( "priority", new NumberFieldEntry ( this, "priority", Messages.getString ( "priority" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         this.fields.put ( "source", new TextFieldEntry ( this, "source", Messages.getString ( "source" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -362,10 +428,15 @@ public class FilterQueryByExampleComposite extends Composite
         this.fields.get ( "sourceTimestamp" ).focus (); //$NON-NLS-1$
     }
 
+    public static int needBorder ()
+    {
+        return Platform.WS_GTK.equals ( Platform.getWS () ) ? SWT.NONE : SWT.BORDER;
+    }
+
     private void populateFromFilter ( final String filterString )
     {
         // no filter given
-        if ( ( filterString == null ) || ( filterString.length () == 0 ) )
+        if ( filterString == null || filterString.length () == 0 )
         {
             return;
         }
@@ -394,7 +465,7 @@ public class FilterQueryByExampleComposite extends Composite
                 final FilterExpression subFilterExpression = (FilterExpression)subFilter;
                 if ( subFilterExpression.getOperator () == Operator.NOT )
                 {
-                    if ( ( subFilterExpression.getFilterSet ().size () == 1 ) && subFilterExpression.getFilterSet ().get ( 0 ).isAssertion () )
+                    if ( subFilterExpression.getFilterSet ().size () == 1 && subFilterExpression.getFilterSet ().get ( 0 ).isAssertion () )
                     {
                         populateFromAssertion ( true, (FilterAssertion)subFilterExpression.getFilterSet ().get ( 0 ) );
                     }
@@ -405,27 +476,27 @@ public class FilterQueryByExampleComposite extends Composite
                     String attribute = null;
                     String from = null;
                     String to = null;
-                    if ( ( subFilterExpression.getFilterSet ().size () == 1 ) || ( ( subFilterExpression.getFilterSet ().size () == 2 ) && subFilterExpression.getFilterSet ().get ( 0 ).isAssertion () ) )
+                    if ( subFilterExpression.getFilterSet ().size () == 1 || subFilterExpression.getFilterSet ().size () == 2 && subFilterExpression.getFilterSet ().get ( 0 ).isAssertion () )
                     {
                         final FilterAssertion filterAssertion = (FilterAssertion)subFilterExpression.getFilterSet ().get ( 0 );
                         attribute = filterAssertion.getAttribute ();
-                        if ( ( filterAssertion != null ) && ( filterAssertion.getAssertion () == Assertion.GREATEREQ ) )
+                        if ( filterAssertion != null && filterAssertion.getAssertion () == Assertion.GREATEREQ )
                         {
                             from = (String)filterAssertion.getValue ();
                         }
-                        else if ( ( filterAssertion != null ) && ( filterAssertion.getAssertion () == Assertion.LESSEQ ) )
+                        else if ( filterAssertion != null && filterAssertion.getAssertion () == Assertion.LESSEQ )
                         {
                             to = (String)filterAssertion.getValue ();
                         }
                     }
-                    if ( ( subFilterExpression.getFilterSet ().size () == 2 ) && subFilterExpression.getFilterSet ().get ( 1 ).isAssertion () )
+                    if ( subFilterExpression.getFilterSet ().size () == 2 && subFilterExpression.getFilterSet ().get ( 1 ).isAssertion () )
                     {
                         final FilterAssertion filterAssertion = (FilterAssertion)subFilterExpression.getFilterSet ().get ( 1 );
-                        if ( ( filterAssertion != null ) && ( filterAssertion.getAssertion () == Assertion.GREATEREQ ) )
+                        if ( filterAssertion != null && filterAssertion.getAssertion () == Assertion.GREATEREQ )
                         {
                             from = (String)filterAssertion.getValue ();
                         }
-                        else if ( ( filterAssertion != null ) && ( filterAssertion.getAssertion () == Assertion.LESSEQ ) )
+                        else if ( filterAssertion != null && filterAssertion.getAssertion () == Assertion.LESSEQ )
                         {
                             to = (String)filterAssertion.getValue ();
                         }
