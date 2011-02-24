@@ -21,6 +21,7 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiDirsComponent">
     <ROW Directory="APPDIR" Directory_Parent="TARGETDIR" DefaultDir="APPDIR:." IsPseudoRoot="1"/>
+    <ROW Directory="LocalAppDataFolder" Directory_Parent="TARGETDIR" DefaultDir="LocalA~1|LocalAppDataFolder" IsPseudoRoot="1"/>
     <ROW Directory="META_INF_2_DIR" Directory_Parent="org.eclipse.ui.intro.universal_3.2.402.r36_v20100702_DIR" DefaultDir="META-INF"/>
     <ROW Directory="META_INF_3_DIR" Directory_Parent="org.eclipse.equinox.launcher.win32.win32.x86_64_1.1.1.R36x_v20100810_DIR" DefaultDir="META-INF"/>
     <ROW Directory="META_INF_DIR" Directory_Parent="org.eclipse.rcp_3.6.1.r361_v20100827_9OArFLdFjY_ThSQXmKvKz0_T_DIR" DefaultDir="META-INF"/>
@@ -869,6 +870,7 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiShortsComponent">
     <ROW Shortcut="Check_for_Updates" Directory_="SHORTCUTDIR" Name="Checkf~1|Check for Updates" Component_="updater.exe" Target="[#updater.exe]" Arguments="/checknow" Hotkey="0" IconIndex="0" ShowCmd="1" WkDir="APPDIR"/>
+    <ROW Shortcut="OpenSCADA_Admin_Client" Directory_="SHORTCUTDIR" Name="OpenSC~1|OpenSCADA Admin Client" Component_="ostc.exe" Target="[#ostc.exe]" Hotkey="0" IconIndex="0" ShowCmd="1" WkDir="LocalAppDataFolder"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiThemeComponent">
     <ATTRIBUTE name="UsedTheme" value="classic"/>
