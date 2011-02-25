@@ -392,13 +392,21 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
             }
         }
 
-        BusyIndicator.showWhile ( getSite ().getShell ().getDisplay (), new Runnable () {
-            @Override
-            public void run ()
-            {
-                EventPoolView.this.pool.addAll ( decoratedEvents );
-            }
-        } );
+        // adding more events costs more time
+        if ( addedEvents.size () > 5 )
+        {
+            BusyIndicator.showWhile ( getSite ().getShell ().getDisplay (), new Runnable () {
+                @Override
+                public void run ()
+                {
+                    EventPoolView.this.pool.addAll ( decoratedEvents );
+                }
+            } );
+        }
+        else
+        {
+            EventPoolView.this.pool.addAll ( decoratedEvents );
+        }
     }
 
     @SuppressWarnings ( "unchecked" )
