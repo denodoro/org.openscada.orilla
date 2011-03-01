@@ -199,16 +199,19 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
 
         this.rmvRect.addMouseListener ( new MouseListener () {
 
+            @Override
             public void mouseDoubleClicked ( final MouseEvent me )
             {
                 handleSetRemoteManualValue ();
             }
 
+            @Override
             public void mousePressed ( final MouseEvent me )
             {
                 setRemoteManualState ( true );
             }
 
+            @Override
             public void mouseReleased ( final MouseEvent me )
             {
                 // TODO Auto-generated method stub
@@ -280,17 +283,20 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
 
         this.mvRect.addMouseListener ( new MouseListener () {
 
+            @Override
             public void mouseDoubleClicked ( final MouseEvent me )
             {
                 ManualOverride.this.manualValue = null;
                 ManualOverride.this.switchToManual ();
             }
 
+            @Override
             public void mousePressed ( final MouseEvent me )
             {
                 ManualOverride.this.switchToManual ();
             }
 
+            @Override
             public void mouseReleased ( final MouseEvent me )
             {
                 // TODO Auto-generated method stub
@@ -358,15 +364,18 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
         } );
         this.rpvRect.addMouseListener ( new MouseListener () {
 
+            @Override
             public void mouseDoubleClicked ( final MouseEvent me )
             {
             }
 
+            @Override
             public void mousePressed ( final MouseEvent me )
             {
                 setRemoteManualState ( false );
             }
 
+            @Override
             public void mouseReleased ( final MouseEvent me )
             {
             }
@@ -408,15 +417,18 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
         } );
         this.pvRect.addMouseListener ( new MouseListener () {
 
+            @Override
             public void mouseDoubleClicked ( final MouseEvent me )
             {
             }
 
+            @Override
             public void mousePressed ( final MouseEvent me )
             {
                 ManualOverride.this.switchToProcess ();
             }
 
+            @Override
             public void mouseReleased ( final MouseEvent me )
             {
             }
@@ -446,7 +458,7 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
     {
         final Map<String, Variant> attributes = new HashMap<String, Variant> ();
 
-        attributes.put ( "org.openscada.da.manual.value", new Variant () );
+        attributes.put ( "org.openscada.da.manual.value", Variant.NULL );
         this.item.writeAtrtibutes ( attributes );
     }
 

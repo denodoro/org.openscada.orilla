@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -37,7 +37,7 @@ public enum ValueType
         @Override
         public Variant convertTo ( final String value )
         {
-            return new Variant ();
+            return Variant.NULL;
         }
     },
     STRING ( 20, Messages.getString ( "ValueType.STRING.label" ) ) //$NON-NLS-1$
@@ -46,7 +46,7 @@ public enum ValueType
         public Variant convertTo ( String value )
         {
             value = value.replace ( Activator.NATIVE_LS, "\n" ); //$NON-NLS-1$
-            return new Variant ( value );
+            return Variant.valueOf ( value );
         }
     },
     STRING_CRLF ( 21, Messages.getString ( "ValueType.STRING_CRLF.label" ) ) //$NON-NLS-1$
@@ -55,7 +55,7 @@ public enum ValueType
         public Variant convertTo ( String value )
         {
             value = value.replace ( Activator.NATIVE_LS, "\r\n" ); //$NON-NLS-1$
-            return new Variant ( value );
+            return Variant.valueOf ( value );
         }
     },
     INT ( 30, Messages.getString ( "ValueType.INT.label" ) ) //$NON-NLS-1$
@@ -66,11 +66,11 @@ public enum ValueType
             final Variant stringValue = new Variant ( value );
             try
             {
-                return new Variant ( stringValue.asInteger () );
+                return Variant.valueOf ( stringValue.asInteger () );
             }
             catch ( final NullValueException e )
             {
-                return new Variant ();
+                return Variant.NULL;
             }
         }
     },
@@ -82,11 +82,11 @@ public enum ValueType
             final Variant stringValue = new Variant ( value );
             try
             {
-                return new Variant ( stringValue.asLong () );
+                return Variant.valueOf ( stringValue.asLong () );
             }
             catch ( final NullValueException e )
             {
-                return new Variant ();
+                return Variant.NULL;
             }
         }
     },
@@ -98,11 +98,11 @@ public enum ValueType
             final Variant stringValue = new Variant ( value );
             try
             {
-                return new Variant ( stringValue.asDouble () );
+                return Variant.valueOf ( stringValue.asDouble () );
             }
             catch ( final NullValueException e )
             {
-                return new Variant ();
+                return Variant.NULL;
             }
         }
     },

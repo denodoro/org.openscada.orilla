@@ -28,6 +28,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
@@ -80,7 +81,7 @@ class WriteAttributesOperationWizardValuePage extends WizardPage implements IWiz
 
         private String valueString = "";
 
-        private Variant value = new Variant ();
+        private Variant value = Variant.NULL;
 
         private Throwable valueError = null;
 
@@ -166,11 +167,13 @@ class WriteAttributesOperationWizardValuePage extends WizardPage implements IWiz
     private class MyLabelProvider extends LabelProvider implements ITableLabelProvider
     {
 
+        @Override
         public Image getColumnImage ( final Object element, final int columnIndex )
         {
             return getImage ( element );
         }
 
+        @Override
         public String getColumnText ( final Object element, final int columnIndex )
         {
             logger.info ( "Label for: " + element + ":" + columnIndex );
@@ -204,6 +207,7 @@ class WriteAttributesOperationWizardValuePage extends WizardPage implements IWiz
 
     private class MyContentProvider implements IStructuredContentProvider
     {
+        @Override
         public Object[] getElements ( final Object inputElement )
         {
             if ( inputElement instanceof Attributes )
@@ -214,10 +218,12 @@ class WriteAttributesOperationWizardValuePage extends WizardPage implements IWiz
             return new Object[0];
         }
 
+        @Override
         public void dispose ()
         {
         }
 
+        @Override
         public void inputChanged ( final Viewer viewer, final Object oldInput, final Object newInput )
         {
         }
@@ -237,6 +243,7 @@ class WriteAttributesOperationWizardValuePage extends WizardPage implements IWiz
             this._viewer = viewer;
         }
 
+        @Override
         public boolean canModify ( final Object element, final String property )
         {
             logger.debug ( "Can modify: " + element + ":" + property );
@@ -259,6 +266,7 @@ class WriteAttributesOperationWizardValuePage extends WizardPage implements IWiz
             return false;
         }
 
+        @Override
         public Object getValue ( final Object element, final String property )
         {
             logger.debug ( "Get Value: " + element + ":" + property );
@@ -282,6 +290,7 @@ class WriteAttributesOperationWizardValuePage extends WizardPage implements IWiz
             return null;
         }
 
+        @Override
         public void modify ( final Object element, final String property, final Object value )
         {
             logger.debug ( "Modify Value: " + element + ":" + property + ":" + value );
@@ -324,7 +333,7 @@ class WriteAttributesOperationWizardValuePage extends WizardPage implements IWiz
     {
         public AddAction ()
         {
-            super ( "Add Entry", Action.AS_PUSH_BUTTON );
+            super ( "Add Entry", IAction.AS_PUSH_BUTTON );
             setEnabled ( true );
         }
 
@@ -345,7 +354,7 @@ class WriteAttributesOperationWizardValuePage extends WizardPage implements IWiz
 
         public RemoveAction ()
         {
-            super ( "Remove Entry", Action.AS_PUSH_BUTTON );
+            super ( "Remove Entry", IAction.AS_PUSH_BUTTON );
         }
 
         @Override
@@ -368,6 +377,7 @@ class WriteAttributesOperationWizardValuePage extends WizardPage implements IWiz
             }
         }
 
+        @Override
         public void selectionChanged ( final SelectionChangedEvent event )
         {
             this._selection = event.getSelection ();
@@ -388,6 +398,7 @@ class WriteAttributesOperationWizardValuePage extends WizardPage implements IWiz
         setDescription ( "Configure the attributes to write" );
     }
 
+    @Override
     public void createControl ( final Composite parent )
     {
         final Composite container = new Composite ( parent, SWT.NONE );
@@ -404,6 +415,7 @@ class WriteAttributesOperationWizardValuePage extends WizardPage implements IWiz
         GridData gd = new GridData ( GridData.FILL_HORIZONTAL );
         this.itemIdText.setLayoutData ( gd );
         this.itemIdText.addModifyListener ( new ModifyListener () {
+            @Override
             public void modifyText ( final ModifyEvent e )
             {
                 dialogChanged ();

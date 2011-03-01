@@ -97,7 +97,7 @@ public class ListEntry extends Observable implements IAdaptable, IPropertySource
     {
         if ( this.value == null )
         {
-            return new Variant ();
+            return Variant.NULL;
         }
         return this.value.getValue ();
     }
@@ -148,6 +148,7 @@ public class ListEntry extends Observable implements IAdaptable, IPropertySource
         return this.value.getSubscriptionError ();
     }
 
+    @Override
     public void updateData ( final DataItemValue value )
     {
         this.value = value;
@@ -155,6 +156,7 @@ public class ListEntry extends Observable implements IAdaptable, IPropertySource
         notifyObservers ( value );
     }
 
+    @Override
     @SuppressWarnings ( "rawtypes" )
     public Object getAdapter ( final Class adapter )
     {
@@ -167,11 +169,13 @@ public class ListEntry extends Observable implements IAdaptable, IPropertySource
 
     // IPropertySource Methods
 
+    @Override
     public Object getEditableValue ()
     {
         return this.item.getId ();
     }
 
+    @Override
     public IPropertyDescriptor[] getPropertyDescriptors ()
     {
         final List<IPropertyDescriptor> result = new LinkedList<IPropertyDescriptor> ();
@@ -204,6 +208,7 @@ public class ListEntry extends Observable implements IAdaptable, IPropertySource
         return result.toArray ( new IPropertyDescriptor[0] );
     }
 
+    @Override
     public Object getPropertyValue ( final Object id )
     {
         if ( id instanceof Properties )
@@ -227,15 +232,18 @@ public class ListEntry extends Observable implements IAdaptable, IPropertySource
         return null;
     }
 
+    @Override
     public boolean isPropertySet ( final Object id )
     {
         return false;
     }
 
+    @Override
     public void resetPropertyValue ( final Object id )
     {
     }
 
+    @Override
     public void setPropertyValue ( final Object id, final Object value )
     {
     }
