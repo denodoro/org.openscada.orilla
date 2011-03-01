@@ -23,6 +23,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -60,6 +61,7 @@ public class WriteOperationWizard extends Wizard implements INewWizard
         final Variant value = this.page.getValue ();
 
         final IRunnableWithProgress op = new IRunnableWithProgress () {
+            @Override
             public void run ( final IProgressMonitor monitor ) throws InvocationTargetException
             {
                 try
@@ -130,16 +132,19 @@ public class WriteOperationWizard extends Wizard implements INewWizard
 
     public void handleError ( final Throwable e )
     {
+        logger.warn ( "Failed to write", e );
         Display.getDefault ().syncExec ( new Runnable () {
 
+            @Override
             public void run ()
             {
-                ErrorDialog.openError ( getShell (), "Failed to write", "Failed to write to the data item", new Status ( Status.ERROR, Activator.PLUGIN_ID, e.getMessage (), e ) );
+                ErrorDialog.openError ( getShell (), "Failed to write", "Failed to write to the data item", new Status ( IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage (), e ) );
             }
         } );
 
     }
 
+    @Override
     public void init ( final IWorkbench workbench, final IStructuredSelection selection )
     {
         setNeedsProgressMonitor ( true );
