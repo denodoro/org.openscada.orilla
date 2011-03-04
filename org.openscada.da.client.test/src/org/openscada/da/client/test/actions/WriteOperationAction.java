@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -19,7 +19,6 @@
 
 package org.openscada.da.client.test.actions;
 
-import org.apache.log4j.Logger;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -34,28 +33,27 @@ import org.openscada.da.client.test.wizards.WriteOperationWizard;
 
 public class WriteOperationAction implements IObjectActionDelegate, IViewActionDelegate
 {
-    @SuppressWarnings ( "unused" )
-    private static Logger _log = Logger.getLogger ( WriteOperationAction.class );
+    private IWorkbenchPartSite site;
 
-    private IWorkbenchPartSite _site = null;
+    private IStructuredSelection selection;
 
-    private IStructuredSelection _selection = null;
-
+    @Override
     public void run ( final IAction action )
     {
-        if ( this._selection == null )
+        if ( this.selection == null )
         {
             return;
         }
 
         final IWorkbenchWizard wiz = new WriteOperationWizard ();
-        wiz.init ( this._site.getWorkbenchWindow ().getWorkbench (), this._selection );
+        wiz.init ( this.site.getWorkbenchWindow ().getWorkbench (), this.selection );
 
         // Embed the wizard into a dialog
-        final WizardDialog dialog = new WizardDialog ( this._site.getShell (), wiz );
+        final WizardDialog dialog = new WizardDialog ( this.site.getShell (), wiz );
         dialog.open ();
     }
 
+    @Override
     public void selectionChanged ( final IAction action, final ISelection selection )
     {
         if ( selection == null )
@@ -67,17 +65,19 @@ public class WriteOperationAction implements IObjectActionDelegate, IViewActionD
             return;
         }
 
-        this._selection = (IStructuredSelection)selection;
+        this.selection = (IStructuredSelection)selection;
     }
 
+    @Override
     public void setActivePart ( final IAction action, final IWorkbenchPart targetPart )
     {
-        this._site = targetPart.getSite ();
+        this.site = targetPart.getSite ();
     }
 
+    @Override
     public void init ( final IViewPart view )
     {
-        this._site = view.getSite ();
+        this.site = view.getSite ();
     }
 
 }

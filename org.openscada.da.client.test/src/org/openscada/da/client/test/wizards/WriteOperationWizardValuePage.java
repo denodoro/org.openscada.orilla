@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -19,7 +19,6 @@
 
 package org.openscada.da.client.test.wizards;
 
-import org.apache.log4j.Logger;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
@@ -41,22 +40,25 @@ import org.openscada.core.Variant;
 import org.openscada.da.client.base.browser.ValueType;
 import org.openscada.da.ui.connection.data.Item;
 import org.openscada.da.ui.connection.data.ItemSelectionHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 class WriteOperationWizardValuePage extends WizardPage implements IWizardPage
 {
-    private static Logger log = Logger.getLogger ( WriteOperationWizardValuePage.class );
 
-    private Text itemIdText = null;
+    private final static Logger logger = LoggerFactory.getLogger ( WriteOperationWizardValuePage.class );
 
-    private Text valueText = null;
+    private Text itemIdText;
 
-    private Combo valueTypeSelect = null;
+    private Text valueText;
 
-    private Text convertedValue = null;
+    private Combo valueTypeSelect;
 
-    private Color defaultValueColor = null;
+    private Text convertedValue;
 
-    private Variant value = null;
+    private Color defaultValueColor;
+
+    private Variant value;
 
     private Item item;
 
@@ -67,6 +69,7 @@ class WriteOperationWizardValuePage extends WizardPage implements IWizardPage
         setDescription ( "Enter the information to write" );
     }
 
+    @Override
     public void createControl ( final Composite parent )
     {
         final Composite container = new Composite ( parent, SWT.NONE );
@@ -83,6 +86,7 @@ class WriteOperationWizardValuePage extends WizardPage implements IWizardPage
         GridData gd = new GridData ( GridData.FILL_HORIZONTAL );
         this.itemIdText.setLayoutData ( gd );
         this.itemIdText.addModifyListener ( new ModifyListener () {
+            @Override
             public void modifyText ( final ModifyEvent e )
             {
                 dialogChanged ();
@@ -100,6 +104,7 @@ class WriteOperationWizardValuePage extends WizardPage implements IWizardPage
         gd = new GridData ( SWT.FILL, SWT.FILL, true, true );
         this.valueText.setLayoutData ( gd );
         this.valueText.addModifyListener ( new ModifyListener () {
+            @Override
             public void modifyText ( final ModifyEvent e )
             {
                 dialogChanged ();
@@ -201,7 +206,7 @@ class WriteOperationWizardValuePage extends WizardPage implements IWizardPage
         }
         catch ( final Exception e )
         {
-            log.error ( "Failed to convert", e );
+            logger.error ( "Failed to convert", e );
         }
         if ( this.value != null )
         {

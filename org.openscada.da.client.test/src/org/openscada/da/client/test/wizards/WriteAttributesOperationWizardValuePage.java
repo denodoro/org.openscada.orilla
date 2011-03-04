@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -26,7 +26,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.ToolBarManager;
@@ -64,10 +63,13 @@ import org.openscada.da.client.base.browser.ValueType;
 import org.openscada.da.ui.connection.data.Item;
 import org.openscada.da.ui.connection.data.ItemSelectionHelper;
 import org.openscada.da.ui.widgets.realtime.AttributePair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 class WriteAttributesOperationWizardValuePage extends WizardPage implements IWizardPage
 {
-    private static Logger logger = Logger.getLogger ( WriteAttributesOperationWizardValuePage.class );
+
+    private final static Logger logger = LoggerFactory.getLogger ( WriteAttributesOperationWizardValuePage.class );
 
     private Text itemIdText = null;
 
@@ -176,12 +178,12 @@ class WriteAttributesOperationWizardValuePage extends WizardPage implements IWiz
         @Override
         public String getColumnText ( final Object element, final int columnIndex )
         {
-            logger.info ( "Label for: " + element + ":" + columnIndex );
+            logger.debug ( "Label for: {} - {}", element, columnIndex );
 
             if ( element instanceof AttributeEntry )
             {
                 final AttributeEntry entry = (AttributeEntry)element;
-                logger.info ( "Label: " + entry.getName () );
+                logger.debug ( "Label: {}", entry.getName () );
                 switch ( columnIndex )
                 {
                 case 0:

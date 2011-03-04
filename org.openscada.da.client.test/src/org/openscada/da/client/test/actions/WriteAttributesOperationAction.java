@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -19,7 +19,6 @@
 
 package org.openscada.da.client.test.actions;
 
-import org.apache.log4j.Logger;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -34,13 +33,11 @@ import org.openscada.da.client.test.wizards.WriteAttributesOperationWizard;
 
 public class WriteAttributesOperationAction implements IObjectActionDelegate, IViewActionDelegate
 {
-    @SuppressWarnings ( "unused" )
-    private static Logger logger = Logger.getLogger ( WriteAttributesOperationAction.class );
-
     private IWorkbenchPartSite site = null;
 
     private IStructuredSelection selection = null;
 
+    @Override
     public void run ( final IAction action )
     {
         if ( this.selection == null )
@@ -56,6 +53,7 @@ public class WriteAttributesOperationAction implements IObjectActionDelegate, IV
         dialog.open ();
     }
 
+    @Override
     public void selectionChanged ( final IAction action, final ISelection selection )
     {
         if ( selection == null )
@@ -70,11 +68,13 @@ public class WriteAttributesOperationAction implements IObjectActionDelegate, IV
         this.selection = (IStructuredSelection)selection;
     }
 
+    @Override
     public void setActivePart ( final IAction action, final IWorkbenchPart targetPart )
     {
         this.site = targetPart.getSite ();
     }
 
+    @Override
     public void init ( final IViewPart view )
     {
         this.site = view.getSite ();

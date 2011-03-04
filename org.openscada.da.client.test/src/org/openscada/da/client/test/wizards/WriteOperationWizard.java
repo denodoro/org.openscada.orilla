@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -21,7 +21,6 @@ package org.openscada.da.client.test.wizards;
 
 import java.lang.reflect.InvocationTargetException;
 
-import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -38,11 +37,13 @@ import org.openscada.da.client.test.Activator;
 import org.openscada.da.ui.connection.data.DataItemHolder;
 import org.openscada.da.ui.connection.data.Item;
 import org.openscada.utils.concurrent.NotifyFuture;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class WriteOperationWizard extends Wizard implements INewWizard
 {
 
-    private static Logger logger = Logger.getLogger ( WriteOperationWizard.class );
+    private final static Logger logger = LoggerFactory.getLogger ( WriteOperationWizard.class );
 
     private WriteOperationWizardValuePage page = null;
 

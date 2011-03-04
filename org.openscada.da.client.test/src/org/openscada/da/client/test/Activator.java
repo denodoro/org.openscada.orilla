@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -19,7 +19,6 @@
 
 package org.openscada.da.client.test;
 
-import org.apache.log4j.Logger;
 import org.eclipse.core.commands.operations.OperationStatus;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -29,13 +28,16 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The main plugin class to be used in the desktop.
  */
 public class Activator extends AbstractUIPlugin
 {
-    private static Logger _log = Logger.getLogger ( "org.openscada.da.client.test.Plugin" );
+
+    private final static Logger logger = LoggerFactory.getLogger ( Activator.class );
 
     public static final String PLUGIN_ID = "org.openscada.da.client.test";
 
@@ -112,13 +114,14 @@ public class Activator extends AbstractUIPlugin
         {
             display.asyncExec ( new Runnable () {
 
+                @Override
                 public void run ()
                 {
                     final Shell shell = getWorkbench ().getActiveWorkbenchWindow ().getShell ();
-                    _log.debug ( String.format ( "Shell disposed: %s", shell.isDisposed () ) );
+                    logger.debug ( "Shell disposed: {}", shell.isDisposed () );
                     if ( !shell.isDisposed () )
                     {
-                        final IStatus status = new OperationStatus ( OperationStatus.ERROR, PLUGIN_ID, 0, message + ":" + error.getMessage (), error );
+                        final IStatus status = new OperationStatus ( IStatus.ERROR, PLUGIN_ID, 0, message + ":" + error.getMessage (), error );
                         ErrorDialog.openError ( shell, null, message, status );
                     }
                 }
