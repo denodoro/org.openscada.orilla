@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: OpenSCADA DA Client Connector
 Bundle-SymbolicName: org.openscada.da.client.connector;singleton:=true
-Bundle-Version: 0.14.0.qualifier
+Bundle-Version: 0.17.0.qualifier
 Bundle-Vendor: TH4 SYSTEMS GmbH
 Bundle-ClassPath: .
 Export-Package: org.openscada.da.client.connector;uses:="org.openscada.core.client,org.eclipse.core.runtime,org.openscada.core"
@@ -11,7 +11,6 @@ Require-Bundle: org.eclipse.core.runtime,
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.openscada.da.client.connector.Activator
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Import-Package: org.apache.log4j,
- org.openscada.core,
- org.openscada.core.client,
+Import-Package: org.openscada.core;version="0.15.0",
+ org.openscada.core.client;version="0.15.0",
  org.slf4j;version="1.5.6"
