@@ -16,6 +16,9 @@ MD5=`md5sum "$1" | sed -e 's/ .*$//'`
 ServerFileName=$basename
 Flags=SilentInstall
 AutoCloseApplication=[APPDIR]ostc.exe
+RegistryKey=HKLM\\SOFTWARE\\TH4 SYSTEMS GmbH\\${version}\\Version
+Version=${version}
+Replaces=All
 EOF
 
 cat "$updatename"
