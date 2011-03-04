@@ -10,8 +10,8 @@
     </description>
 	
 	<!-- properties -->
-	<property file="build.properties"/>
 	<property file="local.properties"/>
+	<property file="build.properties"/>
 	
 	<property name="platformName" value="win32.win32.x86"/>
 	<property name="advinst.base" location="/home/user/AdvancedInstaller"/>
@@ -26,7 +26,7 @@
 	<!-- ================================= 
           target: default              
          ================================= -->
-    <target name="default" depends="init,clean,download,build" description="Build the setup">
+    <target name="default" depends="init,clean,download,build,genUpdate" description="Build the setup">
     </target>
 	
 	<!-- ================================= 
@@ -88,10 +88,25 @@
     </target>
     
     <!-- ================================= 
-      target: build              
+      target: genUpdate              
      ================================= -->
-     <target name="gen.update" description="Generate update file">
-        
+     <target name="genUpdate" description="Generate update file">
+        <makeUpdate file="ostc_${version}_win32.win32.x86.msi" version="${version}"/>
      </target>
+     	
+ 	<!-- = = = = = = = = = = = = = = = = =
+      macrodef: makeUpdate          
+     = = = = = = = = = = = = = = = = = -->
+    <macrodef name="makeUpdate">
+        <attribute name="file" />
+    	<attribute name="version" />
+        <sequential>
+        	<echo message="${basedir}" />
+			<exec failonerror="true" executable="${basedir}/genUpdate" dir="${basedir}">
+				<arg file="@{file}"/>
+				<arg value="@{version}"/>
+			</exec>
+        </sequential>
+    </macrodef>
 	
 </project>
