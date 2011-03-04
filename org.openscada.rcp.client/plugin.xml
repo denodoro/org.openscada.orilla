@@ -4,7 +4,7 @@
 
    <extension
          id="application"
-         name="OpenSCADA RCP Client Application"
+         name="OpenSCADA Admin Client"
          point="org.eclipse.core.runtime.applications">
       <application
             icon="icons/app/openscada.ico">
@@ -34,7 +34,7 @@
          point="org.eclipse.core.runtime.products">
       <product
             application="org.openscada.rcp.client.application"
-            name="OpenSCADA RCP Client">
+            name="OpenSCADA Admin Client">
          <property
                name="aboutImage"
                value="branding/about.png"/>
@@ -55,7 +55,7 @@
                value="OpenSCADA Project"/>
          <property
                name="appName"
-               value="OpenSCADA RCP Client">
+               value="OpenSCADA Admin Client">
          </property>
          <property
                name="startupForegroundColor"

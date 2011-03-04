@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="OpenSCADA RCP Client" uid="org.openscada.testclient" id="org.openscada.rcp.client.product" application="org.openscada.rcp.client.application" version="0.16.0" useFeatures="true" includeLaunchers="true">
+<product name="OpenSCADA Admin Client" uid="org.openscada.testclient" id="org.openscada.rcp.client.product" application="org.openscada.rcp.client.application" version="0.16.0" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
       <image path="branding/about.png"/>
@@ -48,9 +48,9 @@
       <feature id="org.openscada.da.client.test" version="0.15.0.qualifier"/>
       <feature id="org.openscada.hd.client.test" version="0.15.0.qualifier"/>
       <feature id="org.openscada.ae.client.test" version="0.15.0.qualifier"/>
-      <feature id="org.openscada.rcp.client" version="0.15.0.qualifier"/>
       <feature id="org.openscada.da.rcp.LocalTestServer" version="0.15.0.qualifier"/>
       <feature id="org.openscada.ca.client.test" version="0.16.0.qualifier"/>
+      <feature id="org.openscada.rcp.client" version="0.16.0.qualifier"/>
    </features>
 
 
