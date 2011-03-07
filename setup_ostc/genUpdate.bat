@@ -1,1 +1,1 @@
-c:\cygwin\bin\bash --login -c "./genUpdate %1 %2"  
+c:\cygwin\bin\bash -c "./genUpdate %1 %2"  
