@@ -1,7 +1,7 @@
 #!/bin/bash
 
 basename="`basename "$1"`"
-updatename="`echo $1 | sed -e 's/\.msi$//' `".txt
+updatename="`echo $1 | sed -e 's/\.msi$//' `".update.txt
 version="$2"
 
 echo "UpdateName: $updatename"
