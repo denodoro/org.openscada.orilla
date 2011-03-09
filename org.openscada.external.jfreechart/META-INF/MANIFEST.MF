@@ -63,7 +63,7 @@ Export-Package: org.jfree,
  org.jfree.ui.tabbedui,
  org.jfree.util
 Require-Bundle: org.eclipse.swt
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ClassPath: gnujaxp.jar,
  iText-2.1.5.jar,
  jcommon-1.0.16.jar,
