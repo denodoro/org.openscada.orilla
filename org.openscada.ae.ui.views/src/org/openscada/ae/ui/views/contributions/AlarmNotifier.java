@@ -64,6 +64,7 @@ import org.openscada.ae.MonitorStatus;
 import org.openscada.ae.ui.views.Activator;
 import org.openscada.ae.ui.views.config.AlarmNotifierConfiguration;
 import org.openscada.ae.ui.views.config.ConfigurationHelper;
+import org.openscada.ae.ui.views.preferences.PreferenceConstants;
 import org.openscada.core.Variant;
 import org.openscada.core.client.ConnectionState;
 import org.openscada.core.connection.provider.ConnectionIdTracker;
@@ -401,7 +402,7 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution
 
     protected void trigger ( final Runnable run )
     {
-        if ( this.display == null || this.display.isDisposed () )
+        if ( ( this.display == null ) || this.display.isDisposed () )
         {
             return;
         }
@@ -447,27 +448,26 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution
             this.clip.close ();
             this.clip = null;
 
-            if ( !this.bellIcon.isDisposed () )
-            {
-                this.bellIcon.setImage ( null );
-            }
+        }
+        if ( !this.bellIcon.isDisposed () )
+        {
+            this.bellIcon.setImage ( null );
         }
     }
 
     private void enableHorn () throws UnsupportedAudioFileException, IOException, LineUnavailableException
     {
-        if ( this.clip == null || !this.clip.isRunning () )
+        if ( ( ( this.clip == null ) || !this.clip.isRunning () ) && ( Activator.getDefault ().getPreferenceStore ().getBoolean ( PreferenceConstants.BELL_ACTIVATED_KEY ) ) )
         {
             final AudioInputStream sound = AudioSystem.getAudioInputStream ( this.soundFile );
             final DataLine.Info info = new DataLine.Info ( Clip.class, sound.getFormat () );
             this.clip = (Clip)AudioSystem.getLine ( info );
             this.clip.open ( sound );
             this.clip.loop ( Clip.LOOP_CONTINUOUSLY );
-
-            if ( !this.bellIcon.isDisposed () )
-            {
-                this.bellIcon.setImage ( getBellIcon () );
-            }
+        }
+        if ( !this.bellIcon.isDisposed () )
+        {
+            this.bellIcon.setImage ( getBellIcon () );
         }
     }
 
@@ -504,7 +504,7 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution
 
     private String getLabel ()
     {
-        if ( this.connectionService == null || this.connectionService.getConnection ().getState () != ConnectionState.BOUND )
+        if ( ( this.connectionService == null ) || ( this.connectionService.getConnection ().getState () != ConnectionState.BOUND ) )
         {
             return Messages.AlarmNotifier_Label_State_Disconnected;
         }

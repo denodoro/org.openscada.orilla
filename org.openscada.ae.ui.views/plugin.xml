@@ -33,5 +33,19 @@
             restorable="true">
       </view>
    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="org.openscada.ae.ui.views.preferences.PreferencePage"
+            id="org.openscada.ae.ui.views.preferences.PreferencePage"
+            name="%preference.bellActivated.label">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.openscada.ae.ui.views.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
 
 </plugin>
