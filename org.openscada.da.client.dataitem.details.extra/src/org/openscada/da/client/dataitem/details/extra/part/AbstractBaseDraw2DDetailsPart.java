@@ -19,25 +19,24 @@
 
 package org.openscada.da.client.dataitem.details.extra.part;
 
+import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.LightweightSystem;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.openscada.da.client.dataitem.details.part.AbstractBaseDetailsPart;
 
 public abstract class AbstractBaseDraw2DDetailsPart extends AbstractBaseDetailsPart
 {
-    private Canvas canvas;
+    private FigureCanvas canvas;
 
+    @Override
     public void createPart ( final Composite parent )
     {
         parent.setLayout ( new FillLayout () );
 
-        this.canvas = new Canvas ( parent, SWT.NONE );
-        final LightweightSystem lws = new LightweightSystem ( this.canvas );
-        lws.setContents ( createRoot () );
+        this.canvas = new FigureCanvas ( parent );
+
+        this.canvas.setContents ( createRoot () );
     }
 
     @Override
