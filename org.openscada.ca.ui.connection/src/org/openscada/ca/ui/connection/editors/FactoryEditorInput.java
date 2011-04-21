@@ -52,32 +52,38 @@ public class FactoryEditorInput implements IEditorInput
         return this.factoryId;
     }
 
+    @Override
     public boolean exists ()
     {
         return true;
     }
 
+    @Override
     public ImageDescriptor getImageDescriptor ()
     {
         return null;
     }
 
+    @Override
     public String getName ()
     {
         return toString ();
     }
 
+    @Override
     public IPersistableElement getPersistable ()
     {
         return null;
     }
 
+    @Override
     public String getToolTipText ()
     {
         return toString ();
     }
 
-    @SuppressWarnings ( "unchecked" )
+    @Override
+    @SuppressWarnings ( "rawtypes" )
     public Object getAdapter ( final Class adapter )
     {
         return null;
