@@ -268,7 +268,7 @@
    <extension
          point="org.eclipse.ui.perspectiveExtensions">
       <perspectiveExtension
-            targetID="org.openscada.rcp.client.perspective">
+            targetID="org.openscada.othala.application.perspective">
          <view
                closeable="true"
                id="org.openscada.core.ui.connection.ConnectionView"
