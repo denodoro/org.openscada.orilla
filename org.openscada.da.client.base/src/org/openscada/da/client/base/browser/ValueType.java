@@ -63,7 +63,7 @@ public enum ValueType
         @Override
         public Variant convertTo ( final String value ) throws NotConvertableException
         {
-            final Variant stringValue = new Variant ( value );
+            final Variant stringValue = Variant.valueOf ( value );
             try
             {
                 return Variant.valueOf ( stringValue.asInteger () );
@@ -79,7 +79,7 @@ public enum ValueType
         @Override
         public Variant convertTo ( final String value ) throws NotConvertableException
         {
-            final Variant stringValue = new Variant ( value );
+            final Variant stringValue = Variant.valueOf ( value );
             try
             {
                 return Variant.valueOf ( stringValue.asLong () );
@@ -95,7 +95,7 @@ public enum ValueType
         @Override
         public Variant convertTo ( final String value ) throws NotConvertableException
         {
-            final Variant stringValue = new Variant ( value );
+            final Variant stringValue = Variant.valueOf ( value );
             try
             {
                 return Variant.valueOf ( stringValue.asDouble () );
@@ -111,7 +111,7 @@ public enum ValueType
         @Override
         public Variant convertTo ( final String value ) throws NotConvertableException
         {
-            final Variant stringValue = new Variant ( value );
+            final Variant stringValue = Variant.valueOf ( value );
             return Variant.valueOf ( stringValue.asBoolean () );
         }
     },
