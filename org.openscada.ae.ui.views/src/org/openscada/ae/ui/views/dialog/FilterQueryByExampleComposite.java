@@ -179,7 +179,7 @@ public class FilterQueryByExampleComposite extends Composite
                 // to
 
                 final Calendar to = new GregorianCalendar ();
-                to.set ( this.fromDate.getYear (), this.fromDate.getMonth (), this.fromDate.getDay (), this.fromTime.getHours (), this.fromTime.getMinutes (), this.fromTime.getSeconds () );
+                to.set ( this.toDate.getYear (), this.toDate.getMonth (), this.toDate.getDay (), this.toTime.getHours (), this.toTime.getMinutes (), this.toTime.getSeconds () );
 
                 assertionTo = new FilterAssertion ( this.field, Assertion.LESSEQ, isoDateFormat.format ( to.getTime () ) );
                 expression.getFilterSet ().add ( assertionTo );
@@ -439,7 +439,7 @@ public class FilterQueryByExampleComposite extends Composite
     private void populateFromFilter ( final String filterString )
     {
         // no filter given
-        if ( filterString == null || filterString.length () == 0 )
+        if ( ( filterString == null ) || ( filterString.length () == 0 ) )
         {
             return;
         }
@@ -468,7 +468,7 @@ public class FilterQueryByExampleComposite extends Composite
                 final FilterExpression subFilterExpression = (FilterExpression)subFilter;
                 if ( subFilterExpression.getOperator () == Operator.NOT )
                 {
-                    if ( subFilterExpression.getFilterSet ().size () == 1 && subFilterExpression.getFilterSet ().get ( 0 ).isAssertion () )
+                    if ( ( subFilterExpression.getFilterSet ().size () == 1 ) && subFilterExpression.getFilterSet ().get ( 0 ).isAssertion () )
                     {
                         populateFromAssertion ( true, (FilterAssertion)subFilterExpression.getFilterSet ().get ( 0 ) );
                     }
@@ -479,27 +479,27 @@ public class FilterQueryByExampleComposite extends Composite
                     String attribute = null;
                     String from = null;
                     String to = null;
-                    if ( subFilterExpression.getFilterSet ().size () == 1 || subFilterExpression.getFilterSet ().size () == 2 && subFilterExpression.getFilterSet ().get ( 0 ).isAssertion () )
+                    if ( ( subFilterExpression.getFilterSet ().size () == 1 ) || ( ( subFilterExpression.getFilterSet ().size () == 2 ) && subFilterExpression.getFilterSet ().get ( 0 ).isAssertion () ) )
                     {
                         final FilterAssertion filterAssertion = (FilterAssertion)subFilterExpression.getFilterSet ().get ( 0 );
                         attribute = filterAssertion.getAttribute ();
-                        if ( filterAssertion != null && filterAssertion.getAssertion () == Assertion.GREATEREQ )
+                        if ( ( filterAssertion != null ) && ( filterAssertion.getAssertion () == Assertion.GREATEREQ ) )
                         {
                             from = (String)filterAssertion.getValue ();
                         }
-                        else if ( filterAssertion != null && filterAssertion.getAssertion () == Assertion.LESSEQ )
+                        else if ( ( filterAssertion != null ) && ( filterAssertion.getAssertion () == Assertion.LESSEQ ) )
                         {
                             to = (String)filterAssertion.getValue ();
                         }
                     }
-                    if ( subFilterExpression.getFilterSet ().size () == 2 && subFilterExpression.getFilterSet ().get ( 1 ).isAssertion () )
+                    if ( ( subFilterExpression.getFilterSet ().size () == 2 ) && subFilterExpression.getFilterSet ().get ( 1 ).isAssertion () )
                     {
                         final FilterAssertion filterAssertion = (FilterAssertion)subFilterExpression.getFilterSet ().get ( 1 );
-                        if ( filterAssertion != null && filterAssertion.getAssertion () == Assertion.GREATEREQ )
+                        if ( ( filterAssertion != null ) && ( filterAssertion.getAssertion () == Assertion.GREATEREQ ) )
                         {
                             from = (String)filterAssertion.getValue ();
                         }
-                        else if ( filterAssertion != null && filterAssertion.getAssertion () == Assertion.LESSEQ )
+                        else if ( ( filterAssertion != null ) && ( filterAssertion.getAssertion () == Assertion.LESSEQ ) )
                         {
                             to = (String)filterAssertion.getValue ();
                         }
