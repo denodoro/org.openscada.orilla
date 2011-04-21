@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -226,7 +226,7 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
     protected void setRemoteManualState ( final boolean state )
     {
         final Map<String, Variant> attributes = new HashMap<String, Variant> ();
-        attributes.put ( "remote.manual.active", new Variant ( state ) );
+        attributes.put ( "remote.manual.active", Variant.valueOf ( state ) );
         writeAttributes ( attributes );
     }
 
@@ -558,7 +558,7 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
         Variant processError = this.value.getAttributes ().get ( "org.openscada.da.manual.error.original" );
         if ( processError == null )
         {
-            processError = new Variant ( false );
+            processError = Variant.FALSE;
         }
 
         if ( manualValue != null )

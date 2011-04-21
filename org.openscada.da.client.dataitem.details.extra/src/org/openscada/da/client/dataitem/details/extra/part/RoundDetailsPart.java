@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -93,6 +93,7 @@ public class RoundDetailsPart extends AbstractBaseDraw2DDetailsPart
 
         noneButton.addActionListener ( new ActionListener () {
 
+            @Override
             public void actionPerformed ( final ActionEvent event )
             {
                 RoundDetailsPart.this.setRoundType ( "NONE" );
@@ -101,6 +102,7 @@ public class RoundDetailsPart extends AbstractBaseDraw2DDetailsPart
 
         roundButton.addActionListener ( new ActionListener () {
 
+            @Override
             public void actionPerformed ( final ActionEvent event )
             {
                 RoundDetailsPart.this.setRoundType ( "ROUND" );
@@ -109,6 +111,7 @@ public class RoundDetailsPart extends AbstractBaseDraw2DDetailsPart
 
         ceilButton.addActionListener ( new ActionListener () {
 
+            @Override
             public void actionPerformed ( final ActionEvent event )
             {
                 RoundDetailsPart.this.setRoundType ( "CEIL" );
@@ -117,6 +120,7 @@ public class RoundDetailsPart extends AbstractBaseDraw2DDetailsPart
 
         floorButton.addActionListener ( new ActionListener () {
 
+            @Override
             public void actionPerformed ( final ActionEvent event )
             {
                 RoundDetailsPart.this.setRoundType ( "FLOOR" );
@@ -129,7 +133,7 @@ public class RoundDetailsPart extends AbstractBaseDraw2DDetailsPart
     protected void setRoundType ( final String string )
     {
         final Map<String, Variant> attributes = new HashMap<String, Variant> ();
-        attributes.put ( "org.openscada.da.round.type", new Variant ( string ) );
+        attributes.put ( "org.openscada.da.round.type", Variant.valueOf ( string ) );
         this.item.writeAtrtibutes ( attributes );
     }
 
