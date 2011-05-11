@@ -63,7 +63,7 @@
             name="Configuration Editor">
       </editor>
       <editor
-            class="org.openscada.ca.ui.connection.editors.FactoryEditor"
+            class="org.openscada.ca.ui.connection.editors.factory.FactoryEditor"
             default="false"
             id="org.openscada.ca.ui.connection.editors.FactoryEditor"
             name="Factory Editor">

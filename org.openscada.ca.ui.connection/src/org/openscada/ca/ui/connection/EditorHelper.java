@@ -34,9 +34,9 @@ import org.openscada.ca.ui.connection.data.ConfigurationDescriptor;
 import org.openscada.ca.ui.connection.data.ConfigurationInformationBean;
 import org.openscada.ca.ui.connection.data.FactoryInformationBean;
 import org.openscada.ca.ui.connection.editors.BasicEditor;
-import org.openscada.ca.ui.connection.editors.ConfigurationEditorInput;
-import org.openscada.ca.ui.connection.editors.FactoryEditor;
-import org.openscada.ca.ui.connection.editors.FactoryEditorInput;
+import org.openscada.ca.ui.connection.editors.conf.ConfigurationEditorInput;
+import org.openscada.ca.ui.connection.editors.factory.FactoryEditor;
+import org.openscada.ca.ui.connection.editors.factory.FactoryEditorInput;
 
 public class EditorHelper
 {

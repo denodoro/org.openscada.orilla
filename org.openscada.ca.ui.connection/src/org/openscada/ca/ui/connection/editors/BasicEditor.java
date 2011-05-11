@@ -41,6 +41,9 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 import org.openscada.ca.ConfigurationInformation;
 import org.openscada.ca.ui.connection.data.LoadJob;
+import org.openscada.ca.ui.connection.editors.conf.ConfigurationCellLabelProvider;
+import org.openscada.ca.ui.connection.editors.conf.ConfigurationEditorInput;
+import org.openscada.ca.ui.connection.editors.conf.ConfigurationEntry;
 
 public class BasicEditor extends EditorPart
 {

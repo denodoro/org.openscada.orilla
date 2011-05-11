@@ -17,39 +17,33 @@
  * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
-package org.openscada.ca.ui.connection.editors;
+package org.openscada.ca.ui.connection.editors.conf;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
-import org.openscada.ca.connection.provider.ConnectionService;
-import org.openscada.ca.ui.connection.data.LoadFactoryJob;
+import org.openscada.ca.ui.connection.data.LoadJob;
 
-public class FactoryEditorInput implements IEditorInput
+public class ConfigurationEditorInput implements IEditorInput
 {
-
-    private final String connectionUri;
 
     private final String factoryId;
 
-    private final ConnectionService connectionService;
+    private final String configurationId;
 
-    public FactoryEditorInput ( final ConnectionService connectionService, final String factoryId )
+    private final String connectionUri;
+
+    public ConfigurationEditorInput ( final String connectionUri, final String factoryId, final String configurationId )
     {
-        this.connectionService = connectionService;
-        this.connectionUri = connectionService.getConnection ().getConnectionInformation ().toString ();
+        this.connectionUri = connectionUri;
         this.factoryId = factoryId;
-    }
-
-    public String getConnectionUri ()
-    {
-        return this.connectionUri;
+        this.configurationId = configurationId;
     }
 
     @Override
     public String toString ()
     {
-        return this.factoryId;
+        return this.factoryId + "/" + this.configurationId;
     }
 
     @Override
@@ -89,9 +83,9 @@ public class FactoryEditorInput implements IEditorInput
         return null;
     }
 
-    public LoadFactoryJob createLoadJob ()
+    public LoadJob load ()
     {
-        return new LoadFactoryJob ( this.connectionService, this.factoryId );
+        return new LoadJob ( this.connectionUri, this.factoryId, this.configurationId );
     }
 
 }

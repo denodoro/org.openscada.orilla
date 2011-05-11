@@ -17,7 +17,7 @@
  * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
-package org.openscada.ca.ui.connection.editors;
+package org.openscada.ca.ui.connection.editors.conf;
 
 import java.util.Set;
 
@@ -28,10 +28,11 @@ import org.eclipse.jface.viewers.LabelProviderChangedEvent;
 import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.ViewerCell;
 
-final class ConfigurationCellLabelProvider extends StyledCellLabelProvider
+public class ConfigurationCellLabelProvider extends StyledCellLabelProvider
 {
 
     private final IMapChangeListener mapChangeListener = new IMapChangeListener () {
+        @Override
         public void handleMapChange ( final MapChangeEvent event )
         {
             final Set<?> affectedElements = event.diff.getChangedKeys ();
