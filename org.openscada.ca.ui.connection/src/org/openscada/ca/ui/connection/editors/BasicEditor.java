@@ -176,10 +176,10 @@ public class BasicEditor extends EditorPart
 
         this.viewer.getTable ().setHeaderVisible ( true );
 
-        ColumnViewerToolTipSupport.enableFor ( this.viewer );
-
         this.viewer.setContentProvider ( new ObservableSetContentProvider () );
         this.viewer.setInput ( this.dataSet );
+
+        ColumnViewerToolTipSupport.enableFor ( this.viewer );
     }
 
     @Override

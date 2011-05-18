@@ -23,6 +23,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -107,6 +108,7 @@ public class FactoryEditor extends EditorPart
         {
             display.asyncExec ( new Runnable () {
 
+                @Override
                 public void run ()
                 {
                     if ( !display.isDisposed () )
@@ -189,6 +191,7 @@ public class FactoryEditor extends EditorPart
 
         this.viewer.addDoubleClickListener ( new IDoubleClickListener () {
 
+            @Override
             public void doubleClick ( final DoubleClickEvent event )
             {
                 FactoryEditor.this.handleDoubleClick ( event );
@@ -200,6 +203,8 @@ public class FactoryEditor extends EditorPart
         {
             this.viewer.setInput ( this.factory.getConfigurations () );
         }
+
+        ColumnViewerToolTipSupport.enableFor ( this.viewer );
     }
 
     protected void handleDoubleClick ( final DoubleClickEvent event )
