@@ -29,6 +29,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.jface.databinding.viewers.ObservableSetContentProvider;
+import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
@@ -106,6 +107,7 @@ public class BasicEditor extends EditorPart
     {
         final Realm realm = this.dataSet.getRealm ();
         realm.asyncExec ( new Runnable () {
+            @Override
             public void run ()
             {
                 if ( !BasicEditor.this.dataSet.isDisposed () )
@@ -173,6 +175,8 @@ public class BasicEditor extends EditorPart
         tableLayout.addColumnData ( new ColumnWeightData ( 200, true ) );
 
         this.viewer.getTable ().setHeaderVisible ( true );
+
+        ColumnViewerToolTipSupport.enableFor ( this.viewer );
 
         this.viewer.setContentProvider ( new ObservableSetContentProvider () );
         this.viewer.setInput ( this.dataSet );
