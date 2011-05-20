@@ -23,28 +23,38 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.databinding.beans.BeansObservables;
 import org.eclipse.core.databinding.observable.Realm;
 import org.eclipse.core.databinding.observable.set.WritableSet;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.jface.databinding.viewers.ObservableSetContentProvider;
-import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ColumnWeightData;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 import org.openscada.ca.ConfigurationInformation;
 import org.openscada.ca.ui.connection.data.LoadJob;
+import org.openscada.ca.ui.connection.data.UpdateJob;
 import org.openscada.ca.ui.connection.editors.conf.ConfigurationCellLabelProvider;
 import org.openscada.ca.ui.connection.editors.conf.ConfigurationEditorInput;
 import org.openscada.ca.ui.connection.editors.conf.ConfigurationEntry;
+import org.openscada.ca.ui.connection.editors.conf.EntryEditDialog;
+import org.openscada.ui.databinding.AdapterHelper;
 
 public class BasicEditor extends EditorPart
 {
@@ -56,6 +66,8 @@ public class BasicEditor extends EditorPart
 
     private final WritableSet dataSet;
 
+    private boolean dirty;
+
     public BasicEditor ()
     {
         this.dataSet = new WritableSet ();
@@ -64,6 +76,21 @@ public class BasicEditor extends EditorPart
     @Override
     public void doSave ( final IProgressMonitor monitor )
     {
+        final ConfigurationEditorInput input = (ConfigurationEditorInput)getEditorInput ();
+
+        final UpdateJob updateJob = input.update ( this.configuration.getData () );
+
+        updateJob.setProgressGroup ( monitor, 2 );
+
+        updateJob.addJobChangeListener ( new JobChangeAdapter () {
+            @Override
+            public void done ( final IJobChangeEvent event )
+            {
+                performLoad ( input, monitor );
+            }
+        } );
+
+        updateJob.schedule ();
     }
 
     @Override
@@ -90,6 +117,14 @@ public class BasicEditor extends EditorPart
     protected void setInput ( final IEditorInput input )
     {
         final ConfigurationEditorInput factoryInput = (ConfigurationEditorInput)input;
+
+        performLoad ( factoryInput, new NullProgressMonitor () );
+
+        super.setInput ( input );
+    }
+
+    private void performLoad ( final ConfigurationEditorInput factoryInput, final IProgressMonitor monitor )
+    {
         final LoadJob job = factoryInput.load ();
         job.addJobChangeListener ( new JobChangeAdapter () {
             @Override
@@ -98,9 +133,8 @@ public class BasicEditor extends EditorPart
                 BasicEditor.this.handleSetResult ( job.getConfiguration () );
             }
         } );
+        job.setProgressGroup ( monitor, 2 );
         job.schedule ();
-
-        super.setInput ( input );
     }
 
     protected void handleSetResult ( final ConfigurationInformation configurationInformation )
@@ -113,6 +147,7 @@ public class BasicEditor extends EditorPart
                 if ( !BasicEditor.this.dataSet.isDisposed () )
                 {
                     setResult ( configurationInformation );
+                    setDirty ( false );
                 }
             }
         } );
@@ -145,7 +180,7 @@ public class BasicEditor extends EditorPart
     @Override
     public boolean isDirty ()
     {
-        return false;
+        return this.dirty;
     }
 
     @Override
@@ -178,8 +213,53 @@ public class BasicEditor extends EditorPart
 
         this.viewer.setContentProvider ( new ObservableSetContentProvider () );
         this.viewer.setInput ( this.dataSet );
+        this.viewer.setLabelProvider ( new ConfigurationCellLabelProvider ( BeansObservables.observeMaps ( this.dataSet, new String[] { "key", "value" } ) ) );
 
-        ColumnViewerToolTipSupport.enableFor ( this.viewer );
+        this.viewer.addDoubleClickListener ( new IDoubleClickListener () {
+
+            @Override
+            public void doubleClick ( final DoubleClickEvent event )
+            {
+                triggerEditDialog ( event.getSelection () );
+            }
+        } );
+    }
+
+    protected void triggerEditDialog ( final ISelection selection )
+    {
+        if ( selection.isEmpty () || ! ( selection instanceof IStructuredSelection ) )
+        {
+            return;
+        }
+
+        final Object o = ( (IStructuredSelection)selection ).getFirstElement ();
+        final ConfigurationEntry entry = AdapterHelper.adapt ( o, ConfigurationEntry.class );
+        if ( entry == null )
+        {
+            return;
+        }
+
+        final EntryEditDialog dlg = new EntryEditDialog ( getSite ().getShell (), entry );
+        if ( dlg.open () == Window.OK )
+        {
+            updateEntry ( entry, dlg.getValue () );
+
+        }
+    }
+
+    private void updateEntry ( final ConfigurationEntry entry, final String value )
+    {
+        entry.setValue ( value );
+
+        this.configuration.getData ().put ( entry.getKey (), value );
+
+        setDirty ( true );
+    }
+
+    private void setDirty ( final boolean b )
+    {
+        this.dirty = b;
+        firePropertyChange ( IEditorPart.PROP_DIRTY );
     }
 
     @Override

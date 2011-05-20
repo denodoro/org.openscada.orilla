@@ -27,7 +27,10 @@ Import-Package: org.openscada.ca.client;version="0.15.0",
  org.openscada.ui.utils;version="0.15.0",
  org.slf4j;version="1.5.8"
 Export-Package: org.openscada.ca.ui.connection.data;version="0.17.0";
-  uses:="org.openscada.utils.beans,
-   org.openscada.ae.connection.provider,
-   org.openscada.core,
-   org.openscada.ae"
+  uses:="org.openscada.core.client,
+   org.eclipse.core.databinding.observable.set,
+   org.openscada.ca.connection.provider,
+   org.eclipse.core.runtime,
+   org.openscada.utils.beans,
+   org.eclipse.core.runtime.jobs,
+   org.openscada.ca"

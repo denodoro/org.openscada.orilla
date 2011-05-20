@@ -19,10 +19,13 @@
 
 package org.openscada.ca.ui.connection.editors.conf;
 
+import java.util.Map;
+
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
 import org.openscada.ca.ui.connection.data.LoadJob;
+import org.openscada.ca.ui.connection.data.UpdateJob;
 
 public class ConfigurationEditorInput implements IEditorInput
 {
@@ -86,6 +89,11 @@ public class ConfigurationEditorInput implements IEditorInput
     public LoadJob load ()
     {
         return new LoadJob ( this.connectionUri, this.factoryId, this.configurationId );
+    }
+
+    public UpdateJob update ( final Map<String, String> data )
+    {
+        return new UpdateJob ( this.connectionUri, this.factoryId, this.configurationId, data );
     }
 
 }
