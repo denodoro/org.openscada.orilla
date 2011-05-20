@@ -26,13 +26,15 @@ import org.eclipse.draw2d.BorderLayout;
 import org.eclipse.draw2d.ChopboxAnchor;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.ConnectionLayer;
-import org.eclipse.draw2d.ConnectionRouter;
 import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.FlowLayout;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
+import org.eclipse.draw2d.Layer;
+import org.eclipse.draw2d.LayeredPane;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseListener;
@@ -43,6 +45,7 @@ import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.jface.resource.ColorDescriptor;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.resource.LocalResourceManager;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.openscada.core.Variant;
 import org.openscada.core.ui.styles.Style;
@@ -103,15 +106,21 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
     @Override
     public IFigure createRoot ()
     {
-        final Figure baseFigure = new Figure ();
+        final LayeredPane root = new LayeredPane ();
 
-        final ConnectionLayer rootFigure = new ConnectionLayer ();
-        rootFigure.setAntialias ( 1 );
-        rootFigure.setConnectionRouter ( ConnectionRouter.NULL );
-        baseFigure.add ( rootFigure );
+        final Layer figureLayer = new Layer ();
+        figureLayer.setLayoutManager ( new FlowLayout () );
 
-        rootFigure.setLayoutManager ( new GridLayout ( 3, true ) );
-        rootFigure.setBackgroundColor ( ColorConstants.white );
+        final ConnectionLayer connectionLayer = new ConnectionLayer ();
+        connectionLayer.setAntialias ( SWT.ON );
+
+        final Figure figure = new Figure ();
+        figureLayer.add ( figure );
+
+        final GridLayout gridLayout = new GridLayout ( 3, true );
+        gridLayout.horizontalSpacing = 50;
+        gridLayout.verticalSpacing = 50;
+        figure.setLayoutManager ( gridLayout );
 
         final Figure rpvFigure = createRPV ();
         final Figure pvFigure = createPV ();
@@ -119,22 +128,25 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
         final Figure mvFigure = createMV ();
         final Figure rvFigure = createRV ();
 
-        rootFigure.add ( rpvFigure, new GridData ( GridData.CENTER, GridData.CENTER, true, true, 1, 1 ) );
-        rootFigure.add ( pvFigure, new GridData ( GridData.CENTER, GridData.CENTER, true, true, 1, 2 ) );
-        rootFigure.add ( rvFigure, new GridData ( GridData.CENTER, GridData.CENTER, true, true, 1, 3 ) );
+        figure.add ( rpvFigure, new GridData ( GridData.CENTER, GridData.CENTER, true, true, 1, 1 ) );
+        figure.add ( pvFigure, new GridData ( GridData.CENTER, GridData.CENTER, true, true, 1, 2 ) );
+        figure.add ( rvFigure, new GridData ( GridData.CENTER, GridData.CENTER, true, true, 1, 3 ) );
 
-        rootFigure.add ( rmvFigure, new GridData ( GridData.CENTER, GridData.CENTER, true, true, 1, 1 ) );
+        figure.add ( rmvFigure, new GridData ( GridData.CENTER, GridData.CENTER, true, true, 1, 1 ) );
 
-        rootFigure.add ( mvFigure, new GridData ( GridData.CENTER, GridData.CENTER, true, true, 1, 1 ) );
-        rootFigure.add ( new Figure (), new GridData ( GridData.CENTER, GridData.CENTER, true, true, 1, 1 ) ); // placeholder
+        figure.add ( mvFigure, new GridData ( GridData.CENTER, GridData.CENTER, true, true, 1, 1 ) );
+        figure.add ( new Figure (), new GridData ( GridData.CENTER, GridData.CENTER, true, true, 1, 1 ) ); // placeholder
 
-        rootFigure.add ( this.p2rConnection = createConnection ( this.pvRect, this.rvRect ) );
-        rootFigure.add ( this.m2rConnection = createConnection ( this.mvRect, this.rvRect ) );
+        connectionLayer.add ( this.p2rConnection = createConnection ( this.pvRect, this.rvRect ) );
+        connectionLayer.add ( this.m2rConnection = createConnection ( this.mvRect, this.rvRect ) );
 
-        rootFigure.add ( this.rp2pConnection = createConnection ( this.rpvRect, this.pvRect ) );
-        rootFigure.add ( this.rm2pConnection = createConnection ( this.rmvRect, this.pvRect ) );
+        connectionLayer.add ( this.rp2pConnection = createConnection ( this.rpvRect, this.pvRect ) );
+        connectionLayer.add ( this.rm2pConnection = createConnection ( this.rmvRect, this.pvRect ) );
 
-        return rootFigure;
+        root.add ( figureLayer );
+        root.add ( connectionLayer );
+
+        return root;
     }
 
     private PolylineConnection createConnection ( final IFigure source, final IFigure target )
