@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -27,6 +27,7 @@ import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.JFaceResources;
@@ -75,6 +76,7 @@ public class DetailsViewComposite extends Composite
         this.display = parent.getDisplay ();
         addDisposeListener ( new DisposeListener () {
 
+            @Override
             public void widgetDisposed ( final DisposeEvent e )
             {
                 handleDispose ();
@@ -141,7 +143,7 @@ public class DetailsViewComposite extends Composite
 
             if ( ! ( o instanceof DetailsPart ) )
             {
-                throw new CoreException ( new Status ( Status.ERROR, Activator.PLUGIN_ID, "DetailsPart is not of type 'DetailsPart'" ) ); //$NON-NLS-1$
+                throw new CoreException ( new Status ( IStatus.ERROR, Activator.PLUGIN_ID, "DetailsPart is not of type 'DetailsPart'" ) ); //$NON-NLS-1$
             }
 
             final DetailsPartInformation info = new DetailsPartInformation ();
@@ -153,6 +155,7 @@ public class DetailsViewComposite extends Composite
 
         Collections.sort ( result, new Comparator<DetailsPartInformation> () {
 
+            @Override
             public int compare ( final DetailsPartInformation arg0, final DetailsPartInformation arg1 )
             {
                 String key1 = arg0.getSortKey ();
@@ -216,6 +219,7 @@ public class DetailsViewComposite extends Composite
 
             this.dataItem = new DataItemHolder ( Activator.getDefault ().getBundle ().getBundleContext (), item, new DataSourceListener () {
 
+                @Override
                 public void updateData ( final DataItemValue value )
                 {
                     DetailsViewComposite.this.updateData ( value );
@@ -247,6 +251,7 @@ public class DetailsViewComposite extends Composite
     {
         this.display.asyncExec ( new Runnable () {
 
+            @Override
             public void run ()
             {
                 updateHeader ( value );
