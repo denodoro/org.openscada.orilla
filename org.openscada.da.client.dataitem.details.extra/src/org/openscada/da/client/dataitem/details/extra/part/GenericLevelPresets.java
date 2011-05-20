@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -19,6 +19,7 @@
 
 package org.openscada.da.client.dataitem.details.extra.part;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.draw2d.BendpointConnectionRouter;
 import org.eclipse.draw2d.BorderLayout;
@@ -37,6 +38,7 @@ import org.eclipse.draw2d.LayeredPane;
 import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseListener;
 import org.eclipse.draw2d.PolylineConnection;
+import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.Shape;
 import org.eclipse.draw2d.Triangle;
@@ -63,9 +65,10 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
             this.tri = tri;
         }
 
+        @Override
         public void setState ( final State state )
         {
-            GenericLevelPresets.this.blink ( this.tri, state );
+            blink ( this.tri, state );
         }
     }
 
@@ -278,7 +281,7 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
 
         // create HH
         this.triHH = tri = new Triangle ();
-        tri.setDirection ( Triangle.NORTH );
+        tri.setDirection ( PositionConstants.NORTH );
         tri.setBackgroundColor ( ColorConstants.black );
         tri.setSize ( TRI_DIMENSION );
         tri.setLineWidth ( 3 );
@@ -288,7 +291,7 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
 
         // create H
         this.triH = tri = new Triangle ();
-        tri.setDirection ( Triangle.NORTH );
+        tri.setDirection ( PositionConstants.NORTH );
         tri.setBackgroundColor ( ColorConstants.black );
         tri.setSize ( TRI_DIMENSION );
         tri.setLineWidth ( 3 );
@@ -298,7 +301,7 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
 
         // create L
         this.triL = tri = new Triangle ();
-        tri.setDirection ( Triangle.SOUTH );
+        tri.setDirection ( PositionConstants.SOUTH );
         tri.setBackgroundColor ( ColorConstants.black );
         tri.setSize ( TRI_DIMENSION );
         tri.setLineWidth ( 3 );
@@ -308,7 +311,7 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
 
         // create LL
         this.triLL = tri = new Triangle ();
-        tri.setDirection ( Triangle.SOUTH );
+        tri.setDirection ( PositionConstants.SOUTH );
         tri.setBackgroundColor ( ColorConstants.black );
         tri.setSize ( TRI_DIMENSION );
         tri.setLineWidth ( 3 );
@@ -360,17 +363,20 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
     {
         figure.addMouseListener ( new MouseListener () {
 
+            @Override
             public void mouseDoubleClicked ( final MouseEvent me )
             {
                 GenericLevelPresets.this.triggerAction ( string );
             }
 
+            @Override
             public void mousePressed ( final MouseEvent me )
             {
                 // TODO Auto-generated method stub
 
             }
 
+            @Override
             public void mouseReleased ( final MouseEvent me )
             {
                 // TODO Auto-generated method stub
@@ -400,7 +406,7 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
         }
         catch ( final Throwable e )
         {
-            StatusManager.getManager ().handle ( new Status ( Status.ERROR, Activator.PLUGIN_ID, "Failed to show dialog", e ) );
+            StatusManager.getManager ().handle ( new Status ( IStatus.ERROR, Activator.PLUGIN_ID, Messages.GenericLevelPresets_ErrorMessage_Dialog, e ) );
         }
     }
 

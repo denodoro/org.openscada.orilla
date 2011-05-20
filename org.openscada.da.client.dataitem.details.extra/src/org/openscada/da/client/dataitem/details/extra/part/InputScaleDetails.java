@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -127,7 +127,7 @@ public class InputScaleDetails extends AbstractBaseDraw2DDetailsPart
         // cell 2,2
         final RectangleFigure factorRect = new RectangleFigure ();
         factorRect.setLayoutManager ( new BorderLayout () );
-        factorRect.add ( new Label ( "*" ), BorderLayout.CENTER );
+        factorRect.add ( new Label ( Messages.InputScaleDetails_Multiply ), BorderLayout.CENTER );
         factorRect.setBorder ( new MarginBorder ( 10 ) );
         factorRect.setBackgroundColor ( ColorConstants.lightGray );
         factorRect.setForegroundColor ( ColorConstants.black );
@@ -140,7 +140,7 @@ public class InputScaleDetails extends AbstractBaseDraw2DDetailsPart
         // cell 3, 2
         final RectangleFigure offsetRect = new RectangleFigure ();
         offsetRect.setLayoutManager ( new BorderLayout () );
-        offsetRect.add ( new Label ( "+" ), BorderLayout.CENTER );
+        offsetRect.add ( new Label ( Messages.InputScaleDetails_Add ), BorderLayout.CENTER );
         offsetRect.setBorder ( new MarginBorder ( 10 ) );
         offsetRect.setBackgroundColor ( ColorConstants.lightGray );
         offsetRect.setForegroundColor ( ColorConstants.black );
@@ -190,7 +190,7 @@ public class InputScaleDetails extends AbstractBaseDraw2DDetailsPart
         if ( factor != null )
         {
             final Map<String, Variant> attributes = new HashMap<String, Variant> ();
-            attributes.put ( "org.openscada.da.scale.input.factor", factor );
+            attributes.put ( "org.openscada.da.scale.input.factor", factor ); //$NON-NLS-1$
             this.item.writeAtrtibutes ( attributes );
         }
     }
@@ -201,7 +201,7 @@ public class InputScaleDetails extends AbstractBaseDraw2DDetailsPart
         if ( factor != null )
         {
             final Map<String, Variant> attributes = new HashMap<String, Variant> ();
-            attributes.put ( "org.openscada.da.scale.input.offset", factor );
+            attributes.put ( "org.openscada.da.scale.input.offset", factor ); //$NON-NLS-1$
             this.item.writeAtrtibutes ( attributes );
         }
     }
@@ -231,11 +231,11 @@ public class InputScaleDetails extends AbstractBaseDraw2DDetailsPart
         // set the main value
         this.valueLabel.setText ( this.value.getValue ().toString () );
 
-        final Variant factor = this.value.getAttributes ().get ( "org.openscada.da.scale.input.factor" );
-        final Variant raw = this.value.getAttributes ().get ( "org.openscada.da.scale.input.raw" );
+        final Variant factor = this.value.getAttributes ().get ( "org.openscada.da.scale.input.factor" ); //$NON-NLS-1$
+        final Variant raw = this.value.getAttributes ().get ( "org.openscada.da.scale.input.raw" ); //$NON-NLS-1$
         @SuppressWarnings ( "unused" )
-        final Variant active = this.value.getAttributes ().get ( "org.openscada.da.scale.input.active" );
-        final Variant offset = this.value.getAttributes ().get ( "org.openscada.da.scale.input.offset" );
+        final Variant active = this.value.getAttributes ().get ( "org.openscada.da.scale.input.active" ); //$NON-NLS-1$
+        final Variant offset = this.value.getAttributes ().get ( "org.openscada.da.scale.input.offset" ); //$NON-NLS-1$
 
         // set the factor value if available
         if ( factor != null )
@@ -244,7 +244,7 @@ public class InputScaleDetails extends AbstractBaseDraw2DDetailsPart
         }
         else
         {
-            this.factorLabel.setText ( "" );
+            this.factorLabel.setText ( "" ); //$NON-NLS-1$
         }
 
         // set the raw value if available
@@ -254,7 +254,7 @@ public class InputScaleDetails extends AbstractBaseDraw2DDetailsPart
         }
         else
         {
-            this.rawLabel.setText ( "" );
+            this.rawLabel.setText ( "" ); //$NON-NLS-1$
         }
 
         // set the offset value if available
@@ -264,7 +264,7 @@ public class InputScaleDetails extends AbstractBaseDraw2DDetailsPart
         }
         else
         {
-            this.offsetLabel.setText ( "" );
+            this.offsetLabel.setText ( "" ); //$NON-NLS-1$
         }
     }
 

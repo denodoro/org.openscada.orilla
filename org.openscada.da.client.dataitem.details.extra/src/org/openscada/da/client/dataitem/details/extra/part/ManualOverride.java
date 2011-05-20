@@ -164,7 +164,7 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
     {
         final Figure rvFigure = new Figure ();
         rvFigure.setLayoutManager ( new BorderLayout () );
-        final Label label = new Label ( "Result Value" );
+        final Label label = new Label ( Messages.ManualOverride_ResetValue_Label );
         label.setBorder ( new MarginBorder ( 10 ) );
         rvFigure.add ( label, BorderLayout.RIGHT );
 
@@ -183,7 +183,7 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
     {
         final Figure rmvFigure = new Figure ();
         rmvFigure.setLayoutManager ( new BorderLayout () );
-        final Label label = new Label ( "Remote Manual Value" );
+        final Label label = new Label ( Messages.ManualOverride_RemoteManualvalue_Label );
         label.setBorder ( new MarginBorder ( 10 ) );
         rmvFigure.add ( label, BorderLayout.LEFT );
 
@@ -238,7 +238,7 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
     protected void setRemoteManualState ( final boolean state )
     {
         final Map<String, Variant> attributes = new HashMap<String, Variant> ();
-        attributes.put ( "remote.manual.active", Variant.valueOf ( state ) );
+        attributes.put ( "remote.manual.active", Variant.valueOf ( state ) ); //$NON-NLS-1$
         writeAttributes ( attributes );
     }
 
@@ -247,7 +247,7 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
         Variant var = null;
         try
         {
-            var = this.value.getAttributes ().get ( "remote.manual.value" );
+            var = this.value.getAttributes ().get ( "remote.manual.value" ); //$NON-NLS-1$
         }
         catch ( final Exception e )
         {
@@ -258,7 +258,7 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
         if ( value != null )
         {
             final Map<String, Variant> attributes = new HashMap<String, Variant> ();
-            attributes.put ( "remote.manual.value", value );
+            attributes.put ( "remote.manual.value", value ); //$NON-NLS-1$
             writeAttributes ( attributes );
         }
     }
@@ -267,7 +267,7 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
     {
         final Figure mvFigure = new Figure ();
         mvFigure.setLayoutManager ( new BorderLayout () );
-        final Label label = new Label ( "Manual Value" );
+        final Label label = new Label ( Messages.ManualOverride_LocalManualValue_Label );
         label.setBorder ( new MarginBorder ( 10 ) );
         mvFigure.add ( label, BorderLayout.LEFT );
 
@@ -334,7 +334,7 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
         }
 
         final Map<String, Variant> attributes = new HashMap<String, Variant> ();
-        attributes.put ( "org.openscada.da.manual.value", this.manualValue );
+        attributes.put ( "org.openscada.da.manual.value", this.manualValue ); //$NON-NLS-1$
         writeAttributes ( attributes );
     }
 
@@ -347,7 +347,7 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
     {
         final Figure rpvFigure = new Figure ();
         rpvFigure.setLayoutManager ( new BorderLayout () );
-        final Label label = new Label ( "Remote Process Value" );
+        final Label label = new Label ( Messages.ManualOverride_RemoteProcessValue_Label );
         label.setBorder ( new MarginBorder ( 10 ) );
         rpvFigure.add ( label, BorderLayout.LEFT );
 
@@ -400,7 +400,7 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
     {
         final Figure pvFigure = new Figure ();
         pvFigure.setLayoutManager ( new BorderLayout () );
-        final Label label = new Label ( "Process Value" );
+        final Label label = new Label ( Messages.ManualOverride_ProcessValue_Label );
         label.setBorder ( new MarginBorder ( 10 ) );
         pvFigure.add ( label, BorderLayout.LEFT );
 
@@ -470,7 +470,7 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
     {
         final Map<String, Variant> attributes = new HashMap<String, Variant> ();
 
-        attributes.put ( "org.openscada.da.manual.value", Variant.NULL );
+        attributes.put ( "org.openscada.da.manual.value", Variant.NULL ); //$NON-NLS-1$
         this.item.writeAtrtibutes ( attributes );
     }
 
@@ -483,9 +483,9 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
 
     protected void updateRemote ()
     {
-        final Boolean remoteManual = this.value.isAttribute ( "remote.manual.active" );
-        final Variant remoteProcessValue = this.value.getAttributes ().get ( "remote.manual.value.original" );
-        final Variant remoteManualValue = this.value.getAttributes ().get ( "remote.manual.value" );
+        final Boolean remoteManual = this.value.isAttribute ( "remote.manual.active" ); //$NON-NLS-1$
+        final Variant remoteProcessValue = this.value.getAttributes ().get ( "remote.manual.value.original" ); //$NON-NLS-1$
+        final Variant remoteManualValue = this.value.getAttributes ().get ( "remote.manual.value" ); //$NON-NLS-1$
 
         if ( remoteManual == null )
         {
@@ -515,19 +515,19 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
 
     private boolean isLocalManual ()
     {
-        return this.value.isAttribute ( "org.openscada.da.manual.active", false );
+        return this.value.isAttribute ( "org.openscada.da.manual.active", false ); //$NON-NLS-1$
     }
 
     private boolean isRemoteManual ()
     {
-        return this.value.isAttribute ( "remote.manual.active", false );
+        return this.value.isAttribute ( "remote.manual.active", false ); //$NON-NLS-1$
     }
 
     private void updateLocalManualValue ()
     {
         if ( this.manualValue == null )
         {
-            this.manualValue = this.value.getAttributes ().get ( "org.openscada.da.manual.value" );
+            this.manualValue = this.value.getAttributes ().get ( "org.openscada.da.manual.value" ); //$NON-NLS-1$
         }
     }
 
@@ -565,9 +565,9 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
         this.pvRect.setFont ( pvStyle.createFont ( this.resourceManager ) );
 
         // set manual value
-        final Variant manualValue = this.value.getAttributes ().get ( "org.openscada.da.manual.value" );
-        final Variant processValue = this.value.getAttributes ().get ( "org.openscada.da.manual.value.original" );
-        Variant processError = this.value.getAttributes ().get ( "org.openscada.da.manual.error.original" );
+        final Variant manualValue = this.value.getAttributes ().get ( "org.openscada.da.manual.value" ); //$NON-NLS-1$
+        final Variant processValue = this.value.getAttributes ().get ( "org.openscada.da.manual.value.original" ); //$NON-NLS-1$
+        Variant processError = this.value.getAttributes ().get ( "org.openscada.da.manual.error.original" ); //$NON-NLS-1$
         if ( processError == null )
         {
             processError = Variant.FALSE;
@@ -579,7 +579,7 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
         }
         else
         {
-            this.mvValue.setText ( "<none>" );
+            this.mvValue.setText ( Messages.ManualOverride_None );
         }
 
         if ( isLocalManual () )
@@ -594,7 +594,7 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
             }
             else
             {
-                this.pvValue.setText ( "<none>" );
+                this.pvValue.setText ( Messages.ManualOverride_None );
             }
 
             if ( processError.asBoolean () )

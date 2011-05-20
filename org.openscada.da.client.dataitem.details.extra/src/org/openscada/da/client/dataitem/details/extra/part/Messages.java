@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -25,13 +25,31 @@ public class Messages extends NLS
 {
     private static final String BUNDLE_NAME = "org.openscada.da.client.dataitem.details.extra.part.messages"; //$NON-NLS-1$
 
+    public static String GenericLevelPresets_ErrorMessage_Dialog;
+
     public static String GenericLevelPresets_Label_NotAvail_Text;
+
+    public static String InputScaleDetails_Add;
+
+    public static String InputScaleDetails_Multiply;
 
     public static String LevelPresets_EmtyNum;
 
     public static String LevelPresets_InitialLabel;
 
     public static String LevelPresets_NumFormat;
+
+    public static String ManualOverride_LocalManualValue_Label;
+
+    public static String ManualOverride_None;
+
+    public static String ManualOverride_ProcessValue_Label;
+
+    public static String ManualOverride_RemoteManualvalue_Label;
+
+    public static String ManualOverride_RemoteProcessValue_Label;
+
+    public static String ManualOverride_ResetValue_Label;
     static
     {
         // initialize resource bundle
