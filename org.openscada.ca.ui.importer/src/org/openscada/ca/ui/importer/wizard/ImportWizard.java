@@ -39,7 +39,7 @@ import org.eclipse.ui.statushandlers.StatusManager;
 import org.openscada.ca.DiffEntry;
 import org.openscada.ca.connection.provider.ConnectionService;
 import org.openscada.ca.ui.importer.Activator;
-import org.openscada.ca.ui.importer.data.DiffController;
+import org.openscada.ca.ui.util.DiffController;
 import org.openscada.ui.databinding.AdapterHelper;
 import org.openscada.utils.concurrent.NotifyFuture;
 

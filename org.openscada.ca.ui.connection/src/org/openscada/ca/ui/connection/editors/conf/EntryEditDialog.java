@@ -42,12 +42,25 @@ public class EntryEditDialog extends TrayDialog
 
     private Text keyText;
 
+    private boolean createMode;
+
     public EntryEditDialog ( final Shell shell, final ConfigurationEntry entry )
     {
         super ( shell );
+
         this.entry = new ConfigurationEntry ();
-        this.entry.setKey ( entry.getKey () );
-        this.entry.setValue ( entry.getValue () );
+        if ( entry == null )
+        {
+            this.createMode = true;
+            this.entry.setKey ( "" );
+            this.entry.setValue ( "" );
+        }
+        else
+        {
+            this.entry.setKey ( entry.getKey () );
+            this.entry.setValue ( entry.getValue () );
+            this.createMode = false;
+        }
     }
 
     @Override
@@ -83,7 +96,7 @@ public class EntryEditDialog extends TrayDialog
         label = new Label ( wrapper, SWT.NONE );
         label.setText ( "Key:" );
 
-        this.keyText = new Text ( wrapper, SWT.BORDER | SWT.READ_ONLY );
+        this.keyText = new Text ( wrapper, SWT.BORDER | ( this.createMode ? 0 : SWT.READ_ONLY ) );
         this.keyText.setText ( this.entry.getKey () );
         this.keyText.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, false ) );
 
@@ -109,11 +122,17 @@ public class EntryEditDialog extends TrayDialog
     protected void update ()
     {
         this.entry.setValue ( this.valueText.getText () );
+        this.entry.setKey ( this.keyText.getText () );
     }
 
     public String getValue ()
     {
         return this.entry.getValue ();
+    }
+
+    public String getKey ()
+    {
+        return this.entry.getKey ();
     }
 
 }

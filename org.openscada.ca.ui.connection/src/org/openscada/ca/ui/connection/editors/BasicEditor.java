@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -19,6 +19,7 @@
 
 package org.openscada.ca.ui.connection.editors;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +31,12 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IMenuListener;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.databinding.viewers.ObservableSetContentProvider;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.DoubleClickEvent;
@@ -42,9 +49,12 @@ import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 import org.openscada.ca.ConfigurationInformation;
@@ -68,9 +78,27 @@ public class BasicEditor extends EditorPart
 
     private boolean dirty;
 
+    private final Action deleteAction;
+
+    private final Action insertAction;
+
     public BasicEditor ()
     {
         this.dataSet = new WritableSet ();
+        this.deleteAction = new Action ( "Delete" ) {
+            @Override
+            public void run ()
+            {
+                handleDelete ();
+            };
+        };
+        this.insertAction = new Action ( "Insert" ) {
+            @Override
+            public void run ()
+            {
+                handleInsert ();
+            };
+        };
     }
 
     @Override
@@ -223,6 +251,12 @@ public class BasicEditor extends EditorPart
                 triggerEditDialog ( event.getSelection () );
             }
         } );
+
+        getSite ().setSelectionProvider ( this.viewer );
+
+        hookContextMenu ( getEditorSite () );
+        fillLocalPullDown ( getEditorSite ().getActionBars ().getMenuManager () );
+        fillLocalToolBar ( getEditorSite ().getActionBars ().getToolBarManager () );
     }
 
     protected void triggerEditDialog ( final ISelection selection )
@@ -243,7 +277,6 @@ public class BasicEditor extends EditorPart
         if ( dlg.open () == Window.OK )
         {
             updateEntry ( entry, dlg.getValue () );
-
         }
     }
 
@@ -256,6 +289,54 @@ public class BasicEditor extends EditorPart
         setDirty ( true );
     }
 
+    private void insertEntry ( final ConfigurationEntry entry )
+    {
+        this.dataSet.add ( entry );
+        this.configuration.getData ().put ( entry.getKey (), entry.getValue () );
+        setDirty ( true );
+    }
+
+    protected void handleInsert ()
+    {
+        final EntryEditDialog dlg = new EntryEditDialog ( getSite ().getShell (), null );
+        if ( dlg.open () == Window.OK )
+        {
+            final ConfigurationEntry entry = new ConfigurationEntry ();
+            entry.setKey ( dlg.getKey () );
+            entry.setValue ( dlg.getValue () );
+            insertEntry ( entry );
+        }
+    }
+
+    private void deleteEntry ( final ConfigurationEntry entry )
+    {
+        this.dataSet.remove ( entry );
+        this.configuration.getData ().remove ( entry.getKey () );
+        setDirty ( true );
+    }
+
+    protected void handleDelete ()
+    {
+        final ISelection sel = this.viewer.getSelection ();
+        if ( sel == null || sel.isEmpty () || ! ( sel instanceof IStructuredSelection ) )
+        {
+            return;
+        }
+
+        final IStructuredSelection selection = (IStructuredSelection)sel;
+
+        final Iterator<?> i = selection.iterator ();
+        while ( i.hasNext () )
+        {
+            final Object o = i.next ();
+            final ConfigurationEntry entry = AdapterHelper.adapt ( o, ConfigurationEntry.class );
+            if ( entry != null )
+            {
+                deleteEntry ( entry );
+            }
+        }
+    }
+
     private void setDirty ( final boolean b )
     {
         this.dirty = b;
@@ -266,6 +347,58 @@ public class BasicEditor extends EditorPart
     public void setFocus ()
     {
         this.viewer.getControl ().setFocus ();
+    }
+
+    // editor actions
+
+    private void hookContextMenu ( final IEditorSite editorSite )
+    {
+        final MenuManager menuMgr = new MenuManager ( "#PopupMenu" ); //$NON-NLS-1$
+        menuMgr.setRemoveAllWhenShown ( true );
+        menuMgr.addMenuListener ( new IMenuListener () {
+            @Override
+            public void menuAboutToShow ( final IMenuManager manager )
+            {
+                fillContextMenu ( manager );
+            }
+        } );
+        final Menu menu = menuMgr.createContextMenu ( this.viewer.getControl () );
+        this.viewer.getControl ().setMenu ( menu );
+        editorSite.registerContextMenu ( menuMgr, this.viewer );
+    }
+
+    private void fillContextMenu ( final IMenuManager manager )
+    {
+        // Other plug-ins can contribute there actions here
+
+        manager.add ( this.deleteAction );
+        manager.add ( new Separator () );
+        manager.add ( new Separator ( IWorkbenchActionConstants.MB_ADDITIONS ) );
+    }
+
+    private void contributeToActionBars ( final IEditorSite editor )
+    {
+        final IActionBars bars = editor.getActionBars ();
+        fillLocalPullDown ( bars.getMenuManager () );
+        fillLocalToolBar ( bars.getToolBarManager () );
+    }
+
+    public void contribueTo ( final IEditorSite viewSite )
+    {
+        hookContextMenu ( viewSite );
+        contributeToActionBars ( viewSite );
+    }
+
+    protected void fillLocalToolBar ( final IToolBarManager manager )
+    {
+        manager.add ( this.deleteAction );
+        manager.add ( this.insertAction );
+    }
+
+    protected void fillLocalPullDown ( final IMenuManager manager )
+    {
+        manager.add ( this.deleteAction );
+        manager.add ( this.insertAction );
     }
 
 }

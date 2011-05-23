@@ -42,8 +42,8 @@ import org.eclipse.ui.statushandlers.StatusManager;
 import org.openscada.ca.FactoryInformation;
 import org.openscada.ca.connection.provider.ConnectionService;
 import org.openscada.ca.ui.importer.Activator;
-import org.openscada.ca.ui.importer.data.DiffController;
 import org.openscada.ca.ui.util.ConfigurationHelper;
+import org.openscada.ca.ui.util.DiffController;
 import org.openscada.ca.ui.util.OscarLoader;
 
 public class RemoteDataPage extends WizardPage

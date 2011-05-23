@@ -47,7 +47,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.TableItem;
-import org.openscada.ca.ui.importer.data.DiffController;
+import org.openscada.ca.ui.util.DiffController;
 
 public class IgnorePage extends WizardPage
 {

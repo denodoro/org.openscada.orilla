@@ -24,6 +24,8 @@ public class Messages extends NLS
 {
     private static final String BUNDLE_NAME = "org.openscada.ca.ui.util.messages"; //$NON-NLS-1$
 
+    public static String DiffController_TaskName;
+
     public static String ConfigurationHelper_SubTaskNameFormat;
 
     public static String ConfigurationHelper_TaskName;

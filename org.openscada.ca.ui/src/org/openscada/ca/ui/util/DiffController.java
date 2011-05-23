@@ -17,7 +17,7 @@
  * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
-package org.openscada.ca.ui.importer.data;
+package org.openscada.ca.ui.util;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -31,7 +31,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.openscada.ca.DiffEntry;
 import org.openscada.ca.DiffEntry.Operation;
 import org.openscada.ca.FactoryInformation;
-import org.openscada.ca.ui.util.ConfigurationHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
