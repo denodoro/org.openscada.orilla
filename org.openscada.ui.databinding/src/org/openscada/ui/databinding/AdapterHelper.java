@@ -49,7 +49,7 @@ public class AdapterHelper
 
         if ( adapterClass.isAssignableFrom ( target.getClass () ) )
         {
-            return adapterClass.cast ( target.getClass () );
+            return adapterClass.cast ( target );
         }
         if ( target instanceof IAdaptable )
         {
