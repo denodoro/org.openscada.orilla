@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -345,18 +345,18 @@ public class FilterQueryByExampleComposite extends Composite
             try
             {
                 final Long l = Long.parseLong ( this.textText.getText () );
-                assertion = new FilterAssertion ( this.field, Assertion.EQUALITY, new Variant ( l ).toString () );
+                assertion = new FilterAssertion ( this.field, Assertion.EQUALITY, Variant.valueOf ( l ).toString () );
             }
             catch ( final NumberFormatException el )
             {
                 try
                 {
                     final Double d = Double.parseDouble ( this.textText.getText () );
-                    assertion = new FilterAssertion ( this.field, Assertion.EQUALITY, new Variant ( d ).toString () );
+                    assertion = new FilterAssertion ( this.field, Assertion.EQUALITY, Variant.valueOf ( d ).toString () );
                 }
                 catch ( final NumberFormatException ed )
                 {
-                    assertion = new FilterAssertion ( this.field, Assertion.EQUALITY, new Variant ( this.textText.getText () ) );
+                    assertion = new FilterAssertion ( this.field, Assertion.EQUALITY, Variant.valueOf ( this.textText.getText () ) );
                 }
             }
             if ( this.notCheckBox.getSelection () )
@@ -439,7 +439,7 @@ public class FilterQueryByExampleComposite extends Composite
     private void populateFromFilter ( final String filterString )
     {
         // no filter given
-        if ( ( filterString == null ) || ( filterString.length () == 0 ) )
+        if ( filterString == null || filterString.length () == 0 )
         {
             return;
         }
@@ -468,7 +468,7 @@ public class FilterQueryByExampleComposite extends Composite
                 final FilterExpression subFilterExpression = (FilterExpression)subFilter;
                 if ( subFilterExpression.getOperator () == Operator.NOT )
                 {
-                    if ( ( subFilterExpression.getFilterSet ().size () == 1 ) && subFilterExpression.getFilterSet ().get ( 0 ).isAssertion () )
+                    if ( subFilterExpression.getFilterSet ().size () == 1 && subFilterExpression.getFilterSet ().get ( 0 ).isAssertion () )
                     {
                         populateFromAssertion ( true, (FilterAssertion)subFilterExpression.getFilterSet ().get ( 0 ) );
                     }
@@ -479,27 +479,27 @@ public class FilterQueryByExampleComposite extends Composite
                     String attribute = null;
                     String from = null;
                     String to = null;
-                    if ( ( subFilterExpression.getFilterSet ().size () == 1 ) || ( ( subFilterExpression.getFilterSet ().size () == 2 ) && subFilterExpression.getFilterSet ().get ( 0 ).isAssertion () ) )
+                    if ( subFilterExpression.getFilterSet ().size () == 1 || subFilterExpression.getFilterSet ().size () == 2 && subFilterExpression.getFilterSet ().get ( 0 ).isAssertion () )
                     {
                         final FilterAssertion filterAssertion = (FilterAssertion)subFilterExpression.getFilterSet ().get ( 0 );
                         attribute = filterAssertion.getAttribute ();
-                        if ( ( filterAssertion != null ) && ( filterAssertion.getAssertion () == Assertion.GREATEREQ ) )
+                        if ( filterAssertion != null && filterAssertion.getAssertion () == Assertion.GREATEREQ )
                         {
                             from = (String)filterAssertion.getValue ();
                         }
-                        else if ( ( filterAssertion != null ) && ( filterAssertion.getAssertion () == Assertion.LESSEQ ) )
+                        else if ( filterAssertion != null && filterAssertion.getAssertion () == Assertion.LESSEQ )
                         {
                             to = (String)filterAssertion.getValue ();
                         }
                     }
-                    if ( ( subFilterExpression.getFilterSet ().size () == 2 ) && subFilterExpression.getFilterSet ().get ( 1 ).isAssertion () )
+                    if ( subFilterExpression.getFilterSet ().size () == 2 && subFilterExpression.getFilterSet ().get ( 1 ).isAssertion () )
                     {
                         final FilterAssertion filterAssertion = (FilterAssertion)subFilterExpression.getFilterSet ().get ( 1 );
-                        if ( ( filterAssertion != null ) && ( filterAssertion.getAssertion () == Assertion.GREATEREQ ) )
+                        if ( filterAssertion != null && filterAssertion.getAssertion () == Assertion.GREATEREQ )
                         {
                             from = (String)filterAssertion.getValue ();
                         }
-                        else if ( ( filterAssertion != null ) && ( filterAssertion.getAssertion () == Assertion.LESSEQ ) )
+                        else if ( filterAssertion != null && filterAssertion.getAssertion () == Assertion.LESSEQ )
                         {
                             to = (String)filterAssertion.getValue ();
                         }
