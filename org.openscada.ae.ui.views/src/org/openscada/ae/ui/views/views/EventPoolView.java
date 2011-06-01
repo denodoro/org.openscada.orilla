@@ -173,7 +173,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
                 final InputDialog dlg = new InputDialog ( parent.getShell (), commentAction.getText (), commentAction.getDescription (), comment == null ? "" : comment.asString ( "" ), null ); //$NON-NLS-1$ //$NON-NLS-2$
                 if ( dlg.open () == Window.OK )
                 {
-                    comment = new Variant ( dlg.getValue () );
+                    comment = Variant.valueOf ( dlg.getValue () );
                     for ( final DecoratedEvent decoratedEvent : EventPoolView.this.eventsTable.selectedEvents () )
                     {
                         final Event updatedEvent = Event.create ().event ( decoratedEvent.getEvent () ).attribute ( Fields.COMMENT, comment ).build ();

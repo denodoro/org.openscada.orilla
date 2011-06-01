@@ -47,9 +47,9 @@ public class AdapterHelper
             return null;
         }
 
-        if ( adapterClass.isInstance ( target ) )
+        if ( adapterClass.isAssignableFrom ( target.getClass () ) )
         {
-            return (T)target;
+            return adapterClass.cast ( target );
         }
         if ( target instanceof IAdaptable )
         {
