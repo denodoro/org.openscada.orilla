@@ -101,6 +101,8 @@ public class EventViewTable extends Composite
 
     private final TableViewer tableViewer;
 
+    private final ArrayList<EventTableColumn> localColumns;
+
     private static final List<EventTableColumn> columns = new ArrayList<EventTableColumn> ();
 
     static
@@ -137,10 +139,10 @@ public class EventViewTable extends Composite
         this.commentAction = commentAction;
         this.events = events;
 
-        final List<EventTableColumn> localColumns = new ArrayList<EventTableColumn> ( columns );
+        this.localColumns = new ArrayList<EventTableColumn> ( columns );
         if ( additionalColumns != null )
         {
-            localColumns.addAll ( additionalColumns );
+            this.localColumns.addAll ( additionalColumns );
         }
 
         final FillLayout layout = new FillLayout ();
@@ -158,7 +160,7 @@ public class EventViewTable extends Composite
 
         final ObservableSetContentProvider contentProvider = new ObservableSetContentProvider ();
         this.tableViewer.setContentProvider ( contentProvider );
-        this.tableViewer.setLabelProvider ( new EventLabelProvider ( Properties.observeEach ( contentProvider.getKnownElements (), BeanProperties.values ( new String[] { "id", "monitor" } ) ), localColumns, Settings.getTimeZone () ) ); //$NON-NLS-1$ //$NON-NLS-2$
+        this.tableViewer.setLabelProvider ( new EventLabelProvider ( Properties.observeEach ( contentProvider.getKnownElements (), BeanProperties.values ( new String[] { "id", "monitor" } ) ), this.localColumns, Settings.getTimeZone () ) ); //$NON-NLS-1$ //$NON-NLS-2$
         this.tableViewer.setInput ( this.events );
 
         contentProvider.getRealizedElements ().addSetChangeListener ( new ISetChangeListener () {
@@ -257,7 +259,7 @@ public class EventViewTable extends Composite
     {
         final SortListener sortListener = new SortListener ( table );
 
-        for ( final EventTableColumn column : columns )
+        for ( final EventTableColumn column : this.localColumns )
         {
             final TableViewerColumn fieldColumn = new TableViewerColumn ( table, SWT.NONE );
 
