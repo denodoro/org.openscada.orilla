@@ -269,7 +269,6 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
         figure.setLayoutManager ( new BorderLayout () );
         innerFigure.setLayoutManager ( new BorderLayout () );
 
-        final Triangle tri;
         RectangleFigure rect;
 
         // create ceil
