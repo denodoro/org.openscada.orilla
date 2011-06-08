@@ -327,7 +327,6 @@ public class EventViewTable extends Composite
     public void setScrollLock ( final boolean scrollLock )
     {
         this.scrollLock = scrollLock;
-        System.err.println ( scrollLock );
     }
 
     public boolean isScrollLock ()
