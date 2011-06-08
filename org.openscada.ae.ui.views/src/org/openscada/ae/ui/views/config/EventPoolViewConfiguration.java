@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -38,7 +38,14 @@ public class EventPoolViewConfiguration
 
     private final Integer maxNumberOfEvents;
 
-    public EventPoolViewConfiguration ( final String id, final String monitorQueryId, final String eventPoolQueryId, final String connectionString, final ConnectionType connectionType, final String label, final int maxNumberOfEvents )
+    private final int forceEventLimit;
+
+    public int getForceEventLimit ()
+    {
+        return this.forceEventLimit;
+    }
+
+    public EventPoolViewConfiguration ( final String id, final String monitorQueryId, final String eventPoolQueryId, final String connectionString, final ConnectionType connectionType, final String label, final int maxNumberOfEvents, final int forceEventLimit )
     {
         super ();
         this.id = id;
@@ -48,6 +55,7 @@ public class EventPoolViewConfiguration
         this.connectionType = connectionType;
         this.label = label;
         this.maxNumberOfEvents = maxNumberOfEvents;
+        this.forceEventLimit = forceEventLimit;
 
         if ( this.id == null )
         {
@@ -100,9 +108,9 @@ public class EventPoolViewConfiguration
     {
         return this.label;
     }
-    
+
     public Integer getMaxNumberOfEvents ()
     {
-        return maxNumberOfEvents;
+        return this.maxNumberOfEvents;
     }
 }

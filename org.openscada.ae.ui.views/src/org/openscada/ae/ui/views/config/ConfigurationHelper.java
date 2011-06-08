@@ -153,7 +153,19 @@ public class ConfigurationHelper
             final String eventPoolQueryId = ele.getAttribute ( "eventPoolQueryId" ); //$NON-NLS-1$
             final ConnectionType connectionType = ConnectionType.valueOf ( ele.getAttribute ( "connectionType" ) ); //$NON-NLS-1$
             final String label = ele.getAttribute ( "label" ); //$NON-NLS-1$
+
             int maxNumberOfEvents = 0;
+            int forceEventLimit = Integer.getInteger ( "org.openscada.ae.ui.views.config.defaultForceLimit", 200000 );//$NON-NLS-1$
+
+            try
+            {
+                forceEventLimit = Integer.parseInt ( ele.getAttribute ( "forceEventLimit" ) );//$NON-NLS-1$
+            }
+            catch ( final Exception e )
+            {
+                // ignore
+            }
+
             if ( Arrays.asList ( ele.getAttributeNames () ).contains ( "maxNumberOfEvents" ) ) //$NON-NLS-1$
             {
                 final String s = ele.getAttribute ( "maxNumberOfEvents" ); //$NON-NLS-1$
@@ -167,7 +179,7 @@ public class ConfigurationHelper
                 }
             }
 
-            return new EventPoolViewConfiguration ( id, monitorQueryId, eventPoolQueryId, connectionString, connectionType, label, maxNumberOfEvents );
+            return new EventPoolViewConfiguration ( id, monitorQueryId, eventPoolQueryId, connectionString, connectionType, label, maxNumberOfEvents, forceEventLimit );
         }
         catch ( final Exception e )
         {
