@@ -29,11 +29,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.poi.hpsf.CustomProperties;
+import org.apache.poi.hpsf.DocumentSummaryInformation;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFDataFormat;
 import org.apache.poi.hssf.usermodel.HSSFFooter;
 import org.apache.poi.hssf.usermodel.HSSFHeader;
+import org.apache.poi.hssf.usermodel.HSSFPatternFormatting;
+import org.apache.poi.hssf.usermodel.HSSFPrintSetup;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -42,6 +46,8 @@ import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.PrintSetup;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -178,7 +184,7 @@ public class ExportImpl
 
         try
         {
-            monitor.beginTask ( Messages.ExportImpl_Progress_ExportingEvents, events.size () + 3 );
+            monitor.beginTask ( Messages.ExportImpl_Progress_ExportingEvents, events.size () + 3 + columns.size () );
 
             try
             {
@@ -207,12 +213,30 @@ public class ExportImpl
                         return Status.CANCEL_STATUS;
                     }
                 }
+
+                workbook.setRepeatingRowsAndColumns ( 0, -1, -1, 0, 1 );
+
+                monitor.setTaskName ( "Auto sizing" );
+                for ( int i = 0; i < columns.size (); i++ )
+                {
+                    monitor.subTask ( String.format ( "Auto sizing column: %s", columns.get ( i ).getHeader () ) );
+                    sheet.autoSizeColumn ( i );
+                    monitor.worked ( 1 );
+
+                    if ( monitor.isCanceled () )
+                    {
+                        return Status.CANCEL_STATUS;
+                    }
+                }
+
             }
             finally
             {
                 monitor.subTask ( Messages.ExportImpl_Progress_CloseFile );
                 if ( workbook != null )
                 {
+                    makeDocInfo ( workbook );
+
                     final FileOutputStream stream = new FileOutputStream ( file );
                     workbook.write ( stream );
                     stream.close ();
@@ -228,12 +252,21 @@ public class ExportImpl
         return Status.OK_STATUS;
     }
 
+    private void makeDocInfo ( final HSSFWorkbook workbook )
+    {
+        workbook.createInformationProperties ();
+
+        final DocumentSummaryInformation dsi = workbook.getDocumentSummaryInformation ();
+        dsi.setCompany ( "TH4 SYSTEMS GmbH" );
+
+        final CustomProperties cp = new CustomProperties ();
+        cp.put ( "openSCADA Export Version", Activator.getDefault ().getBundle ().getVersion ().toString () );
+        dsi.setCustomProperties ( cp );
+    }
+
     private HSSFSheet createSheet ( final List<Event> events, final HSSFWorkbook workbook, final List<Field> columns )
     {
         final HSSFSheet sheet = workbook.createSheet ( Messages.ExportImpl_ExcelSheet_Name );
-        sheet.getPrintSetup ().setLandscape ( true );
-        sheet.getPrintSetup ().setFitWidth ( (short)1 );
-        sheet.getPrintSetup ().setPaperSize ( PrintSetup.A4_PAPERSIZE );
 
         final HSSFHeader header = sheet.getHeader ();
         header.setLeft ( Messages.ExportImpl_ExcelSheet_Header );
@@ -245,6 +278,24 @@ public class ExportImpl
         footer.setRight ( Messages.ExportImpl_ExcelSheet_Footer_2 + HeaderFooter.page () + Messages.ExportImpl_ExcelSheet_Footer_3 + HeaderFooter.numPages () );
 
         makeHeader ( columns, sheet );
+
+        final HSSFPrintSetup printSetup = sheet.getPrintSetup ();
+        printSetup.setLandscape ( true );
+        printSetup.setFitWidth ( (short)1 );
+        printSetup.setFitHeight ( (short)0 );
+        printSetup.setPaperSize ( PrintSetup.A4_PAPERSIZE );
+
+        sheet.setAutoFilter ( new CellRangeAddress ( 0, 0, 0, columns.size () - 1 ) );
+        sheet.createFreezePane ( 0, 1 );
+        sheet.setFitToPage ( true );
+        sheet.setAutobreaks ( true );
+
+        printSetup.setFooterMargin ( 0.25 );
+
+        sheet.setMargin ( Sheet.LeftMargin, 0.25 );
+        sheet.setMargin ( Sheet.RightMargin, 0.25 );
+        sheet.setMargin ( Sheet.TopMargin, 0.25 );
+        sheet.setMargin ( Sheet.BottomMargin, 0.5 );
 
         return sheet;
     }
@@ -258,7 +309,8 @@ public class ExportImpl
 
         final CellStyle style = sheet.getWorkbook ().createCellStyle ();
         style.setFont ( font );
-        style.setFillBackgroundColor ( HSSFColor.BLACK.index );
+        style.setFillForegroundColor ( HSSFColor.BLACK.index );
+        style.setFillPattern ( HSSFPatternFormatting.SOLID_FOREGROUND );
 
         final HSSFRow row = sheet.createRow ( 0 );
 
@@ -269,8 +321,6 @@ public class ExportImpl
             final HSSFCell cell = row.createCell ( i );
             cell.setCellValue ( field.getHeader () );
             cell.setCellStyle ( style );
-
-            sheet.autoSizeColumn ( i );
         }
     }
 
