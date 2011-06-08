@@ -116,6 +116,8 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
      */
     private int forceEventLimit = 0;
 
+    private List<EventTableColumn> additionalColumns;
+
     public String getPoolId ()
     {
         return this.poolId;
@@ -234,12 +236,12 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
         toolBarManager.add ( setFilterAction );
         toolBarManager.add ( removeFilterAction );
 
-        this.eventsTable = new EventViewTable ( getContentPane (), SWT.BORDER, this.pool, this.ackAction, commentAction, this.initialColumnSettings );
+        loadConfiguration ();
+
+        this.eventsTable = new EventViewTable ( getContentPane (), SWT.BORDER, this.pool, this.ackAction, commentAction, this.initialColumnSettings, this.additionalColumns );
         this.eventsTable.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, true, 1, 1 ) );
 
         getSite ().setSelectionProvider ( this.eventsTable.getTableViewer () );
-
-        loadConfiguration ();
     }
 
     private void loadConfiguration ()
@@ -282,6 +284,13 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
         }
         this.maxNumberOfEvents = cfg.getMaxNumberOfEvents ();
         this.forceEventLimit = cfg.getForceEventLimit ();
+
+        this.additionalColumns = new LinkedList<EventTableColumn> ();
+        for ( final Map.Entry<String, String> entry : cfg.getAdditionalColumns ().entrySet () )
+        {
+            final EventTableColumn col = new EventTableColumn ( entry.getKey (), entry.getValue () );
+            this.additionalColumns.add ( col );
+        }
     }
 
     /**

@@ -127,10 +127,21 @@ public class EventViewTable extends Composite
 
     public EventViewTable ( final Composite parent, final int style, final WritableSet events, final Action ackAction, final Action commentAction, final List<ColumnProperties> columnSettings )
     {
+        this ( parent, style, events, ackAction, commentAction, columnSettings, null );
+    }
+
+    public EventViewTable ( final Composite parent, final int style, final WritableSet events, final Action ackAction, final Action commentAction, final List<ColumnProperties> columnSettings, final List<EventTableColumn> additionalColumns )
+    {
         super ( parent, style );
         this.ackAction = ackAction;
         this.commentAction = commentAction;
         this.events = events;
+
+        final List<EventTableColumn> localColumns = new ArrayList<EventTableColumn> ( columns );
+        if ( additionalColumns != null )
+        {
+            localColumns.addAll ( additionalColumns );
+        }
 
         final FillLayout layout = new FillLayout ();
         setLayout ( layout );
@@ -147,7 +158,7 @@ public class EventViewTable extends Composite
 
         final ObservableSetContentProvider contentProvider = new ObservableSetContentProvider ();
         this.tableViewer.setContentProvider ( contentProvider );
-        this.tableViewer.setLabelProvider ( new EventLabelProvider ( Properties.observeEach ( contentProvider.getKnownElements (), BeanProperties.values ( new String[] { "id", "monitor" } ) ), columns, Settings.getTimeZone () ) ); //$NON-NLS-1$ //$NON-NLS-2$
+        this.tableViewer.setLabelProvider ( new EventLabelProvider ( Properties.observeEach ( contentProvider.getKnownElements (), BeanProperties.values ( new String[] { "id", "monitor" } ) ), localColumns, Settings.getTimeZone () ) ); //$NON-NLS-1$ //$NON-NLS-2$
         this.tableViewer.setInput ( this.events );
 
         contentProvider.getRealizedElements ().addSetChangeListener ( new ISetChangeListener () {
@@ -249,7 +260,16 @@ public class EventViewTable extends Composite
         for ( final EventTableColumn column : columns )
         {
             final TableViewerColumn fieldColumn = new TableViewerColumn ( table, SWT.NONE );
-            fieldColumn.getColumn ().setText ( Messages.getString ( column.getColumn () ) );
+
+            if ( column.getLabel () != null )
+            {
+                fieldColumn.getColumn ().setText ( column.getLabel () );
+            }
+            else
+            {
+                fieldColumn.getColumn ().setText ( Messages.getString ( column.getColumn () ) );
+            }
+
             fieldColumn.getColumn ().setWidth ( 120 );
             fieldColumn.getColumn ().setResizable ( true );
             fieldColumn.getColumn ().setMoveable ( true );

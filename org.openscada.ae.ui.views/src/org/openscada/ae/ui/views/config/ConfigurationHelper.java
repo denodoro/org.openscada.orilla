@@ -22,7 +22,9 @@ package org.openscada.ae.ui.views.config;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.IParameter;
@@ -179,12 +181,28 @@ public class ConfigurationHelper
                 }
             }
 
-            return new EventPoolViewConfiguration ( id, monitorQueryId, eventPoolQueryId, connectionString, connectionType, label, maxNumberOfEvents, forceEventLimit );
+            final Map<String, String> additionalColumns = new HashMap<String, String> ();
+            fillAdditional ( additionalColumns, ele );
+
+            return new EventPoolViewConfiguration ( id, monitorQueryId, eventPoolQueryId, connectionString, connectionType, label, maxNumberOfEvents, forceEventLimit, additionalColumns );
         }
         catch ( final Exception e )
         {
             logger.warn ( "Failed to convert event pool configuration: {}", ele ); //$NON-NLS-1$
             return null;
+        }
+    }
+
+    private static void fillAdditional ( final Map<String, String> additionalColumns, final IConfigurationElement ele )
+    {
+        for ( final IConfigurationElement child : ele.getChildren ( "additionalColumn" ) )
+        {
+            final String key = child.getAttribute ( "key" );
+            final String label = child.getAttribute ( "label" );
+            if ( key != null )
+            {
+                additionalColumns.put ( key, label );
+            }
         }
     }
 

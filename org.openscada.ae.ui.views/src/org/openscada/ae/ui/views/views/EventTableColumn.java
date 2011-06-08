@@ -1,3 +1,22 @@
+/*
+ * This file is part of the OpenSCADA project
+ * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ *
+ * OpenSCADA is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenSCADA is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenSCADA. If not, see
+ * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
+ */
+
 package org.openscada.ae.ui.views.views;
 
 import java.io.Serializable;
@@ -8,11 +27,13 @@ import org.openscada.utils.lang.Immutable;
 @Immutable
 public class EventTableColumn implements Serializable
 {
-    private static final long serialVersionUID = -2535195597442653236L;
+    private static final long serialVersionUID = 1L;
 
     private final String column;
 
     private final Fields field;
+
+    private final String label;
 
     public static EventTableColumn reservedColumnId = new EventTableColumn ( "id" ); //$NON-NLS-1$
 
@@ -20,16 +41,33 @@ public class EventTableColumn implements Serializable
 
     public static EventTableColumn reservedColumnEntryTimestamp = new EventTableColumn ( "entryTimestamp" ); //$NON-NLS-1$
 
-    public EventTableColumn ( final String column )
+    public EventTableColumn ( final String column, final String label )
     {
         this.column = column;
         this.field = null;
+        this.label = label;
+    }
+
+    public EventTableColumn ( final Fields field, final String label )
+    {
+        this.column = field.getName ();
+        this.field = field;
+        this.label = label;
+    }
+
+    public EventTableColumn ( final String column )
+    {
+        this ( column, null );
     }
 
     public EventTableColumn ( final Fields field )
     {
-        this.column = field.getName ();
-        this.field = field;
+        this ( field, null );
+    }
+
+    public String getLabel ()
+    {
+        return this.label;
     }
 
     public String getColumn ()
