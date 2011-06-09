@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -18,6 +18,8 @@
  */
 
 package org.openscada.ae.ui.views.config;
+
+import java.util.Map;
 
 import org.openscada.utils.lang.Immutable;
 
@@ -38,7 +40,11 @@ public class EventPoolViewConfiguration
 
     private final Integer maxNumberOfEvents;
 
-    public EventPoolViewConfiguration ( final String id, final String monitorQueryId, final String eventPoolQueryId, final String connectionString, final ConnectionType connectionType, final String label, final int maxNumberOfEvents )
+    private final int forceEventLimit;
+
+    private final Map<String, String> additionalColumns;
+
+    public EventPoolViewConfiguration ( final String id, final String monitorQueryId, final String eventPoolQueryId, final String connectionString, final ConnectionType connectionType, final String label, final int maxNumberOfEvents, final int forceEventLimit, final Map<String, String> additionalColumns )
     {
         super ();
         this.id = id;
@@ -48,6 +54,8 @@ public class EventPoolViewConfiguration
         this.connectionType = connectionType;
         this.label = label;
         this.maxNumberOfEvents = maxNumberOfEvents;
+        this.forceEventLimit = forceEventLimit;
+        this.additionalColumns = additionalColumns;
 
         if ( this.id == null )
         {
@@ -69,6 +77,16 @@ public class EventPoolViewConfiguration
         {
             throw new IllegalArgumentException ( Messages.EventPoolViewConfiguration_IllegalArgument_eventPoolQueryId );
         }
+    }
+
+    public Map<String, String> getAdditionalColumns ()
+    {
+        return this.additionalColumns;
+    }
+
+    public int getForceEventLimit ()
+    {
+        return this.forceEventLimit;
     }
 
     public String getEventPoolQueryId ()
@@ -100,9 +118,9 @@ public class EventPoolViewConfiguration
     {
         return this.label;
     }
-    
+
     public Integer getMaxNumberOfEvents ()
     {
-        return maxNumberOfEvents;
+        return this.maxNumberOfEvents;
     }
 }

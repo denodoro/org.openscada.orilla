@@ -44,6 +44,8 @@ import org.eclipse.draw2d.Shape;
 import org.eclipse.draw2d.Triangle;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.jface.resource.ColorDescriptor;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.statushandlers.StatusManager;
 import org.openscada.core.Variant;
 import org.openscada.core.ui.styles.Style;
@@ -267,7 +269,6 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
         figure.setLayoutManager ( new BorderLayout () );
         innerFigure.setLayoutManager ( new BorderLayout () );
 
-        Triangle tri;
         RectangleFigure rect;
 
         // create ceil
@@ -275,58 +276,24 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
         rect.setBackgroundColor ( ColorConstants.black );
         rect.setSize ( RECT_DIMENSION );
         rect.setLineWidth ( 3 );
-        attachDoubleClick ( rect, TAG_CEIL );
+        rect.setCursor ( Display.getDefault ().getSystemCursor ( SWT.CURSOR_HAND ) );
         outerFigure.add ( rect, BorderLayout.TOP );
-        attachActivate ( this.rectCeil, TAG_CEIL );
+        activate ( TAG_CEIL, rect );
 
         // create HH
-        this.triHH = tri = new Triangle ();
-        tri.setDirection ( PositionConstants.NORTH );
-        tri.setBackgroundColor ( ColorConstants.black );
-        tri.setSize ( TRI_DIMENSION );
-        tri.setLineWidth ( 3 );
-        attachDoubleClick ( tri, TAG_HH );
-        figure.add ( tri, BorderLayout.TOP );
-        attachActivate ( this.triHH, TAG_HH );
-
-        // create H
-        this.triH = tri = new Triangle ();
-        tri.setDirection ( PositionConstants.NORTH );
-        tri.setBackgroundColor ( ColorConstants.black );
-        tri.setSize ( TRI_DIMENSION );
-        tri.setLineWidth ( 3 );
-        attachDoubleClick ( tri, TAG_H );
-        innerFigure.add ( tri, BorderLayout.TOP );
-        attachActivate ( this.triH, TAG_H );
-
-        // create L
-        this.triL = tri = new Triangle ();
-        tri.setDirection ( PositionConstants.SOUTH );
-        tri.setBackgroundColor ( ColorConstants.black );
-        tri.setSize ( TRI_DIMENSION );
-        tri.setLineWidth ( 3 );
-        attachDoubleClick ( tri, TAG_L );
-        innerFigure.add ( tri, BorderLayout.BOTTOM );
-        attachActivate ( this.triL, TAG_L );
-
-        // create LL
-        this.triLL = tri = new Triangle ();
-        tri.setDirection ( PositionConstants.SOUTH );
-        tri.setBackgroundColor ( ColorConstants.black );
-        tri.setSize ( TRI_DIMENSION );
-        tri.setLineWidth ( 3 );
-        attachDoubleClick ( tri, TAG_LL );
-        figure.add ( tri, BorderLayout.BOTTOM );
-        attachActivate ( this.triLL, TAG_LL );
+        this.triHH = createTri ( figure, TAG_HH, BorderLayout.TOP, PositionConstants.NORTH );
+        this.triH = createTri ( innerFigure, TAG_H, BorderLayout.TOP, PositionConstants.NORTH );
+        this.triL = createTri ( innerFigure, TAG_L, BorderLayout.BOTTOM, PositionConstants.SOUTH );
+        this.triLL = createTri ( figure, TAG_LL, BorderLayout.BOTTOM, PositionConstants.SOUTH );
 
         // create floor
         this.rectFloor = rect = new RectangleFigure ();
         rect.setBackgroundColor ( ColorConstants.black );
         rect.setSize ( RECT_DIMENSION );
         rect.setLineWidth ( 3 );
-        attachDoubleClick ( rect, TAG_FLOOR );
+        rect.setCursor ( Display.getDefault ().getSystemCursor ( SWT.CURSOR_HAND ) );
         outerFigure.add ( rect, BorderLayout.BOTTOM );
-        attachActivate ( this.rectFloor, TAG_FLOOR );
+        activate ( TAG_FLOOR, rect );
 
         figure.add ( innerFigure, BorderLayout.CENTER );
         outerFigure.add ( figure, BorderLayout.CENTER );
@@ -343,46 +310,37 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
         return outerFigure;
     }
 
-    protected void attachActivate ( final Figure figure, final String tag )
+    private Triangle createTri ( final Figure figure, final String tag, final Object constraint, final int direction )
     {
-        figure.addMouseListener ( new MouseListener.Stub () {
-            @Override
-            public void mouseReleased ( final MouseEvent event )
-            {
-                GenericLevelPresets.this.activate ( tag );
-            }
-        } );
+        final Triangle tri;
+        tri = new Triangle ();
+        tri.setDirection ( direction );
+        tri.setBackgroundColor ( ColorConstants.black );
+        tri.setSize ( TRI_DIMENSION );
+        tri.setLineWidth ( 3 );
+        tri.setCursor ( Display.getDefault ().getSystemCursor ( SWT.CURSOR_HAND ) );
+
+        figure.add ( tri, constraint );
+
+        activate ( tag, tri );
+        return tri;
     }
 
-    protected void activate ( final String tag )
+    private void activate ( final String tag, final Shape shape )
     {
-        setActive ( !isActive ( tag ), tag );
-    }
-
-    private void attachDoubleClick ( final Figure figure, final String string )
-    {
-        figure.addMouseListener ( new MouseListener () {
-
-            @Override
-            public void mouseDoubleClicked ( final MouseEvent me )
-            {
-                GenericLevelPresets.this.triggerAction ( string );
-            }
-
-            @Override
-            public void mousePressed ( final MouseEvent me )
-            {
-                // TODO Auto-generated method stub
-
-            }
+        shape.addMouseListener ( new MouseListener.Stub () {
 
             @Override
             public void mouseReleased ( final MouseEvent me )
             {
-                // TODO Auto-generated method stub
-
+                GenericLevelPresets.this.triggerAction ( tag );
             }
         } );
+    }
+
+    protected void toggle ( final String tag )
+    {
+        setActive ( !isActive ( tag ), tag );
     }
 
     protected void triggerAction ( final String string )
@@ -402,7 +360,9 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
             if ( value != null )
             {
                 setPreset ( value, string );
+                setActive ( !value.isNull (), string );
             }
+
         }
         catch ( final Throwable e )
         {

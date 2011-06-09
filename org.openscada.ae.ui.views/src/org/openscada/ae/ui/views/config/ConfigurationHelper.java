@@ -22,7 +22,9 @@ package org.openscada.ae.ui.views.config;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.IParameter;
@@ -153,7 +155,19 @@ public class ConfigurationHelper
             final String eventPoolQueryId = ele.getAttribute ( "eventPoolQueryId" ); //$NON-NLS-1$
             final ConnectionType connectionType = ConnectionType.valueOf ( ele.getAttribute ( "connectionType" ) ); //$NON-NLS-1$
             final String label = ele.getAttribute ( "label" ); //$NON-NLS-1$
+
             int maxNumberOfEvents = 0;
+            int forceEventLimit = Integer.getInteger ( "org.openscada.ae.ui.views.config.defaultForceLimit", 200000 );//$NON-NLS-1$
+
+            try
+            {
+                forceEventLimit = Integer.parseInt ( ele.getAttribute ( "forceEventLimit" ) );//$NON-NLS-1$
+            }
+            catch ( final Exception e )
+            {
+                // ignore
+            }
+
             if ( Arrays.asList ( ele.getAttributeNames () ).contains ( "maxNumberOfEvents" ) ) //$NON-NLS-1$
             {
                 final String s = ele.getAttribute ( "maxNumberOfEvents" ); //$NON-NLS-1$
@@ -167,12 +181,28 @@ public class ConfigurationHelper
                 }
             }
 
-            return new EventPoolViewConfiguration ( id, monitorQueryId, eventPoolQueryId, connectionString, connectionType, label, maxNumberOfEvents );
+            final Map<String, String> additionalColumns = new HashMap<String, String> ();
+            fillAdditional ( additionalColumns, ele );
+
+            return new EventPoolViewConfiguration ( id, monitorQueryId, eventPoolQueryId, connectionString, connectionType, label, maxNumberOfEvents, forceEventLimit, additionalColumns );
         }
         catch ( final Exception e )
         {
             logger.warn ( "Failed to convert event pool configuration: {}", ele ); //$NON-NLS-1$
             return null;
+        }
+    }
+
+    private static void fillAdditional ( final Map<String, String> additionalColumns, final IConfigurationElement ele )
+    {
+        for ( final IConfigurationElement child : ele.getChildren ( "additionalColumn" ) )
+        {
+            final String key = child.getAttribute ( "key" );
+            final String label = child.getAttribute ( "label" );
+            if ( key != null )
+            {
+                additionalColumns.put ( key, label );
+            }
         }
     }
 

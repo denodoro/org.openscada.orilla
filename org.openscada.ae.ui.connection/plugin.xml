@@ -82,6 +82,11 @@
             id="org.openscada.ae.ui.connection.command.aknowledge"
             name="%command.akn.name">
       </command>
+      <category
+            description="OpenSCADA AE"
+            id="org.openscada.ae.ui.category"
+            name="AE">
+      </category>
    </extension>
 
 </plugin>

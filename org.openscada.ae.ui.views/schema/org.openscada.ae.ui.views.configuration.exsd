@@ -6,7 +6,7 @@
          <meta.schema plugin="org.openscada.ae.ui.views" id="org.openscada.ae.ui.views.configuration" name="View Configuration"/>
       </appinfo>
       <documentation>
-         [Enter description of this extension point.]
+         
       </documentation>
    </annotation>
 
@@ -113,6 +113,9 @@
 
    <element name="eventPoolView">
       <complexType>
+         <choice minOccurs="0" maxOccurs="unbounded">
+            <element ref="additionalColumn"/>
+         </choice>
          <attribute name="id" type="string" use="required">
             <annotation>
                <documentation>
@@ -170,6 +173,13 @@
             </annotation>
          </attribute>
          <attribute name="maxNumberOfEvents" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="forceEventLimit" type="string">
             <annotation>
                <documentation>
                   
@@ -322,6 +332,33 @@
       </complexType>
    </element>
 
+   <element name="additionalColumn">
+      <annotation>
+         <documentation>
+            Additional column entry
+         </documentation>
+      </annotation>
+      <complexType>
+         <attribute name="key" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The name of field
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="label" type="string">
+            <annotation>
+               <documentation>
+                  The label to be used when displaying this field
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
    <annotation>
       <appinfo>
          <meta.section type="since"/>
@@ -331,32 +368,8 @@
       </documentation>
    </annotation>
 
-   <annotation>
-      <appinfo>
-         <meta.section type="examples"/>
-      </appinfo>
-      <documentation>
-         [Enter extension point usage example here.]
-      </documentation>
-   </annotation>
 
-   <annotation>
-      <appinfo>
-         <meta.section type="apiinfo"/>
-      </appinfo>
-      <documentation>
-         [Enter API information here.]
-      </documentation>
-   </annotation>
 
-   <annotation>
-      <appinfo>
-         <meta.section type="implementation"/>
-      </appinfo>
-      <documentation>
-         [Enter information about supplied implementation of this extension point.]
-      </documentation>
-   </annotation>
 
 
 </schema>

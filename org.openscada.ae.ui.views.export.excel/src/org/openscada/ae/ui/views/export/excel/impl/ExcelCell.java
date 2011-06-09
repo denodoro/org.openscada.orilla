@@ -21,69 +21,65 @@ package org.openscada.ae.ui.views.export.excel.impl;
 
 import java.util.Date;
 
-import jxl.biff.EmptyCell;
-import jxl.write.Boolean;
-import jxl.write.DateTime;
-import jxl.write.Label;
-import jxl.write.Number;
-import jxl.write.WritableCellFormat;
-
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.openscada.ae.ui.views.export.excel.Cell;
 import org.openscada.core.Variant;
 
 public class ExcelCell implements Cell
 {
-    private jxl.write.WritableCell cell;
+    private final HSSFCell cell;
 
-    private final int row;
+    private final HSSFCellStyle dateFormat;
 
-    private final int column;
-
-    private final WritableCellFormat dateFormat;
-
-    public ExcelCell ( final int row, final int column, final WritableCellFormat dateFormat )
+    public ExcelCell ( final HSSFRow row, final int column, final HSSFCellStyle dateFormat )
     {
-        this.row = row;
-        this.column = column;
+        this.cell = row.createCell ( column );
+
         this.dateFormat = dateFormat;
     }
 
-    public jxl.write.WritableCell getCell ()
+    public HSSFCell getCell ()
     {
         return this.cell;
     }
 
+    @Override
     public void setDataAsDate ( final Date date )
     {
-        this.cell = new DateTime ( this.column, this.row, date, this.dateFormat );
+        this.cell.setCellValue ( date );
+        this.cell.setCellStyle ( this.dateFormat );
     }
 
+    @Override
     public void setDataAsText ( final String text )
     {
-        this.cell = new Label ( this.column, this.row, text );
+        this.cell.setCellValue ( text );
     }
 
+    @Override
     public void setDataAsVariant ( final Variant variant )
     {
         if ( variant == null )
         {
             return;
         }
+
         switch ( variant.getType () )
         {
         case INT32:
         case INT64:
         case DOUBLE:
-            this.cell = new Number ( this.column, this.row, variant.asDouble ( 0.0 ) );
+            this.cell.setCellValue ( variant.asDouble ( 0.0 ) );
             break;
         case BOOLEAN:
-            this.cell = new Boolean ( this.column, this.row, variant.asBoolean () );
+            this.cell.setCellValue ( variant.asBoolean () );
             break;
         case NULL:
-            this.cell = new EmptyCell ( this.column, this.row );
             break;
         case STRING:
-            setDataAsText ( variant.asString ( "" ) ); //$NON-NLS-1$
+            this.cell.setCellValue ( variant.asString ( "" ) );//$NON-NLS-1$
             break;
         }
     }

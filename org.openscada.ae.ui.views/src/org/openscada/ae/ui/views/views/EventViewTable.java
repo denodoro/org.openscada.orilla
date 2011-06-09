@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -101,6 +101,8 @@ public class EventViewTable extends Composite
 
     private final TableViewer tableViewer;
 
+    private final ArrayList<EventTableColumn> localColumns;
+
     private static final List<EventTableColumn> columns = new ArrayList<EventTableColumn> ();
 
     static
@@ -127,10 +129,21 @@ public class EventViewTable extends Composite
 
     public EventViewTable ( final Composite parent, final int style, final WritableSet events, final Action ackAction, final Action commentAction, final List<ColumnProperties> columnSettings )
     {
+        this ( parent, style, events, ackAction, commentAction, columnSettings, null );
+    }
+
+    public EventViewTable ( final Composite parent, final int style, final WritableSet events, final Action ackAction, final Action commentAction, final List<ColumnProperties> columnSettings, final List<EventTableColumn> additionalColumns )
+    {
         super ( parent, style );
         this.ackAction = ackAction;
         this.commentAction = commentAction;
         this.events = events;
+
+        this.localColumns = new ArrayList<EventTableColumn> ( columns );
+        if ( additionalColumns != null )
+        {
+            this.localColumns.addAll ( additionalColumns );
+        }
 
         final FillLayout layout = new FillLayout ();
         setLayout ( layout );
@@ -147,7 +160,7 @@ public class EventViewTable extends Composite
 
         final ObservableSetContentProvider contentProvider = new ObservableSetContentProvider ();
         this.tableViewer.setContentProvider ( contentProvider );
-        this.tableViewer.setLabelProvider ( new EventLabelProvider ( Properties.observeEach ( contentProvider.getKnownElements (), BeanProperties.values ( new String[] { "id", "monitor" } ) ), columns, Settings.getTimeZone () ) ); //$NON-NLS-1$ //$NON-NLS-2$
+        this.tableViewer.setLabelProvider ( new EventLabelProvider ( Properties.observeEach ( contentProvider.getKnownElements (), BeanProperties.values ( new String[] { "id", "monitor" } ) ), this.localColumns, Settings.getTimeZone () ) ); //$NON-NLS-1$ //$NON-NLS-2$
         this.tableViewer.setInput ( this.events );
 
         contentProvider.getRealizedElements ().addSetChangeListener ( new ISetChangeListener () {
@@ -246,10 +259,19 @@ public class EventViewTable extends Composite
     {
         final SortListener sortListener = new SortListener ( table );
 
-        for ( final EventTableColumn column : columns )
+        for ( final EventTableColumn column : this.localColumns )
         {
             final TableViewerColumn fieldColumn = new TableViewerColumn ( table, SWT.NONE );
-            fieldColumn.getColumn ().setText ( Messages.getString ( column.getColumn () ) );
+
+            if ( column.getLabel () != null )
+            {
+                fieldColumn.getColumn ().setText ( column.getLabel () );
+            }
+            else
+            {
+                fieldColumn.getColumn ().setText ( Messages.getString ( column.getColumn () ) );
+            }
+
             fieldColumn.getColumn ().setWidth ( 120 );
             fieldColumn.getColumn ().setResizable ( true );
             fieldColumn.getColumn ().setMoveable ( true );
@@ -327,7 +349,6 @@ public class EventViewTable extends Composite
     public void setScrollLock ( final boolean scrollLock )
     {
         this.scrollLock = scrollLock;
-        System.err.println ( scrollLock );
     }
 
     public boolean isScrollLock ()

@@ -104,7 +104,19 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
 
     private ScheduledExecutorService scheduler;
 
+    /**
+     * The maximum number of event that will be kept when
+     * cleaning up the event list
+     */
     private int maxNumberOfEvents = 0;
+
+    /**
+     * The total maximum when the scroll lock will be overridden and events
+     * are removed down to {@link #maxNumberOfEvents}
+     */
+    private int forceEventLimit = 0;
+
+    private List<EventTableColumn> additionalColumns;
 
     public String getPoolId ()
     {
@@ -224,12 +236,12 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
         toolBarManager.add ( setFilterAction );
         toolBarManager.add ( removeFilterAction );
 
-        this.eventsTable = new EventViewTable ( getContentPane (), SWT.BORDER, this.pool, this.ackAction, commentAction, this.initialColumnSettings );
+        loadConfiguration ();
+
+        this.eventsTable = new EventViewTable ( getContentPane (), SWT.BORDER, this.pool, this.ackAction, commentAction, this.initialColumnSettings, this.additionalColumns );
         this.eventsTable.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, true, 1, 1 ) );
 
         getSite ().setSelectionProvider ( this.eventsTable.getTableViewer () );
-
-        loadConfiguration ();
     }
 
     private void loadConfiguration ()
@@ -271,6 +283,14 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
             setPartName ( cfg.getLabel () );
         }
         this.maxNumberOfEvents = cfg.getMaxNumberOfEvents ();
+        this.forceEventLimit = cfg.getForceEventLimit ();
+
+        this.additionalColumns = new LinkedList<EventTableColumn> ();
+        for ( final Map.Entry<String, String> entry : cfg.getAdditionalColumns ().entrySet () )
+        {
+            final EventTableColumn col = new EventTableColumn ( entry.getKey (), entry.getValue () );
+            this.additionalColumns.add ( col );
+        }
     }
 
     /**
@@ -416,6 +436,12 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
         {
             return;
         }
+
+        if ( this.eventsTable.isScrollLock () && ( this.forceEventLimit <= 0 || this.pool.size () < this.forceEventLimit ) )
+        {
+            return;
+        }
+
         try
         {
             final List<DecoratedEvent> tmpList = new ArrayList<DecoratedEvent> ( EventPoolView.this.pool );
@@ -443,8 +469,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
         }
         catch ( final Throwable th )
         {
-            final IStatus status = new Status ( IStatus.ERROR, Activator.PLUGIN_ID, 42, Messages.EventPoolView_Status_Error_RemoveElement, th );
-            Activator.getDefault ().getLog ().log ( status );
+            Activator.getDefault ().getLog ().log ( new Status ( IStatus.ERROR, Activator.PLUGIN_ID, 42, Messages.EventPoolView_Status_Error_RemoveElement, th ) );
         }
     }
 
