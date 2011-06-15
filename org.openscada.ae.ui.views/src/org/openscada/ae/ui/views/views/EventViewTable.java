@@ -109,16 +109,16 @@ public class EventViewTable extends Composite
     {
         columns.add ( EventTableColumn.reservedColumnId );
         columns.add ( EventTableColumn.reservedColumnSourceTimestamp );
-        columns.add ( new EventTableColumn ( Fields.EVENT_TYPE ) );
-        columns.add ( new EventTableColumn ( Fields.VALUE ) );
-        columns.add ( new EventTableColumn ( Fields.MONITOR_TYPE ) );
-        columns.add ( new EventTableColumn ( Fields.ITEM ) );
-        columns.add ( new EventTableColumn ( Fields.MESSAGE ) );
-        columns.add ( new EventTableColumn ( Fields.ACTOR_NAME ) );
-        columns.add ( new EventTableColumn ( Fields.ACTOR_TYPE ) );
+        columns.add ( new EventTableColumn ( Fields.EVENT_TYPE.getName () ) );
+        columns.add ( new EventTableColumn ( Fields.VALUE.getName () ) );
+        columns.add ( new EventTableColumn ( Fields.MONITOR_TYPE.getName () ) );
+        columns.add ( new EventTableColumn ( Fields.ITEM.getName () ) );
+        columns.add ( new EventTableColumn ( Fields.MESSAGE.getName () ) );
+        columns.add ( new EventTableColumn ( Fields.ACTOR_NAME.getName () ) );
+        columns.add ( new EventTableColumn ( Fields.ACTOR_TYPE.getName () ) );
         for ( final Fields field : Fields.values () )
         {
-            final EventTableColumn column = new EventTableColumn ( field );
+            final EventTableColumn column = new EventTableColumn ( field.getName () );
             if ( !columns.contains ( column ) )
             {
                 columns.add ( column );
