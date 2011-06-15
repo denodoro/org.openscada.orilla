@@ -49,6 +49,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
@@ -419,13 +421,45 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
                 @Override
                 public void run ()
                 {
-                    EventPoolView.this.pool.addAll ( decoratedEvents );
+                    insertElements ( decoratedEvents );
                 }
             } );
         }
         else
         {
-            EventPoolView.this.pool.addAll ( decoratedEvents );
+            insertElements ( decoratedEvents );
+        }
+    }
+
+    private void insertElements ( final Set<DecoratedEvent> decoratedEvents )
+    {
+        final Table table = this.eventsTable.getTableViewer ().getTable ();
+        TableItem item = null;
+
+        try
+        {
+            item = table.getItem ( table.getTopIndex () );
+        }
+        catch ( final IllegalArgumentException e )
+        {
+            // ignore
+        }
+
+        this.pool.addAll ( decoratedEvents );
+
+        if ( item != null )
+        {
+            try
+            {
+                if ( this.eventsTable.isScrollLock () )
+                {
+                    table.setTopIndex ( table.indexOf ( item ) );
+                }
+            }
+            catch ( final IllegalArgumentException e )
+            {
+                // ignore
+            }
         }
     }
 
