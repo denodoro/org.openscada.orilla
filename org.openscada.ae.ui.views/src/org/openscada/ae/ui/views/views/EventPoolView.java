@@ -413,7 +413,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
         }
 
         // adding more events costs more time
-        if ( addedEvents.size () > 5 )
+        if ( addedEvents.size () > 10 )
         {
             BusyIndicator.showWhile ( getSite ().getShell ().getDisplay (), new Runnable () {
                 @Override
