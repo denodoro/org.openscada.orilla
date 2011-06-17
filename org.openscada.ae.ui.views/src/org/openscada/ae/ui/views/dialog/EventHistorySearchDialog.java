@@ -64,7 +64,7 @@ public class EventHistorySearchDialog extends TitleAreaDialog implements FilterC
     {
         // initialize header area
         setTitle ( Messages.search_for_events );
-        this.setMessage ( Messages.search_for_events_description );
+        setMessage ( Messages.search_for_events_description );
         setHelpAvailable ( true );
 
         // initialize content
