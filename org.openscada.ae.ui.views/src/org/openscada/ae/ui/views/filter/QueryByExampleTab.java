@@ -30,7 +30,7 @@ public class QueryByExampleTab implements FilterTab
     @Override
     public String getName ()
     {
-        return "Query by Example";
+        return Messages.QueryByExampleTab_Name;
     }
 
     @Override

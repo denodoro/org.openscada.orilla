@@ -30,7 +30,7 @@ public class FreeFormTab implements FilterTab
     @Override
     public String getName ()
     {
-        return "Free Form";
+        return Messages.FreeFormTab_Name;
     }
 
     @Override
