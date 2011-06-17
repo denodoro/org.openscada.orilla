@@ -87,23 +87,6 @@ public class EventHistorySearchDialog extends TitleAreaDialog implements FilterC
             tabItem.setControl ( tab.createControl ( tabFolder, this, SWT.NONE, filterString ) );
         }
 
-        /*
-        // create tabfolder and add each from separately
-        final TabFolder tabFolder = new TabFolder ( rootComposite, SWT.NONE );
-        // add QBE filter form
-        final TabItem qbeTab = new TabItem ( tabFolder, SWT.NULL );
-        qbeTab.setText ( Messages.QBE );
-        qbeTab.setControl ( new FilterQueryByExampleComposite ( this, tabFolder, SWT.NONE, filterString ) );
-        // add advanced filter form
-        //        final TabItem advancedTab = new TabItem ( tabFolder, SWT.NULL );
-        //        advancedTab.setText ( Messages.advanced_query );
-        //        advancedTab.setControl ( new FilterAdvancedComposite ( this, tabFolder, SWT.NONE ) );
-        // add free from filter form
-        final TabItem freeformTab = new TabItem ( tabFolder, SWT.NULL );
-        freeformTab.setControl ( new FilterFreeFormComposite ( this, tabFolder, SWT.NONE, filterString ) );
-        freeformTab.setText ( Messages.free_form_query );
-        */
-
         final GridData layoutData = new GridData ();
         layoutData.horizontalAlignment = GridData.FILL;
         layoutData.grabExcessHorizontalSpace = true;
