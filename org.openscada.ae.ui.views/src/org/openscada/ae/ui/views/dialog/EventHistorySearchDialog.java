@@ -19,6 +19,9 @@
 
 package org.openscada.ae.ui.views.dialog;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -28,6 +31,9 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.openscada.ae.ui.views.Messages;
+import org.openscada.ae.ui.views.filter.FilterTab;
+import org.openscada.ae.ui.views.filter.FreeFormTab;
+import org.openscada.ae.ui.views.filter.QueryByExampleTab;
 import org.openscada.utils.lang.Pair;
 
 public class EventHistorySearchDialog extends TitleAreaDialog implements FilterChangedListener
@@ -43,23 +49,45 @@ public class EventHistorySearchDialog extends TitleAreaDialog implements FilterC
         this.filter = null;
     }
 
+    protected List<FilterTab> getFilterTabs ()
+    {
+        final List<FilterTab> result = new LinkedList<FilterTab> ();
+
+        result.add ( new QueryByExampleTab () );
+        result.add ( new FreeFormTab () );
+
+        return result;
+    }
+
     @Override
     protected Control createDialogArea ( final Composite parent )
     {
         // initialize header area
-        this.setTitle ( Messages.search_for_events );
+        setTitle ( Messages.search_for_events );
         this.setMessage ( Messages.search_for_events_description );
-        this.setHelpAvailable ( true );
+        setHelpAvailable ( true );
 
         // initialize content
         final Composite rootComposite = (Composite)super.createDialogArea ( parent );
 
         String filterString = ""; //$NON-NLS-1$
-        if ( ( this.initialFilter != null ) && ( this.initialFilter.second != null ) )
+        if ( this.initialFilter != null && this.initialFilter.second != null )
         {
             filterString = this.initialFilter.second;
         }
 
+        final TabFolder tabFolder = new TabFolder ( rootComposite, SWT.NONE );
+
+        // create tabs
+        for ( final FilterTab tab : getFilterTabs () )
+        {
+
+            final TabItem tabItem = new TabItem ( tabFolder, SWT.NONE );
+            tabItem.setText ( tab.getName () );
+            tabItem.setControl ( tab.createControl ( tabFolder, this, SWT.NONE, filterString ) );
+        }
+
+        /*
         // create tabfolder and add each from separately
         final TabFolder tabFolder = new TabFolder ( rootComposite, SWT.NONE );
         // add QBE filter form
@@ -74,6 +102,7 @@ public class EventHistorySearchDialog extends TitleAreaDialog implements FilterC
         final TabItem freeformTab = new TabItem ( tabFolder, SWT.NULL );
         freeformTab.setControl ( new FilterFreeFormComposite ( this, tabFolder, SWT.NONE, filterString ) );
         freeformTab.setText ( Messages.free_form_query );
+        */
 
         final GridData layoutData = new GridData ();
         layoutData.horizontalAlignment = GridData.FILL;
@@ -82,6 +111,7 @@ public class EventHistorySearchDialog extends TitleAreaDialog implements FilterC
         layoutData.grabExcessVerticalSpace = true;
         tabFolder.setLayoutData ( layoutData );
 
+        /*
         if ( this.initialFilter != null )
         {
             switch ( this.initialFilter.first )
@@ -97,6 +127,7 @@ public class EventHistorySearchDialog extends TitleAreaDialog implements FilterC
                 break;
             }
         }
+        */
 
         return rootComposite;
     }
@@ -126,13 +157,15 @@ public class EventHistorySearchDialog extends TitleAreaDialog implements FilterC
         return dialog.getFilter ();
     }
 
+    @Override
     public void onFilterChanged ( final Pair<SearchType, String> filter )
     {
         this.filter = filter;
     }
 
+    @Override
     public void onFilterParseError ( final Pair<SearchType, String> error )
     {
-        this.setErrorMessage ( error.second );
+        setErrorMessage ( error.second );
     }
 }

@@ -55,7 +55,7 @@ public class FilterFreeFormComposite extends Composite
         final FillLayout layout = new FillLayout ( SWT.VERTICAL );
         layout.marginHeight = 12;
         layout.marginWidth = 12;
-        this.setLayout ( layout );
+        setLayout ( layout );
 
         final Text filterTextField = new Text ( this, SWT.BORDER | SWT.MULTI | SWT.WRAP | SWT.V_SCROLL | SWT.H_SCROLL );
         filterTextField.setText ( this.filter );
