@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -19,18 +19,16 @@
 
 package org.openscada.da.client.dataitem.details.extra.part;
 
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -54,8 +52,6 @@ public class VariantEntryDialog extends TitleAreaDialog
 
     private Variant variant;
 
-    private Button buttonTrue;
-
     public VariantEntryDialog ( final Shell parentShell )
     {
         super ( parentShell );
@@ -70,7 +66,7 @@ public class VariantEntryDialog extends TitleAreaDialog
 
     public Variant getValue ()
     {
-        if ( this.open () != Dialog.OK )
+        if ( open () != Window.OK )
         {
             return null;
         }
@@ -83,7 +79,7 @@ public class VariantEntryDialog extends TitleAreaDialog
         final Control control = super.createDialogArea ( parent );
         setMessage ( "Enter a value", IMessageProvider.INFORMATION );
         setTitle ( "Enter variant" );
-        this.getShell ().setText ( "Enter variant" );
+        getShell ().setText ( "Enter variant" );
         createEntryArea ( (Composite)control );
         return control;
     }
@@ -95,44 +91,12 @@ public class VariantEntryDialog extends TitleAreaDialog
 
         comp.setLayout ( new GridLayout ( 2, false ) );
 
-        if ( this.variant != null )
-        {
-            if ( this.variant.isBoolean () )
-            {
-                new Label ( comp, SWT.NONE ).setText ( "Boolean Value:" );
-                this.buttonTrue = new Button ( comp, SWT.CHECK );
-                this.buttonTrue.setText ( "set true" );
-                this.buttonTrue.addSelectionListener ( new SelectionListener () {
-                    public void widgetSelected ( final SelectionEvent arg0 )
-                    {
-                        if ( VariantEntryDialog.this.buttonTrue.getSelection () )
-                        {
-                            if ( VariantEntryDialog.this.valueText != null )
-                            {
-                                VariantEntryDialog.this.valueText.setText ( "true" );
-                            }
-                        }
-                        else
-                        {
-                            if ( VariantEntryDialog.this.valueText != null )
-                            {
-                                VariantEntryDialog.this.valueText.setText ( "false" );
-                            }
-                        }
-                    }
-
-                    public void widgetDefaultSelected ( final SelectionEvent arg0 )
-                    {
-                    }
-                } );
-            }
-        }
-
         new Label ( comp, SWT.NONE ).setText ( "Value:" );
         this.valueText = new Text ( comp, SWT.BORDER | SWT.MULTI );
         this.valueText.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, true, 1, 1 ) );
         this.valueText.addModifyListener ( new ModifyListener () {
 
+            @Override
             public void modifyText ( final ModifyEvent e )
             {
                 dialogChanged ();
@@ -174,18 +138,6 @@ public class VariantEntryDialog extends TitleAreaDialog
         this.convertText.setLayoutData ( new GridData ( GridData.FILL, GridData.FILL, true, true, 1, 1 ) );
 
         //at last fill final the dialogs fields final with information
-
-        if ( this.buttonTrue != null )
-        {
-            try
-            {
-                this.buttonTrue.setSelection ( this.variant.asBoolean () );
-            }
-            catch ( final NullPointerException e )
-            {
-                this.buttonTrue.setSelection ( false );
-            }
-        }
 
         if ( this.variant != null )
         {
