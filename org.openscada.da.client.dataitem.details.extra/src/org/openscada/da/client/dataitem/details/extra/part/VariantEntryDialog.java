@@ -77,9 +77,9 @@ public class VariantEntryDialog extends TitleAreaDialog
     protected Control createDialogArea ( final Composite parent )
     {
         final Control control = super.createDialogArea ( parent );
-        setMessage ( "Enter a value", IMessageProvider.INFORMATION );
-        setTitle ( "Enter variant" );
-        getShell ().setText ( "Enter variant" );
+        setMessage ( Messages.VariantEntryDialog_Dialog_Message, IMessageProvider.INFORMATION );
+        setTitle ( Messages.VariantEntryDialog_Dialog_Title );
+        getShell ().setText ( Messages.VariantEntryDialog_Dialog_Title );
         createEntryArea ( (Composite)control );
         return control;
     }
@@ -91,7 +91,7 @@ public class VariantEntryDialog extends TitleAreaDialog
 
         comp.setLayout ( new GridLayout ( 2, false ) );
 
-        new Label ( comp, SWT.NONE ).setText ( "Value:" );
+        new Label ( comp, SWT.NONE ).setText ( Messages.VariantEntryDialog_Value_Label );
         this.valueText = new Text ( comp, SWT.BORDER | SWT.MULTI );
         this.valueText.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, true, 1, 1 ) );
         this.valueText.addModifyListener ( new ModifyListener () {
@@ -103,7 +103,7 @@ public class VariantEntryDialog extends TitleAreaDialog
             }
         } );
 
-        new Label ( comp, SWT.NONE ).setText ( "Type:" );
+        new Label ( comp, SWT.NONE ).setText ( Messages.VariantEntryDialog_Type_Label );
         this.valueTypeSelect = new Combo ( comp, SWT.DROP_DOWN | SWT.READ_ONLY );
         this.valueTypeSelect.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, false, 1, 1 ) );
         for ( final ValueType vt : ValueType.values () )
@@ -133,7 +133,7 @@ public class VariantEntryDialog extends TitleAreaDialog
             this.valueTypeSelect.select ( ValueType.STRING.ordinal () );
         }
 
-        new Label ( comp, SWT.NONE ).setText ( "Converted text:" );
+        new Label ( comp, SWT.NONE ).setText ( Messages.VariantEntryDialog_Text_Value );
         this.convertText = new Text ( comp, SWT.BORDER | SWT.MULTI | SWT.READ_ONLY );
         this.convertText.setLayoutData ( new GridData ( GridData.FILL, GridData.FILL, true, true, 1, 1 ) );
 
@@ -158,7 +158,7 @@ public class VariantEntryDialog extends TitleAreaDialog
     protected void dialogChanged ()
     {
         // value stuff
-        setValueText ( "<no value>", true );
+        setValueText ( Messages.VariantEntryDialog_NoValue, true );
         this.value = null;
 
         final int idx = this.valueTypeSelect.getSelectionIndex ();
@@ -174,7 +174,7 @@ public class VariantEntryDialog extends TitleAreaDialog
         }
         catch ( final NotConvertableException e )
         {
-            updateStatus ( "Unable to convert value to target type: " + e.getMessage () );
+            updateStatus ( Messages.VariantEntryDialog_ErrorMessage + e.getMessage () );
             return;
         }
         catch ( final Exception e )
@@ -187,7 +187,7 @@ public class VariantEntryDialog extends TitleAreaDialog
         }
         else
         {
-            setValueText ( "no converter found for: " + idx, true );
+            setValueText ( Messages.VariantEntryDialog_NoConverter + idx, true );
         }
 
         updateStatus ( null );

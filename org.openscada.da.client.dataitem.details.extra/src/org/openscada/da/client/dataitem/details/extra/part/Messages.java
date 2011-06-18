@@ -50,6 +50,21 @@ public class Messages extends NLS
     public static String ManualOverride_RemoteProcessValue_Label;
 
     public static String ManualOverride_ResetValue_Label;
+
+    public static String VariantEntryDialog_Dialog_Message;
+
+    public static String VariantEntryDialog_Dialog_Title;
+
+    public static String VariantEntryDialog_ErrorMessage;
+    public static String VariantEntryDialog_NoConverter;
+
+    public static String VariantEntryDialog_NoValue;
+
+    public static String VariantEntryDialog_Text_Value;
+
+    public static String VariantEntryDialog_Type_Label;
+
+    public static String VariantEntryDialog_Value_Label;
     static
     {
         // initialize resource bundle
