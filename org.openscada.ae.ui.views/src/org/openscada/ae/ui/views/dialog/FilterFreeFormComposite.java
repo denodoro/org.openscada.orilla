@@ -30,9 +30,14 @@ import org.openscada.utils.filter.Filter;
 import org.openscada.utils.filter.FilterParseException;
 import org.openscada.utils.filter.FilterParser;
 import org.openscada.utils.lang.Pair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class FilterFreeFormComposite extends Composite
 {
+
+    private final static Logger logger = LoggerFactory.getLogger ( FilterFreeFormComposite.class );
+
     private final FilterChangedListener filterChangedListener;
 
     private final String filter;
@@ -82,7 +87,7 @@ public class FilterFreeFormComposite extends Composite
         }
         catch ( final Exception e )
         {
-            e.printStackTrace ();
+            logger.info ( "Failed to parse", e );
         }
         this.filterChangedListener.onFilterParseError ( new Pair<SearchType, String> ( SearchType.FREEFORM, null ) );
         return true;
