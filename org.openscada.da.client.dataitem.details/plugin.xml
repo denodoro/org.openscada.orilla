@@ -73,7 +73,7 @@
       </detailsPart>
  <detailsPart
        class="org.openscada.da.client.dataitem.details.part.block.BlockDetailsPart"
-       name="Blocking"
+       name="%detailsPart.blocking.name"
        sortKey="0503">
  </detailsPart>
    </extension>
