@@ -27,7 +27,6 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import org.eclipse.swt.graphics.Image;
-import org.openscada.ae.Event.Fields;
 import org.openscada.ae.ui.views.Activator;
 import org.openscada.ae.ui.views.model.DecoratedEvent;
 import org.openscada.core.Variant;
@@ -123,9 +122,9 @@ public class LabelProviderSupport
         }
     }
 
-    public String toLabel ( final DecoratedEvent event, final Fields field )
+    public String toLabel ( final DecoratedEvent event, final String key )
     {
-        return toLabel ( event.getEvent ().getField ( field ) );
+        return toLabel ( event.getEvent ().getAttributes ().get ( key ) );
     }
 
     private SpecialDate toSpecial ( final Date date )

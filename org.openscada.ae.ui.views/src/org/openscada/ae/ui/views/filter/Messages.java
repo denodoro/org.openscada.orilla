@@ -19,24 +19,22 @@
 
 package org.openscada.ae.ui.views.filter;
 
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.openscada.ae.ui.views.dialog.FilterChangedListener;
-import org.openscada.ae.ui.views.dialog.FilterFreeFormComposite;
+import org.eclipse.osgi.util.NLS;
 
-public class FreeFormTab implements FilterTab
+public class Messages extends NLS
 {
+    private static final String BUNDLE_NAME = "org.openscada.ae.ui.views.filter.messages"; //$NON-NLS-1$
 
-    @Override
-    public String getName ()
+    public static String FreeFormTab_Name;
+
+    public static String QueryByExampleTab_Name;
+    static
     {
-        return Messages.FreeFormTab_Name;
+        // initialize resource bundle
+        NLS.initializeMessages ( BUNDLE_NAME, Messages.class );
     }
 
-    @Override
-    public Control createControl ( final Composite parent, final FilterChangedListener filterChangedListener, final int style, final String filter )
+    private Messages ()
     {
-        return new FilterFreeFormComposite ( filterChangedListener, parent, style, filter );
     }
-
 }

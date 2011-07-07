@@ -22,6 +22,9 @@ package org.openscada.ae.ui.views.dialog;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -30,6 +33,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
+import org.eclipse.ui.statushandlers.StatusManager;
 import org.openscada.ae.ui.views.Messages;
 import org.openscada.ae.ui.views.filter.FilterTab;
 import org.openscada.ae.ui.views.filter.FreeFormTab;
@@ -38,6 +42,8 @@ import org.openscada.utils.lang.Pair;
 
 public class EventHistorySearchDialog extends TitleAreaDialog implements FilterChangedListener
 {
+    private static final String EXTP_FILTER_TAB = "org.openscada.ae.ui.views.filterTab";
+
     private Pair<SearchType, String> initialFilter = null;
 
     private Pair<SearchType, String> filter = null;
@@ -56,6 +62,23 @@ public class EventHistorySearchDialog extends TitleAreaDialog implements FilterC
         result.add ( new QueryByExampleTab () );
         result.add ( new FreeFormTab () );
 
+        for ( final IConfigurationElement ele : Platform.getExtensionRegistry ().getConfigurationElementsFor ( EXTP_FILTER_TAB ) )
+        {
+            if ( !"filterTab".equals ( ele.getName () ) )
+            {
+                continue;
+            }
+
+            try
+            {
+                result.add ( (FilterTab)ele.createExecutableExtension ( "class" ) );
+            }
+            catch ( final CoreException e )
+            {
+                StatusManager.getManager ().handle ( e.getStatus () );
+            }
+        }
+
         return result;
     }
 
@@ -64,8 +87,8 @@ public class EventHistorySearchDialog extends TitleAreaDialog implements FilterC
     {
         // initialize header area
         setTitle ( Messages.search_for_events );
-        this.setMessage ( Messages.search_for_events_description );
-        setHelpAvailable ( true );
+        setMessage ( Messages.search_for_events_description );
+        // setHelpAvailable ( true );
 
         // initialize content
         final Composite rootComposite = (Composite)super.createDialogArea ( parent );
@@ -86,23 +109,6 @@ public class EventHistorySearchDialog extends TitleAreaDialog implements FilterC
             tabItem.setText ( tab.getName () );
             tabItem.setControl ( tab.createControl ( tabFolder, this, SWT.NONE, filterString ) );
         }
-
-        /*
-        // create tabfolder and add each from separately
-        final TabFolder tabFolder = new TabFolder ( rootComposite, SWT.NONE );
-        // add QBE filter form
-        final TabItem qbeTab = new TabItem ( tabFolder, SWT.NULL );
-        qbeTab.setText ( Messages.QBE );
-        qbeTab.setControl ( new FilterQueryByExampleComposite ( this, tabFolder, SWT.NONE, filterString ) );
-        // add advanced filter form
-        //        final TabItem advancedTab = new TabItem ( tabFolder, SWT.NULL );
-        //        advancedTab.setText ( Messages.advanced_query );
-        //        advancedTab.setControl ( new FilterAdvancedComposite ( this, tabFolder, SWT.NONE ) );
-        // add free from filter form
-        final TabItem freeformTab = new TabItem ( tabFolder, SWT.NULL );
-        freeformTab.setControl ( new FilterFreeFormComposite ( this, tabFolder, SWT.NONE, filterString ) );
-        freeformTab.setText ( Messages.free_form_query );
-        */
 
         final GridData layoutData = new GridData ();
         layoutData.horizontalAlignment = GridData.FILL;

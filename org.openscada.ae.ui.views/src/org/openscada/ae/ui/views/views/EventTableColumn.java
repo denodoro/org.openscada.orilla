@@ -21,7 +21,6 @@ package org.openscada.ae.ui.views.views;
 
 import java.io.Serializable;
 
-import org.openscada.ae.Event.Fields;
 import org.openscada.utils.lang.Immutable;
 
 @Immutable
@@ -30,8 +29,6 @@ public class EventTableColumn implements Serializable
     private static final long serialVersionUID = 1L;
 
     private final String column;
-
-    private final Fields field;
 
     private final String label;
 
@@ -44,25 +41,12 @@ public class EventTableColumn implements Serializable
     public EventTableColumn ( final String column, final String label )
     {
         this.column = column;
-        this.field = null;
-        this.label = label;
-    }
-
-    public EventTableColumn ( final Fields field, final String label )
-    {
-        this.column = field.getName ();
-        this.field = field;
         this.label = label;
     }
 
     public EventTableColumn ( final String column )
     {
         this ( column, null );
-    }
-
-    public EventTableColumn ( final Fields field )
-    {
-        this ( field, null );
     }
 
     public String getLabel ()
@@ -75,18 +59,13 @@ public class EventTableColumn implements Serializable
         return this.column;
     }
 
-    public Fields getField ()
-    {
-        return this.field;
-    }
-
     @Override
     public int hashCode ()
     {
         final int prime = 31;
         int result = 1;
         result = prime * result + ( this.column == null ? 0 : this.column.hashCode () );
-        result = prime * result + ( this.field == null ? 0 : this.field.hashCode () );
+        result = prime * result + ( this.label == null ? 0 : this.label.hashCode () );
         return result;
     }
 
@@ -101,7 +80,7 @@ public class EventTableColumn implements Serializable
         {
             return false;
         }
-        if ( getClass () != obj.getClass () )
+        if ( ! ( obj instanceof EventTableColumn ) )
         {
             return false;
         }
@@ -117,17 +96,18 @@ public class EventTableColumn implements Serializable
         {
             return false;
         }
-        if ( this.field == null )
+        if ( this.label == null )
         {
-            if ( other.field != null )
+            if ( other.label != null )
             {
                 return false;
             }
         }
-        else if ( !this.field.equals ( other.field ) )
+        else if ( !this.label.equals ( other.label ) )
         {
             return false;
         }
         return true;
     }
+
 }

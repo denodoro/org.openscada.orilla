@@ -2,6 +2,7 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="org.openscada.ae.ui.views.configuration" name="%extension-point.viewConfiguration.name" schema="schema/org.openscada.ae.ui.views.configuration.exsd"/>
+   <extension-point id="filterTab" name="Filter Tab" schema="schema/filterTab.exsd"/>
 
    <extension
          point="org.eclipse.ui.views">

@@ -87,7 +87,7 @@ public class EventLabelProvider extends ObservableMapLabelProvider
                 return Messages.EventLabelProvider_EmptyString;
             }
         }
-        return this.labelProviderSupport.toLabel ( event, column.getField () );
+        return this.labelProviderSupport.toLabel ( event, column.getColumn () );
 
     }
 
