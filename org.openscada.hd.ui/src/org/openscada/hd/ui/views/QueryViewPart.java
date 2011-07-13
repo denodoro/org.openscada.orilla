@@ -42,6 +42,7 @@ public abstract class QueryViewPart extends ViewPart implements QueryListener
     public void dispose ()
     {
         removeListener ();
+        clear ();
         super.dispose ();
     }
 
