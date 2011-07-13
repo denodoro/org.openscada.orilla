@@ -94,7 +94,7 @@ public class CreateManagedTrendViewHandler extends AbstractSelectionHandler
         final Calendar start = Calendar.getInstance ();
         final Calendar end = (Calendar)start.clone ();
 
-        if ( timespec == null )
+        if ( timespec == null || timespec.length == 0 )
         {
             start.add ( Calendar.MINUTE, -30 );
             end.add ( Calendar.MINUTE, 30 );
@@ -104,7 +104,7 @@ public class CreateManagedTrendViewHandler extends AbstractSelectionHandler
             start.add ( Calendar.MINUTE, -timespec[0] );
             end.add ( Calendar.MINUTE, timespec[0] );
         }
-        else if ( timespec.length == 2 )
+        else if ( timespec.length >= 2 )
         {
             start.add ( Calendar.MINUTE, -timespec[0] );
             end.add ( Calendar.MINUTE, timespec[1] );

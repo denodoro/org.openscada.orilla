@@ -114,6 +114,7 @@ public abstract class QueryViewPart extends ViewPart implements QueryListener
 
     protected void clear ()
     {
+        logger.info ( "Clearing query" );
         if ( this.query != null )
         {
             this.query.removeQueryListener ( this );

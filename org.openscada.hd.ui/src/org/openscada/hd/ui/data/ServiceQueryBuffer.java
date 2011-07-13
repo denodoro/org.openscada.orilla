@@ -4,7 +4,6 @@ import org.openscada.core.connection.provider.ConnectionIdTracker;
 import org.openscada.core.connection.provider.ConnectionService;
 import org.openscada.core.connection.provider.ConnectionTracker.Listener;
 import org.openscada.hd.QueryParameters;
-import org.openscada.hd.client.Connection;
 import org.osgi.framework.BundleContext;
 
 public class ServiceQueryBuffer extends AbstractQueryBuffer implements Listener
@@ -18,10 +17,10 @@ public class ServiceQueryBuffer extends AbstractQueryBuffer implements Listener
     {
         super ( itemId );
 
-        this.tracker = new ConnectionIdTracker ( context, connectionId, this, Connection.class );
-        this.tracker.open ();
-
         setRequestParameters ( initialRequestParameters );
+
+        this.tracker = new ConnectionIdTracker ( context, connectionId, this, org.openscada.hd.connection.provider.ConnectionService.class );
+        this.tracker.open ();
     }
 
     @Override

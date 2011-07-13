@@ -283,7 +283,10 @@ public class AbstractQueryBuffer extends AbstractPropertyChange
         if ( !this.requestParameters.equals ( parameters ) )
         {
             setRequestParameters ( parameters );
-            this.query.changeParameters ( parameters );
+            if ( this.query != null )
+            {
+                this.query.changeParameters ( parameters );
+            }
         }
         else
         {
