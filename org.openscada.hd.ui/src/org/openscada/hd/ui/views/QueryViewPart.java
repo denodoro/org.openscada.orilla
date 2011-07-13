@@ -16,6 +16,7 @@
  * version 3 along with OpenSCADA. If not, see
  * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
+
 package org.openscada.hd.ui.views;
 
 import org.eclipse.jface.viewers.ISelection;
@@ -50,6 +51,7 @@ public abstract class QueryViewPart extends ViewPart implements QueryListener
         {
             getViewSite ().getWorkbenchWindow ().getSelectionService ().addSelectionListener ( this.selectionListener = new ISelectionListener () {
 
+                @Override
                 public void selectionChanged ( final IWorkbenchPart part, final ISelection selection )
                 {
                     QueryViewPart.this.setSelection ( selection );
