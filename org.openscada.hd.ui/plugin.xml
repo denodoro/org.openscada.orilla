@@ -99,6 +99,14 @@
             name="%view.trendView.name"
             restorable="true">
       </view>
+      <view
+            allowMultiple="true"
+            category="org.openscada.hd.ui.category"
+            class="org.openscada.hd.ui.views.ManagingTrendView"
+            id="org.openscada.hd.ui.ManagingTrendView"
+            name="%view.trendView.name"
+            restorable="false">
+      </view>
    </extension>
    <extension
          point="org.eclipse.ui.commands">
