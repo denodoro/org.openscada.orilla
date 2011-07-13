@@ -32,6 +32,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.core.databinding.observable.Realm;
 import org.eclipse.core.databinding.observable.set.WritableSet;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -131,11 +132,12 @@ public class EventHistoryView extends AbstractAlarmsEventsView
             public void run ()
             {
                 clearData ();
+                searchAction.setChecked ( false );
             }
         } );
 
         // search Action
-        this.searchAction = new CustomizableAction ();
+        this.searchAction = new CustomizableAction ( "", IAction.AS_CHECK_BOX );
         this.searchAction.setText ( Messages.EventHistoryView_Action_Search_Text );
         this.searchAction.setToolTipText ( Messages.EventHistoryView_Action_Search_ToolTip );
         this.searchAction.setImageDescriptor ( ImageDescriptor.createFromURL ( Activator.getDefault ().getBundle ().getResource ( "icons/search.gif" ) ) ); //$NON-NLS-1$
@@ -145,6 +147,7 @@ public class EventHistoryView extends AbstractAlarmsEventsView
             @Override
             public void run ()
             {
+                searchAction.setChecked ( true );
                 pauseEventsRetrieval ();
                 startEventsRetrieval ();
             }
@@ -276,13 +279,14 @@ public class EventHistoryView extends AbstractAlarmsEventsView
     private void clearData ()
     {
         cancelQuery ();
-        // this.currentFilter = null;
         this.noOfEvents.set ( 0 );
         this.eventsTable.clear ();
 
         this.resumeAction.setEnabled ( false );
         this.clearAction.setEnabled ( true );
         this.searchAction.setEnabled ( true );
+
+        this.currentFilter = null;
         updateStatusBar ();
     }
 

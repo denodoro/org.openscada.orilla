@@ -209,7 +209,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
             }
         } );
 
-        final CustomizableAction setFilterAction = new CustomizableAction ();
+        final CustomizableAction setFilterAction = new CustomizableAction ( "", IAction.AS_CHECK_BOX );
         setFilterAction.setText ( Messages.EventPoolView_Action_Filter_Name );
         setFilterAction.setToolTipText ( Messages.EventPoolView_Action_Filter_ToolTip );
         setFilterAction.setImageDescriptor ( ImageDescriptor.createFromURL ( Activator.getDefault ().getBundle ().getResource ( "icons/search.gif" ) ) ); //$NON-NLS-1$
@@ -217,8 +217,10 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
             @Override
             public void run ()
             {
+                setFilterAction.setChecked ( true );
                 final Pair<SearchType, String> result = EventHistorySearchDialog.open ( parent.getShell (), EventPoolView.this.eventsTable.getFilter () );
                 EventPoolView.this.eventsTable.setFilter ( result );
+                setFilterAction.setChecked ( EventPoolView.this.eventsTable.getFilter () != null );
             }
         } );
         final CustomizableAction removeFilterAction = new CustomizableAction ();
@@ -230,6 +232,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
             public void run ()
             {
                 EventPoolView.this.eventsTable.removeFilter ();
+                setFilterAction.setChecked ( false );
             }
         } );
 

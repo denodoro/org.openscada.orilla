@@ -37,6 +37,7 @@ public class CustomizableAction extends Action implements IWorkbenchAction
         this.runnable = runnable;
     }
 
+    @Override
     public void dispose ()
     {
     }
