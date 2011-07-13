@@ -80,7 +80,7 @@ import org.openscada.hd.Value;
 import org.openscada.hd.ValueInformation;
 import org.openscada.hd.chart.DataAtPoint;
 import org.openscada.hd.chart.TrendChart;
-import org.openscada.hd.ui.data.QueryBuffer;
+import org.openscada.hd.ui.data.AbstractQueryBuffer;
 import org.swtchart.IAxis;
 import org.swtchart.ILineSeries;
 import org.swtchart.ILineSeries.PlotSymbolType;
@@ -1038,7 +1038,7 @@ public abstract class AbstractTrendView extends QueryViewPart
 
     private void doUpdateRangeParameters ()
     {
-        final QueryBuffer query = this.query;
+        final AbstractQueryBuffer query = this.query;
 
         if ( query != null )
         {

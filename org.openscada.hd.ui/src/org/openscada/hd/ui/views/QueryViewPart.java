@@ -25,7 +25,7 @@ import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
 import org.openscada.hd.QueryListener;
-import org.openscada.hd.ui.data.QueryBuffer;
+import org.openscada.hd.ui.data.AbstractQueryBuffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,7 +34,7 @@ public abstract class QueryViewPart extends ViewPart implements QueryListener
 
     private final static Logger logger = LoggerFactory.getLogger ( QueryViewPart.class );
 
-    protected volatile QueryBuffer query;
+    protected volatile AbstractQueryBuffer query;
 
     private ISelectionListener selectionListener;
 
@@ -73,7 +73,7 @@ public abstract class QueryViewPart extends ViewPart implements QueryListener
         }
     }
 
-    protected QueryBuffer getQueryFromSelection ( final ISelection selection )
+    protected AbstractQueryBuffer getQueryFromSelection ( final ISelection selection )
     {
         if ( selection.isEmpty () )
         {
@@ -84,16 +84,16 @@ public abstract class QueryViewPart extends ViewPart implements QueryListener
             return null;
         }
         final Object o = ( (IStructuredSelection)selection ).getFirstElement ();
-        if ( o instanceof QueryBuffer )
+        if ( o instanceof AbstractQueryBuffer )
         {
-            return (QueryBuffer)o;
+            return (AbstractQueryBuffer)o;
         }
         return null;
     }
 
     protected void setSelection ( final ISelection selection )
     {
-        final QueryBuffer query = getQueryFromSelection ( selection );
+        final AbstractQueryBuffer query = getQueryFromSelection ( selection );
         if ( query != this.query )
         {
             clear ();
@@ -104,7 +104,7 @@ public abstract class QueryViewPart extends ViewPart implements QueryListener
         }
     }
 
-    protected void setQuery ( final QueryBuffer query )
+    protected void setQuery ( final AbstractQueryBuffer query )
     {
         logger.info ( "Setting query: {}", query ); //$NON-NLS-1$
 

@@ -19,7 +19,7 @@
 
 package org.openscada.hd.ui.views;
 
-import org.openscada.hd.ui.data.QueryBuffer;
+import org.openscada.hd.ui.data.AbstractQueryBuffer;
 
 /**
  * A managing trend view which controls the underlying
@@ -30,11 +30,13 @@ import org.openscada.hd.ui.data.QueryBuffer;
 public class ManagingTrendView extends AbstractTrendView
 {
 
+    public static final String VIEW_ID = "org.openscada.hd.ui.ManagingTrendView";
+
     @Override
     protected void clear ()
     {
         // remember old query first
-        final QueryBuffer oldQuery = this.query;
+        final AbstractQueryBuffer oldQuery = this.query;
 
         // disconnect
         super.clear ();
@@ -44,5 +46,11 @@ public class ManagingTrendView extends AbstractTrendView
         {
             oldQuery.close ();
         }
+    }
+
+    @Override
+    public void setQuery ( final AbstractQueryBuffer query )
+    {
+        super.setQuery ( query );
     }
 }

@@ -16,19 +16,20 @@ Bundle-ActivationPolicy: lazy
 Import-Package: org.openscada.core;version="0.14.0",
  org.openscada.core.client;version="0.14.0",
  org.openscada.core.client.net;version="0.14.0",
+ org.openscada.core.connection.provider;version="0.14.0",
  org.openscada.hd;version="0.14.0",
  org.openscada.hd.client;version="0.14.0",
  org.openscada.hd.client.net,
+ org.openscada.hd.connection.provider;version="0.16.0",
+ org.openscada.ui.databinding;version="0.14.0",
  org.openscada.ui.utils.datetime,
  org.openscada.utils.beans;version="0.14.0",
  org.openscada.utils.lang;version="0.16.0",
  org.slf4j
-Export-Package: org.openscada.hd.ui;version="0.14.0";uses:="org.eclipse.core.databinding.observable.set,org.eclipse.ui.plugin,org.osgi.framework",
- org.openscada.hd.ui.data;version="0.14.0";
-  uses:="org.eclipse.core.databinding.observable.set,
-   org.openscada.core.client,
-   org.openscada.hd,
+Export-Package: org.openscada.hd.ui;version="0.17.0";uses:="org.eclipse.ui.plugin,org.osgi.framework",
+ org.openscada.hd.ui.data;version="0.17.0";
+  uses:="org.openscada.hd,
    org.openscada.utils.beans,
-   org.eclipse.ui,
+   org.openscada.core.connection.provider,
    org.openscada.hd.client,
-   org.openscada.core"
+   org.osgi.framework"

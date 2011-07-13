@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -16,6 +16,7 @@
  * version 3 along with OpenSCADA. If not, see
  * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
+
 package org.openscada.hd.ui.views;
 
 import java.beans.PropertyChangeEvent;
@@ -46,7 +47,7 @@ import org.openscada.hd.QueryParameters;
 import org.openscada.hd.QueryState;
 import org.openscada.hd.Value;
 import org.openscada.hd.ValueInformation;
-import org.openscada.hd.ui.data.QueryBuffer;
+import org.openscada.hd.ui.data.AbstractQueryBuffer;
 import org.openscada.ui.utils.datetime.DateTimeDialog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -140,6 +141,7 @@ public class QueryControlView extends QueryViewPart implements PropertyChangeLis
         button.setLayoutData ( new GridData ( SWT.BEGINNING, SWT.BEGINNING, false, false ) );
         button.setText ( "..." );
         button.addSelectionListener ( new SelectionAdapter () {
+            @Override
             public void widgetSelected ( final SelectionEvent e )
             {
                 final DateTimeDialog dlg = new DateTimeDialog ( getSite ().getShell () );
@@ -168,6 +170,7 @@ public class QueryControlView extends QueryViewPart implements PropertyChangeLis
         button.setLayoutData ( new GridData ( SWT.BEGINNING, SWT.BEGINNING, false, false ) );
         button.setText ( "..." );
         button.addSelectionListener ( new SelectionAdapter () {
+            @Override
             public void widgetSelected ( final SelectionEvent e )
             {
                 final DateTimeDialog dlg = new DateTimeDialog ( getSite ().getShell () );
@@ -193,6 +196,7 @@ public class QueryControlView extends QueryViewPart implements PropertyChangeLis
         this.entriesRequestText.setLayoutData ( new GridData ( SWT.FILL, SWT.CENTER, true, false, 2, 1 ) );
         this.entriesRequestText.addVerifyListener ( new VerifyListener () {
 
+            @Override
             public void verifyText ( final VerifyEvent e )
             {
                 e.doit = false;
@@ -230,6 +234,7 @@ public class QueryControlView extends QueryViewPart implements PropertyChangeLis
         } );
         this.entriesRequestText.addModifyListener ( new ModifyListener () {
 
+            @Override
             public void modifyText ( final ModifyEvent e )
             {
                 updateEntries ();
@@ -338,6 +343,7 @@ public class QueryControlView extends QueryViewPart implements PropertyChangeLis
     {
         getDisplay ().asyncExec ( new Runnable () {
 
+            @Override
             public void run ()
             {
                 QueryControlView.this.startTimestampRequestText.setText ( String.format ( Messages.QueryControlView_Format_Request_Date, QueryControlView.this.requestParameters.getStartTimestamp () ) );
@@ -348,7 +354,7 @@ public class QueryControlView extends QueryViewPart implements PropertyChangeLis
     }
 
     @Override
-    protected void setQuery ( final QueryBuffer query )
+    protected void setQuery ( final AbstractQueryBuffer query )
     {
         super.setQuery ( query );
         this.query.addPropertyChangeListener ( this );
@@ -393,14 +399,17 @@ public class QueryControlView extends QueryViewPart implements PropertyChangeLis
         this.requestButton.setFocus ();
     }
 
+    @Override
     public void updateData ( final int index, final Map<String, Value[]> values, final ValueInformation[] valueInformation )
     {
     }
 
+    @Override
     public void updateParameters ( final QueryParameters parameters, final Set<String> valueTypes )
     {
         getDisplay ().asyncExec ( new Runnable () {
 
+            @Override
             public void run ()
             {
                 QueryControlView.this.startTimestampText.setText ( String.format ( Messages.QueryControlView_Format_Query_Date, parameters.getStartTimestamp () ) );
@@ -415,6 +424,7 @@ public class QueryControlView extends QueryViewPart implements PropertyChangeLis
         return getSite ().getShell ().getDisplay ();
     }
 
+    @Override
     public void updateState ( final QueryState state )
     {
         setState ( this.query.getState (), this.query.getPercentFilled () );
@@ -426,6 +436,7 @@ public class QueryControlView extends QueryViewPart implements PropertyChangeLis
 
         getDisplay ().asyncExec ( new Runnable () {
 
+            @Override
             public void run ()
             {
                 QueryControlView.this.stateText.setText ( String.format ( Messages.QueryControlView_Format_StateString, state.toString (), 100.0 * percentFilled ) );
@@ -433,13 +444,14 @@ public class QueryControlView extends QueryViewPart implements PropertyChangeLis
         } );
     }
 
+    @Override
     public void propertyChange ( final PropertyChangeEvent evt )
     {
-        if ( QueryBuffer.PROP_PERCENT_FILLED.equals ( evt.getPropertyName () ) || QueryBuffer.PROP_STATE.equals ( evt.getPropertyName () ) )
+        if ( AbstractQueryBuffer.PROP_PERCENT_FILLED.equals ( evt.getPropertyName () ) || AbstractQueryBuffer.PROP_STATE.equals ( evt.getPropertyName () ) )
         {
             setState ( this.query.getState (), this.query.getPercentFilled () );
         }
-        else if ( QueryBuffer.PROP_REQUEST_PARAMETERS.equals ( evt.getPropertyName () ) )
+        else if ( AbstractQueryBuffer.PROP_REQUEST_PARAMETERS.equals ( evt.getPropertyName () ) )
         {
             logger.info ( "Request set using property change: {}", this.query.getRequestParameters () ); //$NON-NLS-1$
             this.requestParameters = this.query.getRequestParameters ();
