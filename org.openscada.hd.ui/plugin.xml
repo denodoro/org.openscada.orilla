@@ -94,7 +94,7 @@
       <view
             allowMultiple="false"
             category="org.openscada.hd.ui.category"
-            class="org.openscada.hd.ui.views.TrendView"
+            class="org.openscada.hd.ui.views.SelectionTrendView"
             id="org.openscada.hd.ui.TrendView"
             name="%view.trendView.name"
             restorable="true">

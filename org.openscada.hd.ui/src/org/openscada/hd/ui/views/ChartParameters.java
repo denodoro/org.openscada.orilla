@@ -24,7 +24,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import org.openscada.hd.ui.views.TrendView.SeriesParameters;
+import org.openscada.hd.ui.views.AbstractTrendView.SeriesParameters;
 import org.openscada.utils.lang.Immutable;
 
 /**
