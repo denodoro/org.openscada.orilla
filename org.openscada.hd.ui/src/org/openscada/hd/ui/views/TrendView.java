@@ -84,11 +84,11 @@ import org.openscada.hd.chart.TrendChart;
 import org.openscada.hd.ui.data.QueryBuffer;
 import org.swtchart.IAxis;
 import org.swtchart.ILineSeries;
+import org.swtchart.ILineSeries.PlotSymbolType;
 import org.swtchart.ISeries;
+import org.swtchart.ISeries.SeriesType;
 import org.swtchart.LineStyle;
 import org.swtchart.Range;
-import org.swtchart.ILineSeries.PlotSymbolType;
-import org.swtchart.ISeries.SeriesType;
 
 public class TrendView extends QueryViewPart implements QueryListener
 {
@@ -158,11 +158,11 @@ public class TrendView extends QueryViewPart implements QueryListener
 
             public ChartParameterBuilder from ( final ChartParameters parameters )
             {
-                this.quality ( parameters.quality );
-                this.manual ( parameters.manual );
-                this.numOfEntries ( parameters.numOfEntries );
-                this.startTime ( parameters.startTime );
-                this.endTime ( parameters.endTime );
+                quality ( parameters.quality );
+                manual ( parameters.manual );
+                numOfEntries ( parameters.numOfEntries );
+                startTime ( parameters.startTime );
+                endTime ( parameters.endTime );
                 this.seriesParameters ( parameters.availableSeries );
                 return this;
             }
@@ -530,6 +530,7 @@ public class TrendView extends QueryViewPart implements QueryListener
         this.scaleAutomaticallyCheckbox.setText ( Messages.TrendView_Automatically );
         this.scaleAutomaticallyCheckbox.setSelection ( this.scaleYAutomatically );
         this.scaleAutomaticallyCheckbox.addSelectionListener ( new SelectionListener () {
+            @Override
             public void widgetSelected ( final SelectionEvent e )
             {
                 if ( TrendView.this.scaleAutomaticallyCheckbox.getSelection () )
@@ -550,6 +551,7 @@ public class TrendView extends QueryViewPart implements QueryListener
                 TrendView.this.chart.redraw ();
             }
 
+            @Override
             public void widgetDefaultSelected ( final SelectionEvent e )
             {
             }
@@ -560,13 +562,15 @@ public class TrendView extends QueryViewPart implements QueryListener
         this.scaleMinSpinner.setDigits ( 3 );
         this.scaleMinSpinner.setMaximum ( Integer.MAX_VALUE );
         this.scaleMinSpinner.setMinimum ( Integer.MIN_VALUE );
-        this.scaleMinSpinner.setSelection ( (int)Math.round ( ( this.scaleYMin * 1000 ) ) );
+        this.scaleMinSpinner.setSelection ( (int)Math.round ( this.scaleYMin * 1000 ) );
         this.scaleMinSpinner.addSelectionListener ( new SelectionListener () {
+            @Override
             public void widgetSelected ( final SelectionEvent e )
             {
                 TrendView.this.scalingUpdateJob.get ().schedule ( GUI_RESIZE_JOB_DELAY );
             }
 
+            @Override
             public void widgetDefaultSelected ( final SelectionEvent e )
             {
             }
@@ -577,13 +581,15 @@ public class TrendView extends QueryViewPart implements QueryListener
         this.scaleMaxSpinner.setDigits ( 3 );
         this.scaleMaxSpinner.setMaximum ( Integer.MAX_VALUE );
         this.scaleMaxSpinner.setMinimum ( Integer.MIN_VALUE );
-        this.scaleMaxSpinner.setSelection ( (int)Math.round ( ( this.scaleYMax * 1000 ) ) );
+        this.scaleMaxSpinner.setSelection ( (int)Math.round ( this.scaleYMax * 1000 ) );
         this.scaleMaxSpinner.addSelectionListener ( new SelectionListener () {
+            @Override
             public void widgetSelected ( final SelectionEvent e )
             {
                 TrendView.this.scalingUpdateJob.get ().schedule ( GUI_RESIZE_JOB_DELAY );
             }
 
+            @Override
             public void widgetDefaultSelected ( final SelectionEvent e )
             {
             }
@@ -600,6 +606,7 @@ public class TrendView extends QueryViewPart implements QueryListener
         this.qualityColorButton.setText ( Messages.TrendView_Color );
         this.qualitySpinner.setBackground ( this.colorRegistry.get ( KEY_QUALITY ) );
         this.qualityColorButton.addSelectionListener ( new SelectionListener () {
+            @Override
             public void widgetSelected ( final SelectionEvent e )
             {
                 final ColorDialog cd = new ColorDialog ( parent.getShell () );
@@ -614,6 +621,7 @@ public class TrendView extends QueryViewPart implements QueryListener
                 }
             }
 
+            @Override
             public void widgetDefaultSelected ( final SelectionEvent e )
             {
             }
@@ -624,6 +632,7 @@ public class TrendView extends QueryViewPart implements QueryListener
         this.qualitySpinner.setMinimum ( 0 );
         this.qualitySpinner.setSelection ( this.chartParameters.get ().getQuality () );
         this.qualitySpinner.addModifyListener ( new ModifyListener () {
+            @Override
             public void modifyText ( final ModifyEvent e )
             {
                 final ChartParameters newParameters = ChartParameters.create ().from ( TrendView.this.chartParameters.get () ).quality ( TrendView.this.qualitySpinner.getSelection () ).construct ();
@@ -643,6 +652,7 @@ public class TrendView extends QueryViewPart implements QueryListener
         this.manualColorButton.setText ( Messages.TrendView_Color );
         this.manualSpinner.setBackground ( this.colorRegistry.get ( KEY_MANUAL ) );
         this.manualColorButton.addSelectionListener ( new SelectionListener () {
+            @Override
             public void widgetSelected ( final SelectionEvent e )
             {
                 final ColorDialog cd = new ColorDialog ( parent.getShell () );
@@ -657,6 +667,7 @@ public class TrendView extends QueryViewPart implements QueryListener
                 }
             }
 
+            @Override
             public void widgetDefaultSelected ( final SelectionEvent e )
             {
             }
@@ -667,6 +678,7 @@ public class TrendView extends QueryViewPart implements QueryListener
         this.manualSpinner.setMinimum ( 0 );
         this.manualSpinner.setSelection ( this.chartParameters.get ().getManual () );
         this.manualSpinner.addModifyListener ( new ModifyListener () {
+            @Override
             public void modifyText ( final ModifyEvent e )
             {
                 final ChartParameters newParameters = ChartParameters.create ().from ( TrendView.this.chartParameters.get () ).manual ( TrendView.this.manualSpinner.getSelection () ).construct ();
@@ -701,6 +713,7 @@ public class TrendView extends QueryViewPart implements QueryListener
         // if size of plot has changed, a new request should be made to account
         // for changed numbers of displayed entries
         this.chart.getPlotArea ().addControlListener ( new ControlListener () {
+            @Override
             public void controlResized ( final ControlEvent e )
             {
                 final ChartParameters newParameters = ChartParameters.create ().from ( TrendView.this.chartParameters.get () ).numOfEntries ( TrendView.this.chart.getPlotArea ().getBounds ().width ).construct ();
@@ -708,11 +721,13 @@ public class TrendView extends QueryViewPart implements QueryListener
                 TrendView.this.rangeUpdateJob.get ().schedule ( GUI_RESIZE_JOB_DELAY );
             }
 
+            @Override
             public void controlMoved ( final ControlEvent e )
             {
             }
         } );
         this.chart.getPlotArea ().addKeyListener ( new KeyListener () {
+            @Override
             public void keyReleased ( final KeyEvent e )
             {
                 if ( e.keyCode == SWT.SHIFT )
@@ -725,6 +740,7 @@ public class TrendView extends QueryViewPart implements QueryListener
                 }
             }
 
+            @Override
             public void keyPressed ( final KeyEvent e )
             {
                 if ( e.keyCode == SWT.SHIFT )
@@ -738,6 +754,7 @@ public class TrendView extends QueryViewPart implements QueryListener
             }
         } );
         this.chart.getPlotArea ().addMouseTrackListener ( new MouseTrackListener () {
+            @Override
             public void mouseHover ( final MouseEvent e )
             {
                 if ( ( e.stateMask & SWT.SHIFT ) == SWT.SHIFT )
@@ -750,17 +767,20 @@ public class TrendView extends QueryViewPart implements QueryListener
                 }
             }
 
+            @Override
             public void mouseExit ( final MouseEvent e )
             {
                 TrendView.this.chart.getPlotArea ().setCursor ( null );
             }
 
+            @Override
             public void mouseEnter ( final MouseEvent e )
             {
                 TrendView.this.chart.getPlotArea ().setFocus ();
             }
         } );
         this.chart.getPlotArea ().addDragDetectListener ( new DragDetectListener () {
+            @Override
             public void dragDetected ( final DragDetectEvent e )
             {
                 TrendView.this.chart.getPlotArea ().setCursor ( TrendView.this.dragCursor );
@@ -769,6 +789,7 @@ public class TrendView extends QueryViewPart implements QueryListener
             }
         } );
         this.chart.getPlotArea ().addMouseListener ( new MouseListener () {
+            @Override
             public void mouseUp ( final MouseEvent e )
             {
                 if ( TrendView.this.dragStarted )
@@ -815,15 +836,18 @@ public class TrendView extends QueryViewPart implements QueryListener
                 }
             }
 
+            @Override
             public void mouseDown ( final MouseEvent e )
             {
             }
 
+            @Override
             public void mouseDoubleClick ( final MouseEvent e )
             {
             }
         } );
         this.chart.getPlotArea ().addMouseWheelListener ( new MouseWheelListener () {
+            @Override
             public void mouseScrolled ( final MouseEvent e )
             {
                 if ( e.count > 0 )
@@ -864,26 +888,31 @@ public class TrendView extends QueryViewPart implements QueryListener
                 return 0;
             }
 
+            @Override
             public Date getTimestamp ( final int x )
             {
                 return TrendView.this.dataTimestamp.get ()[coordinateToIndex ( x )];
             }
 
+            @Override
             public double getQuality ( final int x )
             {
                 return TrendView.this.dataQuality.get ()[coordinateToIndex ( x )];
             }
 
+            @Override
             public double getManual ( final int x )
             {
                 return TrendView.this.dataManual.get ()[coordinateToIndex ( x )];
             };
 
+            @Override
             public long getSourceValues ( final int x )
             {
                 return TrendView.this.dataSourceValues.get ()[coordinateToIndex ( x )];
             }
 
+            @Override
             public Map<String, Double> getData ( final int x )
             {
                 final Map<String, Double> result = new HashMap<String, Double> ();
@@ -899,6 +928,7 @@ public class TrendView extends QueryViewPart implements QueryListener
         final MenuItem miSaveAsImage = new MenuItem ( m, SWT.NONE );
         miSaveAsImage.setText ( Messages.TrendView_SaveAsImage );
         miSaveAsImage.addSelectionListener ( new SelectionListener () {
+            @Override
             public void widgetSelected ( final SelectionEvent e )
             {
                 final FileDialog dlg = new FileDialog ( parent.getShell () );
@@ -926,6 +956,7 @@ public class TrendView extends QueryViewPart implements QueryListener
                 }
             }
 
+            @Override
             public void widgetDefaultSelected ( final SelectionEvent e )
             {
 
@@ -1039,7 +1070,7 @@ public class TrendView extends QueryViewPart implements QueryListener
     private DateRange moveRange ( final int drag1, final int drag2, final int xStart, final int xEnd, final Date startTime, final Date endTime )
     {
         final long factor = ( endTime.getTime () - startTime.getTime () ) / ( xEnd - xStart );
-        final long timediff = Math.abs ( ( drag1 - drag2 ) ) * factor;
+        final long timediff = Math.abs ( drag1 - drag2 ) * factor;
         if ( drag2 > drag1 )
         {
             return new DateRange ( new Date ( startTime.getTime () - timediff ), new Date ( endTime.getTime () - timediff ) );
@@ -1058,6 +1089,7 @@ public class TrendView extends QueryViewPart implements QueryListener
 
     // query listener
 
+    @Override
     public void updateParameters ( final QueryParameters parameters, final Set<String> valueTypes )
     {
         boolean updateRequired = false;
@@ -1089,6 +1121,7 @@ public class TrendView extends QueryViewPart implements QueryListener
         }
     }
 
+    @Override
     public void updateData ( final int index, final Map<String, Value[]> values, final ValueInformation[] valueInformation )
     {
         synchronized ( this.updateLock )
@@ -1137,6 +1170,7 @@ public class TrendView extends QueryViewPart implements QueryListener
         this.dataUpdateJob.get ().schedule ( GUI_JOB_DELAY );
     }
 
+    @Override
     public void updateState ( final QueryState state )
     {
     }
@@ -1160,6 +1194,7 @@ public class TrendView extends QueryViewPart implements QueryListener
             return;
         }
         display.asyncExec ( new Runnable () {
+            @Override
             public void run ()
             {
                 if ( TrendView.this.parent.isDisposed () )
@@ -1218,6 +1253,7 @@ public class TrendView extends QueryViewPart implements QueryListener
                     widthSpinner.setForeground ( contrastForeground ( TrendView.this.colorRegistry.get ( seriesParameters.name ) ) );
                     colorButton.setForeground ( TrendView.this.colorRegistry.get ( seriesParameters.name ) );
                     colorButton.addSelectionListener ( new SelectionListener () {
+                        @Override
                         public void widgetSelected ( final SelectionEvent e )
                         {
                             final ColorDialog cd = new ColorDialog ( TrendView.this.parent.getShell () );
@@ -1233,6 +1269,7 @@ public class TrendView extends QueryViewPart implements QueryListener
                             }
                         }
 
+                        @Override
                         public void widgetDefaultSelected ( final SelectionEvent e )
                         {
                         }
@@ -1242,6 +1279,7 @@ public class TrendView extends QueryViewPart implements QueryListener
                     widthSpinner.setMaximum ( 25 );
                     widthSpinner.setSelection ( seriesParameters.width );
                     widthSpinner.addSelectionListener ( new SelectionListener () {
+                        @Override
                         public void widgetSelected ( final SelectionEvent e )
                         {
                             final ChartParameters newChartParameters = ChartParameters.create ().from ( TrendView.this.chartParameters.get () ).seriesWidth ( seriesParameters.name, widthSpinner.getSelection () ).construct ();
@@ -1251,6 +1289,7 @@ public class TrendView extends QueryViewPart implements QueryListener
                             TrendView.this.chart.redraw ();
                         }
 
+                        @Override
                         public void widgetDefaultSelected ( final SelectionEvent e )
                         {
                         }
@@ -1301,6 +1340,7 @@ public class TrendView extends QueryViewPart implements QueryListener
             return;
         }
         display.asyncExec ( new Runnable () {
+            @Override
             public void run ()
             {
                 for ( final SeriesParameters seriesParameter : TrendView.this.chartParameters.get ().getAvailableSeries () )
@@ -1336,6 +1376,7 @@ public class TrendView extends QueryViewPart implements QueryListener
             return;
         }
         display.asyncExec ( new Runnable () {
+            @Override
             public void run ()
             {
                 double v = TrendView.this.scaleMinSpinner.getSelection () / 1000.0;
