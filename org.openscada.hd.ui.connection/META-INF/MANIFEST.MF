@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: OpenSCADA HD Connection UI
 Bundle-SymbolicName: org.openscada.hd.ui.connection;singleton:=true
-Bundle-Version: 0.15.0.qualifier
+Bundle-Version: 0.17.0.qualifier
 Bundle-Activator: org.openscada.hd.ui.connection.Activator
 Bundle-Vendor: TH4 SYSTEMS GmbH
 Require-Bundle: org.eclipse.ui,
@@ -26,9 +26,17 @@ Bundle-ActivationPolicy: lazy
 Import-Package: org.openscada.core;version="0.14.0",
  org.openscada.core.subscription;version="0.14.0",
  org.slf4j;version="1.5.8"
-Export-Package: org.openscada.hd.ui.connection;version="0.15.0";uses:="org.eclipse.ui.plugin,org.osgi.framework",
- org.openscada.hd.ui.connection.data;version="0.15.0",
- org.openscada.hd.ui.connection.dnd;version="0.15.0",
- org.openscada.hd.ui.connection.handler;version="0.15.0",
- org.openscada.hd.ui.connection.views;version="0.15.0"
+Export-Package: org.openscada.hd.ui.connection;version="0.17.0";uses:="org.eclipse.ui.plugin,org.osgi.framework",
+ org.openscada.hd.ui.connection.data;version="0.17.0";uses:="org.eclipse.jface.viewers",
+ org.openscada.hd.ui.connection.dnd;version="0.17.0";uses:="org.eclipse.ui.navigator,org.eclipse.swt.dnd,org.eclipse.jface.viewers",
+ org.openscada.hd.ui.connection.handler;version="0.17.0";uses:="org.eclipse.core.commands,org.openscada.ui.databinding",
+ org.openscada.hd.ui.connection.views;version="0.17.0";
+  uses:="org.eclipse.core.databinding.observable.set,
+   org.eclipse.osgi.util,
+   org.eclipse.core.databinding.observable,
+   org.openscada.hd,
+   org.openscada.hd.ui.connection.internal,
+   org.eclipse.core.databinding.observable.masterdetail,
+   org.eclipse.jface.databinding.viewers,
+   org.openscada.ui.databinding"
 Bundle-Localization: OSGI-INF/l10n/bundle

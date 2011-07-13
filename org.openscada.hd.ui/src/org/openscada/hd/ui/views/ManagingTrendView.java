@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2010-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -17,27 +17,40 @@
  * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
-package org.openscada.hd.ui.connection.handler;
+package org.openscada.hd.ui.views;
 
-import org.eclipse.core.commands.ExecutionEvent;
-import org.eclipse.core.commands.ExecutionException;
-import org.openscada.hd.ui.connection.internal.QueryBufferBean;
 import org.openscada.hd.ui.data.AbstractQueryBuffer;
 
-public class RemoveQueryHandler extends AbstractQueryHandler
+/**
+ * A managing trend view which controls the underlying
+ * query and closes it when the view is closed
+ * @author Jens Reimann
+ *
+ */
+public class ManagingTrendView extends AbstractTrendView
 {
 
+    public static final String VIEW_ID = "org.openscada.hd.ui.ManagingTrendView";
+
     @Override
-    public Object execute ( final ExecutionEvent event ) throws ExecutionException
+    protected void clear ()
     {
-        for ( final AbstractQueryBuffer query : getQueries () )
+        // remember old query first
+        final AbstractQueryBuffer oldQuery = this.query;
+
+        // disconnect
+        super.clear ();
+
+        // close if there was one set
+        if ( oldQuery != null )
         {
-            if ( query instanceof QueryBufferBean )
-            {
-                ( (QueryBufferBean)query ).remove ();
-            }
+            oldQuery.close ();
         }
-        return null;
     }
 
+    @Override
+    public void setQuery ( final AbstractQueryBuffer query )
+    {
+        super.setQuery ( query );
+    }
 }

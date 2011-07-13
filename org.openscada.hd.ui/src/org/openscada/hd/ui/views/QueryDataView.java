@@ -16,6 +16,7 @@
  * version 3 along with OpenSCADA. If not, see
  * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
+
 package org.openscada.hd.ui.views;
 
 import java.util.HashMap;
@@ -94,10 +95,12 @@ public class QueryDataView extends QueryViewPart implements QueryListener
         super.clear ();
     }
 
+    @Override
     public void updateData ( final int index, final Map<String, Value[]> values, final ValueInformation[] valueInformation )
     {
         getDisplay ().asyncExec ( new Runnable () {
 
+            @Override
             public void run ()
             {
                 handleUpdateData ( index, values, valueInformation );
@@ -180,10 +183,12 @@ public class QueryDataView extends QueryViewPart implements QueryListener
         }
     }
 
+    @Override
     public void updateParameters ( final QueryParameters parameters, final Set<String> valueTypes )
     {
         getDisplay ().asyncExec ( new Runnable () {
 
+            @Override
             public void run ()
             {
                 setDataSize ( parameters.getEntries (), valueTypes );
@@ -237,6 +242,7 @@ public class QueryDataView extends QueryViewPart implements QueryListener
         }
     }
 
+    @Override
     public void updateState ( final QueryState state )
     {
     }

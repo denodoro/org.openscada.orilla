@@ -1,3 +1,22 @@
+/*
+ * This file is part of the OpenSCADA project
+ * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ *
+ * OpenSCADA is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenSCADA is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenSCADA. If not, see
+ * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
+ */
+
 package org.openscada.hd.ui.connection.views;
 
 import java.beans.PropertyChangeEvent;
@@ -15,6 +34,7 @@ import org.openscada.hd.ui.connection.internal.ItemListWrapper;
 import org.openscada.hd.ui.connection.internal.ItemWrapper;
 import org.openscada.hd.ui.connection.internal.QueryBufferBean;
 import org.openscada.hd.ui.connection.internal.QueryWrapper;
+import org.openscada.hd.ui.data.AbstractQueryBuffer;
 import org.openscada.hd.ui.data.QueryBuffer;
 import org.openscada.ui.databinding.CommonListeningLabelProvider;
 import org.openscada.ui.databinding.StyledViewerLabel;
@@ -122,6 +142,7 @@ public class ConnectionLabelProvider extends CommonListeningLabelProvider implem
         super.removeListenerFrom ( next );
     }
 
+    @Override
     public void propertyChange ( final PropertyChangeEvent evt )
     {
         logger.debug ( "Property change: {}" ); //$NON-NLS-1$
@@ -129,7 +150,7 @@ public class ConnectionLabelProvider extends CommonListeningLabelProvider implem
         {
             final String propName = evt.getPropertyName ();
             // don't fire changes for "percent filled" or "filled", they come to often and are not shown
-            if ( !QueryBuffer.PROP_PERCENT_FILLED.equals ( propName ) && !QueryBufferBean.PROP_FILLED.equals ( propName ) )
+            if ( !AbstractQueryBuffer.PROP_PERCENT_FILLED.equals ( propName ) && !AbstractQueryBuffer.PROP_FILLED.equals ( propName ) )
             {
                 fireChangeEvent ( Arrays.asList ( evt.getSource () ) );
             }

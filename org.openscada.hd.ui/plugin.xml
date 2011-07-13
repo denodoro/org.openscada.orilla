@@ -94,10 +94,24 @@
       <view
             allowMultiple="false"
             category="org.openscada.hd.ui.category"
-            class="org.openscada.hd.ui.views.TrendView"
+            class="org.openscada.hd.ui.views.SelectionTrendView"
             id="org.openscada.hd.ui.TrendView"
             name="%view.trendView.name"
             restorable="true">
+         <description>
+            A trend view that follows the currently selected query.
+         </description>
+      </view>
+      <view
+            allowMultiple="true"
+            category="org.openscada.hd.ui.category"
+            class="org.openscada.hd.ui.views.ManagingTrendView"
+            id="org.openscada.hd.ui.ManagingTrendView"
+            name="%view.trendView.name"
+            restorable="false">
+         <description>
+            A trend view that manages only his provided query and closes the query at the end of using the query.
+         </description>
       </view>
    </extension>
    <extension
@@ -113,5 +127,35 @@
             id="org.openscada.hd.ui.category"
             name="%category.hd.name">
       </category>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            categoryId="org.openscada.hd.ui.category"
+            id="org.openscada.hd.ui.createManagedTrendView"
+            name="Create Managed Trend View">
+         <commandParameter
+               id="org.openscada.hd.ui.connectionId"
+               name="Connection ID"
+               optional="false">
+         </commandParameter>
+         <commandParameter
+               id="org.openscada.hd.ui.storageName"
+               name="Storage Name"
+               optional="false">
+         </commandParameter>
+         <commandParameter
+               id="org.openscada.hd.ui.queryTimespec"
+               name="Time Spec"
+               optional="true">
+         </commandParameter>
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="org.openscada.hd.ui.view.CreateManagedTrendViewHandler"
+            commandId="org.openscada.hd.ui.createManagedTrendView">
+      </handler>
    </extension>
 </plugin>

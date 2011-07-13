@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -16,6 +16,7 @@
  * version 3 along with OpenSCADA. If not, see
  * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
+
 package org.openscada.hd.ui.connection.internal;
 
 import java.beans.PropertyChangeEvent;
@@ -52,6 +53,7 @@ public class ConnectionWrapper extends WritableSet implements PropertyChangeList
         super.dispose ();
     }
 
+    @Override
     public synchronized void propertyChange ( final PropertyChangeEvent evt )
     {
         triggerUpdate ();
@@ -61,6 +63,7 @@ public class ConnectionWrapper extends WritableSet implements PropertyChangeList
     {
         getRealm ().asyncExec ( new Runnable () {
 
+            @Override
             public void run ()
             {
                 update ();

@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -16,6 +16,7 @@
  * version 3 along with OpenSCADA. If not, see
  * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
+
 package org.openscada.hd.ui.views;
 
 import java.io.File;
@@ -23,7 +24,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -74,26 +74,26 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Spinner;
-import org.openscada.hd.QueryListener;
 import org.openscada.hd.QueryParameters;
 import org.openscada.hd.QueryState;
 import org.openscada.hd.Value;
 import org.openscada.hd.ValueInformation;
 import org.openscada.hd.chart.DataAtPoint;
 import org.openscada.hd.chart.TrendChart;
-import org.openscada.hd.ui.data.QueryBuffer;
+import org.openscada.hd.ui.data.AbstractQueryBuffer;
 import org.swtchart.IAxis;
 import org.swtchart.ILineSeries;
+import org.swtchart.ILineSeries.PlotSymbolType;
 import org.swtchart.ISeries;
+import org.swtchart.ISeries.SeriesType;
 import org.swtchart.LineStyle;
 import org.swtchart.Range;
-import org.swtchart.ILineSeries.PlotSymbolType;
-import org.swtchart.ISeries.SeriesType;
 
-public class TrendView extends QueryViewPart implements QueryListener
+public abstract class AbstractTrendView extends QueryViewPart
 {
+
     /**
-     * @author jrose
+     * @author Jürgen Rose
      * 
      * holds a range of two dates (from - two), is used as a return value for zooming functionality
      */
@@ -123,286 +123,19 @@ public class TrendView extends QueryViewPart implements QueryListener
         }
     }
 
-    /**
-     * Immutable
-     * 
-     * @author jrose
-     */
-    public static class ChartParameters implements Cloneable
-    {
-        private static final long DAY_IN_MILLISECONDS = 1000 * 60 * 60 * 24;
+    private static final String KEY_QUALITY = "quality";
 
-        private int quality = 75;
+    private static final String KEY_MANUAL = "manual";
 
-        private int manual = 75;
+    private static final String KEY_WHITE = "__white";
 
-        private int numOfEntries = 255;
+    private static final String KEY_BLACK = "__black";
 
-        private Date startTime = null;
+    private static final long GUI_JOB_DELAY = 150;
 
-        private Date endTime = null;
+    private static final long GUI_RESIZE_JOB_DELAY = 1500;
 
-        private final List<SeriesParameters> availableSeries = new ArrayList<SeriesParameters> ();
-
-        public static class ChartParameterBuilder
-        {
-            private final ChartParameters parameters;
-
-            private ChartParameterBuilder ()
-            {
-                this.parameters = new ChartParameters ();
-                final long t = System.currentTimeMillis ();
-                this.parameters.startTime = new Date ( t - DAY_IN_MILLISECONDS );
-                this.parameters.endTime = new Date ( t );
-            }
-
-            public ChartParameterBuilder from ( final ChartParameters parameters )
-            {
-                this.quality ( parameters.quality );
-                this.manual ( parameters.manual );
-                this.numOfEntries ( parameters.numOfEntries );
-                this.startTime ( parameters.startTime );
-                this.endTime ( parameters.endTime );
-                this.seriesParameters ( parameters.availableSeries );
-                return this;
-            }
-
-            public ChartParameterBuilder quality ( final int quality )
-            {
-                this.parameters.quality = quality;
-                return this;
-            }
-
-            public ChartParameterBuilder manual ( final int manual )
-            {
-                this.parameters.manual = manual;
-                return this;
-            }
-
-            public ChartParameterBuilder numOfEntries ( final int numOfEntries )
-            {
-                this.parameters.numOfEntries = numOfEntries;
-                return this;
-            }
-
-            public ChartParameterBuilder startTime ( final Date startTime )
-            {
-                this.parameters.startTime = startTime == null ? null : (Date)startTime.clone ();
-                return this;
-            }
-
-            public ChartParameterBuilder endTime ( final Date endTime )
-            {
-                this.parameters.endTime = endTime == null ? null : (Date)endTime.clone ();
-                return this;
-            }
-
-            public ChartParameterBuilder seriesParameters ( final Iterable<SeriesParameters> availableSeries )
-            {
-                this.parameters.availableSeries.clear ();
-                for ( final SeriesParameters series : availableSeries )
-                {
-                    this.parameters.availableSeries.add ( series );
-                }
-                return this;
-            }
-
-            public ChartParameterBuilder seriesParameters ( final SeriesParameters newSeriesParameters )
-            {
-                int index = 0;
-                for ( final SeriesParameters oldSeriesParameters : this.parameters.availableSeries )
-                {
-                    if ( oldSeriesParameters.name.equals ( newSeriesParameters.name ) )
-                    {
-                        this.parameters.availableSeries.set ( index, newSeriesParameters );
-                    }
-                    index += 1;
-                }
-                return this;
-            }
-
-            public ChartParameterBuilder seriesWidth ( final String seriesId, final int width )
-            {
-                this.seriesParameters ( new SeriesParameters ( seriesId, width ) );
-                return this;
-            }
-
-            public ChartParameterBuilder availableSeries ( final Iterable<String> availableSeries )
-            {
-                final List<SeriesParameters> newSeriesParameters = new ArrayList<SeriesParameters> ();
-                for ( final String seriesId : availableSeries )
-                {
-                    boolean found = false;
-                    for ( final SeriesParameters seriesParameters : this.parameters.availableSeries )
-                    {
-                        if ( seriesId.equals ( seriesParameters.name ) )
-                        {
-                            newSeriesParameters.add ( seriesParameters );
-                            found = true;
-                        }
-
-                    }
-                    if ( !found )
-                    {
-                        newSeriesParameters.add ( new SeriesParameters ( seriesId, 1 ) );
-                    }
-                }
-                this.parameters.availableSeries.clear ();
-                this.parameters.availableSeries.addAll ( newSeriesParameters );
-                return this;
-            }
-
-            public ChartParameters construct ()
-            {
-                return this.parameters;
-            }
-        }
-
-        private ChartParameters ()
-        {
-        }
-
-        public static ChartParameterBuilder create ()
-        {
-            return new ChartParameterBuilder ();
-        }
-
-        public int getQuality ()
-        {
-            return this.quality;
-        }
-
-        public int getManual ()
-        {
-            return this.manual;
-        }
-
-        public int getNumOfEntries ()
-        {
-            return this.numOfEntries;
-        }
-
-        public Date getStartTime ()
-        {
-            return this.startTime == null ? null : (Date)this.startTime.clone ();
-        }
-
-        public Date getEndTime ()
-        {
-            return this.endTime == null ? null : (Date)this.endTime.clone ();
-        }
-
-        public List<SeriesParameters> getAvailableSeries ()
-        {
-            return Collections.unmodifiableList ( this.availableSeries );
-        }
-
-        @Override
-        protected Object clone () throws CloneNotSupportedException
-        {
-            final ChartParameters parameters = new ChartParameters ();
-            parameters.quality = getQuality ();
-            parameters.manual = getManual ();
-            parameters.numOfEntries = getNumOfEntries ();
-            parameters.startTime = getStartTime ();
-            parameters.endTime = getEndTime ();
-            parameters.availableSeries.addAll ( getAvailableSeries () );
-            return parameters;
-        }
-
-        @Override
-        public int hashCode ()
-        {
-            final int prime = 31;
-            int result = 1;
-            result = prime * result + ( this.endTime == null ? 0 : this.endTime.hashCode () );
-            result = prime * result + this.numOfEntries;
-            result = prime * result + this.quality;
-            result = prime * result + this.manual;
-            result = prime * result + ( this.startTime == null ? 0 : this.startTime.hashCode () );
-            return result;
-        }
-
-        @Override
-        public boolean equals ( final Object obj )
-        {
-            if ( this == obj )
-            {
-                return true;
-            }
-            if ( obj == null )
-            {
-                return false;
-            }
-            if ( getClass () != obj.getClass () )
-            {
-                return false;
-            }
-            final ChartParameters other = (ChartParameters)obj;
-            if ( this.endTime == null )
-            {
-                if ( other.endTime != null )
-                {
-                    return false;
-                }
-            }
-            else if ( !this.endTime.equals ( other.endTime ) )
-            {
-                return false;
-            }
-            if ( this.numOfEntries != other.numOfEntries )
-            {
-                return false;
-            }
-            if ( this.quality != other.quality )
-            {
-                return false;
-            }
-            if ( this.manual != other.manual )
-            {
-                return false;
-            }
-            if ( this.startTime == null )
-            {
-                if ( other.startTime != null )
-                {
-                    return false;
-                }
-            }
-            else if ( !this.startTime.equals ( other.startTime ) )
-            {
-                return false;
-            }
-            return true;
-        }
-
-        @Override
-        public String toString ()
-        {
-            String result = "ChartParameters = {"; //$NON-NLS-1$
-            result += "quality: " + this.quality; //$NON-NLS-1$
-            result += ", manual: " + this.manual; //$NON-NLS-1$
-            result += ", numOfEntries: " + this.numOfEntries; //$NON-NLS-1$
-            result += ", startTime: " + this.startTime; //$NON-NLS-1$
-            result += ", endTime: " + this.endTime; //$NON-NLS-1$
-            return result + " }"; //$NON-NLS-1$
-        }
-    }
-
-    // internal
-    private static final String KEY_QUALITY = "quality"; //$NON-NLS-1$
-
-    private static final String KEY_MANUAL = "manual"; //$NON-NLS-1$
-
-    private static final String KEY_WHITE = "__white"; //$NON-NLS-1$
-
-    private static final String KEY_BLACK = "__black"; //$NON-NLS-1$
-
-    private final static long GUI_JOB_DELAY = 150;
-
-    private final static long GUI_RESIZE_JOB_DELAY = 1500;
-
-    private static final String SMALL_LABEL_FONT = "small-label-font"; //$NON-NLS-1$
+    private static final String SMALL_LABEL_FONT = "small-label-font";
 
     private final AtomicReference<Job> parameterUpdateJob = new AtomicReference<Job> ();
 
@@ -412,7 +145,6 @@ public class TrendView extends QueryViewPart implements QueryListener
 
     private final AtomicReference<Job> scalingUpdateJob = new AtomicReference<Job> ();
 
-    // data (model)
     private final ConcurrentMap<String, double[]> data = new ConcurrentHashMap<String, double[]> ();
 
     private final AtomicReference<double[]> dataQuality = new AtomicReference<double[]> ();
@@ -427,7 +159,6 @@ public class TrendView extends QueryViewPart implements QueryListener
 
     private final Object updateLock = new Object ();
 
-    // gui
     private Composite parent;
 
     private Composite panel;
@@ -482,6 +213,11 @@ public class TrendView extends QueryViewPart implements QueryListener
 
     private volatile boolean scaleYAutomatically = true;
 
+    public AbstractTrendView ()
+    {
+        super ();
+    }
+
     @Override
     public void createPartControl ( final Composite parent )
     {
@@ -530,26 +266,28 @@ public class TrendView extends QueryViewPart implements QueryListener
         this.scaleAutomaticallyCheckbox.setText ( Messages.TrendView_Automatically );
         this.scaleAutomaticallyCheckbox.setSelection ( this.scaleYAutomatically );
         this.scaleAutomaticallyCheckbox.addSelectionListener ( new SelectionListener () {
+            @Override
             public void widgetSelected ( final SelectionEvent e )
             {
-                if ( TrendView.this.scaleAutomaticallyCheckbox.getSelection () )
+                if ( AbstractTrendView.this.scaleAutomaticallyCheckbox.getSelection () )
                 {
-                    TrendView.this.scaleYAutomatically = true;
-                    TrendView.this.scaleMinSpinner.setEnabled ( false );
-                    TrendView.this.scaleMaxSpinner.setEnabled ( false );
+                    AbstractTrendView.this.scaleYAutomatically = true;
+                    AbstractTrendView.this.scaleMinSpinner.setEnabled ( false );
+                    AbstractTrendView.this.scaleMaxSpinner.setEnabled ( false );
                 }
                 else
                 {
-                    TrendView.this.scaleYAutomatically = false;
-                    TrendView.this.scaleMinSpinner.setEnabled ( true );
-                    TrendView.this.scaleMaxSpinner.setEnabled ( true );
+                    AbstractTrendView.this.scaleYAutomatically = false;
+                    AbstractTrendView.this.scaleMinSpinner.setEnabled ( true );
+                    AbstractTrendView.this.scaleMaxSpinner.setEnabled ( true );
                 }
-                TrendView.this.scaleMinSpinner.setSelection ( (int)Math.round ( TrendView.this.scaleYMin * 1000 ) );
-                TrendView.this.scaleMaxSpinner.setSelection ( (int)Math.round ( TrendView.this.scaleYMax * 1000 ) );
+                AbstractTrendView.this.scaleMinSpinner.setSelection ( (int)Math.round ( AbstractTrendView.this.scaleYMin * 1000 ) );
+                AbstractTrendView.this.scaleMaxSpinner.setSelection ( (int)Math.round ( AbstractTrendView.this.scaleYMax * 1000 ) );
                 adjustRange ();
-                TrendView.this.chart.redraw ();
+                AbstractTrendView.this.chart.redraw ();
             }
 
+            @Override
             public void widgetDefaultSelected ( final SelectionEvent e )
             {
             }
@@ -560,13 +298,15 @@ public class TrendView extends QueryViewPart implements QueryListener
         this.scaleMinSpinner.setDigits ( 3 );
         this.scaleMinSpinner.setMaximum ( Integer.MAX_VALUE );
         this.scaleMinSpinner.setMinimum ( Integer.MIN_VALUE );
-        this.scaleMinSpinner.setSelection ( (int)Math.round ( ( this.scaleYMin * 1000 ) ) );
+        this.scaleMinSpinner.setSelection ( (int)Math.round ( this.scaleYMin * 1000 ) );
         this.scaleMinSpinner.addSelectionListener ( new SelectionListener () {
+            @Override
             public void widgetSelected ( final SelectionEvent e )
             {
-                TrendView.this.scalingUpdateJob.get ().schedule ( GUI_RESIZE_JOB_DELAY );
+                AbstractTrendView.this.scalingUpdateJob.get ().schedule ( GUI_RESIZE_JOB_DELAY );
             }
 
+            @Override
             public void widgetDefaultSelected ( final SelectionEvent e )
             {
             }
@@ -577,13 +317,15 @@ public class TrendView extends QueryViewPart implements QueryListener
         this.scaleMaxSpinner.setDigits ( 3 );
         this.scaleMaxSpinner.setMaximum ( Integer.MAX_VALUE );
         this.scaleMaxSpinner.setMinimum ( Integer.MIN_VALUE );
-        this.scaleMaxSpinner.setSelection ( (int)Math.round ( ( this.scaleYMax * 1000 ) ) );
+        this.scaleMaxSpinner.setSelection ( (int)Math.round ( this.scaleYMax * 1000 ) );
         this.scaleMaxSpinner.addSelectionListener ( new SelectionListener () {
+            @Override
             public void widgetSelected ( final SelectionEvent e )
             {
-                TrendView.this.scalingUpdateJob.get ().schedule ( GUI_RESIZE_JOB_DELAY );
+                AbstractTrendView.this.scalingUpdateJob.get ().schedule ( GUI_RESIZE_JOB_DELAY );
             }
 
+            @Override
             public void widgetDefaultSelected ( final SelectionEvent e )
             {
             }
@@ -600,6 +342,7 @@ public class TrendView extends QueryViewPart implements QueryListener
         this.qualityColorButton.setText ( Messages.TrendView_Color );
         this.qualitySpinner.setBackground ( this.colorRegistry.get ( KEY_QUALITY ) );
         this.qualityColorButton.addSelectionListener ( new SelectionListener () {
+            @Override
             public void widgetSelected ( final SelectionEvent e )
             {
                 final ColorDialog cd = new ColorDialog ( parent.getShell () );
@@ -607,13 +350,14 @@ public class TrendView extends QueryViewPart implements QueryListener
                 final RGB resultColor = cd.open ();
                 if ( resultColor != null )
                 {
-                    TrendView.this.colorRegistry.put ( KEY_QUALITY, resultColor );
-                    TrendView.this.qualitySpinner.setBackground ( TrendView.this.colorRegistry.get ( KEY_QUALITY ) );
-                    TrendView.this.qualitySpinner.setForeground ( contrastForeground ( TrendView.this.colorRegistry.get ( KEY_QUALITY ) ) );
-                    TrendView.this.parameterUpdateJob.get ().schedule ( GUI_JOB_DELAY );
+                    AbstractTrendView.this.colorRegistry.put ( KEY_QUALITY, resultColor );
+                    AbstractTrendView.this.qualitySpinner.setBackground ( AbstractTrendView.this.colorRegistry.get ( KEY_QUALITY ) );
+                    AbstractTrendView.this.qualitySpinner.setForeground ( contrastForeground ( AbstractTrendView.this.colorRegistry.get ( KEY_QUALITY ) ) );
+                    AbstractTrendView.this.parameterUpdateJob.get ().schedule ( GUI_JOB_DELAY );
                 }
             }
 
+            @Override
             public void widgetDefaultSelected ( final SelectionEvent e )
             {
             }
@@ -624,11 +368,12 @@ public class TrendView extends QueryViewPart implements QueryListener
         this.qualitySpinner.setMinimum ( 0 );
         this.qualitySpinner.setSelection ( this.chartParameters.get ().getQuality () );
         this.qualitySpinner.addModifyListener ( new ModifyListener () {
+            @Override
             public void modifyText ( final ModifyEvent e )
             {
-                final ChartParameters newParameters = ChartParameters.create ().from ( TrendView.this.chartParameters.get () ).quality ( TrendView.this.qualitySpinner.getSelection () ).construct ();
-                TrendView.this.chartParameters.set ( newParameters );
-                TrendView.this.parameterUpdateJob.get ().schedule ( GUI_JOB_DELAY );
+                final ChartParameters newParameters = ChartParameters.create ().from ( AbstractTrendView.this.chartParameters.get () ).quality ( AbstractTrendView.this.qualitySpinner.getSelection () ).construct ();
+                AbstractTrendView.this.chartParameters.set ( newParameters );
+                AbstractTrendView.this.parameterUpdateJob.get ().schedule ( GUI_JOB_DELAY );
             }
         } );
 
@@ -643,6 +388,7 @@ public class TrendView extends QueryViewPart implements QueryListener
         this.manualColorButton.setText ( Messages.TrendView_Color );
         this.manualSpinner.setBackground ( this.colorRegistry.get ( KEY_MANUAL ) );
         this.manualColorButton.addSelectionListener ( new SelectionListener () {
+            @Override
             public void widgetSelected ( final SelectionEvent e )
             {
                 final ColorDialog cd = new ColorDialog ( parent.getShell () );
@@ -650,13 +396,14 @@ public class TrendView extends QueryViewPart implements QueryListener
                 final RGB resultColor = cd.open ();
                 if ( resultColor != null )
                 {
-                    TrendView.this.colorRegistry.put ( KEY_MANUAL, resultColor );
-                    TrendView.this.manualSpinner.setBackground ( TrendView.this.colorRegistry.get ( KEY_MANUAL ) );
-                    TrendView.this.manualSpinner.setForeground ( contrastForeground ( TrendView.this.colorRegistry.get ( KEY_MANUAL ) ) );
-                    TrendView.this.parameterUpdateJob.get ().schedule ( GUI_JOB_DELAY );
+                    AbstractTrendView.this.colorRegistry.put ( KEY_MANUAL, resultColor );
+                    AbstractTrendView.this.manualSpinner.setBackground ( AbstractTrendView.this.colorRegistry.get ( KEY_MANUAL ) );
+                    AbstractTrendView.this.manualSpinner.setForeground ( contrastForeground ( AbstractTrendView.this.colorRegistry.get ( KEY_MANUAL ) ) );
+                    AbstractTrendView.this.parameterUpdateJob.get ().schedule ( GUI_JOB_DELAY );
                 }
             }
 
+            @Override
             public void widgetDefaultSelected ( final SelectionEvent e )
             {
             }
@@ -667,11 +414,12 @@ public class TrendView extends QueryViewPart implements QueryListener
         this.manualSpinner.setMinimum ( 0 );
         this.manualSpinner.setSelection ( this.chartParameters.get ().getManual () );
         this.manualSpinner.addModifyListener ( new ModifyListener () {
+            @Override
             public void modifyText ( final ModifyEvent e )
             {
-                final ChartParameters newParameters = ChartParameters.create ().from ( TrendView.this.chartParameters.get () ).manual ( TrendView.this.manualSpinner.getSelection () ).construct ();
-                TrendView.this.chartParameters.set ( newParameters );
-                TrendView.this.parameterUpdateJob.get ().schedule ( GUI_JOB_DELAY );
+                final ChartParameters newParameters = ChartParameters.create ().from ( AbstractTrendView.this.chartParameters.get () ).manual ( AbstractTrendView.this.manualSpinner.getSelection () ).construct ();
+                AbstractTrendView.this.chartParameters.set ( newParameters );
+                AbstractTrendView.this.parameterUpdateJob.get ().schedule ( GUI_JOB_DELAY );
             }
         } );
 
@@ -701,146 +449,158 @@ public class TrendView extends QueryViewPart implements QueryListener
         // if size of plot has changed, a new request should be made to account
         // for changed numbers of displayed entries
         this.chart.getPlotArea ().addControlListener ( new ControlListener () {
+            @Override
             public void controlResized ( final ControlEvent e )
             {
-                final ChartParameters newParameters = ChartParameters.create ().from ( TrendView.this.chartParameters.get () ).numOfEntries ( TrendView.this.chart.getPlotArea ().getBounds ().width ).construct ();
-                TrendView.this.chartParameters.set ( newParameters );
-                TrendView.this.rangeUpdateJob.get ().schedule ( GUI_RESIZE_JOB_DELAY );
+                final ChartParameters newParameters = ChartParameters.create ().from ( AbstractTrendView.this.chartParameters.get () ).numOfEntries ( AbstractTrendView.this.chart.getPlotArea ().getBounds ().width ).construct ();
+                AbstractTrendView.this.chartParameters.set ( newParameters );
+                AbstractTrendView.this.rangeUpdateJob.get ().schedule ( GUI_RESIZE_JOB_DELAY );
             }
 
+            @Override
             public void controlMoved ( final ControlEvent e )
             {
             }
         } );
         this.chart.getPlotArea ().addKeyListener ( new KeyListener () {
+            @Override
             public void keyReleased ( final KeyEvent e )
             {
                 if ( e.keyCode == SWT.SHIFT )
                 {
-                    TrendView.this.chart.getPlotArea ().setCursor ( null );
+                    AbstractTrendView.this.chart.getPlotArea ().setCursor ( null );
                 }
                 else if ( e.keyCode == SWT.ALT )
                 {
-                    TrendView.this.chart.getPlotArea ().setCursor ( null );
+                    AbstractTrendView.this.chart.getPlotArea ().setCursor ( null );
                 }
             }
 
+            @Override
             public void keyPressed ( final KeyEvent e )
             {
                 if ( e.keyCode == SWT.SHIFT )
                 {
-                    TrendView.this.chart.getPlotArea ().setCursor ( TrendView.this.zoomInCursor );
+                    AbstractTrendView.this.chart.getPlotArea ().setCursor ( AbstractTrendView.this.zoomInCursor );
                 }
                 else if ( e.keyCode == SWT.ALT )
                 {
-                    TrendView.this.chart.getPlotArea ().setCursor ( TrendView.this.zoomOutCursor );
+                    AbstractTrendView.this.chart.getPlotArea ().setCursor ( AbstractTrendView.this.zoomOutCursor );
                 }
             }
         } );
         this.chart.getPlotArea ().addMouseTrackListener ( new MouseTrackListener () {
+            @Override
             public void mouseHover ( final MouseEvent e )
             {
                 if ( ( e.stateMask & SWT.SHIFT ) == SWT.SHIFT )
                 {
-                    TrendView.this.chart.getPlotArea ().setCursor ( TrendView.this.zoomInCursor );
+                    AbstractTrendView.this.chart.getPlotArea ().setCursor ( AbstractTrendView.this.zoomInCursor );
                 }
                 else if ( ( e.stateMask & SWT.ALT ) == SWT.ALT )
                 {
-                    TrendView.this.chart.getPlotArea ().setCursor ( TrendView.this.zoomOutCursor );
+                    AbstractTrendView.this.chart.getPlotArea ().setCursor ( AbstractTrendView.this.zoomOutCursor );
                 }
             }
 
+            @Override
             public void mouseExit ( final MouseEvent e )
             {
-                TrendView.this.chart.getPlotArea ().setCursor ( null );
+                AbstractTrendView.this.chart.getPlotArea ().setCursor ( null );
             }
 
+            @Override
             public void mouseEnter ( final MouseEvent e )
             {
-                TrendView.this.chart.getPlotArea ().setFocus ();
+                AbstractTrendView.this.chart.getPlotArea ().setFocus ();
             }
         } );
         this.chart.getPlotArea ().addDragDetectListener ( new DragDetectListener () {
+            @Override
             public void dragDetected ( final DragDetectEvent e )
             {
-                TrendView.this.chart.getPlotArea ().setCursor ( TrendView.this.dragCursor );
-                TrendView.this.dragStarted = true;
-                TrendView.this.dragStartedX = e.x;
+                AbstractTrendView.this.chart.getPlotArea ().setCursor ( AbstractTrendView.this.dragCursor );
+                AbstractTrendView.this.dragStarted = true;
+                AbstractTrendView.this.dragStartedX = e.x;
             }
         } );
         this.chart.getPlotArea ().addMouseListener ( new MouseListener () {
+            @Override
             public void mouseUp ( final MouseEvent e )
             {
-                if ( TrendView.this.dragStarted )
+                if ( AbstractTrendView.this.dragStarted )
                 {
-                    TrendView.this.dragStarted = false;
-                    TrendView.this.chart.getPlotArea ().setCursor ( null );
+                    AbstractTrendView.this.dragStarted = false;
+                    AbstractTrendView.this.chart.getPlotArea ().setCursor ( null );
                     // zoom in range
-                    final DateRange zoomResult = moveRange ( TrendView.this.dragStartedX, e.x, 0, TrendView.this.chart.getPlotArea ().getSize ().x, TrendView.this.chartParameters.get ().getStartTime (), TrendView.this.chartParameters.get ().getEndTime () );
-                    final ChartParameters parameters = ChartParameters.create ().from ( TrendView.this.chartParameters.get () ).startTime ( zoomResult.start ).endTime ( zoomResult.end ).construct ();
-                    TrendView.this.chartParameters.set ( parameters );
-                    TrendView.this.rangeUpdateJob.get ().schedule ( GUI_JOB_DELAY );
+                    final DateRange zoomResult = moveRange ( AbstractTrendView.this.dragStartedX, e.x, 0, AbstractTrendView.this.chart.getPlotArea ().getSize ().x, AbstractTrendView.this.chartParameters.get ().getStartTime (), AbstractTrendView.this.chartParameters.get ().getEndTime () );
+                    final ChartParameters parameters = ChartParameters.create ().from ( AbstractTrendView.this.chartParameters.get () ).startTime ( zoomResult.start ).endTime ( zoomResult.end ).construct ();
+                    AbstractTrendView.this.chartParameters.set ( parameters );
+                    AbstractTrendView.this.rangeUpdateJob.get ().schedule ( GUI_JOB_DELAY );
                 }
                 else
                 {
                     if ( e.button == 1 && ( e.stateMask & SWT.SHIFT ) == SWT.SHIFT )
                     {
                         // zoom in
-                        final DateRange zoomResult = zoomIn ( e.x, 0, TrendView.this.chart.getPlotArea ().getSize ().x, TrendView.this.chartParameters.get ().getStartTime (), TrendView.this.chartParameters.get ().getEndTime () );
-                        final ChartParameters parameters = ChartParameters.create ().from ( TrendView.this.chartParameters.get () ).startTime ( zoomResult.start ).endTime ( zoomResult.end ).construct ();
-                        TrendView.this.chartParameters.set ( parameters );
-                        TrendView.this.rangeUpdateJob.get ().schedule ( GUI_JOB_DELAY );
+                        final DateRange zoomResult = zoomIn ( e.x, 0, AbstractTrendView.this.chart.getPlotArea ().getSize ().x, AbstractTrendView.this.chartParameters.get ().getStartTime (), AbstractTrendView.this.chartParameters.get ().getEndTime () );
+                        final ChartParameters parameters = ChartParameters.create ().from ( AbstractTrendView.this.chartParameters.get () ).startTime ( zoomResult.start ).endTime ( zoomResult.end ).construct ();
+                        AbstractTrendView.this.chartParameters.set ( parameters );
+                        AbstractTrendView.this.rangeUpdateJob.get ().schedule ( GUI_JOB_DELAY );
                     }
                     else if ( e.button == 1 && ( e.stateMask & SWT.ALT ) == SWT.ALT )
                     {
                         // zoom out
-                        final DateRange zoomResult = zoomOut ( e.x, 0, TrendView.this.chart.getPlotArea ().getSize ().x, TrendView.this.chartParameters.get ().getStartTime (), TrendView.this.chartParameters.get ().getEndTime () );
-                        final ChartParameters parameters = ChartParameters.create ().from ( TrendView.this.chartParameters.get () ).startTime ( zoomResult.start ).endTime ( zoomResult.end ).construct ();
-                        TrendView.this.chartParameters.set ( parameters );
-                        TrendView.this.rangeUpdateJob.get ().schedule ( GUI_JOB_DELAY );
+                        final DateRange zoomResult = zoomOut ( e.x, 0, AbstractTrendView.this.chart.getPlotArea ().getSize ().x, AbstractTrendView.this.chartParameters.get ().getStartTime (), AbstractTrendView.this.chartParameters.get ().getEndTime () );
+                        final ChartParameters parameters = ChartParameters.create ().from ( AbstractTrendView.this.chartParameters.get () ).startTime ( zoomResult.start ).endTime ( zoomResult.end ).construct ();
+                        AbstractTrendView.this.chartParameters.set ( parameters );
+                        AbstractTrendView.this.rangeUpdateJob.get ().schedule ( GUI_JOB_DELAY );
                     }
                     else if ( e.button == 1 )
                     {
-                        TrendView.this.chart.getPlotArea ().setCursor ( null );
+                        AbstractTrendView.this.chart.getPlotArea ().setCursor ( null );
                         // zoom in range
-                        final DateRange zoomResult = moveRange ( e.x, TrendView.this.chart.getPlotArea ().getSize ().x / 2, 0, TrendView.this.chart.getPlotArea ().getSize ().x, TrendView.this.chartParameters.get ().getStartTime (), TrendView.this.chartParameters.get ().getEndTime () );
-                        final ChartParameters parameters = ChartParameters.create ().from ( TrendView.this.chartParameters.get () ).startTime ( zoomResult.start ).endTime ( zoomResult.end ).construct ();
-                        TrendView.this.chartParameters.set ( parameters );
-                        TrendView.this.rangeUpdateJob.get ().schedule ( GUI_JOB_DELAY );
+                        final DateRange zoomResult = moveRange ( e.x, AbstractTrendView.this.chart.getPlotArea ().getSize ().x / 2, 0, AbstractTrendView.this.chart.getPlotArea ().getSize ().x, AbstractTrendView.this.chartParameters.get ().getStartTime (), AbstractTrendView.this.chartParameters.get ().getEndTime () );
+                        final ChartParameters parameters = ChartParameters.create ().from ( AbstractTrendView.this.chartParameters.get () ).startTime ( zoomResult.start ).endTime ( zoomResult.end ).construct ();
+                        AbstractTrendView.this.chartParameters.set ( parameters );
+                        AbstractTrendView.this.rangeUpdateJob.get ().schedule ( GUI_JOB_DELAY );
                     }
                     else if ( e.button == 3 )
                     {
-                        TrendView.this.chart.getMenu ().setVisible ( true );
+                        AbstractTrendView.this.chart.getMenu ().setVisible ( true );
                     }
                 }
             }
 
+            @Override
             public void mouseDown ( final MouseEvent e )
             {
             }
 
+            @Override
             public void mouseDoubleClick ( final MouseEvent e )
             {
             }
         } );
         this.chart.getPlotArea ().addMouseWheelListener ( new MouseWheelListener () {
+            @Override
             public void mouseScrolled ( final MouseEvent e )
             {
                 if ( e.count > 0 )
                 {
                     // zoom in
-                    final DateRange zoomResult = zoomIn ( e.x, 0, TrendView.this.chart.getPlotArea ().getSize ().x, TrendView.this.chartParameters.get ().getStartTime (), TrendView.this.chartParameters.get ().getEndTime () );
-                    final ChartParameters parameters = ChartParameters.create ().from ( TrendView.this.chartParameters.get () ).startTime ( zoomResult.start ).endTime ( zoomResult.end ).construct ();
-                    TrendView.this.chartParameters.set ( parameters );
-                    TrendView.this.rangeUpdateJob.get ().schedule ( GUI_JOB_DELAY );
+                    final DateRange zoomResult = zoomIn ( e.x, 0, AbstractTrendView.this.chart.getPlotArea ().getSize ().x, AbstractTrendView.this.chartParameters.get ().getStartTime (), AbstractTrendView.this.chartParameters.get ().getEndTime () );
+                    final ChartParameters parameters = ChartParameters.create ().from ( AbstractTrendView.this.chartParameters.get () ).startTime ( zoomResult.start ).endTime ( zoomResult.end ).construct ();
+                    AbstractTrendView.this.chartParameters.set ( parameters );
+                    AbstractTrendView.this.rangeUpdateJob.get ().schedule ( GUI_JOB_DELAY );
                 }
                 else
                 {
                     // zoom out
-                    final DateRange zoomResult = zoomOut ( e.x, 0, TrendView.this.chart.getPlotArea ().getSize ().x, TrendView.this.chartParameters.get ().getStartTime (), TrendView.this.chartParameters.get ().getEndTime () );
-                    final ChartParameters parameters = ChartParameters.create ().from ( TrendView.this.chartParameters.get () ).startTime ( zoomResult.start ).endTime ( zoomResult.end ).construct ();
-                    TrendView.this.chartParameters.set ( parameters );
-                    TrendView.this.rangeUpdateJob.get ().schedule ( GUI_JOB_DELAY );
+                    final DateRange zoomResult = zoomOut ( e.x, 0, AbstractTrendView.this.chart.getPlotArea ().getSize ().x, AbstractTrendView.this.chartParameters.get ().getStartTime (), AbstractTrendView.this.chartParameters.get ().getEndTime () );
+                    final ChartParameters parameters = ChartParameters.create ().from ( AbstractTrendView.this.chartParameters.get () ).startTime ( zoomResult.start ).endTime ( zoomResult.end ).construct ();
+                    AbstractTrendView.this.chartParameters.set ( parameters );
+                    AbstractTrendView.this.rangeUpdateJob.get ().schedule ( GUI_JOB_DELAY );
                 }
             }
         } );
@@ -851,8 +611,8 @@ public class TrendView extends QueryViewPart implements QueryListener
                 final int margin = 10;
                 try
                 {
-                    final int numOfEntries = TrendView.this.chartParameters.get ().getNumOfEntries ();
-                    final int pixels = TrendView.this.chart.getPlotArea ().getBounds ().width - 2 * margin;
+                    final int numOfEntries = AbstractTrendView.this.chartParameters.get ().getNumOfEntries ();
+                    final int pixels = AbstractTrendView.this.chart.getPlotArea ().getBounds ().width - 2 * margin;
                     final double factor = (double)numOfEntries / (double)pixels;
                     final int i = (int)Math.round ( ( x - margin ) * factor );
                     return i;
@@ -864,32 +624,37 @@ public class TrendView extends QueryViewPart implements QueryListener
                 return 0;
             }
 
+            @Override
             public Date getTimestamp ( final int x )
             {
-                return TrendView.this.dataTimestamp.get ()[coordinateToIndex ( x )];
+                return AbstractTrendView.this.dataTimestamp.get ()[coordinateToIndex ( x )];
             }
 
+            @Override
             public double getQuality ( final int x )
             {
-                return TrendView.this.dataQuality.get ()[coordinateToIndex ( x )];
+                return AbstractTrendView.this.dataQuality.get ()[coordinateToIndex ( x )];
             }
 
+            @Override
             public double getManual ( final int x )
             {
-                return TrendView.this.dataManual.get ()[coordinateToIndex ( x )];
+                return AbstractTrendView.this.dataManual.get ()[coordinateToIndex ( x )];
             };
 
+            @Override
             public long getSourceValues ( final int x )
             {
-                return TrendView.this.dataSourceValues.get ()[coordinateToIndex ( x )];
+                return AbstractTrendView.this.dataSourceValues.get ()[coordinateToIndex ( x )];
             }
 
+            @Override
             public Map<String, Double> getData ( final int x )
             {
                 final Map<String, Double> result = new HashMap<String, Double> ();
-                for ( final SeriesParameters seriesParameters : TrendView.this.chartParameters.get ().getAvailableSeries () )
+                for ( final SeriesParameters seriesParameters : AbstractTrendView.this.chartParameters.get ().getAvailableSeries () )
                 {
-                    result.put ( seriesParameters.name, TrendView.this.data.get ( seriesParameters.name )[coordinateToIndex ( x )] );
+                    result.put ( seriesParameters.name, AbstractTrendView.this.data.get ( seriesParameters.name )[coordinateToIndex ( x )] );
                 }
                 return result;
             }
@@ -899,6 +664,7 @@ public class TrendView extends QueryViewPart implements QueryListener
         final MenuItem miSaveAsImage = new MenuItem ( m, SWT.NONE );
         miSaveAsImage.setText ( Messages.TrendView_SaveAsImage );
         miSaveAsImage.addSelectionListener ( new SelectionListener () {
+            @Override
             public void widgetSelected ( final SelectionEvent e )
             {
                 final FileDialog dlg = new FileDialog ( parent.getShell () );
@@ -911,8 +677,8 @@ public class TrendView extends QueryViewPart implements QueryListener
                     {
                         if ( file.canWrite () || file.createNewFile () )
                         {
-                            TrendView.this.chart.update ();
-                            TrendView.this.chart.save ( filename, SWT.IMAGE_PNG );
+                            AbstractTrendView.this.chart.update ();
+                            AbstractTrendView.this.chart.save ( filename, SWT.IMAGE_PNG );
                         }
                         else
                         {
@@ -926,6 +692,7 @@ public class TrendView extends QueryViewPart implements QueryListener
                 }
             }
 
+            @Override
             public void widgetDefaultSelected ( final SelectionEvent e )
             {
 
@@ -982,9 +749,6 @@ public class TrendView extends QueryViewPart implements QueryListener
             }
         } );
 
-        // register all own listeners
-        // according to selection on left side update chart as well
-        addListener ();
     }
 
     /**
@@ -1039,7 +803,7 @@ public class TrendView extends QueryViewPart implements QueryListener
     private DateRange moveRange ( final int drag1, final int drag2, final int xStart, final int xEnd, final Date startTime, final Date endTime )
     {
         final long factor = ( endTime.getTime () - startTime.getTime () ) / ( xEnd - xStart );
-        final long timediff = Math.abs ( ( drag1 - drag2 ) ) * factor;
+        final long timediff = Math.abs ( drag1 - drag2 ) * factor;
         if ( drag2 > drag1 )
         {
             return new DateRange ( new Date ( startTime.getTime () - timediff ), new Date ( endTime.getTime () - timediff ) );
@@ -1056,8 +820,7 @@ public class TrendView extends QueryViewPart implements QueryListener
         this.chart.setFocus ();
     }
 
-    // query listener
-
+    @Override
     public void updateParameters ( final QueryParameters parameters, final Set<String> valueTypes )
     {
         boolean updateRequired = false;
@@ -1089,6 +852,7 @@ public class TrendView extends QueryViewPart implements QueryListener
         }
     }
 
+    @Override
     public void updateData ( final int index, final Map<String, Value[]> values, final ValueInformation[] valueInformation )
     {
         synchronized ( this.updateLock )
@@ -1137,11 +901,10 @@ public class TrendView extends QueryViewPart implements QueryListener
         this.dataUpdateJob.get ().schedule ( GUI_JOB_DELAY );
     }
 
+    @Override
     public void updateState ( final QueryState state )
     {
     }
-
-    // update chart parameters
 
     /**
      * must be run in GUI thread, does the actual modification of chart
@@ -1160,44 +923,45 @@ public class TrendView extends QueryViewPart implements QueryListener
             return;
         }
         display.asyncExec ( new Runnable () {
+            @Override
             public void run ()
             {
-                if ( TrendView.this.parent.isDisposed () )
+                if ( AbstractTrendView.this.parent.isDisposed () )
                 {
                     return;
                 }
-                if ( TrendView.this.panel.isDisposed () )
+                if ( AbstractTrendView.this.panel.isDisposed () )
                 {
                     return;
                 }
-                if ( TrendView.this.chart.isDisposed () )
+                if ( AbstractTrendView.this.chart.isDisposed () )
                 {
                     return;
                 }
                 // update GUI with new parameters
                 // remove old Series
-                TrendView.this.chart.setQualityColor ( TrendView.this.colorRegistry.get ( KEY_QUALITY ) );
-                TrendView.this.chart.setQualityThreshold ( TrendView.this.chartParameters.get ().getQuality () / 100.0 );
-                TrendView.this.chart.setManualColor ( TrendView.this.colorRegistry.get ( KEY_MANUAL ) );
-                TrendView.this.chart.setManualThreshold ( TrendView.this.chartParameters.get ().getManual () / 100.0 );
+                AbstractTrendView.this.chart.setQualityColor ( AbstractTrendView.this.colorRegistry.get ( KEY_QUALITY ) );
+                AbstractTrendView.this.chart.setQualityThreshold ( AbstractTrendView.this.chartParameters.get ().getQuality () / 100.0 );
+                AbstractTrendView.this.chart.setManualColor ( AbstractTrendView.this.colorRegistry.get ( KEY_MANUAL ) );
+                AbstractTrendView.this.chart.setManualThreshold ( AbstractTrendView.this.chartParameters.get ().getManual () / 100.0 );
                 final List<String> seriesIds = new ArrayList<String> ();
-                for ( final ISeries series : TrendView.this.chart.getSeriesSet ().getSeries () )
+                for ( final ISeries series : AbstractTrendView.this.chart.getSeriesSet ().getSeries () )
                 {
                     seriesIds.add ( series.getId () );
                 }
                 for ( final String seriesId : seriesIds )
                 {
-                    TrendView.this.chart.getSeriesSet ().deleteSeries ( seriesId );
+                    AbstractTrendView.this.chart.getSeriesSet ().deleteSeries ( seriesId );
                 }
-                for ( final Group group : TrendView.this.seriesGroups.values () )
+                for ( final Group group : AbstractTrendView.this.seriesGroups.values () )
                 {
                     group.dispose ();
                 }
                 // add new series
-                for ( final SeriesParameters seriesParameters : TrendView.this.chartParameters.get ().getAvailableSeries () )
+                for ( final SeriesParameters seriesParameters : AbstractTrendView.this.chartParameters.get ().getAvailableSeries () )
                 {
-                    final ILineSeries series = (ILineSeries)TrendView.this.chart.getSeriesSet ().createSeries ( SeriesType.LINE, seriesParameters.name );
-                    final Group group = new Group ( TrendView.this.panel, SWT.SHADOW_ETCHED_IN );
+                    final ILineSeries series = (ILineSeries)AbstractTrendView.this.chart.getSeriesSet ().createSeries ( SeriesType.LINE, seriesParameters.name );
+                    final Group group = new Group ( AbstractTrendView.this.panel, SWT.SHADOW_ETCHED_IN );
                     final Button colorButton = new Button ( group, SWT.PUSH );
                     final Spinner widthSpinner = new Spinner ( group, SWT.BORDER );
 
@@ -1207,32 +971,34 @@ public class TrendView extends QueryViewPart implements QueryListener
                     series.enableStep ( true );
                     series.setAntialias ( SWT.ON );
                     series.setSymbolType ( PlotSymbolType.NONE );
-                    series.setLineColor ( TrendView.this.colorRegistry.get ( seriesParameters.name ) );
+                    series.setLineColor ( AbstractTrendView.this.colorRegistry.get ( seriesParameters.name ) );
                     series.setLineWidth ( seriesParameters.width );
-                    TrendView.this.seriesGroups.put ( seriesParameters.name, group );
+                    AbstractTrendView.this.seriesGroups.put ( seriesParameters.name, group );
                     group.setText ( seriesParameters.name );
-                    group.setLayout ( TrendView.this.groupLayout );
+                    group.setLayout ( AbstractTrendView.this.groupLayout );
                     colorButton.setText ( Messages.TrendView_Color );
                     colorButton.setVisible ( true );
-                    widthSpinner.setBackground ( TrendView.this.colorRegistry.get ( seriesParameters.name ) );
-                    widthSpinner.setForeground ( contrastForeground ( TrendView.this.colorRegistry.get ( seriesParameters.name ) ) );
-                    colorButton.setForeground ( TrendView.this.colorRegistry.get ( seriesParameters.name ) );
+                    widthSpinner.setBackground ( AbstractTrendView.this.colorRegistry.get ( seriesParameters.name ) );
+                    widthSpinner.setForeground ( contrastForeground ( AbstractTrendView.this.colorRegistry.get ( seriesParameters.name ) ) );
+                    colorButton.setForeground ( AbstractTrendView.this.colorRegistry.get ( seriesParameters.name ) );
                     colorButton.addSelectionListener ( new SelectionListener () {
+                        @Override
                         public void widgetSelected ( final SelectionEvent e )
                         {
-                            final ColorDialog cd = new ColorDialog ( TrendView.this.parent.getShell () );
+                            final ColorDialog cd = new ColorDialog ( AbstractTrendView.this.parent.getShell () );
                             cd.setText ( Messages.TrendView_SelectColor );
                             final RGB resultColor = cd.open ();
                             if ( resultColor != null )
                             {
-                                TrendView.this.colorRegistry.put ( seriesParameters.name, resultColor );
-                                widthSpinner.setBackground ( TrendView.this.colorRegistry.get ( seriesParameters.name ) );
-                                widthSpinner.setForeground ( contrastForeground ( TrendView.this.colorRegistry.get ( seriesParameters.name ) ) );
-                                series.setLineColor ( TrendView.this.colorRegistry.get ( seriesParameters.name ) );
-                                TrendView.this.chart.redraw ();
+                                AbstractTrendView.this.colorRegistry.put ( seriesParameters.name, resultColor );
+                                widthSpinner.setBackground ( AbstractTrendView.this.colorRegistry.get ( seriesParameters.name ) );
+                                widthSpinner.setForeground ( contrastForeground ( AbstractTrendView.this.colorRegistry.get ( seriesParameters.name ) ) );
+                                series.setLineColor ( AbstractTrendView.this.colorRegistry.get ( seriesParameters.name ) );
+                                AbstractTrendView.this.chart.redraw ();
                             }
                         }
 
+                        @Override
                         public void widgetDefaultSelected ( final SelectionEvent e )
                         {
                         }
@@ -1242,37 +1008,37 @@ public class TrendView extends QueryViewPart implements QueryListener
                     widthSpinner.setMaximum ( 25 );
                     widthSpinner.setSelection ( seriesParameters.width );
                     widthSpinner.addSelectionListener ( new SelectionListener () {
+                        @Override
                         public void widgetSelected ( final SelectionEvent e )
                         {
-                            final ChartParameters newChartParameters = ChartParameters.create ().from ( TrendView.this.chartParameters.get () ).seriesWidth ( seriesParameters.name, widthSpinner.getSelection () ).construct ();
-                            TrendView.this.chartParameters.set ( newChartParameters );
+                            final ChartParameters newChartParameters = ChartParameters.create ().from ( AbstractTrendView.this.chartParameters.get () ).seriesWidth ( seriesParameters.name, widthSpinner.getSelection () ).construct ();
+                            AbstractTrendView.this.chartParameters.set ( newChartParameters );
                             series.setLineWidth ( widthSpinner.getSelection () );
                             series.setVisible ( widthSpinner.getSelection () > 0 );
-                            TrendView.this.chart.redraw ();
+                            AbstractTrendView.this.chart.redraw ();
                         }
 
+                        @Override
                         public void widgetDefaultSelected ( final SelectionEvent e )
                         {
                         }
                     } );
                 }
-                if ( TrendView.this.query != null )
+                if ( AbstractTrendView.this.query != null )
                 {
-                    TrendView.this.chart.getTitle ().setText ( TrendView.this.query.getItemId () );
+                    AbstractTrendView.this.chart.getTitle ().setText ( AbstractTrendView.this.query.getItemId () );
                 }
-                TrendView.this.chart.getAxisSet ().getYAxis ( 0 ).getTick ().setTickMarkStepHint ( 33 );
-                TrendView.this.chart.getAxisSet ().getXAxis ( 0 ).getTick ().setTickMarkStepHint ( 33 );
-                TrendView.this.parent.layout ( true, true );
-                TrendView.this.chart.redraw ();
+                AbstractTrendView.this.chart.getAxisSet ().getYAxis ( 0 ).getTick ().setTickMarkStepHint ( 33 );
+                AbstractTrendView.this.chart.getAxisSet ().getXAxis ( 0 ).getTick ().setTickMarkStepHint ( 33 );
+                AbstractTrendView.this.parent.layout ( true, true );
+                AbstractTrendView.this.chart.redraw ();
             }
         } );
     }
 
-    // range has changed, send feedback to query
-
     private void doUpdateRangeParameters ()
     {
-        final QueryBuffer query = this.query;
+        final AbstractQueryBuffer query = this.query;
 
         if ( query != null )
         {
@@ -1287,8 +1053,6 @@ public class TrendView extends QueryViewPart implements QueryListener
         }
     }
 
-    // update chart with new data
-
     private void doUpdateChartData ()
     {
         if ( this.chart.isDisposed () )
@@ -1301,29 +1065,29 @@ public class TrendView extends QueryViewPart implements QueryListener
             return;
         }
         display.asyncExec ( new Runnable () {
+            @Override
             public void run ()
             {
-                for ( final SeriesParameters seriesParameter : TrendView.this.chartParameters.get ().getAvailableSeries () )
+                for ( final SeriesParameters seriesParameter : AbstractTrendView.this.chartParameters.get ().getAvailableSeries () )
                 {
-                    final ISeries series = TrendView.this.chart.getSeriesSet ().getSeries ( seriesParameter.name );
+                    final ISeries series = AbstractTrendView.this.chart.getSeriesSet ().getSeries ( seriesParameter.name );
                     // I'm not sure in which cases the series can even be null, but just try to continue as usual
                     if ( series == null )
                     {
                         continue;
                     }
-                    series.setXDateSeries ( TrendView.this.dataTimestamp.get () );
-                    series.setYSeries ( convertInvalidData ( TrendView.this.data.get ( seriesParameter.name ) ) );
+                    series.setXDateSeries ( AbstractTrendView.this.dataTimestamp.get () );
+                    series.setYSeries ( convertInvalidData ( AbstractTrendView.this.data.get ( seriesParameter.name ) ) );
                 }
-                TrendView.this.chart.getAxisSet ().getXAxis ( 0 ).getTick ().setFormat ( new SimpleDateFormat ( formatByRange () ) );
-                TrendView.this.chart.setQuality ( TrendView.this.dataQuality.get () );
-                TrendView.this.chart.setManual ( TrendView.this.dataManual.get () );
+                AbstractTrendView.this.chart.getAxisSet ().getXAxis ( 0 ).getTick ().setFormat ( new SimpleDateFormat ( formatByRange () ) );
+                AbstractTrendView.this.chart.setQuality ( AbstractTrendView.this.dataQuality.get () );
+                AbstractTrendView.this.chart.setManual ( AbstractTrendView.this.dataManual.get () );
                 adjustRange ();
-                TrendView.this.chart.redraw ();
+                AbstractTrendView.this.chart.redraw ();
             }
         } );
     }
 
-    // update scaling to current value
     private void doUpdateScaling ()
     {
         if ( this.chart.isDisposed () )
@@ -1336,30 +1100,31 @@ public class TrendView extends QueryViewPart implements QueryListener
             return;
         }
         display.asyncExec ( new Runnable () {
+            @Override
             public void run ()
             {
-                double v = TrendView.this.scaleMinSpinner.getSelection () / 1000.0;
-                if ( v >= TrendView.this.scaleYMax )
+                double v = AbstractTrendView.this.scaleMinSpinner.getSelection () / 1000.0;
+                if ( v >= AbstractTrendView.this.scaleYMax )
                 {
-                    TrendView.this.scaleYMin = TrendView.this.scaleYMax - 0.001;
+                    AbstractTrendView.this.scaleYMin = AbstractTrendView.this.scaleYMax - 0.001;
                 }
                 else
                 {
-                    TrendView.this.scaleYMin = v;
+                    AbstractTrendView.this.scaleYMin = v;
                 }
-                TrendView.this.scaleMinSpinner.setSelection ( (int) ( TrendView.this.scaleYMin * 1000 ) );
-                v = TrendView.this.scaleMaxSpinner.getSelection () / 1000.0;
-                if ( v <= TrendView.this.scaleYMin )
+                AbstractTrendView.this.scaleMinSpinner.setSelection ( (int) ( AbstractTrendView.this.scaleYMin * 1000 ) );
+                v = AbstractTrendView.this.scaleMaxSpinner.getSelection () / 1000.0;
+                if ( v <= AbstractTrendView.this.scaleYMin )
                 {
-                    TrendView.this.scaleYMax = TrendView.this.scaleYMin + 0.001;
+                    AbstractTrendView.this.scaleYMax = AbstractTrendView.this.scaleYMin + 0.001;
                 }
                 else
                 {
-                    TrendView.this.scaleYMax = v;
+                    AbstractTrendView.this.scaleYMax = v;
                 }
-                TrendView.this.scaleMaxSpinner.setSelection ( (int) ( TrendView.this.scaleYMax * 1000 ) );
+                AbstractTrendView.this.scaleMaxSpinner.setSelection ( (int) ( AbstractTrendView.this.scaleYMax * 1000 ) );
                 adjustRange ();
-                TrendView.this.chart.redraw ();
+                AbstractTrendView.this.chart.redraw ();
             }
         } );
     }
@@ -1371,7 +1136,7 @@ public class TrendView extends QueryViewPart implements QueryListener
             this.scaleYMin = this.currentYMin == null ? 0 : this.currentYMin;
             this.scaleYMax = this.currentYMax == null ? 1 : this.currentYMax;
         }
-        for ( final IAxis axis : TrendView.this.chart.getAxisSet ().getXAxes () )
+        for ( final IAxis axis : this.chart.getAxisSet ().getXAxes () )
         {
             axis.adjustRange ();
         }
@@ -1427,7 +1192,7 @@ public class TrendView extends QueryViewPart implements QueryListener
     }
 
     /**
-     * returns white for darke background, black for light background
+     * returns white for dark background, black for light background
      * @param c
      * @return
      */
@@ -1455,4 +1220,5 @@ public class TrendView extends QueryViewPart implements QueryListener
         this.zoomOutCursor.dispose ();
         super.dispose ();
     }
+
 }

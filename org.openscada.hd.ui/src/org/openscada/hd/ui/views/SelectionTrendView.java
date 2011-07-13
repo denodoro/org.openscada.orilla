@@ -17,27 +17,20 @@
  * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
-package org.openscada.hd.ui.connection.handler;
+package org.openscada.hd.ui.views;
 
-import org.eclipse.core.commands.ExecutionEvent;
-import org.eclipse.core.commands.ExecutionException;
-import org.openscada.hd.ui.connection.internal.QueryBufferBean;
-import org.openscada.hd.ui.data.AbstractQueryBuffer;
+import org.eclipse.swt.widgets.Composite;
+import org.openscada.hd.QueryListener;
 
-public class RemoveQueryHandler extends AbstractQueryHandler
+public class SelectionTrendView extends AbstractTrendView implements QueryListener
 {
-
     @Override
-    public Object execute ( final ExecutionEvent event ) throws ExecutionException
+    public void createPartControl ( final Composite parent )
     {
-        for ( final AbstractQueryBuffer query : getQueries () )
-        {
-            if ( query instanceof QueryBufferBean )
-            {
-                ( (QueryBufferBean)query ).remove ();
-            }
-        }
-        return null;
-    }
+        super.createPartControl ( parent );
 
+        // register all own listeners
+        // according to selection on left side update chart as well
+        addListener ();
+    }
 }
