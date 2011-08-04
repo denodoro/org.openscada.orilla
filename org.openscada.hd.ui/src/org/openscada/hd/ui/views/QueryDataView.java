@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -40,7 +40,7 @@ import org.openscada.hd.ValueInformation;
 
 public class QueryDataView extends QueryViewPart implements QueryListener
 {
-    private static final int FIX_COLS = 3;
+    private static final int FIX_FRONT_COLS = 3;
 
     private final Map<String, TableColumn> columns = new HashMap<String, TableColumn> ();
 
@@ -57,6 +57,8 @@ public class QueryDataView extends QueryViewPart implements QueryListener
     private TableColumn manualCol;
 
     private TableColumn infoCol;
+
+    private TableColumn countCol;
 
     @Override
     public void createPartControl ( final Composite parent )
@@ -126,10 +128,11 @@ public class QueryDataView extends QueryViewPart implements QueryListener
             for ( int j = 0; j < this.colNames.length; j++ )
             {
                 final Value[] value = values.get ( this.colNames[j] );
-                item.setText ( j + FIX_COLS, getValueString ( value[i] ) );
+                item.setText ( j + FIX_FRONT_COLS, getValueString ( value[i] ) );
             }
 
-            item.setText ( this.colNames.length + FIX_COLS, valueInformation[i].toString () );
+            item.setText ( this.colNames.length + FIX_FRONT_COLS, "" + valueInformation[i].getSourceValues () ); //$NON-NLS-1$
+            item.setText ( this.colNames.length + FIX_FRONT_COLS + 1, String.format ( Messages.QueryDataView_InfoFormat, valueInformation[i].getStartTimestamp (), valueInformation[i].getEndTimestamp () ) );
 
             if ( quality < 0.33 )
             {
@@ -149,20 +152,20 @@ public class QueryDataView extends QueryViewPart implements QueryListener
         if ( num instanceof Double )
         {
             final Double dNum = (Double)num;
-            if ( Double.isInfinite ( dNum ) )
+            if ( dNum.isInfinite () )
             {
-                return "Inf";
+                return Messages.QueryDataView_Infinity;
             }
-            else if ( Double.isNaN ( dNum ) )
+            else if ( dNum.isNaN () )
             {
-                return "NaN";
+                return Messages.QueryDataView_NaN;
             }
             return String.format ( Messages.QueryDataView_Format_Value, dNum );
         }
         else if ( num instanceof Long )
         {
             final Long lNum = (Long)num;
-            return String.format ( "%s", lNum );
+            return String.format ( "%s", lNum ); //$NON-NLS-1$
         }
         else
         {
@@ -210,6 +213,10 @@ public class QueryDataView extends QueryViewPart implements QueryListener
             this.columns.put ( valueType, col );
         }
 
+        this.countCol = new TableColumn ( this.table, SWT.NONE );
+        this.countCol.setText ( Messages.QueryDataView_ColValues );
+        this.countCol.setWidth ( 40 );
+
         this.infoCol = new TableColumn ( this.table, SWT.NONE );
         this.infoCol.setText ( Messages.QueryDataView_ColInfo );
         this.infoCol.setWidth ( 150 );
@@ -234,6 +241,12 @@ public class QueryDataView extends QueryViewPart implements QueryListener
             col.dispose ();
         }
         this.columns.clear ();
+
+        if ( this.countCol != null )
+        {
+            this.countCol.dispose ();
+            this.countCol = null;
+        }
 
         if ( this.infoCol != null )
         {
