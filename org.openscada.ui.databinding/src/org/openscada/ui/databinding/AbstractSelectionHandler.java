@@ -22,6 +22,8 @@ package org.openscada.ui.databinding;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
@@ -35,6 +37,18 @@ public abstract class AbstractSelectionHandler extends AbstractHandler
     {
         final IWorkbenchWindow window = getWorkbenchWindow ();
         return window.getActivePage ();
+    }
+
+    protected Shell getShell ()
+    {
+        if ( this.activeWindow == null )
+        {
+            return Display.getDefault ().getActiveShell ();
+        }
+        else
+        {
+            return this.activeWindow.getShell ();
+        }
     }
 
     /**
