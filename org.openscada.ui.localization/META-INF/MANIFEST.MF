@@ -1,12 +1,13 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Localization Services
+Bundle-Name: openSCADA Localization Services
 Bundle-SymbolicName: org.openscada.ui.localization;singleton:=true
-Bundle-Version: 0.15.0.qualifier
+Bundle-Version: 0.17.0.qualifier
 Bundle-Activator: org.openscada.ui.localization.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Export-Package: org.openscada.ui.localization;version="0.15.0",
- org.openscada.ui.localization.timezone;version="0.15.0"
+Export-Package: org.openscada.ui.localization;version="0.17.0";uses:="org.eclipse.ui.plugin,org.osgi.framework",
+ org.openscada.ui.localization.timezone;version="0.17.0";uses:="org.eclipse.jface.preference,org.eclipse.ui,org.eclipse.core.runtime.preferences"
+Bundle-Vendor: TH4 SYSTEMS GmbH

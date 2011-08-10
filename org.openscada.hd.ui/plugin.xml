@@ -154,7 +154,7 @@
    <extension
          point="org.eclipse.ui.handlers">
       <handler
-            class="org.openscada.hd.ui.view.CreateManagedTrendViewHandler"
+            class="org.openscada.hd.ui.handler.CreateManagedTrendViewHandler"
             commandId="org.openscada.hd.ui.createManagedTrendView">
       </handler>
    </extension>
