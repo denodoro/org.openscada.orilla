@@ -52,13 +52,13 @@ public class TimeZonePreferencePage extends FieldEditorPreferencePage implements
             entries[i][1] = id;
             i += 1;
         }
-        final FieldEditor field = new ComboFieldEditor ( "timeZone", "Time Zone", entries, getFieldEditorParent () );
+        final FieldEditor field = new ComboFieldEditor ( "timeZone", Messages.TimeZonePreferencePage_TimeZone_Label, entries, getFieldEditorParent () ); //$NON-NLS-1$
         addField ( field );
     }
 
     public void init ( final IWorkbench workbench )
     {
         setPreferenceStore ( Activator.getDefault ().getPreferenceStore () );
-        setDescription ( "Set Timezone used within Application" );
+        setDescription ( Messages.TimeZonePreferencePage_TimeZone_Description );
     }
 }
