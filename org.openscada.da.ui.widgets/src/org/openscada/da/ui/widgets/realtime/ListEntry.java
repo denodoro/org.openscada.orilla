@@ -89,7 +89,7 @@ public class ListEntry extends Observable implements IAdaptable, IPropertySource
         }
         else
         {
-            return new DataItemValue ();
+            return DataItemValue.DISCONNECTED;
         }
     }
 
