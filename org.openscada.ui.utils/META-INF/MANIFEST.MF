@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: OpenSCADA UI Utils
+Bundle-Name: openSCADA UI Utils
 Bundle-SymbolicName: org.openscada.ui.utils;singleton:=true
-Bundle-Version: 0.16.0.qualifier
+Bundle-Version: 0.17.0.qualifier
 Bundle-Activator: org.openscada.ui.utils.Activator
 Bundle-Vendor: TH4 SYSTEMS GmbH
 Require-Bundle: org.eclipse.ui,
@@ -10,13 +10,14 @@ Require-Bundle: org.eclipse.ui,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Import-Package: org.openscada.utils.concurrent;version="0.15.0",
- org.slf4j;version="[1.5.8,1.6.0)"
-Export-Package: org.openscada.ui.utils;version="0.16.0";
+ org.slf4j;version="1.5.8"
+Export-Package: org.openscada.ui.utils;version="0.17.0";
   uses:="org.openscada.ui.utils.toggle,
    org.openscada.utils.concurrent,
    org.eclipse.ui.plugin,
    org.osgi.framework,
    org.eclipse.swt.widgets",
- org.openscada.ui.utils.blink;version="0.16.0";uses:="org.openscada.ui.utils.toggle",
- org.openscada.ui.utils.datetime;version="0.16.0";uses:="org.eclipse.jface.window,org.eclipse.swt.widgets,org.eclipse.jface.dialogs",
- org.openscada.ui.utils.toggle;version="0.16.0"
+ org.openscada.ui.utils.blink;version="0.17.0";uses:="org.openscada.ui.utils.toggle",
+ org.openscada.ui.utils.datetime;version="0.17.0";uses:="org.eclipse.jface.window,org.eclipse.swt.widgets,org.eclipse.jface.dialogs",
+ org.openscada.ui.utils.status;version="0.17.0";uses:="org.eclipse.core.runtime",
+ org.openscada.ui.utils.toggle;version="0.17.0"
