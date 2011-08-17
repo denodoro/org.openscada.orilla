@@ -1,11 +1,13 @@
 package org.openscada.ca.ui.util;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.PrintStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
 import java.util.Set;
 import java.util.zip.ZipEntry;
@@ -81,12 +83,13 @@ public class OscarWriter
      * </p>
      * @param data the data to write
      * @param stream the stream to write to
+     * @throws UnsupportedEncodingException 
      */
-    public static void writeData ( final Map<String, Map<String, Map<String, String>>> data, final OutputStream stream )
+    public static void writeData ( final Map<String, Map<String, Map<String, String>>> data, final OutputStream stream ) throws UnsupportedEncodingException
     {
-        final PrintStream printStream = new PrintStream ( stream );
+        final BufferedWriter writer = new BufferedWriter ( new OutputStreamWriter ( stream, "UTF-8" ) );
         final Gson g = new GsonBuilder ().setPrettyPrinting ().create ();
-        g.toJson ( data, printStream );
+        g.toJson ( data, writer );
     }
 
     /**
@@ -96,11 +99,12 @@ public class OscarWriter
      * </p>
      * @param ignoreData the data to write
      * @param stream the stream to write to
+     * @throws UnsupportedEncodingException 
      */
-    public static void writeIgnoreData ( final Map<String, Set<String>> ignoreData, final OutputStream stream )
+    public static void writeIgnoreData ( final Map<String, Set<String>> ignoreData, final OutputStream stream ) throws UnsupportedEncodingException
     {
-        final PrintStream printStream = new PrintStream ( stream );
+        final BufferedWriter writer = new BufferedWriter ( new OutputStreamWriter ( stream, "UTF-8" ) );
         final Gson g = new GsonBuilder ().setPrettyPrinting ().create ();
-        g.toJson ( ignoreData, printStream );
+        g.toJson ( ignoreData, writer );
     }
 }

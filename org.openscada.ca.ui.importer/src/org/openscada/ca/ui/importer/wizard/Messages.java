@@ -51,8 +51,6 @@ public class Messages extends NLS
 
     public static String LocalDataPage_ErrorCannotReadFile;
 
-    public static String LocalDataPage_ErrorInvalidOscar;
-
     public static String LocalDataPage_ErrorMissingFile;
 
     public static String LocalDataPage_ErrorNoData;
