@@ -201,7 +201,8 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
 
         switch ( state )
         {
-        case UNSAFE:
+        case DISCONNECTED:
+        case ERROR:
             style = org.openscada.core.ui.styles.Activator.getStyle ( Style.ERROR );
             break;
 
@@ -213,7 +214,7 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
             style = org.openscada.core.ui.styles.Activator.getStyle ( Style.ALARM );
             break;
 
-        case NORMAL:
+        case OK:
         case ALARM_0:
         default:
             style = new StyleInformation ( null, ColorDescriptor.createFrom ( ColorConstants.lightGray ), null );
@@ -424,7 +425,7 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
 
     private void setBlinker ( final Blinker blinker, final String tag )
     {
-        blinker.setState ( isAlarm ( tag ) || isError ( tag ), isAckRequired ( tag ), isUnsafe ( tag ) );
+        blinker.setState ( isAlarm ( tag ) || isError ( tag ), isAckRequired ( tag ), isUnsafe ( tag ), false, false, false );
     }
 
     private void setLabel ( final Label preset, final String string )
