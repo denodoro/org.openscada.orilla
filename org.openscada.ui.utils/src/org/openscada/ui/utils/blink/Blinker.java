@@ -54,13 +54,7 @@ public class Blinker extends AbstractBlinker
         this.inactiveFactor = inactiveFactor;
     }
 
-    @Deprecated
-    public void setState ( final boolean alarm, final boolean requireAck, final boolean manual, final boolean disconnected, final boolean error )
-    {
-        setState ( alarm, requireAck, manual, disconnected, error, false, false );
-    }
-
-    public void setState ( final boolean alarm, final boolean requireAck, final boolean manual, final boolean disconnected, final boolean error, final boolean isNull, final boolean blocked )
+    public void setState ( final boolean alarm, final boolean requireAck, final boolean manual, final boolean disconnected, final boolean error, final boolean blocked )
     {
         if ( alarm && requireAck )
         {
@@ -94,11 +88,6 @@ public class Blinker extends AbstractBlinker
         {
             enableBlinking ( 0 );
             fireHandler ( State.MANUAL );
-        }
-        else if ( isNull )
-        {
-            enableBlinking ( 0 );
-            fireHandler ( State.OK );
         }
         else
         {

@@ -425,7 +425,7 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
 
     private void setBlinker ( final Blinker blinker, final String tag )
     {
-        blinker.setState ( isAlarm ( tag ) || isError ( tag ), isAckRequired ( tag ), isUnsafe ( tag ), false, false, false );
+        blinker.setState ( isAlarm ( tag ), isAckRequired ( tag ), false, isUnsafe ( tag ), isError ( tag ), false );
     }
 
     private void setLabel ( final Label preset, final String string )

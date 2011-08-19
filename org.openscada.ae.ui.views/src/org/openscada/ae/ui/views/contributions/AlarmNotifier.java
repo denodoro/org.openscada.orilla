@@ -201,7 +201,7 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution
                 AlarmNotifier.this.setBlinkerState ( state );
             }
         } );
-        this.blinker.setState ( false, false, true );
+        this.blinker.setState ( false, false, false, true, false, false );
 
         loadConfiguration ();
 
@@ -222,7 +222,8 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution
 
                 switch ( state )
                 {
-                case UNSAFE:
+                case ERROR:
+                case DISCONNECTED:
                     setBackground ( AlarmNotifier.this.display.getSystemColor ( SWT.COLOR_MAGENTA ) );
                     break;
 
@@ -231,7 +232,7 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution
                     setBackground ( AlarmNotifier.this.display.getSystemColor ( SWT.COLOR_RED ) );
                     break;
 
-                case NORMAL:
+                case OK:
                 case ALARM_0:
                 default:
                     setBackground ( null );
@@ -402,7 +403,7 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution
 
     protected void trigger ( final Runnable run )
     {
-        if ( ( this.display == null ) || this.display.isDisposed () )
+        if ( this.display == null || this.display.isDisposed () )
         {
             return;
         }
@@ -437,7 +438,7 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution
 
     protected void updateState ()
     {
-        this.blinker.setState ( numberOfAlarms () > 0, numberOfAckAlarms () > 0, !this.connected );
+        this.blinker.setState ( numberOfAlarms () > 0, numberOfAckAlarms () > 0, false, !this.connected, false, false );
     }
 
     private void disableHorn ()
@@ -457,7 +458,7 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution
 
     private void enableHorn () throws UnsupportedAudioFileException, IOException, LineUnavailableException
     {
-        if ( ( ( this.clip == null ) || !this.clip.isRunning () ) && ( Activator.getDefault ().getPreferenceStore ().getBoolean ( PreferenceConstants.BELL_ACTIVATED_KEY ) ) )
+        if ( ( this.clip == null || !this.clip.isRunning () ) && Activator.getDefault ().getPreferenceStore ().getBoolean ( PreferenceConstants.BELL_ACTIVATED_KEY ) )
         {
             final AudioInputStream sound = AudioSystem.getAudioInputStream ( this.soundFile );
             final DataLine.Info info = new DataLine.Info ( Clip.class, sound.getFormat () );
@@ -504,7 +505,7 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution
 
     private String getLabel ()
     {
-        if ( ( this.connectionService == null ) || ( this.connectionService.getConnection ().getState () != ConnectionState.BOUND ) )
+        if ( this.connectionService == null || this.connectionService.getConnection ().getState () != ConnectionState.BOUND )
         {
             return Messages.AlarmNotifier_Label_State_Disconnected;
         }
