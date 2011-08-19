@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -23,11 +23,14 @@ public class Blinker extends AbstractBlinker
 {
     public enum State
     {
-        NORMAL,
+        OK,
         ALARM,
         ALARM_0,
         ALARM_1,
-        UNSAFE
+        DISCONNECTED,
+        ERROR,
+        MANUAL,
+        BLOCKED
     }
 
     public interface Handler
@@ -51,14 +54,15 @@ public class Blinker extends AbstractBlinker
         this.inactiveFactor = inactiveFactor;
     }
 
-    public void setState ( final boolean alarm, final boolean requireAck, final boolean unsafe )
+    @Deprecated
+    public void setState ( final boolean alarm, final boolean requireAck, final boolean manual, final boolean disconnected, final boolean error )
     {
-        if ( unsafe )
-        {
-            enableBlinking ( 0 );
-            this.handler.setState ( State.UNSAFE );
-        }
-        else if ( alarm && requireAck )
+        setState ( alarm, requireAck, manual, disconnected, error, false, false );
+    }
+
+    public void setState ( final boolean alarm, final boolean requireAck, final boolean manual, final boolean disconnected, final boolean error, final boolean isNull, final boolean blocked )
+    {
+        if ( alarm && requireAck )
         {
             enableBlinking ( 1 );
         }
@@ -66,16 +70,51 @@ public class Blinker extends AbstractBlinker
         {
             enableBlinking ( this.inactiveFactor );
         }
+        else if ( alarm && !requireAck )
+        {
+            enableBlinking ( 0 );
+            fireHandler ( State.ALARM );
+        }
+        else if ( disconnected )
+        {
+            enableBlinking ( 0 );
+            fireHandler ( State.DISCONNECTED );
+        }
+        else if ( blocked )
+        {
+            enableBlinking ( 0 );
+            fireHandler ( State.BLOCKED );
+        }
+        else if ( error )
+        {
+            enableBlinking ( 0 );
+            fireHandler ( State.ERROR );
+        }
+        else if ( manual )
+        {
+            enableBlinking ( 0 );
+            fireHandler ( State.MANUAL );
+        }
+        else if ( isNull )
+        {
+            enableBlinking ( 0 );
+            fireHandler ( State.OK );
+        }
         else
         {
             enableBlinking ( 0 );
-            this.handler.setState ( alarm ? State.ALARM : State.NORMAL );
+            fireHandler ( State.OK );
         }
+    }
+
+    private void fireHandler ( final State state )
+    {
+        this.handler.setState ( state );
     }
 
     @Override
     public void toggle ( final boolean on )
     {
-        this.handler.setState ( on ? State.ALARM_1 : State.ALARM_0 );
+        fireHandler ( on ? State.ALARM_1 : State.ALARM_0 );
     }
 }
