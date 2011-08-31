@@ -22,6 +22,7 @@ package org.openscada.ae.ui.views.views;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -96,6 +97,8 @@ public class EventHistoryView extends AbstractAlarmsEventsView
 
     private final Gson gson = new GsonBuilder ().create ();
 
+    private List<EventTableColumn> additionalColumns;
+
     /**
      * This is a callback that will allow us to create the viewer and initialize
      * it.
@@ -132,7 +135,7 @@ public class EventHistoryView extends AbstractAlarmsEventsView
             public void run ()
             {
                 clearData ();
-                searchAction.setChecked ( false );
+                EventHistoryView.this.searchAction.setChecked ( false );
             }
         } );
 
@@ -147,7 +150,7 @@ public class EventHistoryView extends AbstractAlarmsEventsView
             @Override
             public void run ()
             {
-                searchAction.setChecked ( true );
+                EventHistoryView.this.searchAction.setChecked ( true );
                 pauseEventsRetrieval ();
                 startEventsRetrieval ();
             }
@@ -171,12 +174,13 @@ public class EventHistoryView extends AbstractAlarmsEventsView
 
         this.events = new WritableSet ( SWTObservables.getRealm ( parent.getDisplay () ) );
 
-        this.eventsTable = new EventViewTable ( getContentPane (), SWT.BORDER, this.events, null, commentAction, this.initialColumnSettings );
+        // load configuration first, since we need the additional columns later
+        loadConfiguration ();
+
+        this.eventsTable = new EventViewTable ( getContentPane (), SWT.BORDER, this.events, null, commentAction, this.initialColumnSettings, this.additionalColumns );
         this.eventsTable.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, true, 1, 1 ) );
 
         getSite ().setSelectionProvider ( this.eventsTable.getTableViewer () );
-
-        loadConfiguration ();
     }
 
     private void loadConfiguration ()
@@ -214,6 +218,13 @@ public class EventHistoryView extends AbstractAlarmsEventsView
         if ( cfg.getLabel () != null )
         {
             setPartName ( cfg.getLabel () );
+        }
+
+        this.additionalColumns = new LinkedList<EventTableColumn> ();
+
+        for ( final Map.Entry<String, String> entry : cfg.getAdditionalColumns ().entrySet () )
+        {
+            this.additionalColumns.add ( new EventTableColumn ( entry.getKey (), entry.getValue () ) );
         }
     }
 

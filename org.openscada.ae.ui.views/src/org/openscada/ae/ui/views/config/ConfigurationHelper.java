@@ -23,6 +23,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -282,7 +283,9 @@ public class ConfigurationHelper
             final ConnectionType connectionType = ConnectionType.valueOf ( ele.getAttribute ( "connectionType" ) ); //$NON-NLS-1$
             final String label = ele.getAttribute ( "label" ); //$NON-NLS-1$
 
-            return new EventHistoryViewConfiguration ( id, connectionString, connectionType, label );
+            final Map<String, String> additionalColumns = new LinkedHashMap<String, String> ();
+            fillAdditional ( additionalColumns, ele );
+            return new EventHistoryViewConfiguration ( id, connectionString, connectionType, label, additionalColumns );
         }
         catch ( final Exception e )
         {
