@@ -2,6 +2,7 @@ package org.openscada.ae.ui.views.preferences;
 
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.openscada.ae.ui.views.Activator;
@@ -25,11 +26,15 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 
     private BooleanFieldEditor bellActivatedEditor;
 
+    private IntegerFieldEditor numOfEventsEditor;
+
+    private IntegerFieldEditor cutListAllSecondsEditor;
+
     public PreferencePage ()
     {
         super ( GRID );
         setPreferenceStore ( Activator.getDefault ().getPreferenceStore () );
-        setDescription ( Messages.PreferencePage_activateBellOnAlarm );
+        setDescription ( Messages.PreferencePage_title );
     }
 
     /**
@@ -42,7 +47,11 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
     public void createFieldEditors ()
     {
         this.bellActivatedEditor = new BooleanFieldEditor ( PreferenceConstants.BELL_ACTIVATED_KEY, Messages.PreferencePage_activateBell, getFieldEditorParent () );
+        this.numOfEventsEditor = new IntegerFieldEditor ( PreferenceConstants.NUMBER_OF_EVENTS_KEY, Messages.PreferencePage_numberOfEvents, getFieldEditorParent () );
+        this.cutListAllSecondsEditor = new IntegerFieldEditor ( PreferenceConstants.CUT_LIST_ALL_SECONDS_KEY, Messages.PreferencePage_cutListEveryXSeconds, getFieldEditorParent () );
         addField ( this.bellActivatedEditor );
+        addField ( this.numOfEventsEditor );
+        addField ( this.cutListAllSecondsEditor );
     }
 
     @Override

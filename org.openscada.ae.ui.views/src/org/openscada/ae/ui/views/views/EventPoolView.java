@@ -67,6 +67,7 @@ import org.openscada.ae.ui.views.dialog.SearchType;
 import org.openscada.ae.ui.views.model.DecoratedEvent;
 import org.openscada.ae.ui.views.model.DecoratedMonitor;
 import org.openscada.ae.ui.views.model.MonitorData;
+import org.openscada.ae.ui.views.preferences.PreferenceConstants;
 import org.openscada.core.Variant;
 import org.openscada.core.client.ConnectionState;
 import org.openscada.core.subscription.SubscriptionState;
@@ -150,6 +151,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
     {
         super.createPartControl ( parent );
         this.scheduler = Executors.newSingleThreadScheduledExecutor ( new NamedThreadFactory ( "shortenEventPool" ) ); //$NON-NLS-1$
+        int shortenEverySeconds = Activator.getDefault ().getPreferenceStore ().getInt ( PreferenceConstants.CUT_LIST_ALL_SECONDS_KEY );
         this.scheduler.scheduleAtFixedRate ( new Runnable () {
             @Override
             public void run ()
@@ -163,7 +165,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
                     }
                 } );
             }
-        }, 10 * 60, 10 * 60, TimeUnit.SECONDS );
+        }, shortenEverySeconds, shortenEverySeconds, TimeUnit.SECONDS );
         this.pool = new WritableSet ( SWTObservables.getRealm ( parent.getDisplay () ) );
         this.pool.addChangeListener ( new IChangeListener () {
             @Override
@@ -287,7 +289,12 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
         {
             setPartName ( cfg.getLabel () );
         }
-        this.maxNumberOfEvents = cfg.getMaxNumberOfEvents ();
+        int maxNumberOfEvents = cfg.getMaxNumberOfEvents ();
+        if ( Activator.getDefault ().getPreferenceStore ().getInt ( PreferenceConstants.NUMBER_OF_EVENTS_KEY ) > 0 )
+        {
+            maxNumberOfEvents = Activator.getDefault ().getPreferenceStore ().getInt ( PreferenceConstants.NUMBER_OF_EVENTS_KEY );
+        }
+        this.maxNumberOfEvents = maxNumberOfEvents;
         this.forceEventLimit = cfg.getForceEventLimit ();
 
         this.additionalColumns = new LinkedList<EventTableColumn> ();
