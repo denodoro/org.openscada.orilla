@@ -27,7 +27,12 @@ public class Messages extends NLS
 
     public static String PreferencePage_activateBell;
 
-    public static String PreferencePage_activateBellOnAlarm;
+    public static String PreferencePage_title;
+
+    public static String PreferencePage_numberOfEvents;
+
+    public static String PreferencePage_cutListEveryXSeconds;
+
     static
     {
         // initialize resource bundle
