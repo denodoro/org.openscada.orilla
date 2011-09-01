@@ -42,7 +42,7 @@ public class ServiceDiscoverer extends AbstractConnectionDiscoverer implements S
 
     private final BundleContext context;
 
-    private final Set<ServiceReference> references = new HashSet<ServiceReference> ();
+    private final Set<ServiceReference<?>> references = new HashSet<ServiceReference<?>> ();
 
     public ServiceDiscoverer ()
     {
@@ -56,10 +56,10 @@ public class ServiceDiscoverer extends AbstractConnectionDiscoverer implements S
         try
         {
             this.context.addServiceListener ( this, String.format ( "(%s=%s)", Constants.OBJECTCLASS, ConnectionService.class.getName () ) );
-            final ServiceReference[] refs = this.context.getAllServiceReferences ( ConnectionService.class.getName (), null );
+            final ServiceReference<?>[] refs = this.context.getAllServiceReferences ( ConnectionService.class.getName (), null );
             if ( refs != null )
             {
-                for ( final ServiceReference ref : refs )
+                for ( final ServiceReference<?> ref : refs )
                 {
                     addReference ( ref );
                 }
@@ -73,7 +73,7 @@ public class ServiceDiscoverer extends AbstractConnectionDiscoverer implements S
 
     }
 
-    private ConnectionInformation fromReference ( final ServiceReference ref )
+    private ConnectionInformation fromReference ( final ServiceReference<?> ref )
     {
         final Object o = ref.getProperty ( ConnectionService.CONNECTION_URI );
         if ( o instanceof String )
@@ -84,7 +84,7 @@ public class ServiceDiscoverer extends AbstractConnectionDiscoverer implements S
         return null;
     }
 
-    private void addReference ( final ServiceReference ref )
+    private void addReference ( final ServiceReference<?> ref )
     {
         logger.info ( "Adding service: {}", ref );
 
@@ -94,7 +94,7 @@ public class ServiceDiscoverer extends AbstractConnectionDiscoverer implements S
         }
     }
 
-    private void removeReference ( final ServiceReference ref )
+    private void removeReference ( final ServiceReference<?> ref )
     {
         logger.info ( "Removing service: {}", ref );
 
@@ -110,7 +110,7 @@ public class ServiceDiscoverer extends AbstractConnectionDiscoverer implements S
     private void update ()
     {
         final Set<ConnectionDescriptor> infos = new HashSet<ConnectionDescriptor> ();
-        for ( final ServiceReference ref : this.references )
+        for ( final ServiceReference<?> ref : this.references )
         {
             final ConnectionInformation ci = fromReference ( ref );
             if ( ci != null )
@@ -131,6 +131,7 @@ public class ServiceDiscoverer extends AbstractConnectionDiscoverer implements S
         this.context.removeServiceListener ( this );
     }
 
+    @Override
     public synchronized void serviceChanged ( final ServiceEvent event )
     {
         switch ( event.getType () )
