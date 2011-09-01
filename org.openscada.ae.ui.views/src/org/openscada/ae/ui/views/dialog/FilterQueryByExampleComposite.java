@@ -286,7 +286,7 @@ public class FilterQueryByExampleComposite extends Composite
         @Override
         public Filter asExpression ()
         {
-            FilterAssertion assertion = null;
+            final FilterAssertion assertion;
             if ( this.textText.getText ().contains ( "*" ) ) //$NON-NLS-1$
             {
                 assertion = new FilterAssertion ( this.field, Assertion.SUBSTRING, toCollection ( this.textText.getText () ) );
@@ -331,42 +331,6 @@ public class FilterQueryByExampleComposite extends Composite
         }
     }
 
-    private static class NumberFieldEntry extends TextFieldEntry
-    {
-        public NumberFieldEntry ( final Composite parent, final String field, final String caption, final FilterModified filterModified )
-        {
-            super ( parent, field, caption, filterModified );
-        }
-
-        @Override
-        public Filter asExpression ()
-        {
-            FilterAssertion assertion = null;
-            try
-            {
-                final Long l = Long.parseLong ( this.textText.getText () );
-                assertion = new FilterAssertion ( this.field, Assertion.EQUALITY, Variant.valueOf ( l ).toString () );
-            }
-            catch ( final NumberFormatException el )
-            {
-                try
-                {
-                    final Double d = Double.parseDouble ( this.textText.getText () );
-                    assertion = new FilterAssertion ( this.field, Assertion.EQUALITY, Variant.valueOf ( d ).toString () );
-                }
-                catch ( final NumberFormatException ed )
-                {
-                    assertion = new FilterAssertion ( this.field, Assertion.EQUALITY, Variant.valueOf ( this.textText.getText () ) );
-                }
-            }
-            if ( this.notCheckBox.getSelection () )
-            {
-                return FilterExpression.negate ( assertion );
-            }
-            return assertion;
-        }
-    }
-
     // clear button
     final Button clearButton;
 
@@ -397,8 +361,8 @@ public class FilterQueryByExampleComposite extends Composite
         this.fields.put ( "monitorType", new TextFieldEntry ( this, "monitorType", Messages.getString ( "monitorType" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         this.fields.put ( "eventType", new TextFieldEntry ( this, "eventType", Messages.getString ( "eventType" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         this.fields.put ( "item", new TextFieldEntry ( this, "item", Messages.getString ( "item" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-        this.fields.put ( "value", new NumberFieldEntry ( this, "value", Messages.getString ( "value" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-        this.fields.put ( "priority", new NumberFieldEntry ( this, "priority", Messages.getString ( "priority" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        this.fields.put ( "value", new TextFieldEntry ( this, "value", Messages.getString ( "value" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        this.fields.put ( "priority", new TextFieldEntry ( this, "priority", Messages.getString ( "priority" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         this.fields.put ( "source", new TextFieldEntry ( this, "source", Messages.getString ( "source" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         this.fields.put ( "actorType", new TextFieldEntry ( this, "actorType", Messages.getString ( "actorType" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         this.fields.put ( "actorName", new TextFieldEntry ( this, "actorName", Messages.getString ( "actorName" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
