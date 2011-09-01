@@ -151,7 +151,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
     {
         super.createPartControl ( parent );
         this.scheduler = Executors.newSingleThreadScheduledExecutor ( new NamedThreadFactory ( "shortenEventPool" ) ); //$NON-NLS-1$
-        int shortenEverySeconds = Activator.getDefault ().getPreferenceStore ().getInt ( PreferenceConstants.CUT_LIST_ALL_SECONDS_KEY );
+        final int shortenEverySeconds = Activator.getDefault ().getPreferenceStore ().getInt ( PreferenceConstants.CUT_LIST_ALL_SECONDS_KEY );
         this.scheduler.scheduleAtFixedRate ( new Runnable () {
             @Override
             public void run ()
@@ -219,10 +219,16 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
             @Override
             public void run ()
             {
-                setFilterAction.setChecked ( true );
-                final Pair<SearchType, String> result = EventHistorySearchDialog.open ( parent.getShell (), EventPoolView.this.eventsTable.getFilter () );
-                EventPoolView.this.eventsTable.setFilter ( result );
-                setFilterAction.setChecked ( EventPoolView.this.eventsTable.getFilter () != null );
+                BusyIndicator.showWhile ( parent.getDisplay (), new Runnable () {
+                    @Override
+                    public void run ()
+                    {
+                        setFilterAction.setChecked ( true );
+                        final Pair<SearchType, String> result = EventHistorySearchDialog.open ( parent.getShell (), EventPoolView.this.eventsTable.getFilter () );
+                        EventPoolView.this.eventsTable.setFilter ( result );
+                        setFilterAction.setChecked ( EventPoolView.this.eventsTable.getFilter () != null );
+                    }
+                } );
             }
         } );
         final CustomizableAction removeFilterAction = new CustomizableAction ();
@@ -233,8 +239,14 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
             @Override
             public void run ()
             {
-                EventPoolView.this.eventsTable.removeFilter ();
-                setFilterAction.setChecked ( false );
+                BusyIndicator.showWhile ( parent.getDisplay (), new Runnable () {
+                    @Override
+                    public void run ()
+                    {
+                        EventPoolView.this.eventsTable.removeFilter ();
+                        setFilterAction.setChecked ( false );
+                    }
+                } );
             }
         } );
 

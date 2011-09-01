@@ -24,9 +24,14 @@ import org.eclipse.jface.viewers.ViewerFilter;
 import org.openscada.ae.filter.EventMatcher;
 import org.openscada.ae.filter.internal.EventMatcherImpl;
 import org.openscada.ae.ui.views.model.DecoratedEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class EventViewerFilter extends ViewerFilter
 {
+
+    private final static Logger logger = LoggerFactory.getLogger ( EventViewerFilter.class );
+
     private final EventMatcher eventMatcher;
 
     private final String filter;
@@ -54,7 +59,7 @@ public class EventViewerFilter extends ViewerFilter
         }
         catch ( final Exception e )
         {
-            e.printStackTrace ();
+            logger.warn ( "Failed to filter", e );
         }
         return false;
     }
