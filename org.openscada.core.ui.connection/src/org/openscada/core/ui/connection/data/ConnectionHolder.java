@@ -67,7 +67,7 @@ public class ConnectionHolder extends AbstractPropertyChange implements Connecti
 
     private final BundleContext context;
 
-    private ServiceRegistration serviceRegistration;
+    private ServiceRegistration<?> serviceRegistration;
 
     public ConnectionHolder ( final ConnectionDiscovererBean discoverer, final ConnectionDescriptor info ) throws InvalidSyntaxException
     {

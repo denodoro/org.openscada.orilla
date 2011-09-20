@@ -43,7 +43,7 @@ public class ConnectionLoginHandler implements LoginHandler
 
     private volatile boolean ok;
 
-    private ServiceRegistration registration;
+    private ServiceRegistration<?> registration;
 
     private final LoginConnection loginConnection;
 
@@ -56,6 +56,7 @@ public class ConnectionLoginHandler implements LoginHandler
 
         this.connectionStateListener = new ConnectionStateListener () {
 
+            @Override
             public void stateChange ( final Connection connectionInstance, final ConnectionState state, final Throwable error )
             {
                 notifyStateChange ( ConnectionLoginHandler.this.connectionService, state, error, true );
@@ -63,11 +64,13 @@ public class ConnectionLoginHandler implements LoginHandler
         };
     }
 
+    @Override
     public void setStateListener ( final StateListener loginStateListener )
     {
         this.loginStateListener = loginStateListener;
     }
 
+    @Override
     public void startLogin ()
     {
         notifyStateChange ( this.connectionService, ConnectionState.CLOSED, null, false );
@@ -101,6 +104,7 @@ public class ConnectionLoginHandler implements LoginHandler
         }
     }
 
+    @Override
     public void register ( final BundleContext context )
     {
         if ( this.registration != null )
@@ -127,6 +131,7 @@ public class ConnectionLoginHandler implements LoginHandler
         this.registration = context.registerService ( str, this.connectionService, properties );
     }
 
+    @Override
     public synchronized void dispose ()
     {
         if ( this.registration != null )
@@ -147,16 +152,19 @@ public class ConnectionLoginHandler implements LoginHandler
         }
     }
 
+    @Override
     public boolean isComplete ()
     {
         return this.complete;
     }
 
+    @Override
     public boolean isOk ()
     {
         return this.ok;
     }
 
+    @Override
     public boolean hasRole ( final String role )
     {
         // we do not provide roles at the moment

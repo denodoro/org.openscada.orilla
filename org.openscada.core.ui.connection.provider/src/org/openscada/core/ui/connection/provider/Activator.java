@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -25,6 +25,7 @@ import java.util.Hashtable;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -47,7 +48,7 @@ public class Activator extends AbstractUIPlugin
     // The shared instance
     private static Activator plugin;
 
-    private final Set<ServiceRegistration> registrations = new HashSet<ServiceRegistration> ();
+    private final Set<ServiceRegistration<?>> registrations = new HashSet<ServiceRegistration<?>> ();
 
     private final Set<ConnectionService> services = new HashSet<ConnectionService> ();
 
@@ -63,6 +64,7 @@ public class Activator extends AbstractUIPlugin
      * (non-Javadoc)
      * @see org.eclipse.core.runtime.Plugins#start(org.osgi.framework.BundleContext)
      */
+    @Override
     public void start ( final BundleContext context ) throws Exception
     {
         super.start ( context );
@@ -75,6 +77,7 @@ public class Activator extends AbstractUIPlugin
      * (non-Javadoc)
      * @see org.eclipse.core.runtime.Plugin#stop(org.osgi.framework.BundleContext)
      */
+    @Override
     public void stop ( final BundleContext context ) throws Exception
     {
         disposeConnections ();
@@ -118,12 +121,12 @@ public class Activator extends AbstractUIPlugin
             }
             else
             {
-                getLog ().log ( new Status ( Status.WARNING, PLUGIN_ID, "Unable to find connection creator for " + uri ) );
+                getLog ().log ( new Status ( IStatus.WARNING, PLUGIN_ID, "Unable to find connection creator for " + uri ) );
             }
         }
         catch ( final Exception e )
         {
-            getLog ().log ( new Status ( Status.ERROR, PLUGIN_ID, "Failed to create connection", e ) );
+            getLog ().log ( new Status ( IStatus.ERROR, PLUGIN_ID, "Failed to create connection", e ) );
         }
     }
 
@@ -141,13 +144,13 @@ public class Activator extends AbstractUIPlugin
             clazzStr[i] = clazzes[i].getName ();
         }
 
-        final ServiceRegistration handle = getBundle ().getBundleContext ().registerService ( clazzStr, service, properties );
+        final ServiceRegistration<?> handle = getBundle ().getBundleContext ().registerService ( clazzStr, service, properties );
         this.registrations.add ( handle );
     }
 
     private void disposeConnections ()
     {
-        for ( final ServiceRegistration reg : this.registrations )
+        for ( final ServiceRegistration<?> reg : this.registrations )
         {
             reg.unregister ();
         }
