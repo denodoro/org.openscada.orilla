@@ -55,6 +55,7 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseTrackListener;
 import org.eclipse.swt.events.MouseWheelListener;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
@@ -81,6 +82,7 @@ import org.openscada.hd.ValueInformation;
 import org.openscada.hd.chart.DataAtPoint;
 import org.openscada.hd.chart.TrendChart;
 import org.openscada.hd.ui.data.AbstractQueryBuffer;
+import org.openscada.utils.lang.Pair;
 import org.swtchart.IAxis;
 import org.swtchart.ILineSeries;
 import org.swtchart.ILineSeries.PlotSymbolType;
@@ -281,8 +283,9 @@ public abstract class AbstractTrendView extends QueryViewPart
                     AbstractTrendView.this.scaleMinSpinner.setEnabled ( true );
                     AbstractTrendView.this.scaleMaxSpinner.setEnabled ( true );
                 }
-                AbstractTrendView.this.scaleMinSpinner.setSelection ( (int)Math.round ( AbstractTrendView.this.scaleYMin * 1000 ) );
-                AbstractTrendView.this.scaleMaxSpinner.setSelection ( (int)Math.round ( AbstractTrendView.this.scaleYMax * 1000 ) );
+
+                updateSpinner ();
+
                 adjustRange ();
                 AbstractTrendView.this.chart.redraw ();
             }
@@ -751,6 +754,12 @@ public abstract class AbstractTrendView extends QueryViewPart
 
     }
 
+    protected void updateSpinner ()
+    {
+        this.scaleMinSpinner.setSelection ( (int)Math.round ( AbstractTrendView.this.scaleYMin * 1000 ) );
+        this.scaleMaxSpinner.setSelection ( (int)Math.round ( AbstractTrendView.this.scaleYMax * 1000 ) );
+    }
+
     /**
      * FIXME: implement zoom out correctly, now its just a very primitive version of it
      * 
@@ -981,7 +990,7 @@ public abstract class AbstractTrendView extends QueryViewPart
                     widthSpinner.setBackground ( AbstractTrendView.this.colorRegistry.get ( seriesParameters.name ) );
                     widthSpinner.setForeground ( contrastForeground ( AbstractTrendView.this.colorRegistry.get ( seriesParameters.name ) ) );
                     colorButton.setForeground ( AbstractTrendView.this.colorRegistry.get ( seriesParameters.name ) );
-                    colorButton.addSelectionListener ( new SelectionListener () {
+                    colorButton.addSelectionListener ( new SelectionAdapter () {
                         @Override
                         public void widgetSelected ( final SelectionEvent e )
                         {
@@ -998,16 +1007,12 @@ public abstract class AbstractTrendView extends QueryViewPart
                             }
                         }
 
-                        @Override
-                        public void widgetDefaultSelected ( final SelectionEvent e )
-                        {
-                        }
                     } );
                     widthSpinner.setDigits ( 0 );
                     widthSpinner.setMinimum ( 0 );
                     widthSpinner.setMaximum ( 25 );
                     widthSpinner.setSelection ( seriesParameters.width );
-                    widthSpinner.addSelectionListener ( new SelectionListener () {
+                    widthSpinner.addSelectionListener ( new SelectionAdapter () {
                         @Override
                         public void widgetSelected ( final SelectionEvent e )
                         {
@@ -1018,10 +1023,6 @@ public abstract class AbstractTrendView extends QueryViewPart
                             AbstractTrendView.this.chart.redraw ();
                         }
 
-                        @Override
-                        public void widgetDefaultSelected ( final SelectionEvent e )
-                        {
-                        }
                     } );
                 }
                 if ( AbstractTrendView.this.query != null )
@@ -1133,8 +1134,11 @@ public abstract class AbstractTrendView extends QueryViewPart
     {
         if ( this.scaleYAutomatically )
         {
-            this.scaleYMin = this.currentYMin == null ? 0 : this.currentYMin;
-            this.scaleYMax = this.currentYMax == null ? 1 : this.currentYMax;
+            final Pair<Double, Double> scale = calcScale ();
+
+            this.scaleYMin = scale.first;
+            this.scaleYMax = scale.second;
+            updateSpinner ();
         }
         for ( final IAxis axis : this.chart.getAxisSet ().getXAxes () )
         {
@@ -1144,6 +1148,45 @@ public abstract class AbstractTrendView extends QueryViewPart
         {
             axis.setRange ( new Range ( this.scaleYMin, this.scaleYMax ) );
         }
+    }
+
+    private Pair<Double, Double> calcScale ()
+    {
+        double min = Double.POSITIVE_INFINITY;
+        double max = Double.NEGATIVE_INFINITY;
+
+        final double feather = 0.05;
+
+        final double[] quality = this.dataQuality.get ();
+
+        final double minQuality = this.chartParameters.get ().getQuality () / 100.0;
+
+        for ( final Map.Entry<String, double[]> entry : this.data.entrySet () )
+        {
+            for ( int i = 0; i < entry.getValue ().length; i++ )
+            {
+                final double d = entry.getValue ()[i];
+
+                if ( Double.isInfinite ( d ) || Double.isNaN ( d ) )
+                {
+                    continue;
+                }
+                if ( quality[i] >= minQuality )
+                {
+                    min = Math.min ( min, d );
+                    max = Math.max ( max, d );
+                }
+            }
+        }
+
+        final Pair<Double, Double> result = new Pair<Double, Double> ( Double.isInfinite ( min ) ? 0.0 : min, Double.isInfinite ( max ) ? 1.0 : max );
+
+        final double diff = result.second - result.first;
+
+        result.first -= diff * feather;
+        result.second += diff * feather;
+
+        return result;
     }
 
     /**
