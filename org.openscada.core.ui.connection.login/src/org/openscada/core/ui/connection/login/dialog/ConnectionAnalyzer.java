@@ -203,10 +203,13 @@ public class ConnectionAnalyzer extends Composite implements ContextCreatorListe
         {
             return error.getClass ().getName ();
         }
-        else
+
+        if ( "Bad credentials".equals ( msg ) ) //$NON-NLS-1$
         {
-            return msg;
+            return Messages.ConnectionAnalyzer_Error_BadCredentials;
         }
+        return msg;
+
     }
 
     public void clear ()
