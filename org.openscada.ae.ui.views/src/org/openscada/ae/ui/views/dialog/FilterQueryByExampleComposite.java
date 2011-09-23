@@ -44,6 +44,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.openscada.ae.Event;
 import org.openscada.ae.ui.views.Messages;
 import org.openscada.core.Variant;
 import org.openscada.core.VariantEditor;
@@ -370,6 +371,8 @@ public class FilterQueryByExampleComposite extends Composite
         this.fields.put ( "system", new TextFieldEntry ( this, "system", Messages.getString ( "system" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         this.fields.put ( "hive", new TextFieldEntry ( this, "hive", Messages.getString ( "hive" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         this.fields.put ( "location", new TextFieldEntry ( this, "location", Messages.getString ( "location" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        this.fields.put ( Event.Fields.MESSAGE_CODE.getName (), new TextFieldEntry ( this, Event.Fields.MESSAGE_CODE.getName (), Messages.getString ( Event.Fields.MESSAGE_CODE.getName () ), filterModified ) );
+        this.fields.put ( "comment", new TextFieldEntry ( this, "comment", Messages.getString ( "comment" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
         // clear button
         this.clearButton = new Button ( this, SWT.PUSH );
