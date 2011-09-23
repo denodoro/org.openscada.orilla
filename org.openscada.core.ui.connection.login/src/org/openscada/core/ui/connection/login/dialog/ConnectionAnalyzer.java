@@ -19,6 +19,7 @@
 
 package org.openscada.core.ui.connection.login.dialog;
 
+import java.net.ConnectException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -190,6 +191,11 @@ public class ConnectionAnalyzer extends Composite implements ContextCreatorListe
         {
             causes.add ( error );
             error = error.getCause ();
+        }
+
+        if ( error instanceof ConnectException || error instanceof java.rmi.ConnectException )
+        {
+            return String.format ( Messages.ConnectionAnalyzer_Error_ConnectException, error.getLocalizedMessage () );
         }
 
         final String msg = error.getLocalizedMessage ();
