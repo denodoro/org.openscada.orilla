@@ -1,7 +1,25 @@
+/*
+ * This file is part of the OpenSCADA project
+ * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ *
+ * OpenSCADA is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenSCADA is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenSCADA. If not, see
+ * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
+ */
+
 package org.openscada.hd.chart;
 
 import java.text.DateFormat;
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -70,13 +88,14 @@ public class TrendChart extends Chart implements PaintListener
     public TrendChart ( final Composite parent, final int style )
     {
         super ( parent, style );
-        this.decimalFormat = DecimalFormat.getNumberInstance ();
+        this.decimalFormat = NumberFormat.getNumberInstance ();
         this.decimalFormat.setGroupingUsed ( true );
         this.decimalFormat.setMaximumFractionDigits ( 3 );
         this.decimalFormat.setMinimumFractionDigits ( 3 );
-        this.percentFormat = DecimalFormat.getPercentInstance ();
+        this.percentFormat = NumberFormat.getPercentInstance ();
 
-        this.getPlotArea ().addMouseMoveListener ( new MouseMoveListener () {
+        getPlotArea ().addMouseMoveListener ( new MouseMoveListener () {
+            @Override
             public void mouseMove ( final MouseEvent e )
             {
                 TrendChart.this.showInfo = false;
@@ -85,13 +104,15 @@ public class TrendChart extends Chart implements PaintListener
                 TrendChart.this.redraw ();
             }
         } );
-        this.getPlotArea ().addMouseTrackListener ( new MouseTrackListener () {
+        getPlotArea ().addMouseTrackListener ( new MouseTrackListener () {
+            @Override
             public void mouseHover ( final MouseEvent e )
             {
                 TrendChart.this.showInfo = true;
                 TrendChart.this.redraw ();
             }
 
+            @Override
             public void mouseExit ( final MouseEvent e )
             {
                 TrendChart.this.currentX = -1;
@@ -99,6 +120,7 @@ public class TrendChart extends Chart implements PaintListener
                 TrendChart.this.redraw ();
             }
 
+            @Override
             public void mouseEnter ( final MouseEvent e )
             {
                 TrendChart.this.currentX = e.x;
@@ -106,7 +128,7 @@ public class TrendChart extends Chart implements PaintListener
                 TrendChart.this.redraw ();
             }
         } );
-        this.getPlotArea ().addPaintListener ( this );
+        getPlotArea ().addPaintListener ( this );
 
         final List<FontData> fontDataList = new ArrayList<FontData> ();
         for ( final FontData fontData : getDisplay ().getFontList ( "Monaco", true ) )
@@ -138,7 +160,8 @@ public class TrendChart extends Chart implements PaintListener
         final BackgroundOverlayPainter qualityBackgroundOverlay = new BackgroundOverlayPainter ();
         final BackgroundOverlayPainter manualBackgroundOverlay = new BackgroundOverlayPainter ();
         manualBackgroundOverlay.setInvert ( true );
-        this.setBackgroundOverlay ( new BackgroundOverlay () {
+        setBackgroundOverlay ( new BackgroundOverlay () {
+            @Override
             public void draw ( final GC gc, final int x, final int y )
             {
                 qualityBackgroundOverlay.setData ( TrendChart.this.quality.get () );
@@ -153,12 +176,13 @@ public class TrendChart extends Chart implements PaintListener
         } );
     }
 
+    @Override
     public void paintControl ( final PaintEvent e )
     {
         final GC gc = e.gc;
         if ( this.currentX > -1 )
         {
-            gc.drawLine ( this.currentX, 0, this.currentX, this.getPlotArea ().getBounds ().height - 1 );
+            gc.drawLine ( this.currentX, 0, this.currentX, getPlotArea ().getBounds ().height - 1 );
         }
         if ( this.showInfo )
         {
@@ -168,60 +192,55 @@ public class TrendChart extends Chart implements PaintListener
 
     private void drawInfo ( final GC gc )
     {
-        if ( this.dataAtPoint != null )
+        if ( this.dataAtPoint == null )
         {
-            final double quality = this.dataAtPoint.getQuality ( this.currentX );
-            final double manual = this.dataAtPoint.getManual ( this.currentX );
-            final Date timestamp = this.dataAtPoint.getTimestamp ( this.currentX );
-            final Map<String, Double> data = this.dataAtPoint.getData ( this.currentX );
-            gc.setAntialias ( SWT.ON );
-            int xoffset = 10;
-            int yoffset = 10;
-            final int corner = 10;
-            final int padding = 5;
-            gc.setBackground ( getDisplay ().getSystemColor ( SWT.COLOR_INFO_BACKGROUND ) );
-            gc.setForeground ( getDisplay ().getSystemColor ( SWT.COLOR_INFO_FOREGROUND ) );
-            final Font smallFont = new Font ( gc.getDevice (), this.smallFontData );
-            gc.setFont ( smallFont );
-            final String timestampText = String.format ( "%-16s: ", Messages.getString ( "TrendChart.timestamp" ) ) + DateFormat.getDateTimeInstance ( DateFormat.LONG, DateFormat.LONG ).format ( timestamp ); //$NON-NLS-1$
-            final String qualityText = String.format ( "%-16s: ", Messages.getString ( "TrendChart.quality" ) ) + this.percentFormat.format ( quality ); //$NON-NLS-1$
-            final String manualText = String.format ( "%-16s: ", Messages.getString ( "TrendChart.manual" ) ) + this.percentFormat.format ( manual ); //$NON-NLS-1$
-            final String soureValuesText = String.format ( "%-16s: ", Messages.getString ( "TrendChart.numOfValues" ) ) + this.dataAtPoint.getSourceValues ( this.currentX ); //$NON-NLS-1$
-            final Point textSize = gc.textExtent ( timestampText );
-            final int textWidth = textSize.x;
-            final int textHeight = textSize.y;
-            final int height = textHeight * 5 + ( textHeight + padding ) * data.keySet ().size () + padding * 6;
-            if ( this.currentY + height > getPlotArea ().getSize ().y )
-            {
-                yoffset = -10 - height;
-            }
-            final int width = textWidth + padding * 3;
-            if ( this.currentX + width > getPlotArea ().getSize ().x )
-            {
-                xoffset = -10 - width;
-            }
-            gc.fillRoundRectangle ( this.currentX + xoffset, this.currentY + yoffset, width, height, corner, corner );
-            gc.drawRoundRectangle ( this.currentX + xoffset, this.currentY + yoffset, width, height, corner, corner );
-            gc.drawLine ( this.currentX + xoffset + padding, this.currentY + yoffset + ( padding + textHeight ) * 5 - padding, this.currentX + xoffset + width - padding, this.currentY + yoffset + ( padding + textHeight ) * 5 - padding );
-            gc.drawText ( timestampText, this.currentX + xoffset + padding, this.currentY + yoffset + padding );
-            gc.drawText ( qualityText, this.currentX + xoffset + padding, this.currentY + yoffset + padding * 2 + textHeight );
-            gc.drawText ( manualText, this.currentX + xoffset + padding, this.currentY + yoffset + padding * 3 + textHeight * 2 );
-            gc.drawText ( soureValuesText, this.currentX + xoffset + padding, this.currentY + yoffset + padding * 4 + textHeight * 3 );
-            int i = 5;
-            for ( final Entry<String, Double> entry : data.entrySet () )
-            {
-                gc.drawText ( String.format ( "%16s: ", entry.getKey () ) + String.format ( "%16s", Double.isNaN ( entry.getValue () ) ? "-" : this.decimalFormat.format ( entry.getValue () ) ), this.currentX + xoffset + padding, this.currentY + yoffset + ( padding + textHeight ) * i + padding ); //$NON-NLS-1$ //$NON-NLS-2$
-                i++;
-            }
-            smallFont.dispose ();
+            return;
         }
-    }
 
-    @Override
-    public void dispose ()
-    {
-
-        super.dispose ();
+        final double quality = this.dataAtPoint.getQuality ( this.currentX );
+        final double manual = this.dataAtPoint.getManual ( this.currentX );
+        final Date timestamp = this.dataAtPoint.getTimestamp ( this.currentX );
+        final Map<String, Double> data = this.dataAtPoint.getData ( this.currentX );
+        gc.setAntialias ( SWT.ON );
+        int xoffset = 10;
+        int yoffset = 10;
+        final int corner = 10;
+        final int padding = 5;
+        gc.setBackground ( getDisplay ().getSystemColor ( SWT.COLOR_INFO_BACKGROUND ) );
+        gc.setForeground ( getDisplay ().getSystemColor ( SWT.COLOR_INFO_FOREGROUND ) );
+        final Font smallFont = new Font ( gc.getDevice (), this.smallFontData );
+        gc.setFont ( smallFont );
+        final String timestampText = String.format ( "%-16s: ", Messages.getString ( "TrendChart.timestamp" ) ) + DateFormat.getDateTimeInstance ( DateFormat.LONG, DateFormat.LONG ).format ( timestamp ); //$NON-NLS-1$
+        final String qualityText = String.format ( "%-16s: ", Messages.getString ( "TrendChart.quality" ) ) + this.percentFormat.format ( quality ); //$NON-NLS-1$
+        final String manualText = String.format ( "%-16s: ", Messages.getString ( "TrendChart.manual" ) ) + this.percentFormat.format ( manual ); //$NON-NLS-1$
+        final String soureValuesText = String.format ( "%-16s: ", Messages.getString ( "TrendChart.numOfValues" ) ) + this.dataAtPoint.getSourceValues ( this.currentX ); //$NON-NLS-1$
+        final Point textSize = gc.textExtent ( timestampText );
+        final int textWidth = textSize.x;
+        final int textHeight = textSize.y;
+        final int height = textHeight * 5 + ( textHeight + padding ) * data.keySet ().size () + padding * 6;
+        if ( this.currentY + height > getPlotArea ().getSize ().y )
+        {
+            yoffset = -10 - height;
+        }
+        final int width = textWidth + padding * 3;
+        if ( this.currentX + width > getPlotArea ().getSize ().x )
+        {
+            xoffset = -10 - width;
+        }
+        gc.fillRoundRectangle ( this.currentX + xoffset, this.currentY + yoffset, width, height, corner, corner );
+        gc.drawRoundRectangle ( this.currentX + xoffset, this.currentY + yoffset, width, height, corner, corner );
+        gc.drawLine ( this.currentX + xoffset + padding, this.currentY + yoffset + ( padding + textHeight ) * 5 - padding, this.currentX + xoffset + width - padding, this.currentY + yoffset + ( padding + textHeight ) * 5 - padding );
+        gc.drawText ( timestampText, this.currentX + xoffset + padding, this.currentY + yoffset + padding );
+        gc.drawText ( qualityText, this.currentX + xoffset + padding, this.currentY + yoffset + padding * 2 + textHeight );
+        gc.drawText ( manualText, this.currentX + xoffset + padding, this.currentY + yoffset + padding * 3 + textHeight * 2 );
+        gc.drawText ( soureValuesText, this.currentX + xoffset + padding, this.currentY + yoffset + padding * 4 + textHeight * 3 );
+        int i = 5;
+        for ( final Entry<String, Double> entry : data.entrySet () )
+        {
+            gc.drawText ( String.format ( "%16s: ", entry.getKey () ) + String.format ( "%16s", Double.isNaN ( entry.getValue () ) ? "-" : this.decimalFormat.format ( entry.getValue () ) ), this.currentX + xoffset + padding, this.currentY + yoffset + ( padding + textHeight ) * i + padding ); //$NON-NLS-1$ //$NON-NLS-2$
+            i++;
+        }
+        smallFont.dispose ();
     }
 
     public void setQuality ( final double[] quality )
