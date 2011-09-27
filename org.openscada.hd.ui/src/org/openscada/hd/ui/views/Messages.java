@@ -25,6 +25,10 @@ public class Messages extends NLS
 {
     private static final String BUNDLE_NAME = "org.openscada.hd.ui.views.messages"; //$NON-NLS-1$
 
+    public static String AbstractTrendView_FilterExtensions;
+
+    public static String AbstractTrendView_FilterNames;
+
     public static String LabelProvider_0;
 
     public static String LabelProvider_1;
