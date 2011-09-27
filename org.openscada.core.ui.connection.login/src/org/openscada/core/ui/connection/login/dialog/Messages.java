@@ -31,6 +31,10 @@ public class Messages extends NLS
 
     public static String ConnectionAnalyzer_Column_Text_Uri;
 
+    public static String ConnectionAnalyzer_Error_BadCredentials;
+
+    public static String ConnectionAnalyzer_Error_ConnectException;
+
     public static String ContextCreator_ErrorConnectionService;
 
     public static String LoginDialog_DefaultMessage;

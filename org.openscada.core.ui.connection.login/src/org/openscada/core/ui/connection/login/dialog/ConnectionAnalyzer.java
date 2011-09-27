@@ -19,6 +19,10 @@
 
 package org.openscada.core.ui.connection.login.dialog;
 
+import java.net.ConnectException;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.eclipse.core.databinding.observable.set.WritableSet;
 import org.eclipse.jface.databinding.viewers.ObservableSetContentProvider;
 import org.eclipse.jface.viewers.CellLabelProvider;
@@ -121,9 +125,12 @@ public class ConnectionAnalyzer extends Composite implements ContextCreatorListe
                 cell.setText ( entry.getState ().toString () );
                 break;
             case 2:
-                if ( entry.getError () != null )
+                final String errorText = makeError ( entry.getError () );
+                // only update when we have an error to prevent
+                // the error from disapearing
+                if ( errorText != null )
                 {
-                    cell.setText ( entry.getError ().getMessage () );
+                    cell.setText ( errorText );
                 }
                 break;
             }
@@ -171,12 +178,47 @@ public class ConnectionAnalyzer extends Composite implements ContextCreatorListe
         this.tableViewer.setItemCount ( 5 );
     }
 
+    public static String makeError ( Throwable error )
+    {
+        if ( error == null )
+        {
+            return null;
+        }
+
+        final Set<Throwable> causes = new HashSet<Throwable> ( 1 );
+
+        while ( error.getCause () != null && !causes.contains ( error ) )
+        {
+            causes.add ( error );
+            error = error.getCause ();
+        }
+
+        if ( error instanceof ConnectException || error instanceof java.rmi.ConnectException )
+        {
+            return String.format ( Messages.ConnectionAnalyzer_Error_ConnectException, error.getLocalizedMessage () );
+        }
+
+        final String msg = error.getLocalizedMessage ();
+        if ( msg == null )
+        {
+            return error.getClass ().getName ();
+        }
+
+        if ( "Bad credentials".equals ( msg ) ) //$NON-NLS-1$
+        {
+            return Messages.ConnectionAnalyzer_Error_BadCredentials;
+        }
+        return msg;
+
+    }
+
     public void clear ()
     {
         this.tableViewer.setItemCount ( 0 );
         this.dataSet.clear ();
     }
 
+    @Override
     public void stateChanged ( final String handlerName, final String state, final Throwable error )
     {
         if ( isDisposed () )
