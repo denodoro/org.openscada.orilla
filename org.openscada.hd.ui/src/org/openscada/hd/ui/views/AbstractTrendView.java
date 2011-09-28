@@ -125,19 +125,19 @@ public abstract class AbstractTrendView extends QueryViewPart
         }
     }
 
-    private static final String KEY_QUALITY = "quality";
+    private static final String KEY_QUALITY = "quality"; //$NON-NLS-1$
 
-    private static final String KEY_MANUAL = "manual";
+    private static final String KEY_MANUAL = "manual"; //$NON-NLS-1$
 
-    private static final String KEY_WHITE = "__white";
+    private static final String KEY_WHITE = "__white"; //$NON-NLS-1$
 
-    private static final String KEY_BLACK = "__black";
+    private static final String KEY_BLACK = "__black"; //$NON-NLS-1$
 
     private static final long GUI_JOB_DELAY = 150;
 
     private static final long GUI_RESIZE_JOB_DELAY = 1500;
 
-    private static final String SMALL_LABEL_FONT = "small-label-font";
+    private static final String SMALL_LABEL_FONT = "small-label-font"; //$NON-NLS-1$
 
     private final AtomicReference<Job> parameterUpdateJob = new AtomicReference<Job> ();
 
@@ -670,8 +670,11 @@ public abstract class AbstractTrendView extends QueryViewPart
             @Override
             public void widgetSelected ( final SelectionEvent e )
             {
-                final FileDialog dlg = new FileDialog ( parent.getShell () );
+                final FileDialog dlg = new FileDialog ( parent.getShell (), SWT.SAVE );
                 dlg.setText ( Messages.TrendView_SaveTrendAsImage );
+                dlg.setFilterExtensions ( new String[] { Messages.AbstractTrendView_FilterExtensions } );
+                dlg.setFilterNames ( new String[] { Messages.AbstractTrendView_FilterNames } );
+                // dlg.setOverwrite ( true );
                 final String filename = dlg.open ();
                 if ( filename != null )
                 {
@@ -1198,19 +1201,19 @@ public abstract class AbstractTrendView extends QueryViewPart
         final long range = this.chartParameters.get ().getEndTime ().getTime () - this.chartParameters.get ().getStartTime ().getTime ();
         if ( range < 1000 * 60 )
         {
-            return "HH:mm:ss.SSS";
+            return "HH:mm:ss.SSS"; //$NON-NLS-1$
         }
         else if ( range < 1000 * 60 * 60 )
         {
-            return "EEE HH:mm:ss";
+            return "EEE HH:mm:ss"; //$NON-NLS-1$
         }
         else if ( range < 1000 * 60 * 60 * 12 )
         {
-            return "dd. MMM HH:mm";
+            return "dd. MMM HH:mm"; //$NON-NLS-1$
         }
         else
         {
-            return "yyyy-MM-dd HH";
+            return "yyyy-MM-dd HH"; //$NON-NLS-1$
         }
     }
 
