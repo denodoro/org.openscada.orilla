@@ -233,7 +233,8 @@ public class ConnectionAnalyzer extends Composite implements ContextCreatorListe
         try
         {
             this.dataSet.setStale ( true );
-            // update
+            // use error information from previous entry of we don't have a new error, so the user
+            // gets at least the last error
             for ( final Entry currentEntry : (Collection<Entry>)this.dataSet )
             {
                 if ( currentEntry.equals ( entry ) && currentEntry.getError () != null && entry.getError () == null )
