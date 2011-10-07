@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: OpenSCADA Core UI Connection Login
+Bundle-Name: openSCADA Core UI Connection Login
 Bundle-SymbolicName: org.openscada.core.ui.connection.login;singleton:=true
-Bundle-Version: 0.16.0.qualifier
+Bundle-Version: 0.17.0.qualifier
 Bundle-Activator: org.openscada.core.ui.connection.login.Activator
 Bundle-Vendor: TH4 SYSTEMS GmbH
 Require-Bundle: org.eclipse.ui,

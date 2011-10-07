@@ -96,7 +96,7 @@ public class FilterQueryByExampleComposite extends Composite
 
         private final Button useCheckbox;
 
-        private static final DateFormat isoDateFormat = new SimpleDateFormat ( "yyyy-MM-dd HH:mm:ss" ); //$NON-NLS-1$
+        private static final DateFormat isoDateFormat = new SimpleDateFormat ( "yyyy-MM-dd HH:mm:ss.SSS" ); //$NON-NLS-1$
 
         public DateFieldEntry ( final Composite parent, final String field, final String caption, final FilterModified filterModified )
         {

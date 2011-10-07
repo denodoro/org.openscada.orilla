@@ -20,6 +20,7 @@
 package org.openscada.core.ui.connection.login.dialog;
 
 import java.net.ConnectException;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -218,6 +219,7 @@ public class ConnectionAnalyzer extends Composite implements ContextCreatorListe
         this.dataSet.clear ();
     }
 
+    @SuppressWarnings ( "unchecked" )
     @Override
     public void stateChanged ( final String handlerName, final String state, final Throwable error )
     {
@@ -226,11 +228,21 @@ public class ConnectionAnalyzer extends Composite implements ContextCreatorListe
             return;
         }
 
-        final Entry entry = new Entry ( handlerName, state, error );
+        Entry entry = new Entry ( handlerName, state, error );
 
         try
         {
             this.dataSet.setStale ( true );
+            // use error information from previous entry of we don't have a new error, so the user
+            // gets at least the last error
+            for ( final Entry currentEntry : (Collection<Entry>)this.dataSet )
+            {
+                if ( currentEntry.equals ( entry ) && currentEntry.getError () != null && entry.getError () == null )
+                {
+                    entry = new Entry ( handlerName, state, currentEntry.getError () );
+                }
+            }
+
             this.dataSet.remove ( entry );
             this.dataSet.add ( entry );
         }
