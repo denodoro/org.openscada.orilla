@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: OpenSCADA DA UI Widgets
 Bundle-SymbolicName: org.openscada.da.ui.widgets;singleton:=true
-Bundle-Version: 0.16.0.qualifier
+Bundle-Version: 0.17.0.qualifier
 Bundle-Vendor: TH4 SYSTEMS GmbH
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.eclipse.ui;bundle-version="3.5.0",
@@ -32,6 +32,6 @@ Import-Package: org.openscada.core;version="0.15.0",
  org.openscada.da.ui.styles;version="0.15.0",
  org.openscada.utils.concurrent;version="0.15.0",
  org.openscada.utils.concurrent.task;version="0.15.0",
- org.slf4j;version="[1.5.8,1.6.0)"
+ org.slf4j;version="[1.5.8,2.0.0)"
 Bundle-Activator: org.openscada.da.ui.widgets.Activator
 Bundle-ActivationPolicy: lazy
