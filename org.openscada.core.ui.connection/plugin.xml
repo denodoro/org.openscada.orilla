@@ -196,6 +196,32 @@
                   </iterate>
             </visibleWhen>
          </command>
+         <command
+               commandId="org.openscada.core.ui.connection.cancelConnection"
+               label="Cancel Connection"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <and>
+                  <iterate
+                        ifEmpty="false"
+                        operator="and">
+                     <or>
+                        <adapt
+                              type="org.openscada.core.ui.connection.data.ConnectionHolder">
+                        </adapt>
+                        <instanceof
+                              value="org.openscada.core.ui.connection.data.ConnectionHolder">
+                        </instanceof>
+                     </or>
+                  </iterate>
+                  <systemTest
+                        property="debug"
+                        value="true">
+                  </systemTest>
+               </and>
+            </visibleWhen>
+         </command>
          
       </menuContribution>
    </extension>
@@ -215,6 +241,11 @@
             categoryId="org.openscada.core.ui.category"
             id="org.openscada.core.ui.connection.command.DeleteConnection"
             name="%command.deleteConnection.name">
+      </command>
+      <command
+            description="Force close a connection for debugging purposes"
+            id="org.openscada.core.ui.connection.cancelConnection"
+            name="Cancel Connection">
       </command>
    </extension>
    <extension
@@ -246,6 +277,10 @@
             </with>
          </enabledWhen>
          
+      </handler>
+      <handler
+            class="org.openscada.core.ui.connection.commands.CancelConnection"
+            commandId="org.openscada.core.ui.connection.cancelConnection">
       </handler>
    </extension>
    <extension
