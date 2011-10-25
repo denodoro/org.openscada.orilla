@@ -318,7 +318,11 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution
         }
         this.items.clear ();
 
+        this.monitorStatus.clear ();
+        this.connected = false;
+
         disableHorn ();
+        updateAlarms ();
     }
 
     private String getItemId ( final String localId )
