@@ -154,10 +154,7 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution
 
         this.resourceManager = new LocalResourceManager ( JFaceResources.getResources () );
 
-        for ( final MonitorStatus ms : MonitorStatus.values () )
-        {
-            this.monitorStatus.put ( ms.name (), new AtomicInteger ( 0 ) );
-        }
+        initMonitorStates ();
 
         this.panel = new Composite ( parent, SWT.NONE );
         final GridLayout layout = new GridLayout ( 2, false );
@@ -206,6 +203,14 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution
         loadConfiguration ();
 
         return this.panel;
+    }
+
+    private void initMonitorStates ()
+    {
+        for ( final MonitorStatus ms : MonitorStatus.values () )
+        {
+            this.monitorStatus.put ( ms.name (), new AtomicInteger ( 0 ) );
+        }
     }
 
     protected void setBlinkerState ( final State state )
@@ -318,7 +323,7 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution
         }
         this.items.clear ();
 
-        this.monitorStatus.clear ();
+        initMonitorStates ();
         this.connected = false;
 
         disableHorn ();
