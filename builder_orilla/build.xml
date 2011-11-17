@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- ====================================================================== 
-     openSCADA Atlantis
+     openSCADA Orilla
      ====================================================================== -->
 
-<project name="org.openscada.atlantis" default="default" basedir=".">
+<project name="org.openscada.orilla" default="default" basedir=".">
     <description>
-            openSCADA Atlantis
+            openSCADA Orilla
     </description>
 
 	<property name="build.root" location="${basedir}"/>
