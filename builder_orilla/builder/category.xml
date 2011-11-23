@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/org.openscada.orilla.sdk_0.15.0.qualifier.jar" id="org.openscada.orilla.sdk" version="0.15.0.qualifier">
-      <category name="org.openscada.orilla.sdk.category"/>
-   </feature>
-   <feature url="features/org.openscada.orilla_0.16.0.qualifier.jar" id="org.openscada.orilla" version="0.16.0.qualifier">
+   <feature url="features/org.openscada.orilla_0.17.0.qualifier.jar" id="org.openscada.orilla" version="0.17.0.qualifier">
       <category name="org.openscada.orilla.category"/>
+   </feature>
+   <feature url="features/org.openscada.orilla.sdk_0.17.0.qualifier.jar" id="org.openscada.orilla.sdk" version="0.17.0.qualifier">
+      <category name="org.openscada.orilla.sdk.category"/>
    </feature>
    <category-def name="org.openscada.orilla.category" label="OpenSCADA Orilla">
       <description>
