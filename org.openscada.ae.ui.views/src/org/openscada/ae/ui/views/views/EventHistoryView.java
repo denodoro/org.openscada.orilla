@@ -297,7 +297,6 @@ public class EventHistoryView extends AbstractAlarmsEventsView
         this.clearAction.setEnabled ( true );
         this.searchAction.setEnabled ( true );
 
-        this.currentFilter = null;
         updateStatusBar ();
     }
 
