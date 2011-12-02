@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -76,7 +77,7 @@ public class DiffController
         this.remoteData = data;
     }
 
-    public Collection<DiffEntry> merge ( final IProgressMonitor monitor )
+    public List<DiffEntry> merge ( final IProgressMonitor monitor )
     {
         try
         {
@@ -90,9 +91,9 @@ public class DiffController
         }
     }
 
-    private Collection<DiffEntry> processMerge ( final IProgressMonitor monitor )
+    private List<DiffEntry> processMerge ( final IProgressMonitor monitor )
     {
-        final Collection<DiffEntry> result = new LinkedList<DiffEntry> ();
+        final List<DiffEntry> result = new LinkedList<DiffEntry> ();
 
         for ( final Map.Entry<String, Map<String, Map<String, String>>> factoryEntry : this.localData.entrySet () )
         {
@@ -157,8 +158,7 @@ public class DiffController
                 {
                     if ( !localFactory.containsKey ( cfgEntry.getKey () ) )
                     {
-                        final DiffEntry newEntry = new DiffEntry ( factoryEntry.getKey (), cfgEntry.getKey (), Operation.DELETE, cfgEntry.getValue () );
-                        result.add ( newEntry );
+                        result.add ( new DiffEntry ( factoryEntry.getKey (), cfgEntry.getKey (), Operation.DELETE, cfgEntry.getValue () ) );
                     }
                 }
             }

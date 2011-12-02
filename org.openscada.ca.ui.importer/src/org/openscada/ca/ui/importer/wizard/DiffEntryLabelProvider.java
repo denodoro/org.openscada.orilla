@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -32,36 +32,62 @@ public class DiffEntryLabelProvider extends CellLabelProvider
     public void update ( final ViewerCell cell )
     {
         final Object ele = cell.getElement ();
-        if ( ! ( ele instanceof DiffEntry ) )
+
+        if ( ele instanceof DiffEntry )
         {
-            return;
-        }
-        final DiffEntry entry = (DiffEntry)ele;
+            final DiffEntry entry = (DiffEntry)ele;
 
-        final int idx = cell.getColumnIndex ();
-        switch ( idx )
+            final int idx = cell.getColumnIndex ();
+            switch ( idx )
+            {
+            case 0:
+                cell.setText ( entry.getFactoryId () );
+                break;
+
+            case 1:
+                cell.setText ( entry.getConfigurationId () );
+                break;
+
+            case 2:
+                cell.setText ( entry.getOperation ().toString () );
+                break;
+
+            case 3:
+                cell.setText ( formatData ( entry.getNewData () ) );
+                break;
+
+            case 4:
+                cell.setText ( formatData ( entry.getOldData () ) );
+                break;
+            }
+        }
+
+        else if ( ele instanceof DiffSubEntry )
         {
-        case 0:
-            cell.setText ( entry.getFactoryId () );
-            break;
+            final DiffSubEntry entry = (DiffSubEntry)ele;
 
-        case 1:
-            cell.setText ( entry.getConfigurationId () );
-            break;
+            final int idx = cell.getColumnIndex ();
+            switch ( idx )
+            {
+            case 0:
+                break;
 
-        case 2:
-            cell.setText ( entry.getOperation ().toString () );
-            break;
+            case 1:
+                cell.setText ( entry.getKey () );
+                break;
 
-        case 3:
-            cell.setText ( formatData ( entry.getNewData () ) );
-            break;
+            case 2:
+                break;
 
-        case 4:
-            cell.setText ( formatData ( entry.getOldData () ) );
-            break;
+            case 3:
+                cell.setText ( entry.getNewValue () );
+                break;
+
+            case 4:
+                cell.setText ( entry.getOldValue () );
+                break;
+            }
         }
-
     }
 
     private String formatData ( final Map<String, String> data )
