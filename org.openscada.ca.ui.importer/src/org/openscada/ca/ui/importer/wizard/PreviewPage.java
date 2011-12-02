@@ -100,39 +100,9 @@ public class PreviewPage extends WizardPage
 
         this.viewer.getTree ().setHeaderVisible ( true );
 
-        // this.viewer.setContentProvider ( new DiffEntryTreeProvider () );
         this.viewer.setContentProvider ( new LazyDiffEntryTreeProvider () );
         this.viewer.setUseHashlookup ( true );
 
-        /*
-        this.viewer.setComparator ( new ViewerComparator () {
-            @Override
-            public int compare ( final Viewer viewer, final Object e1, final Object e2 )
-            {
-                if ( e1 instanceof DiffEntry && e2 instanceof DiffEntry )
-                {
-                    final DiffEntry en1 = (DiffEntry)e1;
-                    final DiffEntry en2 = (DiffEntry)e2;
-
-                    final int f = en1.getFactoryId ().compareTo ( en2.getFactoryId () );
-                    if ( f != 0 )
-                    {
-                        return f;
-                    }
-
-                    return en1.getConfigurationId ().compareTo ( en2.getConfigurationId () );
-                }
-                else if ( e1 instanceof DiffSubEntry && e2 instanceof DiffSubEntry )
-                {
-                    final DiffSubEntry en1 = (DiffSubEntry)e1;
-                    final DiffSubEntry en2 = (DiffSubEntry)e2;
-                    return en1.getKey ().compareTo ( en2.getKey () );
-                }
-                return 0;
-            }
-        } );
-
-         */
         this.statsLabel = new Label ( wrapper, SWT.NONE );
         this.statsLabel.setLayoutData ( new GridData ( SWT.FILL, SWT.CENTER, true, false ) );
 
