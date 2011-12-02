@@ -38,18 +38,18 @@ public class DiffController
 {
     private final static Logger logger = LoggerFactory.getLogger ( DiffController.class );
 
-    private Map<String, Map<String, Map<String, String>>> localData = null;
+    private Map<String, Map<String, Map<String, String>>> localData;
 
     private Set<String> ignoreFactories = new HashSet<String> ();
 
     private Map<String, Set<String>> ignoreFields = new HashMap<String, Set<String>> ();
 
+    private Map<String, Map<String, Map<String, String>>> remoteData = Collections.emptyMap ();
+
     public void setLocalData ( final Map<String, Map<String, Map<String, String>>> localData )
     {
         this.localData = localData;
     }
-
-    private Map<String, Map<String, Map<String, String>>> remoteData = Collections.emptyMap ();
 
     public Set<String> getIgnoreFactories ()
     {
@@ -63,7 +63,7 @@ public class DiffController
 
     public long setRemoteData ( final Collection<FactoryInformation> remoteData )
     {
-        final HashMap<String, Map<String, Map<String, String>>> data = new HashMap<String, Map<String, Map<String, String>>> ();
+        final Map<String, Map<String, Map<String, String>>> data = new HashMap<String, Map<String, Map<String, String>>> ();
 
         final long count = ConfigurationHelper.convert ( remoteData, data );
 
