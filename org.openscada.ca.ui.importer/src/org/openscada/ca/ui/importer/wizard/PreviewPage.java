@@ -128,7 +128,6 @@ public class PreviewPage extends WizardPage
             }
             catch ( final Exception e )
             {
-                e.printStackTrace ();
                 final Status status = new Status ( IStatus.ERROR, Activator.PLUGIN_ID, Messages.PreviewPage_StatusErrorFailedToMerge, e );
                 StatusManager.getManager ().handle ( status );
                 ErrorDialog.openError ( getShell (), Messages.PreviewPage_TitleErrorFailedToMerge, Messages.PreviewPage_MessageErrorFailedToMerge, status );
