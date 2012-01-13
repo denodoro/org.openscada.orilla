@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -75,6 +75,7 @@ public class RealTimeListViewer implements RealtimeListAdapter
     {
         parent.addDisposeListener ( new DisposeListener () {
 
+            @Override
             public void widgetDisposed ( final DisposeEvent e )
             {
                 dispose ();
@@ -148,16 +149,19 @@ public class RealTimeListViewer implements RealtimeListAdapter
         this.contentProvider.dispose ();
     }
 
+    @Override
     public void remove ( final ListEntry entry )
     {
         this.list.remove ( entry );
     }
 
+    @Override
     public void remove ( final Collection<ListEntry> entries )
     {
         this.list.removeAll ( entries );
     }
 
+    @Override
     public void add ( final ListEntry entry )
     {
         this.list.add ( entry );
@@ -165,7 +169,8 @@ public class RealTimeListViewer implements RealtimeListAdapter
 
     private void addDropSupport ()
     {
-        this.viewer.addDropSupport ( DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_LINK, new Transfer[] { ItemTransfer.getInstance () }, new ItemDropAdapter ( this.viewer, this ) );
+        this.viewer.addDropSupport ( DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_LINK, new Transfer[] { ItemTransfer.getInstance (), TextTransfer.getInstance () }, new ItemDropAdapter ( this.viewer, this ) );
+
     }
 
     private void addDragSupport ()
@@ -261,6 +266,7 @@ public class RealTimeListViewer implements RealtimeListAdapter
         final MenuManager menuMgr = new MenuManager ( "#PopupMenu" ); //$NON-NLS-1$
         menuMgr.setRemoveAllWhenShown ( true );
         menuMgr.addMenuListener ( new IMenuListener () {
+            @Override
             public void menuAboutToShow ( final IMenuManager manager )
             {
                 fillContextMenu ( manager );

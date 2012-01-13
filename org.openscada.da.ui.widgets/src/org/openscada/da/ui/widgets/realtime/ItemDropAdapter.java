@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -51,11 +51,11 @@ public class ItemDropAdapter extends ViewerDropAdapter
     @Override
     public boolean performDrop ( final Object data )
     {
-        logger.debug ( "Dropping: " + data );
+        logger.debug ( "Dropping: {}", data );
 
         if ( data instanceof Item[] )
         {
-            dropItems ( ( (Item[])data ) );
+            dropItems ( (Item[])data );
             return true;
         }
         if ( data instanceof String )
@@ -83,7 +83,8 @@ public class ItemDropAdapter extends ViewerDropAdapter
                 }
                 else if ( uri.getFragment () != null )
                 {
-                    final Item item = new Item ( uri.toString (), uri.getFragment (), Type.URI );
+                    final String[] stoks = tok.split ( "#", 2 );
+                    final Item item = new Item ( stoks[0], uri.getFragment (), Type.URI );
                     dropItem ( item, viewer );
                 }
 
@@ -119,7 +120,15 @@ public class ItemDropAdapter extends ViewerDropAdapter
     @Override
     public boolean validateDrop ( final Object target, final int operation, final TransferData transferData )
     {
-        return ItemTransfer.getInstance ().isSupportedType ( transferData ) || TextTransfer.getInstance ().isSupportedType ( transferData );
+        if ( ItemTransfer.getInstance ().isSupportedType ( transferData ) )
+        {
+            return true;
+        }
+        if ( TextTransfer.getInstance ().isSupportedType ( transferData ) )
+        {
+            return true;
+        }
+        return false;
     }
 
 }
