@@ -161,7 +161,6 @@ public class EventHistoryView extends AbstractAlarmsEventsView
             @Override
             public void run ()
             {
-                System.err.println ( "comment" ); //$NON-NLS-1$
             }
         } );
 
@@ -297,7 +296,6 @@ public class EventHistoryView extends AbstractAlarmsEventsView
         this.clearAction.setEnabled ( true );
         this.searchAction.setEnabled ( true );
 
-        this.currentFilter = null;
         updateStatusBar ();
     }
 
