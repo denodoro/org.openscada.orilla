@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -30,7 +30,6 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
@@ -44,10 +43,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.statushandlers.StatusManager;
 import org.openscada.ae.Event;
+import org.openscada.ae.ui.views.Activator;
 import org.openscada.ae.ui.views.Messages;
 import org.openscada.core.Variant;
 import org.openscada.core.VariantEditor;
+import org.openscada.ui.utils.status.StatusHelper;
 import org.openscada.utils.filter.Assertion;
 import org.openscada.utils.filter.Filter;
 import org.openscada.utils.filter.FilterAssertion;
@@ -96,6 +98,8 @@ public class FilterQueryByExampleComposite extends Composite
 
         private final Button useCheckbox;
 
+        private final FilterModified filterModified;
+
         private static final DateFormat isoDateFormat = new SimpleDateFormat ( "yyyy-MM-dd HH:mm:ss.SSS" ); //$NON-NLS-1$
 
         public DateFieldEntry ( final Composite parent, final String field, final String caption, final FilterModified filterModified )
@@ -106,12 +110,15 @@ public class FilterQueryByExampleComposite extends Composite
             this.captionLabel = new Label ( parent, SWT.NONE );
             this.captionLabel.setText ( caption );
 
+            this.filterModified = filterModified;
+
             this.useCheckbox = new Button ( parent, SWT.CHECK );
             this.useCheckbox.addSelectionListener ( new SelectionAdapter () {
                 @Override
                 public void widgetSelected ( final SelectionEvent e )
                 {
                     updateFromCheckbox ();
+                    filterModified.onModified ();
                 }
             } );
 
@@ -199,6 +206,8 @@ public class FilterQueryByExampleComposite extends Composite
         public void clear ()
         {
             this.useCheckbox.setSelection ( false );
+            updateFromCheckbox ();
+            this.filterModified.onModified ();
         }
 
         @Override
@@ -400,7 +409,7 @@ public class FilterQueryByExampleComposite extends Composite
 
     public static int needBorder ()
     {
-        return Platform.WS_GTK.equals ( Platform.getWS () ) ? SWT.NONE : SWT.BORDER;
+        return SWT.BORDER;
     }
 
     private void populateFromFilter ( final String filterString )
@@ -411,7 +420,16 @@ public class FilterQueryByExampleComposite extends Composite
             return;
         }
         // it has to be an expression
-        final Filter filter = new FilterParser ( filterString ).getFilter ();
+        final Filter filter;
+        try
+        {
+            filter = new FilterParser ( filterString ).getFilter ();
+        }
+        catch ( final Exception e )
+        {
+            StatusManager.getManager ().handle ( StatusHelper.convertStatus ( Activator.PLUGIN_ID, e ), StatusManager.LOG );
+            return;
+        }
         if ( !filter.isExpression () )
         {
             return;
