@@ -31,8 +31,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.KeyAdapter;
-import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -284,9 +284,9 @@ public class FilterQueryByExampleComposite extends Composite
                     filterModified.onModified ();
                 }
             } );
-            this.textText.addKeyListener ( new KeyAdapter () {
+            this.textText.addModifyListener ( new ModifyListener () {
                 @Override
-                public void keyReleased ( final KeyEvent e )
+                public void modifyText ( final ModifyEvent e )
                 {
                     filterModified.onModified ();
                 }
