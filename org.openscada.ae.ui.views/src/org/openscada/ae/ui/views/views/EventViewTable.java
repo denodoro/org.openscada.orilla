@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -27,8 +27,12 @@ import org.eclipse.core.databinding.observable.set.ISetChangeListener;
 import org.eclipse.core.databinding.observable.set.SetChangeEvent;
 import org.eclipse.core.databinding.observable.set.WritableSet;
 import org.eclipse.core.databinding.property.Properties;
-import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IMenuListener;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.databinding.viewers.ObservableSetContentProvider;
+import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
@@ -38,10 +42,11 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.ui.IViewSite;
+import org.eclipse.ui.IWorkbenchActionConstants;
 import org.openscada.ae.Event.Fields;
 import org.openscada.ae.ui.views.Messages;
 import org.openscada.ae.ui.views.Settings;
@@ -93,10 +98,6 @@ public class EventViewTable extends Composite
         }
     }
 
-    private final Action ackAction;
-
-    private final Action commentAction;
-
     private Pair<SearchType, String> filter;
 
     private final TableViewer tableViewer;
@@ -127,16 +128,14 @@ public class EventViewTable extends Composite
         columns.add ( EventTableColumn.reservedColumnEntryTimestamp );
     }
 
-    public EventViewTable ( final Composite parent, final int style, final WritableSet events, final Action ackAction, final Action commentAction, final List<ColumnProperties> columnSettings )
+    public EventViewTable ( final Composite parent, final IViewSite viewSite, final int style, final WritableSet events, final List<ColumnProperties> columnSettings )
     {
-        this ( parent, style, events, ackAction, commentAction, columnSettings, null );
+        this ( parent, viewSite, style, events, columnSettings, null );
     }
 
-    public EventViewTable ( final Composite parent, final int style, final WritableSet events, final Action ackAction, final Action commentAction, final List<ColumnProperties> columnSettings, final List<EventTableColumn> additionalColumns )
+    public EventViewTable ( final Composite parent, final IViewSite viewSite, final int style, final WritableSet events, final List<ColumnProperties> columnSettings, final List<EventTableColumn> additionalColumns )
     {
         super ( parent, style );
-        this.ackAction = ackAction;
-        this.commentAction = commentAction;
         this.events = events;
 
         this.localColumns = new ArrayList<EventTableColumn> ( columns );
@@ -156,7 +155,10 @@ public class EventViewTable extends Composite
         this.tableViewer.setUseHashlookup ( true );
         this.tableViewer.setSorter ( new EventTableSorter ( EventTableColumn.reservedColumnSourceTimestamp, SWT.DOWN ) );
         this.tableViewer.getTable ().setSortDirection ( SWT.DOWN );
-        this.tableViewer.getTable ().setMenu ( createContextMenu ( this.tableViewer.getTable () ) );
+
+        hookContextMenu ( this.tableViewer.getControl (), this.tableViewer, viewSite );
+
+        viewSite.setSelectionProvider ( this.tableViewer );
 
         final ObservableSetContentProvider contentProvider = new ObservableSetContentProvider ();
         this.tableViewer.setContentProvider ( contentProvider );
@@ -173,6 +175,27 @@ public class EventViewTable extends Composite
                 }
             }
         } );
+    }
+
+    protected void hookContextMenu ( final Control control, final ISelectionProvider selectionProvider, final IViewSite viewSite )
+    {
+        final MenuManager menuMgr = new MenuManager ( "#PopupMenu" ); //$NON-NLS-1$
+        menuMgr.setRemoveAllWhenShown ( true );
+        menuMgr.addMenuListener ( new IMenuListener () {
+            @Override
+            public void menuAboutToShow ( final IMenuManager manager )
+            {
+                fillContextMenu ( manager );
+            }
+        } );
+        final Menu menu = menuMgr.createContextMenu ( control );
+        control.setMenu ( menu );
+        viewSite.registerContextMenu ( menuMgr, selectionProvider );
+    }
+
+    protected void fillContextMenu ( final IMenuManager manager )
+    {
+        manager.add ( new Separator ( IWorkbenchActionConstants.MB_ADDITIONS ) );
     }
 
     public TableViewer getTableViewer ()
@@ -209,45 +232,6 @@ public class EventViewTable extends Composite
             col.setWidth ( p.getWidth () );
             i += 1;
         }
-    }
-
-    private Menu createContextMenu ( final Control parent )
-    {
-        if ( this.ackAction == null && this.commentAction == null )
-        {
-            return null;
-        }
-        final Menu contextMenu = new Menu ( parent );
-        if ( this.ackAction != null )
-        {
-            final MenuItem ackMenuItem = new MenuItem ( contextMenu, SWT.NONE );
-            ackMenuItem.setText ( Messages.Acknowledge );
-            ackMenuItem.setImage ( this.ackAction.getImageDescriptor ().createImage () );
-            ackMenuItem.addSelectionListener ( new SelectionAdapter () {
-                @Override
-                public void widgetSelected ( final SelectionEvent e )
-                {
-                    EventViewTable.this.ackAction.run ();
-                }
-            } );
-        }
-        /*
-        FIXME: comment in when comment can be set
-        if ( this.commentAction != null )
-        {
-            final MenuItem commentMenuItem = new MenuItem ( contextMenu, SWT.NONE );
-            commentMenuItem.setText ( this.commentAction.getText () );
-            commentMenuItem.setImage ( this.commentAction.getImageDescriptor ().createImage () );
-            commentMenuItem.addSelectionListener ( new SelectionAdapter () {
-                @Override
-                public void widgetSelected ( final SelectionEvent e )
-                {
-                    EventViewTable.this.commentAction.run ();
-                }
-            } );
-        }
-        */
-        return contextMenu;
     }
 
     public void clear ()

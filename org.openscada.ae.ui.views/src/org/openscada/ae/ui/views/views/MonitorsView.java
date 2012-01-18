@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -30,8 +30,6 @@ import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 import org.openscada.ae.ui.views.config.ConfigurationHelper;
 import org.openscada.ae.ui.views.config.MonitorViewConfiguration;
-import org.openscada.ae.ui.views.model.DecoratedMonitor;
-import org.openscada.core.client.ConnectionState;
 import org.openscada.utils.str.StringHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,7 +60,7 @@ public class MonitorsView extends MonitorSubscriptionAlarmsEventsView
     {
         super.createPartControl ( parent );
 
-        this.monitorsTable = new MonitorsViewTable ( getContentPane (), SWT.BORDER, this.monitors, this.ackAction, this.initialColumnSettings );
+        this.monitorsTable = new MonitorsViewTable ( getContentPane (), getViewSite (), SWT.BORDER, this.monitors, this.initialColumnSettings );
         this.monitorsTable.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, true, 1, 1 ) );
 
         loadConfiguration ();
@@ -118,18 +116,6 @@ public class MonitorsView extends MonitorSubscriptionAlarmsEventsView
     public void setFocus ()
     {
         this.monitorsTable.setFocus ();
-    }
-
-    @Override
-    protected void acknowledge ()
-    {
-        if ( getConnection () != null && getConnection ().getState () == ConnectionState.BOUND )
-        {
-            for ( final DecoratedMonitor monitor : this.monitorsTable.selectedMonitors () )
-            {
-                getConnection ().acknowledge ( monitor.getMonitor ().getId (), monitor.getMonitor ().getStatusTimestamp () );
-            }
-        }
     }
 
     @Override

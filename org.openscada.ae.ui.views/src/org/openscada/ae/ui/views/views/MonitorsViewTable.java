@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -29,8 +29,12 @@ import org.eclipse.core.databinding.observable.set.ISetChangeListener;
 import org.eclipse.core.databinding.observable.set.SetChangeEvent;
 import org.eclipse.core.databinding.observable.set.WritableSet;
 import org.eclipse.core.databinding.property.Properties;
-import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IMenuListener;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.databinding.viewers.ObservableSetContentProvider;
+import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
@@ -42,10 +46,11 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.ui.IViewSite;
+import org.eclipse.ui.IWorkbenchActionConstants;
 import org.openscada.ae.MonitorStatusInformation;
 import org.openscada.ae.ui.views.Messages;
 import org.openscada.ae.ui.views.Settings;
@@ -178,16 +183,13 @@ public class MonitorsViewTable extends Composite
 
     private final WritableSet monitors;
 
-    private final Action ackAction;
-
     private final TableViewer tableViewer;
 
     private volatile boolean scrollLock = false;
 
-    public MonitorsViewTable ( final Composite parent, final int style, final WritableSet monitors, final Action ackAction, final List<ColumnProperties> columnSettings )
+    public MonitorsViewTable ( final Composite parent, final IViewSite viewSite, final int style, final WritableSet monitors, final List<ColumnProperties> columnSettings )
     {
         super ( parent, style );
-        this.ackAction = ackAction;
 
         this.monitors = monitors;
 
@@ -203,7 +205,10 @@ public class MonitorsViewTable extends Composite
         this.tableViewer.setUseHashlookup ( true );
         this.tableViewer.setSorter ( new Sorter ( Columns.TIMESTAMP, SWT.DOWN ) );
         this.tableViewer.getTable ().setSortDirection ( SWT.DOWN );
-        this.tableViewer.getTable ().setMenu ( createContextMenu ( this.tableViewer.getTable () ) );
+
+        hookContextMenu ( this.tableViewer.getControl (), this.tableViewer, viewSite );
+
+        viewSite.setSelectionProvider ( this.tableViewer );
 
         final ObservableSetContentProvider contentProvider = new ObservableSetContentProvider ();
         this.tableViewer.setContentProvider ( contentProvider );
@@ -222,20 +227,25 @@ public class MonitorsViewTable extends Composite
         } );
     }
 
-    private Menu createContextMenu ( final Control parent )
+    protected void hookContextMenu ( final Control control, final ISelectionProvider selectionProvider, final IViewSite viewSite )
     {
-        final Menu ackMenu = new Menu ( parent );
-        final MenuItem ackMenuItem = new MenuItem ( ackMenu, SWT.NONE );
-        ackMenuItem.setText ( Messages.Acknowledge );
-        ackMenuItem.setImage ( this.ackAction.getImageDescriptor ().createImage () );
-        ackMenuItem.addSelectionListener ( new SelectionAdapter () {
+        final MenuManager menuMgr = new MenuManager ( "#PopupMenu" ); //$NON-NLS-1$
+        menuMgr.setRemoveAllWhenShown ( true );
+        menuMgr.addMenuListener ( new IMenuListener () {
             @Override
-            public void widgetSelected ( final SelectionEvent e )
+            public void menuAboutToShow ( final IMenuManager manager )
             {
-                MonitorsViewTable.this.ackAction.run ();
+                fillContextMenu ( manager );
             }
         } );
-        return ackMenu;
+        final Menu menu = menuMgr.createContextMenu ( control );
+        control.setMenu ( menu );
+        viewSite.registerContextMenu ( menuMgr, selectionProvider );
+    }
+
+    protected void fillContextMenu ( final IMenuManager manager )
+    {
+        manager.add ( new Separator ( IWorkbenchActionConstants.MB_ADDITIONS ) );
     }
 
     private void createColumns ( final TableViewer table )

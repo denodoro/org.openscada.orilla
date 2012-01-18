@@ -42,9 +42,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.databinding.swt.SWTObservables;
-import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.layout.GridData;
@@ -69,7 +67,6 @@ import org.openscada.ae.ui.views.model.DecoratedMonitor;
 import org.openscada.ae.ui.views.model.MonitorData;
 import org.openscada.ae.ui.views.preferences.PreferenceConstants;
 import org.openscada.core.Variant;
-import org.openscada.core.client.ConnectionState;
 import org.openscada.core.subscription.SubscriptionState;
 import org.openscada.utils.concurrent.NamedThreadFactory;
 import org.openscada.utils.lang.Pair;
@@ -175,6 +172,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
             }
         } );
 
+        /*
         final CustomizableAction commentAction = createCommentAction ( null );
         commentAction.setRunnable ( new Runnable () {
             @Override
@@ -199,6 +197,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
                 }
             }
         } );
+        */
 
         final CustomizableAction scrollLockAction = new CustomizableAction ( Messages.EventPoolView_Action_ScrollLock_Name, IAction.AS_CHECK_BOX );
         scrollLockAction.setToolTipText ( Messages.EventPoolView_Action_ScrollLock_ToolTip );
@@ -257,7 +256,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
 
         loadConfiguration ();
 
-        this.eventsTable = new EventViewTable ( getContentPane (), SWT.BORDER, this.pool, this.ackAction, commentAction, this.initialColumnSettings, this.additionalColumns );
+        this.eventsTable = new EventViewTable ( getContentPane (), getViewSite (), SWT.BORDER, this.pool, this.initialColumnSettings, this.additionalColumns );
         this.eventsTable.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, true, 1, 1 ) );
 
         getSite ().setSelectionProvider ( this.eventsTable.getTableViewer () );
@@ -613,21 +612,6 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
 
     private void statusChangedEventSubscription ( final SubscriptionState state )
     {
-    }
-
-    @Override
-    protected void acknowledge ()
-    {
-        if ( getConnection () != null && getConnection ().getState () == ConnectionState.BOUND )
-        {
-            for ( final DecoratedEvent event : this.eventsTable.selectedEvents () )
-            {
-                if ( event.getMonitor () != null )
-                {
-                    getConnection ().acknowledge ( event.getMonitor ().getId (), event.getEvent ().getSourceTimestamp () );
-                }
-            }
-        }
     }
 
     @Override

@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -19,6 +19,7 @@
 
 package org.openscada.ae.ui.views.views;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -31,28 +32,23 @@ import org.eclipse.core.databinding.observable.map.IMapChangeListener;
 import org.eclipse.core.databinding.observable.map.MapChangeEvent;
 import org.eclipse.core.databinding.observable.map.WritableMap;
 import org.eclipse.core.databinding.observable.set.WritableSet;
-import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.databinding.swt.SWTObservables;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Composite;
 import org.openscada.ae.MonitorStatusInformation;
 import org.openscada.ae.client.MonitorListener;
-import org.openscada.ae.ui.views.Activator;
-import org.openscada.ae.ui.views.CustomizableAction;
 import org.openscada.ae.ui.views.model.DecoratedMonitor;
+import org.openscada.core.client.ConnectionState;
 import org.openscada.core.subscription.SubscriptionState;
 
 public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarmsEventsView
 {
     protected String monitorsId;
 
-    protected CustomizableAction ackAction;
-
     protected WritableSet monitors;
 
     protected WritableMap monitorsMap;
 
-    private MonitorListener monitorListener = null;
+    private MonitorListener monitorListener;
 
     @Override
     protected Realm getRealm ()
@@ -222,21 +218,6 @@ public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarms
     {
         super.createPartControl ( parent );
 
-        this.ackAction = new CustomizableAction ();
-        this.ackAction.setText ( Messages.MonitorSubscriptionAlarmsEventsView_AknAction_Text );
-        this.ackAction.setToolTipText ( Messages.MonitorSubscriptionAlarmsEventsView_AknAction_ToolTip );
-        this.ackAction.setImageDescriptor ( ImageDescriptor.createFromURL ( Activator.getDefault ().getBundle ().getResource ( "icons/acknowledge.gif" ) ) ); //$NON-NLS-1$
-        this.ackAction.setRunnable ( new Runnable () {
-            @Override
-            public void run ()
-            {
-                acknowledge ();
-            }
-        } );
-
-        final IToolBarManager toolBarManager = getViewSite ().getActionBars ().getToolBarManager ();
-        toolBarManager.add ( this.ackAction );
-
         this.monitorsMap = new WritableMap ( SWTObservables.getRealm ( parent.getDisplay () ) );
         this.monitors = new WritableSet ( SWTObservables.getRealm ( parent.getDisplay () ) );
         this.monitorsMap.addMapChangeListener ( new IMapChangeListener () {
@@ -273,6 +254,12 @@ public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarms
         } );
     }
 
-    protected abstract void acknowledge ();
+    public void acknowledgeMonitor ( final String monitorId, final Date timestamp )
+    {
+        if ( getConnection () != null && getConnection ().getState () == ConnectionState.BOUND )
+        {
+            getConnection ().acknowledge ( monitorId, timestamp );
+        }
+    }
 
 }

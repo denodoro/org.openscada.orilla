@@ -21,10 +21,12 @@ package org.openscada.ae.ui.views.model;
 
 import java.io.Serializable;
 
+import org.eclipse.core.runtime.IAdaptable;
 import org.openscada.ae.MonitorStatusInformation;
+import org.openscada.ae.ui.views.handler.AckInformation;
 import org.openscada.utils.beans.AbstractPropertyChange;
 
-public class DecoratedMonitor extends AbstractPropertyChange implements Serializable
+public class DecoratedMonitor extends AbstractPropertyChange implements Serializable, IAdaptable
 {
     private static final long serialVersionUID = -5247078232293575375L;
 
@@ -75,4 +77,14 @@ public class DecoratedMonitor extends AbstractPropertyChange implements Serializ
         return "DecoratedMonitor [id=" + this.id + ", monitor=" + this.monitor + "]"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     }
 
+    @SuppressWarnings ( "rawtypes" )
+    @Override
+    public Object getAdapter ( final Class adapter )
+    {
+        if ( adapter == AckInformation.class )
+        {
+            return new AckInformation ( this.monitor.getId (), this.monitor.getStatusTimestamp (), this.monitor.getStatus () );
+        }
+        return null;
+    }
 }

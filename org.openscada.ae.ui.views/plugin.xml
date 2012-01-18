@@ -2,7 +2,7 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="org.openscada.ae.ui.views.configuration" name="%extension-point.viewConfiguration.name" schema="schema/org.openscada.ae.ui.views.configuration.exsd"/>
-   <extension-point id="filterTab" name="Filter Tab" schema="schema/filterTab.exsd"/>
+   <extension-point id="filterTab" name="%extension-point.name" schema="schema/filterTab.exsd"/>
 
    <extension
          point="org.eclipse.ui.views">
@@ -47,6 +47,121 @@
       <initializer
             class="org.openscada.ae.ui.views.preferences.PreferenceInitializer">
       </initializer>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            commandId="org.openscada.ae.ui.views.AcknowledgeCommand">
+         <class
+               class="org.openscada.ae.ui.views.handler.AcknowledgeHandler">
+         </class>
+         <activeWhen>
+            <and>
+               <with
+                     variable="selection">
+                  <and>
+                     <iterate
+                           ifEmpty="false"
+                           operator="or">
+                        <adapt
+                              type="org.openscada.ae.ui.views.handler.AckInformation">
+                           <or>
+                              <test
+                                    forcePluginActivation="true"
+                                    property="org.openscada.ae.ui.views.ackInformationTester.status"
+                                    value="NOT_OK_NOT_AKN">
+                              </test>
+                              <test
+                                    forcePluginActivation="true"
+                                    property="org.openscada.ae.ui.views.ackInformationTester.status"
+                                    value="NOT_AKN">
+                              </test>
+                           </or>
+                        </adapt>
+                     </iterate>
+                  </and>
+               </with>
+            </and>
+         </activeWhen>
+      </handler>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            categoryId="org.openscada.ae.ui.category"
+            description="%command.ack.description"
+            id="org.openscada.ae.ui.views.AcknowledgeCommand"
+            name="%command.ack.name">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:org.openscada.ae.ui.views.views.monitors">
+         <command
+               commandId="org.openscada.ae.ui.views.AcknowledgeCommand"
+               style="push">
+         </command>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:org.openscada.ae.ui.views.views.monitors">
+         <command
+               commandId="org.openscada.ae.ui.views.AcknowledgeCommand"
+               style="push">
+         </command>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:org.openscada.ae.ui.views.views.eventpool">
+         <command
+               commandId="org.openscada.ae.ui.views.AcknowledgeCommand"
+               style="push">
+         </command>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:org.openscada.ae.ui.views.views.eventpool">
+         <command
+               commandId="org.openscada.ae.ui.views.AcknowledgeCommand"
+               style="push">
+         </command>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commandImages">
+      <image
+            commandId="org.openscada.ae.ui.views.AcknowledgeCommand"
+            icon="icons/acknowledge.gif">
+      </image>
+   </extension>
+   <extension
+         point="org.eclipse.core.expressions.propertyTesters">
+      <propertyTester
+            class="org.openscada.ae.ui.views.tester.AckInformationTester"
+            id="org.openscada.ae.ui.views.ackInformationTester"
+            namespace="org.openscada.ae.ui.views.ackInformationTester"
+            properties="status"
+            type="org.openscada.ae.ui.views.handler.AckInformation">
+      </propertyTester>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.adapters">
+      <factory
+            adaptableType="org.openscada.ae.ui.views.model.DecoratedEvent"
+            class="org.openscada.ae.ui.views.adapter.DecoratedFactory">
+         <adapter
+               type="org.openscada.ae.ui.views.handler.AckInformation">
+         </adapter>
+      </factory>
+      <factory
+            adaptableType="org.openscada.ae.ui.views.model.DecoratedMonitor"
+            class="org.openscada.ae.ui.views.adapter.DecoratedFactory">
+         <adapter
+               type="org.openscada.ae.ui.views.handler.AckInformation">
+         </adapter>
+      </factory>
    </extension>
 
 </plugin>

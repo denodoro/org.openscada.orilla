@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -156,14 +156,6 @@ public class EventHistoryView extends AbstractAlarmsEventsView
             }
         } );
 
-        // comment Action
-        final CustomizableAction commentAction = createCommentAction ( new Runnable () {
-            @Override
-            public void run ()
-            {
-            }
-        } );
-
         final IToolBarManager toolBarManager = getViewSite ().getActionBars ().getToolBarManager ();
         toolBarManager.add ( this.resumeAction );
         toolBarManager.add ( this.searchAction );
@@ -176,7 +168,7 @@ public class EventHistoryView extends AbstractAlarmsEventsView
         // load configuration first, since we need the additional columns later
         loadConfiguration ();
 
-        this.eventsTable = new EventViewTable ( getContentPane (), SWT.BORDER, this.events, null, commentAction, this.initialColumnSettings, this.additionalColumns );
+        this.eventsTable = new EventViewTable ( getContentPane (), getViewSite (), SWT.BORDER, this.events, this.initialColumnSettings, this.additionalColumns );
         this.eventsTable.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, true, 1, 1 ) );
 
         getSite ().setSelectionProvider ( this.eventsTable.getTableViewer () );

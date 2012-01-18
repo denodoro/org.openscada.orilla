@@ -105,10 +105,6 @@ public class Messages extends NLS
 
     public static String LabelProviderSupport_TimeFormat;
 
-    public static String MonitorSubscriptionAlarmsEventsView_AknAction_Text;
-
-    public static String MonitorSubscriptionAlarmsEventsView_AknAction_ToolTip;
-
     public static String MonitorsView_Label_Format_CountMonitors;
 
     public static String MonitorsView_Label_Format_Monitors;

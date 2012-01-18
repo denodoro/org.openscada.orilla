@@ -26,6 +26,7 @@ import org.eclipse.core.runtime.IAdaptable;
 import org.openscada.ae.Event;
 import org.openscada.ae.MonitorStatus;
 import org.openscada.ae.MonitorStatusInformation;
+import org.openscada.ae.ui.views.handler.AckInformation;
 import org.openscada.utils.beans.AbstractPropertyChange;
 
 public class DecoratedEvent extends AbstractPropertyChange implements Serializable, IAdaptable, Comparable<DecoratedEvent>
@@ -158,6 +159,10 @@ public class DecoratedEvent extends AbstractPropertyChange implements Serializab
         {
             return this.event;
         }
+        else if ( adapter == AckInformation.class && this.monitor != null )
+        {
+            return new AckInformation ( this.monitor.getId (), this.event.getSourceTimestamp (), this.monitor.getStatus () );
+        }
         return null;
     }
 
@@ -166,4 +171,5 @@ public class DecoratedEvent extends AbstractPropertyChange implements Serializab
     {
         return comparator.compare ( this, o );
     }
+
 }
