@@ -173,7 +173,7 @@ public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarms
             {
                 for ( final String id : removed )
                 {
-                    MonitorSubscriptionAlarmsEventsView.this.monitorsMap.remove ( id );
+                    this.monitorsMap.remove ( id );
                 }
             }
             if ( addedOrUpdated != null )
@@ -183,21 +183,21 @@ public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarms
                 final Map<String, DecoratedMonitor> missing = new HashMap<String, DecoratedMonitor> ();
                 for ( final MonitorStatusInformation monitorStatusInformation : addedOrUpdated )
                 {
-                    if ( !MonitorSubscriptionAlarmsEventsView.this.monitorsMap.containsKey ( monitorStatusInformation.getId () ) )
+                    if ( !this.monitorsMap.containsKey ( monitorStatusInformation.getId () ) )
                     {
                         missing.put ( monitorStatusInformation.getId (), new DecoratedMonitor ( monitorStatusInformation ) );
                     }
                 }
-                MonitorSubscriptionAlarmsEventsView.this.monitorsMap.putAll ( missing );
+                this.monitorsMap.putAll ( missing );
                 // 2. update data                    
                 for ( final MonitorStatusInformation monitorStatusInformation : addedOrUpdated )
                 {
                     if ( !missing.keySet ().contains ( monitorStatusInformation.getId () ) )
                     {
-                        final DecoratedMonitor dm = (DecoratedMonitor)MonitorSubscriptionAlarmsEventsView.this.monitorsMap.get ( monitorStatusInformation.getId () );
+                        final DecoratedMonitor dm = (DecoratedMonitor)this.monitorsMap.get ( monitorStatusInformation.getId () );
                         if ( dm == null )
                         {
-                            MonitorSubscriptionAlarmsEventsView.this.monitorsMap.put ( monitorStatusInformation.getId (), new DecoratedMonitor ( monitorStatusInformation ) );
+                            this.monitorsMap.put ( monitorStatusInformation.getId (), new DecoratedMonitor ( monitorStatusInformation ) );
                         }
                         else
                         {
