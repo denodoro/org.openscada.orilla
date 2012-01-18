@@ -547,6 +547,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
 
     private void performDataChanged ( final MonitorStatusInformation[] addedOrUpdated, final String[] removed )
     {
+        // FIXME: check if addAll is really necessary
         EventPoolView.this.pool.addAll ( decorateEvents ( addedOrUpdated ) );
     }
 
