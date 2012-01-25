@@ -44,7 +44,7 @@ import org.slf4j.LoggerFactory;
 public class ConfigurationHelper
 {
 
-    private final static Logger logger = LoggerFactory.getLogger ( ConfigurationHelper.class );
+    private static final Logger logger = LoggerFactory.getLogger ( ConfigurationHelper.class );
 
     private static final String EXTP_CFG_ID = "org.openscada.ae.ui.views.configuration"; //$NON-NLS-1$
 

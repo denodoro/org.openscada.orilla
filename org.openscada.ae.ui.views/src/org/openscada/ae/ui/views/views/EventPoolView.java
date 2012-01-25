@@ -80,7 +80,7 @@ import com.google.gson.reflect.TypeToken;
 
 public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
 {
-    private final static Logger logger = LoggerFactory.getLogger ( EventPoolView.class );
+    private static final Logger logger = LoggerFactory.getLogger ( EventPoolView.class );
 
     public static final String ID = "org.openscada.ae.ui.views.views.eventpool"; //$NON-NLS-1$
 
@@ -532,10 +532,6 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
     public void dataChanged ( final MonitorStatusInformation[] addedOrUpdated, final String[] removed )
     {
         super.dataChanged ( addedOrUpdated, removed );
-        if ( addedOrUpdated == null )
-        {
-            return;
-        }
         scheduleJob ( new Runnable () {
             @Override
             public void run ()
@@ -548,21 +544,39 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
     private void performDataChanged ( final MonitorStatusInformation[] addedOrUpdated, final String[] removed )
     {
         // FIXME: check if addAll is really necessary
-        EventPoolView.this.pool.addAll ( decorateEvents ( addedOrUpdated ) );
+        EventPoolView.this.pool.addAll ( decorateEvents ( addedOrUpdated, removed ) );
     }
 
-    private Set<DecoratedEvent> decorateEvents ( final MonitorStatusInformation[] monitors )
+    private Set<DecoratedEvent> decorateEvents ( final MonitorStatusInformation[] monitors, String[] removed )
     {
         final Set<DecoratedEvent> result = new HashSet<DecoratedEvent> ();
-        for ( final MonitorStatusInformation monitorStatusInformation : monitors )
+        if ( monitors != null )
         {
-            final Set<DecoratedEvent> d = this.poolMap.get ( monitorStatusInformation.getId () );
-            if ( d != null )
+            for ( final MonitorStatusInformation monitorStatusInformation : monitors )
             {
-                for ( final DecoratedEvent event : d )
+                final Set<DecoratedEvent> d = this.poolMap.get ( monitorStatusInformation.getId () );
+                if ( d != null )
                 {
-                    event.setMonitor ( new MonitorData ( monitorStatusInformation ) );
-                    result.add ( event );
+                    for ( final DecoratedEvent event : d )
+                    {
+                        event.setMonitor ( new MonitorData ( monitorStatusInformation ) );
+                        result.add ( event );
+                    }
+                }
+            }
+        }
+        if ( removed != null )
+        {
+            for ( String monitorId : removed )
+            {
+                final Set<DecoratedEvent> d = this.poolMap.get ( monitorId );
+                if ( d != null )
+                {
+                    for ( final DecoratedEvent event : d )
+                    {
+                        event.setMonitor ( null );
+                        result.add ( event );
+                    }
                 }
             }
         }

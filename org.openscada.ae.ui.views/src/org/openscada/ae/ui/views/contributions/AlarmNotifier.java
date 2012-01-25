@@ -85,7 +85,7 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution
 
     private static final List<String> ACK_STATES = Arrays.asList ( new String[] { "NOT_AKN", "NOT_OK_NOT_AKN" } ); //$NON-NLS-1$ //$NON-NLS-2$
 
-    private final static Logger logger = LoggerFactory.getLogger ( AlarmNotifier.class );
+    private static final Logger logger = LoggerFactory.getLogger ( AlarmNotifier.class );
 
     public static final String ID = "org.openscada.ae.ui.views.contributions.alarmnotifier"; //$NON-NLS-1$
 

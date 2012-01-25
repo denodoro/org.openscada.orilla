@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
 public class FilterFreeFormComposite extends Composite
 {
 
-    private final static Logger logger = LoggerFactory.getLogger ( FilterFreeFormComposite.class );
+    private static final Logger logger = LoggerFactory.getLogger ( FilterFreeFormComposite.class );
 
     private final FilterChangedListener filterChangedListener;
 

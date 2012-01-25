@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 public class EventViewerFilter extends ViewerFilter
 {
 
-    private final static Logger logger = LoggerFactory.getLogger ( EventViewerFilter.class );
+    private static final Logger logger = LoggerFactory.getLogger ( EventViewerFilter.class );
 
     private final EventMatcher eventMatcher;
 
