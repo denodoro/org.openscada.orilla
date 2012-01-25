@@ -85,10 +85,9 @@ public class LazyDiffEntryTreeProvider implements ILazyTreeContentProvider
         int count = 0;
         if ( element instanceof DiffEntry )
         {
-
             final Operation op = ( (DiffEntry)element ).getOperation ();
 
-            if ( op == Operation.UPDATE_DIFF || op == Operation.UPDATE_SET )
+            if ( op == Operation.UPDATE_DIFF || op == Operation.UPDATE_SET || op == Operation.ADD )
             {
                 final Object[] childs = DiffEntryHelper.diffChilds ( (DiffEntry)element );
                 count = childs.length;

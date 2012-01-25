@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -60,23 +60,29 @@ public final class DiffEntryHelper
         final Map<String, DiffSubEntry> childs = new LinkedHashMap<String, DiffSubEntry> ();
 
         // new entries
-        for ( final Map.Entry<String, String> data : entry.getNewData ().entrySet () )
+        if ( entry.getNewData () != null )
         {
-            final DiffSubEntry subEntry = new DiffSubEntry ( entry, data.getKey () );
-            subEntry.setNewValue ( data.getValue () );
-            childs.put ( data.getKey (), subEntry );
+            for ( final Map.Entry<String, String> data : entry.getNewData ().entrySet () )
+            {
+                final DiffSubEntry subEntry = new DiffSubEntry ( entry, data.getKey () );
+                subEntry.setNewValue ( data.getValue () );
+                childs.put ( data.getKey (), subEntry );
+            }
         }
 
         // old entries
-        for ( final Map.Entry<String, String> data : entry.getOldData ().entrySet () )
+        if ( entry.getOldData () != null )
         {
-            DiffSubEntry subEntry = childs.get ( data.getKey () );
-            if ( subEntry == null )
+            for ( final Map.Entry<String, String> data : entry.getOldData ().entrySet () )
             {
-                subEntry = new DiffSubEntry ( entry, data.getKey () );
-                childs.put ( data.getKey (), subEntry );
+                DiffSubEntry subEntry = childs.get ( data.getKey () );
+                if ( subEntry == null )
+                {
+                    subEntry = new DiffSubEntry ( entry, data.getKey () );
+                    childs.put ( data.getKey (), subEntry );
+                }
+                subEntry.setOldValue ( data.getValue () );
             }
-            subEntry.setOldValue ( data.getValue () );
         }
         return childs;
     }
