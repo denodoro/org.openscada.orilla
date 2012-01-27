@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -35,14 +35,14 @@ public class MonitorData extends MonitorStatusInformation
 {
     private static final long serialVersionUID = 6727349873713785401L;
 
-    public MonitorData ( final String id, final MonitorStatus status, final Date statusTimestamp, final Variant value, final Date lastAknTimestamp, final String lastAknUser, final Map<String, Variant> attributes )
+    public MonitorData ( final String id, final MonitorStatus status, final Date statusTimestamp, final Variant value, final Date lastAknTimestamp, final String lastAknUser, final Date lastFailTimestamp, final Map<String, Variant> attributes )
     {
-        super ( id, status, statusTimestamp, value, lastAknTimestamp, lastAknUser, attributes );
+        super ( id, status, statusTimestamp, value, lastAknTimestamp, lastAknUser, lastFailTimestamp, attributes );
     }
 
     public MonitorData ( final MonitorStatusInformation monitor )
     {
-        super ( monitor.getId (), monitor.getStatus (), monitor.getStatusTimestamp (), monitor.getValue (), monitor.getLastAknTimestamp (), monitor.getLastAknUser (), monitor.getAttributes () );
+        super ( monitor.getId (), monitor.getStatus (), monitor.getStatusTimestamp (), monitor.getValue (), monitor.getLastAknTimestamp (), monitor.getLastAknUser (), monitor.getLastFailTimestamp (), monitor.getAttributes () );
     }
 
     @Override
@@ -75,69 +75,69 @@ public class MonitorData extends MonitorStatusInformation
             return false;
         }
         final MonitorStatusInformation other = (MonitorStatusInformation)obj;
-        if ( this.getId () == null )
+        if ( getId () == null )
         {
             if ( other.getId () != null )
             {
                 return false;
             }
         }
-        else if ( !this.getId ().equals ( other.getId () ) )
+        else if ( !getId ().equals ( other.getId () ) )
         {
             return false;
         }
-        if ( this.getLastAknTimestamp () == null )
+        if ( getLastAknTimestamp () == null )
         {
             if ( other.getLastAknTimestamp () != null )
             {
                 return false;
             }
         }
-        else if ( !this.getLastAknTimestamp ().equals ( other.getLastAknTimestamp () ) )
+        else if ( !getLastAknTimestamp ().equals ( other.getLastAknTimestamp () ) )
         {
             return false;
         }
-        if ( this.getLastAknUser () == null )
+        if ( getLastAknUser () == null )
         {
             if ( other.getLastAknUser () != null )
             {
                 return false;
             }
         }
-        else if ( !this.getLastAknUser ().equals ( other.getLastAknUser () ) )
+        else if ( !getLastAknUser ().equals ( other.getLastAknUser () ) )
         {
             return false;
         }
-        if ( this.getStatus () == null )
+        if ( getStatus () == null )
         {
             if ( other.getStatus () != null )
             {
                 return false;
             }
         }
-        else if ( !this.getStatus ().equals ( other.getStatus () ) )
+        else if ( !getStatus ().equals ( other.getStatus () ) )
         {
             return false;
         }
-        if ( this.getStatusTimestamp () == null )
+        if ( getStatusTimestamp () == null )
         {
             if ( other.getStatusTimestamp () != null )
             {
                 return false;
             }
         }
-        else if ( !this.getStatusTimestamp ().equals ( other.getStatusTimestamp () ) )
+        else if ( !getStatusTimestamp ().equals ( other.getStatusTimestamp () ) )
         {
             return false;
         }
-        if ( this.getValue () == null )
+        if ( getValue () == null )
         {
             if ( other.getValue () != null )
             {
                 return false;
             }
         }
-        else if ( !this.getValue ().equals ( other.getValue () ) )
+        else if ( !getValue ().equals ( other.getValue () ) )
         {
             return false;
         }

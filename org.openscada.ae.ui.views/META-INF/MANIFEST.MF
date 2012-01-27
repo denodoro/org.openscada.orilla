@@ -16,7 +16,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Import-Package: com.google.gson;version="1.4.0",
  com.google.gson.reflect;version="1.4.0",
- org.openscada.ae;version="0.15.0",
+ org.openscada.ae;version="0.18.0",
  org.openscada.ae.client;version="0.15.0",
  org.openscada.ae.connection.provider;version="0.14.0",
  org.openscada.ae.filter;version="0.15.0",
@@ -44,7 +44,7 @@ Import-Package: com.google.gson;version="1.4.0",
  org.openscada.utils.propertyeditors;version="0.15.0",
  org.openscada.utils.str;version="0.15.0",
  org.slf4j;version="[1.5.0,2.0.0)"
-Export-Package: org.openscada.ae.ui.views.contributions;version="0.17.0";
+Export-Package: org.openscada.ae.ui.views.contributions;version="0.18.0";
   uses:="org.eclipse.osgi.util,
    org.openscada.da.connection.provider,
    org.openscada.da.client,
@@ -53,9 +53,9 @@ Export-Package: org.openscada.ae.ui.views.contributions;version="0.17.0";
    org.eclipse.swt.widgets,
    org.openscada.ui.utils.blink,
    org.openscada.ae",
- org.openscada.ae.ui.views.dialog;version="0.17.0",
- org.openscada.ae.ui.views.filter;version="0.17.0",
- org.openscada.ae.ui.views.model;version="0.17.0";
+ org.openscada.ae.ui.views.dialog;version="0.18.0",
+ org.openscada.ae.ui.views.filter;version="0.18.0",
+ org.openscada.ae.ui.views.model;version="0.18.0";
   uses:="org.eclipse.core.runtime,
    org.openscada.utils.beans,
    org.openscada.core,
