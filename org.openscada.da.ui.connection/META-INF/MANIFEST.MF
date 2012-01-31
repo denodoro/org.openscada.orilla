@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: OpenSCADA DA Connection UI
+Bundle-Name: openSCADA DA Connection UI
 Bundle-SymbolicName: org.openscada.da.ui.connection;singleton:=true
-Bundle-Version: 0.16.0.qualifier
+Bundle-Version: 0.18.0.qualifier
 Bundle-Activator: org.openscada.da.ui.connection.Activator
 Bundle-Vendor: TH4 SYSTEMS GmbH
 Require-Bundle: org.eclipse.ui,
