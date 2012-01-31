@@ -67,12 +67,13 @@ public class MonitorsViewTable extends Composite
     {
         ID,
         STATE,
-        TIMESTAMP,
+        LAST_FAIL_TIMESTAMP,
         VALUE,
         ACK_USER,
         ACK_TIMESTAMP,
         ITEM,
-        MESSAGE;
+        MESSAGE,
+        STATUS_TIMESTAMP;
     }
 
     private static class Sorter extends ViewerSorter
@@ -109,9 +110,9 @@ public class MonitorsViewTable extends Composite
                 v1 = m1.getValue () == null ? Variant.NULL : m1.getValue ();
                 v2 = m2.getValue () == null ? Variant.NULL : m2.getValue ();
                 break;
-            case TIMESTAMP:
-                v1 = m1.getStatusTimestamp ();
-                v2 = m2.getStatusTimestamp ();
+            case LAST_FAIL_TIMESTAMP:
+                v1 = m1.getLastFailTimestamp ();
+                v2 = m2.getLastFailTimestamp ();
                 break;
             case ACK_USER:
                 v1 = m1.getLastAknUser () == null ? "" : m1.getLastAknUser (); //$NON-NLS-1$
@@ -129,13 +130,17 @@ public class MonitorsViewTable extends Composite
                 v1 = m1.getAttributes ().get ( "message" ) == null ? Variant.NULL : m1.getAttributes ().get ( "message" ); //$NON-NLS-1$ //$NON-NLS-2$
                 v2 = m2.getAttributes ().get ( "message" ) == null ? Variant.NULL : m2.getAttributes ().get ( "message" ); //$NON-NLS-1$ //$NON-NLS-2$
                 break;
+            case STATUS_TIMESTAMP:
+                v1 = m1.getStatusTimestamp ();
+                v2 = m2.getStatusTimestamp ();
+                break;
             }
             // first compare the given column
             int result = v1.compareTo ( v2 );
             // use given order for sorting
             result = this.dir == SWT.DOWN ? -result : result;
             // if values are the same, order by timestamp in descending order
-            if ( this.column != Columns.TIMESTAMP && result == 0 )
+            if ( this.column != Columns.LAST_FAIL_TIMESTAMP && result == 0 )
             {
                 result = m2.getStatusTimestamp ().compareTo ( m1.getStatusTimestamp () );
             }
@@ -203,7 +208,7 @@ public class MonitorsViewTable extends Composite
         this.tableViewer.getTable ().setHeaderVisible ( true );
         this.tableViewer.getTable ().setLinesVisible ( true );
         this.tableViewer.setUseHashlookup ( true );
-        this.tableViewer.setSorter ( new Sorter ( Columns.TIMESTAMP, SWT.DOWN ) );
+        this.tableViewer.setSorter ( new Sorter ( Columns.LAST_FAIL_TIMESTAMP, SWT.DOWN ) );
         this.tableViewer.getTable ().setSortDirection ( SWT.DOWN );
 
         hookContextMenu ( this.tableViewer.getControl (), this.tableViewer, viewSite );
@@ -268,10 +273,10 @@ public class MonitorsViewTable extends Composite
         stateColumn.getColumn ().setResizable ( true );
         stateColumn.getColumn ().setMoveable ( true );
         stateColumn.getColumn ().addSelectionListener ( sortListener );
-        // timestamp
+        // last fail timestamp
         final TableViewerColumn timestampColumn = new TableViewerColumn ( table, SWT.NONE );
         timestampColumn.getColumn ().setText ( Messages.Timestamp );
-        timestampColumn.getColumn ().setData ( COLUMN_KEY, Columns.TIMESTAMP );
+        timestampColumn.getColumn ().setData ( COLUMN_KEY, Columns.LAST_FAIL_TIMESTAMP );
         timestampColumn.getColumn ().setWidth ( 180 );
         timestampColumn.getColumn ().setResizable ( true );
         timestampColumn.getColumn ().setMoveable ( true );
@@ -300,7 +305,7 @@ public class MonitorsViewTable extends Composite
         aknTimestampColumn.getColumn ().setResizable ( true );
         aknTimestampColumn.getColumn ().setMoveable ( true );
         aknTimestampColumn.getColumn ().addSelectionListener ( sortListener );
-
+        // item
         final TableViewerColumn itemColumn = new TableViewerColumn ( table, SWT.NONE );
         itemColumn.getColumn ().setText ( Messages.Item );
         itemColumn.getColumn ().setData ( COLUMN_KEY, Columns.ITEM );
@@ -308,7 +313,7 @@ public class MonitorsViewTable extends Composite
         itemColumn.getColumn ().setResizable ( true );
         itemColumn.getColumn ().setMoveable ( true );
         itemColumn.getColumn ().addSelectionListener ( sortListener );
-
+        // message
         final TableViewerColumn messageColumn = new TableViewerColumn ( table, SWT.NONE );
         messageColumn.getColumn ().setText ( Messages.Message );
         messageColumn.getColumn ().setData ( COLUMN_KEY, Columns.MESSAGE );
@@ -316,6 +321,14 @@ public class MonitorsViewTable extends Composite
         messageColumn.getColumn ().setResizable ( true );
         messageColumn.getColumn ().setMoveable ( true );
         messageColumn.getColumn ().addSelectionListener ( sortListener );
+        // status timestamp
+        final TableViewerColumn statusTimestampColumn = new TableViewerColumn ( table, SWT.NONE );
+        statusTimestampColumn.getColumn ().setText ( Messages.MonitorsViewTable_StatusTimestamp );
+        statusTimestampColumn.getColumn ().setData ( COLUMN_KEY, Columns.STATUS_TIMESTAMP );
+        statusTimestampColumn.getColumn ().setWidth ( 180 );
+        statusTimestampColumn.getColumn ().setResizable ( true );
+        statusTimestampColumn.getColumn ().setMoveable ( true );
+        statusTimestampColumn.getColumn ().addSelectionListener ( sortListener );
     }
 
     public void clear ()

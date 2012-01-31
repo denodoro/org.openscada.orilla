@@ -29,6 +29,8 @@ public class Messages extends NLS
 
     public static String Message;
 
+    public static String MonitorsViewTable_StatusTimestamp;
+
     public static String from;
 
     public static String to;
