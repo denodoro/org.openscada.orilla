@@ -210,7 +210,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
             }
         } );
 
-        final CustomizableAction setFilterAction = new CustomizableAction ( "", IAction.AS_CHECK_BOX );
+        final CustomizableAction setFilterAction = new CustomizableAction ( "", IAction.AS_CHECK_BOX ); //$NON-NLS-1$
         setFilterAction.setText ( Messages.EventPoolView_Action_Filter_Name );
         setFilterAction.setToolTipText ( Messages.EventPoolView_Action_Filter_ToolTip );
         setFilterAction.setImageDescriptor ( ImageDescriptor.createFromURL ( Activator.getDefault ().getBundle ().getResource ( "icons/search.gif" ) ) ); //$NON-NLS-1$
@@ -679,6 +679,12 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
         }
 
         labels.add ( String.format ( Messages.EventPoolView_Label_Format_CountEvents, EventPoolView.this.pool.size () ) );
+
+        final Pair<SearchType, String> filter = this.eventsTable.getFilter ();
+        if ( filter != null && filter.second != null && !filter.second.isEmpty () )
+        {
+            labels.add ( String.format ( Messages.EventPoolView_Label_Format_Filter, filter.second ).replace ( "&", "&&" ) ); //$NON-NLS-2$ //$NON-NLS-3$
+        }
 
         return StringHelper.join ( labels, Messages.EventPoolView_Sep );
     }

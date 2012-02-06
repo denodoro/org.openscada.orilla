@@ -104,7 +104,7 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
     }
 
     @Override
-    public IFigure createRoot ()
+    public IFigure createMain ()
     {
         final LayeredPane root = new LayeredPane ();
 
@@ -534,6 +534,7 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
     @Override
     protected void update ()
     {
+        super.update ();
         if ( this.value == null )
         {
             return;
@@ -624,6 +625,12 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
         connection.setLineStyle ( state ? Graphics.LINE_SOLID : Graphics.LINE_DOT );
         connection.setLineWidth ( state ? 2 : 1 );
         connection.setTargetDecoration ( state ? dec : null );
+    }
+
+    @Override
+    protected boolean isAvailable ()
+    {
+        return hasAttribute ( "org.openscada.da.manual.active" );
     }
 
 }

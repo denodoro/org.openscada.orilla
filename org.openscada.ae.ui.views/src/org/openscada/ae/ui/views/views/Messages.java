@@ -81,6 +81,8 @@ public class Messages extends NLS
 
     public static String EventPoolView_Label_Format_CountEvents;
 
+    public static String EventPoolView_Label_Format_Filter;
+
     public static String EventPoolView_Label_Format_Monitors;
 
     public static String EventPoolView_Label_Format_NoMonitors;

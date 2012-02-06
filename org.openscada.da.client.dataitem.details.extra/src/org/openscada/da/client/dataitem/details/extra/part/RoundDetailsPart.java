@@ -58,7 +58,7 @@ public class RoundDetailsPart extends AbstractBaseDraw2DDetailsPart
     private PolylineConnection roundConnection;
 
     @Override
-    protected IFigure createRoot ()
+    protected IFigure createMain ()
     {
         final Figure rootFigure = new Figure ();
 
@@ -185,6 +185,8 @@ public class RoundDetailsPart extends AbstractBaseDraw2DDetailsPart
     @Override
     protected void update ()
     {
+        super.update ();
+
         if ( this.value == null )
         {
             return;
@@ -222,5 +224,11 @@ public class RoundDetailsPart extends AbstractBaseDraw2DDetailsPart
             this.roundConnection.setForegroundColor ( ColorConstants.darkGray );
         }
         this.typeLabel.setForegroundColor ( ColorConstants.black );
+    }
+
+    @Override
+    protected boolean isAvailable ()
+    {
+        return hasAttribute ( "org.openscada.da.round.active" );
     }
 }
