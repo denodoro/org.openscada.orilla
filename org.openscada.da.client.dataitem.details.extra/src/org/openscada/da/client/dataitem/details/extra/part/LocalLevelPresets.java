@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -82,11 +82,24 @@ public class LocalLevelPresets extends GenericLevelPresets
         this.item.writeAtrtibutes ( attributes );
     }
 
+    private static final String[] TAGS = new String[] { "floor", "lowlow", "low", "high", "highhigh", "ceil" };
+
     @Override
     protected boolean isAvailable ()
     {
-        // FIXME: no method for now to identit
-        return true;
+        if ( Boolean.getBoolean ( "org.openscada.da.client.dataitem.details.extra.dontFilter" ) )//$NON-NLS-1$
+        {
+            return true;
+        }
+
+        for ( final String tag : TAGS )
+        {
+            if ( hasAttribute ( String.format ( "org.openscada.da.level.%s.active", tag ) ) )//$NON-NLS-1$
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
