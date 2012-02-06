@@ -226,6 +226,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
                         final Pair<SearchType, String> result = EventHistorySearchDialog.open ( parent.getShell (), EventPoolView.this.eventsTable.getFilter () );
                         EventPoolView.this.eventsTable.setFilter ( result );
                         setFilterAction.setChecked ( EventPoolView.this.eventsTable.getFilter () != null );
+                        updateStatusBar ();
                     }
                 } );
             }
@@ -244,6 +245,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
                     {
                         EventPoolView.this.eventsTable.removeFilter ();
                         setFilterAction.setChecked ( false );
+                        updateStatusBar ();
                     }
                 } );
             }
@@ -484,7 +486,6 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
         }
     }
 
-    @SuppressWarnings ( "unchecked" )
     private void removeEvents ()
     {
         if ( this.maxNumberOfEvents <= 0 )
@@ -499,6 +500,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
 
         try
         {
+            @SuppressWarnings ( "unchecked" )
             final List<DecoratedEvent> tmpList = new ArrayList<DecoratedEvent> ( EventPoolView.this.pool );
             final List<DecoratedEvent> toRemove = new ArrayList<DecoratedEvent> ();
             Collections.sort ( tmpList, new Comparator<DecoratedEvent> () {
@@ -547,7 +549,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
         EventPoolView.this.pool.addAll ( decorateEvents ( addedOrUpdated, removed ) );
     }
 
-    private Set<DecoratedEvent> decorateEvents ( final MonitorStatusInformation[] monitors, String[] removed )
+    private Set<DecoratedEvent> decorateEvents ( final MonitorStatusInformation[] monitors, final String[] removed )
     {
         final Set<DecoratedEvent> result = new HashSet<DecoratedEvent> ();
         if ( monitors != null )
@@ -567,7 +569,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
         }
         if ( removed != null )
         {
-            for ( String monitorId : removed )
+            for ( final String monitorId : removed )
             {
                 final Set<DecoratedEvent> d = this.poolMap.get ( monitorId );
                 if ( d != null )
