@@ -69,7 +69,7 @@ public class BlockDetailsPart extends AbstractBaseDetailsPart
         label.setText ( Messages.BlockDetailsPart_Label_State );
         this.stateWidget = new Label ( parent, SWT.NONE );
         this.stateWidget.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, false, false ) );
-        this.stateWidget.setText ( "State" ); //$NON-NLS-1$
+        this.stateWidget.setText ( Messages.BlockDetailsPart_Label_State );
         this.stateWidget.setImage ( Activator.getDefault ().getImageRegistry ().get ( Activator.IMG_BLOCK_DEFAULT ) );
 
         label = new Label ( parent, SWT.NONE );
@@ -136,6 +136,11 @@ public class BlockDetailsPart extends AbstractBaseDetailsPart
         this.item.writeAtrtibutes ( attributes );
     }
 
+    protected boolean isAvailable ()
+    {
+        return isForceActive () || hasAttribute ( "org.openscada.da.master.common.block.active" );
+    }
+
     @Override
     protected void update ()
     {
@@ -176,8 +181,8 @@ public class BlockDetailsPart extends AbstractBaseDetailsPart
         }
 
         // states
-        this.reasonText.setEnabled ( value != null && !value.isBlocked () && value.isConnected () );
-        this.blockButton.setEnabled ( value != null && !value.isBlocked () && value.isConnected () );
-        this.unblockButton.setEnabled ( value != null && value.isBlocked () && value.isConnected () );
+        this.reasonText.setEnabled ( isAvailable () && value != null && !value.isBlocked () && value.isConnected () );
+        this.blockButton.setEnabled ( isAvailable () && value != null && !value.isBlocked () && value.isConnected () );
+        this.unblockButton.setEnabled ( isAvailable () && value != null && value.isBlocked () && value.isConnected () );
     }
 }

@@ -127,40 +127,26 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
     private static final Dimension TRI_DIMENSION = new Dimension ( 50, 50 );
 
     @Override
-    protected IFigure createRoot ()
+    protected IFigure createMain ()
     {
         final Figure baseFigure = new LayeredPane ();
 
-        this.rootFigure = new Layer ();
+        final Layer rootFigure = new Layer ();
 
         this.connLayer = new ConnectionLayer ();
         this.connLayer.setAntialias ( 1 );
         this.connLayer.setConnectionRouter ( ConnectionRouter.NULL );
 
         baseFigure.add ( this.connLayer );
-        baseFigure.add ( this.rootFigure );
-        baseFigure.add ( createNaPanel () );
+        baseFigure.add ( rootFigure );
 
-        this.rootFigure.setLayoutManager ( new BorderLayout () );
-        this.rootFigure.setBackgroundColor ( ColorConstants.white );
+        rootFigure.setLayoutManager ( new BorderLayout () );
+        rootFigure.setBackgroundColor ( ColorConstants.white );
 
-        this.rootFigure.add ( createArrowFigure (), BorderLayout.RIGHT );
-        this.rootFigure.add ( createEntryGrid ( this.connLayer ), BorderLayout.CENTER );
+        rootFigure.add ( createArrowFigure (), BorderLayout.RIGHT );
+        rootFigure.add ( createEntryGrid ( this.connLayer ), BorderLayout.CENTER );
 
         return baseFigure;
-    }
-
-    private IFigure createNaPanel ()
-    {
-        this.naPanel = new Figure ();
-
-        final BorderLayout layout = new BorderLayout ();
-        this.naPanel.setLayoutManager ( layout );
-
-        final Label label = new Label ();
-        label.setText ( Messages.GenericLevelPresets_Label_NotAvail_Text );
-        this.naPanel.add ( label, BorderLayout.CENTER );
-        return this.naPanel;
     }
 
     private IFigure createEntryGrid ( final Figure connLayer )
@@ -250,10 +236,6 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
     private static final Dimension RECT_DIMENSION = new Dimension ( 50, 15 );
 
     private ConnectionLayer connLayer;
-
-    private Layer rootFigure;
-
-    private Figure naPanel;
 
     public GenericLevelPresets ()
     {
@@ -371,28 +353,10 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
         }
     }
 
-    /**
-     * Check if the functionality of this tab is available or not
-     * @return <code>true</code> if the functionality can be provided,
-     * <code>false</code> otherwise
-     */
-    protected abstract boolean isAvailable ();
-
     @Override
     protected void update ()
     {
-        if ( !isAvailable () )
-        {
-            this.connLayer.setVisible ( false );
-            this.rootFigure.setVisible ( false );
-            this.naPanel.setVisible ( true );
-        }
-        else
-        {
-            this.connLayer.setVisible ( true );
-            this.rootFigure.setVisible ( true );
-            this.naPanel.setVisible ( false );
-        }
+        super.update ();
 
         if ( this.value == null )
         {

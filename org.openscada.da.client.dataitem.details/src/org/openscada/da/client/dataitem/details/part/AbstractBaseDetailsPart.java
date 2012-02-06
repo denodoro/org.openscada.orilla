@@ -91,6 +91,11 @@ public abstract class AbstractBaseDetailsPart implements DetailsPart
         return this.value.isManual ();
     }
 
+    protected boolean isForceActive ()
+    {
+        return Boolean.getBoolean ( "org.openscada.da.client.dataitem.details.extra.forceActive" ); //$NON-NLS-1$
+    }
+
     protected boolean getBooleanAttribute ( final String name )
     {
         if ( this.value.getAttributes ().containsKey ( name ) )

@@ -87,11 +87,6 @@ public class LocalLevelPresets extends GenericLevelPresets
     @Override
     protected boolean isAvailable ()
     {
-        if ( Boolean.getBoolean ( "org.openscada.da.client.dataitem.details.extra.dontFilter" ) )//$NON-NLS-1$
-        {
-            return true;
-        }
-
         for ( final String tag : TAGS )
         {
             if ( hasAttribute ( String.format ( "org.openscada.da.level.%s.active", tag ) ) )//$NON-NLS-1$
