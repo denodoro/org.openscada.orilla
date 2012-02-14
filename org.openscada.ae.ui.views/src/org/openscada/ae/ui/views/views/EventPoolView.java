@@ -218,12 +218,14 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
             @Override
             public void run ()
             {
+                // we need to open the dialog outside of the busy loop
+                setFilterAction.setChecked ( true );
+                final Pair<SearchType, String> result = EventHistorySearchDialog.open ( parent.getShell (), EventPoolView.this.eventsTable.getFilter () );
+
                 BusyIndicator.showWhile ( parent.getDisplay (), new Runnable () {
                     @Override
                     public void run ()
                     {
-                        setFilterAction.setChecked ( true );
-                        final Pair<SearchType, String> result = EventHistorySearchDialog.open ( parent.getShell (), EventPoolView.this.eventsTable.getFilter () );
                         EventPoolView.this.eventsTable.setFilter ( result );
                         setFilterAction.setChecked ( EventPoolView.this.eventsTable.getFilter () != null );
                     }
@@ -681,7 +683,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
         final Pair<SearchType, String> filter = this.eventsTable.getFilter ();
         if ( filter != null && filter.second != null && !filter.second.isEmpty () )
         {
-            labels.add ( String.format ( Messages.EventPoolView_Label_Format_Filter, filter.second ).replace ( "&", "&&" ) ); //$NON-NLS-2$ //$NON-NLS-3$
+            labels.add ( String.format ( Messages.EventPoolView_Label_Format_Filter, filter.second ).replace ( "&", "&&" ) ); //$NON-NLS-2$ 
         }
 
         return StringHelper.join ( labels, Messages.EventPoolView_Sep );
