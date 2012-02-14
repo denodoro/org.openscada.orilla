@@ -228,6 +228,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
                     {
                         EventPoolView.this.eventsTable.setFilter ( result );
                         setFilterAction.setChecked ( EventPoolView.this.eventsTable.getFilter () != null );
+                        updateStatusBar ();
                     }
                 } );
             }
@@ -246,6 +247,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
                     {
                         EventPoolView.this.eventsTable.removeFilter ();
                         setFilterAction.setChecked ( false );
+                        updateStatusBar ();
                     }
                 } );
             }
@@ -486,7 +488,6 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
         }
     }
 
-    @SuppressWarnings ( "unchecked" )
     private void removeEvents ()
     {
         if ( this.maxNumberOfEvents <= 0 )
@@ -501,6 +502,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
 
         try
         {
+            @SuppressWarnings ( "unchecked" )
             final List<DecoratedEvent> tmpList = new ArrayList<DecoratedEvent> ( EventPoolView.this.pool );
             final List<DecoratedEvent> toRemove = new ArrayList<DecoratedEvent> ();
             Collections.sort ( tmpList, new Comparator<DecoratedEvent> () {
