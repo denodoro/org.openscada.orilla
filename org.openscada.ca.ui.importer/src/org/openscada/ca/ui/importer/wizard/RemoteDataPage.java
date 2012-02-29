@@ -22,10 +22,12 @@ package org.openscada.ca.ui.importer.wizard;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.wizard.WizardPage;
@@ -65,6 +67,7 @@ public class RemoteDataPage extends WizardPage
         this.mergeController = mergeController;
     }
 
+    @Override
     public void createControl ( final Composite parent )
     {
         final Composite wrapper = new Composite ( parent, SWT.NONE );
@@ -131,6 +134,7 @@ public class RemoteDataPage extends WizardPage
         {
             getContainer ().run ( true, false, new IRunnableWithProgress () {
 
+                @Override
                 public void run ( final IProgressMonitor monitor ) throws InvocationTargetException, InterruptedException
                 {
                     OscarLoader loader;
@@ -148,16 +152,26 @@ public class RemoteDataPage extends WizardPage
                         monitor.done ();
                     }
                     RemoteDataPage.this.mergeController.setRemoteData ( loader.getData () );
-                    RemoteDataPage.this.count = -1;
+                    RemoteDataPage.this.count = count ( loader.getData () );
                 }
             } );
 
         }
         catch ( final Exception e )
         {
-            StatusManager.getManager ().handle ( new Status ( Status.ERROR, Activator.PLUGIN_ID, Messages.RemoteDataPage_StatusText, e ) );
+            StatusManager.getManager ().handle ( new Status ( IStatus.ERROR, Activator.PLUGIN_ID, Messages.RemoteDataPage_StatusText, e ) );
         }
         update ();
+    }
+
+    protected static long count ( final Map<String, Map<String, Map<String, String>>> data )
+    {
+        long count = 0;
+        for ( final Map.Entry<String, Map<String, Map<String, String>>> entry : data.entrySet () )
+        {
+            count += entry.getValue ().size ();
+        }
+        return count;
     }
 
     protected void performLoad ()
@@ -168,6 +182,7 @@ public class RemoteDataPage extends WizardPage
         {
             getContainer ().run ( true, true, new IRunnableWithProgress () {
 
+                @Override
                 public void run ( final IProgressMonitor monitor ) throws InvocationTargetException, InterruptedException
                 {
                     try
