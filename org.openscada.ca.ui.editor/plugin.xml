@@ -4,7 +4,7 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="org.openscada.ca.ui.editor.BasicEditor"
+            class="org.openscada.ca.ui.editor.config.BasicEditor"
             default="false"
             id="org.openscada.ca.ui.connection.editors.BasicEditor"
             name="Configuration Editor">

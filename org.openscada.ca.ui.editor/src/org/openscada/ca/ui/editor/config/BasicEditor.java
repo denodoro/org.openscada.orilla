@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -17,20 +17,11 @@
  * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
-package org.openscada.ca.ui.editor;
+package org.openscada.ca.ui.editor.config;
 
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 import org.eclipse.core.databinding.beans.BeansObservables;
-import org.eclipse.core.databinding.observable.Realm;
-import org.eclipse.core.databinding.observable.set.WritableSet;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.jobs.IJobChangeEvent;
-import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -52,31 +43,16 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.part.EditorPart;
-import org.openscada.ca.ConfigurationInformation;
-import org.openscada.ca.ui.editor.config.ConfigurationCellLabelProvider;
-import org.openscada.ca.ui.editor.config.ConfigurationEditorInput;
-import org.openscada.ca.ui.editor.config.ConfigurationEntry;
-import org.openscada.ca.ui.editor.config.EntryEditDialog;
-import org.openscada.ca.ui.jobs.LoadJob;
-import org.openscada.ca.ui.jobs.UpdateJob;
 import org.openscada.ui.databinding.AdapterHelper;
 
-public class BasicEditor extends EditorPart
+public class BasicEditor extends AbstractConfigurationEditor
 {
     public static final String EDITOR_ID = "org.openscada.ca.ui.connection.editors.BasicEditor";
 
     private TableViewer viewer;
-
-    private ConfigurationInformation configuration;
-
-    private final WritableSet dataSet;
-
-    private boolean dirty;
 
     private final Action deleteAction;
 
@@ -84,7 +60,6 @@ public class BasicEditor extends EditorPart
 
     public BasicEditor ()
     {
-        this.dataSet = new WritableSet ();
         this.deleteAction = new Action ( "Delete" ) {
             @Override
             public void run ()
@@ -102,31 +77,6 @@ public class BasicEditor extends EditorPart
     }
 
     @Override
-    public void doSave ( final IProgressMonitor monitor )
-    {
-        final ConfigurationEditorInput input = (ConfigurationEditorInput)getEditorInput ();
-
-        final UpdateJob updateJob = input.update ( this.configuration.getData () );
-
-        updateJob.setProgressGroup ( monitor, 2 );
-
-        updateJob.addJobChangeListener ( new JobChangeAdapter () {
-            @Override
-            public void done ( final IJobChangeEvent event )
-            {
-                performLoad ( input, monitor );
-            }
-        } );
-
-        updateJob.schedule ();
-    }
-
-    @Override
-    public void doSaveAs ()
-    {
-    }
-
-    @Override
     public void init ( final IEditorSite site, final IEditorInput input ) throws PartInitException
     {
         setPartName ( input.toString () );
@@ -139,82 +89,6 @@ public class BasicEditor extends EditorPart
         {
             throw new PartInitException ( "Failed to initialize editor", e );
         }
-    }
-
-    @Override
-    protected void setInput ( final IEditorInput input )
-    {
-        final ConfigurationEditorInput factoryInput = (ConfigurationEditorInput)input;
-
-        performLoad ( factoryInput, new NullProgressMonitor () );
-
-        super.setInput ( input );
-    }
-
-    private void performLoad ( final ConfigurationEditorInput factoryInput, final IProgressMonitor monitor )
-    {
-        final LoadJob job = factoryInput.load ();
-        job.addJobChangeListener ( new JobChangeAdapter () {
-            @Override
-            public void done ( final IJobChangeEvent event )
-            {
-                BasicEditor.this.handleSetResult ( job.getConfiguration () );
-            }
-        } );
-        job.setProgressGroup ( monitor, 2 );
-        job.schedule ();
-    }
-
-    protected void handleSetResult ( final ConfigurationInformation configurationInformation )
-    {
-        final Realm realm = this.dataSet.getRealm ();
-        realm.asyncExec ( new Runnable () {
-            @Override
-            public void run ()
-            {
-                if ( !BasicEditor.this.dataSet.isDisposed () )
-                {
-                    setResult ( configurationInformation );
-                    setDirty ( false );
-                }
-            }
-        } );
-    }
-
-    protected void setResult ( final ConfigurationInformation configurationInformation )
-    {
-        this.configuration = configurationInformation;
-        this.dataSet.setStale ( true );
-        this.dataSet.clear ();
-        this.dataSet.addAll ( convertData ( configurationInformation.getData () ) );
-        this.dataSet.setStale ( false );
-    }
-
-    private List<ConfigurationEntry> convertData ( final Map<String, String> data )
-    {
-        final List<ConfigurationEntry> result = new LinkedList<ConfigurationEntry> ();
-
-        for ( final Map.Entry<String, String> entry : data.entrySet () )
-        {
-            final ConfigurationEntry newEntry = new ConfigurationEntry ();
-            newEntry.setKey ( entry.getKey () );
-            newEntry.setValue ( entry.getValue () );
-            result.add ( newEntry );
-        }
-
-        return result;
-    }
-
-    @Override
-    public boolean isDirty ()
-    {
-        return this.dirty;
-    }
-
-    @Override
-    public boolean isSaveAsAllowed ()
-    {
-        return false;
     }
 
     @Override
@@ -280,20 +154,10 @@ public class BasicEditor extends EditorPart
         }
     }
 
-    private void updateEntry ( final ConfigurationEntry entry, final String value )
+    @Override
+    public void setFocus ()
     {
-        entry.setValue ( value );
-
-        this.configuration.getData ().put ( entry.getKey (), value );
-
-        setDirty ( true );
-    }
-
-    private void insertEntry ( final ConfigurationEntry entry )
-    {
-        this.dataSet.add ( entry );
-        this.configuration.getData ().put ( entry.getKey (), entry.getValue () );
-        setDirty ( true );
+        this.viewer.getControl ().setFocus ();
     }
 
     protected void handleInsert ()
@@ -306,13 +170,6 @@ public class BasicEditor extends EditorPart
             entry.setValue ( dlg.getValue () );
             insertEntry ( entry );
         }
-    }
-
-    private void deleteEntry ( final ConfigurationEntry entry )
-    {
-        this.dataSet.remove ( entry );
-        this.configuration.getData ().remove ( entry.getKey () );
-        setDirty ( true );
     }
 
     protected void handleDelete ()
@@ -335,18 +192,6 @@ public class BasicEditor extends EditorPart
                 deleteEntry ( entry );
             }
         }
-    }
-
-    private void setDirty ( final boolean b )
-    {
-        this.dirty = b;
-        firePropertyChange ( IEditorPart.PROP_DIRTY );
-    }
-
-    @Override
-    public void setFocus ()
-    {
-        this.viewer.getControl ().setFocus ();
     }
 
     // editor actions
