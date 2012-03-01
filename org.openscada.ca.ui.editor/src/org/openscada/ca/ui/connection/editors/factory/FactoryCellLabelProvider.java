@@ -23,7 +23,7 @@ import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
-import org.openscada.ca.ui.connection.data.ConfigurationDescriptor;
+import org.openscada.ca.ui.data.ConfigurationDescriptor;
 
 final class FactoryCellLabelProvider extends StyledCellLabelProvider
 {

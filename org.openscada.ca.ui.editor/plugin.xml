@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="org.openscada.ca.ui.connection.editors.BasicEditor"
+            default="false"
+            id="org.openscada.ca.ui.connection.editors.BasicEditor"
+            name="Configuration Editor">
+      </editor>
+      <editor
+            class="org.openscada.ca.ui.connection.editors.factory.FactoryEditor"
+            default="false"
+            id="org.openscada.ca.ui.connection.editors.FactoryEditor"
+            name="Factory Editor">
+      </editor>
+   </extension>
+</plugin>

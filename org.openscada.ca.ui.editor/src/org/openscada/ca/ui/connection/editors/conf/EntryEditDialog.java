@@ -31,7 +31,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import org.openscada.ca.ui.connection.Activator;
+import org.openscada.ca.ui.editor.internal.Activator;
 
 public class EntryEditDialog extends TrayDialog
 {

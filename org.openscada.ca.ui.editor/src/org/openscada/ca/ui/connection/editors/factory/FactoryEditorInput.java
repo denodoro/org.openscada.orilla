@@ -23,7 +23,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
 import org.openscada.ca.connection.provider.ConnectionService;
-import org.openscada.ca.ui.connection.data.LoadFactoryJob;
+import org.openscada.ca.ui.jobs.LoadFactoryJob;
 
 public class FactoryEditorInput implements IEditorInput
 {

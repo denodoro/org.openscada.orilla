@@ -41,9 +41,9 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 import org.openscada.ca.ConfigurationInformation;
 import org.openscada.ca.FactoryInformation;
-import org.openscada.ca.ui.connection.EditorHelper;
-import org.openscada.ca.ui.connection.data.ConfigurationDescriptor;
-import org.openscada.ca.ui.connection.data.LoadFactoryJob;
+import org.openscada.ca.ui.data.ConfigurationDescriptor;
+import org.openscada.ca.ui.editor.EditorHelper;
+import org.openscada.ca.ui.jobs.LoadFactoryJob;
 
 public class FactoryEditor extends EditorPart
 {

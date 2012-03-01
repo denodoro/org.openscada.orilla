@@ -24,8 +24,8 @@ import java.util.Map;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
-import org.openscada.ca.ui.connection.data.LoadJob;
-import org.openscada.ca.ui.connection.data.UpdateJob;
+import org.openscada.ca.ui.jobs.LoadJob;
+import org.openscada.ca.ui.jobs.UpdateJob;
 
 public class ConfigurationEditorInput implements IEditorInput
 {

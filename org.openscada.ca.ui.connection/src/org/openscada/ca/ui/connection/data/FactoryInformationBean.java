@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -23,6 +23,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import org.eclipse.core.databinding.observable.set.WritableSet;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.swt.widgets.Display;
@@ -30,6 +31,7 @@ import org.openscada.ca.ConfigurationInformation;
 import org.openscada.ca.FactoryInformation;
 import org.openscada.ca.connection.provider.ConnectionService;
 import org.openscada.ca.ui.connection.Activator;
+import org.openscada.ca.ui.data.FactoryEditorSourceInformation;
 import org.openscada.core.client.Connection;
 import org.openscada.core.client.ConnectionState;
 import org.openscada.core.client.ConnectionStateListener;
@@ -38,7 +40,7 @@ import org.openscada.utils.beans.AbstractPropertyChange;
 import org.openscada.utils.concurrent.FutureListener;
 import org.openscada.utils.concurrent.NotifyFuture;
 
-public class FactoryInformationBean extends AbstractPropertyChange implements ConnectionStateListener
+public class FactoryInformationBean extends AbstractPropertyChange implements ConnectionStateListener, IAdaptable
 {
     public static final String PROP_DATA = "factoryInformation";
 
@@ -93,6 +95,7 @@ public class FactoryInformationBean extends AbstractPropertyChange implements Co
         final NotifyFuture<FactoryInformation> task = this.service.getConnection ().getFactoryWithData ( this.factoryInformation.getId () );
         task.addListener ( new DisplayFutureListener<FactoryInformation> ( Display.getDefault (), new FutureListener<FactoryInformation> () {
 
+            @Override
             public void complete ( final Future<FactoryInformation> future )
             {
                 try
@@ -155,6 +158,7 @@ public class FactoryInformationBean extends AbstractPropertyChange implements Co
         this.service.getConnection ().removeConnectionStateListener ( this );
     }
 
+    @Override
     public void stateChange ( final Connection connection, final ConnectionState state, final Throwable error )
     {
         if ( state == ConnectionState.BOUND )
@@ -168,4 +172,14 @@ public class FactoryInformationBean extends AbstractPropertyChange implements Co
         }
     }
 
+    @SuppressWarnings ( "rawtypes" )
+    @Override
+    public Object getAdapter ( final Class adapter )
+    {
+        if ( adapter == FactoryEditorSourceInformation.class )
+        {
+            return new FactoryEditorSourceInformation ( this.service, this.factoryInformation.getId () );
+        }
+        return null;
+    }
 }

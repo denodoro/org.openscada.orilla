@@ -17,7 +17,7 @@
  * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
-package org.openscada.ca.ui.connection;
+package org.openscada.ca.ui.editor;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -30,13 +30,14 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
-import org.openscada.ca.ui.connection.data.ConfigurationDescriptor;
-import org.openscada.ca.ui.connection.data.ConfigurationInformationBean;
-import org.openscada.ca.ui.connection.data.FactoryInformationBean;
 import org.openscada.ca.ui.connection.editors.BasicEditor;
 import org.openscada.ca.ui.connection.editors.conf.ConfigurationEditorInput;
 import org.openscada.ca.ui.connection.editors.factory.FactoryEditor;
 import org.openscada.ca.ui.connection.editors.factory.FactoryEditorInput;
+import org.openscada.ca.ui.data.ConfigurationEditorSourceInformation;
+import org.openscada.ca.ui.data.FactoryEditorSourceInformation;
+import org.openscada.ca.ui.editor.internal.Activator;
+import org.openscada.ui.databinding.AdapterHelper;
 
 public class EditorHelper
 {
@@ -46,27 +47,25 @@ public class EditorHelper
         {
             final Iterator<?> i = ( (IStructuredSelection)selection ).iterator ();
             final List<IEditorInput> result = new ArrayList<IEditorInput> ();
+
             while ( i.hasNext () )
             {
                 final Object o = i.next ();
-                if ( o instanceof ConfigurationInformationBean )
+
+                final FactoryEditorSourceInformation factory = AdapterHelper.adapt ( o, FactoryEditorSourceInformation.class );
+                if ( factory != null )
                 {
-                    final ConfigurationInformationBean bean = (ConfigurationInformationBean)o;
-                    final ConfigurationEditorInput input = new ConfigurationEditorInput ( bean.getService ().getConnection ().getConnectionInformation ().toString (), bean.getConfigurationInformation ().getFactoryId (), bean.getConfigurationInformation ().getId () );
+                    final FactoryEditorInput input = new FactoryEditorInput ( factory.getConnection (), factory.getFactoryId () );
                     result.add ( input );
                 }
-                else if ( o instanceof FactoryInformationBean )
+
+                final ConfigurationEditorSourceInformation config = AdapterHelper.adapt ( o, ConfigurationEditorSourceInformation.class );
+                if ( config != null )
                 {
-                    final FactoryInformationBean bean = (FactoryInformationBean)o;
-                    final FactoryEditorInput input = new FactoryEditorInput ( bean.getService (), bean.getFactoryInformation ().getId () );
+                    final ConfigurationEditorInput input = new ConfigurationEditorInput ( config.getConnectionId (), config.getFactoryId (), config.getConfigurationId () );
                     result.add ( input );
                 }
-                else if ( o instanceof ConfigurationDescriptor )
-                {
-                    final ConfigurationDescriptor cfg = (ConfigurationDescriptor)o;
-                    final ConfigurationEditorInput input = new ConfigurationEditorInput ( cfg.getConnectionUri (), cfg.getConfigurationInformation ().getFactoryId (), cfg.getConfigurationInformation ().getId () );
-                    result.add ( input );
-                }
+
             }
             return result.toArray ( new IEditorInput[0] );
         }

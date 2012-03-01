@@ -14,7 +14,16 @@ Import-Package: com.google.gson;version="1.4.0",
  org.codehaus.jackson.map;version="1.5.0",
  org.openscada.ca;version="0.15.0",
  org.openscada.ca.client;version="0.15.0",
+ org.openscada.ca.connection.provider;version="0.15.0",
+ org.openscada.core;version="0.18.0",
  org.openscada.core.client;version="0.15.0",
+ org.openscada.core.connection.provider;version="0.18.0",
  org.openscada.utils.concurrent;version="0.15.0",
  org.slf4j;version="1.5.8"
-Export-Package: org.openscada.ca.ui.util;version="0.17.0";uses:="org.eclipse.osgi.util,org.eclipse.core.runtime,org.openscada.ca.client"
+Export-Package: org.openscada.ca.ui.data;version="0.18.0",
+ org.openscada.ca.ui.jobs;version="0.18.0";
+  uses:="org.openscada.ca.connection.provider,
+   org.eclipse.core.runtime,
+   org.eclipse.core.runtime.jobs,
+   org.openscada.ca",
+ org.openscada.ca.ui.util;version="0.18.0";uses:="org.eclipse.osgi.util,org.eclipse.core.runtime,org.openscada.ca.client"

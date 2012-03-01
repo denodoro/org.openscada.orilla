@@ -58,12 +58,12 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 import org.openscada.ca.ConfigurationInformation;
-import org.openscada.ca.ui.connection.data.LoadJob;
-import org.openscada.ca.ui.connection.data.UpdateJob;
 import org.openscada.ca.ui.connection.editors.conf.ConfigurationCellLabelProvider;
 import org.openscada.ca.ui.connection.editors.conf.ConfigurationEditorInput;
 import org.openscada.ca.ui.connection.editors.conf.ConfigurationEntry;
 import org.openscada.ca.ui.connection.editors.conf.EntryEditDialog;
+import org.openscada.ca.ui.jobs.LoadJob;
+import org.openscada.ca.ui.jobs.UpdateJob;
 import org.openscada.ui.databinding.AdapterHelper;
 
 public class BasicEditor extends EditorPart

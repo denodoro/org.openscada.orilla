@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -20,12 +20,14 @@
 package org.openscada.ca.ui.connection;
 
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.navigator.ICommonActionConstants;
 import org.eclipse.ui.navigator.ICommonActionExtensionSite;
 import org.eclipse.ui.navigator.ICommonViewerSite;
 import org.eclipse.ui.navigator.ICommonViewerWorkbenchSite;
+import org.openscada.ca.ui.editor.EditorHelper;
 
 public class CommonActionProvider extends org.eclipse.ui.navigator.CommonActionProvider
 {
@@ -40,7 +42,7 @@ public class CommonActionProvider extends org.eclipse.ui.navigator.CommonActionP
         if ( viewSite instanceof ICommonViewerWorkbenchSite )
         {
             final ICommonViewerWorkbenchSite workbenchSite = (ICommonViewerWorkbenchSite)viewSite;
-            this.openAction = new Action ( "Open", Action.AS_PUSH_BUTTON ) {
+            this.openAction = new Action ( "Open", IAction.AS_PUSH_BUTTON ) {
                 @Override
                 public void run ()
                 {
