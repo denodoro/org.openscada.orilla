@@ -4,13 +4,13 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="org.openscada.ca.ui.connection.editors.BasicEditor"
+            class="org.openscada.ca.ui.editor.BasicEditor"
             default="false"
             id="org.openscada.ca.ui.connection.editors.BasicEditor"
             name="Configuration Editor">
       </editor>
       <editor
-            class="org.openscada.ca.ui.connection.editors.factory.FactoryEditor"
+            class="org.openscada.ca.ui.editor.factory.FactoryEditor"
             default="false"
             id="org.openscada.ca.ui.connection.editors.FactoryEditor"
             name="Factory Editor">

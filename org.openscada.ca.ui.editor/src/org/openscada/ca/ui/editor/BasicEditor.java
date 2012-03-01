@@ -17,7 +17,7 @@
  * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
-package org.openscada.ca.ui.connection.editors;
+package org.openscada.ca.ui.editor;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -58,10 +58,10 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 import org.openscada.ca.ConfigurationInformation;
-import org.openscada.ca.ui.connection.editors.config.ConfigurationCellLabelProvider;
-import org.openscada.ca.ui.connection.editors.config.ConfigurationEditorInput;
-import org.openscada.ca.ui.connection.editors.config.ConfigurationEntry;
-import org.openscada.ca.ui.connection.editors.config.EntryEditDialog;
+import org.openscada.ca.ui.editor.config.ConfigurationCellLabelProvider;
+import org.openscada.ca.ui.editor.config.ConfigurationEditorInput;
+import org.openscada.ca.ui.editor.config.ConfigurationEntry;
+import org.openscada.ca.ui.editor.config.EntryEditDialog;
 import org.openscada.ca.ui.jobs.LoadJob;
 import org.openscada.ca.ui.jobs.UpdateJob;
 import org.openscada.ui.databinding.AdapterHelper;

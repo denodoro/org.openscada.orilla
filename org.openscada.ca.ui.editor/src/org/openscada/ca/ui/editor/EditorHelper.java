@@ -30,12 +30,11 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
-import org.openscada.ca.ui.connection.editors.BasicEditor;
-import org.openscada.ca.ui.connection.editors.config.ConfigurationEditorInput;
-import org.openscada.ca.ui.connection.editors.factory.FactoryEditor;
-import org.openscada.ca.ui.connection.editors.factory.FactoryEditorInput;
 import org.openscada.ca.ui.data.ConfigurationEditorSourceInformation;
 import org.openscada.ca.ui.data.FactoryEditorSourceInformation;
+import org.openscada.ca.ui.editor.config.ConfigurationEditorInput;
+import org.openscada.ca.ui.editor.factory.FactoryEditor;
+import org.openscada.ca.ui.editor.factory.FactoryEditorInput;
 import org.openscada.ca.ui.editor.internal.Activator;
 import org.openscada.ui.databinding.AdapterHelper;
 
