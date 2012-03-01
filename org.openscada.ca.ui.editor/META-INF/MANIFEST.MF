@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: openSCADA CA UI Editor
+Bundle-SymbolicName: org.openscada.ca.ui.editor
+Bundle-Version: 0.18.0.qualifier
+Bundle-Activator: org.openscada.ca.ui.editor.Activator
+Bundle-Vendor: TH4 SYSTEMS GmbH
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy
