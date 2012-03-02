@@ -32,8 +32,8 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.openscada.ca.ui.data.ConfigurationEditorSourceInformation;
 import org.openscada.ca.ui.data.FactoryEditorSourceInformation;
-import org.openscada.ca.ui.editor.config.BasicEditor;
 import org.openscada.ca.ui.editor.config.ConfigurationEditorInput;
+import org.openscada.ca.ui.editor.config.MultiConfigurationEditor;
 import org.openscada.ca.ui.editor.factory.FactoryEditor;
 import org.openscada.ca.ui.editor.factory.FactoryEditorInput;
 import org.openscada.ca.ui.editor.internal.Activator;
@@ -87,7 +87,7 @@ public class EditorHelper
             {
                 if ( input instanceof ConfigurationEditorInput )
                 {
-                    page.openEditor ( input, BasicEditor.EDITOR_ID, true );
+                    page.openEditor ( input, MultiConfigurationEditor.EDITOR_ID, true );
                 }
                 else if ( input instanceof FactoryEditorInput )
                 {

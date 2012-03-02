@@ -1,34 +1,24 @@
 package org.openscada.ca.ui.editor.config;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import org.eclipse.core.databinding.observable.Realm;
-import org.eclipse.core.databinding.observable.set.WritableSet;
+import org.eclipse.core.databinding.observable.value.IObservableValue;
+import org.eclipse.core.databinding.observable.value.IValueChangeListener;
+import org.eclipse.core.databinding.observable.value.ValueChangeEvent;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.jobs.IJobChangeEvent;
-import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.part.EditorPart;
-import org.openscada.ca.ConfigurationInformation;
-import org.openscada.ca.ui.jobs.LoadJob;
-import org.openscada.ca.ui.jobs.UpdateJob;
 
 public abstract class AbstractConfigurationEditor extends EditorPart
 {
 
-    protected final WritableSet dataSet;
+    private IObservableValue dirtyValue;
 
-    private ConfigurationInformation configuration;
+    private final boolean nested;
 
-    private boolean dirty;
-
-    public AbstractConfigurationEditor ()
+    public AbstractConfigurationEditor ( final boolean nested )
     {
-        this.dataSet = new WritableSet ();
+        this.nested = nested;
     }
 
     @Override
@@ -40,21 +30,8 @@ public abstract class AbstractConfigurationEditor extends EditorPart
     @Override
     public void doSave ( final IProgressMonitor monitor )
     {
-        final ConfigurationEditorInput input = (ConfigurationEditorInput)getEditorInput ();
-
-        final UpdateJob updateJob = input.update ( this.configuration.getData () );
-
-        updateJob.setProgressGroup ( monitor, 2 );
-
-        updateJob.addJobChangeListener ( new JobChangeAdapter () {
-            @Override
-            public void done ( final IJobChangeEvent event )
-            {
-                performLoad ( input, monitor );
-            }
-        } );
-
-        updateJob.schedule ();
+        final ConfigurationEditorInput input = getEditorInput ();
+        input.performSave ( monitor );
     }
 
     @Override
@@ -62,103 +39,65 @@ public abstract class AbstractConfigurationEditor extends EditorPart
     {
     }
 
-    private void performLoad ( final ConfigurationEditorInput factoryInput, final IProgressMonitor monitor )
-    {
-        final LoadJob job = factoryInput.load ();
-        job.addJobChangeListener ( new JobChangeAdapter () {
-            @Override
-            public void done ( final IJobChangeEvent event )
-            {
-                AbstractConfigurationEditor.this.handleSetResult ( job.getConfiguration () );
-            }
-        } );
-        job.setProgressGroup ( monitor, 2 );
-        job.schedule ();
-    }
-
-    protected void handleSetResult ( final ConfigurationInformation configurationInformation )
-    {
-        final Realm realm = this.dataSet.getRealm ();
-        realm.asyncExec ( new Runnable () {
-            @Override
-            public void run ()
-            {
-                if ( !AbstractConfigurationEditor.this.dataSet.isDisposed () )
-                {
-                    setResult ( configurationInformation );
-                    setDirty ( false );
-                }
-            }
-        } );
-    }
-
     @Override
     public boolean isDirty ()
     {
-        return this.dirty;
-    }
+        if ( this.dirtyValue == null )
+        {
+            return false;
+        }
 
-    private void setDirty ( final boolean b )
-    {
-        this.dirty = b;
-        firePropertyChange ( IEditorPart.PROP_DIRTY );
-    }
+        final Object value = this.dirtyValue.getValue ();
+        if ( ! ( value instanceof Boolean ) )
+        {
+            return false;
+        }
 
-    protected void setResult ( final ConfigurationInformation configurationInformation )
-    {
-        this.configuration = configurationInformation;
-        this.dataSet.setStale ( true );
-        this.dataSet.clear ();
-        this.dataSet.addAll ( convertData ( configurationInformation.getData () ) );
-        this.dataSet.setStale ( false );
+        return (Boolean)value;
     }
 
     @Override
     protected void setInput ( final IEditorInput input )
     {
-        final ConfigurationEditorInput factoryInput = (ConfigurationEditorInput)input;
+        final ConfigurationEditorInput configurationInput = (ConfigurationEditorInput)input;
 
-        performLoad ( factoryInput, new NullProgressMonitor () );
+        if ( !this.nested )
+        {
+            configurationInput.performLoad ( new NullProgressMonitor () );
+        }
+
+        this.dirtyValue = configurationInput.getDirtyValue ();
+        this.dirtyValue.addValueChangeListener ( new IValueChangeListener () {
+
+            @Override
+            public void handleValueChange ( final ValueChangeEvent event )
+            {
+                firePropertyChange ( IEditorPart.PROP_DIRTY );
+            }
+        } );
 
         super.setInput ( input );
     }
 
-    private List<ConfigurationEntry> convertData ( final Map<String, String> data )
+    @Override
+    public ConfigurationEditorInput getEditorInput ()
     {
-        final List<ConfigurationEntry> result = new LinkedList<ConfigurationEntry> ();
-
-        for ( final Map.Entry<String, String> entry : data.entrySet () )
-        {
-            final ConfigurationEntry newEntry = new ConfigurationEntry ();
-            newEntry.setKey ( entry.getKey () );
-            newEntry.setValue ( entry.getValue () );
-            result.add ( newEntry );
-        }
-
-        return result;
+        return (ConfigurationEditorInput)super.getEditorInput ();
     }
 
-    protected void updateEntry ( final ConfigurationEntry entry, final String value )
+    public void updateEntry ( final ConfigurationEntry entry, final String value )
     {
-        entry.setValue ( value );
-
-        this.configuration.getData ().put ( entry.getKey (), value );
-
-        setDirty ( true );
+        getEditorInput ().updateEntry ( entry, value );
     }
 
-    protected void insertEntry ( final ConfigurationEntry entry )
+    public void insertEntry ( final ConfigurationEntry entry )
     {
-        this.dataSet.add ( entry );
-        this.configuration.getData ().put ( entry.getKey (), entry.getValue () );
-        setDirty ( true );
+        getEditorInput ().insertEntry ( entry );
     }
 
-    protected void deleteEntry ( final ConfigurationEntry entry )
+    public void deleteEntry ( final ConfigurationEntry entry )
     {
-        this.dataSet.remove ( entry );
-        this.configuration.getData ().remove ( entry.getKey () );
-        setDirty ( true );
+        getEditorInput ().deleteEntry ( entry );
     }
 
 }

@@ -10,6 +10,12 @@
             name="Configuration Editor">
       </editor>
       <editor
+            class="org.openscada.ca.ui.editor.config.MultiConfigurationEditor"
+            default="false"
+            id="org.openscada.ca.ui.connection.editors.MultiConfigurationEditor"
+            name="Multi Configuration Editor">
+      </editor>
+      <editor
             class="org.openscada.ca.ui.editor.factory.FactoryEditor"
             default="false"
             id="org.openscada.ca.ui.connection.editors.FactoryEditor"

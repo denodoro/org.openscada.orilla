@@ -60,6 +60,12 @@ public class BasicEditor extends AbstractConfigurationEditor
 
     public BasicEditor ()
     {
+        this ( false );
+    }
+
+    public BasicEditor ( final boolean nested )
+    {
+        super ( nested );
         this.deleteAction = new Action ( "Delete" ) {
             @Override
             public void run ()
@@ -92,6 +98,18 @@ public class BasicEditor extends AbstractConfigurationEditor
     }
 
     @Override
+    protected void setInput ( final IEditorInput input )
+    {
+        super.setInput ( input );
+
+        if ( getEditorInput () != null && this.viewer != null )
+        {
+            this.viewer.setInput ( getEditorInput ().getDataSet () );
+            this.viewer.setLabelProvider ( new ConfigurationCellLabelProvider ( BeansObservables.observeMaps ( getEditorInput ().getDataSet (), new String[] { "key", "value" } ) ) );
+        }
+    }
+
+    @Override
     public void createPartControl ( final Composite parent )
     {
         this.viewer = new TableViewer ( parent );
@@ -114,8 +132,11 @@ public class BasicEditor extends AbstractConfigurationEditor
         this.viewer.getTable ().setHeaderVisible ( true );
 
         this.viewer.setContentProvider ( new ObservableSetContentProvider () );
-        this.viewer.setInput ( this.dataSet );
-        this.viewer.setLabelProvider ( new ConfigurationCellLabelProvider ( BeansObservables.observeMaps ( this.dataSet, new String[] { "key", "value" } ) ) );
+        if ( getEditorInput () != null )
+        {
+            this.viewer.setInput ( getEditorInput ().getDataSet () );
+            this.viewer.setLabelProvider ( new ConfigurationCellLabelProvider ( BeansObservables.observeMaps ( getEditorInput ().getDataSet (), new String[] { "key", "value" } ) ) );
+        }
 
         this.viewer.addDoubleClickListener ( new IDoubleClickListener () {
 
