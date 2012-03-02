@@ -213,4 +213,9 @@ public class ConfigurationEditorInput implements IEditorInput
     {
         return this.dirtyValue;
     }
+
+    public String getFactoryId ()
+    {
+        return this.factoryId;
+    }
 }
