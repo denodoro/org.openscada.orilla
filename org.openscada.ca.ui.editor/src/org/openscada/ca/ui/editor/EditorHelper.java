@@ -32,10 +32,10 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.openscada.ca.ui.data.ConfigurationEditorSourceInformation;
 import org.openscada.ca.ui.data.FactoryEditorSourceInformation;
-import org.openscada.ca.ui.editor.config.ConfigurationEditorInput;
 import org.openscada.ca.ui.editor.config.MultiConfigurationEditor;
 import org.openscada.ca.ui.editor.factory.FactoryEditor;
-import org.openscada.ca.ui.editor.factory.FactoryEditorInput;
+import org.openscada.ca.ui.editor.input.ConfigurationEditorInput;
+import org.openscada.ca.ui.editor.input.FactoryEditorInput;
 import org.openscada.ca.ui.editor.internal.Activator;
 import org.openscada.ui.databinding.AdapterHelper;
 

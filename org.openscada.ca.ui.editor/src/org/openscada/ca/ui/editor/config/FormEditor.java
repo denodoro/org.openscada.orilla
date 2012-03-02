@@ -69,7 +69,7 @@ public class FormEditor extends AbstractConfigurationEditor
     @Override
     public void createPartControl ( final Composite parent )
     {
-        this.form.createFormPart ( parent );
+        this.form.createFormPart ( parent, getEditorInput () );
     }
 
 }

@@ -24,4 +24,10 @@ Import-Package: org.openscada.ca;version="0.18.0",
  org.openscada.core.connection.provider;version="0.18.0",
  org.openscada.ui.databinding;version="0.17.0",
  org.openscada.utils.beans;version="0.17.0"
-Export-Package: org.openscada.ca.ui.editor;version="0.18.0"
+Export-Package: org.openscada.ca.ui.editor;version="0.18.0";
+  uses:="org.eclipse.core.runtime,
+   org.eclipse.ui,
+   org.eclipse.jface.viewers,
+   org.openscada.ca.ui.editor.config.form",
+ org.openscada.ca.ui.editor.config.form;version="0.18.0";uses:="org.eclipse.swt.widgets",
+ org.openscada.ca.ui.editor.input;version="0.18.0"

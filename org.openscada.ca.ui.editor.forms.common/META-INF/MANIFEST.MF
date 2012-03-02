@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: CA Common Editor Forms
+Bundle-SymbolicName: org.openscada.ca.ui.editor.forms.common;singleton:=true
+Bundle-Version: 0.18.0.qualifier
+Bundle-Activator: org.openscada.ca.ui.editor.forms.common.Activator
+Bundle-Vendor: TH4 SYSTEMS GmbH
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.openscada.ca.ui.editor;bundle-version="0.18.0",
+ org.eclipse.ui.forms;bundle-version="3.5.100",
+ org.eclipse.core.databinding;bundle-version="1.4.0",
+ org.eclipse.core.databinding.observable;bundle-version="1.4.0",
+ org.eclipse.jface.databinding;bundle-version="1.5.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy

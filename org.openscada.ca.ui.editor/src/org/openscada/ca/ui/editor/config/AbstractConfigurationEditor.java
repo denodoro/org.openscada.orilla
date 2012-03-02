@@ -27,6 +27,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.part.EditorPart;
+import org.openscada.ca.ui.editor.input.ConfigurationEditorInput;
 
 public abstract class AbstractConfigurationEditor extends EditorPart
 {
@@ -104,19 +105,19 @@ public abstract class AbstractConfigurationEditor extends EditorPart
         return (ConfigurationEditorInput)super.getEditorInput ();
     }
 
-    public void updateEntry ( final ConfigurationEntry entry, final String value )
+    public void updateEntry ( final String oldKey, final String key, final String value )
     {
-        getEditorInput ().updateEntry ( entry, value );
+        getEditorInput ().updateEntry ( oldKey, key, value );
     }
 
-    public void insertEntry ( final ConfigurationEntry entry )
+    public void insertEntry ( final String key, final String value )
     {
-        getEditorInput ().insertEntry ( entry );
+        getEditorInput ().insertEntry ( key, value );
     }
 
-    public void deleteEntry ( final ConfigurationEntry entry )
+    public void deleteEntry ( final String key )
     {
-        getEditorInput ().deleteEntry ( entry );
+        getEditorInput ().deleteEntry ( key );
     }
 
 }

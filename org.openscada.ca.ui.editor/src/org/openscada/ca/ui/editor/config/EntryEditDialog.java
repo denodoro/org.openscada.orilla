@@ -19,6 +19,8 @@
 
 package org.openscada.ca.ui.editor.config;
 
+import java.util.Map;
+
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.TrayDialog;
 import org.eclipse.swt.SWT;
@@ -44,7 +46,7 @@ public class EntryEditDialog extends TrayDialog
 
     private boolean createMode;
 
-    public EntryEditDialog ( final Shell shell, final ConfigurationEntry entry )
+    public EntryEditDialog ( final Shell shell, final Map.Entry<?, ?> entry )
     {
         super ( shell );
 
@@ -57,8 +59,8 @@ public class EntryEditDialog extends TrayDialog
         }
         else
         {
-            this.entry.setKey ( entry.getKey () );
-            this.entry.setValue ( entry.getValue () );
+            this.entry.setKey ( "" + entry.getKey () );
+            this.entry.setValue ( "" + entry.getValue () );
             this.createMode = false;
         }
     }

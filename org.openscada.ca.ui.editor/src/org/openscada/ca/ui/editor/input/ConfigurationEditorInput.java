@@ -17,14 +17,15 @@
  * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
-package org.openscada.ca.ui.editor.config;
+package org.openscada.ca.ui.editor.input;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.core.databinding.observable.ChangeEvent;
+import org.eclipse.core.databinding.observable.IChangeListener;
 import org.eclipse.core.databinding.observable.Realm;
-import org.eclipse.core.databinding.observable.set.WritableSet;
+import org.eclipse.core.databinding.observable.map.WritableMap;
 import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
@@ -45,9 +46,7 @@ public class ConfigurationEditorInput implements IEditorInput
 
     private final String connectionUri;
 
-    private ConfigurationInformation configuration;
-
-    private final WritableSet dataSet = new WritableSet ();
+    private final WritableMap dataMap = new WritableMap ();
 
     private final WritableValue dirtyValue = new WritableValue ( false, Boolean.class );
 
@@ -56,6 +55,20 @@ public class ConfigurationEditorInput implements IEditorInput
         this.connectionUri = connectionUri;
         this.factoryId = factoryId;
         this.configurationId = configurationId;
+
+        this.dataMap.addChangeListener ( new IChangeListener () {
+
+            @Override
+            public void handleChange ( final ChangeEvent event )
+            {
+                ConfigurationEditorInput.this.dirtyValue.setValue ( true );
+            }
+        } );
+    }
+
+    public String getConfigurationId ()
+    {
+        return this.configurationId;
     }
 
     @Override
@@ -115,39 +128,24 @@ public class ConfigurationEditorInput implements IEditorInput
         job.schedule ();
     }
 
-    private List<ConfigurationEntry> convertData ( final Map<String, String> data )
-    {
-        final List<ConfigurationEntry> result = new LinkedList<ConfigurationEntry> ();
-
-        for ( final Map.Entry<String, String> entry : data.entrySet () )
-        {
-            final ConfigurationEntry newEntry = new ConfigurationEntry ();
-            newEntry.setKey ( entry.getKey () );
-            newEntry.setValue ( entry.getValue () );
-            result.add ( newEntry );
-        }
-
-        return result;
-    }
-
     protected void setResult ( final ConfigurationInformation configurationInformation )
     {
-        this.configuration = configurationInformation;
-        this.dataSet.setStale ( true );
-        this.dataSet.clear ();
-        this.dataSet.addAll ( convertData ( configurationInformation.getData () ) );
-        this.dataSet.setStale ( false );
+        this.dataMap.setStale ( true );
+        this.dataMap.clear ();
+        this.dataMap.putAll ( configurationInformation.getData () );
+        this.dataMap.setStale ( false );
+
         this.dirtyValue.setValue ( false );
     }
 
     protected void handleSetResult ( final ConfigurationInformation configurationInformation )
     {
-        final Realm realm = this.dataSet.getRealm ();
+        final Realm realm = this.dataMap.getRealm ();
         realm.asyncExec ( new Runnable () {
             @Override
             public void run ()
             {
-                if ( !ConfigurationEditorInput.this.dataSet.isDisposed () )
+                if ( !ConfigurationEditorInput.this.dataMap.isDisposed () )
                 {
                     setResult ( configurationInformation );
                 }
@@ -155,9 +153,11 @@ public class ConfigurationEditorInput implements IEditorInput
         } );
     }
 
+    @SuppressWarnings ( "unchecked" )
     public void performSave ( final IProgressMonitor monitor )
     {
-        final UpdateJob updateJob = update ( this.configuration.getData () );
+        // provide a copy so that it can be accessed outside the realm
+        final UpdateJob updateJob = update ( new HashMap<String, String> ( this.dataMap ) );
 
         updateJob.setProgressGroup ( monitor, 2 );
 
@@ -182,31 +182,31 @@ public class ConfigurationEditorInput implements IEditorInput
         return new UpdateJob ( this.connectionUri, this.factoryId, this.configurationId, data );
     }
 
-    public void updateEntry ( final ConfigurationEntry entry, final String value )
+    public void updateEntry ( final String oldKey, final String key, final String value )
     {
-        entry.setValue ( value );
+        this.dataMap.setStale ( true );
+        this.dataMap.remove ( oldKey );
+        this.dataMap.put ( key, value );
+        this.dataMap.setStale ( false );
 
-        this.configuration.getData ().put ( entry.getKey (), value );
         this.dirtyValue.setValue ( true );
     }
 
-    public void insertEntry ( final ConfigurationEntry entry )
+    public void insertEntry ( final String key, final String value )
     {
-        this.dataSet.add ( entry );
-        this.configuration.getData ().put ( entry.getKey (), entry.getValue () );
+        this.dataMap.put ( key, value );
         this.dirtyValue.setValue ( true );
     }
 
-    public void deleteEntry ( final ConfigurationEntry entry )
+    public void deleteEntry ( final String key )
     {
-        this.dataSet.remove ( entry );
-        this.configuration.getData ().remove ( entry.getKey () );
+        this.dataMap.remove ( key );
         this.dirtyValue.setValue ( true );
     }
 
-    public WritableSet getDataSet ()
+    public WritableMap getDataMap ()
     {
-        return this.dataSet;
+        return this.dataMap;
     }
 
     public WritableValue getDirtyValue ()

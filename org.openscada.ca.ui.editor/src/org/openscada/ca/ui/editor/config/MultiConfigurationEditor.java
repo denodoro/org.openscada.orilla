@@ -8,6 +8,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.statushandlers.StatusManager;
 import org.openscada.ca.ui.editor.ConfigurationFormInformation;
+import org.openscada.ca.ui.editor.input.ConfigurationEditorInput;
 import org.openscada.ca.ui.editor.internal.Activator;
 
 public class MultiConfigurationEditor extends MultiPageEditorPart
@@ -20,10 +21,8 @@ public class MultiConfigurationEditor extends MultiPageEditorPart
     {
         try
         {
-            addPage ( 0, new BasicEditor (), getEditorInput () );
-            setPageText ( 0, "Basic Editor" );
 
-            final int i = 1;
+            int i = 0;
 
             final String factoryId = getEditorInput ().getFactoryId ();
             for ( final ConfigurationFormInformation info : Activator.findMatching ( factoryId ) )
@@ -32,12 +31,18 @@ public class MultiConfigurationEditor extends MultiPageEditorPart
                 {
                     addPage ( i, new FormEditor ( info ), getEditorInput () );
                     setPageText ( i, info.getLabel () );
+                    i++;
                 }
                 catch ( final CoreException e )
                 {
                     StatusManager.getManager ().handle ( e.getStatus (), StatusManager.SHOW );
                 }
             }
+
+            // add default editor 
+            addPage ( i, new BasicEditor (), getEditorInput () );
+            setPageText ( i, "Basic Editor" );
+
         }
         catch ( final PartInitException e )
         {

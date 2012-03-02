@@ -43,6 +43,7 @@ import org.openscada.ca.ConfigurationInformation;
 import org.openscada.ca.FactoryInformation;
 import org.openscada.ca.ui.data.ConfigurationDescriptor;
 import org.openscada.ca.ui.editor.EditorHelper;
+import org.openscada.ca.ui.editor.input.FactoryEditorInput;
 import org.openscada.ca.ui.jobs.LoadFactoryJob;
 
 public class FactoryEditor extends EditorPart

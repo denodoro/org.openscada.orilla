@@ -159,6 +159,7 @@
   	<openscada.builder.copyPlugin id="org.openscada.ca.ui.importer"/>
   	<openscada.builder.copyPlugin id="org.openscada.ca.ui.exporter"/>
   	<openscada.builder.copyPlugin id="org.openscada.ca.ui.editor"/>
+  	<openscada.builder.copyPlugin id="org.openscada.ca.ui.editor.forms.common"/>
   	<openscada.builder.copyPlugin id="org.openscada.ca.ui.connection" />
   	<openscada.builder.copyPlugin id="org.openscada.ca.ui.connection.creator.jaxws" />
   </target>

@@ -19,6 +19,7 @@
 
 package org.openscada.ca.ui.editor.config;
 
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.databinding.observable.map.IMapChangeListener;
@@ -70,14 +71,14 @@ public class ConfigurationCellLabelProvider extends StyledCellLabelProvider
     @Override
     public void update ( final ViewerCell cell )
     {
-        final ConfigurationEntry cfg = (ConfigurationEntry)cell.getElement ();
+        final Map.Entry<?, ?> cfg = (Map.Entry<?, ?>)cell.getElement ();
         switch ( cell.getColumnIndex () )
         {
         case 0:
-            cell.setText ( cfg.getKey () );
+            cell.setText ( "" + cfg.getKey () );
             break;
         case 1:
-            cell.setText ( cfg.getValue () );
+            cell.setText ( "" + cfg.getValue () );
             break;
         }
         super.update ( cell );

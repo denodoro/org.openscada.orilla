@@ -20,15 +20,14 @@
 package org.openscada.ca.ui.editor.config;
 
 import java.util.Iterator;
+import java.util.Map;
 
-import org.eclipse.core.databinding.beans.BeansObservables;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
-import org.eclipse.jface.databinding.viewers.ObservableSetContentProvider;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -102,10 +101,16 @@ public class BasicEditor extends AbstractConfigurationEditor
     {
         super.setInput ( input );
 
+        createViewer ();
+    }
+
+    private void createViewer ()
+    {
         if ( getEditorInput () != null && this.viewer != null )
         {
-            this.viewer.setInput ( getEditorInput ().getDataSet () );
-            this.viewer.setLabelProvider ( new ConfigurationCellLabelProvider ( BeansObservables.observeMaps ( getEditorInput ().getDataSet (), new String[] { "key", "value" } ) ) );
+            this.viewer.setInput ( getEditorInput ().getDataMap () );
+            this.viewer.setLabelProvider ( new ConfigurationCellLabelProvider () );
+
         }
     }
 
@@ -131,12 +136,8 @@ public class BasicEditor extends AbstractConfigurationEditor
 
         this.viewer.getTable ().setHeaderVisible ( true );
 
-        this.viewer.setContentProvider ( new ObservableSetContentProvider () );
-        if ( getEditorInput () != null )
-        {
-            this.viewer.setInput ( getEditorInput ().getDataSet () );
-            this.viewer.setLabelProvider ( new ConfigurationCellLabelProvider ( BeansObservables.observeMaps ( getEditorInput ().getDataSet (), new String[] { "key", "value" } ) ) );
-        }
+        this.viewer.setContentProvider ( new ObservableMapContentProvider () );
+        createViewer ();
 
         this.viewer.addDoubleClickListener ( new IDoubleClickListener () {
 
@@ -162,7 +163,7 @@ public class BasicEditor extends AbstractConfigurationEditor
         }
 
         final Object o = ( (IStructuredSelection)selection ).getFirstElement ();
-        final ConfigurationEntry entry = AdapterHelper.adapt ( o, ConfigurationEntry.class );
+        final Map.Entry<?, ?> entry = AdapterHelper.adapt ( o, Map.Entry.class );
         if ( entry == null )
         {
             return;
@@ -171,7 +172,7 @@ public class BasicEditor extends AbstractConfigurationEditor
         final EntryEditDialog dlg = new EntryEditDialog ( getSite ().getShell (), entry );
         if ( dlg.open () == Window.OK )
         {
-            updateEntry ( entry, dlg.getValue () );
+            updateEntry ( "" + entry.getKey (), dlg.getKey (), dlg.getValue () );
         }
     }
 
@@ -186,10 +187,7 @@ public class BasicEditor extends AbstractConfigurationEditor
         final EntryEditDialog dlg = new EntryEditDialog ( getSite ().getShell (), null );
         if ( dlg.open () == Window.OK )
         {
-            final ConfigurationEntry entry = new ConfigurationEntry ();
-            entry.setKey ( dlg.getKey () );
-            entry.setValue ( dlg.getValue () );
-            insertEntry ( entry );
+            insertEntry ( dlg.getKey (), dlg.getValue () );
         }
     }
 
@@ -207,10 +205,10 @@ public class BasicEditor extends AbstractConfigurationEditor
         while ( i.hasNext () )
         {
             final Object o = i.next ();
-            final ConfigurationEntry entry = AdapterHelper.adapt ( o, ConfigurationEntry.class );
+            final Map.Entry<?, ?> entry = AdapterHelper.adapt ( o, Map.Entry.class );
             if ( entry != null )
             {
-                deleteEntry ( entry );
+                deleteEntry ( "" + entry.getKey () );
             }
         }
     }
