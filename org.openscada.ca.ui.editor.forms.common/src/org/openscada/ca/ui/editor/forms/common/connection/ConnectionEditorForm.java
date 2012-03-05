@@ -29,7 +29,7 @@ public class ConnectionEditorForm implements ConfigurationForm
 
         this.toolkit = new FormToolkit ( parent.getDisplay () );
         this.form = this.toolkit.createScrolledForm ( parent );
-        this.form.setText ( "openSCADA Connection: " + input.getConfigurationId () );
+        this.form.setText ( String.format ( "openSCADA Connection: %s", input.getConfigurationId () ) );
         this.toolkit.decorateFormHeading ( this.form.getForm () );
 
         this.form.getBody ().setLayout ( new GridLayout () );
@@ -47,6 +47,7 @@ public class ConnectionEditorForm implements ConfigurationForm
 
         final IObservableValue value = Observables.observeMapEntry ( input.getDataMap (), "connection.uri" );
         this.dbc.bindValue ( SWTObservables.observeText ( uriText, SWT.Modify ), value );
+        this.dbc.updateTargets ();
     }
 
     @Override
