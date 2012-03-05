@@ -36,6 +36,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -46,6 +47,7 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PartInitException;
 import org.openscada.ui.databinding.AdapterHelper;
+import org.openscada.ui.databinding.observable.ObservableMapContentProvider;
 
 public class BasicEditor extends AbstractConfigurationEditor
 {
@@ -138,6 +140,8 @@ public class BasicEditor extends AbstractConfigurationEditor
 
         this.viewer.setContentProvider ( new ObservableMapContentProvider () );
         createViewer ();
+
+        this.viewer.setSorter ( new ViewerSorter () );
 
         this.viewer.addDoubleClickListener ( new IDoubleClickListener () {
 

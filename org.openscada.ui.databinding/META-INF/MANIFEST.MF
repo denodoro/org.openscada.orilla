@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: org.openscada.ui.databinding
-Bundle-Version: 0.17.0.qualifier
+Bundle-Version: 0.18.0.qualifier
 Bundle-Activator: org.openscada.ui.databinding.Activator
 Bundle-Vendor: %Bundle-Vendor
 Require-Bundle: org.eclipse.ui;bundle-version="3.5.0",
@@ -17,12 +17,18 @@ Import-Package: org.openscada.core;version="0.17.0",
  org.openscada.da.client;version="0.16.0",
  org.openscada.da.connection.provider;version="0.15.0",
  org.slf4j;version="1.5.0"
-Export-Package: org.openscada.ui.databinding;version="0.17.0";
-  uses:="org.eclipse.core.databinding.observable.set,
+Export-Package: org.openscada.ui.databinding;version="0.18.0";
+  uses:="org.openscada.core.connection.provider,
    org.eclipse.ui.navigator,
    org.eclipse.ui,
    org.eclipse.ui.plugin,
-   org.eclipse.jface.viewers,
+   org.eclipse.core.databinding.conversion,
+   org.eclipse.core.commands,
+   org.eclipse.core.databinding.observable.set,
+   org.eclipse.core.databinding.observable.value,
+   org.openscada.da.client,
    org.eclipse.swt.graphics,
+   org.eclipse.jface.viewers,
    org.osgi.framework,
-   org.eclipse.core.commands"
+   org.eclipse.swt.widgets",
+ org.openscada.ui.databinding.observable;version="0.18.0";uses:="org.eclipse.core.databinding.observable.map"

@@ -10,7 +10,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.databinding;bundle-version="1.4.0",
  org.eclipse.core.databinding.beans;bundle-version="1.2.100",
  org.eclipse.core.databinding.observable;bundle-version="1.4.0",
- org.eclipse.jface.databinding;bundle-version="1.5.0"
+ org.eclipse.jface.databinding;bundle-version="1.5.0",
+ org.openscada.ui.databinding;bundle-version="0.18.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Import-Package: org.openscada.ca;version="0.18.0",

@@ -1,4 +1,4 @@
-package org.openscada.ca.ui.editor.config;
+package org.openscada.ui.databinding.observable;
 
 import org.eclipse.core.databinding.observable.map.IMapChangeListener;
 import org.eclipse.core.databinding.observable.map.IObservableMap;

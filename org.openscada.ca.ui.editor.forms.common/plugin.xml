@@ -8,6 +8,36 @@
             factoryId="da.connection"
             label="Connection">
       </form>
+      <form
+            class="org.openscada.ca.ui.editor.forms.common.connection.LevelEditorForm"
+            factoryId="org.openscada.da.level.floor"
+            label="Level Monitor">
+      </form>
+      <form
+            class="org.openscada.ca.ui.editor.forms.common.connection.LevelEditorForm"
+            factoryId="org.openscada.da.level.ceil"
+            label="Level Monitor">
+      </form>
+      <form
+            class="org.openscada.ca.ui.editor.forms.common.connection.LevelEditorForm"
+            factoryId="org.openscada.da.level.low"
+            label="Level Monitor">
+      </form>
+	  <form
+            class="org.openscada.ca.ui.editor.forms.common.connection.LevelEditorForm"
+            factoryId="org.openscada.da.level.lowlow"
+            label="Level Monitor">
+      </form>
+      <form
+            class="org.openscada.ca.ui.editor.forms.common.connection.LevelEditorForm"
+            factoryId="org.openscada.da.level.high"
+            label="Level Monitor">
+      </form>
+	  <form
+            class="org.openscada.ca.ui.editor.forms.common.connection.LevelEditorForm"
+            factoryId="org.openscada.da.level.highhigh"
+            label="Level Monitor">
+      </form>
    </extension>
 
 </plugin>
