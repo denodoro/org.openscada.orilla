@@ -9,6 +9,11 @@
             label="Connection">
       </form>
       <form
+            class="org.openscada.ca.ui.editor.forms.common.connection.MonitorQueryEditorForm"
+            factoryId="ae.monitor.query"
+            label="Monitor Query">
+      </form>
+      <form
             class="org.openscada.ca.ui.editor.forms.common.connection.LevelEditorForm"
             label="Level Monitor">
             <factory>org.openscada.da.level.floor</factory>            

@@ -33,7 +33,6 @@
                icon="icons/add.png"
                id="org.openscada.ca.ui.editor.factory.InsertAction"
                label="Insert"
-               menubarPath="additions"
                style="push"
                toolbarPath="additions">
          </action>
@@ -42,7 +41,6 @@
         icon="icons/delete.gif"
         id="org.openscada.ca.ui.editor.factory.DeleteAction"
         label="Delete"
-        menubarPath="additions"
         style="push"
         toolbarPath="additions">
          </action>
@@ -52,7 +50,6 @@
         icon="icons/refresh.gif"
         id="org.openscada.ca.ui.editor.RefreshAction"
         label="Refresh"
-        menubarPath="additions"
         style="push"
         toolbarPath="additions">
   </action>

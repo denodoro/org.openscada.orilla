@@ -51,6 +51,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
@@ -120,6 +121,11 @@ public class ConfigurationFormToolkit
 
     public Composite createStandardSection ( final Composite parent, final String sectionLabel )
     {
+        return createStandardSection ( parent, sectionLabel, false );
+    }
+
+    public Composite createStandardSection ( final Composite parent, final String sectionLabel, final boolean fillVeritcal )
+    {
         final Section section = this.toolkit.createSection ( parent, sectionLabel != null ? ExpandableComposite.TITLE_BAR : ExpandableComposite.NO_TITLE );
         if ( sectionLabel != null )
         {
@@ -129,7 +135,7 @@ public class ConfigurationFormToolkit
         final Composite client = createStandardComposite ( section );
         section.setClient ( client );
         client.setLayout ( new GridLayout ( 3, false ) );
-        section.setLayoutData ( new GridData ( GridData.FILL, GridData.BEGINNING, true, false ) );
+        section.setLayoutData ( new GridData ( GridData.FILL, GridData.BEGINNING, true, fillVeritcal ) );
 
         return client;
     }
@@ -169,11 +175,28 @@ public class ConfigurationFormToolkit
 
     public void createStandardText ( final Composite parent, final String attributeName, final String label, final String textMessage, final IObservableMap data, final Object valueType )
     {
-        this.toolkit.createLabel ( parent, label + ":" );
+        createStandardText ( parent, attributeName, SWT.SINGLE, label, textMessage, data, valueType );
+    }
 
-        final Text text = this.toolkit.createText ( parent, "" );
+    public void createStandardMultiText ( final Composite parent, final String attributeName, final String label, final String textMessage, final IObservableMap data, final Object valueType )
+    {
+        createStandardText ( parent, attributeName, SWT.MULTI, label, textMessage, data, valueType );
+    }
+
+    public void createStandardText ( final Composite parent, final String attributeName, final int style, final String label, final String textMessage, final IObservableMap data, final Object valueType )
+    {
+        final Label labelControl = this.toolkit.createLabel ( parent, label + ":" );
+
+        final boolean multi = ( style & SWT.MULTI ) > 0;
+
+        if ( multi )
+        {
+            labelControl.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, false, false ) );
+        }
+
+        final Text text = this.toolkit.createText ( parent, "", style );
         text.setMessage ( textMessage );
-        final GridData gd = new GridData ( GridData.FILL, GridData.BEGINNING, true, true );
+        final GridData gd = new GridData ( GridData.FILL, multi ? GridData.FILL : GridData.BEGINNING, true, true );
         gd.horizontalSpan = 2;
         text.setLayoutData ( gd );
 
