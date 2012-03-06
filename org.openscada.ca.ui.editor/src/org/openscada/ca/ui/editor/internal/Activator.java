@@ -73,16 +73,15 @@ public class Activator extends AbstractUIPlugin
                 continue;
             }
             final ConfigurationFormInformation info = new ConfigurationFormInformation ( ele );
-            if ( info.getFactoryId () == null )
+            if ( info.getFactoryIds () == null )
             {
                 continue;
             }
 
-            if ( info.getFactoryId ().equals ( "*" ) || info.getFactoryId ().equals ( factoryId ) )
+            if ( info.getFactoryIds ().contains ( "*" ) || info.getFactoryIds ().contains ( factoryId ) )
             {
                 result.add ( info );
             }
-
         }
 
         return result;

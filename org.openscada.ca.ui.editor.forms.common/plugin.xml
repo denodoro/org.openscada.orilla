@@ -10,33 +10,13 @@
       </form>
       <form
             class="org.openscada.ca.ui.editor.forms.common.connection.LevelEditorForm"
-            factoryId="org.openscada.da.level.floor"
             label="Level Monitor">
-      </form>
-      <form
-            class="org.openscada.ca.ui.editor.forms.common.connection.LevelEditorForm"
-            factoryId="org.openscada.da.level.ceil"
-            label="Level Monitor">
-      </form>
-      <form
-            class="org.openscada.ca.ui.editor.forms.common.connection.LevelEditorForm"
-            factoryId="org.openscada.da.level.low"
-            label="Level Monitor">
-      </form>
-	  <form
-            class="org.openscada.ca.ui.editor.forms.common.connection.LevelEditorForm"
-            factoryId="org.openscada.da.level.lowlow"
-            label="Level Monitor">
-      </form>
-      <form
-            class="org.openscada.ca.ui.editor.forms.common.connection.LevelEditorForm"
-            factoryId="org.openscada.da.level.high"
-            label="Level Monitor">
-      </form>
-	  <form
-            class="org.openscada.ca.ui.editor.forms.common.connection.LevelEditorForm"
-            factoryId="org.openscada.da.level.highhigh"
-            label="Level Monitor">
+            <factory>org.openscada.da.level.floor</factory>            
+            <factory>org.openscada.da.level.ceil</factory>
+            <factory>org.openscada.da.level.low</factory>
+            <factory>org.openscada.da.level.lowlow</factory>
+            <factory>org.openscada.da.level.high</factory>
+            <factory>org.openscada.da.level.highhigh</factory>
       </form>
    </extension>
 

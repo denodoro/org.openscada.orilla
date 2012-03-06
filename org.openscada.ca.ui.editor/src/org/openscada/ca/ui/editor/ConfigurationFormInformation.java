@@ -19,6 +19,9 @@
 
 package org.openscada.ca.ui.editor;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.openscada.ca.ui.editor.config.form.ConfigurationForm;
@@ -38,9 +41,27 @@ public class ConfigurationFormInformation
         return this.configuration.getAttribute ( "label" );
     }
 
-    public String getFactoryId ()
+    public Set<String> getFactoryIds ()
     {
-        return this.configuration.getAttribute ( "factoryId" );
+        final Set<String> result = new HashSet<String> ();
+
+        // by attribute
+        final String factoryId = this.configuration.getAttribute ( "factoryId" );
+        if ( factoryId != null && !factoryId.isEmpty () )
+        {
+            result.add ( factoryId );
+        }
+
+        // by child element
+        for ( final IConfigurationElement ele : this.configuration.getChildren ( "factory" ) )
+        {
+            if ( ele.getValue () != null && !ele.getValue ().isEmpty () )
+            {
+                result.add ( ele.getValue () );
+            }
+        }
+
+        return result;
     }
 
     public ConfigurationForm create () throws CoreException
