@@ -119,7 +119,7 @@ public class BasicEditor extends AbstractConfigurationEditor
     @Override
     public void createPartControl ( final Composite parent )
     {
-        this.viewer = new TableViewer ( parent );
+        this.viewer = new TableViewer ( parent, SWT.FULL_SELECTION | SWT.MULTI );
 
         final TableLayout tableLayout = new TableLayout ();
         this.viewer.getTable ().setLayout ( tableLayout );
@@ -155,7 +155,6 @@ public class BasicEditor extends AbstractConfigurationEditor
         getSite ().setSelectionProvider ( this.viewer );
 
         hookContextMenu ( getEditorSite () );
-        fillLocalPullDown ( getEditorSite ().getActionBars ().getMenuManager () );
         fillLocalToolBar ( getEditorSite ().getActionBars ().getToolBarManager () );
     }
 

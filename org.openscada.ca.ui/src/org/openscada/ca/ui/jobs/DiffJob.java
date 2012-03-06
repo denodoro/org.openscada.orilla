@@ -44,10 +44,13 @@ public class DiffJob extends Job
 
     private final AtomicReference<Thread> runner = new AtomicReference<Thread> ();
 
+    private final ConnectionService connectionService;
+
     public DiffJob ( final String jobName, final String connectionUri, final DiffEntry diffEntry )
     {
         super ( jobName );
         this.connectionUri = connectionUri;
+        this.connectionService = null;
         this.diffEntries = Arrays.asList ( diffEntry );
     }
 
@@ -55,7 +58,21 @@ public class DiffJob extends Job
     {
         super ( jobName );
         this.connectionUri = connectionUri;
+        this.connectionService = null;
         this.diffEntries = diffEntries;
+    }
+
+    public DiffJob ( final String jobName, final ConnectionService connectionService, final Collection<DiffEntry> diffEntries )
+    {
+        super ( jobName );
+        this.connectionUri = null;
+        this.connectionService = connectionService;
+        this.diffEntries = diffEntries;
+    }
+
+    public DiffJob ( final String jobName, final ConnectionService connectionService, final DiffEntry entry )
+    {
+        this ( jobName, connectionService, Arrays.asList ( entry ) );
     }
 
     @Override
@@ -68,36 +85,55 @@ public class DiffJob extends Job
     @Override
     protected IStatus run ( final IProgressMonitor monitor )
     {
-        final ConnectionInformation connectionInformation = ConnectionInformation.fromURI ( this.connectionUri );
-        final ConnectionRequestTracker tracker = new ConnectionRequestTracker ( Activator.getBundleContext (), new ConnectionRequest ( null, connectionInformation, 10 * 1000, true ), null );
-
-        try
+        if ( this.connectionService != null )
         {
-            this.runner.set ( Thread.currentThread () );
-
-            tracker.open ();
-
-            tracker.waitForService ( 0 );
-
-            final ConnectionService connectionService = tracker.getService ();
-            final Connection connection = (Connection)connectionService.getConnection ();
-
-            connection.applyDiff ( this.diffEntries );
-
+            try
+            {
+                runWithService ( this.connectionService );
+            }
+            catch ( final Exception e )
+            {
+                return new Status ( IStatus.ERROR, Activator.PLUGIN_ID, "Failed to save data", e );
+            }
             return Status.OK_STATUS;
         }
-        catch ( final InterruptedException e )
+        else
         {
-            return Status.CANCEL_STATUS;
+            final ConnectionInformation connectionInformation = ConnectionInformation.fromURI ( this.connectionUri );
+            final ConnectionRequestTracker tracker = new ConnectionRequestTracker ( Activator.getBundleContext (), new ConnectionRequest ( null, connectionInformation, 10 * 1000, true ), null );
+
+            try
+            {
+                this.runner.set ( Thread.currentThread () );
+
+                tracker.open ();
+
+                tracker.waitForService ( 0 );
+
+                final ConnectionService connectionService = tracker.getService ();
+                runWithService ( connectionService );
+
+                return Status.OK_STATUS;
+            }
+            catch ( final InterruptedException e )
+            {
+                return Status.CANCEL_STATUS;
+            }
+            catch ( final Exception e )
+            {
+                return new Status ( IStatus.ERROR, Activator.PLUGIN_ID, "Failed to save data", e );
+            }
+            finally
+            {
+                this.runner.set ( null );
+                tracker.close ();
+            }
         }
-        catch ( final Exception e )
-        {
-            return new Status ( IStatus.ERROR, Activator.PLUGIN_ID, "Failed to save data", e );
-        }
-        finally
-        {
-            this.runner.set ( null );
-            tracker.close ();
-        }
+    }
+
+    private void runWithService ( final ConnectionService connectionService )
+    {
+        final Connection connection = (Connection)connectionService.getConnection ();
+        connection.applyDiff ( this.diffEntries );
     }
 }

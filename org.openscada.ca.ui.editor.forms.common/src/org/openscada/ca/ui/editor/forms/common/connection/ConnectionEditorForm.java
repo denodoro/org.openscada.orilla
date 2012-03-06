@@ -44,7 +44,7 @@ public class ConnectionEditorForm extends StandardConfigurationForm
     protected void populateFormContent ( final ConfigurationFormToolkit toolkit, final ScrolledForm form, final ConfigurationEditorInput input )
     {
         final Composite client = toolkit.createStandardComposite ( form.getBody () );
-        client.setLayout ( new GridLayout ( 2, false ) );
+        client.setLayout ( new GridLayout ( 3, false ) );
         client.setLayoutData ( new GridData ( GridData.FILL_HORIZONTAL ) );
         toolkit.createStandardText ( client, "connection.uri", "Connection URI", "Enter connection URI", input.getDataMap (), null );
     }

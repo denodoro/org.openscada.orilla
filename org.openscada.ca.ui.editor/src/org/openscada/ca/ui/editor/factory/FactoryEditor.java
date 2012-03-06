@@ -19,24 +19,43 @@
 
 package org.openscada.ca.ui.editor.factory;
 
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedList;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IMenuListener;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.dialogs.InputDialog;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerComparator;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 import org.openscada.ca.ConfigurationInformation;
@@ -54,8 +73,20 @@ public class FactoryEditor extends EditorPart
 
     private FactoryInformation factory;
 
+    private final Action deleteAction;
+
+    private FactoryEditorInput factoryInput;
+
     public FactoryEditor ()
     {
+        this.deleteAction = new Action ( "Delete" ) {
+            @Override
+            public void run ()
+            {
+                handleDelete ();
+            };
+        };
+
     }
 
     @Override
@@ -88,18 +119,24 @@ public class FactoryEditor extends EditorPart
     @Override
     protected void setInput ( final IEditorInput input )
     {
-        final FactoryEditorInput factoryInput = (FactoryEditorInput)input;
-        final LoadFactoryJob job = factoryInput.createLoadJob ();
+        this.factoryInput = (FactoryEditorInput)input;
+
+        refresh ();
+
+        super.setInput ( input );
+    }
+
+    public void refresh ()
+    {
+        final LoadFactoryJob job = this.factoryInput.createLoadJob ();
         job.addJobChangeListener ( new JobChangeAdapter () {
             @Override
             public void done ( final IJobChangeEvent event )
             {
-                FactoryEditor.this.handleSetResult ( job.getFactory (), factoryInput.getConnectionUri () );
+                FactoryEditor.this.handleSetResult ( job.getFactory (), FactoryEditor.this.factoryInput.getConnectionUri () );
             }
         } );
         job.schedule ();
-
-        super.setInput ( input );
     }
 
     protected void handleSetResult ( final FactoryInformation factory, final String connectionUri )
@@ -172,7 +209,7 @@ public class FactoryEditor extends EditorPart
         layout.marginHeight = layout.marginWidth = 0;
         wrapper.setLayout ( layout );
 
-        this.viewer = new TableViewer ( wrapper, SWT.FULL_SELECTION );
+        this.viewer = new TableViewer ( wrapper, SWT.FULL_SELECTION | SWT.MULTI );
         this.viewer.getControl ().setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, true ) );
         final TableLayout tableLayout = new TableLayout ();
         this.viewer.getTable ().setLayout ( tableLayout );
@@ -205,7 +242,21 @@ public class FactoryEditor extends EditorPart
             this.viewer.setInput ( this.factory.getConfigurations () );
         }
 
+        this.viewer.setComparator ( new ViewerComparator () {
+            @Override
+            public int compare ( final Viewer viewer, final Object e1, final Object e2 )
+            {
+                final ConfigurationDescriptor d1 = (ConfigurationDescriptor)e1;
+                final ConfigurationDescriptor d2 = (ConfigurationDescriptor)e2;
+                return d1.getConfigurationInformation ().getId ().compareTo ( d2.getConfigurationInformation ().getId () );
+            }
+        } );
+
         ColumnViewerToolTipSupport.enableFor ( this.viewer );
+
+        getSite ().setSelectionProvider ( this.viewer );
+
+        hookContextMenu ( getEditorSite () );
     }
 
     protected void handleDoubleClick ( final DoubleClickEvent event )
@@ -219,4 +270,94 @@ public class FactoryEditor extends EditorPart
         this.viewer.getControl ().setFocus ();
     }
 
+    public void handleInsert ()
+    {
+        final InputDialog dlg = new InputDialog ( getSite ().getShell (), "Create new configuration", "Enter the id of the new configuration object to create", "", null );
+        if ( dlg.open () == Window.OK )
+        {
+            insertEntry ( dlg.getValue () );
+        }
+    }
+
+    private void insertEntry ( final String value )
+    {
+        final Job job = this.factoryInput.createCreateJob ( value );
+        job.addJobChangeListener ( new JobChangeAdapter () {
+            @Override
+            public void done ( final IJobChangeEvent event )
+            {
+                refresh ();
+            }
+        } );
+        job.schedule ();
+    }
+
+    public void handleDelete ()
+    {
+        final ISelection sel = this.viewer.getSelection ();
+        if ( sel == null || sel.isEmpty () || ! ( sel instanceof IStructuredSelection ) )
+        {
+            return;
+        }
+
+        final IStructuredSelection selection = (IStructuredSelection)sel;
+
+        final Collection<String> items = new LinkedList<String> ();
+
+        final Iterator<?> i = selection.iterator ();
+        while ( i.hasNext () )
+        {
+            final ConfigurationDescriptor info = (ConfigurationDescriptor)i.next ();
+            items.add ( info.getConfigurationInformation ().getId () );
+        }
+
+        if ( items.isEmpty () )
+        {
+            return;
+        }
+
+        if ( !MessageDialog.openConfirm ( this.viewer.getControl ().getShell (), "Delete configurations", String.format ( "Delete %s configuration entries", items.size () ) ) )
+        {
+            return;
+        }
+
+        final org.eclipse.core.runtime.jobs.Job job = this.factoryInput.createDeleteJob ( items );
+        job.addJobChangeListener ( new JobChangeAdapter () {
+
+            @Override
+            public void done ( final IJobChangeEvent event )
+            {
+                refresh ();
+            }
+
+        } );
+        job.schedule ();
+    }
+
+    // editor actions
+
+    private void hookContextMenu ( final IEditorSite editorSite )
+    {
+        final MenuManager menuMgr = new MenuManager ( "#PopupMenu" ); //$NON-NLS-1$
+        menuMgr.setRemoveAllWhenShown ( true );
+        menuMgr.addMenuListener ( new IMenuListener () {
+            @Override
+            public void menuAboutToShow ( final IMenuManager manager )
+            {
+                fillContextMenu ( manager );
+            }
+        } );
+        final Menu menu = menuMgr.createContextMenu ( this.viewer.getControl () );
+        this.viewer.getControl ().setMenu ( menu );
+        editorSite.registerContextMenu ( menuMgr, this.viewer );
+    }
+
+    private void fillContextMenu ( final IMenuManager manager )
+    {
+        // Other plug-ins can contribute there actions here
+
+        manager.add ( this.deleteAction );
+        manager.add ( new Separator () );
+        manager.add ( new Separator ( IWorkbenchActionConstants.MB_ADDITIONS ) );
+    }
 }

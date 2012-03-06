@@ -23,4 +23,37 @@
             name="Factory Editor">
       </editor>
    </extension>
+   <extension
+         point="org.eclipse.ui.editorActions">
+      <editorContribution
+            id="org.openscada.ca.ui.editor.editorContribution1"
+            targetID="org.openscada.ca.ui.connection.editors.FactoryEditor">
+         <action
+               class="org.openscada.ca.ui.editor.factory.InsertAction"
+               id="org.openscada.ca.ui.editor.factory.InsertAction"
+               label="Insert"
+               menubarPath="additions"
+               style="push"
+               toolbarPath="additions">
+         </action>
+		<action
+        class="org.openscada.ca.ui.editor.factory.DeleteAction"
+        id="org.openscada.ca.ui.editor.factory.DeleteAction"
+        label="Delete"
+        menubarPath="additions"
+        style="push"
+        toolbarPath="additions">
+         </action>
+  <action
+        class="org.openscada.ca.ui.editor.factory.RefreshAction"
+        definitionId="org.eclipse.ui.file.refresh"
+        icon="icons/refresh.gif"
+        id="org.openscada.ca.ui.editor.RefreshAction"
+        label="Refresh"
+        menubarPath="additions"
+        style="push"
+        toolbarPath="additions">
+  </action>
+      </editorContribution>
+   </extension>
 </plugin>

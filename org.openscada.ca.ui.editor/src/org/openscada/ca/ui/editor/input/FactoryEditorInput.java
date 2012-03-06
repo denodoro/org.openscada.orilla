@@ -19,10 +19,18 @@
 
 package org.openscada.ca.ui.editor.input;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
+
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
+import org.openscada.ca.DiffEntry;
+import org.openscada.ca.DiffEntry.Operation;
 import org.openscada.ca.connection.provider.ConnectionService;
+import org.openscada.ca.ui.jobs.DiffJob;
 import org.openscada.ca.ui.jobs.LoadFactoryJob;
 
 public class FactoryEditorInput implements IEditorInput
@@ -92,6 +100,25 @@ public class FactoryEditorInput implements IEditorInput
     public LoadFactoryJob createLoadJob ()
     {
         return new LoadFactoryJob ( this.connectionService, this.factoryId );
+    }
+
+    public Job createDeleteJob ( final Collection<String> items )
+    {
+        final Collection<DiffEntry> diffEntries = new LinkedList<DiffEntry> ();
+
+        for ( final String configurationId : items )
+        {
+            diffEntries.add ( new DiffEntry ( this.factoryId, configurationId, Operation.DELETE, null ) );
+        }
+
+        return new DiffJob ( "Delete configurations", this.connectionService, diffEntries );
+    }
+
+    public Job createCreateJob ( final String configurationId )
+    {
+        final DiffEntry entry = new DiffEntry ( this.factoryId, configurationId, Operation.ADD, Collections.<String, String> emptyMap () );
+
+        return new DiffJob ( "Create configuration", this.connectionService, entry );
     }
 
 }
