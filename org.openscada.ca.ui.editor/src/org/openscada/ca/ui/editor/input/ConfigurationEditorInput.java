@@ -66,6 +66,11 @@ public class ConfigurationEditorInput implements IEditorInput
         } );
     }
 
+    public String getConnectionUri ()
+    {
+        return this.connectionUri;
+    }
+
     public String getConfigurationId ()
     {
         return this.configurationId;

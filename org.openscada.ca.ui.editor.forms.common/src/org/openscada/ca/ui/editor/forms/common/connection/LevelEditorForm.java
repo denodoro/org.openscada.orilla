@@ -50,7 +50,7 @@ public class LevelEditorForm extends StandardConfigurationForm
             final Composite sectionClient = toolkit.createStandardSection ( form.getBody (), "Source Information" );
 
             // fields
-            toolkit.createStandardText ( sectionClient, "master.id", "Master Item Id", "ID of the master item", input.getDataMap (), null );
+            toolkit.createStandardLinkText ( sectionClient, "master.item", "master.id", "Master Item Id", "ID of the master item", input, null );
         }
 
         toolkit.createInfoSection ( form, input );

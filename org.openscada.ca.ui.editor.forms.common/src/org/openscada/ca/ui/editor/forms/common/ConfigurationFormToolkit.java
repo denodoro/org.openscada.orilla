@@ -34,10 +34,15 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.forms.events.HyperlinkAdapter;
+import org.eclipse.ui.forms.events.HyperlinkEvent;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.forms.widgets.Hyperlink;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
+import org.openscada.ca.ui.editor.EditorHelper;
 import org.openscada.ca.ui.editor.input.ConfigurationEditorInput;
 import org.openscada.ui.databinding.observable.KeyPrefixMapObservable;
 import org.openscada.ui.databinding.observable.ObservableMapContentProvider;
@@ -104,7 +109,7 @@ public class ConfigurationFormToolkit
 
         final Composite client = createStandardComposite ( section );
         section.setClient ( client );
-        client.setLayout ( new GridLayout ( 2, false ) );
+        client.setLayout ( new GridLayout ( 3, false ) );
         section.setLayoutData ( new GridData ( GridData.FILL, GridData.BEGINNING, true, false ) );
 
         return client;
@@ -119,13 +124,39 @@ public class ConfigurationFormToolkit
         return client;
     }
 
-    public void createStandardText ( final Composite parent, final String attributeName, final String label, final String textMessage, final IObservableMap data, final Object valueType )
+    public void createStandardLinkText ( final Composite parent, final String linkFactory, final String attributeName, final String label, final String textMessage, final ConfigurationEditorInput input, final Object valueType )
     {
         this.toolkit.createLabel ( parent, label + ":" );
 
         final Text text = this.toolkit.createText ( parent, "" );
         text.setMessage ( textMessage );
         text.setLayoutData ( new GridData ( GridData.FILL, GridData.BEGINNING, true, true ) );
+
+        final IObservableValue value = Observables.observeMapEntry ( input.getDataMap (), attributeName, valueType );
+        this.dbc.bindValue ( SWTObservables.observeText ( text, SWT.Modify ), value );
+
+        final Hyperlink link = this.toolkit.createHyperlink ( parent, "link", SWT.NONE );
+        link.setLayoutData ( new GridData ( GridData.FILL, GridData.BEGINNING, false, false ) );
+
+        link.addHyperlinkListener ( new HyperlinkAdapter () {
+
+            @Override
+            public void linkActivated ( final HyperlinkEvent e )
+            {
+                EditorHelper.handleOpen ( PlatformUI.getWorkbench ().getActiveWorkbenchWindow ().getActivePage (), input.getConnectionUri (), linkFactory, text.getText () );
+            }
+        } );
+    }
+
+    public void createStandardText ( final Composite parent, final String attributeName, final String label, final String textMessage, final IObservableMap data, final Object valueType )
+    {
+        this.toolkit.createLabel ( parent, label + ":" );
+
+        final Text text = this.toolkit.createText ( parent, "" );
+        text.setMessage ( textMessage );
+        final GridData gd = new GridData ( GridData.FILL, GridData.BEGINNING, true, true );
+        gd.horizontalSpan = 2;
+        text.setLayoutData ( gd );
 
         final IObservableValue value = Observables.observeMapEntry ( data, attributeName, valueType );
         this.dbc.bindValue ( SWTObservables.observeText ( text, SWT.Modify ), value );
@@ -136,7 +167,7 @@ public class ConfigurationFormToolkit
         final Button button = this.toolkit.createButton ( parent, label, SWT.CHECK );
         {
             final GridData gd = new GridData ( GridData.FILL_HORIZONTAL );
-            gd.horizontalSpan = 2;
+            gd.horizontalSpan = 3;
             button.setLayoutData ( gd );
             final IObservableValue value = Observables.observeMapEntry ( data, attributeName, valueType );
             this.dbc.bindValue ( SWTObservables.observeSelection ( button ), value );

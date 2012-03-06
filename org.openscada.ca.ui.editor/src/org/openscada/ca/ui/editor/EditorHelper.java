@@ -30,6 +30,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.statushandlers.StatusManager;
 import org.openscada.ca.ui.data.ConfigurationEditorSourceInformation;
 import org.openscada.ca.ui.data.FactoryEditorSourceInformation;
 import org.openscada.ca.ui.editor.config.MultiConfigurationEditor;
@@ -104,5 +105,17 @@ public class EditorHelper
     public static void handleOpen ( final IWorkbenchPage page, final ISelectionProvider selectionProvider )
     {
         handleOpen ( page, selectionProvider.getSelection () );
+    }
+
+    public static void handleOpen ( final IWorkbenchPage page, final String connectionId, final String factoryId, final String configurationId )
+    {
+        try
+        {
+            page.openEditor ( new ConfigurationEditorInput ( connectionId, factoryId, configurationId ), MultiConfigurationEditor.EDITOR_ID, true );
+        }
+        catch ( final PartInitException e )
+        {
+            StatusManager.getManager ().handle ( e.getStatus () );
+        }
     }
 }
