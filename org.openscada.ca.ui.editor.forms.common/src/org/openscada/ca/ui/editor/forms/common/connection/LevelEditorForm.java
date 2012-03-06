@@ -43,7 +43,7 @@ public class LevelEditorForm extends StandardConfigurationForm
             toolkit.createStandardText ( sectionClient, "preset", "Preset", "Preset value", input.getDataMap (), String.class );
             toolkit.createStandardCheckbox ( sectionClient, "active", "Active", input.getDataMap (), String.class );
             toolkit.createStandardCheckbox ( sectionClient, "error", "As error", input.getDataMap (), String.class );
-            toolkit.createStandardCheckbox ( sectionClient, "Require acknowledge", "requireAck", input.getDataMap (), String.class );
+            toolkit.createStandardCheckbox ( sectionClient, "requireAck", "Require acknowledge", input.getDataMap (), String.class );
         }
 
         {
