@@ -30,6 +30,7 @@
             targetID="org.openscada.ca.ui.connection.editors.FactoryEditor">
          <action
                class="org.openscada.ca.ui.editor.factory.InsertAction"
+               icon="icons/add.png"
                id="org.openscada.ca.ui.editor.factory.InsertAction"
                label="Insert"
                menubarPath="additions"
@@ -38,6 +39,7 @@
          </action>
 		<action
         class="org.openscada.ca.ui.editor.factory.DeleteAction"
+        icon="icons/delete.gif"
         id="org.openscada.ca.ui.editor.factory.DeleteAction"
         label="Delete"
         menubarPath="additions"
