@@ -22,17 +22,17 @@ package org.openscada.ae.ui.views.views;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.databinding.beans.BeanProperties;
 import org.eclipse.core.databinding.observable.set.ISetChangeListener;
 import org.eclipse.core.databinding.observable.set.SetChangeEvent;
 import org.eclipse.core.databinding.observable.set.WritableSet;
-import org.eclipse.core.databinding.property.Properties;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.databinding.viewers.ObservableSetContentProvider;
+import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
@@ -47,9 +47,8 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchActionConstants;
-import org.openscada.ae.Event.Fields;
-import org.openscada.ae.ui.views.Messages;
 import org.openscada.ae.ui.views.Settings;
+import org.openscada.ae.ui.views.config.ColumnLabelProviderInformation;
 import org.openscada.ae.ui.views.dialog.SearchType;
 import org.openscada.ae.ui.views.filter.EventViewerFilter;
 import org.openscada.ae.ui.views.model.DecoratedEvent;
@@ -102,8 +101,13 @@ public class EventViewTable extends Composite
 
     private final TableViewer tableViewer;
 
-    private final ArrayList<EventTableColumn> localColumns;
+    // private final ArrayList<EventTableColumn> localColumns;
 
+    private final LabelProviderSupport labelProviderSupport;
+
+    private final List<ColumnLabelProviderInformation> columnInformations;
+
+    /*
     private static final List<EventTableColumn> columns = new ArrayList<EventTableColumn> ();
 
     static
@@ -127,22 +131,21 @@ public class EventViewTable extends Composite
         }
         columns.add ( EventTableColumn.reservedColumnEntryTimestamp );
     }
+    */
 
     public EventViewTable ( final Composite parent, final IViewSite viewSite, final int style, final WritableSet events, final List<ColumnProperties> columnSettings )
     {
         this ( parent, viewSite, style, events, columnSettings, null );
     }
 
-    public EventViewTable ( final Composite parent, final IViewSite viewSite, final int style, final WritableSet events, final List<ColumnProperties> columnSettings, final List<EventTableColumn> additionalColumns )
+    public EventViewTable ( final Composite parent, final IViewSite viewSite, final int style, final WritableSet events, final List<ColumnProperties> columnSettings, final List<ColumnLabelProviderInformation> columnInformations )
     {
         super ( parent, style );
         this.events = events;
 
-        this.localColumns = new ArrayList<EventTableColumn> ( columns );
-        if ( additionalColumns != null )
-        {
-            this.localColumns.addAll ( additionalColumns );
-        }
+        this.columnInformations = columnInformations;
+
+        this.labelProviderSupport = new LabelProviderSupport ( Settings.getTimeZone () );
 
         final FillLayout layout = new FillLayout ();
         setLayout ( layout );
@@ -162,7 +165,7 @@ public class EventViewTable extends Composite
 
         final ObservableSetContentProvider contentProvider = new ObservableSetContentProvider ();
         this.tableViewer.setContentProvider ( contentProvider );
-        this.tableViewer.setLabelProvider ( new EventLabelProvider ( Properties.observeEach ( contentProvider.getKnownElements (), BeanProperties.values ( new String[] { "id", "monitor" } ) ), this.localColumns, Settings.getTimeZone () ) ); //$NON-NLS-1$ //$NON-NLS-2$
+        // this.tableViewer.setLabelProvider ( new EventLabelProvider ( Properties.observeEach ( contentProvider.getKnownElements (), BeanProperties.values ( new String[] { "id", "monitor" } ) ), this.localColumns, Settings.getTimeZone () ) ); //$NON-NLS-1$ //$NON-NLS-2$
         this.tableViewer.setInput ( this.events );
 
         contentProvider.getRealizedElements ().addSetChangeListener ( new ISetChangeListener () {
@@ -175,6 +178,13 @@ public class EventViewTable extends Composite
                 }
             }
         } );
+    }
+
+    @Override
+    public void dispose ()
+    {
+        super.dispose ();
+        this.labelProviderSupport.dispose ();
     }
 
     protected void hookContextMenu ( final Control control, final ISelectionProvider selectionProvider, final IViewSite viewSite )
@@ -243,32 +253,28 @@ public class EventViewTable extends Composite
     {
         final SortListener sortListener = new SortListener ( table );
 
-        for ( final EventTableColumn column : this.localColumns )
+        for ( final ColumnLabelProviderInformation columnInformation : this.columnInformations )
         {
             final TableViewerColumn fieldColumn = new TableViewerColumn ( table, SWT.NONE );
+            fieldColumn.getColumn ().setText ( columnInformation.getLabel () );
 
-            if ( column.getLabel () != null )
+            fieldColumn.getColumn ().setWidth ( columnInformation.getInitialSize () );
+            fieldColumn.getColumn ().setResizable ( true );
+            fieldColumn.getColumn ().setMoveable ( true );
+
+            if ( columnInformation.isSortable () )
             {
-                fieldColumn.getColumn ().setText ( column.getLabel () );
+                fieldColumn.getColumn ().addSelectionListener ( sortListener );
+            }
+
+            final CellLabelProvider labelProvider = columnInformation.createLabelProvider ( this.labelProviderSupport );
+            if ( labelProvider != null )
+            {
+                fieldColumn.setLabelProvider ( labelProvider );
             }
             else
             {
-                fieldColumn.getColumn ().setText ( Messages.getString ( column.getColumn () ) );
-            }
-
-            fieldColumn.getColumn ().setWidth ( 120 );
-            fieldColumn.getColumn ().setResizable ( true );
-            fieldColumn.getColumn ().setMoveable ( true );
-            fieldColumn.getColumn ().setData ( COLUMN_KEY, column );
-            if ( column == EventTableColumn.reservedColumnId )
-            {
-                fieldColumn.getColumn ().setWidth ( 0 );
-                fieldColumn.getColumn ().addSelectionListener ( sortListener );
-            }
-            if ( column == EventTableColumn.reservedColumnSourceTimestamp || column == EventTableColumn.reservedColumnEntryTimestamp )
-            {
-                fieldColumn.getColumn ().setWidth ( 140 );
-                fieldColumn.getColumn ().addSelectionListener ( sortListener );
+                fieldColumn.setLabelProvider ( new StyledCellLabelProvider () {} );
             }
         }
     }

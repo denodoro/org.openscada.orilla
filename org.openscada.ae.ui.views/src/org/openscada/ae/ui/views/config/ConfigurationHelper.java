@@ -22,8 +22,9 @@ package org.openscada.ae.ui.views.config;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -37,12 +38,16 @@ import org.eclipse.core.runtime.InvalidRegistryObjectException;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
+import org.openscada.ae.Event.Fields;
 import org.openscada.ae.ui.views.views.ColumnProperties;
+import org.openscada.ae.ui.views.views.table.VariantLabelProvider.Decoration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ConfigurationHelper
 {
+
+    private static final int DEFAULT_INITIAL_SIZE = 120;
 
     private static final Logger logger = LoggerFactory.getLogger ( ConfigurationHelper.class );
 
@@ -180,12 +185,12 @@ public class ConfigurationHelper
                 {
                     // pass
                 }
+
             }
+            final List<ColumnLabelProviderInformation> columnInformation = new LinkedList<ColumnLabelProviderInformation> ();
+            fillColumnInformation ( columnInformation, ele );
 
-            final Map<String, String> additionalColumns = new HashMap<String, String> ();
-            fillAdditional ( additionalColumns, ele );
-
-            return new EventPoolViewConfiguration ( id, monitorQueryId, eventPoolQueryId, connectionString, connectionType, label, maxNumberOfEvents, forceEventLimit, additionalColumns );
+            return new EventPoolViewConfiguration ( id, monitorQueryId, eventPoolQueryId, connectionString, connectionType, label, maxNumberOfEvents, forceEventLimit, columnInformation );
         }
         catch ( final Exception e )
         {
@@ -194,17 +199,89 @@ public class ConfigurationHelper
         }
     }
 
-    private static void fillAdditional ( final Map<String, String> additionalColumns, final IConfigurationElement ele )
+    private static void fillColumnInformation ( final List<ColumnLabelProviderInformation> columnInformation, final IConfigurationElement ele )
     {
-        for ( final IConfigurationElement child : ele.getChildren ( "additionalColumn" ) )
+        // load definition
+
+        final String definitionId = ele.getAttribute ( "columnInformationDefinition" );
+        if ( definitionId != null && !definitionId.isEmpty () )
         {
-            final String key = child.getAttribute ( "key" );
-            final String label = child.getAttribute ( "label" );
-            if ( key != null )
+            for ( final IConfigurationElement defEle : Platform.getExtensionRegistry ().getConfigurationElementsFor ( EXTP_CFG_ID ) )
             {
-                additionalColumns.put ( key, label );
+                if ( !"columnInformationDefinition".equals ( defEle.getName () ) ) //$NON-NLS-1$
+                {
+                    continue;
+                }
+                fillColumnInformation ( columnInformation, defEle );
             }
         }
+
+        // load direct elements
+
+        for ( final IConfigurationElement child : ele.getChildren ( "columnInformation" ) )
+        {
+            final String type = child.getAttribute ( "type" );
+            final String label = child.getAttribute ( "label" );
+
+            int initialSize = DEFAULT_INITIAL_SIZE;
+            try
+            {
+                initialSize = Integer.parseInt ( child.getAttribute ( "initialSize" ) );
+            }
+            catch ( final Exception e )
+            {
+            }
+
+            final boolean sortable = Boolean.parseBoolean ( child.getAttribute ( "sortable" ) );
+
+            final Map<String, String> parameters = new HashMap<String, String> ();
+
+            for ( final IConfigurationElement param : child.getChildren ( "columnParameter" ) )
+            {
+                final String key = param.getAttribute ( "key" );
+                final String value = param.getAttribute ( "value" );
+                if ( key != null )
+                {
+                    parameters.put ( key, value );
+                }
+            }
+
+            if ( type != null )
+            {
+                columnInformation.add ( new ColumnLabelProviderInformation ( label, type, sortable, initialSize, parameters ) );
+            }
+        }
+
+        if ( columnInformation.isEmpty () )
+        {
+            fillWithDefault ( columnInformation );
+        }
+    }
+
+    private static void fillWithDefault ( final List<ColumnLabelProviderInformation> columnInformation )
+    {
+
+        columnInformation.add ( new ColumnLabelProviderInformation ( "sourceTimestamp", "sourceTimestamp", true, DEFAULT_INITIAL_SIZE, Collections.<String, String> emptyMap () ) );
+
+        for ( final Fields field : Fields.values () )
+        {
+            final Map<String, String> properties = new HashMap<String, String> ();
+            properties.put ( "key", field.getName () );
+
+            switch ( field )
+            {
+            case ACTOR_NAME:
+                properties.put ( "decoration", Decoration.ACTOR.toString () );
+                break;
+            case EVENT_TYPE:
+                properties.put ( "decoration", Decoration.MONITOR.toString () );
+                break;
+            }
+
+            columnInformation.add ( new ColumnLabelProviderInformation ( field.getName (), "variant", false, DEFAULT_INITIAL_SIZE, properties ) );
+        }
+
+        columnInformation.add ( new ColumnLabelProviderInformation ( "entryTimestamp", "entryTimestamp", true, DEFAULT_INITIAL_SIZE, Collections.<String, String> emptyMap () ) );
     }
 
     private static List<ColumnProperties> parseColumnSettings ( final String columns )
@@ -283,9 +360,10 @@ public class ConfigurationHelper
             final ConnectionType connectionType = ConnectionType.valueOf ( ele.getAttribute ( "connectionType" ) ); //$NON-NLS-1$
             final String label = ele.getAttribute ( "label" ); //$NON-NLS-1$
 
-            final Map<String, String> additionalColumns = new LinkedHashMap<String, String> ();
-            fillAdditional ( additionalColumns, ele );
-            return new EventHistoryViewConfiguration ( id, connectionString, connectionType, label, additionalColumns );
+            final List<ColumnLabelProviderInformation> columnInformation = new LinkedList<ColumnLabelProviderInformation> ();
+            fillColumnInformation ( columnInformation, ele );
+
+            return new EventHistoryViewConfiguration ( id, connectionString, connectionType, label, columnInformation );
         }
         catch ( final Exception e )
         {

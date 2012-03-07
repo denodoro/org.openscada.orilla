@@ -22,6 +22,7 @@
             <element ref="monitorView"/>
             <element ref="eventHistoryView"/>
             <element ref="alarmNotifier"/>
+            <element ref="columnInformationDefinition"/>
          </choice>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -114,7 +115,7 @@
    <element name="eventPoolView">
       <complexType>
          <choice minOccurs="0" maxOccurs="unbounded">
-            <element ref="additionalColumn"/>
+            <element ref="columnInformation"/>
          </choice>
          <attribute name="id" type="string" use="required">
             <annotation>
@@ -186,13 +187,23 @@
                </documentation>
             </annotation>
          </attribute>
+         <attribute name="columnInformationDefinition" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="identifier" basedOn="org.openscada.ae.ui.views.configuration/columnInformationDefinition/@id"/>
+               </appinfo>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 
    <element name="eventHistoryView">
       <complexType>
          <choice minOccurs="0" maxOccurs="unbounded">
-            <element ref="additionalColumn"/>
+            <element ref="columnInformation"/>
          </choice>
          <attribute name="id" type="string" use="required">
             <annotation>
@@ -233,6 +244,16 @@
                </documentation>
                <appinfo>
                   <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="columnInformationDefinition" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="identifier" basedOn="org.openscada.ae.ui.views.configuration/columnInformationDefinition/@id"/>
                </appinfo>
             </annotation>
          </attribute>
@@ -356,6 +377,97 @@
                </documentation>
                <appinfo>
                   <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="columnInformation">
+      <complexType>
+         <choice minOccurs="0" maxOccurs="unbounded">
+            <element ref="columnParameter"/>
+         </choice>
+         <attribute name="type" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+            <simpleType>
+               <restriction base="string">
+                  <enumeration value="id">
+                  </enumeration>
+                  <enumeration value="variant">
+                  </enumeration>
+                  <enumeration value="sourceTimestamp">
+                  </enumeration>
+                  <enumeration value="entryTimestamp">
+                  </enumeration>
+               </restriction>
+            </simpleType>
+         </attribute>
+         <attribute name="label" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="sortable" type="boolean" use="default" value="false">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="initialSize" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="columnParameter">
+      <complexType>
+         <attribute name="key" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="value" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="columnInformationDefinition">
+      <complexType>
+         <choice minOccurs="0" maxOccurs="unbounded">
+            <element ref="columnInformation"/>
+         </choice>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="identifier"/>
                </appinfo>
             </annotation>
          </attribute>

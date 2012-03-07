@@ -58,6 +58,7 @@ import org.openscada.ae.MonitorStatusInformation;
 import org.openscada.ae.client.EventListener;
 import org.openscada.ae.ui.views.Activator;
 import org.openscada.ae.ui.views.CustomizableAction;
+import org.openscada.ae.ui.views.config.ColumnLabelProviderInformation;
 import org.openscada.ae.ui.views.config.ConfigurationHelper;
 import org.openscada.ae.ui.views.config.EventPoolViewConfiguration;
 import org.openscada.ae.ui.views.dialog.EventHistorySearchDialog;
@@ -116,7 +117,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
      */
     private int forceEventLimit = 0;
 
-    private List<EventTableColumn> additionalColumns;
+    private List<ColumnLabelProviderInformation> columnInformation;
 
     public String getPoolId ()
     {
@@ -260,7 +261,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
 
         loadConfiguration ();
 
-        this.eventsTable = new EventViewTable ( getContentPane (), getViewSite (), SWT.BORDER, this.pool, this.initialColumnSettings, this.additionalColumns );
+        this.eventsTable = new EventViewTable ( getContentPane (), getViewSite (), SWT.BORDER, this.pool, this.initialColumnSettings, this.columnInformation );
         this.eventsTable.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, true, 1, 1 ) );
 
         getSite ().setSelectionProvider ( this.eventsTable.getTableViewer () );
@@ -312,12 +313,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
         this.maxNumberOfEvents = maxNumberOfEvents;
         this.forceEventLimit = cfg.getForceEventLimit ();
 
-        this.additionalColumns = new LinkedList<EventTableColumn> ();
-        for ( final Map.Entry<String, String> entry : cfg.getAdditionalColumns ().entrySet () )
-        {
-            final EventTableColumn col = new EventTableColumn ( entry.getKey (), entry.getValue () );
-            this.additionalColumns.add ( col );
-        }
+        this.columnInformation = cfg.getColumnInformation ();
     }
 
     /**

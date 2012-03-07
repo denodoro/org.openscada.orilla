@@ -26,7 +26,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
+import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.graphics.Image;
+import org.openscada.ae.Event.Fields;
 import org.openscada.ae.ui.views.Activator;
 import org.openscada.ae.ui.views.model.DecoratedEvent;
 import org.openscada.core.Variant;
@@ -50,21 +52,21 @@ public class LabelProviderSupport
 
     public static final NumberFormat nf6 = new DecimalFormat ( Messages.LabelProviderSupport_Format_NF6 );
 
-    public static final Image ALARM_IMG = Activator.getImageDescriptor ( "icons/monitor_alarm.png" ).createImage (); //$NON-NLS-1$
+    private final Image alarmImage = Activator.getImageDescriptor ( "icons/monitor_alarm.png" ).createImage (); //$NON-NLS-1$
 
-    public static final Image ACK_IMG = Activator.getImageDescriptor ( "icons/monitor_ack.png" ).createImage (); //$NON-NLS-1$
+    private final Image ackImage = Activator.getImageDescriptor ( "icons/monitor_ack.png" ).createImage (); //$NON-NLS-1$
 
-    public static final Image EMPTY_IMG = Activator.getImageDescriptor ( "icons/monitor_empty.png" ).createImage (); //$NON-NLS-1$
+    private final Image emptyImage = Activator.getImageDescriptor ( "icons/monitor_empty.png" ).createImage (); //$NON-NLS-1$
 
-    public static final Image OK_IMG = Activator.getImageDescriptor ( "icons/monitor_ok.png" ).createImage (); //$NON-NLS-1$
+    private final Image okImage = Activator.getImageDescriptor ( "icons/monitor_ok.png" ).createImage (); //$NON-NLS-1$
 
-    public static final Image MANUAL_IMG = Activator.getImageDescriptor ( "icons/monitor_manual.png" ).createImage (); //$NON-NLS-1$
+    private final Image maualImage = Activator.getImageDescriptor ( "icons/monitor_manual.png" ).createImage (); //$NON-NLS-1$
 
-    public static final Image DISCONNECTED_IMG = Activator.getImageDescriptor ( "icons/monitor_disconnected.png" ).createImage (); //$NON-NLS-1$
+    private final Image disconnectedImage = Activator.getImageDescriptor ( "icons/monitor_disconnected.png" ).createImage (); //$NON-NLS-1$
 
-    public static final Image USER_IMG = Activator.getImageDescriptor ( "icons/user_icon.gif" ).createImage (); //$NON-NLS-1$
+    private final Image userImage = Activator.getImageDescriptor ( "icons/user_icon.gif" ).createImage (); //$NON-NLS-1$
 
-    public static final Image SYSTEM_IMG = Activator.getImageDescriptor ( "icons/system_icon.gif" ).createImage (); //$NON-NLS-1$
+    private final Image systemImage = Activator.getImageDescriptor ( "icons/system_icon.gif" ).createImage (); //$NON-NLS-1$
 
     public LabelProviderSupport ( final TimeZone timeZone )
     {
@@ -164,5 +166,100 @@ public class LabelProviderSupport
             return SpecialDate.FUTURE;
         }
         */
+    }
+
+    public void decorateWithActorType ( final DecoratedEvent event, final ViewerCell cell )
+    {
+        final String value = Variant.valueOf ( event.getEvent ().getField ( Fields.ACTOR_TYPE ) ).asString ( "" );
+        if ( "USER".equalsIgnoreCase ( value ) ) //$NON-NLS-1$
+        {
+            cell.setImage ( this.userImage );
+        }
+        else if ( "SYSTEM".equalsIgnoreCase ( value ) ) //$NON-NLS-1$
+        {
+            cell.setImage ( this.systemImage );
+        }
+        else
+        {
+            cell.setImage ( null );
+        }
+    }
+
+    public void decorateWithMonitorState ( final DecoratedEvent event, final ViewerCell cell )
+    {
+        if ( !event.isActive () )
+        {
+            cell.setImage ( null );
+        }
+        else
+        {
+            switch ( event.getMonitor ().getStatus () )
+            {
+            case NOT_OK:
+                cell.setImage ( this.alarmImage );
+                break;
+            case NOT_OK_AKN:
+                cell.setImage ( this.alarmImage );
+                break;
+            case NOT_AKN:
+                cell.setImage ( this.ackImage );
+                break;
+            case NOT_OK_NOT_AKN:
+                cell.setImage ( this.ackImage );
+                break;
+            }
+        }
+    }
+
+    public void dispose ()
+    {
+        this.alarmImage.dispose ();
+        this.ackImage.dispose ();
+        this.emptyImage.dispose ();
+        this.okImage.dispose ();
+        this.maualImage.dispose ();
+        this.disconnectedImage.dispose ();
+        this.userImage.dispose ();
+        this.systemImage.dispose ();
+    }
+
+    public Image getAlarmImage ()
+    {
+        return this.alarmImage;
+    }
+
+    public Image getAckImage ()
+    {
+        return this.ackImage;
+    }
+
+    public Image getEmptyImage ()
+    {
+        return this.emptyImage;
+    }
+
+    public Image getOkImage ()
+    {
+        return this.okImage;
+    }
+
+    public Image getMaualImage ()
+    {
+        return this.maualImage;
+    }
+
+    public Image getDisconnectedImage ()
+    {
+        return this.disconnectedImage;
+    }
+
+    public Image getUserImage ()
+    {
+        return this.userImage;
+    }
+
+    public Image getSystemImage ()
+    {
+        return this.systemImage;
     }
 }

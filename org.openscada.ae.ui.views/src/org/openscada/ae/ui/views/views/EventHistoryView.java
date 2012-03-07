@@ -22,7 +22,6 @@ package org.openscada.ae.ui.views.views;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -49,6 +48,7 @@ import org.openscada.ae.QueryListener;
 import org.openscada.ae.QueryState;
 import org.openscada.ae.ui.views.Activator;
 import org.openscada.ae.ui.views.CustomizableAction;
+import org.openscada.ae.ui.views.config.ColumnLabelProviderInformation;
 import org.openscada.ae.ui.views.config.ConfigurationHelper;
 import org.openscada.ae.ui.views.config.EventHistoryViewConfiguration;
 import org.openscada.ae.ui.views.dialog.EventHistorySearchDialog;
@@ -71,15 +71,15 @@ public class EventHistoryView extends AbstractAlarmsEventsView
 
     private static final int LOAD_NO_OF_ITEMS = 2000;
 
-    private CustomizableAction clearAction = null;
+    private CustomizableAction clearAction;
 
-    private CustomizableAction searchAction = null;
+    private CustomizableAction searchAction;
 
-    private CustomizableAction resumeAction = null;
+    private CustomizableAction resumeAction;
 
-    private EventViewTable eventsTable = null;
+    private EventViewTable eventsTable;
 
-    private Pair<SearchType, String> currentFilter = null;
+    private Pair<SearchType, String> currentFilter;
 
     private final AtomicReference<Query> queryRef = new AtomicReference<Query> ( null );
 
@@ -93,11 +93,11 @@ public class EventHistoryView extends AbstractAlarmsEventsView
 
     private WritableSet events;
 
-    private List<ColumnProperties> initialColumnSettings = null;
+    private List<ColumnProperties> initialColumnSettings;
 
     private final Gson gson = new GsonBuilder ().create ();
 
-    private List<EventTableColumn> additionalColumns;
+    private List<ColumnLabelProviderInformation> columnInformations;
 
     /**
      * This is a callback that will allow us to create the viewer and initialize
@@ -168,7 +168,7 @@ public class EventHistoryView extends AbstractAlarmsEventsView
         // load configuration first, since we need the additional columns later
         loadConfiguration ();
 
-        this.eventsTable = new EventViewTable ( getContentPane (), getViewSite (), SWT.BORDER, this.events, this.initialColumnSettings, this.additionalColumns );
+        this.eventsTable = new EventViewTable ( getContentPane (), getViewSite (), SWT.BORDER, this.events, this.initialColumnSettings, this.columnInformations );
         this.eventsTable.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, true, 1, 1 ) );
 
         getSite ().setSelectionProvider ( this.eventsTable.getTableViewer () );
@@ -211,12 +211,7 @@ public class EventHistoryView extends AbstractAlarmsEventsView
             setPartName ( cfg.getLabel () );
         }
 
-        this.additionalColumns = new LinkedList<EventTableColumn> ();
-
-        for ( final Map.Entry<String, String> entry : cfg.getAdditionalColumns ().entrySet () )
-        {
-            this.additionalColumns.add ( new EventTableColumn ( entry.getKey (), entry.getValue () ) );
-        }
+        this.columnInformations = cfg.getColumnInformation ();
     }
 
     /**

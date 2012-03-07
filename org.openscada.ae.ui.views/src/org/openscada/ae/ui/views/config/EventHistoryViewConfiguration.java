@@ -19,9 +19,7 @@
 
 package org.openscada.ae.ui.views.config;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 import org.openscada.utils.lang.Immutable;
 
@@ -36,16 +34,16 @@ public class EventHistoryViewConfiguration
 
     private final String label;
 
-    private final Map<String, String> additionalColumns;
+    private final List<ColumnLabelProviderInformation> columnInformation;
 
-    public EventHistoryViewConfiguration ( final String id, final String connectionString, final ConnectionType connectionType, final String label, final Map<String, String> additionalColumns )
+    public EventHistoryViewConfiguration ( final String id, final String connectionString, final ConnectionType connectionType, final String label, final List<ColumnLabelProviderInformation> columnInformation )
     {
         super ();
         this.id = id;
         this.connectionString = connectionString;
         this.connectionType = connectionType;
         this.label = label;
-        this.additionalColumns = additionalColumns == null ? Collections.<String, String> emptyMap () : new HashMap<String, String> ( additionalColumns );
+        this.columnInformation = columnInformation;
 
         if ( this.id == null )
         {
@@ -61,9 +59,9 @@ public class EventHistoryViewConfiguration
         }
     }
 
-    public Map<String, String> getAdditionalColumns ()
+    public List<ColumnLabelProviderInformation> getColumnInformation ()
     {
-        return Collections.unmodifiableMap ( this.additionalColumns );
+        return this.columnInformation;
     }
 
     public String getConnectionString ()

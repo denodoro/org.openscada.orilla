@@ -19,7 +19,7 @@
 
 package org.openscada.ae.ui.views.config;
 
-import java.util.Map;
+import java.util.List;
 
 import org.openscada.utils.lang.Immutable;
 
@@ -42,9 +42,9 @@ public class EventPoolViewConfiguration
 
     private final int forceEventLimit;
 
-    private final Map<String, String> additionalColumns;
+    private final List<ColumnLabelProviderInformation> columnInformation;
 
-    public EventPoolViewConfiguration ( final String id, final String monitorQueryId, final String eventPoolQueryId, final String connectionString, final ConnectionType connectionType, final String label, final int maxNumberOfEvents, final int forceEventLimit, final Map<String, String> additionalColumns )
+    public EventPoolViewConfiguration ( final String id, final String monitorQueryId, final String eventPoolQueryId, final String connectionString, final ConnectionType connectionType, final String label, final int maxNumberOfEvents, final int forceEventLimit, final List<ColumnLabelProviderInformation> columnInformation )
     {
         super ();
         this.id = id;
@@ -55,7 +55,7 @@ public class EventPoolViewConfiguration
         this.label = label;
         this.maxNumberOfEvents = maxNumberOfEvents;
         this.forceEventLimit = forceEventLimit;
-        this.additionalColumns = additionalColumns;
+        this.columnInformation = columnInformation;
 
         if ( this.id == null )
         {
@@ -79,9 +79,9 @@ public class EventPoolViewConfiguration
         }
     }
 
-    public Map<String, String> getAdditionalColumns ()
+    public List<ColumnLabelProviderInformation> getColumnInformation ()
     {
-        return this.additionalColumns;
+        return this.columnInformation;
     }
 
     public int getForceEventLimit ()

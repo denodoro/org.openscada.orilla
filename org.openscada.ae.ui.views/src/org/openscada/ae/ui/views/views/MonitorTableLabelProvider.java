@@ -44,6 +44,13 @@ public class MonitorTableLabelProvider extends ObservableMapLabelProvider
     }
 
     @Override
+    public void dispose ()
+    {
+        super.dispose ();
+        this.labelProviderSupport.dispose ();
+    }
+
+    @Override
     public Image getColumnImage ( final Object element, final int columnIndex )
     {
         if ( ! ( element instanceof DecoratedMonitor ) )
@@ -56,21 +63,21 @@ public class MonitorTableLabelProvider extends ObservableMapLabelProvider
             switch ( monitor.getStatus () )
             {
             case INACTIVE:
-                return LabelProviderSupport.MANUAL_IMG;
+                return this.labelProviderSupport.getMaualImage ();
             case UNSAFE:
-                return LabelProviderSupport.DISCONNECTED_IMG;
+                return this.labelProviderSupport.getDisconnectedImage ();
             case OK:
-                return LabelProviderSupport.OK_IMG;
+                return this.labelProviderSupport.getOkImage ();
             case NOT_OK:
-                return LabelProviderSupport.ALARM_IMG;
+                return this.labelProviderSupport.getAlarmImage ();
             case NOT_OK_AKN:
-                return LabelProviderSupport.ALARM_IMG;
+                return this.labelProviderSupport.getAlarmImage ();
             case NOT_AKN:
-                return LabelProviderSupport.ACK_IMG;
+                return this.labelProviderSupport.getAckImage ();
             case NOT_OK_NOT_AKN:
-                return LabelProviderSupport.ACK_IMG;
+                return this.labelProviderSupport.getAckImage ();
             }
-            return LabelProviderSupport.EMPTY_IMG;
+            return this.labelProviderSupport.getEmptyImage ();
         }
         return null;
     }
