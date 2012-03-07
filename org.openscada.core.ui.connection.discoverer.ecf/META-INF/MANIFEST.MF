@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: OpenSCADA ECF Discoverer
+Bundle-Name: openSCADA ECF Discoverer
 Bundle-SymbolicName: org.openscada.core.ui.connection.discoverer.ecf;singleton:=true
-Bundle-Version: 0.14.0.qualifier
+Bundle-Version: 0.18.0.qualifier
 Bundle-Activator: org.openscada.core.ui.connection.discoverer.ecf.Activator
 Bundle-Vendor: TH4 SYSTEMS GmbH
 Require-Bundle: org.eclipse.ui,
@@ -12,4 +12,5 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ecf;bundle-version="3.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
-Import-Package: org.openscada.core;version="0.15.0"
+Import-Package: org.openscada.core;version="0.15.0",
+ org.slf4j;version="1.5.0"

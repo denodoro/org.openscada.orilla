@@ -30,10 +30,15 @@ import org.eclipse.ecf.discovery.IServiceListener;
 import org.openscada.core.ConnectionInformation;
 import org.openscada.core.ui.connection.AbstractConnectionDiscoverer;
 import org.openscada.core.ui.connection.ConnectionDescriptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ConnectionDiscovererImpl extends AbstractConnectionDiscoverer implements IServiceListener
 {
-    public static final String DISCOVERY_CONTAINER = "ecf.singleton.discovery"; //$NON-NLS-1$
+
+    private final static Logger logger = LoggerFactory.getLogger ( ConnectionDiscovererImpl.class );
+
+    public static final String DISCOVERY_CONTAINER = "ecf.discovery.composite"; //$NON-NLS-1$
 
     private IContainer container;
 
@@ -47,7 +52,7 @@ public class ConnectionDiscovererImpl extends AbstractConnectionDiscoverer imple
         }
         catch ( final Exception e )
         {
-            e.printStackTrace ();
+            logger.error ( "Failed to initialize", e );
         }
     }
 
@@ -81,6 +86,7 @@ public class ConnectionDiscovererImpl extends AbstractConnectionDiscoverer imple
         super.dispose ();
     }
 
+    @Override
     public void serviceDiscovered ( final IServiceEvent anEvent )
     {
         serviceDiscovered ( anEvent.getServiceInfo () );
@@ -88,6 +94,8 @@ public class ConnectionDiscovererImpl extends AbstractConnectionDiscoverer imple
 
     private void serviceDiscovered ( final IServiceInfo serviceInfo )
     {
+        logger.info ( "Service discovered: {}", serviceInfo );
+
         final ConnectionDescriptor info = makeConnectionInformation ( serviceInfo );
         if ( info != null )
         {
@@ -131,6 +139,7 @@ public class ConnectionDiscovererImpl extends AbstractConnectionDiscoverer imple
         return new ConnectionDescriptor ( ConnectionInformation.fromURI ( String.format ( "%s://%s:%s", scheme, host, port ) ) );
     }
 
+    @Override
     public void serviceUndiscovered ( final IServiceEvent anEvent )
     {
         serviceUndiscovered ( anEvent.getServiceInfo () );
