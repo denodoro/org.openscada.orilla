@@ -17,36 +17,55 @@
  * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
-package org.openscada.ca.ui.editor.forms.common.connection;
+package org.openscada.ca.ui.editor.forms.common;
 
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
-import org.openscada.ca.ui.editor.forms.common.ConfigurationFormToolkit;
+import org.openscada.ca.ui.editor.config.form.ConfigurationForm;
 import org.openscada.ca.ui.editor.input.ConfigurationEditorInput;
 
-public class MonitorQueryEditorForm extends StandardConfigurationForm
+public abstract class StandardConfigurationForm implements ConfigurationForm
 {
-    @Override
-    protected String getTitle ( final ConfigurationEditorInput input )
-    {
-        return String.format ( "openSCADA Monitor Query: %s", input.getConfigurationId () );
-    }
+
+    private ScrolledForm form;
+
+    private ConfigurationFormToolkit toolkit;
 
     @Override
+    public void createFormPart ( final Composite parent, final ConfigurationEditorInput input )
+    {
+        this.toolkit = new ConfigurationFormToolkit ( parent.getDisplay () );
+
+        this.form = this.toolkit.createScrolledForm ( parent, getTitle ( input ) );
+        this.form.getBody ().setLayout ( new GridLayout ( getColumnCount (), true ) );
+
+        // create
+        populateFormContent ( this.toolkit, this.form, input );
+
+        this.toolkit.getDataBindingContext ().updateTargets ();
+    }
+
     protected int getColumnCount ()
     {
-        return 1;
+        return 2;
+    }
+
+    protected abstract String getTitle ( ConfigurationEditorInput input );
+
+    protected abstract void populateFormContent ( ConfigurationFormToolkit toolkit, ScrolledForm form, ConfigurationEditorInput input );
+
+    @Override
+    public void dispose ()
+    {
+        this.form.dispose ();
+        this.toolkit.dispose ();
     }
 
     @Override
-    protected void populateFormContent ( final ConfigurationFormToolkit toolkit, final ScrolledForm form, final ConfigurationEditorInput input )
+    public void setFocus ()
     {
-        final Composite client = toolkit.createStandardComposite ( form.getBody () );
-        client.setLayout ( new GridLayout ( 3, false ) );
-        client.setLayoutData ( new GridData ( GridData.FILL_BOTH ) );
-
-        toolkit.createStandardMultiText ( client, "filter", "Filter", "Filter expression", input.getDataMap (), null );
+        this.form.setFocus ();
     }
+
 }

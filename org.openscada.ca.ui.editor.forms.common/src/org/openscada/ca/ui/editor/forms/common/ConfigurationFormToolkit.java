@@ -63,6 +63,7 @@ import org.eclipse.ui.forms.widgets.Hyperlink;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 import org.openscada.ca.ui.editor.EditorHelper;
+import org.openscada.ca.ui.editor.forms.common.internal.Activator;
 import org.openscada.ca.ui.editor.input.ConfigurationEditorInput;
 import org.openscada.ui.databinding.observable.KeyPrefixMapObservable;
 import org.openscada.ui.databinding.observable.ObservableMapContentProvider;

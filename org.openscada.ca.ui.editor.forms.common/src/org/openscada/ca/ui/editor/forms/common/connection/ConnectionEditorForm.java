@@ -24,6 +24,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.openscada.ca.ui.editor.forms.common.ConfigurationFormToolkit;
+import org.openscada.ca.ui.editor.forms.common.StandardConfigurationForm;
 import org.openscada.ca.ui.editor.input.ConfigurationEditorInput;
 
 public class ConnectionEditorForm extends StandardConfigurationForm
