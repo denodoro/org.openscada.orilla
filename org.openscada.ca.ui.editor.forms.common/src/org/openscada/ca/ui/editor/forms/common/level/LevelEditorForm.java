@@ -17,11 +17,12 @@
  * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
-package org.openscada.ca.ui.editor.forms.common.connection;
+package org.openscada.ca.ui.editor.forms.common.level;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.openscada.ca.ui.editor.forms.common.ConfigurationFormToolkit;
+import org.openscada.ca.ui.editor.forms.common.StandardConfigurationForm;
 import org.openscada.ca.ui.editor.input.ConfigurationEditorInput;
 
 public class LevelEditorForm extends StandardConfigurationForm
