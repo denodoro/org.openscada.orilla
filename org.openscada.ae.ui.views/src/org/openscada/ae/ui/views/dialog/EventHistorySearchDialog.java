@@ -26,6 +26,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -139,16 +140,13 @@ public class EventHistorySearchDialog extends TitleAreaDialog implements FilterC
     }
 
     @Override
-    protected void okPressed ()
+    public boolean close ()
     {
-        super.okPressed ();
-    }
-
-    @Override
-    protected void cancelPressed ()
-    {
-        this.filter = null;
-        super.cancelPressed ();
+        if ( getReturnCode () != Window.OK )
+        {
+            this.filter = null;
+        }
+        return super.close ();
     }
 
     public Pair<SearchType, String> getFilter ()
