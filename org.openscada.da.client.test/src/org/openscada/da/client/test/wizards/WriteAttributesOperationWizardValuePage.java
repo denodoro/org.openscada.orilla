@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -71,9 +71,9 @@ class WriteAttributesOperationWizardValuePage extends WizardPage implements IWiz
 
     private final static Logger logger = LoggerFactory.getLogger ( WriteAttributesOperationWizardValuePage.class );
 
-    private Text itemIdText = null;
+    private Text itemIdText;
 
-    private TableViewer table = null;
+    private TableViewer table;
 
     private class AttributeEntry
     {
@@ -232,23 +232,23 @@ class WriteAttributesOperationWizardValuePage extends WizardPage implements IWiz
 
     }
 
-    private ComboBoxCellEditor _valueTypeEditor;
+    private ComboBoxCellEditor valueTypeEditor;
 
     private final String[] PROPERTIES = new String[] { "name", "value-type", "value", "value-error" };
 
     private class MyCellModifier implements ICellModifier
     {
-        private TableViewer _viewer = null;
+        private TableViewer viewer = null;
 
         public MyCellModifier ( final TableViewer viewer )
         {
-            this._viewer = viewer;
+            this.viewer = viewer;
         }
 
         @Override
         public boolean canModify ( final Object element, final String property )
         {
-            logger.debug ( "Can modify: " + element + ":" + property );
+            logger.debug ( "Can modify: {}:{}", element, property );
 
             if ( element instanceof AttributeEntry )
             {
@@ -295,7 +295,7 @@ class WriteAttributesOperationWizardValuePage extends WizardPage implements IWiz
         @Override
         public void modify ( final Object element, final String property, final Object value )
         {
-            logger.debug ( "Modify Value: " + element + ":" + property + ":" + value );
+            logger.debug ( "Modify Value: {}:{}:{}", new Object[] { element, property, value } );
 
             final TableItem tableItem = (TableItem)element;
 
@@ -313,7 +313,7 @@ class WriteAttributesOperationWizardValuePage extends WizardPage implements IWiz
                 else if ( property.equals ( "value-type" ) )
                 {
                     final Integer i = (Integer)value;
-                    final String valueType = WriteAttributesOperationWizardValuePage.this._valueTypeEditor.getItems ()[i];
+                    final String valueType = WriteAttributesOperationWizardValuePage.this.valueTypeEditor.getItems ()[i];
                     for ( final ValueType vt : ValueType.values () )
                     {
                         if ( vt.label ().equals ( valueType ) )
@@ -322,11 +322,10 @@ class WriteAttributesOperationWizardValuePage extends WizardPage implements IWiz
                         }
                     }
                 }
-                this._viewer.update ( entry, WriteAttributesOperationWizardValuePage.this.PROPERTIES );
+                this.viewer.update ( entry, WriteAttributesOperationWizardValuePage.this.PROPERTIES );
                 dialogChanged ();
             }
         }
-
     }
 
     private final Attributes attributes = new Attributes ();
@@ -352,7 +351,7 @@ class WriteAttributesOperationWizardValuePage extends WizardPage implements IWiz
     private class RemoveAction extends Action implements ISelectionChangedListener
     {
 
-        private ISelection _selection = null;
+        private ISelection selection;
 
         public RemoveAction ()
         {
@@ -362,9 +361,9 @@ class WriteAttributesOperationWizardValuePage extends WizardPage implements IWiz
         @Override
         public void run ()
         {
-            if ( this._selection instanceof IStructuredSelection )
+            if ( this.selection instanceof IStructuredSelection )
             {
-                final IStructuredSelection selection = (IStructuredSelection)this._selection;
+                final IStructuredSelection selection = (IStructuredSelection)this.selection;
                 final Iterator<?> i = selection.iterator ();
                 while ( i.hasNext () )
                 {
@@ -382,14 +381,14 @@ class WriteAttributesOperationWizardValuePage extends WizardPage implements IWiz
         @Override
         public void selectionChanged ( final SelectionChangedEvent event )
         {
-            this._selection = event.getSelection ();
+            this.selection = event.getSelection ();
         }
 
     }
 
-    private final AddAction _addAction = new AddAction ();
+    private final AddAction addAction = new AddAction ();
 
-    private final RemoveAction _removeAction = new RemoveAction ();
+    private final RemoveAction removeAction = new RemoveAction ();
 
     private Item item;
 
@@ -434,8 +433,8 @@ class WriteAttributesOperationWizardValuePage extends WizardPage implements IWiz
         final ToolBar toolbar = new ToolBar ( container, SWT.NONE );
         toolbar.setLayoutData ( gd );
         final ToolBarManager tbm = new ToolBarManager ( toolbar );
-        tbm.add ( this._addAction );
-        tbm.add ( this._removeAction );
+        tbm.add ( this.addAction );
+        tbm.add ( this.removeAction );
         tbm.update ( true );
 
         // row 3
@@ -473,10 +472,10 @@ class WriteAttributesOperationWizardValuePage extends WizardPage implements IWiz
             {
                 values.add ( vt.label () );
             }
-            this._valueTypeEditor = new ComboBoxCellEditor ( this.table.getTable (), values.toArray ( new String[0] ) );
+            this.valueTypeEditor = new ComboBoxCellEditor ( this.table.getTable (), values.toArray ( new String[0] ) );
 
             final TextCellEditor valueEditor = new TextCellEditor ( this.table.getTable () );
-            this.table.setCellEditors ( new CellEditor[] { nameEditor, this._valueTypeEditor, valueEditor, new TextCellEditor ( this.table.getTable () ) } );
+            this.table.setCellEditors ( new CellEditor[] { nameEditor, this.valueTypeEditor, valueEditor, new TextCellEditor ( this.table.getTable () ) } );
 
             final TableLayout tableLayout = new TableLayout ();
             tableLayout.addColumnData ( new ColumnWeightData ( 50, 75, true ) );
@@ -493,7 +492,7 @@ class WriteAttributesOperationWizardValuePage extends WizardPage implements IWiz
         }
 
         this.table.getTable ().setLayoutData ( gd );
-        this.table.addSelectionChangedListener ( this._removeAction );
+        this.table.addSelectionChangedListener ( this.removeAction );
 
         setControl ( container );
         updateSelection ();
