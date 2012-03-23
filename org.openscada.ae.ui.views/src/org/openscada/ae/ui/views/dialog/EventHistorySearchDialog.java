@@ -26,6 +26,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -44,9 +45,9 @@ public class EventHistorySearchDialog extends TitleAreaDialog implements FilterC
 {
     private static final String EXTP_FILTER_TAB = "org.openscada.ae.ui.views.filterTab";
 
-    private Pair<SearchType, String> initialFilter = null;
+    private final Pair<SearchType, String> initialFilter;
 
-    private Pair<SearchType, String> filter = null;
+    private Pair<SearchType, String> filter;
 
     private EventHistorySearchDialog ( final Shell parentShell, final Pair<SearchType, String> filter )
     {
@@ -104,7 +105,6 @@ public class EventHistorySearchDialog extends TitleAreaDialog implements FilterC
         // create tabs
         for ( final FilterTab tab : getFilterTabs () )
         {
-
             final TabItem tabItem = new TabItem ( tabFolder, SWT.NONE );
             tabItem.setText ( tab.getName () );
             tabItem.setControl ( tab.createControl ( tabFolder, this, SWT.NONE, filterString ) );
@@ -117,38 +117,37 @@ public class EventHistorySearchDialog extends TitleAreaDialog implements FilterC
         layoutData.grabExcessVerticalSpace = true;
         tabFolder.setLayoutData ( layoutData );
 
-        /*
-        if ( this.initialFilter != null )
-        {
-            switch ( this.initialFilter.first )
-            {
-            case SIMPLE:
-                tabFolder.setSelection ( 0 );
-                break;
-            case ADVANCED:
-                tabFolder.setSelection ( 1 );
-                break;
-            case FREEFORM:
-                tabFolder.setSelection ( 2 );
-                break;
-            }
-        }
-        */
+        selectInitialFilterPage ( tabFolder );
 
         return rootComposite;
     }
 
-    @Override
-    protected void okPressed ()
+    private void selectInitialFilterPage ( final TabFolder tabFolder )
     {
-        super.okPressed ();
+        if ( this.initialFilter == null )
+        {
+            return;
+        }
+
+        switch ( this.initialFilter.first )
+        {
+        case SIMPLE:
+            tabFolder.setSelection ( 0 );
+            break;
+        case FREEFORM:
+            tabFolder.setSelection ( 1 );
+            break;
+        }
     }
 
     @Override
-    protected void cancelPressed ()
+    public boolean close ()
     {
-        this.filter = null;
-        super.cancelPressed ();
+        if ( getReturnCode () != Window.OK )
+        {
+            this.filter = null;
+        }
+        return super.close ();
     }
 
     public Pair<SearchType, String> getFilter ()
