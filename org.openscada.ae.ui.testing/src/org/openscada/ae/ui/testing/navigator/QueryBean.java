@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -70,12 +70,14 @@ public class QueryBean extends AbstractPropertyChange implements QueryListener
         return this.filterType;
     }
 
+    @Override
     public void queryData ( final Event[] events )
     {
         logger.debug ( "Received {} events", events.length );
 
         this.events.getRealm ().asyncExec ( new Runnable () {
 
+            @Override
             public void run ()
             {
                 QueryBean.this.addData ( events );
@@ -100,9 +102,10 @@ public class QueryBean extends AbstractPropertyChange implements QueryListener
         return this.events.size ();
     }
 
-    public void queryStateChanged ( final QueryState state )
+    @Override
+    public void queryStateChanged ( final QueryState state, final Throwable error )
     {
-        logger.info ( "Query state changed {}", state );
+        logger.info ( "Query state changed {}: ", state, error != null ? error.getMessage () : "<none>" );
 
         final QueryState oldState = this.state;
         this.state = state;

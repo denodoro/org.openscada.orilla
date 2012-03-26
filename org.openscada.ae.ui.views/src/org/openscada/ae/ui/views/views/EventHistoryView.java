@@ -85,6 +85,8 @@ public class EventHistoryView extends AbstractAlarmsEventsView
 
     private final AtomicReference<QueryState> queryState = new AtomicReference<QueryState> ( QueryState.DISCONNECTED );
 
+    private final AtomicReference<Throwable> queryError = new AtomicReference<Throwable> ( null );
+
     private ScheduledExecutorService scheduler;
 
     private final AtomicInteger noOfEvents = new AtomicInteger ( 0 );
@@ -326,8 +328,9 @@ public class EventHistoryView extends AbstractAlarmsEventsView
     {
         final QueryListener queryListener = new QueryListener () {
             @Override
-            public void queryStateChanged ( final QueryState state )
+            public void queryStateChanged ( final QueryState state, final Throwable error )
             {
+                EventHistoryView.this.queryError.set ( error );
                 EventHistoryView.this.queryState.set ( state );
                 if ( state == QueryState.CONNECTED && !EventHistoryView.this.isPaused.get () )
                 {
@@ -420,6 +423,8 @@ public class EventHistoryView extends AbstractAlarmsEventsView
             public void run ()
             {
                 EventHistoryView.this.getStateLabel ().setText ( createStatusLabel () );
+                final Throwable error = EventHistoryView.this.queryError.get ();
+                getStateLabel ().setToolTipText ( error != null ? error.getMessage () : null );
             }
         } );
     }
