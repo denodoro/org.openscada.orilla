@@ -194,7 +194,7 @@
   <!-- Steps to do before running the build.xmls for the elements being built. -->
   <!-- ===================================================================== -->
   <target name="preProcess">
-	<property file="${buildDirectory}/finalPluginsVersions.properties"/>
+	<property file="${buildDirectory}/finalFeaturesVersions.properties"/>
   	<echo message="Setting about versions: ${org.openscada.orilla}"/>
   	<replace dir="${buildDirectory}/plugins" value="${org.openscada.orilla}">
   		<include name="**/about.mappings"/>
