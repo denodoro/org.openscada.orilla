@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -30,14 +30,15 @@ public class SelectionHelper
 {
 
     /**
-     * Create an iterator that iterates only over objects in the selection
-     * of the provided type
+     * Create an iterator that iterates only over objects in the selection of the provided type
      * <p>
-     * This implementation will only work with {@link IStructuredSelection}
-     * but does not fail for others. 
+     * This implementation will only work with {@link IStructuredSelection} but does not fail for others.
      * </p>
-     * @param selection the selection
-     * @param clazz the required type
+     * 
+     * @param selection
+     *            the selection
+     * @param clazz
+     *            the required type
      * @return the resulting iterator, never <code>null</code>
      */
     public static <T> Iterator<T> iterator ( final ISelection selection, final Class<T> clazz )
@@ -100,5 +101,15 @@ public class SelectionHelper
                 return SelectionHelper.iterator ( selection, clazz );
             }
         };
+    }
+
+    public static <T> T first ( final ISelection selection, final Class<T> clazz )
+    {
+        final Iterator<T> i = iterator ( selection, clazz );
+        if ( i.hasNext () )
+        {
+            return i.next ();
+        }
+        return null;
     }
 }
