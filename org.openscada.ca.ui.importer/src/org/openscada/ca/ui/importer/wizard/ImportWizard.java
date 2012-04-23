@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -39,6 +39,7 @@ import org.eclipse.ui.statushandlers.StatusManager;
 import org.openscada.ca.DiffEntry;
 import org.openscada.ca.connection.provider.ConnectionService;
 import org.openscada.ca.ui.importer.Activator;
+import org.openscada.ca.ui.importer.preferences.PreferenceConstants;
 import org.openscada.ca.ui.util.DiffController;
 import org.openscada.ui.databinding.AdapterHelper;
 import org.openscada.utils.concurrent.NotifyFuture;
@@ -47,8 +48,6 @@ import com.google.common.collect.Iterables;
 
 public class ImportWizard extends Wizard implements IImportWizard
 {
-
-    private static final int DEFAULT_CHUNK_SIZE = 500;
 
     private ConnectionService connection;
 
@@ -77,6 +76,7 @@ public class ImportWizard extends Wizard implements IImportWizard
         {
             getContainer ().run ( true, false, new IRunnableWithProgress () {
 
+                @Override
                 public void run ( final IProgressMonitor monitor ) throws InvocationTargetException, InterruptedException
                 {
                     try
@@ -112,7 +112,7 @@ public class ImportWizard extends Wizard implements IImportWizard
             return;
         }
 
-        final Iterable<List<DiffEntry>> splitted = Iterables.partition ( result, DEFAULT_CHUNK_SIZE );
+        final Iterable<List<DiffEntry>> splitted = Iterables.partition ( result, Activator.getDefault ().getPreferenceStore ().getInt ( PreferenceConstants.P_DEFAULT_CHUNK_SIZE ) );
 
         final SubMonitor sub = monitor.newChild ( 90 );
 
@@ -150,6 +150,7 @@ public class ImportWizard extends Wizard implements IImportWizard
         addPage ( new PreviewPage ( this.mergeController ) );
     }
 
+    @Override
     public void init ( final IWorkbench workbench, final IStructuredSelection selection )
     {
         this.connection = getConnection ( selection );

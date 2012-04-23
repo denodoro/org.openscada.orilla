@@ -59,5 +59,19 @@
             name="%category.name">
       </category>
    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="org.openscada.ca.ui.importer.preferences.ImportPreferencePage"
+            id="org.openscada.ca.ui.importer.preferences.ImportPreferencePage"
+            name="Import Preferences">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.openscada.ca.ui.importer.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
 
 </plugin>
