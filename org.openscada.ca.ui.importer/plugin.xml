@@ -2,12 +2,6 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         point="org.eclipse.ui.commands">
-   </extension>
-   <extension
-         point="org.eclipse.ui.handlers">
-   </extension>
-   <extension
          point="org.eclipse.ui.menus">
       <menuContribution
             locationURI="popup:org.openscada.core.ui.connection.ConnectionView#PopupMenu">
