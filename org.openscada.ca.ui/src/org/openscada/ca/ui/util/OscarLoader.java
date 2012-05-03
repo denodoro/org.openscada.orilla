@@ -104,7 +104,10 @@ public class OscarLoader
     public static Map<String, Set<String>> loadIgnoreData ( final InputStream stream ) throws Exception
     {
         final ObjectMapper mapper = new ObjectMapper ();
-        final Map<String, Collection<Object>> data = mapper.readValue ( stream, HashMap.class );
+
+        final BufferedReader reader = new BufferedReader ( new InputStreamReader ( stream, "UTF-8" ) );
+
+        final Map<String, Collection<Object>> data = mapper.readValue ( reader, HashMap.class );
 
         final Map<String, Set<String>> result = new HashMap<String, Set<String>> ();
         for ( final Map.Entry<String, Collection<Object>> entry : data.entrySet () )
