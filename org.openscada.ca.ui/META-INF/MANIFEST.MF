@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: openSCADA CA UI
 Bundle-SymbolicName: org.openscada.ca.ui;singleton:=true
-Bundle-Version: 0.18.0.qualifier
+Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.openscada.ca.ui.Activator
 Bundle-Vendor: TH4 SYSTEMS GmbH
 Require-Bundle: org.eclipse.ui;bundle-version="3.5.0",
@@ -20,10 +20,10 @@ Import-Package: com.google.gson;version="1.4.0",
  org.openscada.core.connection.provider;version="0.18.0",
  org.openscada.utils.concurrent;version="0.15.0",
  org.slf4j;version="1.5.8"
-Export-Package: org.openscada.ca.ui.data;version="0.18.0",
- org.openscada.ca.ui.jobs;version="0.18.0";
+Export-Package: org.openscada.ca.ui.data;version="1.0.0",
+ org.openscada.ca.ui.jobs;version="1.0.0";
   uses:="org.openscada.ca.connection.provider,
    org.eclipse.core.runtime,
    org.eclipse.core.runtime.jobs,
    org.openscada.ca",
- org.openscada.ca.ui.util;version="0.18.0";uses:="org.eclipse.osgi.util,org.eclipse.core.runtime,org.openscada.ca.client"
+ org.openscada.ca.ui.util;version="1.0.0";uses:="org.eclipse.osgi.util,org.eclipse.core.runtime,org.openscada.ca.client"

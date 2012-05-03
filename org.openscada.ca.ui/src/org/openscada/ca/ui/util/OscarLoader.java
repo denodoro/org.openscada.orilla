@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -19,9 +19,11 @@
 
 package org.openscada.ca.ui.util;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -125,7 +127,9 @@ public class OscarLoader
     {
         final ObjectMapper mapper = new ObjectMapper ();
 
-        final Map<String, Map<String, Map<String, Object>>> data = mapper.readValue ( stream, HashMap.class );
+        final BufferedReader reader = new BufferedReader ( new InputStreamReader ( stream, "UTF-8" ) );
+
+        final Map<String, Map<String, Map<String, Object>>> data = mapper.readValue ( reader, HashMap.class );
 
         final Map<String, Map<String, Map<String, String>>> result = new HashMap<String, Map<String, Map<String, String>>> ( data.size () );
 
