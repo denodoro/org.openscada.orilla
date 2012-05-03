@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -29,6 +29,7 @@ import org.eclipse.jface.resource.LocalResourceManager;
 import org.eclipse.jface.resource.ResourceManager;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.navigator.IDescriptionProvider;
 import org.openscada.core.ConnectionInformation;
 import org.openscada.core.client.Connection;
 import org.openscada.core.connection.provider.ConnectionService;
@@ -40,7 +41,7 @@ import org.openscada.ui.databinding.StyledViewerLabel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ConnectionLabelProvider extends CommonListeningLabelProvider implements PropertyChangeListener
+public class ConnectionLabelProvider extends CommonListeningLabelProvider implements PropertyChangeListener, IDescriptionProvider
 {
     private final static Logger logger = LoggerFactory.getLogger ( ConnectionLabelProvider.class );
 
@@ -112,6 +113,16 @@ public class ConnectionLabelProvider extends CommonListeningLabelProvider implem
     }
 
     @Override
+    public String getDescription ( final Object element )
+    {
+        if ( element instanceof ConnectionDiscovererBean )
+        {
+            return ( (ConnectionDiscovererBean)element ).getDescription ();
+        }
+        return super.getDescription ( element );
+    }
+
+    @Override
     protected void addListenerTo ( final Object next )
     {
         super.addListenerTo ( next );
@@ -131,6 +142,7 @@ public class ConnectionLabelProvider extends CommonListeningLabelProvider implem
         super.removeListenerFrom ( next );
     }
 
+    @Override
     public void propertyChange ( final PropertyChangeEvent evt )
     {
         logger.debug ( "Detected a property change: {}", evt ); //$NON-NLS-1$

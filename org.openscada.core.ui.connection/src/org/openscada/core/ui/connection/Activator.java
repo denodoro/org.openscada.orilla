@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -74,6 +74,7 @@ public class Activator extends AbstractUIPlugin
      * (non-Javadoc)
      * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
      */
+    @Override
     public void start ( final BundleContext context ) throws Exception
     {
         super.start ( context );
@@ -90,6 +91,7 @@ public class Activator extends AbstractUIPlugin
      * (non-Javadoc)
      * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
      */
+    @Override
     public void stop ( final BundleContext context ) throws Exception
     {
         for ( final Map.Entry<Class<?>, IAdapterFactory> entry : this.adaperFactories.entrySet () )
@@ -115,7 +117,7 @@ public class Activator extends AbstractUIPlugin
 
     private ObservableSet createDiscoverers ()
     {
-        final WritableSet result = new WritableSet ( SWTObservables.getRealm ( this.getWorkbench ().getDisplay () ) );
+        final WritableSet result = new WritableSet ( SWTObservables.getRealm ( getWorkbench ().getDisplay () ) );
 
         for ( final IConfigurationElement ele : Platform.getExtensionRegistry ().getConfigurationElementsFor ( EXTP_CONNECTON_DISCOVERER ) )
         {
@@ -132,13 +134,15 @@ public class Activator extends AbstractUIPlugin
                 ImageDescriptor imageDescriptor = null;
                 if ( icon != null )
                 {
-                    imageDescriptor = Activator.imageDescriptorFromPlugin ( ele.getContributor ().getName (), icon );
+                    imageDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin ( ele.getContributor ().getName (), icon );
                 }
+
+                final String description = ele.getAttribute ( "description" );
 
                 // create
                 try
                 {
-                    final ConnectionDiscovererBean bean = new ConnectionDiscovererBean ( id, name, imageDescriptor, (ConnectionDiscoverer)ele.createExecutableExtension ( "class" ) );
+                    final ConnectionDiscovererBean bean = new ConnectionDiscovererBean ( id, name, description, imageDescriptor, (ConnectionDiscoverer)ele.createExecutableExtension ( "class" ) );
                     result.add ( bean );
                 }
                 catch ( final CoreException e )
@@ -153,7 +157,7 @@ public class Activator extends AbstractUIPlugin
 
     /**
      * Returns the shared instance
-     *
+     * 
      * @return the shared instance
      */
     public static Activator getDefault ()
