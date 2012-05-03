@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: org.openscada.core.ui.connection.discoverer.prefs;singleton:=true
-Bundle-Version: 0.16.0.qualifier
+Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.openscada.core.ui.connection.discoverer.prefs.Activator
 Bundle-Vendor: %Bundle-Vendor
 Require-Bundle: org.eclipse.ui,
@@ -14,4 +14,4 @@ Bundle-ActivationPolicy: lazy
 Import-Package: org.openscada.core;version="0.15.0",
  org.openscada.core.client;version="0.15.0",
  org.openscada.core.connection.provider;version="0.14.0",
- org.openscada.core.ui.connection.discoverer.file
+ org.openscada.core.ui.connection.discoverer.file;version="1.0.0"
