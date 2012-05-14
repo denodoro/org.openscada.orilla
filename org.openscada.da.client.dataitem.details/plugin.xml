@@ -138,17 +138,23 @@
       </command>
       <command
             categoryId="org.openscada.da.ui.category"
+            description="Open the details dialog for one item. Either by connection ID or connection URI."
             id="org.openscada.da.client.dataitem.details.openDetailsDialog"
             name="Data Item Details Dialog">
          <commandParameter
                id="org.openscada.da.client.dataitem.details.itemId"
-               name="itemId"
+               name="Item ID"
                optional="false">
          </commandParameter>
          <commandParameter
-               id="org.openscada.da.client.dataitem.details.commandParameter2"
-               name="connectionId"
-               optional="false">
+               id="org.openscada.da.client.dataitem.details.connectionId"
+               name="Connection ID"
+               optional="true">
+         </commandParameter>
+         <commandParameter
+               id="org.openscada.da.client.dataitem.details.connectionUri"
+               name="Connection URI"
+               optional="true">
          </commandParameter>
       </command>
    </extension>

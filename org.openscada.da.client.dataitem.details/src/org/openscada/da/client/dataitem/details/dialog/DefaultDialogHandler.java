@@ -32,20 +32,28 @@ public class DefaultDialogHandler extends AbstractSelectionHandler
     public Object execute ( final ExecutionEvent event ) throws ExecutionException
     {
         final String connectionId = event.getParameter ( "org.openscada.da.client.dataitem.details.connectionId" );
+        final String connectionUri = event.getParameter ( "org.openscada.da.client.dataitem.details.connectionUri" );
         final String itemId = event.getParameter ( "org.openscada.da.client.dataitem.details.itemId" );
 
-        if ( connectionId == null || itemId == null )
+        if ( connectionId == null && connectionUri == null || itemId == null )
         {
             return null;
         }
 
-        open ( connectionId, itemId );
+        if ( connectionId != null )
+        {
+            open ( connectionId, itemId, Type.ID );
+        }
+        else
+        {
+            open ( connectionUri, itemId, Type.URI );
+        }
         return null;
     }
 
-    private void open ( final String connectionId, final String itemId )
+    private void open ( final String connectionId, final String itemId, final Type type )
     {
-        new DataItemDetailsDialog ( getShell (), new Item ( connectionId, itemId, Type.ID ) );
+        new DataItemDetailsDialog ( getShell (), new Item ( connectionId, itemId, type ) );
     }
 
 }
