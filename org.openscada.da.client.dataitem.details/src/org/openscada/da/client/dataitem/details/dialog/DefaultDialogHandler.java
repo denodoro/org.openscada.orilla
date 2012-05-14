@@ -53,7 +53,8 @@ public class DefaultDialogHandler extends AbstractSelectionHandler
 
     private void open ( final String connectionId, final String itemId, final Type type )
     {
-        new DataItemDetailsDialog ( getShell (), new Item ( connectionId, itemId, type ) );
+        final DataItemDetailsDialog dlg = new DataItemDetailsDialog ( getShell (), new Item ( connectionId, itemId, type ) );
+        dlg.open ();
     }
 
 }
