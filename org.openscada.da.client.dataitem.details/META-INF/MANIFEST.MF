@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: org.openscada.da.client.dataitem.details;singleton:=true
-Bundle-Version: 0.18.0.qualifier
+Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.openscada.da.client.dataitem.details.Activator
 Bundle-Vendor: %Bundle-Vendor
 Require-Bundle: org.eclipse.ui,
@@ -23,18 +23,24 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jface.databinding;bundle-version="1.3.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
-Export-Package: org.openscada.da.client.dataitem.details;version="0.16.0";
-  uses:="org.eclipse.ui,
-   org.openscada.da.client,
+Export-Package: org.openscada.da.client.dataitem.details;version="1.0.0";
+  uses:="org.eclipse.jface.resource,
+   org.eclipse.ui,
    org.eclipse.ui.plugin,
-   org.osgi.framework,
-   org.openscada.da.client.base.action,
    org.eclipse.ui.part,
+   org.openscada.da.ui.connection.data,
+   org.eclipse.osgi.util,
+   org.openscada.da.client,
+   org.openscada.da.client.base.action,
+   org.osgi.framework,
    org.eclipse.swt.widgets,
-   org.openscada.da.client.dataitem.details.part,
+   org.openscada.da.client.dataitem.details.part",
+ org.openscada.da.client.dataitem.details.dialog;version="1.0.0";
+  uses:="org.eclipse.osgi.util,
+   org.eclipse.swt.widgets,
+   org.eclipse.jface.dialogs,
    org.openscada.da.ui.connection.data",
- org.openscada.da.client.dataitem.details.dialog,
- org.openscada.da.client.dataitem.details.part;version="0.16.0";
+ org.openscada.da.client.dataitem.details.part;version="1.0.0";
   uses:="org.eclipse.ui.services,
    org.openscada.da.client,
    org.eclipse.swt.widgets,

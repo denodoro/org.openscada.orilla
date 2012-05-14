@@ -98,6 +98,12 @@
             </with>
          </enabledWhen>
       </handler>
+      <handler
+            commandId="org.openscada.da.client.dataitem.details.openDetailsDialog">
+         <class
+               class="org.openscada.da.client.dataitem.details.dialog.DefaultDialogHandler">
+         </class>
+      </handler>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -129,6 +135,21 @@
             categoryId="org.openscada.da.ui.category"
             id="org.openscada.da.client.dataitem.details.openDetails"
             name="%command.name">
+      </command>
+      <command
+            categoryId="org.openscada.da.ui.category"
+            id="org.openscada.da.client.dataitem.details.openDetailsDialog"
+            name="Data Item Details Dialog">
+         <commandParameter
+               id="org.openscada.da.client.dataitem.details.itemId"
+               name="itemId"
+               optional="false">
+         </commandParameter>
+         <commandParameter
+               id="org.openscada.da.client.dataitem.details.commandParameter2"
+               name="connectionId"
+               optional="false">
+         </commandParameter>
       </command>
    </extension>
 
