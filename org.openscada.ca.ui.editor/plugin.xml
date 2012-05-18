@@ -15,6 +15,9 @@
             default="false"
             id="org.openscada.ca.ui.connection.editors.MultiConfigurationEditor"
             name="Multi Configuration Editor">
+         <contentTypeBinding
+               contentTypeId="org.openscada.ca.oscar">
+         </contentTypeBinding>
       </editor>
       <editor
             class="org.openscada.ca.ui.editor.factory.FactoryEditor"
@@ -69,5 +72,14 @@
                toolbarPath="additions">
          </action>
       </editorContribution>
+   </extension>
+   <extension
+         point="org.eclipse.core.contenttype.contentTypes">
+      <content-type
+            file-extensions="oscar"
+            id="org.openscada.ca.oscar"
+            name="openSCADA Configuration Archive"
+            priority="normal">
+      </content-type>
    </extension>
 </plugin>
