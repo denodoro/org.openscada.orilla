@@ -163,6 +163,9 @@
   	<openscada.builder.copyPlugin id="org.openscada.ca.ui.editor.forms.arduino"/>
   	<openscada.builder.copyPlugin id="org.openscada.ca.ui.connection" />
   	<openscada.builder.copyPlugin id="org.openscada.ca.ui.connection.creator.jaxws" />
+  	
+  	<openscada.builder.copyPlugin id="org.openscada.ca.ui.editor.wizard" />
+  	
   </target>
 
   <!-- ===================================================================== -->
