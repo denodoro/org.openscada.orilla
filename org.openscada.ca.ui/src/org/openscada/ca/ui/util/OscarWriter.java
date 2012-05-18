@@ -42,8 +42,11 @@ public class OscarWriter
 
     /**
      * Create a new writer instance
-     * @param data the data to write (most not be <code>null</code>)
-     * @param ignoreData the ignore data (may be <code>null</code>)
+     * 
+     * @param data
+     *            the data to write (most not be <code>null</code>)
+     * @param ignoreData
+     *            the ignore data (may be <code>null</code>)
      */
     public OscarWriter ( final Map<String, Map<String, Map<String, String>>> data, final Map<String, Set<String>> ignoreData )
     {
@@ -61,8 +64,11 @@ public class OscarWriter
      * <p>
      * The stream is closed.
      * </p>
-     * @param targetStream target stream to write to
-     * @throws IOException if an IO error occurs
+     * 
+     * @param targetStream
+     *            target stream to write to
+     * @throws IOException
+     *             if an IO error occurs
      */
     public void write ( final OutputStream targetStream ) throws IOException
     {
@@ -99,9 +105,12 @@ public class OscarWriter
      * <p>
      * The stream is not closed
      * </p>
-     * @param data the data to write
-     * @param stream the stream to write to
-     * @throws IOException 
+     * 
+     * @param data
+     *            the data to write
+     * @param stream
+     *            the stream to write to
+     * @throws IOException
      */
     public static void writeData ( final Map<String, Map<String, Map<String, String>>> data, final OutputStream stream ) throws IOException
     {
@@ -116,9 +125,12 @@ public class OscarWriter
      * <p>
      * The stream is not closed
      * </p>
-     * @param ignoreData the data to write
-     * @param stream the stream to write to
-     * @throws IOException 
+     * 
+     * @param ignoreData
+     *            the data to write
+     * @param stream
+     *            the stream to write to
+     * @throws IOException
      */
     public static void writeIgnoreData ( final Map<String, Set<String>> ignoreData, final OutputStream stream ) throws IOException
     {

@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: CA UI Editor Wizards
+Bundle-SymbolicName: org.openscada.ca.ui.editor.wizard;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: org.openscada.ca.ui.editor.wizard.Activator
+Bundle-Vendor: TH4 SYSTEMS GmbH
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.core.resources,
+ org.eclipse.ui.ide,
+ org.openscada.ca.ui;bundle-version="1.0.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy
+Import-Package: org.openscada.ca.ui.util;version="1.0.0"
