@@ -17,6 +17,8 @@ public class MultiConfigurationEditor extends MultiPageEditorPart
 
     public static final String EDITOR_ID = "org.openscada.ca.ui.connection.editors.MultiConfigurationEditor";
 
+    private BasicEditor basicEditor;
+
     @Override
     public void init ( final IEditorSite site, final IEditorInput input ) throws PartInitException
     {
@@ -55,7 +57,7 @@ public class MultiConfigurationEditor extends MultiPageEditorPart
             }
 
             // add default editor 
-            addPage ( i, new BasicEditor (), getEditorInput () );
+            addPage ( i, this.basicEditor = new BasicEditor (), getEditorInput () );
             setPageText ( i, "Basic Editor" );
 
         }
@@ -96,6 +98,11 @@ public class MultiConfigurationEditor extends MultiPageEditorPart
     public boolean isSaveAsAllowed ()
     {
         return false;
+    }
+
+    public void handleInsert ()
+    {
+        this.basicEditor.handleInsert ();
     }
 
 }

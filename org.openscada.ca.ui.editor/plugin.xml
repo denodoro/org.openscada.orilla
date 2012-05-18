@@ -30,6 +30,7 @@
             targetID="org.openscada.ca.ui.connection.editors.FactoryEditor">
          <action
                class="org.openscada.ca.ui.editor.factory.InsertAction"
+               definitionId="org.eclipse.ui.edit.text.toggleInsertMode"
                icon="icons/add.png"
                id="org.openscada.ca.ui.editor.factory.InsertAction"
                label="Insert"
@@ -38,6 +39,7 @@
          </action>
 		<action
         class="org.openscada.ca.ui.editor.factory.DeleteAction"
+        definitionId="org.eclipse.ui.edit.delete"
         icon="icons/delete.gif"
         id="org.openscada.ca.ui.editor.factory.DeleteAction"
         label="Delete"
@@ -53,6 +55,19 @@
         style="push"
         toolbarPath="additions">
   </action>
+      </editorContribution>
+      <editorContribution
+            id="org.openscada.ca.ui.editor.editorContribution1"
+            targetID="org.openscada.ca.ui.connection.editors.MultiConfigurationEditor">
+         <action
+               class="org.openscada.ca.ui.editor.config.InsertAction"
+               definitionId="org.eclipse.ui.edit.text.toggleInsertMode"
+               icon="icons/add.png"
+               id="org.openscada.ca.ui.editor.config.InsertAction"
+               label="Insert"
+               style="push"
+               toolbarPath="additions">
+         </action>
       </editorContribution>
    </extension>
 </plugin>

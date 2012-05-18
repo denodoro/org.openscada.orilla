@@ -25,7 +25,6 @@ import java.util.Map;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
-import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ColumnWeightData;
@@ -41,7 +40,6 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
-import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IWorkbenchActionConstants;
@@ -57,8 +55,6 @@ public class BasicEditor extends AbstractConfigurationEditor
 
     private final Action deleteAction;
 
-    private final Action insertAction;
-
     public BasicEditor ()
     {
         this ( false );
@@ -72,13 +68,6 @@ public class BasicEditor extends AbstractConfigurationEditor
             public void run ()
             {
                 handleDelete ();
-            };
-        };
-        this.insertAction = new Action ( "Insert" ) {
-            @Override
-            public void run ()
-            {
-                handleInsert ();
             };
         };
     }
@@ -155,7 +144,6 @@ public class BasicEditor extends AbstractConfigurationEditor
         getSite ().setSelectionProvider ( this.viewer );
 
         hookContextMenu ( getEditorSite () );
-        fillLocalToolBar ( getEditorSite ().getActionBars ().getToolBarManager () );
     }
 
     protected void triggerEditDialog ( final ISelection selection )
@@ -243,29 +231,9 @@ public class BasicEditor extends AbstractConfigurationEditor
         manager.add ( new Separator ( IWorkbenchActionConstants.MB_ADDITIONS ) );
     }
 
-    private void contributeToActionBars ( final IEditorSite editor )
-    {
-        final IActionBars bars = editor.getActionBars ();
-        fillLocalPullDown ( bars.getMenuManager () );
-        fillLocalToolBar ( bars.getToolBarManager () );
-    }
-
     public void contribueTo ( final IEditorSite viewSite )
     {
         hookContextMenu ( viewSite );
-        contributeToActionBars ( viewSite );
-    }
-
-    protected void fillLocalToolBar ( final IToolBarManager manager )
-    {
-        manager.add ( this.deleteAction );
-        manager.add ( this.insertAction );
-    }
-
-    protected void fillLocalPullDown ( final IMenuManager manager )
-    {
-        manager.add ( this.deleteAction );
-        manager.add ( this.insertAction );
     }
 
 }
