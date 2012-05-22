@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -72,6 +72,7 @@ public class ContextCreator
                 {
                     handler.setStateListener ( new StateListener () {
 
+                        @Override
                         public void stateChanged ( final String connectionName, final String state, final Throwable error )
                         {
                             handleStateChange ( handler, connectionName, state, error );
@@ -82,6 +83,7 @@ public class ContextCreator
             }
             catch ( final Throwable e )
             {
+                logger.warn ( "Failed to start logon", e );
                 for ( final LoginHandler handler : this.handlers )
                 {
                     handler.dispose ();
@@ -169,6 +171,7 @@ public class ContextCreator
             logger.info ( "Fire state change - connection: {}, state: {}, error: {}", new Object[] { handlerName, state, error } ); //$NON-NLS-1$
             this.realm.asyncExec ( new Runnable () {
 
+                @Override
                 public void run ()
                 {
                     ContextCreator.this.listener.stateChanged ( handlerName, state, error );
@@ -208,6 +211,7 @@ public class ContextCreator
 
         this.realm.asyncExec ( new Runnable () {
 
+            @Override
             public void run ()
             {
                 ContextCreator.this.resultListener.complete ( result );
