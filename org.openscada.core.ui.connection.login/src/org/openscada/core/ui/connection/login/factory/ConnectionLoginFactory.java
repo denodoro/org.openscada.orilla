@@ -37,6 +37,7 @@ import org.openscada.core.ui.connection.login.factory.internal.LoginConnection;
 
 public class ConnectionLoginFactory implements LoginFactory
 {
+    @Override
     public LoginHandler createHandler ( final LoginContext context, final String username, final String password ) throws Exception
     {
         final Collection<LoginHandler> handlers = new LinkedList<LoginHandler> ();
@@ -86,7 +87,7 @@ public class ConnectionLoginFactory implements LoginFactory
                 final ConnectionInformation ci = ConnectionInformation.fromURI ( child.getAttribute ( "uri" ) );
                 final String servicePid = child.getAttribute ( "servicePid" );
 
-                Integer servicePriority;
+                final Integer servicePriority;
                 if ( child.getAttribute ( "servicePriority" ) != null )
                 {
                     servicePriority = Integer.parseInt ( child.getAttribute ( "servicePriority" ) );
