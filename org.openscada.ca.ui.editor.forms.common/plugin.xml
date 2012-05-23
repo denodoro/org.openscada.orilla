@@ -28,6 +28,11 @@
             factoryId="org.openscada.da.mapper.osgi.configuredMapper"
             label="Configured Mapper">
       </form>
+      <form
+            class="org.openscada.ca.ui.editor.forms.common.mapper.MapperHandlerEditorForm"
+            factoryId="org.openscada.da.master.mapper"
+            label="Mapper Master Handler">
+      </form>
    </extension>
 
 </plugin>

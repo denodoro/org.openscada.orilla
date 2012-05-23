@@ -15,7 +15,7 @@ Require-Bundle: org.eclipse.ui,
  org.openscada.ui.databinding;bundle-version="0.18.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
-Export-Package: org.openscada.ca.ui.editor.forms.common;version="0.18.0";
+Export-Package: org.openscada.ca.ui.editor.forms.common;version="1.0.0";
   uses:="org.openscada.ca.ui.editor.input,
    org.eclipse.core.databinding,
    org.eclipse.core.databinding.observable.map,
