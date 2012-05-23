@@ -31,6 +31,7 @@ import org.openscada.core.client.ConnectionStateListener;
 import org.openscada.core.connection.provider.ConnectionService;
 import org.openscada.core.ui.connection.login.LoginHandler;
 import org.openscada.core.ui.connection.login.StateListener;
+import org.openscada.core.ui.connection.login.factory.internal.LoginConnection.Mode;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
@@ -51,6 +52,8 @@ public class ConnectionLoginHandler implements LoginHandler
     private final LoginConnection loginConnection;
 
     private final ConnectionStateListener connectionStateListener;
+
+    private BundleContext registerContext;
 
     public ConnectionLoginHandler ( final ConnectionService connectionService, final LoginConnection loginConnection )
     {
@@ -86,16 +89,16 @@ public class ConnectionLoginHandler implements LoginHandler
         switch ( state )
         {
             case BOUND:
-                this.complete = true;
-                this.ok = true;
-                this.connectionService.getConnection ().removeConnectionStateListener ( this.connectionStateListener );
+                markCompleteOk ();
                 break;
             case CLOSED:
-                this.ok = false;
-                if ( canBeFinal )
+                if ( this.loginConnection.getMode () == Mode.NORMAL )
                 {
-                    this.complete = true;
-                    dispose ();
+                    markCompleteFailure ( canBeFinal );
+                }
+                else
+                {
+                    markCompleteOk ();
                 }
                 break;
         }
@@ -107,15 +110,58 @@ public class ConnectionLoginHandler implements LoginHandler
         }
     }
 
+    private void markCompleteFailure ( final boolean canBeFinal )
+    {
+        this.ok = false;
+        if ( canBeFinal )
+        {
+            this.complete = true;
+            dispose ();
+        }
+    }
+
+    private void markCompleteOk ()
+    {
+        this.complete = true;
+        this.ok = true;
+        this.connectionService.getConnection ().removeConnectionStateListener ( this.connectionStateListener );
+        checkRegister ();
+    }
+
+    private void checkRegister ()
+    {
+        // we need to register now if we are already in registered mode but only recently got BOUND
+        if ( this.complete && this.ok )
+        {
+            register ( this.registerContext );
+        }
+    }
+
     @Override
     public void register ( final BundleContext context )
     {
-        if ( this.registrations != null )
+        synchronized ( this )
         {
-            return;
-        }
+            if ( context == null )
+            {
+                return;
+            }
 
-        this.registrations = new LinkedList<ServiceRegistration<?>> ();
+            if ( this.registrations != null )
+            {
+                return;
+            }
+
+            this.registerContext = context;
+
+            if ( !this.complete || !this.ok )
+            {
+                // wait with registration until we are really connected
+                return;
+            }
+
+            this.registrations = new LinkedList<ServiceRegistration<?>> ();
+        }
 
         final Class<?>[] clazzes = this.connectionService.getSupportedInterfaces ();
         final String[] str = new String[clazzes.length];
@@ -166,13 +212,13 @@ public class ConnectionLoginHandler implements LoginHandler
     @Override
     public boolean isComplete ()
     {
-        return this.complete;
+        return this.loginConnection.getMode () != Mode.NORMAL || this.complete;
     }
 
     @Override
     public boolean isOk ()
     {
-        return this.ok;
+        return this.loginConnection.getMode () != Mode.NORMAL || this.ok;
     }
 
     @Override

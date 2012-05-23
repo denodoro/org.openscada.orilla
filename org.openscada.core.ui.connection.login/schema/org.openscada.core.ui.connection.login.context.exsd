@@ -101,7 +101,7 @@ Actually the connection entry should be outside the context and be located by th
                </documentation>
             </annotation>
          </attribute>
-         <attribute name="servicePid" type="string" use="required">
+         <attribute name="servicePid" type="string">
             <annotation>
                <documentation>
                   A persistent service id the connection service will be registered with in OSGi.
@@ -125,6 +125,23 @@ If this attribute is set and the registration element is used all service PIDs w
                   
                </documentation>
             </annotation>
+         </attribute>
+         <attribute name="mode" use="default" value="NORMAL">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+            <simpleType>
+               <restriction base="string">
+                  <enumeration value="NORMAL">
+                  </enumeration>
+                  <enumeration value="OPTIONAL">
+                  </enumeration>
+                  <enumeration value="LAZY">
+                  </enumeration>
+               </restriction>
+            </simpleType>
          </attribute>
       </complexType>
    </element>

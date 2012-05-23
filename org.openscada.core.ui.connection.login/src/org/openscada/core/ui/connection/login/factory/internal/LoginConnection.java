@@ -29,6 +29,14 @@ import org.openscada.utils.lang.Immutable;
 @Immutable
 public class LoginConnection
 {
+
+    public static enum Mode
+    {
+        NORMAL,
+        OPTIONAL,
+        LAZY;
+    }
+
     private final ConnectionInformation connectionInformation;
 
     private final Set<String> servicePids;
@@ -37,12 +45,15 @@ public class LoginConnection
 
     private final Integer priority;
 
-    public LoginConnection ( final ConnectionInformation connectionInformation, final Set<String> servicePids, final Integer autoReconnectDelay, final Integer priority )
+    private final Mode mode;
+
+    public LoginConnection ( final ConnectionInformation connectionInformation, final Set<String> servicePids, final Integer autoReconnectDelay, final Integer priority, final Mode mode )
     {
         this.connectionInformation = connectionInformation.clone ();
         this.servicePids = servicePids != null ? new HashSet<String> ( servicePids ) : Collections.<String> emptySet ();
         this.autoReconnectDelay = autoReconnectDelay;
         this.priority = priority;
+        this.mode = mode;
     }
 
     public ConnectionInformation getConnectionInformation ()
@@ -63,5 +74,10 @@ public class LoginConnection
     public Set<String> getServicePids ()
     {
         return this.servicePids;
+    }
+
+    public Mode getMode ()
+    {
+        return this.mode;
     }
 }

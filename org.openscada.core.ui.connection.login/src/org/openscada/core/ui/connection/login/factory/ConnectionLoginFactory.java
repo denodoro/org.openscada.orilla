@@ -34,7 +34,16 @@ import org.openscada.core.ui.connection.login.LoginFactory;
 import org.openscada.core.ui.connection.login.LoginHandler;
 import org.openscada.core.ui.connection.login.factory.internal.ConnectionLoginHandler;
 import org.openscada.core.ui.connection.login.factory.internal.LoginConnection;
+import org.openscada.core.ui.connection.login.factory.internal.LoginConnection.Mode;
 
+/**
+ * A login factory which builds up openSCADA connections
+ * <p>
+ * This factory feeds on the same extension point the login context does. This should be changed in the future.
+ * </p>
+ * 
+ * @author Jens Reimann
+ */
 public class ConnectionLoginFactory implements LoginFactory
 {
     @Override
@@ -88,6 +97,9 @@ public class ConnectionLoginFactory implements LoginFactory
 
                 final Set<String> servicePids = new HashSet<String> ();
 
+                final String modeString = child.getAttribute ( "mode" );
+                final LoginConnection.Mode mode = modeString == null ? Mode.NORMAL : Mode.valueOf ( modeString );
+
                 // load single service pid
                 addServicePid ( servicePids, child.getAttribute ( "servicePid" ) );
 
@@ -117,7 +129,7 @@ public class ConnectionLoginFactory implements LoginFactory
                     autoReconnectDelay = null;
                 }
 
-                final LoginConnection lc = new LoginConnection ( ci, servicePids, autoReconnectDelay, servicePriority );
+                final LoginConnection lc = new LoginConnection ( ci, servicePids, autoReconnectDelay, servicePriority, mode );
                 result.add ( lc );
             }
         }
