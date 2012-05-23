@@ -19,8 +19,10 @@
 
 package org.openscada.core.ui.connection.login.factory.internal;
 
+import java.util.Collection;
 import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.LinkedList;
 import java.util.Map;
 
 import org.openscada.core.client.Connection;
@@ -44,7 +46,7 @@ public class ConnectionLoginHandler implements LoginHandler
 
     private volatile boolean ok;
 
-    private ServiceRegistration<?> registration;
+    private Collection<ServiceRegistration<?>> registrations;
 
     private final LoginConnection loginConnection;
 
@@ -108,10 +110,12 @@ public class ConnectionLoginHandler implements LoginHandler
     @Override
     public void register ( final BundleContext context )
     {
-        if ( this.registration != null )
+        if ( this.registrations != null )
         {
             return;
         }
+
+        this.registrations = new LinkedList<ServiceRegistration<?>> ();
 
         final Class<?>[] clazzes = this.connectionService.getSupportedInterfaces ();
         final String[] str = new String[clazzes.length];
@@ -120,25 +124,31 @@ public class ConnectionLoginHandler implements LoginHandler
             str[i] = clazzes[i].getName ();
         }
 
-        final Dictionary<String, Object> properties = new Hashtable<String, Object> ();
-
-        properties.put ( ConnectionService.CONNECTION_URI, this.connectionService.getConnection ().getConnectionInformation ().toString () );
-        properties.put ( Constants.SERVICE_PID, this.loginConnection.getServicePid () );
-        if ( this.loginConnection.getPriority () != null )
+        for ( final String servicePid : this.loginConnection.getServicePids () )
         {
-            properties.put ( Constants.SERVICE_RANKING, this.loginConnection.getPriority () );
-        }
+            final Dictionary<String, Object> properties = new Hashtable<String, Object> ();
 
-        this.registration = context.registerService ( str, this.connectionService, properties );
+            properties.put ( ConnectionService.CONNECTION_URI, this.connectionService.getConnection ().getConnectionInformation ().toString () );
+            properties.put ( Constants.SERVICE_PID, servicePid );
+            if ( this.loginConnection.getPriority () != null )
+            {
+                properties.put ( Constants.SERVICE_RANKING, this.loginConnection.getPriority () );
+            }
+
+            this.registrations.add ( context.registerService ( str, this.connectionService, properties ) );
+        }
     }
 
     @Override
     public synchronized void dispose ()
     {
-        if ( this.registration != null )
+        if ( this.registrations != null )
         {
-            this.registration.unregister ();
-            this.registration = null;
+            for ( final ServiceRegistration<?> reg : this.registrations )
+            {
+                reg.unregister ();
+            }
+            this.registrations = null;
         }
 
         if ( this.connectionService != null )

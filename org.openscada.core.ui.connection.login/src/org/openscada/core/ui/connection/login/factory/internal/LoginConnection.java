@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -19,6 +19,10 @@
 
 package org.openscada.core.ui.connection.login.factory.internal;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.openscada.core.ConnectionInformation;
 import org.openscada.utils.lang.Immutable;
 
@@ -27,16 +31,16 @@ public class LoginConnection
 {
     private final ConnectionInformation connectionInformation;
 
-    private final String servicePid;
+    private final Set<String> servicePids;
 
     private final Integer autoReconnectDelay;
 
     private final Integer priority;
 
-    public LoginConnection ( final ConnectionInformation connectionInformation, final String servicePid, final Integer autoReconnectDelay, final Integer priority )
+    public LoginConnection ( final ConnectionInformation connectionInformation, final Set<String> servicePids, final Integer autoReconnectDelay, final Integer priority )
     {
         this.connectionInformation = connectionInformation.clone ();
-        this.servicePid = servicePid;
+        this.servicePids = servicePids != null ? new HashSet<String> ( servicePids ) : Collections.<String> emptySet ();
         this.autoReconnectDelay = autoReconnectDelay;
         this.priority = priority;
     }
@@ -56,8 +60,8 @@ public class LoginConnection
         return this.priority;
     }
 
-    public String getServicePid ()
+    public Set<String> getServicePids ()
     {
-        return this.servicePid;
+        return this.servicePids;
     }
 }

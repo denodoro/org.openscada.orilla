@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -85,7 +85,17 @@ public class ConnectionLoginFactory implements LoginFactory
             for ( final IConfigurationElement child : ele.getChildren ( "connection" ) )
             {
                 final ConnectionInformation ci = ConnectionInformation.fromURI ( child.getAttribute ( "uri" ) );
-                final String servicePid = child.getAttribute ( "servicePid" );
+
+                final Set<String> servicePids = new HashSet<String> ();
+
+                // load single service pid
+                addServicePid ( servicePids, child.getAttribute ( "servicePid" ) );
+
+                // load multi service pids
+                for ( final IConfigurationElement registrationElement : child.getChildren ( "registration" ) )
+                {
+                    addServicePid ( servicePids, registrationElement.getAttribute ( "servicePid" ) );
+                }
 
                 final Integer servicePriority;
                 if ( child.getAttribute ( "servicePriority" ) != null )
@@ -107,12 +117,20 @@ public class ConnectionLoginFactory implements LoginFactory
                     autoReconnectDelay = null;
                 }
 
-                final LoginConnection lc = new LoginConnection ( ci, servicePid, autoReconnectDelay, servicePriority );
+                final LoginConnection lc = new LoginConnection ( ci, servicePids, autoReconnectDelay, servicePriority );
                 result.add ( lc );
             }
         }
 
         return result;
+    }
+
+    private void addServicePid ( final Set<String> servicePids, final String attribute )
+    {
+        if ( attribute != null && !attribute.isEmpty () )
+        {
+            servicePids.add ( attribute );
+        }
     }
 
     private void disposeAll ( final Collection<LoginHandler> handler )

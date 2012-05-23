@@ -48,6 +48,11 @@
    </element>
 
    <element name="context">
+      <annotation>
+         <documentation>
+            A login context the user can connect to.
+         </documentation>
+      </annotation>
       <complexType>
          <choice minOccurs="0" maxOccurs="unbounded">
             <element ref="connection"/>
@@ -78,7 +83,17 @@
    </element>
 
    <element name="connection">
+      <annotation>
+         <documentation>
+            A connection entry that is part of the login context. 
+
+Actually the connection entry should be outside the context and be located by the factory itself. Still this connection element is here due to history.
+         </documentation>
+      </annotation>
       <complexType>
+         <choice minOccurs="0" maxOccurs="unbounded">
+            <element ref="registration"/>
+         </choice>
          <attribute name="uri" type="string" use="required">
             <annotation>
                <documentation>
@@ -89,7 +104,11 @@
          <attribute name="servicePid" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  A persistent service id the connection service will be registered with in OSGi.
+
+If the connection should be registered with different PIDs use the registration element.
+
+If this attribute is set and the registration element is used all service PIDs will be used for registration.
                </documentation>
             </annotation>
          </attribute>
@@ -111,6 +130,11 @@
    </element>
 
    <element name="factory">
+      <annotation>
+         <documentation>
+            A factory which is part of the login context.
+         </documentation>
+      </annotation>
       <complexType>
          <attribute name="class" type="string" use="required">
             <annotation>
@@ -126,6 +150,11 @@
    </element>
 
    <element name="property">
+      <annotation>
+         <documentation>
+            Properties that belong to this login context. Once the login context is activated these properties may be read using the SessionManager.
+         </documentation>
+      </annotation>
       <complexType>
          <attribute name="key" type="string" use="required">
             <annotation>
@@ -142,6 +171,25 @@
                <appinfo>
                   <meta.attribute translatable="true"/>
                </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="registration">
+      <annotation>
+         <documentation>
+            A persistent service id the connection service will be registered with in OSGi.
+
+If the &quot;servicePid&quot; attribute is set and the registration element is used all service PIDs will be used for registration.
+         </documentation>
+      </annotation>
+      <complexType>
+         <attribute name="servicePid" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
             </annotation>
          </attribute>
       </complexType>
