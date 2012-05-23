@@ -137,7 +137,10 @@ public class ConfigurationEditorInput implements IEditorInput
     {
         this.dataMap.setStale ( true );
         this.dataMap.clear ();
-        this.dataMap.putAll ( configurationInformation.getData () );
+        if ( configurationInformation != null )
+        {
+            this.dataMap.putAll ( configurationInformation.getData () );
+        }
         this.dataMap.setStale ( false );
 
         this.dirtyValue.setValue ( false );
