@@ -221,14 +221,19 @@ public class ConfigurationFormToolkit
 
     public void createInfoSection ( final ScrolledForm form, final ConfigurationEditorInput input )
     {
+        createTableSection ( form, input, "info.", "Informational Attributes" );
+    }
+
+    public void createTableSection ( final ScrolledForm form, final ConfigurationEditorInput input, final String prefix, final String label )
+    {
 
         // data
-        final IObservableMap map = KeyPrefixMapObservable.observePrefix ( input.getDataMap (), String.class, "info.", true );
+        final IObservableMap map = KeyPrefixMapObservable.observePrefix ( input.getDataMap (), String.class, prefix, true );
 
         // section
 
         final Section section = this.toolkit.createSection ( form.getBody (), ExpandableComposite.TITLE_BAR );
-        section.setText ( "Informational Attributes" );
+        section.setText ( label );
 
         final Composite client = this.toolkit.createComposite ( section, SWT.NONE );
         section.setClient ( client );

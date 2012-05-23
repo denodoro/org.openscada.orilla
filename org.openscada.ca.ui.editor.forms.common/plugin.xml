@@ -23,6 +23,11 @@
             <factory>org.openscada.da.level.high</factory>
             <factory>org.openscada.da.level.highhigh</factory>
       </form>
+      <form
+            class="org.openscada.ca.ui.editor.forms.common.mapper.MapperEditorForm"
+            factoryId="org.openscada.da.mapper.osgi.configuredMapper"
+            label="Configured Mapper">
+      </form>
    </extension>
 
 </plugin>
