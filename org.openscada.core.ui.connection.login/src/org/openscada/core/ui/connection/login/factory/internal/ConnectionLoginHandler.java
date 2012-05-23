@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -21,6 +21,7 @@ package org.openscada.core.ui.connection.login.factory.internal;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.Map;
 
 import org.openscada.core.client.Connection;
 import org.openscada.core.client.ConnectionState;
@@ -82,19 +83,19 @@ public class ConnectionLoginHandler implements LoginHandler
     {
         switch ( state )
         {
-        case BOUND:
-            this.complete = true;
-            this.ok = true;
-            this.connectionService.getConnection ().removeConnectionStateListener ( this.connectionStateListener );
-            break;
-        case CLOSED:
-            this.ok = false;
-            if ( canBeFinal )
-            {
+            case BOUND:
                 this.complete = true;
-                dispose ();
-            }
-            break;
+                this.ok = true;
+                this.connectionService.getConnection ().removeConnectionStateListener ( this.connectionStateListener );
+                break;
+            case CLOSED:
+                this.ok = false;
+                if ( canBeFinal )
+                {
+                    this.complete = true;
+                    dispose ();
+                }
+                break;
         }
 
         final StateListener loginStateListener = this.loginStateListener;
@@ -167,8 +168,19 @@ public class ConnectionLoginHandler implements LoginHandler
     @Override
     public boolean hasRole ( final String role )
     {
-        // we do not provide roles at the moment
-        return false;
+        try
+        {
+            final Map<String, String> properties = this.connectionService.getConnection ().getSessionProperties ();
+            final String value = properties.get ( "session.privilege." + role );
+            if ( value == null )
+            {
+                return false;
+            }
+            return Boolean.parseBoolean ( value );
+        }
+        catch ( final NullPointerException e )
+        {
+            return false;
+        }
     }
-
 }
