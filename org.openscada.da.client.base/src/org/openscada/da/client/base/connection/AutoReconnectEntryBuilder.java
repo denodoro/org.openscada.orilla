@@ -22,7 +22,7 @@ package org.openscada.da.client.base.connection;
 import org.openscada.core.ConnectionInformation;
 import org.openscada.core.client.AutoReconnectController;
 import org.openscada.da.client.Connection;
-import org.openscada.da.client.ItemManager;
+import org.openscada.da.client.ItemManagerImpl;
 import org.openscada.da.client.connector.Activator;
 
 public class AutoReconnectEntryBuilder implements EntryBuilder
@@ -66,7 +66,7 @@ public class AutoReconnectEntryBuilder implements EntryBuilder
         }
 
         entry.setConnection ( connection );
-        entry.setItemManager ( new ItemManager ( connection ) );
+        entry.setItemManager ( new ItemManagerImpl ( connection ) );
         entry.setController ( new AutoReconnectController ( connection ) );
 
         setupConnection ( entry, requireOpen );

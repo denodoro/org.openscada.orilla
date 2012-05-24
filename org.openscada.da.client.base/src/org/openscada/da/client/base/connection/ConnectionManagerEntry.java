@@ -20,13 +20,12 @@
 package org.openscada.da.client.base.connection;
 
 import org.openscada.da.client.Connection;
-import org.openscada.da.client.ItemManager;
 
 public class ConnectionManagerEntry
 {
     private Connection connection;
 
-    private ItemManager itemManager;
+    private Object itemManager;
 
     public void setConnection ( final Connection connection )
     {
@@ -38,12 +37,12 @@ public class ConnectionManagerEntry
         return this.connection;
     }
 
-    public void setItemManager ( final ItemManager itemManager )
+    public void setItemManager ( final Object itemManager )
     {
         this.itemManager = itemManager;
     }
 
-    public ItemManager getItemManager ()
+    public Object getItemManager ()
     {
         return this.itemManager;
     }
