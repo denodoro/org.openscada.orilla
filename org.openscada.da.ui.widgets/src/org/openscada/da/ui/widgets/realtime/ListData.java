@@ -95,7 +95,7 @@ public class ListData implements Observer
         fireRemoved ( entries.toArray ( new ListEntry[entries.size ()] ) );
     }
 
-    synchronized public void clear ()
+    public synchronized void clear ()
     {
         for ( final ListEntry entry : this.items )
         {
