@@ -100,6 +100,7 @@ public class ListData implements Observer
         for ( final ListEntry entry : this.items )
         {
             entry.deleteObserver ( this );
+            entry.clear ();
         }
         this.items.clear ();
         fireRemoved ( this.items.toArray ( new ListEntry[this.items.size ()] ) );
@@ -169,6 +170,7 @@ public class ListData implements Observer
         }
     }
 
+    @Override
     public void update ( final Observable o, final Object arg )
     {
         if ( o instanceof ListEntry && this.items.contains ( o ) )

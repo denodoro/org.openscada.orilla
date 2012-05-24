@@ -71,6 +71,11 @@ public class ListEntry extends Observable implements IAdaptable, IPropertySource
         this.dataItem = new DataItemHolder ( Activator.getDefault ().getBundle ().getBundleContext (), item, this );
     }
 
+    public void dispose ()
+    {
+        clear ();
+    }
+
     public synchronized void clear ()
     {
         this.item = null;
@@ -128,6 +133,7 @@ public class ListEntry extends Observable implements IAdaptable, IPropertySource
 
     /**
      * check if attributes are in the list
+     * 
      * @return <code>true</code> if the attributes list is not empty
      */
     public synchronized boolean hasAttributes ()
@@ -215,18 +221,18 @@ public class ListEntry extends Observable implements IAdaptable, IPropertySource
         {
             switch ( (Properties)id )
             {
-            case ITEM_ID:
-                return this.item.getId ();
-            case CONNECTION_URI:
-                return this.item.getConnectionString ();
-            case VALUE:
-                return this.value;
-            case SUBSCRIPTION_STATE:
-                if ( this.value == null )
-                {
-                    return SubscriptionState.DISCONNECTED;
-                }
-                return this.value.getSubscriptionState ();
+                case ITEM_ID:
+                    return this.item.getId ();
+                case CONNECTION_URI:
+                    return this.item.getConnectionString ();
+                case VALUE:
+                    return this.value;
+                case SUBSCRIPTION_STATE:
+                    if ( this.value == null )
+                    {
+                        return SubscriptionState.DISCONNECTED;
+                    }
+                    return this.value.getSubscriptionState ();
             }
         }
         return null;
