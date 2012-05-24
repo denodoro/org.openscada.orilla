@@ -116,6 +116,7 @@
   	<openscada.builder.copyPlugin id="org.openscada.core.ui.connection.discoverer.ecf" />
 	<openscada.builder.copyPlugin id="org.openscada.core.ui.connection.discoverer.prefs" />
   	
+  	<openscada.builder.copyPlugin id="org.openscada.core.ui.connection.information" />
   	<openscada.builder.copyPlugin id="org.openscada.core.ui.connection.provider" />
   	<openscada.builder.copyPlugin id="org.openscada.core.ui.connection.login" />
   	
