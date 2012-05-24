@@ -17,6 +17,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Import-Package: org.openscada.core.connection.provider;version="1.0.0",
  org.openscada.core.connection.provider.info;version="1.0.0",
+ org.openscada.core.info;version="1.0.0",
  org.openscada.utils.beans;version="0.17.0",
  org.openscada.utils.osgi;version="0.18.0",
  org.slf4j;version="1.5.0"
