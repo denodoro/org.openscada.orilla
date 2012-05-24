@@ -45,7 +45,7 @@ public class ListData implements Observer
         return new ArrayList<ListEntry> ( this.items );
     }
 
-    synchronized public void setItems ( final List<ListEntry> items )
+    public synchronized void setItems ( final List<ListEntry> items )
     {
         clear ();
 
