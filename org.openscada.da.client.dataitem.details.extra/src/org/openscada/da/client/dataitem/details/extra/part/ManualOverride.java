@@ -54,8 +54,8 @@ import org.openscada.da.ui.styles.Activator;
 
 /**
  * A detail view for the manual override value, setting and getting the status
+ * 
  * @author Jens Reimann
- *
  */
 public class ManualOverride extends AbstractBaseDraw2DDetailsPart
 {
@@ -93,6 +93,10 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
     private LocalResourceManager resourceManager;
 
     private StyleInformation baseStyle;
+
+    private Figure rmvFigure;
+
+    private Figure rpvFigure;
 
     @Override
     public void createPart ( final Composite parent )
@@ -181,11 +185,11 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
 
     private Figure createRMV ()
     {
-        final Figure rmvFigure = new Figure ();
-        rmvFigure.setLayoutManager ( new BorderLayout () );
+        this.rmvFigure = new Figure ();
+        this.rmvFigure.setLayoutManager ( new BorderLayout () );
         final Label label = new Label ( Messages.ManualOverride_RemoteManualvalue_Label );
         label.setBorder ( new MarginBorder ( 10 ) );
-        rmvFigure.add ( label, BorderLayout.LEFT );
+        this.rmvFigure.add ( label, BorderLayout.LEFT );
 
         this.rmvRect = new RoundedRectangle ();
         this.rmvRect.setLayoutManager ( new BorderLayout () );
@@ -226,13 +230,11 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
             @Override
             public void mouseReleased ( final MouseEvent me )
             {
-                // TODO Auto-generated method stub
-
             }
         } );
 
-        rmvFigure.add ( this.rmvRect, BorderLayout.CENTER );
-        return rmvFigure;
+        this.rmvFigure.add ( this.rmvRect, BorderLayout.CENTER );
+        return this.rmvFigure;
     }
 
     protected void setRemoteManualState ( final boolean state )
@@ -345,11 +347,11 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
 
     private Figure createRPV ()
     {
-        final Figure rpvFigure = new Figure ();
-        rpvFigure.setLayoutManager ( new BorderLayout () );
+        this.rpvFigure = new Figure ();
+        this.rpvFigure.setLayoutManager ( new BorderLayout () );
         final Label label = new Label ( Messages.ManualOverride_RemoteProcessValue_Label );
         label.setBorder ( new MarginBorder ( 10 ) );
-        rpvFigure.add ( label, BorderLayout.LEFT );
+        this.rpvFigure.add ( label, BorderLayout.LEFT );
 
         this.rpvRect = new RoundedRectangle ();
         this.rpvRect.setLayoutManager ( new BorderLayout () );
@@ -358,7 +360,7 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
         this.rpvRect.setBackgroundColor ( ColorConstants.lightGray );
         this.rpvRect.add ( this.rpvValue, BorderLayout.CENTER );
 
-        rpvFigure.add ( this.rpvRect, BorderLayout.CENTER );
+        this.rpvFigure.add ( this.rpvRect, BorderLayout.CENTER );
 
         this.rpvRect.addMouseMotionListener ( new MouseMotionListener.Stub () {
 
@@ -393,7 +395,7 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
             }
         } );
 
-        return rpvFigure;
+        return this.rpvFigure;
     }
 
     private Figure createPV ()
@@ -487,6 +489,8 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
         final Variant remoteProcessValue = this.value.getAttributes ().get ( "remote.manual.value.original" ); //$NON-NLS-1$
         final Variant remoteManualValue = this.value.getAttributes ().get ( "remote.manual.value" ); //$NON-NLS-1$
 
+        setRemoteVisible ( remoteManual != null );
+
         if ( remoteManual == null )
         {
             setConnectionState ( this.rp2pConnection, false );
@@ -511,6 +515,14 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
         {
             this.rpvValue.setText ( remoteProcessValue.toString () );
         }
+    }
+
+    private void setRemoteVisible ( final boolean visible )
+    {
+        this.rmvFigure.setVisible ( visible );
+        this.rpvFigure.setVisible ( visible );
+        this.rp2pConnection.setVisible ( visible );
+        this.rm2pConnection.setVisible ( visible );
     }
 
     private boolean isLocalManual ()
@@ -614,8 +626,11 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
 
     /**
      * Set graphics attribute according to the connection state
-     * @param connection the connection to change 
-     * @param state the state
+     * 
+     * @param connection
+     *            the connection to change
+     * @param state
+     *            the state
      */
     protected void setConnectionState ( final PolylineConnection connection, final boolean state )
     {
