@@ -32,12 +32,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ColorRegistry;
 import org.eclipse.jface.resource.FontRegistry;
@@ -139,27 +136,19 @@ public abstract class AbstractTrendView extends QueryViewPart
 
     private static final String SMALL_LABEL_FONT = "small-label-font"; //$NON-NLS-1$
 
-    private final AtomicReference<Job> parameterUpdateJob = new AtomicReference<Job> ();
-
-    private final AtomicReference<Job> rangeUpdateJob = new AtomicReference<Job> ();
-
-    private final AtomicReference<Job> dataUpdateJob = new AtomicReference<Job> ();
-
-    private final AtomicReference<Job> scalingUpdateJob = new AtomicReference<Job> ();
+    private ExecutorService scheduler;
 
     private final ConcurrentMap<String, double[]> data = new ConcurrentHashMap<String, double[]> ();
 
-    private final AtomicReference<double[]> dataQuality = new AtomicReference<double[]> ();
+    private double[] dataQuality;
 
-    private final AtomicReference<double[]> dataManual = new AtomicReference<double[]> ();
+    private double[] dataManual;
 
-    private final AtomicReference<long[]> dataSourceValues = new AtomicReference<long[]> ();
+    private long[] dataSourceValues;
 
-    private final AtomicReference<Date[]> dataTimestamp = new AtomicReference<Date[]> ();
+    private Date[] dataTimestamp;
 
-    private final AtomicReference<ChartParameters> chartParameters = new AtomicReference<ChartParameters> ();
-
-    private final Object updateLock = new Object ();
+    private ChartParameters chartParameters;
 
     private Composite parent;
 
@@ -215,9 +204,18 @@ public abstract class AbstractTrendView extends QueryViewPart
 
     private volatile boolean scaleYAutomatically = true;
 
+    private Runnable updateScalingJob;
+
+    private Runnable updateChartParametersJob;
+
+    private Runnable updateChartDataJob;
+
+    private Runnable updateRangeParametersJob;
+
     public AbstractTrendView ()
     {
         super ();
+        scheduler = Executors.newSingleThreadExecutor ();
     }
 
     @Override
@@ -241,7 +239,7 @@ public abstract class AbstractTrendView extends QueryViewPart
         this.colorRegistry.put ( "AVG", new RGB ( 0, 0, 255 ) ); //$NON-NLS-1$
 
         // chart has some predefined parameters, quality of 0.75, from yesterday to today
-        this.chartParameters.set ( ChartParameters.create ().construct () );
+        this.chartParameters = ChartParameters.create ().construct ();
 
         this.parent = parent;
 
@@ -306,7 +304,7 @@ public abstract class AbstractTrendView extends QueryViewPart
             @Override
             public void widgetSelected ( final SelectionEvent e )
             {
-                AbstractTrendView.this.scalingUpdateJob.get ().schedule ( GUI_RESIZE_JOB_DELAY );
+                scheduler.execute ( updateScalingJob );
             }
 
             @Override
@@ -325,7 +323,7 @@ public abstract class AbstractTrendView extends QueryViewPart
             @Override
             public void widgetSelected ( final SelectionEvent e )
             {
-                AbstractTrendView.this.scalingUpdateJob.get ().schedule ( GUI_RESIZE_JOB_DELAY );
+                scheduler.execute ( updateScalingJob );
             }
 
             @Override
@@ -356,7 +354,7 @@ public abstract class AbstractTrendView extends QueryViewPart
                     AbstractTrendView.this.colorRegistry.put ( KEY_QUALITY, resultColor );
                     AbstractTrendView.this.qualitySpinner.setBackground ( AbstractTrendView.this.colorRegistry.get ( KEY_QUALITY ) );
                     AbstractTrendView.this.qualitySpinner.setForeground ( contrastForeground ( AbstractTrendView.this.colorRegistry.get ( KEY_QUALITY ) ) );
-                    AbstractTrendView.this.parameterUpdateJob.get ().schedule ( GUI_JOB_DELAY );
+                    scheduler.execute ( updateChartParametersJob );
                 }
             }
 
@@ -369,14 +367,14 @@ public abstract class AbstractTrendView extends QueryViewPart
         this.qualitySpinner.setDigits ( 2 );
         this.qualitySpinner.setMaximum ( 100 );
         this.qualitySpinner.setMinimum ( 0 );
-        this.qualitySpinner.setSelection ( this.chartParameters.get ().getQuality () );
+        this.qualitySpinner.setSelection ( this.chartParameters.getQuality () );
         this.qualitySpinner.addModifyListener ( new ModifyListener () {
             @Override
             public void modifyText ( final ModifyEvent e )
             {
-                final ChartParameters newParameters = ChartParameters.create ().from ( AbstractTrendView.this.chartParameters.get () ).quality ( AbstractTrendView.this.qualitySpinner.getSelection () ).construct ();
-                AbstractTrendView.this.chartParameters.set ( newParameters );
-                AbstractTrendView.this.parameterUpdateJob.get ().schedule ( GUI_JOB_DELAY );
+                final ChartParameters newParameters = ChartParameters.create ().from ( AbstractTrendView.this.chartParameters ).quality ( AbstractTrendView.this.qualitySpinner.getSelection () ).construct ();
+                AbstractTrendView.this.chartParameters = newParameters;
+                scheduler.execute ( updateChartParametersJob );
             }
         } );
 
@@ -402,7 +400,7 @@ public abstract class AbstractTrendView extends QueryViewPart
                     AbstractTrendView.this.colorRegistry.put ( KEY_MANUAL, resultColor );
                     AbstractTrendView.this.manualSpinner.setBackground ( AbstractTrendView.this.colorRegistry.get ( KEY_MANUAL ) );
                     AbstractTrendView.this.manualSpinner.setForeground ( contrastForeground ( AbstractTrendView.this.colorRegistry.get ( KEY_MANUAL ) ) );
-                    AbstractTrendView.this.parameterUpdateJob.get ().schedule ( GUI_JOB_DELAY );
+                    scheduler.execute ( updateChartParametersJob );
                 }
             }
 
@@ -415,14 +413,15 @@ public abstract class AbstractTrendView extends QueryViewPart
         this.manualSpinner.setDigits ( 2 );
         this.manualSpinner.setMaximum ( 100 );
         this.manualSpinner.setMinimum ( 0 );
-        this.manualSpinner.setSelection ( this.chartParameters.get ().getManual () );
+        this.manualSpinner.setSelection ( this.chartParameters.getManual () );
         this.manualSpinner.addModifyListener ( new ModifyListener () {
             @Override
             public void modifyText ( final ModifyEvent e )
             {
-                final ChartParameters newParameters = ChartParameters.create ().from ( AbstractTrendView.this.chartParameters.get () ).manual ( AbstractTrendView.this.manualSpinner.getSelection () ).construct ();
-                AbstractTrendView.this.chartParameters.set ( newParameters );
-                AbstractTrendView.this.parameterUpdateJob.get ().schedule ( GUI_JOB_DELAY );
+                final ChartParameters newParameters = ChartParameters.create ().from ( AbstractTrendView.this.chartParameters ).manual ( AbstractTrendView.this.manualSpinner.getSelection () ).construct ();
+                AbstractTrendView.this.chartParameters = newParameters;
+                scheduler.execute ( updateChartParametersJob );
+
             }
         } );
 
@@ -455,9 +454,9 @@ public abstract class AbstractTrendView extends QueryViewPart
             @Override
             public void controlResized ( final ControlEvent e )
             {
-                final ChartParameters newParameters = ChartParameters.create ().from ( AbstractTrendView.this.chartParameters.get () ).numOfEntries ( AbstractTrendView.this.chart.getPlotArea ().getBounds ().width ).construct ();
-                AbstractTrendView.this.chartParameters.set ( newParameters );
-                AbstractTrendView.this.rangeUpdateJob.get ().schedule ( GUI_RESIZE_JOB_DELAY );
+                final ChartParameters newParameters = ChartParameters.create ().from ( AbstractTrendView.this.chartParameters ).numOfEntries ( AbstractTrendView.this.chart.getPlotArea ().getBounds ().width ).construct ();
+                AbstractTrendView.this.chartParameters = newParameters;
+                scheduler.execute ( updateRangeParametersJob );
             }
 
             @Override
@@ -531,42 +530,46 @@ public abstract class AbstractTrendView extends QueryViewPart
             @Override
             public void mouseUp ( final MouseEvent e )
             {
+                System.err.println ( e );
                 if ( AbstractTrendView.this.dragStarted )
                 {
                     AbstractTrendView.this.dragStarted = false;
                     AbstractTrendView.this.chart.getPlotArea ().setCursor ( null );
                     // zoom in range
-                    final DateRange zoomResult = moveRange ( AbstractTrendView.this.dragStartedX, e.x, 0, AbstractTrendView.this.chart.getPlotArea ().getSize ().x, AbstractTrendView.this.chartParameters.get ().getStartTime (), AbstractTrendView.this.chartParameters.get ().getEndTime () );
-                    final ChartParameters parameters = ChartParameters.create ().from ( AbstractTrendView.this.chartParameters.get () ).startTime ( zoomResult.start ).endTime ( zoomResult.end ).construct ();
-                    AbstractTrendView.this.chartParameters.set ( parameters );
-                    AbstractTrendView.this.rangeUpdateJob.get ().schedule ( GUI_JOB_DELAY );
+                    final DateRange zoomResult = moveRange ( AbstractTrendView.this.dragStartedX, e.x, 0, AbstractTrendView.this.chart.getPlotArea ().getSize ().x, AbstractTrendView.this.chartParameters.getStartTime (), AbstractTrendView.this.chartParameters.getEndTime () );
+                    final ChartParameters parameters = ChartParameters.create ().from ( AbstractTrendView.this.chartParameters ).startTime ( zoomResult.start ).endTime ( zoomResult.end ).construct ();
+                    AbstractTrendView.this.chartParameters = parameters;
+                    scheduler.execute ( updateRangeParametersJob );
                 }
                 else
                 {
                     if ( e.button == 1 && ( e.stateMask & SWT.SHIFT ) == SWT.SHIFT )
                     {
                         // zoom in
-                        final DateRange zoomResult = zoomIn ( e.x, 0, AbstractTrendView.this.chart.getPlotArea ().getSize ().x, AbstractTrendView.this.chartParameters.get ().getStartTime (), AbstractTrendView.this.chartParameters.get ().getEndTime () );
-                        final ChartParameters parameters = ChartParameters.create ().from ( AbstractTrendView.this.chartParameters.get () ).startTime ( zoomResult.start ).endTime ( zoomResult.end ).construct ();
-                        AbstractTrendView.this.chartParameters.set ( parameters );
-                        AbstractTrendView.this.rangeUpdateJob.get ().schedule ( GUI_JOB_DELAY );
+                        final DateRange zoomResult = zoomIn ( e.x, 0, AbstractTrendView.this.chart.getPlotArea ().getSize ().x, AbstractTrendView.this.chartParameters.getStartTime (), AbstractTrendView.this.chartParameters.getEndTime () );
+                        final ChartParameters parameters = ChartParameters.create ().from ( AbstractTrendView.this.chartParameters ).startTime ( zoomResult.start ).endTime ( zoomResult.end ).construct ();
+                        AbstractTrendView.this.chartParameters = parameters;
+                        scheduler.execute ( updateRangeParametersJob );
+
                     }
                     else if ( e.button == 1 && ( e.stateMask & SWT.ALT ) == SWT.ALT )
                     {
                         // zoom out
-                        final DateRange zoomResult = zoomOut ( e.x, 0, AbstractTrendView.this.chart.getPlotArea ().getSize ().x, AbstractTrendView.this.chartParameters.get ().getStartTime (), AbstractTrendView.this.chartParameters.get ().getEndTime () );
-                        final ChartParameters parameters = ChartParameters.create ().from ( AbstractTrendView.this.chartParameters.get () ).startTime ( zoomResult.start ).endTime ( zoomResult.end ).construct ();
-                        AbstractTrendView.this.chartParameters.set ( parameters );
-                        AbstractTrendView.this.rangeUpdateJob.get ().schedule ( GUI_JOB_DELAY );
+                        final DateRange zoomResult = zoomOut ( e.x, 0, AbstractTrendView.this.chart.getPlotArea ().getSize ().x, AbstractTrendView.this.chartParameters.getStartTime (), AbstractTrendView.this.chartParameters.getEndTime () );
+                        final ChartParameters parameters = ChartParameters.create ().from ( AbstractTrendView.this.chartParameters ).startTime ( zoomResult.start ).endTime ( zoomResult.end ).construct ();
+                        AbstractTrendView.this.chartParameters = parameters;
+                        scheduler.execute ( updateRangeParametersJob );
+
                     }
                     else if ( e.button == 1 )
                     {
                         AbstractTrendView.this.chart.getPlotArea ().setCursor ( null );
                         // zoom in range
-                        final DateRange zoomResult = moveRange ( e.x, AbstractTrendView.this.chart.getPlotArea ().getSize ().x / 2, 0, AbstractTrendView.this.chart.getPlotArea ().getSize ().x, AbstractTrendView.this.chartParameters.get ().getStartTime (), AbstractTrendView.this.chartParameters.get ().getEndTime () );
-                        final ChartParameters parameters = ChartParameters.create ().from ( AbstractTrendView.this.chartParameters.get () ).startTime ( zoomResult.start ).endTime ( zoomResult.end ).construct ();
-                        AbstractTrendView.this.chartParameters.set ( parameters );
-                        AbstractTrendView.this.rangeUpdateJob.get ().schedule ( GUI_JOB_DELAY );
+                        final DateRange zoomResult = moveRange ( e.x, AbstractTrendView.this.chart.getPlotArea ().getSize ().x / 2, 0, AbstractTrendView.this.chart.getPlotArea ().getSize ().x, AbstractTrendView.this.chartParameters.getStartTime (), AbstractTrendView.this.chartParameters.getEndTime () );
+                        final ChartParameters parameters = ChartParameters.create ().from ( AbstractTrendView.this.chartParameters ).startTime ( zoomResult.start ).endTime ( zoomResult.end ).construct ();
+                        AbstractTrendView.this.chartParameters = parameters;
+                        scheduler.execute ( updateRangeParametersJob );
+
                     }
                     else if ( e.button == 3 )
                     {
@@ -592,18 +595,20 @@ public abstract class AbstractTrendView extends QueryViewPart
                 if ( e.count > 0 )
                 {
                     // zoom in
-                    final DateRange zoomResult = zoomIn ( e.x, 0, AbstractTrendView.this.chart.getPlotArea ().getSize ().x, AbstractTrendView.this.chartParameters.get ().getStartTime (), AbstractTrendView.this.chartParameters.get ().getEndTime () );
-                    final ChartParameters parameters = ChartParameters.create ().from ( AbstractTrendView.this.chartParameters.get () ).startTime ( zoomResult.start ).endTime ( zoomResult.end ).construct ();
-                    AbstractTrendView.this.chartParameters.set ( parameters );
-                    AbstractTrendView.this.rangeUpdateJob.get ().schedule ( GUI_JOB_DELAY );
+                    final DateRange zoomResult = zoomIn ( e.x, 0, AbstractTrendView.this.chart.getPlotArea ().getSize ().x, AbstractTrendView.this.chartParameters.getStartTime (), AbstractTrendView.this.chartParameters.getEndTime () );
+                    final ChartParameters parameters = ChartParameters.create ().from ( AbstractTrendView.this.chartParameters ).startTime ( zoomResult.start ).endTime ( zoomResult.end ).construct ();
+                    AbstractTrendView.this.chartParameters = parameters;
+                    scheduler.execute ( updateRangeParametersJob );
+
                 }
                 else
                 {
                     // zoom out
-                    final DateRange zoomResult = zoomOut ( e.x, 0, AbstractTrendView.this.chart.getPlotArea ().getSize ().x, AbstractTrendView.this.chartParameters.get ().getStartTime (), AbstractTrendView.this.chartParameters.get ().getEndTime () );
-                    final ChartParameters parameters = ChartParameters.create ().from ( AbstractTrendView.this.chartParameters.get () ).startTime ( zoomResult.start ).endTime ( zoomResult.end ).construct ();
-                    AbstractTrendView.this.chartParameters.set ( parameters );
-                    AbstractTrendView.this.rangeUpdateJob.get ().schedule ( GUI_JOB_DELAY );
+                    final DateRange zoomResult = zoomOut ( e.x, 0, AbstractTrendView.this.chart.getPlotArea ().getSize ().x, AbstractTrendView.this.chartParameters.getStartTime (), AbstractTrendView.this.chartParameters.getEndTime () );
+                    final ChartParameters parameters = ChartParameters.create ().from ( AbstractTrendView.this.chartParameters ).startTime ( zoomResult.start ).endTime ( zoomResult.end ).construct ();
+                    AbstractTrendView.this.chartParameters = parameters;
+                    scheduler.execute ( updateRangeParametersJob );
+
                 }
             }
         } );
@@ -614,7 +619,7 @@ public abstract class AbstractTrendView extends QueryViewPart
                 final int margin = 10;
                 try
                 {
-                    final int numOfEntries = AbstractTrendView.this.chartParameters.get ().getNumOfEntries ();
+                    final int numOfEntries = AbstractTrendView.this.chartParameters.getNumOfEntries ();
                     final int pixels = AbstractTrendView.this.chart.getPlotArea ().getBounds ().width - 2 * margin;
                     final double factor = (double)numOfEntries / (double)pixels;
                     final int i = (int)Math.round ( ( x - margin ) * factor );
@@ -630,32 +635,32 @@ public abstract class AbstractTrendView extends QueryViewPart
             @Override
             public Date getTimestamp ( final int x )
             {
-                return AbstractTrendView.this.dataTimestamp.get ()[coordinateToIndex ( x )];
+                return AbstractTrendView.this.dataTimestamp[coordinateToIndex ( x )];
             }
 
             @Override
             public double getQuality ( final int x )
             {
-                return AbstractTrendView.this.dataQuality.get ()[coordinateToIndex ( x )];
+                return AbstractTrendView.this.dataQuality[coordinateToIndex ( x )];
             }
 
             @Override
             public double getManual ( final int x )
             {
-                return AbstractTrendView.this.dataManual.get ()[coordinateToIndex ( x )];
+                return AbstractTrendView.this.dataManual[coordinateToIndex ( x )];
             };
 
             @Override
             public long getSourceValues ( final int x )
             {
-                return AbstractTrendView.this.dataSourceValues.get ()[coordinateToIndex ( x )];
+                return AbstractTrendView.this.dataSourceValues[coordinateToIndex ( x )];
             }
 
             @Override
             public Map<String, Double> getData ( final int x )
             {
                 final Map<String, Double> result = new HashMap<String, Double> ();
-                for ( final SeriesParameters seriesParameters : AbstractTrendView.this.chartParameters.get ().getAvailableSeries () )
+                for ( final SeriesParameters seriesParameters : AbstractTrendView.this.chartParameters.getAvailableSeries () )
                 {
                     result.put ( seriesParameters.name, AbstractTrendView.this.data.get ( seriesParameters.name )[coordinateToIndex ( x )] );
                 }
@@ -707,54 +712,34 @@ public abstract class AbstractTrendView extends QueryViewPart
 
         this.chart.setMenu ( m );
 
-        // set up job for updating chart in case of parameter change
-        this.parameterUpdateJob.set ( new Job ( "updateChartParameters" ) { //$NON-NLS-1$
+        updateChartParametersJob = new Runnable () {
             @Override
-            protected IStatus run ( final IProgressMonitor monitor )
+            public void run ()
             {
                 doUpdateChartParameters ();
-                return Status.OK_STATUS;
             }
-        } );
-
-        // set up job for updating chart in case of range change
-        this.rangeUpdateJob.set ( new Job ( "updateRangeParameters" ) { //$NON-NLS-1$
+        };
+        updateRangeParametersJob = new Runnable () {
             @Override
-            protected IStatus run ( final IProgressMonitor monitor )
+            public void run ()
             {
                 doUpdateRangeParameters ();
-                return Status.OK_STATUS;
             }
-        } );
-
-        // set up job for updating chart on data change
-        this.dataUpdateJob.set ( new Job ( "updateChartData" ) { //$NON-NLS-1$
+        };
+        updateScalingJob = new Runnable () {
             @Override
-            protected IStatus run ( final IProgressMonitor monitor )
-            {
-                doUpdateChartData ();
-                return Status.OK_STATUS;
-            }
-        } );
-
-        // set up job for updating chart scaling
-        this.scalingUpdateJob.set ( new Job ( "updateScaling" ) { //$NON-NLS-1$
-            @Override
-            protected IStatus run ( final IProgressMonitor monitor )
+            public void run ()
             {
                 doUpdateScaling ();
-                try
-                {
-                    Thread.sleep ( 100 );
-                }
-                catch ( final InterruptedException e )
-                {
-                    // pass
-                }
-                return Status.OK_STATUS;
             }
-        } );
-
+        };
+        updateChartDataJob = new Runnable () {
+            @Override
+            public void run ()
+            {
+                doUpdateChartData ();
+            }
+        };
     }
 
     protected void updateSpinner ()
@@ -835,82 +820,78 @@ public abstract class AbstractTrendView extends QueryViewPart
     @Override
     public void updateParameters ( final QueryParameters parameters, final Set<String> valueTypes )
     {
+        System.err.println ( "updateParameters called: " + parameters );
+        // new Exception().printStackTrace();
         boolean updateRequired = false;
-        synchronized ( this.updateLock )
+        // update model
+        this.data.clear ();
+        this.dataTimestamp = new Date[parameters.getEntries ()];
+        this.dataQuality = new double[parameters.getEntries ()];
+        this.dataManual = new double[parameters.getEntries ()];
+        this.dataSourceValues = new long[parameters.getEntries ()];
+        for ( final String seriesId : valueTypes )
         {
-            // update model
-            this.data.clear ();
-            this.dataTimestamp.set ( new Date[parameters.getEntries ()] );
-            this.dataQuality.set ( new double[parameters.getEntries ()] );
-            this.dataManual.set ( new double[parameters.getEntries ()] );
-            this.dataSourceValues.set ( new long[parameters.getEntries ()] );
-            for ( final String seriesId : valueTypes )
-            {
-                this.data.put ( seriesId, new double[parameters.getEntries ()] );
-            }
-            final ChartParameters newChartParameters = ChartParameters.create ().from ( this.chartParameters.get () ).startTime ( parameters.getStartTimestamp ().getTime () ).endTime ( parameters.getEndTimestamp ().getTime () ).numOfEntries ( parameters.getEntries () ).availableSeries ( valueTypes ).construct ();
-            if ( !newChartParameters.equals ( this.chartParameters.get () ) )
-            {
-                this.chartParameters.set ( newChartParameters );
-                updateRequired = true;
-            }
-            this.currentYMin = null;
-            this.currentYMax = null;
+            this.data.put ( seriesId, new double[parameters.getEntries ()] );
         }
+        final ChartParameters newChartParameters = ChartParameters.create ().from ( this.chartParameters ).startTime ( parameters.getStartTimestamp ().getTime () ).endTime ( parameters.getEndTimestamp ().getTime () ).numOfEntries ( parameters.getEntries () ).availableSeries ( valueTypes ).construct ();
+        if ( !newChartParameters.equals ( this.chartParameters ) )
+        {
+            this.chartParameters = newChartParameters;
+            updateRequired = true;
+        }
+        this.currentYMin = null;
+        this.currentYMax = null;
         if ( updateRequired )
         {
-            this.parameterUpdateJob.get ().schedule ( GUI_JOB_DELAY );
-            this.rangeUpdateJob.get ().schedule ( GUI_JOB_DELAY );
+            scheduler.execute ( updateChartParametersJob );
         }
     }
 
     @Override
     public void updateData ( final int index, final Map<String, Value[]> values, final ValueInformation[] valueInformation )
     {
-        synchronized ( this.updateLock )
+        for ( final SeriesParameters series : this.chartParameters.getAvailableSeries () )
         {
-            for ( final SeriesParameters series : this.chartParameters.get ().getAvailableSeries () )
+            // use local ref for faster access
+            final Value[] valueArray = values.get ( series.name );
+            final double[] chartValues = this.data.get ( series.name );
+            // now copy values from data source to our data array
+            for ( int i = 0; i < valueInformation.length; i++ )
             {
-                // use local ref for faster access
-                final Value[] valueArray = values.get ( series.name );
-                final double[] chartValues = this.data.get ( series.name );
-                // now copy values from data source to our data array
-                for ( int i = 0; i < valueInformation.length; i++ )
+                final double d = valueArray[i].toDouble ();
+                chartValues[i + index] = d;
+                if ( !Double.isInfinite ( d ) && !Double.isNaN ( d ) && d != 0.0 )
                 {
-                    final double d = valueArray[i].toDouble ();
-                    chartValues[i + index] = d;
-                    if ( !Double.isInfinite ( d ) && !Double.isNaN ( d ) && d != 0.0 )
+                    if ( this.currentYMin == null )
                     {
-                        if ( this.currentYMin == null )
-                        {
-                            this.currentYMin = d;
-                        }
-                        if ( this.currentYMax == null )
-                        {
-                            this.currentYMax = d;
-                        }
-                        final double diff = this.currentYMax - this.currentYMin;
-                        if ( d > this.currentYMax )
-                        {
-                            this.currentYMax = d + diff * 0.2;
-                        }
-                        if ( d < this.currentYMin )
-                        {
-                            this.currentYMin = d - diff * 0.2;
-                        }
+                        this.currentYMin = d;
+                    }
+                    if ( this.currentYMax == null )
+                    {
+                        this.currentYMax = d;
+                    }
+                    final double diff = this.currentYMax - this.currentYMin;
+                    if ( d > this.currentYMax )
+                    {
+                        this.currentYMax = d + diff * 0.2;
+                    }
+                    if ( d < this.currentYMin )
+                    {
+                        this.currentYMin = d - diff * 0.2;
                     }
                 }
             }
-            // now copy values for date axis and quality
-            for ( int i = 0; i < valueInformation.length; i++ )
-            {
-                this.dataTimestamp.get ()[i + index] = valueInformation[i].getStartTimestamp ().getTime ();
-                this.dataQuality.get ()[i + index] = valueInformation[i].getQuality ();
-                this.dataManual.get ()[i + index] = valueInformation[i].getManualPercentage ();
-                this.dataSourceValues.get ()[i + index] = valueInformation[i].getSourceValues ();
-            }
         }
-        this.dataUpdateJob.get ().schedule ( GUI_JOB_DELAY );
+        // now copy values for date axis and quality
+        for ( int i = 0; i < valueInformation.length; i++ )
+        {
+            this.dataTimestamp[i + index] = valueInformation[i].getStartTimestamp ().getTime ();
+            this.dataQuality[i + index] = valueInformation[i].getQuality ();
+            this.dataManual[i + index] = valueInformation[i].getManualPercentage ();
+            this.dataSourceValues[i + index] = valueInformation[i].getSourceValues ();
+        }
+        scheduler.execute ( updateChartDataJob );
+
     }
 
     @Override
@@ -953,9 +934,9 @@ public abstract class AbstractTrendView extends QueryViewPart
                 // update GUI with new parameters
                 // remove old Series
                 AbstractTrendView.this.chart.setQualityColor ( AbstractTrendView.this.colorRegistry.get ( KEY_QUALITY ) );
-                AbstractTrendView.this.chart.setQualityThreshold ( AbstractTrendView.this.chartParameters.get ().getQuality () / 100.0 );
+                AbstractTrendView.this.chart.setQualityThreshold ( AbstractTrendView.this.chartParameters.getQuality () / 100.0 );
                 AbstractTrendView.this.chart.setManualColor ( AbstractTrendView.this.colorRegistry.get ( KEY_MANUAL ) );
-                AbstractTrendView.this.chart.setManualThreshold ( AbstractTrendView.this.chartParameters.get ().getManual () / 100.0 );
+                AbstractTrendView.this.chart.setManualThreshold ( AbstractTrendView.this.chartParameters.getManual () / 100.0 );
                 final List<String> seriesIds = new ArrayList<String> ();
                 for ( final ISeries series : AbstractTrendView.this.chart.getSeriesSet ().getSeries () )
                 {
@@ -970,7 +951,7 @@ public abstract class AbstractTrendView extends QueryViewPart
                     group.dispose ();
                 }
                 // add new series
-                for ( final SeriesParameters seriesParameters : AbstractTrendView.this.chartParameters.get ().getAvailableSeries () )
+                for ( final SeriesParameters seriesParameters : AbstractTrendView.this.chartParameters.getAvailableSeries () )
                 {
                     final ILineSeries series = (ILineSeries)AbstractTrendView.this.chart.getSeriesSet ().createSeries ( SeriesType.LINE, seriesParameters.name );
                     final Group group = new Group ( AbstractTrendView.this.panel, SWT.SHADOW_ETCHED_IN );
@@ -1019,8 +1000,8 @@ public abstract class AbstractTrendView extends QueryViewPart
                         @Override
                         public void widgetSelected ( final SelectionEvent e )
                         {
-                            final ChartParameters newChartParameters = ChartParameters.create ().from ( AbstractTrendView.this.chartParameters.get () ).seriesWidth ( seriesParameters.name, widthSpinner.getSelection () ).construct ();
-                            AbstractTrendView.this.chartParameters.set ( newChartParameters );
+                            final ChartParameters newChartParameters = ChartParameters.create ().from ( AbstractTrendView.this.chartParameters ).seriesWidth ( seriesParameters.name, widthSpinner.getSelection () ).construct ();
+                            AbstractTrendView.this.chartParameters = newChartParameters;
                             series.setLineWidth ( widthSpinner.getSelection () );
                             series.setVisible ( widthSpinner.getSelection () > 0 );
                             AbstractTrendView.this.chart.redraw ();
@@ -1047,13 +1028,10 @@ public abstract class AbstractTrendView extends QueryViewPart
         if ( query != null )
         {
             final Calendar startTime = new GregorianCalendar ();
-            startTime.setTime ( this.chartParameters.get ().getStartTime () );
+            startTime.setTime ( this.chartParameters.getStartTime () );
             final Calendar endTime = new GregorianCalendar ();
-            endTime.setTime ( this.chartParameters.get ().getEndTime () );
-            synchronized ( this.updateLock )
-            {
-                query.changeProperties ( new QueryParameters ( startTime, endTime, this.chartParameters.get ().getNumOfEntries () ) );
-            }
+            endTime.setTime ( this.chartParameters.getEndTime () );
+            query.changeProperties ( new QueryParameters ( startTime, endTime, this.chartParameters.getNumOfEntries () ) );
         }
     }
 
@@ -1072,7 +1050,7 @@ public abstract class AbstractTrendView extends QueryViewPart
             @Override
             public void run ()
             {
-                for ( final SeriesParameters seriesParameter : AbstractTrendView.this.chartParameters.get ().getAvailableSeries () )
+                for ( final SeriesParameters seriesParameter : AbstractTrendView.this.chartParameters.getAvailableSeries () )
                 {
                     final ISeries series = AbstractTrendView.this.chart.getSeriesSet ().getSeries ( seriesParameter.name );
                     // I'm not sure in which cases the series can even be null, but just try to continue as usual
@@ -1080,12 +1058,12 @@ public abstract class AbstractTrendView extends QueryViewPart
                     {
                         continue;
                     }
-                    series.setXDateSeries ( AbstractTrendView.this.dataTimestamp.get () );
+                    series.setXDateSeries ( AbstractTrendView.this.dataTimestamp );
                     series.setYSeries ( convertInvalidData ( AbstractTrendView.this.data.get ( seriesParameter.name ) ) );
                 }
                 AbstractTrendView.this.chart.getAxisSet ().getXAxis ( 0 ).getTick ().setFormat ( new SimpleDateFormat ( formatByRange () ) );
-                AbstractTrendView.this.chart.setQuality ( AbstractTrendView.this.dataQuality.get () );
-                AbstractTrendView.this.chart.setManual ( AbstractTrendView.this.dataManual.get () );
+                AbstractTrendView.this.chart.setQuality ( AbstractTrendView.this.dataQuality );
+                AbstractTrendView.this.chart.setManual ( AbstractTrendView.this.dataManual );
                 adjustRange ();
                 AbstractTrendView.this.chart.redraw ();
             }
@@ -1160,9 +1138,9 @@ public abstract class AbstractTrendView extends QueryViewPart
 
         final double feather = 0.05;
 
-        final double[] quality = this.dataQuality.get ();
+        final double[] quality = this.dataQuality;
 
-        final double minQuality = this.chartParameters.get ().getQuality () / 100.0;
+        final double minQuality = this.chartParameters.getQuality () / 100.0;
 
         for ( final Map.Entry<String, double[]> entry : this.data.entrySet () )
         {
@@ -1198,7 +1176,7 @@ public abstract class AbstractTrendView extends QueryViewPart
      */
     private String formatByRange ()
     {
-        final long range = this.chartParameters.get ().getEndTime ().getTime () - this.chartParameters.get ().getStartTime ().getTime ();
+        final long range = this.chartParameters.getEndTime ().getTime () - this.chartParameters.getStartTime ().getTime ();
         if ( range < 1000 * 60 )
         {
             return "HH:mm:ss.SSS"; //$NON-NLS-1$
@@ -1258,13 +1236,10 @@ public abstract class AbstractTrendView extends QueryViewPart
     @Override
     public void dispose ()
     {
-        this.parameterUpdateJob.get ().cancel ();
-        this.rangeUpdateJob.get ().cancel ();
-        this.dataUpdateJob.get ().cancel ();
+        this.scheduler.shutdownNow ();
         this.dragCursor.dispose ();
         this.zoomInCursor.dispose ();
         this.zoomOutCursor.dispose ();
         super.dispose ();
     }
-
 }
