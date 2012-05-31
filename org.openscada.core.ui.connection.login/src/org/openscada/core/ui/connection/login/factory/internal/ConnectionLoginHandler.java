@@ -101,6 +101,8 @@ public class ConnectionLoginHandler implements LoginHandler
                     markCompleteOk ();
                 }
                 break;
+            default:
+                break;
         }
 
         final StateListener loginStateListener = this.loginStateListener;
