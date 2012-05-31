@@ -158,7 +158,10 @@ public class ConnectionInformationList
         {
             this.context.ungetService ( ref );
         }
-        this.list.clear ();
-        this.list.dispose ();
+        if ( !this.list.isDisposed () )
+        {
+            this.list.clear ();
+            this.list.dispose ();
+        }
     }
 }
