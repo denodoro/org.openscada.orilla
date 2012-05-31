@@ -81,6 +81,8 @@ public class ConnectionLoginHandler implements LoginHandler
     {
         notifyStateChange ( this.connectionService, ConnectionState.CLOSED, null, false );
         this.connectionService.getConnection ().addConnectionStateListener ( this.connectionStateListener );
+
+        // we do call connect for lazy connections since the ConnectionService decides when to connect
         this.connectionService.connect ();
     }
 

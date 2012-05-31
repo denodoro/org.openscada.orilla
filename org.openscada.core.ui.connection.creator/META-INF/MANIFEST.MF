@@ -2,12 +2,16 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: openSCADA Core UI Connection Creator
 Bundle-SymbolicName: org.openscada.core.ui.connection.creator;singleton:=true
-Bundle-Version: 0.18.0.qualifier
+Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.openscada.core.ui.connection.creator.Activator
 Bundle-Vendor: TH4 SYSTEMS GmbH
 Require-Bundle: org.eclipse.core.runtime,
  org.openscada.core.connection.provider;bundle-version="0.14.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
-Export-Package: org.openscada.core.ui.connection.creator
+Export-Package: org.openscada.core.ui.connection.creator;version="1.0.0";
+  uses:="org.eclipse.core.runtime,
+   org.openscada.core.connection.provider,
+   org.osgi.framework,
+   org.openscada.core"
 Import-Package: org.openscada.core;version="0.16.0"

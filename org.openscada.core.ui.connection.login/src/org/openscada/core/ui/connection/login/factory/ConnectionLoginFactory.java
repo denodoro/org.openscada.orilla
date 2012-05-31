@@ -57,7 +57,7 @@ public class ConnectionLoginFactory implements LoginFactory
             ci.setUser ( username );
             ci.setPassword ( password );
 
-            final ConnectionService connectionService = ConnectionCreatorHelper.createConnection ( ci, loginConnection.getAutoReconnectDelay () );
+            final ConnectionService connectionService = ConnectionCreatorHelper.createConnection ( ci, loginConnection.getAutoReconnectDelay (), loginConnection.getMode () == Mode.LAZY );
             if ( connectionService == null )
             {
                 // dispose already created first

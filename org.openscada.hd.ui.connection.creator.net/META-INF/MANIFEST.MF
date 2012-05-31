@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: OpenSCADA HD UI NET Connection Creator
+Bundle-Name: openSCADA HD UI NET Connection Creator
 Bundle-SymbolicName: org.openscada.hd.ui.connection.creator.net;singleton:=true
-Bundle-Version: 0.15.0.qualifier
+Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.openscada.hd.ui.connection.creator.net.Activator
 Bundle-Vendor: TH4 SYSTEMS GmbH
 Require-Bundle: org.eclipse.ui,
