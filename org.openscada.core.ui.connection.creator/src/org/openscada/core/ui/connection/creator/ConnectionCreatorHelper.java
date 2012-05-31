@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -27,7 +27,7 @@ import org.openscada.core.connection.provider.ConnectionService;
 
 public class ConnectionCreatorHelper
 {
-    public static ConnectionService createConnection ( final ConnectionInformation info, final Integer autoReconnectDelay )
+    public static ConnectionService createConnection ( final ConnectionInformation info, final Integer autoReconnectDelay, final boolean lazyActivation )
     {
         if ( info == null )
         {
@@ -44,7 +44,7 @@ public class ConnectionCreatorHelper
             }
             if ( interfaceName.equals ( info.getInterface () ) && driverName.equals ( info.getDriver () ) )
             {
-                final ConnectionService service = createConnection ( info, ele, autoReconnectDelay );
+                final ConnectionService service = createConnection ( info, ele, autoReconnectDelay, lazyActivation );
                 if ( service != null )
                 {
                     return service;
@@ -56,13 +56,16 @@ public class ConnectionCreatorHelper
 
     /**
      * Create a new connection from the connection created defined in the element
-     * @param connectionInformation the connection information
-     * @param ele the configuration element
-     * @param autoReconnectDelay the automatic reconnect delay or <code>null</code> if not
-     * automatic reconnect should be used
+     * 
+     * @param connectionInformation
+     *            the connection information
+     * @param ele
+     *            the configuration element
+     * @param autoReconnectDelay
+     *            the automatic reconnect delay or <code>null</code> if not automatic reconnect should be used
      * @return a new {@link ConnectionService} or <code>null</code>
      */
-    private static ConnectionService createConnection ( final ConnectionInformation connectionInformation, final IConfigurationElement ele, final Integer autoReconnectDelay )
+    private static ConnectionService createConnection ( final ConnectionInformation connectionInformation, final IConfigurationElement ele, final Integer autoReconnectDelay, final boolean lazyActivation )
     {
         try
         {
@@ -72,7 +75,7 @@ public class ConnectionCreatorHelper
                 return null;
             }
 
-            return ( (ConnectionCreator)o ).createConnection ( connectionInformation, autoReconnectDelay );
+            return ( (ConnectionCreator)o ).createConnection ( connectionInformation, autoReconnectDelay, lazyActivation );
         }
         catch ( final CoreException e )
         {

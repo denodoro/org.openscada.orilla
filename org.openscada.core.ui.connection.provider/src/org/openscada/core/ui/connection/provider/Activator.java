@@ -110,7 +110,7 @@ public class Activator extends AbstractUIPlugin
             {
                 autoReconnectDelay = Integer.valueOf ( autoReconnect );
             }
-            final ConnectionService service = ConnectionCreatorHelper.createConnection ( ConnectionInformation.fromURI ( uri ), autoReconnectDelay );
+            final ConnectionService service = ConnectionCreatorHelper.createConnection ( ConnectionInformation.fromURI ( uri ), autoReconnectDelay, false );
             if ( service != null )
             {
                 if ( this.services.add ( service ) )
@@ -164,7 +164,7 @@ public class Activator extends AbstractUIPlugin
 
     /**
      * Returns the shared instance
-     *
+     * 
      * @return the shared instance
      */
     public static Activator getDefault ()
