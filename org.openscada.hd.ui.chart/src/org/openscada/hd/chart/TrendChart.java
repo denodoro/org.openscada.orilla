@@ -200,6 +200,9 @@ public class TrendChart extends Chart implements PaintListener
         final double quality = this.dataAtPoint.getQuality ( this.currentX );
         final double manual = this.dataAtPoint.getManual ( this.currentX );
         final Date timestamp = this.dataAtPoint.getTimestamp ( this.currentX );
+        if (timestamp == null ) {
+        	return;
+        }
         final Map<String, Double> data = this.dataAtPoint.getData ( this.currentX );
         gc.setAntialias ( SWT.ON );
         int xoffset = 10;
