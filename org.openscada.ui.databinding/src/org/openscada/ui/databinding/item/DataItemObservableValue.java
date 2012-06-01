@@ -205,6 +205,7 @@ public class DataItemObservableValue extends AbstractObservableValue
         {
             this.dataItem.unregister ();
             this.dataItem.deleteObservers ();
+            handleUpdate ( null, DataItemValue.DISCONNECTED );
         }
     }
 
