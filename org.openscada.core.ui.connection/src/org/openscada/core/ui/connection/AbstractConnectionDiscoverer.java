@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -40,7 +40,7 @@ public abstract class AbstractConnectionDiscoverer implements ConnectionDiscover
 
         this.connections = result;
 
-        fireDiscoveryUpdate ( added.toArray ( new ConnectionDescriptor[0] ), removed.toArray ( new ConnectionDescriptor[0] ) );
+        fireDiscoveryUpdate ( added.toArray ( new ConnectionDescriptor[added.size ()] ), removed.toArray ( new ConnectionDescriptor[removed.size ()] ) );
     }
 
     protected synchronized void fireDiscoveryUpdate ( final ConnectionDescriptor[] added, final ConnectionDescriptor[] removed )
@@ -51,14 +51,16 @@ public abstract class AbstractConnectionDiscoverer implements ConnectionDiscover
         }
     }
 
+    @Override
     public synchronized void addConnectionListener ( final ConnectionDiscoveryListener listener )
     {
         if ( this.listeners.add ( listener ) )
         {
-            listener.discoveryUpdate ( this.connections.toArray ( new ConnectionDescriptor[0] ), null );
+            listener.discoveryUpdate ( this.connections.toArray ( new ConnectionDescriptor[this.connections.size ()] ), null );
         }
     }
 
+    @Override
     public synchronized void removeConnectionListener ( final ConnectionDiscoveryListener listener )
     {
         this.listeners.remove ( listener );
@@ -72,7 +74,9 @@ public abstract class AbstractConnectionDiscoverer implements ConnectionDiscover
      * <p>
      * If the connection was already known, <code>false</code> will be returned and no event will be emitted
      * </p>
-     * @param connectionInformation a new connection
+     * 
+     * @param connectionInformation
+     *            a new connection
      * @return <code>true</code> if the new connection was added
      */
     public synchronized boolean addConnection ( final ConnectionDescriptor connectionInformation )
@@ -98,7 +102,9 @@ public abstract class AbstractConnectionDiscoverer implements ConnectionDiscover
      * <p>
      * If the connection was not known, <code>false</code> will be returned and no event will be emitted
      * </p>
-     * @param connectionInformation the connection to remove
+     * 
+     * @param connectionInformation
+     *            the connection to remove
      * @return <code>true</code> if the connection was removed
      */
     public synchronized boolean removeConnection ( final ConnectionDescriptor connectionInformation )
@@ -121,9 +127,10 @@ public abstract class AbstractConnectionDiscoverer implements ConnectionDiscover
         return Collections.unmodifiableSet ( this.connections );
     }
 
+    @Override
     public synchronized void dispose ()
     {
-        fireDiscoveryUpdate ( null, this.connections.toArray ( new ConnectionDescriptor[0] ) );
+        fireDiscoveryUpdate ( null, this.connections.toArray ( new ConnectionDescriptor[this.connections.size ()] ) );
         this.listeners.clear ();
         this.connections.clear ();
     }
