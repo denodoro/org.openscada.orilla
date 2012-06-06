@@ -117,7 +117,8 @@ public class ServiceDiscoverer extends AbstractConnectionDiscoverer implements S
             {
                 final Object o = ref.getProperty ( Constants.SERVICE_PID );
                 final String id = o != null ? o.toString () : null;
-                final ConnectionDescriptor cd = new ConnectionDescriptor ( ci, id );
+                final Object description = ref.getProperty ( Constants.SERVICE_DESCRIPTION );
+                final ConnectionDescriptor cd = new ConnectionDescriptor ( ci, id, description == null ? null : description.toString () );
                 infos.add ( cd );
             }
         }
@@ -125,7 +126,7 @@ public class ServiceDiscoverer extends AbstractConnectionDiscoverer implements S
     }
 
     @Override
-    public void dispose ()
+    public synchronized void dispose ()
     {
         super.dispose ();
         this.context.removeServiceListener ( this );
@@ -136,15 +137,15 @@ public class ServiceDiscoverer extends AbstractConnectionDiscoverer implements S
     {
         switch ( event.getType () )
         {
-        case ServiceEvent.REGISTERED:
-            addReference ( event.getServiceReference () );
-            break;
-        case ServiceEvent.MODIFIED:
-            update ();
-            break;
-        case ServiceEvent.UNREGISTERING:
-            removeReference ( event.getServiceReference () );
-            break;
+            case ServiceEvent.REGISTERED:
+                addReference ( event.getServiceReference () );
+                break;
+            case ServiceEvent.MODIFIED:
+                update ();
+                break;
+            case ServiceEvent.UNREGISTERING:
+                removeReference ( event.getServiceReference () );
+                break;
         }
     }
 

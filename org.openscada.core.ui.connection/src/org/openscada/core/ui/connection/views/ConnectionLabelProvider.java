@@ -123,7 +123,7 @@ public class ConnectionLabelProvider extends CommonListeningLabelProvider implem
     }
 
     @Override
-    protected void addListenerTo ( final Object next )
+    protected synchronized void addListenerTo ( final Object next )
     {
         super.addListenerTo ( next );
         if ( next instanceof ConnectionHolder )
@@ -133,7 +133,7 @@ public class ConnectionLabelProvider extends CommonListeningLabelProvider implem
     }
 
     @Override
-    protected void removeListenerFrom ( final Object next )
+    protected synchronized void removeListenerFrom ( final Object next )
     {
         if ( next instanceof ConnectionHolder )
         {

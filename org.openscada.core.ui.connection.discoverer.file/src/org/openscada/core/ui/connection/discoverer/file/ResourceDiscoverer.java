@@ -140,7 +140,7 @@ public abstract class ResourceDiscoverer extends AbstractConnectionDiscoverer
             }
             else
             {
-                cd = new ConnectionDescriptor ( ConnectionInformation.fromURI ( tok[1] ), tok[0] );
+                cd = new ConnectionDescriptor ( ConnectionInformation.fromURI ( tok[1] ), tok[0], null );
             }
             if ( cd.getConnectionInformation () == null )
             {
