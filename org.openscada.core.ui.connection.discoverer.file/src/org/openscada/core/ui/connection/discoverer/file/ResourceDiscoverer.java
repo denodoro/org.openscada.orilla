@@ -1,3 +1,22 @@
+/*
+ * This file is part of the OpenSCADA project
+ * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ *
+ * OpenSCADA is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenSCADA is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenSCADA. If not, see
+ * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
+ */
+
 package org.openscada.core.ui.connection.discoverer.file;
 
 import java.io.File;
@@ -13,6 +32,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.openscada.core.ConnectionInformation;
 import org.openscada.core.ui.connection.AbstractConnectionDiscoverer;
@@ -42,7 +62,7 @@ public abstract class ResourceDiscoverer extends AbstractConnectionDiscoverer
         }
         catch ( final FileNotFoundException e )
         {
-            Activator.getDefault ().getLog ().log ( new Status ( Status.INFO, Activator.PLUGIN_ID, Messages.ResourceDiscoverer_ErrorLoad, e ) );
+            Activator.getDefault ().getLog ().log ( new Status ( IStatus.INFO, Activator.PLUGIN_ID, Messages.ResourceDiscoverer_ErrorLoad, e ) );
         }
     }
 
@@ -59,7 +79,7 @@ public abstract class ResourceDiscoverer extends AbstractConnectionDiscoverer
         }
         catch ( final Throwable e )
         {
-            Activator.getDefault ().getLog ().log ( new Status ( Status.WARNING, Activator.PLUGIN_ID, Messages.ResourceDiscoverer_ErrorLoad, e ) );
+            Activator.getDefault ().getLog ().log ( new Status ( IStatus.WARNING, Activator.PLUGIN_ID, Messages.ResourceDiscoverer_ErrorLoad, e ) );
         }
         finally
         {
@@ -71,7 +91,7 @@ public abstract class ResourceDiscoverer extends AbstractConnectionDiscoverer
                 }
                 catch ( final IOException e )
                 {
-                    Activator.getDefault ().getLog ().log ( new Status ( Status.ERROR, Activator.PLUGIN_ID, Messages.ResourceDiscoverer_ErrorCloseStream, e ) );
+                    Activator.getDefault ().getLog ().log ( new Status ( IStatus.ERROR, Activator.PLUGIN_ID, Messages.ResourceDiscoverer_ErrorCloseStream, e ) );
                 }
             }
         }
