@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -32,7 +32,8 @@ public abstract class AbstractItemHandler extends AbstractSelectionHandler
 {
     /**
      * Get all items from the selection
-     * @return a list of all selected items
+     * 
+     * @return a data of all selected items
      */
     protected Collection<Item> getItems ()
     {
@@ -46,7 +47,7 @@ public abstract class AbstractItemHandler extends AbstractSelectionHandler
             {
                 final Object o = i.next ();
 
-                final Item holder = (Item)AdapterHelper.adapt ( o, Item.class );
+                final Item holder = AdapterHelper.adapt ( o, Item.class );
                 if ( holder != null )
                 {
                     result.add ( holder );
