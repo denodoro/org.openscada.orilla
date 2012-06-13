@@ -48,7 +48,7 @@ public class ConnectionLabelProvider extends CommonListeningLabelProvider implem
     }
 
     @Override
-    public void dispose ()
+    public synchronized void dispose ()
     {
         this.resource.dispose ();
         super.dispose ();
@@ -123,6 +123,7 @@ public class ConnectionLabelProvider extends CommonListeningLabelProvider implem
         super.removeListenerFrom ( next );
     }
 
+    @Override
     public void propertyChange ( final PropertyChangeEvent evt )
     {
         fireChangeEvent ( Arrays.asList ( evt.getSource () ) );
