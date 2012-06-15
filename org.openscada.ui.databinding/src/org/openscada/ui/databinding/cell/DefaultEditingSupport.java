@@ -27,20 +27,19 @@ import org.eclipse.core.databinding.property.value.IValueProperty;
 import org.eclipse.jface.databinding.viewers.ObservableValueEditingSupport;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnViewer;
-import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.ViewerCell;
 
 public class DefaultEditingSupport extends ObservableValueEditingSupport
 {
     private final IValueProperty cellEditorProperty;
 
-    private final TextCellEditor cellEditor;
+    private final CellEditor cellEditor;
 
     private final IValueProperty elementProperty;
 
     private final DataBindingContext dbc;
 
-    public DefaultEditingSupport ( final ColumnViewer viewer, final DataBindingContext dbc, final IValueProperty cellEditorProperty, final TextCellEditor cellEditor, final IValueProperty elementProperty )
+    public DefaultEditingSupport ( final ColumnViewer viewer, final DataBindingContext dbc, final IValueProperty cellEditorProperty, final CellEditor cellEditor, final IValueProperty elementProperty )
     {
         super ( viewer, dbc );
         this.cellEditorProperty = cellEditorProperty;
