@@ -53,7 +53,7 @@ public class ConnectionLabelProvider extends CommonListeningLabelProvider implem
     }
 
     @Override
-    public synchronized void dispose ()
+    public void dispose ()
     {
         this.resource.dispose ();
         super.dispose ();
@@ -127,7 +127,7 @@ public class ConnectionLabelProvider extends CommonListeningLabelProvider implem
     }
 
     @Override
-    protected synchronized void addListenerTo ( final Object next )
+    protected void addListenerTo ( final Object next )
     {
         super.addListenerTo ( next );
         if ( next instanceof ConnectionHolder )
@@ -137,7 +137,7 @@ public class ConnectionLabelProvider extends CommonListeningLabelProvider implem
     }
 
     @Override
-    protected synchronized void removeListenerFrom ( final Object next )
+    protected void removeListenerFrom ( final Object next )
     {
         if ( next instanceof ConnectionHolder )
         {

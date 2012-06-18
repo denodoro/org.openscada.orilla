@@ -48,7 +48,7 @@ public class ConnectionLabelProvider extends CommonListeningLabelProvider implem
     }
 
     @Override
-    public synchronized void dispose ()
+    public void dispose ()
     {
         this.resource.dispose ();
         super.dispose ();
