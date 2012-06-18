@@ -29,12 +29,12 @@ import org.eclipse.core.databinding.observable.set.SetChangeEvent;
 
 /**
  * @since 1.1
- * 
  */
 public class ListeningLabelProvider extends ViewerLabelProvider
 {
 
     private final ISetChangeListener listener = new ISetChangeListener () {
+        @Override
         public void handleSetChange ( final SetChangeEvent event )
         {
             for ( final Iterator<?> it = event.diff.getAdditions ().iterator (); it.hasNext (); )
@@ -64,7 +64,7 @@ public class ListeningLabelProvider extends ViewerLabelProvider
     {
     }
 
-    protected synchronized void addSource ( final IObservableSet observableSet )
+    protected void addSource ( final IObservableSet observableSet )
     {
         if ( observableSet == null )
         {
@@ -79,7 +79,7 @@ public class ListeningLabelProvider extends ViewerLabelProvider
         }
     }
 
-    protected synchronized void removeSource ( final IObservableSet observableSet )
+    protected void removeSource ( final IObservableSet observableSet )
     {
         if ( observableSet == null )
         {
@@ -98,16 +98,22 @@ public class ListeningLabelProvider extends ViewerLabelProvider
         }
     }
 
-    protected synchronized void addListenerTo ( final Object next )
+    protected void addListenerTo ( final Object next )
     {
     }
 
-    protected synchronized void removeListenerFrom ( final Object next )
+    protected void removeListenerFrom ( final Object next )
     {
     }
 
-    public synchronized void dispose ()
+    @Override
+    public void dispose ()
     {
+        if ( this.disposed )
+        {
+            return;
+        }
+
         this.disposed = true;
 
         for ( final IObservableSet set : this.sources )
