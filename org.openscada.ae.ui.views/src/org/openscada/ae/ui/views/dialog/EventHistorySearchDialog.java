@@ -131,12 +131,14 @@ public class EventHistorySearchDialog extends TitleAreaDialog implements FilterC
 
         switch ( this.initialFilter.first )
         {
-        case SIMPLE:
-            tabFolder.setSelection ( 0 );
-            break;
-        case FREEFORM:
-            tabFolder.setSelection ( 1 );
-            break;
+            case SIMPLE:
+                tabFolder.setSelection ( 0 );
+                break;
+            case FREEFORM:
+                tabFolder.setSelection ( 1 );
+                break;
+            case ADVANCED:
+                break;
         }
     }
 
