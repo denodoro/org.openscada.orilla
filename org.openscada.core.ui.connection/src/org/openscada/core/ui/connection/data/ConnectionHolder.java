@@ -20,11 +20,6 @@
 package org.openscada.core.ui.connection.data;
 
 import org.eclipse.core.runtime.IAdaptable;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.dialogs.ErrorDialog;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.openscada.core.client.Connection;
 import org.openscada.core.client.ConnectionState;
@@ -172,60 +167,8 @@ public class ConnectionHolder extends AbstractPropertyChange implements Connecti
     {
         logger.debug ( "Connection state changed: {}", state );
 
-        final IStatus status = makeStatus ( connection, state, error );
-        Activator.getDefault ().getLog ().log ( status );
-
         setConnectionState ( state );
         setConnectionError ( error );
-
-        showError ( status );
-    }
-
-    private void showError ( final IStatus status )
-    {
-        if ( !status.matches ( IStatus.ERROR ) )
-        {
-            return;
-        }
-
-        final Display display = PlatformUI.getWorkbench ().getDisplay ();
-        if ( !display.isDisposed () )
-        {
-            display.asyncExec ( new Runnable () {
-
-                @Override
-                public void run ()
-                {
-                    if ( !display.isDisposed () )
-                    {
-                        ErrorDialog.openError ( PlatformUI.getWorkbench ().getActiveWorkbenchWindow ().getShell (), "Connection error", "Connection failed", status, IStatus.ERROR );
-                    }
-                }
-            } );
-        }
-    }
-
-    private IStatus makeStatus ( final Connection connection, final ConnectionState state, final Throwable error )
-    {
-        int severity;
-        String message;
-        if ( error != null )
-        {
-            message = error.getMessage ();
-            severity = IStatus.ERROR;
-        }
-        else if ( state == ConnectionState.CLOSED )
-        {
-            message = "Connection closed";
-            severity = IStatus.WARNING;
-        }
-        else
-        {
-            message = String.format ( "State changed: %s", state );
-            severity = IStatus.INFO;
-        }
-
-        return new Status ( severity, Activator.PLUGIN_ID, message, error );
     }
 
     @Override

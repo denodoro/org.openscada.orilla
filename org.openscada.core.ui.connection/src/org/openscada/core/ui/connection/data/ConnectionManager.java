@@ -23,7 +23,16 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Set;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.dialogs.ErrorDialog;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.PlatformUI;
+import org.openscada.core.client.Connection;
+import org.openscada.core.client.ConnectionState;
+import org.openscada.core.client.ConnectionStateListener;
 import org.openscada.core.connection.provider.ConnectionService;
+import org.openscada.core.ui.connection.Activator;
 import org.openscada.core.ui.connection.ConnectionDescriptor;
 import org.openscada.core.ui.connection.creator.ConnectionCreatorHelper;
 import org.osgi.framework.BundleContext;
@@ -76,7 +85,7 @@ public class ConnectionManager
         public void dispose ();
     }
 
-    public class EntryImpl implements Entry
+    public class EntryImpl implements Entry, ConnectionStateListener
     {
         private final ConnectionService connectionService;
 
@@ -89,6 +98,65 @@ public class ConnectionManager
             this.connectionDescriptor = connectionDescriptor;
             this.connectionService = connectionService;
             this.serviceRegistration = serviceRegistration;
+
+            connectionService.getConnection ().addConnectionStateListener ( this );
+        }
+
+        @Override
+        public void stateChange ( final Connection connection, final ConnectionState state, final Throwable error )
+        {
+
+            final IStatus status = makeStatus ( connection, state, error );
+            Activator.getDefault ().getLog ().log ( status );
+
+            showError ( status );
+        }
+
+        private void showError ( final IStatus status )
+        {
+            if ( !status.matches ( IStatus.ERROR ) )
+            {
+                return;
+            }
+
+            final Display display = PlatformUI.getWorkbench ().getDisplay ();
+            if ( !display.isDisposed () )
+            {
+                display.asyncExec ( new Runnable () {
+
+                    @Override
+                    public void run ()
+                    {
+                        if ( !display.isDisposed () )
+                        {
+                            ErrorDialog.openError ( PlatformUI.getWorkbench ().getActiveWorkbenchWindow ().getShell (), "Connection error", "Connection failed", status, IStatus.ERROR );
+                        }
+                    }
+                } );
+            }
+        }
+
+        private IStatus makeStatus ( final Connection connection, final ConnectionState state, final Throwable error )
+        {
+            int severity;
+            String message;
+            if ( error != null )
+            {
+                message = error.getMessage ();
+                severity = IStatus.ERROR;
+            }
+            else if ( state == ConnectionState.CLOSED )
+            {
+                message = "Connection closed";
+                severity = IStatus.WARNING;
+            }
+            else
+            {
+                message = String.format ( "State changed: %s", state );
+                severity = IStatus.INFO;
+            }
+
+            return new Status ( severity, Activator.PLUGIN_ID, message, error );
         }
 
         @Override
@@ -106,6 +174,7 @@ public class ConnectionManager
         @Override
         public void dispose ()
         {
+            this.connectionService.getConnection ().removeConnectionStateListener ( this );
             try
             {
                 this.serviceRegistration.unregister ();
