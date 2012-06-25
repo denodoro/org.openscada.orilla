@@ -106,14 +106,12 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
     private ScheduledExecutorService scheduler;
 
     /**
-     * The maximum number of event that will be kept when
-     * cleaning up the event list
+     * The maximum number of event that will be kept when cleaning up the event list
      */
     private int maxNumberOfEvents = 0;
 
     /**
-     * The total maximum when the scroll lock will be overridden and events
-     * are removed down to {@link #maxNumberOfEvents}
+     * The total maximum when the scroll lock will be overridden and events are removed down to {@link #maxNumberOfEvents}
      */
     private int forceEventLimit = 0;
 
@@ -141,8 +139,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
     }
 
     /**
-     * This is a callback that will allow us to create the viewer and initialize
-     * it.
+     * This is a callback that will allow us to create the viewer and initialize it.
      */
     @Override
     public void createPartControl ( final Composite parent )
@@ -293,12 +290,12 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
         setMonitorsId ( cfg.getMonitorQueryId () );
         switch ( cfg.getConnectionType () )
         {
-        case URI:
-            setConnectionUri ( cfg.getConnectionString () );
-            break;
-        case ID:
-            setConnectionId ( cfg.getConnectionString () );
-            break;
+            case URI:
+                setConnectionUri ( cfg.getConnectionString () );
+                break;
+            case ID:
+                setConnectionId ( cfg.getConnectionString () );
+                break;
         }
 
         if ( cfg.getLabel () != null )
@@ -713,6 +710,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
     public void dispose ()
     {
         super.dispose ();
+        unSubscribe ();
         this.scheduler.shutdown ();
         this.scheduler = null;
     }
