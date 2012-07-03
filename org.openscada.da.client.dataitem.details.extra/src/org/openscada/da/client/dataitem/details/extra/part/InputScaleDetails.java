@@ -1,19 +1,19 @@
 /*
- * This file is part of the OpenSCADA project
+ * This file is part of the openSCADA project
  * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
- * OpenSCADA is free software: you can redistribute it and/or modify
+ * openSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
  * only, as published by the Free Software Foundation.
  *
- * OpenSCADA is distributed in the hope that it will be useful,
+ * openSCADA is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License version 3 for more details
  * (a copy is included in the LICENSE file that accompanied this code).
  *
  * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenSCADA. If not, see
+ * version 3 along with openSCADA. If not, see
  * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
@@ -22,7 +22,10 @@ package org.openscada.da.client.dataitem.details.extra.part;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.draw2d.ActionEvent;
+import org.eclipse.draw2d.ActionListener;
 import org.eclipse.draw2d.BorderLayout;
+import org.eclipse.draw2d.CheckBox;
 import org.eclipse.draw2d.ChopboxAnchor;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Figure;
@@ -39,6 +42,7 @@ import org.eclipse.draw2d.PolygonDecoration;
 import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.RoundedRectangle;
+import org.eclipse.swt.SWT;
 import org.openscada.core.Variant;
 
 public class InputScaleDetails extends AbstractBaseDraw2DDetailsPart
@@ -60,6 +64,8 @@ public class InputScaleDetails extends AbstractBaseDraw2DDetailsPart
 
     private Label offsetLabel;
 
+    private CheckBox button;
+
     @Override
     protected IFigure createMain ()
     {
@@ -68,11 +74,15 @@ public class InputScaleDetails extends AbstractBaseDraw2DDetailsPart
         rootFigure.setLayoutManager ( new GridLayout ( 4, true ) );
         rootFigure.setBackgroundColor ( ColorConstants.white );
 
+        // cell 1,0 
+        rootFigure.add ( makeHeader (), new GridData ( GridData.BEGINNING, GridData.CENTER, true, false, 4, 1 ) );
+
         // cell 1,1
         rootFigure.add ( new Figure () );
 
         // cell 2,1
         rootFigure.add ( this.factorFigure = new RoundedRectangle (), new GridData ( GridData.CENTER, GridData.CENTER, true, true ) );
+        this.factorFigure.setAntialias ( SWT.ON );
         this.factorFigure.setBackgroundColor ( ColorConstants.lightGray );
         this.factorFigure.setForegroundColor ( ColorConstants.black );
         this.factorFigure.setBorder ( new MarginBorder ( 10 ) );
@@ -94,6 +104,7 @@ public class InputScaleDetails extends AbstractBaseDraw2DDetailsPart
 
         // cell 3,1
         rootFigure.add ( this.offsetFigure = new RoundedRectangle (), new GridData ( GridData.CENTER, GridData.CENTER, true, true ) );
+        this.offsetFigure.setAntialias ( SWT.ON );
         this.offsetFigure.setBackgroundColor ( ColorConstants.lightGray );
         this.offsetFigure.setForegroundColor ( ColorConstants.black );
         this.offsetFigure.setBorder ( new MarginBorder ( 10 ) );
@@ -118,6 +129,7 @@ public class InputScaleDetails extends AbstractBaseDraw2DDetailsPart
 
         // cell 1,2
         rootFigure.add ( this.rawFigure = new RoundedRectangle (), new GridData ( GridData.CENTER, GridData.CENTER, true, true ) );
+        this.rawFigure.setAntialias ( SWT.ON );
         this.rawFigure.setBackgroundColor ( ColorConstants.lightGray );
         this.rawFigure.setForegroundColor ( ColorConstants.black );
         this.rawFigure.setBorder ( new MarginBorder ( 10 ) );
@@ -152,6 +164,7 @@ public class InputScaleDetails extends AbstractBaseDraw2DDetailsPart
 
         // cell 4,2
         rootFigure.add ( this.valueFigure = new RoundedRectangle (), new GridData ( GridData.CENTER, GridData.CENTER, true, true ) );
+        this.valueFigure.setAntialias ( SWT.ON );
         this.valueFigure.setLayoutManager ( new BorderLayout () );
         this.valueFigure.setBackgroundColor ( ColorConstants.lightGray );
         this.valueFigure.setForegroundColor ( ColorConstants.black );
@@ -184,12 +197,35 @@ public class InputScaleDetails extends AbstractBaseDraw2DDetailsPart
         return rootFigure;
     }
 
+    private Figure makeHeader ()
+    {
+        this.button = new CheckBox ( "Active" );
+
+        this.button.getModel ().addActionListener ( new ActionListener () {
+
+            @Override
+            public void actionPerformed ( final ActionEvent event )
+            {
+                setEnabled ( InputScaleDetails.this.button.getModel ().isSelected () );
+            }
+        } );
+
+        return this.button;
+    }
+
+    protected void setEnabled ( final boolean selected )
+    {
+        final Map<String, Variant> attributes = new HashMap<String, Variant> ( 1 );
+        attributes.put ( "org.openscada.da.scale.input.active", Variant.valueOf ( selected ) ); //$NON-NLS-1$
+        this.item.writeAtrtibutes ( attributes );
+    }
+
     protected void triggerFactorInput ()
     {
         final Variant factor = new VariantEntryDialog ( this.shell ).getValue ();
         if ( factor != null )
         {
-            final Map<String, Variant> attributes = new HashMap<String, Variant> ();
+            final Map<String, Variant> attributes = new HashMap<String, Variant> ( 1 );
             attributes.put ( "org.openscada.da.scale.input.factor", factor ); //$NON-NLS-1$
             this.item.writeAtrtibutes ( attributes );
         }
@@ -200,7 +236,7 @@ public class InputScaleDetails extends AbstractBaseDraw2DDetailsPart
         final Variant factor = new VariantEntryDialog ( this.shell ).getValue ();
         if ( factor != null )
         {
-            final Map<String, Variant> attributes = new HashMap<String, Variant> ();
+            final Map<String, Variant> attributes = new HashMap<String, Variant> ( 1 );
             attributes.put ( "org.openscada.da.scale.input.offset", factor ); //$NON-NLS-1$
             this.item.writeAtrtibutes ( attributes );
         }
@@ -234,9 +270,17 @@ public class InputScaleDetails extends AbstractBaseDraw2DDetailsPart
 
         final Variant factor = this.value.getAttributes ().get ( "org.openscada.da.scale.input.factor" ); //$NON-NLS-1$
         final Variant raw = this.value.getAttributes ().get ( "org.openscada.da.scale.input.raw" ); //$NON-NLS-1$
-        @SuppressWarnings ( "unused" )
         final Variant active = this.value.getAttributes ().get ( "org.openscada.da.scale.input.active" ); //$NON-NLS-1$
         final Variant offset = this.value.getAttributes ().get ( "org.openscada.da.scale.input.offset" ); //$NON-NLS-1$
+
+        if ( active != null && active.asBoolean () )
+        {
+            this.button.getModel ().setSelected ( true );
+        }
+        else
+        {
+            this.button.getModel ().setSelected ( false );
+        }
 
         // set the factor value if available
         if ( factor != null )
