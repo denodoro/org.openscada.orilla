@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: org.openscada.hd.ui;singleton:=true
-Bundle-Version: 0.17.1.qualifier
+Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.openscada.hd.ui.Activator
 Bundle-Vendor: %Bundle-Vendor
 Require-Bundle: org.eclipse.ui,
@@ -13,21 +13,21 @@ Require-Bundle: org.eclipse.ui,
  org.openscada.hd.ui.chart;bundle-version="0.6.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
-Import-Package: org.openscada.core;version="0.14.0",
- org.openscada.core.client;version="0.14.0",
- org.openscada.core.client.net;version="0.14.0",
- org.openscada.core.connection.provider;version="0.14.0",
+Import-Package: org.openscada.core;version="1.0.0",
+ org.openscada.core.client;version="0.16.0",
+ org.openscada.core.client.net;version="0.16.0",
+ org.openscada.core.connection.provider;version="1.0.0",
  org.openscada.hd;version="0.14.0",
  org.openscada.hd.client;version="0.14.0",
- org.openscada.hd.client.net,
+ org.openscada.hd.client.net;version="0.16.0",
  org.openscada.hd.connection.provider;version="0.16.0",
- org.openscada.ui.databinding;version="0.14.0",
- org.openscada.ui.utils.datetime,
- org.openscada.utils.beans;version="0.14.0",
+ org.openscada.ui.databinding;version="1.0.0",
+ org.openscada.ui.utils.datetime;version="0.16.0",
+ org.openscada.utils.beans;version="0.16.0",
  org.openscada.utils.lang;version="0.16.0",
- org.slf4j
-Export-Package: org.openscada.hd.ui;version="0.17.0";uses:="org.eclipse.ui.plugin,org.osgi.framework",
- org.openscada.hd.ui.data;version="0.17.0";
+ org.slf4j;version="1.5.0"
+Export-Package: org.openscada.hd.ui;version="1.0.0";uses:="org.eclipse.ui.plugin,org.osgi.framework",
+ org.openscada.hd.ui.data;version="1.0.0";
   uses:="org.openscada.hd,
    org.openscada.utils.beans,
    org.openscada.core.connection.provider,
