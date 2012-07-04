@@ -53,7 +53,7 @@ public class ConnectionLabelProvider extends CommonListeningLabelProvider implem
     }
 
     @Override
-    public synchronized void dispose ()
+    public void dispose ()
     {
         this.resource.dispose ();
         super.dispose ();
@@ -118,6 +118,10 @@ public class ConnectionLabelProvider extends CommonListeningLabelProvider implem
         if ( element instanceof ConnectionDiscovererBean )
         {
             return ( (ConnectionDiscovererBean)element ).getDescription ();
+        }
+        else if ( element instanceof ConnectionHolder )
+        {
+            return ( (ConnectionHolder)element ).getConnectionInformation ().getDescription ();
         }
         return super.getDescription ( element );
     }

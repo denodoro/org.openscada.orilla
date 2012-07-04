@@ -62,20 +62,22 @@ public class MonitorTableLabelProvider extends ObservableMapLabelProvider
         {
             switch ( monitor.getStatus () )
             {
-            case INACTIVE:
-                return this.labelProviderSupport.getMaualImage ();
-            case UNSAFE:
-                return this.labelProviderSupport.getDisconnectedImage ();
-            case OK:
-                return this.labelProviderSupport.getOkImage ();
-            case NOT_OK:
-                return this.labelProviderSupport.getAlarmImage ();
-            case NOT_OK_AKN:
-                return this.labelProviderSupport.getAlarmImage ();
-            case NOT_AKN:
-                return this.labelProviderSupport.getAckImage ();
-            case NOT_OK_NOT_AKN:
-                return this.labelProviderSupport.getAckImage ();
+                case INACTIVE:
+                    return this.labelProviderSupport.getMaualImage ();
+                case UNSAFE:
+                    return this.labelProviderSupport.getDisconnectedImage ();
+                case OK:
+                    return this.labelProviderSupport.getOkImage ();
+                case NOT_OK:
+                    return this.labelProviderSupport.getAlarmImage ();
+                case NOT_OK_AKN:
+                    return this.labelProviderSupport.getAlarmImage ();
+                case NOT_AKN:
+                    return this.labelProviderSupport.getAckImage ();
+                case NOT_OK_NOT_AKN:
+                    return this.labelProviderSupport.getAckImage ();
+                case INIT:
+                    break;
             }
             return this.labelProviderSupport.getEmptyImage ();
         }
@@ -92,24 +94,24 @@ public class MonitorTableLabelProvider extends ObservableMapLabelProvider
         final MonitorStatusInformation monitor = ( (DecoratedMonitor)element ).getMonitor ();
         switch ( columnIndex )
         {
-        case 0:
-            return monitor.getId ().toString ();
-        case 1:
-            return monitor.getStatus ().toString ();
-        case 2:
-            return this.labelProviderSupport.formatDate ( monitor.getLastFailTimestamp () );
-        case 3:
-            return this.labelProviderSupport.toLabel ( monitor.getValue () );
-        case 4:
-            return monitor.getLastAknUser ().toString ();
-        case 5:
-            return this.labelProviderSupport.formatDate ( monitor.getLastAknTimestamp () );
-        case 6:
-            return this.labelProviderSupport.toLabel ( monitor.getAttributes ().get ( "item" ) ); //$NON-NLS-1$
-        case 7:
-            return this.labelProviderSupport.toLabel ( monitor.getAttributes ().get ( "message" ) ); //$NON-NLS-1$
-        case 8:
-            return this.labelProviderSupport.formatDate ( monitor.getStatusTimestamp () );
+            case 0:
+                return monitor.getId ().toString ();
+            case 1:
+                return monitor.getStatus ().toString ();
+            case 2:
+                return this.labelProviderSupport.formatDate ( monitor.getLastFailTimestamp () );
+            case 3:
+                return this.labelProviderSupport.toLabel ( monitor.getValue () );
+            case 4:
+                return monitor.getLastAknUser ().toString ();
+            case 5:
+                return this.labelProviderSupport.formatDate ( monitor.getLastAknTimestamp () );
+            case 6:
+                return this.labelProviderSupport.toLabel ( monitor.getAttributes ().get ( "item" ) ); //$NON-NLS-1$
+            case 7:
+                return this.labelProviderSupport.toLabel ( monitor.getAttributes ().get ( "message" ) ); //$NON-NLS-1$
+            case 8:
+                return this.labelProviderSupport.formatDate ( monitor.getStatusTimestamp () );
         }
         return Messages.MonitorTableLabelProvider_EmptyString;
     }

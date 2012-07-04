@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -52,13 +52,13 @@ public class ConnectionLabelProvider extends CommonListeningLabelProvider
     @Override
     public void updateLabel ( final StyledViewerLabel label, final Object element )
     {
-        final FolderEntry folderEntry = (FolderEntry)AdapterHelper.adapt ( element, FolderEntry.class );
+        final FolderEntry folderEntry = AdapterHelper.adapt ( element, FolderEntry.class );
         if ( folderEntry != null )
         {
             updateFolder ( label, folderEntry );
         }
 
-        final DataItemEntry dataItemEntry = (DataItemEntry)AdapterHelper.adapt ( element, DataItemEntry.class );
+        final DataItemEntry dataItemEntry = AdapterHelper.adapt ( element, DataItemEntry.class );
         if ( dataItemEntry != null )
         {
             updateItem ( label, dataItemEntry );
@@ -107,7 +107,7 @@ public class ConnectionLabelProvider extends CommonListeningLabelProvider
     @Override
     public String getDescription ( final Object anElement )
     {
-        final DataItemEntry dataItemEntry = (DataItemEntry)AdapterHelper.adapt ( anElement, DataItemEntry.class );
+        final DataItemEntry dataItemEntry = AdapterHelper.adapt ( anElement, DataItemEntry.class );
         if ( dataItemEntry != null )
         {
             final String itemId = dataItemEntry.getId ();
@@ -123,7 +123,7 @@ public class ConnectionLabelProvider extends CommonListeningLabelProvider
             }
         }
 
-        final FolderEntry folderEntry = (FolderEntry)AdapterHelper.adapt ( anElement, FolderEntry.class );
+        final FolderEntry folderEntry = AdapterHelper.adapt ( anElement, FolderEntry.class );
         if ( folderEntry != null )
         {
             final Variant value = folderEntry.getAttributes ().get ( "description" );

@@ -37,6 +37,7 @@ import org.openscada.core.ui.connection.data.ConnectionDiscovererAdapterFactory;
 import org.openscada.core.ui.connection.data.ConnectionDiscovererBean;
 import org.openscada.core.ui.connection.data.ConnectionHolder;
 import org.openscada.core.ui.connection.data.ConnectionHolderAdapterFactory;
+import org.openscada.core.ui.connection.data.ConnectionManager;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -59,6 +60,8 @@ public class Activator extends AbstractUIPlugin
 
     private final Map<Class<?>, IAdapterFactory> adaperFactories = new HashMap<Class<?>, IAdapterFactory> ();
 
+    private ConnectionManager connectionManager;
+
     public static final Root ROOT = new Root ();
 
     /**
@@ -80,6 +83,8 @@ public class Activator extends AbstractUIPlugin
         super.start ( context );
         plugin = this;
 
+        this.connectionManager = new ConnectionManager ( context );
+
         for ( final Map.Entry<Class<?>, IAdapterFactory> entry : this.adaperFactories.entrySet () )
         {
             Platform.getAdapterManager ().registerAdapters ( entry.getValue (), entry.getKey () );
@@ -97,6 +102,12 @@ public class Activator extends AbstractUIPlugin
         for ( final Map.Entry<Class<?>, IAdapterFactory> entry : this.adaperFactories.entrySet () )
         {
             Platform.getAdapterManager ().unregisterAdapters ( entry.getValue (), entry.getKey () );
+        }
+
+        if ( this.connectionManager != null )
+        {
+            this.connectionManager.dispose ();
+            this.connectionManager = null;
         }
 
         plugin = null;
@@ -155,6 +166,11 @@ public class Activator extends AbstractUIPlugin
         return result;
     }
 
+    public ConnectionManager getConnectionManager ()
+    {
+        return this.connectionManager;
+    }
+
     /**
      * Returns the shared instance
      * 
@@ -163,6 +179,11 @@ public class Activator extends AbstractUIPlugin
     public static Activator getDefault ()
     {
         return plugin;
+    }
+
+    public static ConnectionManager getDefaultConectionManager ()
+    {
+        return getDefault ().getConnectionManager ();
     }
 
 }

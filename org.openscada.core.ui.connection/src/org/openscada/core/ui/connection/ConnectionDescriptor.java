@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -27,15 +27,18 @@ public class ConnectionDescriptor
 
     private final String serviceId;
 
+    private final String description;
+
     public ConnectionDescriptor ( final ConnectionInformation connectionInformation )
     {
-        this ( connectionInformation, null );
+        this ( connectionInformation, null, null );
     }
 
-    public ConnectionDescriptor ( final ConnectionInformation connectionInformation, final String serviceId )
+    public ConnectionDescriptor ( final ConnectionInformation connectionInformation, final String serviceId, final String description )
     {
         this.connectionInformation = connectionInformation;
         this.serviceId = serviceId;
+        this.description = description;
     }
 
     public ConnectionInformation getConnectionInformation ()
@@ -46,6 +49,11 @@ public class ConnectionDescriptor
     public String getServiceId ()
     {
         return this.serviceId;
+    }
+
+    public String getDescription ()
+    {
+        return this.description;
     }
 
     @Override

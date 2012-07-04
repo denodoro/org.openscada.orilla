@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -17,7 +17,7 @@
  * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
-package org.openscada.ui.databinding;
+package org.openscada.ui.databinding.item;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -36,6 +36,55 @@ import org.osgi.framework.BundleContext;
 public class DataItemObservableValue extends AbstractObservableValue
 {
 
+    public static final class ReplaceInvalidValuePolicy implements InvalidValuePolicy
+    {
+
+        private final DataItemValue replacement;
+
+        public ReplaceInvalidValuePolicy ( final DataItemValue replacement )
+        {
+            this.replacement = replacement;
+        }
+
+        @Override
+        public boolean isInvalid ( final DataItemValue value )
+        {
+            if ( value == null )
+            {
+                return true;
+            }
+            if ( !value.isConnected () || value.isError () )
+            {
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public DataItemValue processInvalid ( final DataItemValue value )
+        {
+            return this.replacement;
+        }
+
+    }
+
+    public static final InvalidValuePolicy VALUE_POLICY_REPLACE_DISCONNECTED = new ReplaceInvalidValuePolicy ( DataItemValue.DISCONNECTED );
+
+    public static final InvalidValuePolicy VALUE_POLICY_IGNORE = new InvalidValuePolicy () {
+
+        @Override
+        public boolean isInvalid ( final DataItemValue value )
+        {
+            return false;
+        }
+
+        @Override
+        public DataItemValue processInvalid ( final DataItemValue value )
+        {
+            return value;
+        }
+    };
+
     private final ConnectionTracker tracker;
 
     private DataItemValue value = DataItemValue.DISCONNECTED;
@@ -48,8 +97,16 @@ public class DataItemObservableValue extends AbstractObservableValue
 
     private org.openscada.da.connection.provider.ConnectionService service;
 
+    private final InvalidValuePolicy invalidValuePolicy;
+
     public DataItemObservableValue ( final BundleContext context, final String connectionId, final String itemId )
     {
+        this ( context, connectionId, itemId, VALUE_POLICY_REPLACE_DISCONNECTED );
+    }
+
+    public DataItemObservableValue ( final BundleContext context, final String connectionId, final String itemId, final InvalidValuePolicy invalidValuePolicy )
+    {
+        this.invalidValuePolicy = invalidValuePolicy;
         this.itemId = itemId;
         final Listener listener = new Listener () {
 
@@ -101,11 +158,16 @@ public class DataItemObservableValue extends AbstractObservableValue
         };
     }
 
-    protected synchronized void handleUpdate ( final Observer observer, final DataItemValue value )
+    protected synchronized void handleUpdate ( final Observer observer, DataItemValue value )
     {
         if ( observer != this.observer )
         {
             return;
+        }
+
+        if ( this.invalidValuePolicy.isInvalid ( value ) )
+        {
+            value = this.invalidValuePolicy.processInvalid ( value );
         }
 
         fireChange ( this.value, this.value = value );
@@ -143,6 +205,7 @@ public class DataItemObservableValue extends AbstractObservableValue
         {
             this.dataItem.unregister ();
             this.dataItem.deleteObservers ();
+            handleUpdate ( null, DataItemValue.DISCONNECTED );
         }
     }
 

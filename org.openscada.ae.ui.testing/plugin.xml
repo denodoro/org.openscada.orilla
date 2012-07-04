@@ -79,11 +79,13 @@
                style="push">
             <visibleWhen
                   checkEnabled="false">
-               <iterate>
+                  <with variable="selection">
+               <iterate ifEmpty="false">
                   <instanceof
                         value="org.openscada.ae.ui.testing.navigator.QueryBean">
                   </instanceof>
                </iterate>
+               </with>
             </visibleWhen>
          </command>
          <command
@@ -92,11 +94,13 @@
                style="push">
             <visibleWhen
                   checkEnabled="false">
-               <iterate>
+                  <with variable="selection">
+               <iterate ifEmpty="false">
                   <instanceof
                         value="org.openscada.ae.ui.testing.navigator.QueryBean">
                   </instanceof>
                </iterate>
+               </with>
             </visibleWhen>
             <parameter
                   name="org.openscada.ae.ui.testing.loadMore.count"
@@ -109,11 +113,14 @@
                style="push">
             <visibleWhen
                   checkEnabled="false">
-               <iterate>
-                  <instanceof
-                        value="org.openscada.ae.ui.testing.navigator.QueryBean">
-                  </instanceof>
-               </iterate>
+                  <with
+                        variable="selection">
+	               <iterate ifEmpty="false">
+	                  <instanceof
+	                        value="org.openscada.ae.ui.testing.navigator.QueryBean">
+	                  </instanceof>
+	               </iterate>
+               </with>
             </visibleWhen>
          </command>
       </menuContribution>

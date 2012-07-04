@@ -31,7 +31,7 @@ import org.eclipse.ui.IWorkbenchWizard;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
-import org.openscada.ca.ui.util.OscarWriter;
+import org.openscada.ca.oscar.OscarWriter;
 
 /**
  * This is a sample new wizard. Its role is to create a new file resource in the provided container. If the container resource (a folder or a project) is selected in the workspace when the wizard is

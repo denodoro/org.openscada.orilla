@@ -53,6 +53,7 @@ public class AddConnectionWizardPage1 extends WizardPage
         return this.connectionInformation;
     }
 
+    @Override
     public void createControl ( final Composite parent )
     {
         final Composite comp = new Composite ( parent, SWT.NONE );
@@ -71,6 +72,7 @@ public class AddConnectionWizardPage1 extends WizardPage
         this.uriText.setLayoutData ( new GridData ( SWT.FILL, SWT.CENTER, true, false ) );
         this.uriText.addModifyListener ( new ModifyListener () {
 
+            @Override
             public void modifyText ( final ModifyEvent e )
             {
                 update ();
@@ -88,6 +90,7 @@ public class AddConnectionWizardPage1 extends WizardPage
         this.idText.setLayoutData ( new GridData ( SWT.FILL, SWT.CENTER, true, false ) );
         this.idText.addModifyListener ( new ModifyListener () {
 
+            @Override
             public void modifyText ( final ModifyEvent e )
             {
                 update ();
@@ -123,7 +126,7 @@ public class AddConnectionWizardPage1 extends WizardPage
                 id = null;
             }
 
-            this.connectionInformation = new ConnectionDescriptor ( ConnectionInformation.fromURI ( this.uriText.getText () ), id );
+            this.connectionInformation = new ConnectionDescriptor ( ConnectionInformation.fromURI ( this.uriText.getText () ), id, null );
         }
         catch ( final Throwable e )
         {

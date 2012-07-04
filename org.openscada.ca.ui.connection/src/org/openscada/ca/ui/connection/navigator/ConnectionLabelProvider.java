@@ -123,6 +123,7 @@ public class ConnectionLabelProvider extends CommonListeningLabelProvider implem
         super.removeListenerFrom ( next );
     }
 
+    @Override
     public void propertyChange ( final PropertyChangeEvent evt )
     {
         fireChangeEvent ( Arrays.asList ( evt.getSource () ) );

@@ -138,7 +138,6 @@ public class ConnectionDiscovererBean implements IAdaptable, ConnectionDiscovery
 
     protected void handleDiscoveryUpdate ( final ConnectionDescriptor[] added, final ConnectionDescriptor[] removed )
     {
-
         if ( removed != null )
         {
             for ( final ConnectionDescriptor info : removed )

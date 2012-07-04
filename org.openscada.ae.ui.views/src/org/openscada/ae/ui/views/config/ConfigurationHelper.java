@@ -270,12 +270,14 @@ public class ConfigurationHelper
 
             switch ( field )
             {
-            case ACTOR_NAME:
-                properties.put ( "decoration", Decoration.ACTOR.toString () );
-                break;
-            case EVENT_TYPE:
-                properties.put ( "decoration", Decoration.MONITOR.toString () );
-                break;
+                case ACTOR_NAME:
+                    properties.put ( "decoration", Decoration.ACTOR.toString () );
+                    break;
+                case EVENT_TYPE:
+                    properties.put ( "decoration", Decoration.MONITOR.toString () );
+                    break;
+                default:
+                    break;
             }
 
             columnInformation.add ( new ColumnLabelProviderInformation ( field.getName (), "variant", false, DEFAULT_INITIAL_SIZE, properties ) );
