@@ -269,7 +269,8 @@ public class InputScaleDetails extends AbstractBaseDraw2DDetailsPart
         this.valueLabel.setText ( this.value.getValue ().toString () );
 
         final Variant factor = this.value.getAttributes ().get ( "org.openscada.da.scale.input.factor" ); //$NON-NLS-1$
-        final Variant raw = this.value.getAttributes ().get ( "org.openscada.da.scale.input.raw" ); //$NON-NLS-1$
+        final Variant raw = this.value.getAttributes ().get ( "org.openscada.da.scale.input.value.original" ); //$NON-NLS-1$
+        @SuppressWarnings ( "unused" )
         final Variant active = this.value.getAttributes ().get ( "org.openscada.da.scale.input.active" ); //$NON-NLS-1$
         final Variant offset = this.value.getAttributes ().get ( "org.openscada.da.scale.input.offset" ); //$NON-NLS-1$
 
