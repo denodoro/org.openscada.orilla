@@ -20,9 +20,21 @@
 package org.openscada.da.ui.client.chart.view;
 
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.LinkedList;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.LineAttributes;
+import org.eclipse.swt.widgets.Display;
 import org.openscada.chart.DataEntry;
 import org.openscada.chart.WritableSeries;
+import org.openscada.chart.XAxis;
+import org.openscada.chart.YAxis;
+import org.openscada.chart.swt.DisplayRealm;
+import org.openscada.chart.swt.manager.ChartManager;
+import org.openscada.chart.swt.render.PositionYRuler;
+import org.openscada.chart.swt.render.Renderer;
+import org.openscada.core.Variant;
 import org.openscada.da.client.DataItemValue;
 import org.openscada.da.ui.client.chart.Activator;
 import org.openscada.da.ui.connection.data.DataItemHolder;
@@ -33,7 +45,7 @@ public class ItemObserver implements DataSourceListener
 {
     private final Item item;
 
-    private final WritableSeries series;
+    private final WritableSeries valueSeries;
 
     private DataItemHolder dataItem;
 
@@ -41,16 +53,148 @@ public class ItemObserver implements DataSourceListener
 
     private DataEntry lastTickMarker;
 
-    public ItemObserver ( final Item item, final WritableSeries series )
+    private final ChartManager manager;
+
+    private final Renderer valueRenderer;
+
+    private boolean selection;
+
+    private final YAxis y;
+
+    private final Collection<LevelRuler> levelRulers = new LinkedList<LevelRuler> ();
+
+    private static class LevelRuler
+    {
+        private final String prefix;
+
+        private final PositionYRuler ruler;
+
+        private final ChartManager manager;
+
+        private final int alpha;
+
+        public LevelRuler ( final ChartManager manager, final String prefix, final YAxis y, final int style, final int alpha, final float lineWidth )
+        {
+            this.prefix = prefix;
+
+            this.manager = manager;
+            this.alpha = alpha;
+
+            this.ruler = new PositionYRuler ( y, style );
+            this.ruler.setAlpha ( this.alpha );
+            this.ruler.setLineAttributes ( new LineAttributes ( lineWidth ) );
+            this.manager.addRenderer ( this.ruler );
+        }
+
+        public void dispose ()
+        {
+            this.manager.removeRenderer ( this.ruler );
+        }
+
+        public void update ( final DataItemValue value )
+        {
+            this.ruler.setVisible ( false );
+
+            if ( value != null )
+            {
+                final Variant levelValue = value.getAttributes ().get ( this.prefix + ".preset" );
+                if ( levelValue != null )
+                {
+                    this.ruler.setPosition ( levelValue.asDouble ( null ) );
+                    this.ruler.setVisible ( true );
+                }
+                final boolean active = value.getAttributeAsBoolean ( this.prefix + ".active" );
+                final boolean unsafe = value.getAttributeAsBoolean ( this.prefix + ".unsafe" );
+                final boolean error = value.getAttributeAsBoolean ( this.prefix + ".error" );
+                final boolean alarm = value.getAttributeAsBoolean ( this.prefix + ".alarm" );
+
+                if ( !active )
+                {
+                    this.ruler.setColor ( Display.getDefault ().getSystemColor ( SWT.COLOR_GRAY ) );
+                }
+                else if ( unsafe )
+                {
+                    this.ruler.setColor ( Display.getDefault ().getSystemColor ( SWT.COLOR_MAGENTA ) );
+                }
+                else if ( error || alarm )
+                {
+                    this.ruler.setColor ( Display.getDefault ().getSystemColor ( SWT.COLOR_RED ) );
+                }
+                else
+                {
+                    this.ruler.setColor ( Display.getDefault ().getSystemColor ( SWT.COLOR_GREEN ) );
+                }
+            }
+        }
+    }
+
+    public ItemObserver ( final ChartManager manager, final Item item, final DisplayRealm realm, final XAxis x, final YAxis y )
     {
         this.item = item;
-        this.series = series;
+        this.manager = manager;
+
+        this.y = y;
+
+        this.valueSeries = new WritableSeries ( realm, x, y );
+
+        this.valueRenderer = this.manager.createStepSeries ( this.valueSeries );
         connect ();
+    }
+
+    public void setSelection ( final boolean state )
+    {
+        if ( this.selection == state )
+        {
+            return;
+        }
+        this.selection = state;
+
+        if ( this.selection )
+        {
+            this.levelRulers.add ( makeLevelRuler ( "org.openscada.da.level.ceil", SWT.NONE, 255, 2.0f ) );
+            this.levelRulers.add ( makeLevelRuler ( "org.openscada.da.level.highhigh", SWT.TOP, 64, 1.0f ) );
+            this.levelRulers.add ( makeLevelRuler ( "org.openscada.da.level.high", SWT.TOP, 32, 1.0f ) );
+            this.levelRulers.add ( makeLevelRuler ( "org.openscada.da.level.low", SWT.BOTTOM, 32, 1.0f ) );
+            this.levelRulers.add ( makeLevelRuler ( "org.openscada.da.level.lowlow", SWT.BOTTOM, 64, 1.0f ) );
+            this.levelRulers.add ( makeLevelRuler ( "org.openscada.da.level.floor", SWT.NONE, 255, 2.0f ) );
+            updateLevels ();
+        }
+        else
+        {
+            removeLevelRulers ();
+        }
+    }
+
+    private void updateLevels ()
+    {
+        for ( final LevelRuler ruler : this.levelRulers )
+        {
+            ruler.update ( this.lastValue );
+        }
+    }
+
+    private LevelRuler makeLevelRuler ( final String prefix, final int style, final int alpha, final float lineWidth )
+    {
+        final LevelRuler ruler = new LevelRuler ( this.manager, prefix, this.y, style, alpha, lineWidth );
+
+        return ruler;
     }
 
     public void dispose ()
     {
+        removeLevelRulers ();
+
+        this.manager.removeRenderer ( this.valueRenderer );
         disconnect ();
+    }
+
+    private void removeLevelRulers ()
+    {
+        for ( final LevelRuler ruler : this.levelRulers )
+        {
+            ruler.dispose ();
+        }
+        this.levelRulers.clear ();
     }
 
     public Item getItem ()
@@ -72,10 +216,10 @@ public class ItemObserver implements DataSourceListener
         }
         else
         {
-            this.series.getData ().remove ( this.lastTickMarker );
+            this.valueSeries.getData ().remove ( this.lastTickMarker );
         }
         this.lastTickMarker = new DataEntry ( now, this.lastTickMarker.getValue () );
-        this.series.getData ().add ( this.lastTickMarker );
+        this.valueSeries.getData ().add ( this.lastTickMarker );
     }
 
     public void connect ()
@@ -95,7 +239,7 @@ public class ItemObserver implements DataSourceListener
     @Override
     public void updateData ( final DataItemValue value )
     {
-        this.series.getRealm ().asyncExec ( new Runnable () {
+        this.valueSeries.getRealm ().asyncExec ( new Runnable () {
             @Override
             public void run ()
             {
@@ -110,12 +254,13 @@ public class ItemObserver implements DataSourceListener
 
         if ( this.lastTickMarker != null )
         {
-            this.series.getData ().remove ( this.lastTickMarker );
+            this.valueSeries.getData ().remove ( this.lastTickMarker );
             this.lastTickMarker = null;
         }
 
         final DataEntry entry = makeEntry ( value );
-        this.series.getData ().addAsLast ( entry );
+        this.valueSeries.getData ().addAsLast ( entry );
+        updateLevels ();
     }
 
     private DataEntry makeEntry ( final DataItemValue value )

@@ -19,8 +19,10 @@
 
 package org.openscada.da.ui.client.chart.view;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
@@ -34,7 +36,6 @@ import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
-import org.openscada.chart.WritableSeries;
 import org.openscada.chart.XAxis;
 import org.openscada.chart.YAxis;
 import org.openscada.chart.swt.DisplayRealm;
@@ -56,7 +57,7 @@ public class ChartView extends ViewPart
 
     private final DisplayRealm realm;
 
-    private final Collection<ItemObserver> items = new LinkedList<ItemObserver> ();
+    private final List<ItemObserver> items = new ArrayList<ItemObserver> ();
 
     private final Collection<Item> loadedItems = new LinkedList<Item> ();
 
@@ -82,8 +83,8 @@ public class ChartView extends ViewPart
         this.manager = new ChartManager ( parent, SWT.NONE );
         this.manager.setChartBackground ( parent.getDisplay ().getSystemColor ( SWT.COLOR_WHITE ) );
 
-        this.manager.addDynamicXAxis ( this.x ).setFormat ( "%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS.%1$tL" );
-        this.manager.addDynamicYAxis ( this.y ).setFormat ( "%.02f" );
+        this.manager.addDynamicXAxis ( this.x ).setFormat ( "%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS.%1$tL" ); //$NON-NLS-1$
+        this.manager.addDynamicYAxis ( this.y ).setFormat ( "%.02f" ); //$NON-NLS-1$
 
         this.timeRuler = new CurrentTimeRuler ( this.x );
         this.timeRuler.setColor ( parent.getDisplay ().getSystemColor ( SWT.COLOR_BLUE ) );
@@ -157,15 +158,19 @@ public class ChartView extends ViewPart
 
     public void addItem ( final Item item )
     {
-        final WritableSeries series = new WritableSeries ( this.realm, this.x, this.y );
-        this.manager.addStepSeries ( series );
+        final ItemObserver itemObserver = new ItemObserver ( this.manager, item, this.realm, this.x, this.y );
 
-        final ItemObserver itemObserver = new ItemObserver ( item, series );
+        if ( this.items.size () == 1 )
+        {
+            this.items.get ( 0 ).setSelection ( false );
+        }
+
         this.items.add ( itemObserver );
 
         if ( this.items.size () == 1 )
         {
-            this.manager.setTitle ( "" + item.getConnectionString () + "#" + item.getId () );
+            itemObserver.setSelection ( true );
+            this.manager.setTitle ( "" + item.getId () );
         }
         else
         {
