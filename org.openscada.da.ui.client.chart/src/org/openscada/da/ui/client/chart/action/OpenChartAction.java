@@ -33,7 +33,7 @@ import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.PartInitException;
 import org.openscada.da.ui.client.chart.Activator;
 import org.openscada.da.ui.client.chart.Messages;
-import org.openscada.da.ui.client.chart.view.ChartView2;
+import org.openscada.da.ui.client.chart.view.ChartView;
 import org.openscada.da.ui.connection.data.Item;
 import org.openscada.da.ui.connection.data.ItemSelectionHelper;
 import org.slf4j.Logger;
@@ -75,13 +75,13 @@ public class OpenChartAction implements IViewActionDelegate, IObjectActionDelega
 
         try
         {
-            final IViewPart viewer = this.site.getPage ().showView ( ChartView2.VIEW_ID, secondaryId, IWorkbenchPage.VIEW_ACTIVATE );
+            final IViewPart viewer = this.site.getPage ().showView ( ChartView.VIEW_ID, secondaryId, IWorkbenchPage.VIEW_ACTIVATE );
 
             for ( final Item item : ItemSelectionHelper.getSelection ( this.selection ) )
             {
-                if ( viewer instanceof ChartView2 )
+                if ( viewer instanceof ChartView )
                 {
-                    ( (ChartView2)viewer ).addItem ( item );
+                    ( (ChartView)viewer ).addItem ( item );
                 }
             }
 

@@ -25,7 +25,7 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
-import org.openscada.da.ui.client.chart.view.ChartView2;
+import org.openscada.da.ui.client.chart.view.ChartView;
 import org.openscada.da.ui.connection.commands.AbstractItemHandler;
 import org.openscada.da.ui.connection.data.Item;
 
@@ -47,7 +47,7 @@ public abstract class AbstractChartHandler extends AbstractItemHandler
         IViewPart viewer;
         try
         {
-            viewer = getActivePage ().showView ( ChartView2.VIEW_ID, sb.toString (), IWorkbenchPage.VIEW_ACTIVATE );
+            viewer = getActivePage ().showView ( ChartView.VIEW_ID, sb.toString (), IWorkbenchPage.VIEW_ACTIVATE );
         }
         catch ( final PartInitException e )
         {
@@ -56,9 +56,9 @@ public abstract class AbstractChartHandler extends AbstractItemHandler
 
         for ( final Item item : items )
         {
-            if ( viewer instanceof ChartView2 )
+            if ( viewer instanceof ChartView )
             {
-                ( (ChartView2)viewer ).addItem ( item );
+                ( (ChartView)viewer ).addItem ( item );
             }
         }
     }
