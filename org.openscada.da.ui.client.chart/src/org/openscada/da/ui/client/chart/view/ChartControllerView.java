@@ -19,6 +19,10 @@
 
 package org.openscada.da.ui.client.chart.view;
 
+import org.eclipse.jface.action.IMenuListener;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnWeightData;
@@ -31,7 +35,10 @@ import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.ISelectionListener;
+import org.eclipse.ui.IViewSite;
+import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
 
@@ -77,6 +84,8 @@ public class ChartControllerView extends ViewPart
         } );
         handleSelectionChanged ( getViewSite ().getWorkbenchWindow ().getSelectionService ().getSelection () );
         getSite ().setSelectionProvider ( this.viewer );
+
+        contribueTo ( getViewSite () );
     }
 
     protected void handleSelectionChanged ( final ISelection sel )
@@ -111,6 +120,33 @@ public class ChartControllerView extends ViewPart
     public void setFocus ()
     {
         this.viewer.getControl ().setFocus ();
+    }
+
+    private void hookContextMenu ( final IViewSite viewSite )
+    {
+        final MenuManager menuMgr = new MenuManager ( "#PopupMenu" ); //$NON-NLS-1$
+        menuMgr.setRemoveAllWhenShown ( true );
+        menuMgr.addMenuListener ( new IMenuListener () {
+            @Override
+            public void menuAboutToShow ( final IMenuManager manager )
+            {
+                fillContextMenu ( manager );
+            }
+        } );
+        final Menu menu = menuMgr.createContextMenu ( this.viewer.getControl () );
+        this.viewer.getControl ().setMenu ( menu );
+        viewSite.registerContextMenu ( menuMgr, this.viewer );
+    }
+
+    private void fillContextMenu ( final IMenuManager manager )
+    {
+        // Other plug-ins can contribute there actions here
+        manager.add ( new Separator ( IWorkbenchActionConstants.MB_ADDITIONS ) );
+    }
+
+    public void contribueTo ( final IViewSite viewSite )
+    {
+        hookContextMenu ( viewSite );
     }
 
 }

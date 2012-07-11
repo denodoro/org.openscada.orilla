@@ -55,6 +55,8 @@ public class ChartViewer
 
     private final Display display;
 
+    private ChartInput selection;
+
     public ChartViewer ( final Composite parent )
     {
         this.display = Display.getDefault ();
@@ -131,7 +133,7 @@ public class ChartViewer
 
     public void addItem ( final ItemConfiguration itemConfiguration )
     {
-        final ChartInput itemObserver = new ItemObserver ( this.manager, itemConfiguration.getItem (), this.realm, this.x, this.y );
+        final ChartInput itemObserver = new ItemObserver ( this.manager, this, itemConfiguration.getItem (), this.realm, this.x, this.y );
 
         if ( this.items.size () == 1 )
         {
@@ -142,12 +144,29 @@ public class ChartViewer
 
         if ( this.items.size () == 1 )
         {
-            itemObserver.setSelection ( true );
-            this.manager.setTitle ( itemConfiguration.getLabel () );
+            setSelection ( itemObserver );
+        }
+
+        updateTitle ();
+    }
+
+    protected void updateTitle ()
+    {
+        if ( this.items.isEmpty () )
+        {
+            this.manager.setTitle ( "No item" );
+        }
+        else if ( this.items.size () == 1 )
+        {
+            this.manager.setTitle ( ( (ChartInput)this.items.get ( 0 ) ).getLabel () );
+        }
+        else if ( this.selection != null )
+        {
+            this.manager.setTitle ( String.format ( "%s items (selected: %s)", this.items.size (), this.selection.getLabel () ) );
         }
         else
         {
-            this.manager.setTitle ( String.format ( "%s items", this.items.size () ) );
+            this.manager.setTitle ( String.format ( "%s items (none selected)", this.items.size () ) );
         }
     }
 
@@ -157,6 +176,8 @@ public class ChartViewer
         {
             return;
         }
+
+        this.selection = chartInput;
 
         for ( final Object input : this.items )
         {
@@ -174,14 +195,7 @@ public class ChartViewer
         }
         else
         {
-            if ( chartInput != null )
-            {
-                this.manager.setTitle ( String.format ( "%s items (Selected: %s)", this.items.size (), chartInput.getLabel () ) );
-            }
-            else
-            {
-                this.manager.setTitle ( String.format ( "%s items", this.items.size () ) );
-            }
+            updateTitle ();
         }
     }
 
@@ -212,5 +226,14 @@ public class ChartViewer
     public IObservableList getItems ()
     {
         return Observables.unmodifiableObservableList ( this.items );
+    }
+
+    public void removeInput ( final ChartInput input )
+    {
+        if ( input == this.selection )
+        {
+            setSelection ( null );
+        }
+        this.items.remove ( input );
     }
 }

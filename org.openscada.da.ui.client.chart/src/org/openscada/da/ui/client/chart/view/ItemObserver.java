@@ -63,6 +63,10 @@ public class ItemObserver implements DataSourceListener, ChartInput
 
     private final Collection<LevelRuler> levelRulers = new LinkedList<LevelRuler> ();
 
+    private final ChartViewer viewer;
+
+    private boolean disposed;
+
     private static class LevelRuler
     {
         private final String prefix;
@@ -78,6 +82,7 @@ public class ItemObserver implements DataSourceListener, ChartInput
             this.prefix = prefix;
 
             this.manager = manager;
+
             this.alpha = alpha;
 
             this.ruler = new PositionYRuler ( y, style );
@@ -128,10 +133,11 @@ public class ItemObserver implements DataSourceListener, ChartInput
         }
     }
 
-    public ItemObserver ( final ChartManager manager, final Item item, final DisplayRealm realm, final XAxis x, final YAxis y )
+    public ItemObserver ( final ChartManager manager, final ChartViewer viewer, final Item item, final DisplayRealm realm, final XAxis x, final YAxis y )
     {
         this.item = item;
         this.manager = manager;
+        this.viewer = viewer;
 
         this.y = y;
 
@@ -190,8 +196,14 @@ public class ItemObserver implements DataSourceListener, ChartInput
     @Override
     public void dispose ()
     {
+        if ( this.disposed )
+        {
+            this.disposed = true;
+        }
+
         removeLevelRulers ();
 
+        this.viewer.removeInput ( this );
         this.manager.removeRenderer ( this.valueRenderer );
         disconnect ();
     }
