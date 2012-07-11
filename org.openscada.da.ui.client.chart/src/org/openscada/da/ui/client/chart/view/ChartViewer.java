@@ -203,9 +203,17 @@ public class ChartViewer
     {
         final long now = System.currentTimeMillis ();
 
-        for ( final Object item : this.items )
+        try
         {
-            ( (ChartInput)item ).tick ( now );
+            this.manager.getChartArea ().setStale ( true );
+            for ( final Object item : this.items )
+            {
+                ( (ChartInput)item ).tick ( now );
+            }
+        }
+        finally
+        {
+            this.manager.getChartArea ().setStale ( false );
         }
     }
 
