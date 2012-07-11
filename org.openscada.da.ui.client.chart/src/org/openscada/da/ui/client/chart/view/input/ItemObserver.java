@@ -33,7 +33,7 @@ import org.openscada.chart.YAxis;
 import org.openscada.chart.swt.DisplayRealm;
 import org.openscada.chart.swt.manager.ChartManager;
 import org.openscada.chart.swt.render.PositionYRuler;
-import org.openscada.chart.swt.render.Renderer;
+import org.openscada.chart.swt.render.StepRenderer;
 import org.openscada.core.Variant;
 import org.openscada.da.client.DataItemValue;
 import org.openscada.da.ui.client.chart.Activator;
@@ -56,7 +56,7 @@ public class ItemObserver implements DataSourceListener, ChartInput
 
     private final ChartManager manager;
 
-    private final Renderer valueRenderer;
+    private final StepRenderer valueRenderer;
 
     private boolean selection;
 
@@ -134,11 +134,11 @@ public class ItemObserver implements DataSourceListener, ChartInput
         }
     }
 
-    public ItemObserver ( final ChartManager manager, final ChartViewer viewer, final Item item, final DisplayRealm realm, final XAxis x, final YAxis y )
+    public ItemObserver ( final ChartViewer viewer, final Item item, final DisplayRealm realm, final XAxis x, final YAxis y )
     {
         this.item = item;
-        this.manager = manager;
         this.viewer = viewer;
+        this.manager = viewer.getManager ();
 
         this.y = y;
 
@@ -206,6 +206,7 @@ public class ItemObserver implements DataSourceListener, ChartInput
 
         this.viewer.removeInput ( this );
         this.manager.removeRenderer ( this.valueRenderer );
+        this.valueRenderer.dispose ();
         disconnect ();
     }
 

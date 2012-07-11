@@ -36,14 +36,20 @@ import org.openscada.chart.YAxis;
 import org.openscada.chart.swt.DisplayRealm;
 import org.openscada.chart.swt.manager.ChartManager;
 import org.openscada.chart.swt.render.CurrentTimeRuler;
+import org.openscada.da.ui.client.chart.view.input.ArchiveConfiguration;
+import org.openscada.da.ui.client.chart.view.input.ArchiveInput;
 import org.openscada.da.ui.client.chart.view.input.ChartInput;
 import org.openscada.da.ui.client.chart.view.input.ItemConfiguration;
 import org.openscada.da.ui.client.chart.view.input.ItemObserver;
 import org.openscada.da.ui.connection.data.Item;
-import org.openscada.da.ui.connection.dnd.ItemTransfer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ChartViewer
 {
+
+    private final static Logger logger = LoggerFactory.getLogger ( ChartViewer.class );
+
     private final ChartManager manager;
 
     private final XAxis x;
@@ -86,16 +92,30 @@ public class ChartViewer
         this.manager.addRenderer ( this.timeRuler );
 
         this.manager.addDefaultControllers ( this.x, this.y );
-        this.manager.createDropTarget ( new Transfer[] { ItemTransfer.getInstance () }, new DropTargetAdapter () {
+        this.manager.createDropTarget ( new Transfer[] { org.openscada.hd.ui.connection.dnd.ItemTransfer.getInstance (), org.openscada.da.ui.connection.dnd.ItemTransfer.getInstance () }, new DropTargetAdapter () {
             @Override
             public void drop ( final DropTargetEvent event )
             {
-                if ( event.data instanceof Item[] )
+                try
                 {
-                    for ( final Item item : (Item[])event.data )
+                    if ( event.data instanceof Item[] )
                     {
-                        addItem ( new ItemConfiguration ( item ) );
+                        for ( final Item item : (Item[])event.data )
+                        {
+                            addItem ( new ItemConfiguration ( item ) );
+                        }
                     }
+                    else if ( event.data instanceof org.openscada.hd.ui.connection.data.Item[] )
+                    {
+                        for ( final org.openscada.hd.ui.connection.data.Item item : (org.openscada.hd.ui.connection.data.Item[])event.data )
+                        {
+                            addItem ( new ArchiveConfiguration ( item ) );
+                        }
+                    }
+                }
+                catch ( final Exception e )
+                {
+                    logger.warn ( "Failed to drop", e );
                 }
             }
 
@@ -134,20 +154,32 @@ public class ChartViewer
         } );
     }
 
-    public void addItem ( final ItemConfiguration itemConfiguration )
+    public void addItem ( final ArchiveConfiguration configuration )
     {
-        final ChartInput itemObserver = new ItemObserver ( this.manager, this, itemConfiguration.getItem (), this.realm, this.x, this.y );
+        final ChartInput input = new ArchiveInput ( configuration, this, this.realm, this.x, this.y );
 
+        addInput ( input );
+    }
+
+    public void addItem ( final ItemConfiguration configuration )
+    {
+        final ChartInput input = new ItemObserver ( this, configuration.getItem (), this.realm, this.x, this.y );
+
+        addInput ( input );
+    }
+
+    private void addInput ( final ChartInput input )
+    {
         if ( this.items.size () == 1 )
         {
             ( (ChartInput)this.items.get ( 0 ) ).setSelection ( false );
         }
 
-        this.items.add ( itemObserver );
+        this.items.add ( input );
 
         if ( this.items.size () == 1 )
         {
-            setSelection ( itemObserver );
+            setSelection ( input );
         }
 
         updateTitle ();
@@ -209,7 +241,7 @@ public class ChartViewer
         }
         finally
         {
-            this.manager.getChartArea ().setStale ( false );
+            this.manager.getChartArea ().setStale ( false, true );
         }
     }
 
@@ -239,5 +271,10 @@ public class ChartViewer
             setSelection ( null );
         }
         this.items.remove ( input );
+    }
+
+    public ChartManager getManager ()
+    {
+        return this.manager;
     }
 }

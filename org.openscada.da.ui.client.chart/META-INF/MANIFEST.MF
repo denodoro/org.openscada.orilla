@@ -22,7 +22,13 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.databinding.beans;bundle-version="1.2.100",
  org.eclipse.core.databinding.observable;bundle-version="1.4.0",
  org.eclipse.jface.databinding;bundle-version="1.5.0",
- org.openscada.ui.utils;bundle-version="0.17.0"
+ org.openscada.ui.utils;bundle-version="0.17.0",
+ org.openscada.hd.ui.connection;bundle-version="0.17.0",
+ org.openscada.core.connection.provider;bundle-version="1.0.0",
+ org.openscada.hd.connection.provider;bundle-version="1.0.0",
+ org.openscada.hd;bundle-version="0.17.0",
+ org.openscada.hd.client.common;bundle-version="0.14.0",
+ org.openscada.hd.ui;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Localization: plugin
