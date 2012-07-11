@@ -28,6 +28,8 @@ import java.io.ObjectOutputStream;
 import org.eclipse.swt.dnd.ByteArrayTransfer;
 import org.eclipse.swt.dnd.TransferData;
 import org.openscada.da.ui.connection.data.Item;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Class for serializing gadgets to/from a byte array
@@ -39,6 +41,8 @@ public class ItemTransfer extends ByteArrayTransfer
     private static final String TYPE_NAME = "openscada-da-item-transfer-format-v2"; //$NON-NLS-1$
 
     private static final int TYPEID = registerType ( TYPE_NAME );
+
+    private final static Logger logger = LoggerFactory.getLogger ( ItemTransfer.class );
 
     /**
      * Returns the singleton gadget transfer instance.
@@ -64,6 +68,7 @@ public class ItemTransfer extends ByteArrayTransfer
         }
         catch ( final Exception e )
         {
+            logger.warn ( "Failed to decode", e );
             return null;
         }
     }
