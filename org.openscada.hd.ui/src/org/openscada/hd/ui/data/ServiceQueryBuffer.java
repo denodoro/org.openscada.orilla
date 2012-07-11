@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -20,7 +20,10 @@
 package org.openscada.hd.ui.data;
 
 import org.openscada.core.connection.provider.ConnectionIdTracker;
+import org.openscada.core.connection.provider.ConnectionRequest;
+import org.openscada.core.connection.provider.ConnectionRequestTracker;
 import org.openscada.core.connection.provider.ConnectionService;
+import org.openscada.core.connection.provider.ConnectionTracker;
 import org.openscada.core.connection.provider.ConnectionTracker.Listener;
 import org.openscada.hd.QueryParameters;
 import org.osgi.framework.BundleContext;
@@ -28,9 +31,19 @@ import org.osgi.framework.BundleContext;
 public class ServiceQueryBuffer extends AbstractQueryBuffer implements Listener
 {
 
-    private final ConnectionIdTracker tracker;
+    private final ConnectionTracker tracker;
 
     private org.openscada.hd.connection.provider.ConnectionService connection;
+
+    public ServiceQueryBuffer ( final BundleContext context, final ConnectionRequest connectionRequest, final String itemId, final QueryParameters initialRequestParameters )
+    {
+        super ( itemId );
+
+        setRequestParameters ( initialRequestParameters );
+
+        this.tracker = new ConnectionRequestTracker ( context, connectionRequest, this, org.openscada.hd.connection.provider.ConnectionService.class );
+        this.tracker.open ();
+    }
 
     public ServiceQueryBuffer ( final BundleContext context, final String connectionId, final String itemId, final QueryParameters initialRequestParameters )
     {
