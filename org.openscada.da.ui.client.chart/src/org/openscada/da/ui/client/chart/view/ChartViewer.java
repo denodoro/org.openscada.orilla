@@ -288,4 +288,9 @@ public class ChartViewer
     {
         this.x.shiftByTimespan ( duration, timeUnit );
     }
+
+    public void setNowCenter ()
+    {
+        this.x.setNowCenter ();
+    }
 }

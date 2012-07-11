@@ -50,6 +50,22 @@ import org.openscada.ui.databinding.SelectionHelper;
 public class ChartView extends ViewPart
 {
 
+    public class CenterNowAction extends Action
+    {
+        public CenterNowAction ( final String text )
+        {
+            super ( text );
+            setDescription ( "Set center to now" );
+            setToolTipText ( "Set center to now" );
+        }
+
+        @Override
+        public void run ()
+        {
+            ChartView.this.viewer.setNowCenter ();
+        }
+    }
+
     public class SelectionProviderImpl implements ISelectionProvider
     {
         private final Set<ISelectionChangedListener> listeners = new LinkedHashSet<ISelectionChangedListener> ();
@@ -97,20 +113,21 @@ public class ChartView extends ViewPart
 
         protected final TimeUnit timeUnit;
 
-        public TimeAction ( final long duration, final TimeUnit timeUnit, final String label )
+        public TimeAction ( final long duration, final TimeUnit timeUnit, final String label, final String description )
         {
             super ( label );
+            setDescription ( description );
+            setToolTipText ( description );
             this.duration = duration;
             this.timeUnit = timeUnit;
         }
-
     }
 
     private class SetTimespanAction extends TimeAction
     {
-        public SetTimespanAction ( final long duration, final TimeUnit timeUnit, final String label )
+        public SetTimespanAction ( final long duration, final TimeUnit timeUnit, final String label, final String description )
         {
-            super ( duration, timeUnit, label );
+            super ( duration, timeUnit, label, description );
         }
 
         @Override
@@ -122,9 +139,9 @@ public class ChartView extends ViewPart
 
     private class PageTimespanAction extends TimeAction
     {
-        public PageTimespanAction ( final long duration, final TimeUnit timeUnit, final String label )
+        public PageTimespanAction ( final long duration, final TimeUnit timeUnit, final String label, final String description )
         {
-            super ( duration, timeUnit, label );
+            super ( duration, timeUnit, label, description );
         }
 
         @Override
@@ -172,21 +189,23 @@ public class ChartView extends ViewPart
 
     private void fillToolbar ( final IToolBarManager toolBarManager )
     {
-        toolBarManager.add ( new SetTimespanAction ( 1, TimeUnit.MINUTES, "<1m>" ) );
-        toolBarManager.add ( new SetTimespanAction ( 1, TimeUnit.HOURS, "<1h>" ) );
-        toolBarManager.add ( new SetTimespanAction ( 1, TimeUnit.DAYS, "<1d>" ) );
+        toolBarManager.add ( new SetTimespanAction ( 1, TimeUnit.MINUTES, "<1m>", "Scale to one minute" ) );
+        toolBarManager.add ( new SetTimespanAction ( 1, TimeUnit.HOURS, "<1h>", "Scale to one hour" ) );
+        toolBarManager.add ( new SetTimespanAction ( 1, TimeUnit.DAYS, "<1d>", "Scale to one day" ) );
+
+        toolBarManager.add ( new CenterNowAction ( "<now>" ) );
 
         toolBarManager.add ( new Separator () );
 
-        toolBarManager.add ( new PageTimespanAction ( -1, TimeUnit.MINUTES, "<1m" ) );
-        toolBarManager.add ( new PageTimespanAction ( -1, TimeUnit.HOURS, "<1h" ) );
-        toolBarManager.add ( new PageTimespanAction ( -1, TimeUnit.DAYS, "<1d" ) );
+        toolBarManager.add ( new PageTimespanAction ( -1, TimeUnit.MINUTES, "<1m", "Move back 1 minute" ) );
+        toolBarManager.add ( new PageTimespanAction ( -1, TimeUnit.HOURS, "<1h", "Move back 1 hour" ) );
+        toolBarManager.add ( new PageTimespanAction ( -1, TimeUnit.DAYS, "<1d", "Move back 1 day" ) );
 
         toolBarManager.add ( new Separator () );
 
-        toolBarManager.add ( new PageTimespanAction ( 1, TimeUnit.MINUTES, "1m>" ) );
-        toolBarManager.add ( new PageTimespanAction ( 1, TimeUnit.HOURS, "1h>" ) );
-        toolBarManager.add ( new PageTimespanAction ( 1, TimeUnit.DAYS, "1d>" ) );
+        toolBarManager.add ( new PageTimespanAction ( 1, TimeUnit.MINUTES, "1m>", "Move forward 1 minute" ) );
+        toolBarManager.add ( new PageTimespanAction ( 1, TimeUnit.HOURS, "1h>", "Move forward 1 hour" ) );
+        toolBarManager.add ( new PageTimespanAction ( 1, TimeUnit.DAYS, "1d>", "Move forward 1 day" ) );
     }
 
     @Override
