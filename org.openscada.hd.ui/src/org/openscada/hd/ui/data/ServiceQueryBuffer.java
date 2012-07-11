@@ -28,12 +28,21 @@ import org.openscada.core.connection.provider.ConnectionTracker.Listener;
 import org.openscada.hd.QueryParameters;
 import org.osgi.framework.BundleContext;
 
-public class ServiceQueryBuffer extends AbstractQueryBuffer implements Listener
+public class ServiceQueryBuffer extends AbstractQueryBuffer
 {
 
     private final ConnectionTracker tracker;
 
     private org.openscada.hd.connection.provider.ConnectionService connection;
+
+    private final Listener listener = new Listener () {
+
+        @Override
+        public void setConnection ( final ConnectionService connectionService )
+        {
+            ServiceQueryBuffer.this.setConnection ( connectionService );
+        }
+    };
 
     public ServiceQueryBuffer ( final BundleContext context, final ConnectionRequest connectionRequest, final String itemId, final QueryParameters initialRequestParameters )
     {
@@ -41,7 +50,7 @@ public class ServiceQueryBuffer extends AbstractQueryBuffer implements Listener
 
         setRequestParameters ( initialRequestParameters );
 
-        this.tracker = new ConnectionRequestTracker ( context, connectionRequest, this, org.openscada.hd.connection.provider.ConnectionService.class );
+        this.tracker = new ConnectionRequestTracker ( context, connectionRequest, this.listener, org.openscada.hd.connection.provider.ConnectionService.class );
         this.tracker.open ();
     }
 
@@ -51,7 +60,7 @@ public class ServiceQueryBuffer extends AbstractQueryBuffer implements Listener
 
         setRequestParameters ( initialRequestParameters );
 
-        this.tracker = new ConnectionIdTracker ( context, connectionId, this, org.openscada.hd.connection.provider.ConnectionService.class );
+        this.tracker = new ConnectionIdTracker ( context, connectionId, this.listener, org.openscada.hd.connection.provider.ConnectionService.class );
         this.tracker.open ();
     }
 
@@ -63,8 +72,7 @@ public class ServiceQueryBuffer extends AbstractQueryBuffer implements Listener
         detachConnection ();
     }
 
-    @Override
-    public void setConnection ( final ConnectionService connectionService )
+    protected void setConnection ( final ConnectionService connectionService )
     {
         detachConnection ();
         if ( connectionService != null )
