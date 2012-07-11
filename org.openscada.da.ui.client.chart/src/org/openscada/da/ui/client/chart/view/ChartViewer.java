@@ -20,6 +20,7 @@
 package org.openscada.da.ui.client.chart.view;
 
 import java.util.LinkedList;
+import java.util.concurrent.TimeUnit;
 
 import org.eclipse.core.databinding.observable.Observables;
 import org.eclipse.core.databinding.observable.list.IObservableList;
@@ -276,5 +277,15 @@ public class ChartViewer
     public ChartManager getManager ()
     {
         return this.manager;
+    }
+
+    public void showTimespan ( final long duration, final TimeUnit timeUnit )
+    {
+        this.x.setByTimespan ( duration, timeUnit );
+    }
+
+    public void pageTimespan ( final long duration, final TimeUnit timeUnit )
+    {
+        this.x.shiftByTimespan ( duration, timeUnit );
     }
 }

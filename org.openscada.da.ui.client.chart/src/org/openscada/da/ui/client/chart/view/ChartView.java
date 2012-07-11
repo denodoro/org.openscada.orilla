@@ -23,7 +23,11 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -87,6 +91,49 @@ public class ChartView extends ViewPart
 
     private ChartViewer viewer;
 
+    private class TimeAction extends Action
+    {
+        protected final long duration;
+
+        protected final TimeUnit timeUnit;
+
+        public TimeAction ( final long duration, final TimeUnit timeUnit, final String label )
+        {
+            super ( label );
+            this.duration = duration;
+            this.timeUnit = timeUnit;
+        }
+
+    }
+
+    private class SetTimespanAction extends TimeAction
+    {
+        public SetTimespanAction ( final long duration, final TimeUnit timeUnit, final String label )
+        {
+            super ( duration, timeUnit, label );
+        }
+
+        @Override
+        public void run ()
+        {
+            showTimespan ( this.duration, this.timeUnit );
+        }
+    }
+
+    private class PageTimespanAction extends TimeAction
+    {
+        public PageTimespanAction ( final long duration, final TimeUnit timeUnit, final String label )
+        {
+            super ( duration, timeUnit, label );
+        }
+
+        @Override
+        public void run ()
+        {
+            pageTimespan ( this.duration, this.timeUnit );
+        }
+    }
+
     @Override
     public void createPartControl ( final Composite parent )
     {
@@ -119,6 +166,27 @@ public class ChartView extends ViewPart
                 // else: don't select anything which we do not care about
             }
         } );
+
+        fillToolbar ( getViewSite ().getActionBars ().getToolBarManager () );
+    }
+
+    private void fillToolbar ( final IToolBarManager toolBarManager )
+    {
+        toolBarManager.add ( new SetTimespanAction ( 1, TimeUnit.MINUTES, "<1m>" ) );
+        toolBarManager.add ( new SetTimespanAction ( 1, TimeUnit.HOURS, "<1h>" ) );
+        toolBarManager.add ( new SetTimespanAction ( 1, TimeUnit.DAYS, "<1d>" ) );
+
+        toolBarManager.add ( new Separator () );
+
+        toolBarManager.add ( new PageTimespanAction ( -1, TimeUnit.MINUTES, "<1m" ) );
+        toolBarManager.add ( new PageTimespanAction ( -1, TimeUnit.HOURS, "<1h" ) );
+        toolBarManager.add ( new PageTimespanAction ( -1, TimeUnit.DAYS, "<1d" ) );
+
+        toolBarManager.add ( new Separator () );
+
+        toolBarManager.add ( new PageTimespanAction ( 1, TimeUnit.MINUTES, "1m>" ) );
+        toolBarManager.add ( new PageTimespanAction ( 1, TimeUnit.HOURS, "1h>" ) );
+        toolBarManager.add ( new PageTimespanAction ( 1, TimeUnit.DAYS, "1d>" ) );
     }
 
     @Override
@@ -168,6 +236,16 @@ public class ChartView extends ViewPart
     public void addItem ( final Item item )
     {
         this.viewer.addItem ( new ItemConfiguration ( item ) );
+    }
+
+    public void showTimespan ( final long duration, final TimeUnit timeUnit )
+    {
+        this.viewer.showTimespan ( duration, timeUnit );
+    }
+
+    public void pageTimespan ( final long duration, final TimeUnit timeUnit )
+    {
+        this.viewer.pageTimespan ( duration, timeUnit );
     }
 
 }
