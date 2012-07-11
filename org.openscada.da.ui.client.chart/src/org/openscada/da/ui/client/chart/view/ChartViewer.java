@@ -89,7 +89,7 @@ public class ChartViewer
                 {
                     for ( final Item item : (Item[])event.data )
                     {
-                        addItem ( item );
+                        addItem ( new ItemConfiguration ( item ) );
                     }
                 }
             }
@@ -129,9 +129,9 @@ public class ChartViewer
         } );
     }
 
-    public void addItem ( final Item item )
+    public void addItem ( final ItemConfiguration itemConfiguration )
     {
-        final ChartInput itemObserver = new ItemObserver ( this.manager, item, this.realm, this.x, this.y );
+        final ChartInput itemObserver = new ItemObserver ( this.manager, itemConfiguration.getItem (), this.realm, this.x, this.y );
 
         if ( this.items.size () == 1 )
         {
@@ -143,7 +143,7 @@ public class ChartViewer
         if ( this.items.size () == 1 )
         {
             itemObserver.setSelection ( true );
-            this.manager.setTitle ( "" + item.getId () );
+            this.manager.setTitle ( "" + itemConfiguration.getLabel () );
         }
         else
         {

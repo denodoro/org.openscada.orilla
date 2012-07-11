@@ -289,4 +289,9 @@ public class ItemObserver implements DataSourceListener, ChartInput
         }
     }
 
+    @Override
+    public ChartConfiguration getConfiguration ()
+    {
+        return new ItemConfiguration ( this.item );
+    }
 }

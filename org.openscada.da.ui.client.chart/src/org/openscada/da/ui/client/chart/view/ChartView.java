@@ -19,8 +19,8 @@
 
 package org.openscada.da.ui.client.chart.view;
 
-import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -35,7 +35,7 @@ public class ChartView extends ViewPart
 
     public static final String VIEW_ID = "org.openscada.da.ui.client.chart.ChartView";
 
-    private final Collection<Item> loadedItems = new LinkedList<Item> ();
+    private final List<ItemConfiguration> loadedItems = new LinkedList<ItemConfiguration> ();
 
     private ChartViewer viewer;
 
@@ -46,7 +46,7 @@ public class ChartView extends ViewPart
 
         this.viewer = new ChartViewer ( parent );
 
-        for ( final Item item : this.loadedItems )
+        for ( final ItemConfiguration item : this.loadedItems )
         {
             this.viewer.addItem ( item );
         }
@@ -68,21 +68,7 @@ public class ChartView extends ViewPart
     @Override
     public void init ( final IViewSite site, final IMemento memento ) throws PartInitException
     {
-        if ( memento != null )
-        {
-            final IMemento[] childs = memento.getChildren ( "item" );
-            if ( childs != null )
-            {
-                for ( final IMemento child : childs )
-                {
-                    final org.openscada.da.ui.connection.data.Item item = org.openscada.da.ui.connection.data.Item.loadFrom ( child );
-                    if ( item != null )
-                    {
-                        this.loadedItems.add ( item );
-                    }
-                }
-            }
-        }
+        this.loadedItems.addAll ( ItemConfiguration.loadAll ( memento ) );
 
         super.init ( site, memento );
     }
@@ -92,19 +78,21 @@ public class ChartView extends ViewPart
     {
         for ( final Object item : this.viewer.getItems () )
         {
-            if ( item instanceof ItemObserver )
+            if ( item instanceof ChartInput )
             {
-            final IMemento child = memento.createChild ( "item" );
-            ((ItemObserver)item).getItem ().saveTo ( child );
+                final ChartConfiguration cfg = ( (ChartInput)item ).getConfiguration ();
+                if ( cfg != null )
+                {
+                    cfg.storeAsChild ( memento );
+                }
             }
         }
-
         super.saveState ( memento );
     }
 
     public void addItem ( final Item item )
     {
-        this.viewer.addItem ( item );
+        this.viewer.addItem ( new ItemConfiguration ( item ) );
     }
 
 }
