@@ -16,6 +16,7 @@
  * version 3 along with OpenSCADA. If not, see
  * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
+
 package org.openscada.hd.ui.connection.dnd;
 
 import java.io.ByteArrayInputStream;
@@ -27,6 +28,8 @@ import java.io.IOException;
 import org.eclipse.swt.dnd.ByteArrayTransfer;
 import org.eclipse.swt.dnd.TransferData;
 import org.openscada.hd.ui.connection.data.Item;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Class for serializing gadgets to/from a byte array
@@ -38,6 +41,8 @@ public class ItemTransfer extends ByteArrayTransfer
     private static final String TYPE_NAME = "openscada-hd-item-transfer-format"; //$NON-NLS-1$
 
     private static final int TYPEID = registerType ( TYPE_NAME );
+
+    private final static Logger logger = LoggerFactory.getLogger ( ItemTransfer.class );
 
     /**
      * Returns the singleton gadget transfer instance.
@@ -77,6 +82,7 @@ public class ItemTransfer extends ByteArrayTransfer
         }
         catch ( final IOException e )
         {
+            logger.warn ( "Failed to deseriablize", e );
             return null;
         }
     }
@@ -157,6 +163,7 @@ public class ItemTransfer extends ByteArrayTransfer
         }
         catch ( final IOException e )
         {
+            logger.warn ( "Failed to encode", e );
             //when in doubt send nothing
         }
         return bytes;
