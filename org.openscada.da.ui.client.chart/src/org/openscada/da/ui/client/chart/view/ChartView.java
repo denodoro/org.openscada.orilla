@@ -37,6 +37,9 @@ import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
+import org.openscada.da.ui.client.chart.view.input.ChartConfiguration;
+import org.openscada.da.ui.client.chart.view.input.ChartInput;
+import org.openscada.da.ui.client.chart.view.input.ItemConfiguration;
 import org.openscada.da.ui.connection.data.Item;
 import org.openscada.ui.databinding.SelectionHelper;
 

@@ -1,4 +1,4 @@
-package org.openscada.da.ui.client.chart.view;
+package org.openscada.da.ui.client.chart.view.input;
 
 import java.util.LinkedList;
 import java.util.List;

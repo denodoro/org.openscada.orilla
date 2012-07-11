@@ -1,4 +1,4 @@
-package org.openscada.da.ui.client.chart.view;
+package org.openscada.da.ui.client.chart.view.input;
 
 import org.eclipse.ui.IMemento;
 

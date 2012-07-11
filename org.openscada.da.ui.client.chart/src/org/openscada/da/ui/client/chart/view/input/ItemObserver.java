@@ -17,7 +17,7 @@
  * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
-package org.openscada.da.ui.client.chart.view;
+package org.openscada.da.ui.client.chart.view.input;
 
 import java.util.Calendar;
 import java.util.Collection;
@@ -37,6 +37,7 @@ import org.openscada.chart.swt.render.Renderer;
 import org.openscada.core.Variant;
 import org.openscada.da.client.DataItemValue;
 import org.openscada.da.ui.client.chart.Activator;
+import org.openscada.da.ui.client.chart.view.ChartViewer;
 import org.openscada.da.ui.connection.data.DataItemHolder;
 import org.openscada.da.ui.connection.data.DataSourceListener;
 import org.openscada.da.ui.connection.data.Item;

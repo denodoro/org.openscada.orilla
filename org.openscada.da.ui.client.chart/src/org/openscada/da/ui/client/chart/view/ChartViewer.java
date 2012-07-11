@@ -36,6 +36,9 @@ import org.openscada.chart.YAxis;
 import org.openscada.chart.swt.DisplayRealm;
 import org.openscada.chart.swt.manager.ChartManager;
 import org.openscada.chart.swt.render.CurrentTimeRuler;
+import org.openscada.da.ui.client.chart.view.input.ChartInput;
+import org.openscada.da.ui.client.chart.view.input.ItemConfiguration;
+import org.openscada.da.ui.client.chart.view.input.ItemObserver;
 import org.openscada.da.ui.connection.data.Item;
 import org.openscada.da.ui.connection.dnd.ItemTransfer;
 

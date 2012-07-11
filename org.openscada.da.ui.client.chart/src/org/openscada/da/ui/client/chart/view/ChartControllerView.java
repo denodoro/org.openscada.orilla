@@ -41,6 +41,7 @@ import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
+import org.openscada.da.ui.client.chart.view.input.ChartInput;
 
 public class ChartControllerView extends ViewPart
 {

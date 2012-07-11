@@ -113,7 +113,7 @@
                         ifEmpty="false"
                         operator="and">
                      <instanceof
-                           value="org.openscada.da.ui.client.chart.view.ChartInput">
+                           value="org.openscada.da.ui.client.chart.view.input.ChartInput">
                      </instanceof>
                   </iterate>
                </with>

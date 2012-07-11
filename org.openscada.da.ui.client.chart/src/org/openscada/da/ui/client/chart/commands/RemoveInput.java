@@ -21,7 +21,7 @@ package org.openscada.da.ui.client.chart.commands;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.openscada.da.ui.client.chart.view.ChartInput;
+import org.openscada.da.ui.client.chart.view.input.ChartInput;
 import org.openscada.ui.databinding.AbstractSelectionHandler;
 import org.openscada.ui.databinding.SelectionHelper;
 
