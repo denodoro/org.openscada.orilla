@@ -264,7 +264,7 @@ public class ConnectionManager
 
     public void dispose ()
     {
-        for ( final EntryWrapper wrapper : this.entryMap.values () )
+        for ( final EntryWrapper wrapper : this.entryMap.values ().toArray ( new EntryWrapper[0] ) )
         {
             wrapper.dispose ();
         }
