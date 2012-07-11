@@ -189,14 +189,7 @@ public class ChartViewer
             chartInput.setSelection ( true );
         }
 
-        if ( this.items.size () == 1 )
-        {
-            this.manager.setTitle ( chartInput.getLabel () );
-        }
-        else
-        {
-            updateTitle ();
-        }
+        updateTitle ();
     }
 
     public void tick ()
