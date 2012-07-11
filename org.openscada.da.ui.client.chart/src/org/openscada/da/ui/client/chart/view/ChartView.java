@@ -19,19 +19,64 @@
 
 package org.openscada.da.ui.client.chart.view;
 
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IMemento;
+import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IViewSite;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 import org.openscada.da.ui.connection.data.Item;
+import org.openscada.ui.databinding.SelectionHelper;
 
 public class ChartView extends ViewPart
 {
+
+    public class SelectionProviderImpl implements ISelectionProvider
+    {
+        private final Set<ISelectionChangedListener> listeners = new LinkedHashSet<ISelectionChangedListener> ();
+
+        private ISelection selection;
+
+        @Override
+        public void setSelection ( final ISelection selection )
+        {
+            this.selection = selection;
+            for ( final ISelectionChangedListener listener : this.listeners )
+            {
+                listener.selectionChanged ( new SelectionChangedEvent ( this, selection ) );
+            }
+        }
+
+        @Override
+        public void removeSelectionChangedListener ( final ISelectionChangedListener listener )
+        {
+            this.listeners.remove ( listener );
+        }
+
+        @Override
+        public ISelection getSelection ()
+        {
+            return this.selection;
+        }
+
+        @Override
+        public void addSelectionChangedListener ( final ISelectionChangedListener listener )
+        {
+            this.listeners.add ( listener );
+        }
+    }
 
     public static final String VIEW_ID = "org.openscada.da.ui.client.chart.ChartView";
 
@@ -50,6 +95,27 @@ public class ChartView extends ViewPart
         {
             this.viewer.addItem ( item );
         }
+
+        getSite ().setSelectionProvider ( new SelectionProviderImpl () );
+        setAsSelection ();
+
+        getSite ().getWorkbenchWindow ().getSelectionService ().addPostSelectionListener ( new ISelectionListener () {
+
+            @Override
+            public void selectionChanged ( final IWorkbenchPart part, final ISelection selection )
+            {
+                final Object sel = SelectionHelper.first ( selection, Object.class );
+                if ( sel == null )
+                {
+                    ChartView.this.viewer.setSelection ( null );
+                }
+                else if ( sel instanceof ChartInput )
+                {
+                    ChartView.this.viewer.setSelection ( (ChartInput)sel );
+                }
+                // else: don't select anything which we do not care about
+            }
+        } );
     }
 
     @Override
@@ -62,7 +128,13 @@ public class ChartView extends ViewPart
     @Override
     public void setFocus ()
     {
+        setAsSelection ();
         this.viewer.setFocus ();
+    }
+
+    private void setAsSelection ()
+    {
+        getSite ().getSelectionProvider ().setSelection ( new StructuredSelection ( this.viewer ) );
     }
 
     @Override

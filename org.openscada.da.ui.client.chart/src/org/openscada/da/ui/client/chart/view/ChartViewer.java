@@ -143,11 +143,45 @@ public class ChartViewer
         if ( this.items.size () == 1 )
         {
             itemObserver.setSelection ( true );
-            this.manager.setTitle ( "" + itemConfiguration.getLabel () );
+            this.manager.setTitle ( itemConfiguration.getLabel () );
         }
         else
         {
             this.manager.setTitle ( String.format ( "%s items", this.items.size () ) );
+        }
+    }
+
+    public void setSelection ( final ChartInput chartInput )
+    {
+        if ( chartInput != null && !this.items.contains ( chartInput ) )
+        {
+            return;
+        }
+
+        for ( final Object input : this.items )
+        {
+            ( (ChartInput)input ).setSelection ( false );
+        }
+
+        if ( chartInput != null )
+        {
+            chartInput.setSelection ( true );
+        }
+
+        if ( this.items.size () == 1 )
+        {
+            this.manager.setTitle ( chartInput.getLabel () );
+        }
+        else
+        {
+            if ( chartInput != null )
+            {
+                this.manager.setTitle ( String.format ( "%s items (Selected: %s)", this.items.size (), chartInput.getLabel () ) );
+            }
+            else
+            {
+                this.manager.setTitle ( String.format ( "%s items", this.items.size () ) );
+            }
         }
     }
 

@@ -19,11 +19,26 @@
 
 package org.openscada.da.ui.client.chart.view;
 
+import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
+import org.eclipse.jface.viewers.CellLabelProvider;
+import org.eclipse.jface.viewers.ColumnWeightData;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.TableLayout;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.ViewerCell;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.ISelectionListener;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
 
 public class ChartControllerView extends ViewPart
 {
+
+    private TableViewer viewer;
 
     public ChartControllerView ()
     {
@@ -32,12 +47,70 @@ public class ChartControllerView extends ViewPart
     @Override
     public void createPartControl ( final Composite parent )
     {
+        parent.setLayout ( new FillLayout () );
+        this.viewer = new TableViewer ( parent );
 
+        final TableLayout tableLayout = new TableLayout ();
+        this.viewer.getTable ().setLayout ( tableLayout );
+
+        final TableViewerColumn col = new TableViewerColumn ( this.viewer, SWT.NONE );
+        tableLayout.addColumnData ( new ColumnWeightData ( 100, true ) );
+        col.setLabelProvider ( new CellLabelProvider () {
+
+            @Override
+            public void update ( final ViewerCell cell )
+            {
+                cell.setText ( ( (ChartInput)cell.getElement () ).getConfiguration ().getLabel () );
+            }
+        } );
+
+        this.viewer.setContentProvider ( new ObservableListContentProvider () );
+
+        getViewSite ().getWorkbenchWindow ().getSelectionService ().addPostSelectionListener ( new ISelectionListener () {
+
+            @Override
+            public void selectionChanged ( final IWorkbenchPart part, final ISelection selection )
+            {
+                handleSelectionChanged ( selection );
+            }
+
+        } );
+        handleSelectionChanged ( getViewSite ().getWorkbenchWindow ().getSelectionService ().getSelection () );
+        getSite ().setSelectionProvider ( this.viewer );
+    }
+
+    protected void handleSelectionChanged ( final ISelection sel )
+    {
+        if ( sel == null || sel.isEmpty () )
+        {
+            return;
+        }
+        if ( ! ( sel instanceof IStructuredSelection ) )
+        {
+            return;
+        }
+
+        final Object o = ( (IStructuredSelection)sel ).getFirstElement ();
+        if ( ! ( o instanceof ChartViewer ) )
+        {
+            return;
+        }
+
+        setChartViewer ( (ChartViewer)o );
+    }
+
+    private void setChartViewer ( final ChartViewer chartViewer )
+    {
+        if ( chartViewer != null )
+        {
+            this.viewer.setInput ( chartViewer.getItems () );
+        }
     }
 
     @Override
     public void setFocus ()
     {
+        this.viewer.getControl ().setFocus ();
     }
 
 }

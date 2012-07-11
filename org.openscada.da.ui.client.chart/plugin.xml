@@ -7,8 +7,10 @@
             allowMultiple="true"
             category="org.openscada.da.ui.category"
             class="org.openscada.da.ui.client.chart.view.ChartView"
+            icon="icons/chartView.gif"
             id="org.openscada.da.ui.client.chart.ChartView"
-            name="%view.chartView.name"/>
+            name="%view.chartView.name"
+            restorable="true"/>
       <view
             allowMultiple="false"
             category="org.openscada.da.ui.category"
