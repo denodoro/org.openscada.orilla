@@ -90,10 +90,13 @@ public class ChartView extends ViewPart
     @Override
     public void saveState ( final IMemento memento )
     {
-        for ( final ItemObserver item : this.viewer.getItems () )
+        for ( final Object item : this.viewer.getItems () )
         {
+            if ( item instanceof ItemObserver )
+            {
             final IMemento child = memento.createChild ( "item" );
-            item.getItem ().saveTo ( child );
+            ((ItemObserver)item).getItem ().saveTo ( child );
+            }
         }
 
         super.saveState ( memento );

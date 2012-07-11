@@ -19,10 +19,11 @@
 
 package org.openscada.da.ui.client.chart.view;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.LinkedList;
 
+import org.eclipse.core.databinding.observable.Observables;
+import org.eclipse.core.databinding.observable.list.IObservableList;
+import org.eclipse.core.databinding.observable.list.WritableList;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTargetAdapter;
@@ -48,7 +49,7 @@ public class ChartViewer
 
     private final DisplayRealm realm;
 
-    private final List<ItemObserver> items = new ArrayList<ItemObserver> ();
+    private final WritableList items = new WritableList ( new LinkedList<Object> (), ChartInput.class );
 
     private final CurrentTimeRuler timeRuler;
 
@@ -130,11 +131,11 @@ public class ChartViewer
 
     public void addItem ( final Item item )
     {
-        final ItemObserver itemObserver = new ItemObserver ( this.manager, item, this.realm, this.x, this.y );
+        final ChartInput itemObserver = new ItemObserver ( this.manager, item, this.realm, this.x, this.y );
 
         if ( this.items.size () == 1 )
         {
-            this.items.get ( 0 ).setSelection ( false );
+            ( (ChartInput)this.items.get ( 0 ) ).setSelection ( false );
         }
 
         this.items.add ( itemObserver );
@@ -154,9 +155,9 @@ public class ChartViewer
     {
         final long now = System.currentTimeMillis ();
 
-        for ( final ItemObserver item : this.items )
+        for ( final Object item : this.items )
         {
-            item.tick ( now );
+            ( (ChartInput)item ).tick ( now );
         }
     }
 
@@ -167,15 +168,15 @@ public class ChartViewer
 
     public void dispose ()
     {
-        for ( final ItemObserver item : this.items )
+        for ( final Object item : this.items )
         {
-            item.dispose ();
+            ( (ChartInput)item ).dispose ();
         }
         this.items.clear ();
     }
 
-    public List<ItemObserver> getItems ()
+    public IObservableList getItems ()
     {
-        return Collections.unmodifiableList ( this.items );
+        return Observables.unmodifiableObservableList ( this.items );
     }
 }

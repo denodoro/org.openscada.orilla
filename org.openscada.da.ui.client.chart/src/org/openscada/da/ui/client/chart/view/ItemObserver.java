@@ -41,7 +41,7 @@ import org.openscada.da.ui.connection.data.DataItemHolder;
 import org.openscada.da.ui.connection.data.DataSourceListener;
 import org.openscada.da.ui.connection.data.Item;
 
-public class ItemObserver implements DataSourceListener
+public class ItemObserver implements DataSourceListener, ChartInput
 {
     private final Item item;
 
@@ -141,6 +141,10 @@ public class ItemObserver implements DataSourceListener
         connect ();
     }
 
+    /* (non-Javadoc)
+     * @see org.openscada.da.ui.client.chart.view.ChartInput#setSelection(boolean)
+     */
+    @Override
     public void setSelection ( final boolean state )
     {
         if ( this.selection == state )
@@ -180,6 +184,10 @@ public class ItemObserver implements DataSourceListener
         return ruler;
     }
 
+    /* (non-Javadoc)
+     * @see org.openscada.da.ui.client.chart.view.ChartInput#dispose()
+     */
+    @Override
     public void dispose ()
     {
         removeLevelRulers ();
@@ -202,6 +210,10 @@ public class ItemObserver implements DataSourceListener
         return this.item;
     }
 
+    /* (non-Javadoc)
+     * @see org.openscada.da.ui.client.chart.view.ChartInput#tick(long)
+     */
+    @Override
     public void tick ( final long now )
     {
         if ( this.lastTickMarker == null )
