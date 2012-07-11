@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -16,17 +16,19 @@
  * version 3 along with OpenSCADA. If not, see
  * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
+
 package org.openscada.hd.ui.connection.data;
 
 import java.io.Serializable;
 
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.ui.IMemento;
 
 /**
  * A data item information object
+ * 
  * @author Jens Reimann
- *
  */
 public class Item implements Serializable
 {
@@ -70,6 +72,37 @@ public class Item implements Serializable
     {
         this.connectionString = item.connectionString;
         this.id = item.id;
+    }
+
+    public static Item loadFrom ( final IMemento memento )
+    {
+        if ( memento == null )
+        {
+            return null;
+        }
+
+        final String itemId = memento.getString ( "item.id" );
+        final String connectionString = memento.getString ( "connection.uri" );
+
+        if ( itemId == null || connectionString == null )
+        {
+            return null;
+        }
+        else
+        {
+            return new Item ( connectionString, itemId );
+        }
+    }
+
+    public void saveTo ( final IMemento memento )
+    {
+        if ( memento == null )
+        {
+            return;
+        }
+
+        memento.putString ( "item.id", this.id );
+        memento.putString ( "connection.uri", this.connectionString );
     }
 
     public static Item adaptTo ( final Object o )
