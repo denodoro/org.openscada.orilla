@@ -119,6 +119,10 @@ public class ConnectionLabelProvider extends CommonListeningLabelProvider implem
         {
             return ( (ConnectionDiscovererBean)element ).getDescription ();
         }
+        else if ( element instanceof ConnectionHolder )
+        {
+            return ( (ConnectionHolder)element ).getConnectionInformation ().getDescription ();
+        }
         return super.getDescription ( element );
     }
 

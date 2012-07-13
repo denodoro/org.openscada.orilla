@@ -115,12 +115,12 @@ public class LabelProviderSupport
         }
         switch ( toSpecial ( date ) )
         {
-        case YESTERDAY:
-            return String.format ( Messages.LabelProviderSupport_SpecialFormat_Yesterday, this.tf.format ( date ) );
-        case TODAY:
-            return String.format ( Messages.LabelProviderSupport_SpecialFormat_Today, this.tf.format ( date ) );
-        default:
-            return this.df.format ( date );
+            case YESTERDAY:
+                return String.format ( Messages.LabelProviderSupport_SpecialFormat_Yesterday, this.tf.format ( date ) );
+            case TODAY:
+                return String.format ( Messages.LabelProviderSupport_SpecialFormat_Today, this.tf.format ( date ) );
+            default:
+                return this.df.format ( date );
         }
     }
 
@@ -195,18 +195,23 @@ public class LabelProviderSupport
         {
             switch ( event.getMonitor ().getStatus () )
             {
-            case NOT_OK:
-                cell.setImage ( this.alarmImage );
-                break;
-            case NOT_OK_AKN:
-                cell.setImage ( this.alarmImage );
-                break;
-            case NOT_AKN:
-                cell.setImage ( this.ackImage );
-                break;
-            case NOT_OK_NOT_AKN:
-                cell.setImage ( this.ackImage );
-                break;
+                case NOT_OK:
+                    cell.setImage ( this.alarmImage );
+                    break;
+                case NOT_OK_AKN:
+                    cell.setImage ( this.alarmImage );
+                    break;
+                case NOT_AKN:
+                    cell.setImage ( this.ackImage );
+                    break;
+                case NOT_OK_NOT_AKN:
+                    cell.setImage ( this.ackImage );
+                    break;
+                case INACTIVE: //$FALL-THROUGH$
+                case INIT: //$FALL-THROUGH$
+                case UNSAFE: //$FALL-THROUGH$
+                case OK: //$FALL-THROUGH$
+                    break;
             }
         }
     }

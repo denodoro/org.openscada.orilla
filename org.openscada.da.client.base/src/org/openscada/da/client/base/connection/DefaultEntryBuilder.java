@@ -21,7 +21,7 @@ package org.openscada.da.client.base.connection;
 
 import org.openscada.core.ConnectionInformation;
 import org.openscada.da.client.Connection;
-import org.openscada.da.client.ItemManager;
+import org.openscada.da.client.ItemManagerImpl;
 import org.openscada.da.client.connector.Activator;
 
 /**
@@ -50,7 +50,7 @@ public class DefaultEntryBuilder implements EntryBuilder
         setupConnection ( connection, requireOpen );
 
         entry.setConnection ( connection );
-        entry.setItemManager ( new ItemManager ( entry.getConnection () ) );
+        entry.setItemManager ( new ItemManagerImpl ( entry.getConnection () ) );
 
         return entry;
     }

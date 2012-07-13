@@ -23,6 +23,7 @@ import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.PlatformObject;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.openscada.hd.HistoricalItemInformation;
+import org.openscada.hd.ui.connection.data.Item;
 
 public class ItemWrapper extends PlatformObject implements IAdaptable
 {
@@ -59,6 +60,10 @@ public class ItemWrapper extends PlatformObject implements IAdaptable
         if ( adapter == IPropertySource.class )
         {
             return new ItemPropertySource ( this );
+        }
+        else if ( adapter == Item.class )
+        {
+            return new Item ( this.connection.getService ().getConnection ().getConnectionInformation ().toString (), this.itemInformation.getId () );
         }
         return super.getAdapter ( adapter );
     }

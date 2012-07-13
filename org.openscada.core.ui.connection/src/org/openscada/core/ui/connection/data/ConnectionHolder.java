@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -19,15 +19,7 @@
 
 package org.openscada.core.ui.connection.data;
 
-import java.util.Dictionary;
-import java.util.Hashtable;
-
 import org.eclipse.core.runtime.IAdaptable;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.dialogs.ErrorDialog;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.openscada.core.client.Connection;
 import org.openscada.core.client.ConnectionState;
@@ -35,12 +27,9 @@ import org.openscada.core.client.ConnectionStateListener;
 import org.openscada.core.connection.provider.ConnectionService;
 import org.openscada.core.ui.connection.Activator;
 import org.openscada.core.ui.connection.ConnectionDescriptor;
-import org.openscada.core.ui.connection.creator.ConnectionCreatorHelper;
+import org.openscada.core.ui.connection.data.ConnectionManager.Entry;
 import org.openscada.utils.beans.AbstractPropertyChange;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceRegistration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,75 +54,39 @@ public class ConnectionHolder extends AbstractPropertyChange implements Connecti
 
     private Throwable connectionError;
 
-    private final BundleContext context;
-
-    private ServiceRegistration<?> serviceRegistration;
+    private Entry entry;
 
     public ConnectionHolder ( final ConnectionDiscovererBean discoverer, final ConnectionDescriptor info ) throws InvalidSyntaxException
     {
         this.info = info;
         this.discoverer = discoverer;
 
-        this.context = Activator.getDefault ().getBundle ().getBundleContext ();
-
         createConnection ();
     }
 
     private synchronized void createConnection ()
     {
-        final ConnectionService connectionService = ConnectionCreatorHelper.createConnection ( this.info.getConnectionInformation (), null );
-        if ( connectionService != null )
+        this.entry = Activator.getDefaultConectionManager ().getConnection ( this.info );
+        if ( this.entry != null )
         {
-            connectionService.getConnection ().addConnectionStateListener ( this );
-            setConnectionService ( connectionService );
+            this.entry.getConnectionService ().getConnection ().addConnectionStateListener ( this );
+
+            setConnectionService ( this.entry.getConnectionService () );
             setConnectionState ( ConnectionState.CLOSED );
             setConnectionError ( null );
-
-            registerConnection ();
         }
-    }
-
-    /**
-     * Register the current connection as an OSGi service
-     */
-    private void registerConnection ()
-    {
-        final Class<?>[] interfaces = this.connectionService.getSupportedInterfaces ();
-
-        final String[] clazzes = new String[interfaces.length];
-
-        int i = 0;
-        for ( final Class<?> iface : interfaces )
-        {
-            clazzes[i] = iface.getName ();
-            i++;
-        }
-
-        final Dictionary<String, String> properties = new Hashtable<String, String> ();
-        properties.put ( ConnectionService.CONNECTION_URI, this.info.getConnectionInformation ().toString () );
-        if ( this.info.getServiceId () != null )
-        {
-            properties.put ( Constants.SERVICE_PID, this.info.getServiceId () );
-        }
-        this.serviceRegistration = this.context.registerService ( clazzes, this.connectionService, properties );
     }
 
     private synchronized void destroyConnection ()
     {
-        if ( this.serviceRegistration != null )
+        if ( this.entry != null )
         {
-            this.serviceRegistration.unregister ();
-            this.serviceRegistration = null;
+            this.entry.getConnectionService ().getConnection ().removeConnectionStateListener ( this );
+            this.entry.dispose ();
         }
-        if ( this.connectionService != null )
-        {
-            this.connectionService.getConnection ().removeConnectionStateListener ( this );
-            this.connectionService.disconnect ();
-            this.connectionService = null;
-            setConnectionService ( null );
-            setConnectionState ( null );
-            setConnectionError ( null );
-        }
+        setConnectionService ( null );
+        setConnectionState ( null );
+        setConnectionError ( null );
     }
 
     public synchronized void connect ()
@@ -197,16 +150,16 @@ public class ConnectionHolder extends AbstractPropertyChange implements Connecti
 
     protected void setConnectionService ( final ConnectionService connectionService )
     {
-        final ConnectionService olcConnectionService = connectionService;
+        final ConnectionService oldConnectionService = connectionService;
         this.connectionService = connectionService;
-        firePropertyChange ( PROP_CONNECTION_SERVICE, olcConnectionService, connectionService );
+        firePropertyChange ( PROP_CONNECTION_SERVICE, oldConnectionService, connectionService );
     }
 
     protected void setConnectionError ( final Throwable connectionError )
     {
-        final Throwable olcConnectionError = connectionError;
+        final Throwable oldConnectionError = connectionError;
         this.connectionError = connectionError;
-        firePropertyChange ( PROP_CONNECTION_ERROR, olcConnectionError, connectionError );
+        firePropertyChange ( PROP_CONNECTION_ERROR, oldConnectionError, connectionError );
     }
 
     @Override
@@ -214,60 +167,8 @@ public class ConnectionHolder extends AbstractPropertyChange implements Connecti
     {
         logger.debug ( "Connection state changed: {}", state );
 
-        final IStatus status = makeStatus ( connection, state, error );
-        Activator.getDefault ().getLog ().log ( status );
-
         setConnectionState ( state );
         setConnectionError ( error );
-
-        showError ( status );
-    }
-
-    private void showError ( final IStatus status )
-    {
-        if ( !status.matches ( IStatus.ERROR ) )
-        {
-            return;
-        }
-
-        final Display display = PlatformUI.getWorkbench ().getDisplay ();
-        if ( !display.isDisposed () )
-        {
-            display.asyncExec ( new Runnable () {
-
-                @Override
-                public void run ()
-                {
-                    if ( !display.isDisposed () )
-                    {
-                        ErrorDialog.openError ( PlatformUI.getWorkbench ().getActiveWorkbenchWindow ().getShell (), "Connection error", "Connection failed", status, IStatus.ERROR );
-                    }
-                }
-            } );
-        }
-    }
-
-    private IStatus makeStatus ( final Connection connection, final ConnectionState state, final Throwable error )
-    {
-        int severity;
-        String message;
-        if ( error != null )
-        {
-            message = error.getMessage ();
-            severity = IStatus.ERROR;
-        }
-        else if ( state == ConnectionState.CLOSED )
-        {
-            message = "Connection closed";
-            severity = IStatus.WARNING;
-        }
-        else
-        {
-            message = String.format ( "State changed: %s", state );
-            severity = IStatus.INFO;
-        }
-
-        return new Status ( severity, Activator.PLUGIN_ID, message, error );
     }
 
     @Override

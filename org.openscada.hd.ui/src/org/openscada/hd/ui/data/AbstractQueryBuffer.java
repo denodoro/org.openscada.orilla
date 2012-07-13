@@ -127,6 +127,7 @@ public class AbstractQueryBuffer extends AbstractPropertyChange
 
     /**
      * Return the current value information
+     * 
      * @return the current value information
      */
     public ValueInformation[] getValueInformation ()
@@ -136,11 +137,17 @@ public class AbstractQueryBuffer extends AbstractPropertyChange
 
     /**
      * Return the current values
+     * 
      * @return the current values
      */
     public Map<String, Value[]> getValues ()
     {
-        return new HashMap<String, Value[]> ( this.values );
+        final Map<String, Value[]> values = this.values;
+        if ( values == null )
+        {
+            return null;
+        }
+        return new HashMap<String, Value[]> ( values );
     }
 
     protected synchronized void updateData ( final int index, final Map<String, Value[]> values, final ValueInformation[] valueInformation )
@@ -269,6 +276,11 @@ public class AbstractQueryBuffer extends AbstractPropertyChange
 
     public void close ()
     {
+        closeQuery ();
+    }
+
+    private void closeQuery ()
+    {
         if ( this.query != null )
         {
             this.query.close ();
@@ -370,7 +382,7 @@ public class AbstractQueryBuffer extends AbstractPropertyChange
 
     protected synchronized void createQuery ( final Connection connection, final String itemId )
     {
-        close ();
+        closeQuery ();
         this.query = connection.createQuery ( itemId, this.requestParameters, new QueryListener () {
 
             @Override

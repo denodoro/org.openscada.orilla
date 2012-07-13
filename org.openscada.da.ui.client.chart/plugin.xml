@@ -6,9 +6,19 @@
       <view
             allowMultiple="true"
             category="org.openscada.da.ui.category"
-            class="org.openscada.da.ui.client.chart.view.ChartView2"
+            class="org.openscada.da.ui.client.chart.view.ChartView"
+            icon="icons/chartView.gif"
             id="org.openscada.da.ui.client.chart.ChartView"
-            name="%view.chartView.name"/>
+            name="%view.chartView.name"
+            restorable="true"/>
+      <view
+            allowMultiple="false"
+            category="org.openscada.da.ui.category"
+            class="org.openscada.da.ui.client.chart.view.ChartControllerView"
+            id="org.openscada.da.ui.client.chart.ChartController"
+            name="Chart Controller"
+            restorable="true">
+      </view>
    </extension>
    <extension
          point="org.eclipse.ui.popupMenus">
@@ -40,11 +50,35 @@
             id="org.openscada.da.client.chart.commands.OpenCharView"
             name="Open Chart">
       </command>
+      <command
+            categoryId="org.openscada.da.ui.category"
+            id="org.openscada.da.client.chart.commands.OpenParametersCharView"
+            name="Open Chart">
+         <commandParameter
+               id="org.openscada.da.ui.client.chart.connectionId"
+               name="Connection Id"
+               optional="true">
+         </commandParameter>
+         <commandParameter
+               id="org.openscada.da.ui.client.chart.connectionString"
+               name="Connection String (Uri)"
+               optional="true">
+         </commandParameter>
+         <commandParameter
+               id="org.openscada.da.ui.client.chart.itemId"
+               name="Item ID"
+               optional="true">
+         </commandParameter>
+      </command>
+      <command
+            id="org.openscada.da.ui.client.chart.RemoteInput"
+            name="Remove">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
       <handler
-            class="org.openscada.da.ui.client.chart.commands.OpenCharView"
+            class="org.openscada.da.ui.client.chart.commands.OpenChartView"
             commandId="org.openscada.da.client.chart.commands.OpenCharView">
          <enabledWhen>
             <with
@@ -62,6 +96,28 @@
                   </or>
                </iterate>
             </with>
+         </enabledWhen>
+      </handler>
+      <handler
+            class="org.openscada.da.ui.client.chart.commands.OpenChartViewWithParameters"
+            commandId="org.openscada.da.client.chart.commands.OpenParametersCharView">
+      </handler>
+      <handler
+            class="org.openscada.da.ui.client.chart.commands.RemoveInput"
+            commandId="org.openscada.da.ui.client.chart.RemoteInput">
+         <enabledWhen>
+            <and>
+               <with
+                     variable="selection">
+                  <iterate
+                        ifEmpty="false"
+                        operator="and">
+                     <instanceof
+                           value="org.openscada.da.ui.client.chart.view.input.ChartInput">
+                     </instanceof>
+                  </iterate>
+               </with>
+            </and>
          </enabledWhen>
       </handler>
    </extension>
@@ -88,6 +144,14 @@
                   </or>
                </iterate>
             </visibleWhen>
+         </command>
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:org.openscada.da.ui.client.chart.ChartController">
+         <command
+               commandId="org.openscada.da.ui.client.chart.RemoteInput"
+               style="push">
          </command>
       </menuContribution>
    </extension>

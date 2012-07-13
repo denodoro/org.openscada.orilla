@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -45,7 +45,7 @@ public class ListData implements Observer
         return new ArrayList<ListEntry> ( this.items );
     }
 
-    synchronized public void setItems ( final List<ListEntry> items )
+    public synchronized void setItems ( final List<ListEntry> items )
     {
         clear ();
 
@@ -95,11 +95,12 @@ public class ListData implements Observer
         fireRemoved ( entries.toArray ( new ListEntry[entries.size ()] ) );
     }
 
-    synchronized public void clear ()
+    public synchronized void clear ()
     {
         for ( final ListEntry entry : this.items )
         {
             entry.deleteObserver ( this );
+            entry.clear ();
         }
         this.items.clear ();
         fireRemoved ( this.items.toArray ( new ListEntry[this.items.size ()] ) );
@@ -169,6 +170,7 @@ public class ListData implements Observer
         }
     }
 
+    @Override
     public void update ( final Observable o, final Object arg )
     {
         if ( o instanceof ListEntry && this.items.contains ( o ) )

@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: CA Common Editor Forms
 Bundle-SymbolicName: org.openscada.ca.ui.editor.forms.common;singleton:=true
-Bundle-Version: 0.18.0.qualifier
+Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.openscada.ca.ui.editor.forms.common.internal.Activator
 Bundle-Vendor: TH4 SYSTEMS GmbH
 Require-Bundle: org.eclipse.ui,
@@ -15,7 +15,7 @@ Require-Bundle: org.eclipse.ui,
  org.openscada.ui.databinding;bundle-version="0.18.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
-Export-Package: org.openscada.ca.ui.editor.forms.common;version="0.18.0";
+Export-Package: org.openscada.ca.ui.editor.forms.common;version="1.0.0";
   uses:="org.openscada.ca.ui.editor.input,
    org.eclipse.core.databinding,
    org.eclipse.core.databinding.observable.map,

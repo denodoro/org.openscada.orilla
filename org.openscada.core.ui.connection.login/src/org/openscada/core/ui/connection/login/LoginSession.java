@@ -80,7 +80,9 @@ public class LoginSession
      * <p>
      * If no handler grants the role, the default <code>false</code> is returned.
      * </p>
-     * @param role the role to check
+     * 
+     * @param role
+     *            the role to check
      * @return <code>true</code> if the role was granted, <code>false</code> otherwise
      */
     public boolean hasRole ( final String role )
