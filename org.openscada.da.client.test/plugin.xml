@@ -9,7 +9,8 @@
             category="org.openscada.da.ui.category"
             class="org.openscada.da.client.test.views.realtime.RealTimeList"
             id="org.openscada.da.test.views.RealTimeList"
-            name="%view.realtimeList.name"/>
+            name="%view.realtimeList.name"
+            restorable="true"/>
    </extension>
    <extension
          point="org.eclipse.ui.commands">
@@ -108,7 +109,7 @@
    <extension
          point="org.eclipse.ui.menus">
       <menuContribution
-            locationURI="toolbar:org.eclipse.ui.main.toolbar">
+            locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
          <toolbar
                id="org.openscada.da.client.test.toolbar">
             <command

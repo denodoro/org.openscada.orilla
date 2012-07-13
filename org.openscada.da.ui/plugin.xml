@@ -31,7 +31,26 @@
          </perspectiveShortcut>
       </perspectiveExtension>
       <perspectiveExtension
-            targetID="org.openscada.da.ui.perspective">         
+            targetID="org.openscada.da.ui.perspective">
+         <view
+               closeable="true"
+               id="org.openscada.core.ui.connection.ConnectionView"
+               minimized="false"
+               moveable="true"
+               ratio="0.35"
+               relationship="left"
+               relative="org.eclipse.ui.editorss"
+               showTitle="true"
+               standalone="false"
+               visible="true">
+         </view>
+         <view
+               id="org.openscada.da.test.views.RealTimeList"
+               minimized="false"
+               relationship="right"
+               relative="org.eclipse.ui.editorss"
+               visible="true">
+         </view>         
       </perspectiveExtension>
    </extension>
    <extension
