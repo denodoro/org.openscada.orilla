@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: openSCADA DA Client Chart
-Bundle-SymbolicName: org.openscada.da.ui.client.chart;singleton:=true
+Bundle-SymbolicName: org.openscada.ui.chart;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.openscada.da.ui.client.chart.Activator
 Bundle-Vendor: TH4 SYSTEMS GmbH

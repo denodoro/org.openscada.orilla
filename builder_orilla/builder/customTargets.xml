@@ -132,7 +132,6 @@
   	<openscada.builder.copyPlugin id="org.openscada.da.client.dataitem.details.extra"/>
   	<openscada.builder.copyPlugin id="org.openscada.da.client.signalGenerator"/>
   	<openscada.builder.copyPlugin id="org.openscada.da.client.test"/>
-  	<openscada.builder.copyPlugin id="org.openscada.da.ui.client.chart"/>
   	<openscada.builder.copyPlugin id="org.openscada.da.ui.connection" />
   	<openscada.builder.copyPlugin id="org.openscada.da.ui.connection.creator.net" />
   	<openscada.builder.copyPlugin id="org.openscada.da.ui.styles"/>
@@ -154,6 +153,10 @@
   	<openscada.builder.copyPlugin id="org.openscada.hd.ui.printing"/>
   	<openscada.builder.copyPlugin id="org.openscada.hd.ui.connection" />
   	<openscada.builder.copyPlugin id="org.openscada.hd.ui.connection.creator.net" />
+  	
+	<!-- openSCADA Chart UI -->
+  		
+  	<openscada.builder.copyPlugin id="org.openscada.ui.chart"/>
   	
   	<!-- OpenSCADA CA UI -->
   	
