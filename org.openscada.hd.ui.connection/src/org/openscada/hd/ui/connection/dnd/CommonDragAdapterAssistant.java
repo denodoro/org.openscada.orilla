@@ -28,9 +28,12 @@ import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.dnd.URLTransfer;
 import org.openscada.hd.ui.connection.data.Item;
 import org.openscada.hd.ui.connection.data.ItemSelectionHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CommonDragAdapterAssistant extends org.eclipse.ui.navigator.CommonDragAdapterAssistant
 {
+    private final static Logger logger = LoggerFactory.getLogger ( CommonDragAdapterAssistant.class );
 
     private static final String NL = System.getProperty ( "line.separator", "\n" );
 
@@ -41,11 +44,20 @@ public class CommonDragAdapterAssistant extends org.eclipse.ui.navigator.CommonD
     }
 
     @Override
+    public void dragStart ( final DragSourceEvent event, final IStructuredSelection selection )
+    {
+        event.doit = !ItemSelectionHelper.getSelection ( selection ).isEmpty ();
+    }
+
+    @Override
     public boolean setDragData ( final DragSourceEvent event, final IStructuredSelection selection )
     {
+        logger.debug ( "setDragData ( event: {}, selection: {}", event, selection );
+
         final Collection<Item> items = ItemSelectionHelper.getSelection ( selection );
         if ( items.isEmpty () )
         {
+            logger.info ( "Empty item set for setDragData" );
             return false;
         }
 
@@ -64,6 +76,9 @@ public class CommonDragAdapterAssistant extends org.eclipse.ui.navigator.CommonD
             event.data = getItemUriData ( items );
             return true;
         }
+
+        logger.debug ( "No possible transfer" );
+
         return false;
     }
 
