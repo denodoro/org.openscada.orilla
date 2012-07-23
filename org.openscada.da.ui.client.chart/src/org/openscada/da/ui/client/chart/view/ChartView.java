@@ -1,19 +1,19 @@
 /*
- * This file is part of the OpenSCADA project
+ * This file is part of the openSCADA project
  * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
- * OpenSCADA is free software: you can redistribute it and/or modify
+ * openSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
  * only, as published by the Free Software Foundation.
  *
- * OpenSCADA is distributed in the hope that it will be useful,
+ * openSCADA is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License version 3 for more details
  * (a copy is included in the LICENSE file that accompanied this code).
  *
  * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenSCADA. If not, see
+ * version 3 along with openSCADA. If not, see
  * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
@@ -52,9 +52,9 @@ public class ChartView extends ViewPart
 
     public class CenterNowAction extends Action
     {
-        public CenterNowAction ( final String text )
+        public CenterNowAction ()
         {
-            super ( text );
+            super ( "<now>" );
             setDescription ( "Set center to now" );
             setToolTipText ( "Set center to now" );
         }
@@ -189,11 +189,11 @@ public class ChartView extends ViewPart
 
     private void fillToolbar ( final IToolBarManager toolBarManager )
     {
-        toolBarManager.add ( new SetTimespanAction ( 1, TimeUnit.MINUTES, "<1m>", "Scale to one minute" ) );
         toolBarManager.add ( new SetTimespanAction ( 1, TimeUnit.HOURS, "<1h>", "Scale to one hour" ) );
+        toolBarManager.add ( new SetTimespanAction ( 1, TimeUnit.MINUTES, "<1m>", "Scale to one minute" ) );
         toolBarManager.add ( new SetTimespanAction ( 1, TimeUnit.DAYS, "<1d>", "Scale to one day" ) );
 
-        toolBarManager.add ( new CenterNowAction ( "<now>" ) );
+        toolBarManager.add ( new CenterNowAction () );
 
         toolBarManager.add ( new Separator () );
 
@@ -206,6 +206,7 @@ public class ChartView extends ViewPart
         toolBarManager.add ( new PageTimespanAction ( 1, TimeUnit.MINUTES, "1m>", "Move forward 1 minute" ) );
         toolBarManager.add ( new PageTimespanAction ( 1, TimeUnit.HOURS, "1h>", "Move forward 1 hour" ) );
         toolBarManager.add ( new PageTimespanAction ( 1, TimeUnit.DAYS, "1d>", "Move forward 1 day" ) );
+
     }
 
     @Override
