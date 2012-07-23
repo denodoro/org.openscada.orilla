@@ -28,11 +28,15 @@ import org.eclipse.swt.dnd.DragSourceEvent;
 import org.eclipse.swt.dnd.DragSourceListener;
 import org.openscada.da.ui.connection.data.Item;
 import org.openscada.da.ui.connection.data.ItemSelectionHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ItemDragSourceListener implements DragSourceListener
 {
 
-    private Viewer viewer = null;
+    private final static Logger logger = LoggerFactory.getLogger ( ItemDragSourceListener.class );
+
+    private final Viewer viewer;
 
     public ItemDragSourceListener ( final Viewer viewer )
     {
@@ -40,10 +44,12 @@ public class ItemDragSourceListener implements DragSourceListener
         this.viewer = viewer;
     }
 
+    @Override
     public void dragFinished ( final DragSourceEvent event )
     {
     }
 
+    @Override
     public void dragSetData ( final DragSourceEvent event )
     {
         try
@@ -53,15 +59,18 @@ public class ItemDragSourceListener implements DragSourceListener
                 final IStructuredSelection selection = (IStructuredSelection)LocalSelectionTransfer.getTransfer ().getSelection ();
                 final Collection<Item> items = ItemSelectionHelper.getSelection ( selection );
                 event.data = items.toArray ( new Item[items.size ()] );
+                event.doit = true;
             }
         }
         catch ( final Exception e )
         {
+            logger.warn ( "Failed to set drag data", e );
             event.doit = false;
         }
 
     }
 
+    @Override
     public void dragStart ( final DragSourceEvent event )
     {
         event.doit = false;
