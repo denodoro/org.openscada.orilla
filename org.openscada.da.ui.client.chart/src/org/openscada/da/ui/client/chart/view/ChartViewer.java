@@ -19,12 +19,15 @@
 
 package org.openscada.da.ui.client.chart.view;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.concurrent.TimeUnit;
 
 import org.eclipse.core.databinding.observable.Observables;
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.list.WritableList;
+import org.eclipse.jface.util.LocalSelectionTransfer;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTargetAdapter;
@@ -43,14 +46,9 @@ import org.openscada.da.ui.client.chart.view.input.ChartInput;
 import org.openscada.da.ui.client.chart.view.input.ItemConfiguration;
 import org.openscada.da.ui.client.chart.view.input.ItemObserver;
 import org.openscada.da.ui.connection.data.Item;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class ChartViewer
 {
-
-    private final static Logger logger = LoggerFactory.getLogger ( ChartViewer.class );
-
     private final ChartManager manager;
 
     private final XAxis x;
@@ -93,37 +91,62 @@ public class ChartViewer
         this.manager.addRenderer ( this.timeRuler );
 
         this.manager.addDefaultControllers ( this.x, this.y );
-        this.manager.createDropTarget ( new Transfer[] { org.openscada.hd.ui.connection.dnd.ItemTransfer.getInstance (), org.openscada.da.ui.connection.dnd.ItemTransfer.getInstance () }, new DropTargetAdapter () {
-            @Override
-            public void drop ( final DropTargetEvent event )
-            {
-                try
-                {
-                    if ( event.data instanceof Item[] )
-                    {
-                        for ( final Item item : (Item[])event.data )
-                        {
-                            addItem ( new ItemConfiguration ( item ) );
-                        }
-                    }
-                    else if ( event.data instanceof org.openscada.hd.ui.connection.data.Item[] )
-                    {
-                        for ( final org.openscada.hd.ui.connection.data.Item item : (org.openscada.hd.ui.connection.data.Item[])event.data )
-                        {
-                            addItem ( new ArchiveConfiguration ( item ) );
-                        }
-                    }
-                }
-                catch ( final Exception e )
-                {
-                    logger.warn ( "Failed to drop", e );
-                }
-            }
 
+        this.manager.createDropTarget ( new Transfer[] { LocalSelectionTransfer.getTransfer () }, new DropTargetAdapter () {
             @Override
             public void dragEnter ( final DropTargetEvent event )
             {
-                event.detail = DND.DROP_COPY;
+                event.detail = DND.DROP_NONE;
+
+                final ISelection selection = LocalSelectionTransfer.getTransfer ().getSelection ();
+
+                {
+                    final Collection<org.openscada.da.ui.connection.data.Item> data = org.openscada.da.ui.connection.data.ItemSelectionHelper.getSelection ( selection );
+                    if ( !data.isEmpty () )
+                    {
+                        event.detail = DND.DROP_COPY;
+                        return;
+                    }
+                }
+
+                {
+                    final Collection<org.openscada.hd.ui.connection.data.Item> data = org.openscada.hd.ui.connection.data.ItemSelectionHelper.getSelection ( LocalSelectionTransfer.getTransfer ().getSelection () );
+                    if ( !data.isEmpty () )
+                    {
+                        event.detail = DND.DROP_COPY;
+                        return;
+                    }
+                }
+            };
+
+            @Override
+            public void drop ( final DropTargetEvent event )
+            {
+                final ISelection selection = LocalSelectionTransfer.getTransfer ().getSelection ();
+
+                {
+                    final Collection<org.openscada.da.ui.connection.data.Item> data = org.openscada.da.ui.connection.data.ItemSelectionHelper.getSelection ( selection );
+                    if ( !data.isEmpty () )
+                    {
+                        for ( final Item item : data )
+                        {
+                            addItem ( new ItemConfiguration ( item ) );
+                        }
+                        return;
+                    }
+                }
+
+                {
+                    final Collection<org.openscada.hd.ui.connection.data.Item> data = org.openscada.hd.ui.connection.data.ItemSelectionHelper.getSelection ( LocalSelectionTransfer.getTransfer ().getSelection () );
+                    if ( !data.isEmpty () )
+                    {
+                        for ( final org.openscada.hd.ui.connection.data.Item item : data )
+                        {
+                            addItem ( new ArchiveConfiguration ( item ) );
+                        }
+                        return;
+                    }
+                }
             };
         } );
 
