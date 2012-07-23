@@ -40,9 +40,14 @@ public class ItemTransfer extends ByteArrayTransfer
 
     private static final String TYPE_NAME = "openscada-da-item-transfer-format-v2"; //$NON-NLS-1$
 
-    private static final int TYPEID = registerType ( TYPE_NAME );
+    private static final int TYPE_ID = registerType ( TYPE_NAME );
 
     private final static Logger logger = LoggerFactory.getLogger ( ItemTransfer.class );
+
+    static
+    {
+        logger.info ( "Registered type '{}' with id '{}'", TYPE_NAME, TYPE_ID );
+    }
 
     /**
      * Returns the singleton gadget transfer instance.
@@ -79,7 +84,7 @@ public class ItemTransfer extends ByteArrayTransfer
     @Override
     protected int[] getTypeIds ()
     {
-        return new int[] { TYPEID };
+        return new int[] { TYPE_ID };
     }
 
     /*
