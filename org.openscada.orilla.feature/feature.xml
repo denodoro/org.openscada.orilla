@@ -17,6 +17,10 @@
       %license
    </license>
 
+   <includes
+         id="org.openscada.chart"
+         version="0.0.0"/>
+
    <requires>
       <import feature="org.openscada.atlantis" version="0.15.0.qualifier"/>
       <import plugin="org.eclipse.draw2d"/>
@@ -95,13 +99,6 @@
 
    <plugin
          id="org.openscada.da.client.base"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.openscada.ui.chart"
          download-size="0"
          install-size="0"
          version="0.0.0"
