@@ -18,7 +18,7 @@
    </license>
 
    <includes
-         id="org.openscada.chart"
+         id="org.openscada.ui.chart"
          version="0.0.0"/>
 
    <requires>
