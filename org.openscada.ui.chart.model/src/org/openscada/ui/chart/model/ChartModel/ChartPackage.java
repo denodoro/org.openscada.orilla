@@ -465,13 +465,31 @@ public interface ChartPackage extends EPackage
     int DATA_ITEM_SERIES__ITEM = ITEM_DATA_SERIES__ITEM;
 
     /**
+     * The feature id for the '<em><b>Line Color</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int DATA_ITEM_SERIES__LINE_COLOR = ITEM_DATA_SERIES_FEATURE_COUNT + 0;
+
+    /**
+     * The feature id for the '<em><b>Line Width</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int DATA_ITEM_SERIES__LINE_WIDTH = ITEM_DATA_SERIES_FEATURE_COUNT + 1;
+
+    /**
      * The number of structural features of the '<em>Data Item Series</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int DATA_ITEM_SERIES_FEATURE_COUNT = ITEM_DATA_SERIES_FEATURE_COUNT + 0;
+    int DATA_ITEM_SERIES_FEATURE_COUNT = ITEM_DATA_SERIES_FEATURE_COUNT + 2;
 
     /**
      * The meta object id for the '{@link org.openscada.ui.chart.model.ChartModel.impl.ArchiveSeriesImpl <em>Archive Series</em>}' class.
@@ -910,6 +928,28 @@ public interface ChartPackage extends EPackage
     EClass getDataItemSeries ();
 
     /**
+     * Returns the meta object for the attribute '{@link org.openscada.ui.chart.model.ChartModel.DataItemSeries#getLineColor <em>Line Color</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Line Color</em>'.
+     * @see org.openscada.ui.chart.model.ChartModel.DataItemSeries#getLineColor()
+     * @see #getDataItemSeries()
+     * @generated
+     */
+    EAttribute getDataItemSeries_LineColor ();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.openscada.ui.chart.model.ChartModel.DataItemSeries#getLineWidth <em>Line Width</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Line Width</em>'.
+     * @see org.openscada.ui.chart.model.ChartModel.DataItemSeries#getLineWidth()
+     * @see #getDataItemSeries()
+     * @generated
+     */
+    EAttribute getDataItemSeries_LineWidth ();
+
+    /**
      * Returns the meta object for class '{@link org.openscada.ui.chart.model.ChartModel.ArchiveSeries <em>Archive Series</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1248,6 +1288,22 @@ public interface ChartPackage extends EPackage
          * @generated
          */
         EClass DATA_ITEM_SERIES = eINSTANCE.getDataItemSeries ();
+
+        /**
+         * The meta object literal for the '<em><b>Line Color</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute DATA_ITEM_SERIES__LINE_COLOR = eINSTANCE.getDataItemSeries_LineColor ();
+
+        /**
+         * The meta object literal for the '<em><b>Line Width</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute DATA_ITEM_SERIES__LINE_WIDTH = eINSTANCE.getDataItemSeries_LineWidth ();
 
         /**
          * The meta object literal for the '{@link org.openscada.ui.chart.model.ChartModel.impl.ArchiveSeriesImpl <em>Archive Series</em>}' class.

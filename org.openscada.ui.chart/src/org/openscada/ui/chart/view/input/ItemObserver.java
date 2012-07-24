@@ -23,8 +23,11 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.LinkedList;
 
+import org.eclipse.jface.resource.ResourceManager;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.LineAttributes;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 import org.openscada.chart.DataEntry;
 import org.openscada.chart.Realm;
@@ -67,6 +70,10 @@ public class ItemObserver implements DataSourceListener, ChartInput
     private final ChartViewer viewer;
 
     private boolean disposed;
+
+    private Color lineColor;
+
+    private final ResourceManager resourceManager;
 
     private static class LevelRuler
     {
@@ -134,11 +141,12 @@ public class ItemObserver implements DataSourceListener, ChartInput
         }
     }
 
-    public ItemObserver ( final ChartViewer viewer, final Item item, final Realm realm, final XAxis x, final YAxis y )
+    public ItemObserver ( final ChartViewer viewer, final Item item, final Realm realm, final XAxis x, final YAxis y, final ResourceManager resourceManager )
     {
         this.item = item;
         this.viewer = viewer;
         this.manager = viewer.getManager ();
+        this.resourceManager = resourceManager;
 
         this.y = y;
 
@@ -146,6 +154,34 @@ public class ItemObserver implements DataSourceListener, ChartInput
 
         this.valueRenderer = this.manager.createStepSeries ( this.valueSeries );
         connect ();
+    }
+
+    public void setLineColor ( final RGB rgb )
+    {
+        if ( this.lineColor != null )
+        {
+            this.resourceManager.destroyColor ( this.lineColor.getRGB () );
+            this.lineColor = null;
+            this.valueRenderer.setLineColor ( Display.getDefault ().getSystemColor ( SWT.COLOR_BLACK ) );
+        }
+
+        if ( rgb != null )
+        {
+            this.lineColor = this.resourceManager.createColor ( rgb );
+            this.valueRenderer.setLineColor ( this.lineColor );
+        }
+    }
+
+    public RGB getLineColor ()
+    {
+        if ( this.lineColor == null )
+        {
+            return null;
+        }
+        else
+        {
+            return this.lineColor.getRGB ();
+        }
     }
 
     /* (non-Javadoc)

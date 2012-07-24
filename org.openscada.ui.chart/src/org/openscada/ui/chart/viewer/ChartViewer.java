@@ -147,7 +147,7 @@ public class ChartViewer
         this.xLocator = new SimpleAxisLocator<XAxis, XAxisViewer> ( this.topManager, this.bottomManager );
         this.yLocator = new SimpleAxisLocator<YAxis, YAxisViewer> ( this.leftManager, this.rightManager );
 
-        this.inputManager = new InputManager ( this.ctx, this, this.xLocator, this.yLocator );
+        this.inputManager = new InputManager ( this.ctx, this, this.resourceManager, this.xLocator, this.yLocator );
         this.ctx.bindList ( this.inputManager.getList (), EMFObservables.observeList ( chart, ChartPackage.Literals.CHART__INPUTS ) );
 
         this.ctx.bindValue ( PojoObservables.observeValue ( this.manager, "title" ), EMFObservables.observeValue ( this.chart, ChartPackage.Literals.CHART__TITLE ) );
@@ -455,7 +455,24 @@ public class ChartViewer
         input.setItem ( itemRef );
         input.setX ( this.selectedXAxisElement );
         input.setY ( this.selectedYAxisElement );
+
+        input.setLineColor ( nextFreeColor () );
+
         this.chart.getInputs ().add ( input );
+    }
+
+    private static RGB[] DEFAULT_COLORS = new RGB[] { // 
+    new RGB ( 255, 0, 0 ), // red
+    new RGB ( 0, 255, 0 ), // green
+    new RGB ( 0, 255, 255 ), // blue
+    new RGB ( 255, 194, 0 ), // yellow
+    new RGB ( 255, 0, 255 ), // magenta
+    new RGB ( 0, 255, 255 ), // cyan
+    };
+
+    private RGB nextFreeColor ()
+    {
+        return DEFAULT_COLORS[this.items.size () % DEFAULT_COLORS.length];
     }
 
     public void addInput ( final ChartInput input )
@@ -551,11 +568,13 @@ public class ChartViewer
 
     public void dispose ()
     {
-        for ( final Object item : this.items )
+        final Object[] items = this.items.toArray ();
+        this.items.clear ();
+
+        for ( final Object item : items )
         {
             ( (ChartInput)item ).dispose ();
         }
-        this.items.clear ();
     }
 
     public IObservableList getItems ()

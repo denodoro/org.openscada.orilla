@@ -9,6 +9,7 @@ import org.eclipse.core.databinding.observable.list.ListChangeEvent;
 import org.eclipse.core.databinding.observable.list.ListDiff;
 import org.eclipse.core.databinding.observable.list.ListDiffVisitor;
 import org.eclipse.core.databinding.observable.list.WritableList;
+import org.eclipse.jface.resource.ResourceManager;
 import org.openscada.ui.chart.model.ChartModel.ArchiveSeries;
 import org.openscada.ui.chart.model.ChartModel.DataItemSeries;
 import org.openscada.ui.chart.model.ChartModel.DataSeries;
@@ -32,10 +33,13 @@ public class InputManager
 
     private final AxisLocator<YAxis, YAxisViewer> yLocator;
 
-    public InputManager ( final DataBindingContext dbc, final ChartViewer viewer, final AxisLocator<XAxis, XAxisViewer> xLocator, final AxisLocator<YAxis, YAxisViewer> yLocator )
+    private final ResourceManager resourceManager;
+
+    public InputManager ( final DataBindingContext dbc, final ChartViewer viewer, final ResourceManager resourceManager, final AxisLocator<XAxis, XAxisViewer> xLocator, final AxisLocator<YAxis, YAxisViewer> yLocator )
     {
         this.dbc = dbc;
         this.viewer = viewer;
+        this.resourceManager = resourceManager;
 
         this.xLocator = xLocator;
         this.yLocator = yLocator;
@@ -72,11 +76,11 @@ public class InputManager
     {
         if ( element instanceof DataItemSeries )
         {
-            addInput ( element, new DataItemSeriesViewer ( this.dbc, (DataItemSeries)element, this.viewer, this.xLocator, this.yLocator ) );
+            addInput ( element, new DataItemSeriesViewer ( this.dbc, (DataItemSeries)element, this.viewer, this.resourceManager, this.xLocator, this.yLocator ) );
         }
         else if ( element instanceof ArchiveSeries )
         {
-            addInput ( element, new ArchiveSeriesViewer ( this.dbc, (ArchiveSeries)element, this.viewer, this.xLocator, this.yLocator ) );
+            addInput ( element, new ArchiveSeriesViewer ( this.dbc, (ArchiveSeries)element, this.viewer, this.resourceManager, this.xLocator, this.yLocator ) );
         }
     }
 

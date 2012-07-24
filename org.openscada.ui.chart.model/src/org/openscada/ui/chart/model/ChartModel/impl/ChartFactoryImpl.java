@@ -16,33 +16,39 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.eclipse.swt.graphics.RGB;
-import org.openscada.ui.chart.model.ChartModel.*;
+import org.openscada.ui.chart.model.ChartModel.ArchiveSeries;
 import org.openscada.ui.chart.model.ChartModel.Chart;
 import org.openscada.ui.chart.model.ChartModel.ChartFactory;
 import org.openscada.ui.chart.model.ChartModel.ChartPackage;
+import org.openscada.ui.chart.model.ChartModel.DataItemSeries;
+import org.openscada.ui.chart.model.ChartModel.IdItem;
+import org.openscada.ui.chart.model.ChartModel.UriItem;
+import org.openscada.ui.chart.model.ChartModel.XAxis;
+import org.openscada.ui.chart.model.ChartModel.YAxis;
 
 /**
  * <!-- begin-user-doc --> An implementation of the model <b>Factory</b>. <!-- end-user-doc -->
+ * 
  * @generated
  */
 public class ChartFactoryImpl extends EFactoryImpl implements ChartFactory
 {
     /**
-     * Creates the default factory implementation.
-     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * Creates the default factory implementation. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     public static ChartFactory init ()
     {
         try
         {
-            ChartFactory theChartFactory = (ChartFactory)EPackage.Registry.INSTANCE.getEFactory ( "http://openscada.org/UI/Chart" );
+            final ChartFactory theChartFactory = (ChartFactory)EPackage.Registry.INSTANCE.getEFactory ( "http://openscada.org/UI/Chart" );
             if ( theChartFactory != null )
             {
                 return theChartFactory;
             }
         }
-        catch ( Exception exception )
+        catch ( final Exception exception )
         {
             EcorePlugin.INSTANCE.log ( exception );
         }
@@ -50,8 +56,8 @@ public class ChartFactoryImpl extends EFactoryImpl implements ChartFactory
     }
 
     /**
-     * Creates an instance of the factory.
-     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * Creates an instance of the factory. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     public ChartFactoryImpl ()
@@ -61,10 +67,11 @@ public class ChartFactoryImpl extends EFactoryImpl implements ChartFactory
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     @Override
-    public EObject create ( EClass eClass )
+    public EObject create ( final EClass eClass )
     {
         switch ( eClass.getClassifierID () )
         {
@@ -89,10 +96,11 @@ public class ChartFactoryImpl extends EFactoryImpl implements ChartFactory
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     @Override
-    public Object createFromString ( EDataType eDataType, String initialValue )
+    public Object createFromString ( final EDataType eDataType, final String initialValue )
     {
         switch ( eDataType.getClassifierID () )
         {
@@ -105,10 +113,11 @@ public class ChartFactoryImpl extends EFactoryImpl implements ChartFactory
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     @Override
-    public String convertToString ( EDataType eDataType, Object instanceValue )
+    public String convertToString ( final EDataType eDataType, final Object instanceValue )
     {
         switch ( eDataType.getClassifierID () )
         {
@@ -121,78 +130,85 @@ public class ChartFactoryImpl extends EFactoryImpl implements ChartFactory
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     @Override
     public Chart createChart ()
     {
-        ChartImpl chart = new ChartImpl ();
+        final ChartImpl chart = new ChartImpl ();
         return chart;
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
+    @Override
     public XAxis createXAxis ()
     {
-        XAxisImpl xAxis = new XAxisImpl ();
+        final XAxisImpl xAxis = new XAxisImpl ();
         return xAxis;
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
+    @Override
     public YAxis createYAxis ()
     {
-        YAxisImpl yAxis = new YAxisImpl ();
+        final YAxisImpl yAxis = new YAxisImpl ();
         return yAxis;
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
+    @Override
     public DataItemSeries createDataItemSeries ()
     {
-        DataItemSeriesImpl dataItemSeries = new DataItemSeriesImpl ();
+        final DataItemSeriesImpl dataItemSeries = new DataItemSeriesImpl ();
         return dataItemSeries;
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
+    @Override
     public ArchiveSeries createArchiveSeries ()
     {
-        ArchiveSeriesImpl archiveSeries = new ArchiveSeriesImpl ();
+        final ArchiveSeriesImpl archiveSeries = new ArchiveSeriesImpl ();
         return archiveSeries;
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
+    @Override
     public UriItem createUriItem ()
     {
-        UriItemImpl uriItem = new UriItemImpl ();
+        final UriItemImpl uriItem = new UriItemImpl ();
         return uriItem;
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
+    @Override
     public IdItem createIdItem ()
     {
-        IdItemImpl idItem = new IdItemImpl ();
+        final IdItemImpl idItem = new IdItemImpl ();
         return idItem;
     }
 
@@ -229,11 +245,12 @@ public class ChartFactoryImpl extends EFactoryImpl implements ChartFactory
     public String convertRGBToString ( final EDataType eDataType, final Object instanceValue )
     {
         final RGB rgb = (RGB)instanceValue;
-        return String.format ( "#%02h%02h%02h", rgb.red, rgb.green, rgb.blue );
+        return String.format ( "#%02X%02X%02X", rgb.red, rgb.green, rgb.blue );
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     @Override
@@ -244,6 +261,7 @@ public class ChartFactoryImpl extends EFactoryImpl implements ChartFactory
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @deprecated
      * @generated
      */

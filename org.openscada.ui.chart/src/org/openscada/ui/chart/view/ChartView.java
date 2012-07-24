@@ -64,7 +64,6 @@ import org.openscada.utils.codec.Base64;
 
 public class ChartView extends ViewPart
 {
-
     public class CenterNowAction extends Action
     {
         public CenterNowAction ()
@@ -175,22 +174,7 @@ public class ChartView extends ViewPart
 
         if ( this.loadedConfiguration == null )
         {
-            this.configuration = ChartFactory.eINSTANCE.createChart ();
-
-            final YAxis y = ChartFactory.eINSTANCE.createYAxis ();
-            y.setLabel ( "Values" );
-            y.setFormat ( "%.2f" );
-            this.configuration.getLeft ().add ( y );
-
-            final XAxis x = ChartFactory.eINSTANCE.createXAxis ();
-            x.setLabel ( "Time" );
-            x.setFormat ( "%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS.%1$tL" );
-            x.setMinimum ( System.currentTimeMillis () );
-            x.setMaximum ( System.currentTimeMillis () + 900 * 1000 );
-            this.configuration.getBottom ().add ( x );
-
-            this.configuration.setSelectedXAxis ( x );
-            this.configuration.setSelectedYAxis ( y );
+            this.configuration = makeDefaultConfiguration ();
         }
         else
         {
@@ -223,19 +207,41 @@ public class ChartView extends ViewPart
         fillToolbar ( getViewSite ().getActionBars ().getToolBarManager () );
     }
 
+    private Chart makeDefaultConfiguration ()
+    {
+        final Chart configuration = ChartFactory.eINSTANCE.createChart ();
+
+        final YAxis y = ChartFactory.eINSTANCE.createYAxis ();
+        y.setLabel ( "Values" );
+        y.setFormat ( "%.2f" );
+        configuration.getLeft ().add ( y );
+
+        final XAxis x = ChartFactory.eINSTANCE.createXAxis ();
+        x.setLabel ( "Time" );
+        x.setFormat ( "%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS.%1$tL" );
+        x.setMinimum ( System.currentTimeMillis () );
+        x.setMaximum ( System.currentTimeMillis () + 900 * 1000 );
+        configuration.getBottom ().add ( x );
+
+        configuration.setSelectedXAxis ( x );
+        configuration.setSelectedYAxis ( y );
+
+        return configuration;
+    }
+
     private void fillToolbar ( final IToolBarManager toolBarManager )
     {
-        toolBarManager.add ( new SetTimespanAction ( 1, TimeUnit.HOURS, "<1h>", "Scale to one hour" ) );
         toolBarManager.add ( new SetTimespanAction ( 1, TimeUnit.MINUTES, "<1m>", "Scale to one minute" ) );
+        toolBarManager.add ( new SetTimespanAction ( 1, TimeUnit.HOURS, "<1h>", "Scale to one hour" ) );
         toolBarManager.add ( new SetTimespanAction ( 1, TimeUnit.DAYS, "<1d>", "Scale to one day" ) );
 
         toolBarManager.add ( new CenterNowAction () );
 
         toolBarManager.add ( new Separator () );
 
-        toolBarManager.add ( new PageTimespanAction ( -1, TimeUnit.MINUTES, "<1m", "Move back 1 minute" ) );
-        toolBarManager.add ( new PageTimespanAction ( -1, TimeUnit.HOURS, "<1h", "Move back 1 hour" ) );
         toolBarManager.add ( new PageTimespanAction ( -1, TimeUnit.DAYS, "<1d", "Move back 1 day" ) );
+        toolBarManager.add ( new PageTimespanAction ( -1, TimeUnit.HOURS, "<1h", "Move back 1 hour" ) );
+        toolBarManager.add ( new PageTimespanAction ( -1, TimeUnit.MINUTES, "<1m", "Move back 1 minute" ) );
 
         toolBarManager.add ( new Separator () );
 

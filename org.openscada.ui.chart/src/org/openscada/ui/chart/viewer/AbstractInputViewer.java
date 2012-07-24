@@ -3,6 +3,8 @@ package org.openscada.ui.chart.viewer;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.emf.databinding.EMFObservables;
+import org.eclipse.jface.resource.LocalResourceManager;
+import org.eclipse.jface.resource.ResourceManager;
 import org.openscada.ui.chart.model.ChartModel.ChartPackage;
 import org.openscada.ui.chart.model.ChartModel.Item;
 import org.openscada.ui.chart.model.ChartModel.ItemDataSeries;
@@ -28,9 +30,13 @@ public abstract class AbstractInputViewer extends AbstractObserver implements In
 
     protected YAxis y;
 
-    public AbstractInputViewer ( final DataBindingContext dbc, final ItemDataSeries element, final ChartViewer viewer, final AxisLocator<XAxis, XAxisViewer> xLocator, final AxisLocator<YAxis, YAxisViewer> yLocator )
+    protected final ResourceManager resourceManager;
+
+    public AbstractInputViewer ( final DataBindingContext dbc, final ItemDataSeries element, final ChartViewer viewer, final ResourceManager resourceManager, final AxisLocator<XAxis, XAxisViewer> xLocator, final AxisLocator<YAxis, YAxisViewer> yLocator )
     {
         this.viewer = viewer;
+
+        this.resourceManager = new LocalResourceManager ( resourceManager );
 
         this.xLocator = xLocator;
         this.yLocator = yLocator;
@@ -94,6 +100,8 @@ public abstract class AbstractInputViewer extends AbstractObserver implements In
     {
         super.dispose ();
         disposeInput ();
+
+        this.resourceManager.dispose ();
     }
 
 }

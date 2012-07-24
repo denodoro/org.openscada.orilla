@@ -1,6 +1,7 @@
 package org.openscada.ui.chart.viewer;
 
 import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.jface.resource.ResourceManager;
 import org.openscada.ui.chart.model.ChartModel.ArchiveSeries;
 import org.openscada.ui.chart.model.ChartModel.IdItem;
 import org.openscada.ui.chart.model.ChartModel.Item;
@@ -13,9 +14,9 @@ public class ArchiveSeriesViewer extends AbstractInputViewer
 {
     private ArchiveInput input;
 
-    public ArchiveSeriesViewer ( final DataBindingContext dbc, final ArchiveSeries element, final ChartViewer viewer, final AxisLocator<XAxis, XAxisViewer> xLocator, final AxisLocator<YAxis, YAxisViewer> yLocator )
+    public ArchiveSeriesViewer ( final DataBindingContext dbc, final ArchiveSeries element, final ChartViewer viewer, final ResourceManager resourceManager, final AxisLocator<XAxis, XAxisViewer> xLocator, final AxisLocator<YAxis, YAxisViewer> yLocator )
     {
-        super ( dbc, element, viewer, xLocator, yLocator );
+        super ( dbc, element, viewer, resourceManager, xLocator, yLocator );
     }
 
     @Override

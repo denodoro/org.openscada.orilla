@@ -130,6 +130,14 @@
   <children xmi:type="notation:Node" xmi:id="_QmZgsNTPEeGG6ZRHVvsIug" type="1001">
     <children xmi:type="notation:Node" xmi:id="_QmbV4NTPEeGG6ZRHVvsIug" type="4001"/>
     <children xmi:type="notation:Node" xmi:id="_QmbV4dTPEeGG6ZRHVvsIug" type="5001">
+      <children xmi:type="notation:Node" xmi:id="_eoDOkNV0EeGG6ZRHVvsIug" type="2001">
+        <element xmi:type="ecore:EAttribute" href="Chart.ecore#//DataItemSeries/lineWidth"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_eoDOkdV0EeGG6ZRHVvsIug"/>
+      </children>
+      <children xmi:type="notation:Node" xmi:id="_Z4RFsNV0EeGG6ZRHVvsIug" type="2001">
+        <element xmi:type="ecore:EAttribute" href="Chart.ecore#//DataItemSeries/lineColor"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_Z4RFsdV0EeGG6ZRHVvsIug"/>
+      </children>
       <styles xmi:type="notation:DrawerStyle" xmi:id="_QmbV4tTPEeGG6ZRHVvsIug"/>
       <styles xmi:type="notation:SortingStyle" xmi:id="_QmbV49TPEeGG6ZRHVvsIug"/>
       <styles xmi:type="notation:FilteringStyle" xmi:id="_Qmb88NTPEeGG6ZRHVvsIug"/>
@@ -141,7 +149,7 @@
     </children>
     <styles xmi:type="notation:ShapeStyle" xmi:id="_QmZgsdTPEeGG6ZRHVvsIug" fontColor="4210752" fontName="Ubuntu" fontHeight="10" fillColor="13761016" lineColor="8421504"/>
     <element xmi:type="ecore:EClass" href="Chart.ecore#//DataItemSeries"/>
-    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_QmZgstTPEeGG6ZRHVvsIug" x="1104" y="504" width="147"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_QmZgstTPEeGG6ZRHVvsIug" x="1116" y="480" width="147"/>
   </children>
   <children xmi:type="notation:Node" xmi:id="_RsiCUNTPEeGG6ZRHVvsIug" type="1001">
     <children xmi:type="notation:Node" xmi:id="_RsipYNTPEeGG6ZRHVvsIug" type="4001"/>
@@ -157,7 +165,7 @@
     </children>
     <styles xmi:type="notation:ShapeStyle" xmi:id="_RsiCUdTPEeGG6ZRHVvsIug" fontColor="4210752" fontName="Ubuntu" fontHeight="10" fillColor="13761016" lineColor="8421504"/>
     <element xmi:type="ecore:EClass" href="Chart.ecore#//ArchiveSeries"/>
-    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_RsiCUtTPEeGG6ZRHVvsIug" x="1104" y="612" width="147"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_RsiCUtTPEeGG6ZRHVvsIug" x="1104" y="648" width="147"/>
   </children>
   <children xmi:type="notation:Node" xmi:id="_p3G6gNTQEeGG6ZRHVvsIug" type="1001">
     <children xmi:type="notation:Node" xmi:id="_p3JWwNTQEeGG6ZRHVvsIug" type="4001"/>
@@ -177,7 +185,7 @@
     </children>
     <styles xmi:type="notation:ShapeStyle" xmi:id="_p3G6gdTQEeGG6ZRHVvsIug" fontColor="4210752" fontName="Ubuntu" fontHeight="10" fillColor="13761016" lineColor="8421504"/>
     <element xmi:type="ecore:EClass" href="Chart.ecore#//Item"/>
-    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_p3G6gtTQEeGG6ZRHVvsIug" x="1332" y="504"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_p3G6gtTQEeGG6ZRHVvsIug" x="1332" y="528"/>
   </children>
   <children xmi:type="notation:Node" xmi:id="_vcZvENTQEeGG6ZRHVvsIug" type="1001">
     <children xmi:type="notation:Node" xmi:id="_vcbkQNTQEeGG6ZRHVvsIug" type="4001"/>
@@ -197,7 +205,7 @@
     </children>
     <styles xmi:type="notation:ShapeStyle" xmi:id="_vcZvEdTQEeGG6ZRHVvsIug" fontColor="4210752" fontName="Ubuntu" fontHeight="10" fillColor="13761016" lineColor="8421504"/>
     <element xmi:type="ecore:EClass" href="Chart.ecore#//UriItem"/>
-    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_vcZvEtTQEeGG6ZRHVvsIug" x="1536" y="528" width="183"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_vcZvEtTQEeGG6ZRHVvsIug" x="1536" y="576" width="183"/>
   </children>
   <children xmi:type="notation:Node" xmi:id="_xkCxANTQEeGG6ZRHVvsIug" type="1001">
     <children xmi:type="notation:Node" xmi:id="_xkCxAdTQEeGG6ZRHVvsIug" type="4001"/>
@@ -217,7 +225,7 @@
     </children>
     <styles xmi:type="notation:ShapeStyle" xmi:id="_xkCxCtTQEeGG6ZRHVvsIug" fontColor="4210752" fontName="Ubuntu" fontHeight="10" fillColor="13761016" lineColor="8421504"/>
     <element xmi:type="ecore:EClass" href="Chart.ecore#//IdItem"/>
-    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_xkCxC9TQEeGG6ZRHVvsIug" x="1536" y="480" width="183"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_xkCxC9TQEeGG6ZRHVvsIug" x="1536" y="492" width="183"/>
   </children>
   <children xmi:type="notation:Node" xmi:id="_BsrFYNVpEeGG6ZRHVvsIug" type="1001">
     <children xmi:type="notation:Node" xmi:id="_BsthoNVpEeGG6ZRHVvsIug" type="4001"/>

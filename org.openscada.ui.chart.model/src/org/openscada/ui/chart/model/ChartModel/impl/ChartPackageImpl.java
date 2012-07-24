@@ -438,6 +438,26 @@ public class ChartPackageImpl extends EPackageImpl implements ChartPackage
      * <!-- end-user-doc -->
      * @generated
      */
+    public EAttribute getDataItemSeries_LineColor ()
+    {
+        return (EAttribute)dataItemSeriesEClass.getEStructuralFeatures ().get ( 0 );
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getDataItemSeries_LineWidth ()
+    {
+        return (EAttribute)dataItemSeriesEClass.getEStructuralFeatures ().get ( 1 );
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     public EClass getArchiveSeries ()
     {
         return archiveSeriesEClass;
@@ -594,6 +614,8 @@ public class ChartPackageImpl extends EPackageImpl implements ChartPackage
         createEReference ( dataSeriesEClass, DATA_SERIES__Y );
 
         dataItemSeriesEClass = createEClass ( DATA_ITEM_SERIES );
+        createEAttribute ( dataItemSeriesEClass, DATA_ITEM_SERIES__LINE_COLOR );
+        createEAttribute ( dataItemSeriesEClass, DATA_ITEM_SERIES__LINE_WIDTH );
 
         archiveSeriesEClass = createEClass ( ARCHIVE_SERIES );
 
@@ -682,6 +704,8 @@ public class ChartPackageImpl extends EPackageImpl implements ChartPackage
         initEReference ( getDataSeries_Y (), this.getYAxis (), null, "y", null, 1, 1, DataSeries.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
 
         initEClass ( dataItemSeriesEClass, DataItemSeries.class, "DataItemSeries", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS );
+        initEAttribute ( getDataItemSeries_LineColor (), this.getRGB (), "lineColor", null, 0, 1, DataItemSeries.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
+        initEAttribute ( getDataItemSeries_LineWidth (), ecorePackage.getEInt (), "lineWidth", "1", 1, 1, DataItemSeries.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
 
         initEClass ( archiveSeriesEClass, ArchiveSeries.class, "ArchiveSeries", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS );
 

@@ -4,8 +4,9 @@ import java.util.Collection;
 import java.util.LinkedList;
 
 import org.eclipse.core.databinding.Binding;
+import org.openscada.utils.beans.AbstractPropertyChange;
 
-public class AbstractObserver
+public class AbstractObserver extends AbstractPropertyChange
 {
     private final Collection<Binding> bindings = new LinkedList<Binding> ();
 
