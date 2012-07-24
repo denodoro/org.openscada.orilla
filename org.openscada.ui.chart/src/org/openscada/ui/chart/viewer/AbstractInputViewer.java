@@ -1,4 +1,4 @@
-package org.openscada.ui.chart.view;
+package org.openscada.ui.chart.viewer;
 
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.beans.PojoObservables;

@@ -1,4 +1,4 @@
-package org.openscada.ui.chart.view;
+package org.openscada.ui.chart.viewer;
 
 import java.util.HashMap;
 import java.util.Map;

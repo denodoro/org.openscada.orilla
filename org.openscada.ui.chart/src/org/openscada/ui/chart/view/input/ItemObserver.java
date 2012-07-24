@@ -40,7 +40,7 @@ import org.openscada.da.ui.connection.data.DataItemHolder;
 import org.openscada.da.ui.connection.data.DataSourceListener;
 import org.openscada.da.ui.connection.data.Item;
 import org.openscada.ui.chart.Activator;
-import org.openscada.ui.chart.view.ChartViewer;
+import org.openscada.ui.chart.viewer.ChartViewer;
 
 public class ItemObserver implements DataSourceListener, ChartInput
 {

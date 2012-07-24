@@ -5,7 +5,7 @@ import org.openscada.chart.XAxis;
 import org.openscada.chart.YAxis;
 import org.openscada.chart.swt.render.StepRenderer;
 import org.openscada.hd.ui.connection.data.Item;
-import org.openscada.ui.chart.view.ChartViewer;
+import org.openscada.ui.chart.viewer.ChartViewer;
 
 public class ArchiveInput implements ChartInput
 {

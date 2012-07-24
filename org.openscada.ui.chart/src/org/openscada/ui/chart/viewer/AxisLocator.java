@@ -1,4 +1,4 @@
-package org.openscada.ui.chart.view;
+package org.openscada.ui.chart.viewer;
 
 public interface AxisLocator<Key, Value>
 {
