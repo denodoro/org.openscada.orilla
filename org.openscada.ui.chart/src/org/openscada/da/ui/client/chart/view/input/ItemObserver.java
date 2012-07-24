@@ -27,10 +27,10 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.LineAttributes;
 import org.eclipse.swt.widgets.Display;
 import org.openscada.chart.DataEntry;
+import org.openscada.chart.Realm;
 import org.openscada.chart.WritableSeries;
 import org.openscada.chart.XAxis;
 import org.openscada.chart.YAxis;
-import org.openscada.chart.swt.DisplayRealm;
 import org.openscada.chart.swt.manager.ChartManager;
 import org.openscada.chart.swt.render.PositionYRuler;
 import org.openscada.chart.swt.render.StepRenderer;
@@ -134,7 +134,7 @@ public class ItemObserver implements DataSourceListener, ChartInput
         }
     }
 
-    public ItemObserver ( final ChartViewer viewer, final Item item, final DisplayRealm realm, final XAxis x, final YAxis y )
+    public ItemObserver ( final ChartViewer viewer, final Item item, final Realm realm, final XAxis x, final YAxis y )
     {
         this.item = item;
         this.viewer = viewer;
@@ -309,9 +309,4 @@ public class ItemObserver implements DataSourceListener, ChartInput
         return this.item.getId ();
     }
 
-    @Override
-    public ChartConfiguration getConfiguration ()
-    {
-        return new ItemConfiguration ( this.item );
-    }
 }

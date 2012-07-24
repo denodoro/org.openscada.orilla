@@ -19,12 +19,19 @@
 
 package org.openscada.da.ui.client.chart.view;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
@@ -41,11 +48,18 @@ import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
-import org.openscada.da.ui.client.chart.view.input.ChartConfiguration;
+import org.eclipse.ui.statushandlers.StatusManager;
+import org.openscada.da.ui.client.chart.Activator;
 import org.openscada.da.ui.client.chart.view.input.ChartInput;
-import org.openscada.da.ui.client.chart.view.input.ItemConfiguration;
 import org.openscada.da.ui.connection.data.Item;
+import org.openscada.ui.chart.model.ChartModel.Chart;
+import org.openscada.ui.chart.model.ChartModel.ChartFactory;
+import org.openscada.ui.chart.model.ChartModel.ChartPackage;
+import org.openscada.ui.chart.model.ChartModel.XAxis;
+import org.openscada.ui.chart.model.ChartModel.YAxis;
 import org.openscada.ui.databinding.SelectionHelper;
+import org.openscada.ui.utils.status.StatusHelper;
+import org.openscada.utils.codec.Base64;
 
 public class ChartView extends ViewPart
 {
@@ -103,9 +117,11 @@ public class ChartView extends ViewPart
 
     public static final String VIEW_ID = "org.openscada.da.ui.client.chart.ChartView";
 
-    private final List<ItemConfiguration> loadedItems = new LinkedList<ItemConfiguration> ();
-
     private ChartViewer viewer;
+
+    private Chart configuration;
+
+    private Chart loadedConfiguration;
 
     private class TimeAction extends Action
     {
@@ -156,12 +172,31 @@ public class ChartView extends ViewPart
     {
         parent.setLayout ( new FillLayout () );
 
-        this.viewer = new ChartViewer ( parent );
-
-        for ( final ItemConfiguration item : this.loadedItems )
+        if ( this.loadedConfiguration == null )
         {
-            this.viewer.addItem ( item );
+            this.configuration = ChartFactory.eINSTANCE.createChart ();
+
+            final YAxis y = ChartFactory.eINSTANCE.createYAxis ();
+            y.setLabel ( "Values" );
+            y.setFormat ( "%.2f" );
+            this.configuration.getLeft ().add ( y );
+
+            final XAxis x = ChartFactory.eINSTANCE.createXAxis ();
+            x.setLabel ( "Time" );
+            x.setFormat ( "%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS.%1$tL" );
+            x.setMinimum ( System.currentTimeMillis () );
+            x.setMaximum ( System.currentTimeMillis () + 900 * 1000 );
+            this.configuration.getBottom ().add ( x );
+
+            this.configuration.setSelectedXAxis ( x );
+            this.configuration.setSelectedYAxis ( y );
         }
+        else
+        {
+            this.configuration = this.loadedConfiguration;
+        }
+
+        this.viewer = new ChartViewer ( parent, this.configuration );
 
         getSite ().setSelectionProvider ( new SelectionProviderImpl () );
         setAsSelection ();
@@ -231,31 +266,72 @@ public class ChartView extends ViewPart
     @Override
     public void init ( final IViewSite site, final IMemento memento ) throws PartInitException
     {
-        this.loadedItems.addAll ( ItemConfiguration.loadAll ( memento ) );
-
         super.init ( site, memento );
+
+        if ( memento == null )
+        {
+            return;
+        }
+
+        final IMemento child = memento.getChild ( "configuration" );
+        if ( child == null )
+        {
+            return;
+        }
+
+        final String data = child.getTextData ();
+        if ( data == null || data.isEmpty () )
+        {
+            return;
+        }
+
+        try
+        {
+            this.loadedConfiguration = load ( new ByteArrayInputStream ( Base64.decode ( data ) ) );
+        }
+        catch ( final Exception e )
+        {
+            StatusManager.getManager ().handle ( StatusHelper.convertStatus ( Activator.PLUGIN_ID, e ), StatusManager.LOG );
+        }
+    }
+
+    private static Chart load ( final InputStream input ) throws IOException
+    {
+        final Resource resource = new XMIResourceFactoryImpl ().createResource ( null );
+
+        final Map<?, ?> options = new HashMap<Object, Object> ();
+        resource.load ( input, options );
+
+        return (Chart)EcoreUtil.getObjectByType ( resource.getContents (), ChartPackage.Literals.CHART );
     }
 
     @Override
     public void saveState ( final IMemento memento )
     {
-        for ( final Object item : this.viewer.getItems () )
-        {
-            if ( item instanceof ChartInput )
-            {
-                final ChartConfiguration cfg = ( (ChartInput)item ).getConfiguration ();
-                if ( cfg != null )
-                {
-                    cfg.storeAsChild ( memento );
-                }
-            }
-        }
         super.saveState ( memento );
-    }
+        if ( memento == null )
+        {
+            return;
+        }
 
-    public void addItem ( final Item item )
-    {
-        this.viewer.addItem ( new ItemConfiguration ( item ) );
+        final Resource resource = new XMIResourceFactoryImpl ().createResource ( null );
+        resource.getContents ().add ( this.configuration );
+
+        final ByteArrayOutputStream outputStream = new ByteArrayOutputStream ();
+
+        final Map<?, ?> options = new HashMap<Object, Object> ();
+
+        try
+        {
+            resource.save ( outputStream, options );
+            final IMemento child = memento.createChild ( "configuration" );
+
+            child.putTextData ( Base64.encodeBytes ( outputStream.toByteArray () ) );
+        }
+        catch ( final Exception e )
+        {
+            StatusManager.getManager ().handle ( StatusHelper.convertStatus ( Activator.PLUGIN_ID, e ), StatusManager.LOG );
+        }
     }
 
     public void showTimespan ( final long duration, final TimeUnit timeUnit )
@@ -266,6 +342,11 @@ public class ChartView extends ViewPart
     public void pageTimespan ( final long duration, final TimeUnit timeUnit )
     {
         this.viewer.pageTimespan ( duration, timeUnit );
+    }
+
+    public void addItem ( final Item item )
+    {
+        this.viewer.addItem ( item );
     }
 
 }

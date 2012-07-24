@@ -68,7 +68,7 @@ public class ChartControllerView extends ViewPart
             @Override
             public void update ( final ViewerCell cell )
             {
-                cell.setText ( ( (ChartInput)cell.getElement () ).getConfiguration ().getLabel () );
+                cell.setText ( ( (ChartInput)cell.getElement () ).getLabel () );
             }
         } );
 

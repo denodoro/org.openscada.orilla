@@ -19,6 +19,7 @@ import org.openscada.hd.QueryParameters;
 import org.openscada.hd.QueryState;
 import org.openscada.hd.Value;
 import org.openscada.hd.ValueInformation;
+import org.openscada.hd.ui.connection.data.Item;
 import org.openscada.hd.ui.data.ServiceQueryBuffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,21 +29,21 @@ public class QuerySeriesData extends SeriesData
 
     private final static Logger logger = LoggerFactory.getLogger ( QuerySeriesData.class );
 
-    private final ArchiveConfiguration configuration;
-
     private final ServiceQueryBuffer query;
 
     private QueryParameters parameters;
 
     private QueryParameters nextParameters;
 
-    public QuerySeriesData ( final ArchiveConfiguration configuration, final Realm realm, final XAxis xAxis, final YAxis yAxis )
+    private final Item item;
+
+    public QuerySeriesData ( final Item item, final Realm realm, final XAxis xAxis, final YAxis yAxis )
     {
         super ( realm, xAxis, yAxis );
-        this.configuration = configuration;
+        this.item = item;
 
         this.parameters = makeParameters ();
-        this.query = new ServiceQueryBuffer ( Activator.getDefault ().getBundle ().getBundleContext (), createRequest (), configuration.getItem ().getId (), this.parameters = makeParameters () );
+        this.query = new ServiceQueryBuffer ( Activator.getDefault ().getBundle ().getBundleContext (), createRequest (), item.getId (), this.parameters = makeParameters () );
 
         this.query.addQueryListener ( new QueryListener () {
 
@@ -90,7 +91,7 @@ public class QuerySeriesData extends SeriesData
 
     private ConnectionRequest createRequest ()
     {
-        return new ConnectionRequest ( null, ConnectionInformation.fromURI ( this.configuration.getItem ().getConnectionString () ), null, false );
+        return new ConnectionRequest ( null, ConnectionInformation.fromURI ( this.item.getConnectionString () ), null, false );
     }
 
     @Override

@@ -5,11 +5,10 @@ import org.openscada.chart.XAxis;
 import org.openscada.chart.YAxis;
 import org.openscada.chart.swt.render.StepRenderer;
 import org.openscada.da.ui.client.chart.view.ChartViewer;
+import org.openscada.hd.ui.connection.data.Item;
 
 public class ArchiveInput implements ChartInput
 {
-
-    private final ArchiveConfiguration configuration;
 
     private boolean disposed;
 
@@ -19,12 +18,14 @@ public class ArchiveInput implements ChartInput
 
     private QuerySeriesData data;
 
-    public ArchiveInput ( final ArchiveConfiguration configuration, final ChartViewer viewer, final Realm realm, final XAxis x, final YAxis y )
+    private final Item item;
+
+    public ArchiveInput ( final Item item, final ChartViewer viewer, final Realm realm, final XAxis x, final YAxis y )
     {
-        this.configuration = configuration;
+        this.item = item;
         this.viewer = viewer;
 
-        this.renderer = viewer.getManager ().createStepSeries ( this.data = new QuerySeriesData ( configuration, realm, x, y ) );
+        this.renderer = viewer.getManager ().createStepSeries ( this.data = new QuerySeriesData ( item, realm, x, y ) );
     }
 
     @Override
@@ -53,15 +54,9 @@ public class ArchiveInput implements ChartInput
     }
 
     @Override
-    public ChartConfiguration getConfiguration ()
-    {
-        return this.configuration;
-    }
-
-    @Override
     public String getLabel ()
     {
-        return this.configuration.getItem ().getId ();
+        return this.item.getId ();
     }
 
 }

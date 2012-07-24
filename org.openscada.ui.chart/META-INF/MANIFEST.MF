@@ -28,9 +28,13 @@ Require-Bundle: org.eclipse.ui,
  org.openscada.hd.connection.provider;bundle-version="1.0.0",
  org.openscada.hd;bundle-version="0.17.0",
  org.openscada.hd.client.common;bundle-version="0.14.0",
- org.openscada.hd.ui;bundle-version="1.0.0"
+ org.openscada.hd.ui;bundle-version="1.0.0",
+ org.openscada.ui.chart.model;bundle-version="1.0.0",
+ org.eclipse.emf.databinding;bundle-version="1.2.0",
+ org.eclipse.emf.ecore.xmi;bundle-version="2.7.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Localization: plugin
 Import-Package: org.openscada.utils.beans;version="0.17.0",
+ org.openscada.utils.codec;version="0.17.0",
  org.slf4j;version="1.5.8"

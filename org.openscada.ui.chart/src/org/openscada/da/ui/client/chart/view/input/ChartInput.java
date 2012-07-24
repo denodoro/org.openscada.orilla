@@ -28,8 +28,6 @@ public interface ChartInput
 
     public void tick ( final long now );
 
-    public ChartConfiguration getConfiguration ();
-
     public String getLabel ();
 
 }

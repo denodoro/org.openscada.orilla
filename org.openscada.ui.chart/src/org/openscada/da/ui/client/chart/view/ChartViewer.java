@@ -23,9 +23,16 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.concurrent.TimeUnit;
 
+import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.core.databinding.observable.Observables;
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.list.WritableList;
+import org.eclipse.emf.databinding.EMFObservables;
+import org.eclipse.jface.databinding.swt.SWTObservables;
+import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.jface.resource.LocalResourceManager;
+import org.eclipse.jface.resource.ResourceManager;
 import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
@@ -33,66 +40,270 @@ import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTargetAdapter;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.openscada.chart.XAxis;
-import org.openscada.chart.YAxis;
+import org.openscada.chart.Realm;
 import org.openscada.chart.swt.DisplayRealm;
+import org.openscada.chart.swt.controller.MouseDragZoomer;
+import org.openscada.chart.swt.controller.MouseTransformer;
+import org.openscada.chart.swt.controller.MouseWheelZoomer;
 import org.openscada.chart.swt.manager.ChartManager;
 import org.openscada.chart.swt.render.CurrentTimeRuler;
-import org.openscada.da.ui.client.chart.view.input.ArchiveConfiguration;
-import org.openscada.da.ui.client.chart.view.input.ArchiveInput;
 import org.openscada.da.ui.client.chart.view.input.ChartInput;
-import org.openscada.da.ui.client.chart.view.input.ItemConfiguration;
-import org.openscada.da.ui.client.chart.view.input.ItemObserver;
 import org.openscada.da.ui.connection.data.Item;
+import org.openscada.ui.chart.model.ChartModel.ArchiveSeries;
+import org.openscada.ui.chart.model.ChartModel.Chart;
+import org.openscada.ui.chart.model.ChartModel.ChartFactory;
+import org.openscada.ui.chart.model.ChartModel.ChartPackage;
+import org.openscada.ui.chart.model.ChartModel.DataItemSeries;
+import org.openscada.ui.chart.model.ChartModel.IdItem;
+import org.openscada.ui.chart.model.ChartModel.UriItem;
+import org.openscada.ui.chart.model.ChartModel.XAxis;
+import org.openscada.ui.chart.model.ChartModel.YAxis;
 
 public class ChartViewer
 {
     private final ChartManager manager;
 
-    private final XAxis x;
-
-    private final YAxis y;
-
-    private final DisplayRealm realm;
-
     private final WritableList items = new WritableList ( new LinkedList<Object> (), ChartInput.class );
 
-    private final CurrentTimeRuler timeRuler;
+    private CurrentTimeRuler timeRuler;
 
     private final Display display;
 
     private ChartInput selection;
 
-    public ChartViewer ( final Composite parent )
+    private final Chart chart;
+
+    private final DataBindingContext ctx;
+
+    private final ResourceManager resourceManager;
+
+    private Color chartBackground;
+
+    private final YAxisManager leftManager;
+
+    private final YAxisManager rightManager;
+
+    private final XAxisManager topManager;
+
+    private final XAxisManager bottomManager;
+
+    private XAxisViewer selectedXAxis;
+
+    private YAxisViewer selectedYAxis;
+
+    private MouseTransformer mouseTransformer;
+
+    private MouseDragZoomer mouseDragZoomer;
+
+    private MouseWheelZoomer mouseWheelZoomer;
+
+    private boolean showTimeRuler;
+
+    private final DisplayRealm realm;
+
+    private final SimpleAxisLocator<XAxis, XAxisViewer> xLocator;
+
+    private final SimpleAxisLocator<YAxis, YAxisViewer> yLocator;
+
+    private final InputManager inputManager;
+
+    private YAxis selectedYAxisElement;
+
+    private XAxis selectedXAxisElement;
+
+    public ChartViewer ( final Composite parent, final Chart chart )
     {
+        this.chart = chart;
+
         this.display = Display.getDefault ();
-        this.realm = new DisplayRealm ( Display.getDefault () );
 
-        this.x = new XAxis ();
-        this.x.setLabel ( "Time" );
-        this.x.setMinMax ( System.currentTimeMillis (), System.currentTimeMillis () + 900 * 1000 );
+        this.resourceManager = new LocalResourceManager ( JFaceResources.getResources ( this.display ) );
 
-        this.y = new YAxis ();
-        this.y.setLabel ( "Value" );
-        this.y.setMinMax ( -100.0, +100.0 );
+        this.ctx = new DataBindingContext ( SWTObservables.getRealm ( this.display ) );
 
         // create content
 
         this.manager = new ChartManager ( parent, SWT.NONE );
-        this.manager.setChartBackground ( parent.getDisplay ().getSystemColor ( SWT.COLOR_WHITE ) );
+        this.realm = new DisplayRealm ( this.display );
 
-        this.manager.addDynamicXAxis ( this.x ).setFormat ( "%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS.%1$tL" ); //$NON-NLS-1$
-        this.manager.addDynamicYAxis ( this.y ).setFormat ( "%.02f" ); //$NON-NLS-1$
+        this.manager.createDropTarget ( new Transfer[] { LocalSelectionTransfer.getTransfer () }, createDropTarget () );
 
-        this.timeRuler = new CurrentTimeRuler ( this.x );
-        this.timeRuler.setColor ( parent.getDisplay ().getSystemColor ( SWT.COLOR_BLUE ) );
-        this.manager.addRenderer ( this.timeRuler );
+        this.leftManager = new YAxisManager ( this.ctx, this.manager );
+        this.ctx.bindList ( this.leftManager.getList (), EMFObservables.observeList ( chart, ChartPackage.Literals.CHART__LEFT ) );
+        this.rightManager = new YAxisManager ( this.ctx, this.manager );
+        this.ctx.bindList ( this.rightManager.getList (), EMFObservables.observeList ( chart, ChartPackage.Literals.CHART__RIGHT ) );
 
-        this.manager.addDefaultControllers ( this.x, this.y );
+        this.topManager = new XAxisManager ( this.ctx, this.manager );
+        this.ctx.bindList ( this.topManager.getList (), EMFObservables.observeList ( chart, ChartPackage.Literals.CHART__TOP ) );
+        this.bottomManager = new XAxisManager ( this.ctx, this.manager );
+        this.ctx.bindList ( this.bottomManager.getList (), EMFObservables.observeList ( chart, ChartPackage.Literals.CHART__BOTTOM ) );
 
-        this.manager.createDropTarget ( new Transfer[] { LocalSelectionTransfer.getTransfer () }, new DropTargetAdapter () {
+        this.xLocator = new SimpleAxisLocator<XAxis, XAxisViewer> ( this.topManager, this.bottomManager );
+        this.yLocator = new SimpleAxisLocator<YAxis, YAxisViewer> ( this.leftManager, this.rightManager );
+
+        this.inputManager = new InputManager ( this.ctx, this, this.xLocator, this.yLocator );
+        this.ctx.bindList ( this.inputManager.getList (), EMFObservables.observeList ( chart, ChartPackage.Literals.CHART__INPUTS ) );
+
+        this.ctx.bindValue ( PojoObservables.observeValue ( this.manager, "title" ), EMFObservables.observeValue ( this.chart, ChartPackage.Literals.CHART__TITLE ) );
+        this.ctx.bindValue ( PojoObservables.observeValue ( this, "showCurrentTimeRuler" ), EMFObservables.observeValue ( this.chart, ChartPackage.Literals.CHART__SHOW_CURREN_TIME_RULER ) );
+        this.ctx.bindValue ( PojoObservables.observeValue ( this, "chartBackground" ), EMFObservables.observeValue ( this.chart, ChartPackage.Literals.CHART__BACKGROUND_COLOR ) );
+
+        this.ctx.bindValue ( PojoObservables.observeValue ( this, "selectedXAxis" ), EMFObservables.observeValue ( this.chart, ChartPackage.Literals.CHART__SELECTED_XAXIS ) );
+        this.ctx.bindValue ( PojoObservables.observeValue ( this, "selectedYAxis" ), EMFObservables.observeValue ( this.chart, ChartPackage.Literals.CHART__SELECTED_YAXIS ) );
+
+        startTimer ();
+
+        this.manager.addDisposeListener ( new DisposeListener () {
+
+            @Override
+            public void widgetDisposed ( final DisposeEvent e )
+            {
+                handleDispose ();
+            }
+        } );
+    }
+
+    public Realm getRealm ()
+    {
+        return this.realm;
+    }
+
+    protected void updateState ()
+    {
+        final org.openscada.chart.XAxis x;
+        final org.openscada.chart.YAxis y;
+
+        x = getSelectedXAxisViewer ();
+        y = getSelectedYAxisViewer ();
+
+        // update mouse controllers
+
+        if ( this.mouseTransformer != null )
+        {
+            this.mouseTransformer.dispose ();
+            this.mouseTransformer = null;
+        }
+        if ( this.mouseDragZoomer != null )
+        {
+            this.mouseDragZoomer.dispose ();
+            this.mouseDragZoomer = null;
+        }
+        if ( this.mouseWheelZoomer != null )
+        {
+            this.mouseWheelZoomer.dispose ();
+            this.mouseWheelZoomer = null;
+        }
+
+        if ( x != null && y != null )
+        {
+            this.mouseTransformer = new MouseTransformer ( this.manager.getChartArea (), x, y );
+            this.mouseDragZoomer = new MouseDragZoomer ( this.manager.getChartArea (), x, y );
+            this.mouseWheelZoomer = new MouseWheelZoomer ( this.manager.getChartArea (), x, y );
+        }
+
+        // update current time tracker
+
+        if ( this.timeRuler == null && this.showTimeRuler && x != null )
+        {
+            this.timeRuler = new CurrentTimeRuler ( x );
+            this.timeRuler.setColor ( this.manager.getDisplay ().getSystemColor ( SWT.COLOR_BLUE ) );
+            this.manager.addRenderer ( this.timeRuler );
+        }
+        else if ( this.timeRuler != null && !this.showTimeRuler || x == null )
+        {
+            this.manager.removeRenderer ( this.timeRuler );
+            this.timeRuler = null;
+        }
+    }
+
+    private org.openscada.chart.YAxis getSelectedYAxisViewer ()
+    {
+        return this.selectedYAxis != null ? this.selectedYAxis.getAxis () : null;
+    }
+
+    private org.openscada.chart.XAxis getSelectedXAxisViewer ()
+    {
+        return this.selectedXAxis != null ? this.selectedXAxis.getAxis () : null;
+    }
+
+    public XAxis getSelectedXAxis ()
+    {
+        return this.selectedXAxisElement;
+    }
+
+    public YAxis getSelectedYAxis ()
+    {
+        return this.selectedYAxisElement;
+    }
+
+    public void setSelectedXAxis ( final XAxis axis )
+    {
+        final XAxisViewer newSelection = this.xLocator.findAxis ( axis );
+        if ( this.selectedXAxis == newSelection )
+        {
+            return;
+        }
+        this.selectedXAxis = newSelection;
+        this.selectedXAxisElement = axis;
+        updateState ();
+    }
+
+    public void setSelectedYAxis ( final YAxis axis )
+    {
+        final YAxisViewer newSelection = this.yLocator.findAxis ( axis );
+        if ( this.selectedYAxis == newSelection )
+        {
+            return;
+        }
+        this.selectedYAxis = newSelection;
+        this.selectedYAxisElement = axis;
+        updateState ();
+    }
+
+    public void setChartBackground ( final RGB rgb )
+    {
+        if ( this.chartBackground != null )
+        {
+            this.resourceManager.destroyColor ( rgb );
+        }
+        this.chartBackground = this.resourceManager.createColor ( rgb );
+        this.manager.setChartBackground ( this.chartBackground );
+    }
+
+    public RGB getChartBackground ()
+    {
+        final Color background = this.chartBackground;
+        if ( background == null )
+        {
+            return null;
+        }
+        else
+        {
+            return background.getRGB ();
+        }
+    }
+
+    protected void handleDispose ()
+    {
+        this.inputManager.dispose ();
+
+        this.topManager.dispose ();
+        this.bottomManager.dispose ();
+        this.leftManager.dispose ();
+        this.rightManager.dispose ();
+
+        this.ctx.dispose ();
+    }
+
+    private DropTargetAdapter createDropTarget ()
+    {
+        return new DropTargetAdapter () {
             @Override
             public void dragEnter ( final DropTargetEvent event )
             {
@@ -130,7 +341,7 @@ public class ChartViewer
                     {
                         for ( final Item item : data )
                         {
-                            addItem ( new ItemConfiguration ( item ) );
+                            addItem ( item );
                         }
                         return;
                     }
@@ -142,17 +353,24 @@ public class ChartViewer
                     {
                         for ( final org.openscada.hd.ui.connection.data.Item item : data )
                         {
-                            addItem ( new ArchiveConfiguration ( item ) );
+                            addItem ( item );
                         }
                         return;
                     }
                 }
             };
-        } );
+        };
+    }
 
-        this.manager.setTitle ( "No item" );
+    public void setShowCurrentTimeRuler ( final boolean state )
+    {
+        this.showTimeRuler = state;
+        updateState ();
+    }
 
-        startTimer ();
+    public boolean isShowCurrentTimeRuler ()
+    {
+        return this.showTimeRuler;
     }
 
     private void startTimer ()
@@ -178,21 +396,69 @@ public class ChartViewer
         } );
     }
 
-    public void addItem ( final ArchiveConfiguration configuration )
+    public void addItem ( final org.openscada.hd.ui.connection.data.Item item )
     {
-        final ChartInput input = new ArchiveInput ( configuration, this, this.realm, this.x, this.y );
+        if ( this.selectedXAxisElement == null || this.selectedYAxisElement == null )
+        {
+            return;
+        }
 
-        addInput ( input );
+        org.openscada.ui.chart.model.ChartModel.UriItem itemRef = null;
+
+        itemRef = ChartFactory.eINSTANCE.createUriItem ();
+        itemRef.setItemId ( item.getId () );
+        itemRef.setConnectionUri ( item.getConnectionString () );
+
+        final ArchiveSeries input = ChartFactory.eINSTANCE.createArchiveSeries ();
+        input.setLabel ( item.toString () );
+        input.setItem ( itemRef );
+        input.setX ( this.selectedXAxisElement );
+        input.setY ( this.selectedYAxisElement );
+
+        this.chart.getInputs ().add ( input );
     }
 
-    public void addItem ( final ItemConfiguration configuration )
+    public void addItem ( final Item item )
     {
-        final ChartInput input = new ItemObserver ( this, configuration.getItem (), this.realm, this.x, this.y );
+        if ( this.selectedXAxisElement == null || this.selectedYAxisElement == null )
+        {
+            return;
+        }
 
-        addInput ( input );
+        org.openscada.ui.chart.model.ChartModel.Item itemRef = null;
+
+        switch ( item.getType () )
+        {
+            case ID:
+            {
+                itemRef = ChartFactory.eINSTANCE.createIdItem ();
+                ( (IdItem)itemRef ).setConnectionId ( item.getId () );
+                itemRef.setItemId ( item.getId () );
+                break;
+            }
+            case URI:
+            {
+                itemRef = ChartFactory.eINSTANCE.createUriItem ();
+                ( (UriItem)itemRef ).setConnectionUri ( item.getConnectionString () );
+                itemRef.setItemId ( item.getId () );
+                break;
+            }
+        }
+
+        if ( itemRef == null )
+        {
+            return;
+        }
+
+        final DataItemSeries input = ChartFactory.eINSTANCE.createDataItemSeries ();
+        input.setLabel ( item.toString () );
+        input.setItem ( itemRef );
+        input.setX ( this.selectedXAxisElement );
+        input.setY ( this.selectedYAxisElement );
+        this.chart.getInputs ().add ( input );
     }
 
-    private void addInput ( final ChartInput input )
+    public void addInput ( final ChartInput input )
     {
         if ( this.items.size () == 1 )
         {
@@ -209,23 +475,32 @@ public class ChartViewer
         updateTitle ();
     }
 
+    public void removeInput ( final ChartInput input )
+    {
+        if ( input == this.selection )
+        {
+            setSelection ( null );
+        }
+        this.items.remove ( input );
+    }
+
     protected void updateTitle ()
     {
         if ( this.items.isEmpty () )
         {
-            this.manager.setTitle ( "No item" );
+            this.chart.setTitle ( "No item" );
         }
         else if ( this.items.size () == 1 )
         {
-            this.manager.setTitle ( ( (ChartInput)this.items.get ( 0 ) ).getLabel () );
+            this.chart.setTitle ( ( (ChartInput)this.items.get ( 0 ) ).getLabel () );
         }
         else if ( this.selection != null )
         {
-            this.manager.setTitle ( String.format ( "%s items (selected: %s)", this.items.size (), this.selection.getLabel () ) );
+            this.chart.setTitle ( String.format ( "%s items (selected: %s)", this.items.size (), this.selection.getLabel () ) );
         }
         else
         {
-            this.manager.setTitle ( String.format ( "%s items (none selected)", this.items.size () ) );
+            this.chart.setTitle ( String.format ( "%s items (none selected)", this.items.size () ) );
         }
     }
 
@@ -288,15 +563,6 @@ public class ChartViewer
         return Observables.unmodifiableObservableList ( this.items );
     }
 
-    public void removeInput ( final ChartInput input )
-    {
-        if ( input == this.selection )
-        {
-            setSelection ( null );
-        }
-        this.items.remove ( input );
-    }
-
     public ChartManager getManager ()
     {
         return this.manager;
@@ -304,16 +570,28 @@ public class ChartViewer
 
     public void showTimespan ( final long duration, final TimeUnit timeUnit )
     {
-        this.x.setByTimespan ( duration, timeUnit );
+        final org.openscada.chart.XAxis x = getSelectedXAxisViewer ();
+        if ( x != null )
+        {
+            x.setByTimespan ( duration, timeUnit );
+        }
     }
 
     public void pageTimespan ( final long duration, final TimeUnit timeUnit )
     {
-        this.x.shiftByTimespan ( duration, timeUnit );
+        final org.openscada.chart.XAxis x = getSelectedXAxisViewer ();
+        if ( x != null )
+        {
+            x.shiftByTimespan ( duration, timeUnit );
+        }
     }
 
     public void setNowCenter ()
     {
-        this.x.setNowCenter ();
+        final org.openscada.chart.XAxis x = getSelectedXAxisViewer ();
+        if ( x != null )
+        {
+            x.setNowCenter ();
+        }
     }
 }
