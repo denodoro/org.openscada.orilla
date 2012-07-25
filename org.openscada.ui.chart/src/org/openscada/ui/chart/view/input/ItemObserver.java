@@ -311,13 +311,16 @@ public class ItemObserver implements DataSourceListener, ChartInput
     @Override
     public void updateData ( final DataItemValue value )
     {
-        this.valueSeries.getRealm ().asyncExec ( new Runnable () {
-            @Override
-            public void run ()
-            {
-                addNewValue ( value );
-            }
-        } );
+        if ( !this.valueSeries.getRealm ().isDisposed () )
+        {
+            this.valueSeries.getRealm ().asyncExec ( new Runnable () {
+                @Override
+                public void run ()
+                {
+                    addNewValue ( value );
+                }
+            } );
+        }
     }
 
     private void addNewValue ( final DataItemValue value )
