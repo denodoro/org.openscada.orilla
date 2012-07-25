@@ -9,6 +9,7 @@ import org.openscada.ui.chart.model.ChartModel.UriItem;
 import org.openscada.ui.chart.model.ChartModel.XAxis;
 import org.openscada.ui.chart.model.ChartModel.YAxis;
 import org.openscada.ui.chart.view.input.ArchiveInput;
+import org.openscada.ui.chart.view.input.ChartInput;
 
 public class ArchiveSeriesViewer extends AbstractInputViewer
 {
@@ -62,4 +63,9 @@ public class ArchiveSeriesViewer extends AbstractInputViewer
         }
     }
 
+    @Override
+    public boolean provides ( final ChartInput input )
+    {
+        return this.input == input;
+    }
 }

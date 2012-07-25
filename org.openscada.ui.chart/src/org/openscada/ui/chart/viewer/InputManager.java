@@ -15,6 +15,7 @@ import org.openscada.ui.chart.model.ChartModel.DataItemSeries;
 import org.openscada.ui.chart.model.ChartModel.DataSeries;
 import org.openscada.ui.chart.model.ChartModel.XAxis;
 import org.openscada.ui.chart.model.ChartModel.YAxis;
+import org.openscada.ui.chart.view.input.ChartInput;
 
 public class InputManager
 {
@@ -35,6 +36,21 @@ public class InputManager
 
     private final ResourceManager resourceManager;
 
+    private final ChartViewerListener chartViewerListener = new ChartViewerListener () {
+
+        @Override
+        public void inputRemoved ( final ChartInput input )
+        {
+            handleInputRemoved ( input );
+        }
+
+        @Override
+        public void inputAdded ( final ChartInput input )
+        {
+            handleInputAdded ( input );
+        }
+    };
+
     public InputManager ( final DataBindingContext dbc, final ChartViewer viewer, final ResourceManager resourceManager, final AxisLocator<XAxis, XAxisViewer> xLocator, final AxisLocator<YAxis, YAxisViewer> yLocator )
     {
         this.dbc = dbc;
@@ -52,6 +68,8 @@ public class InputManager
                 handleListeChange ( event.diff );
             }
         } );
+
+        this.viewer.addChartViewerListener ( this.chartViewerListener );
     }
 
     protected void handleListeChange ( final ListDiff diff )
@@ -103,8 +121,29 @@ public class InputManager
         }
     }
 
+    protected void handleInputRemoved ( final ChartInput input )
+    {
+        final Map<DataSeries, InputViewer> inputs = new HashMap<DataSeries, InputViewer> ( this.inputMap );
+
+        for ( final Map.Entry<DataSeries, InputViewer> entry : inputs.entrySet () )
+        {
+            if ( entry.getValue ().provides ( input ) )
+            {
+                entry.getValue ().dispose ();
+                this.inputMap.remove ( entry.getKey () );
+                this.list.remove ( entry.getKey () );
+            }
+        }
+    }
+
+    protected void handleInputAdded ( final ChartInput input )
+    {
+        // FIXME: this is not supported
+    }
+
     public void dispose ()
     {
+        this.viewer.removeChartViewerListener ( this.chartViewerListener );
         this.list.removeListChangeListener ( this.listener );
 
         for ( final InputViewer input : this.inputMap.values () )

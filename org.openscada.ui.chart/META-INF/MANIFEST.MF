@@ -31,7 +31,9 @@ Require-Bundle: org.eclipse.ui,
  org.openscada.hd.ui;bundle-version="1.0.0",
  org.openscada.ui.chart.model;bundle-version="1.0.0",
  org.eclipse.emf.databinding;bundle-version="1.2.0",
- org.eclipse.emf.ecore.xmi;bundle-version="2.7.0"
+ org.eclipse.emf.ecore.xmi;bundle-version="2.7.0",
+ org.openscada.ui.chart.model.edit;bundle-version="1.0.0",
+ org.eclipse.emf.edit.ui;bundle-version="2.7.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Localization: plugin

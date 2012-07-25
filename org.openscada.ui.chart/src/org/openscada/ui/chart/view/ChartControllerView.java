@@ -26,8 +26,6 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnWeightData;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
@@ -36,15 +34,12 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
-import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchActionConstants;
-import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.part.ViewPart;
 import org.openscada.ui.chart.view.input.ChartInput;
 import org.openscada.ui.chart.viewer.ChartViewer;
 
-public class ChartControllerView extends ViewPart
+public class ChartControllerView extends AbstractChartManagePart
 {
 
     private TableViewer viewer;
@@ -75,42 +70,15 @@ public class ChartControllerView extends ViewPart
 
         this.viewer.setContentProvider ( new ObservableListContentProvider () );
 
-        getViewSite ().getWorkbenchWindow ().getSelectionService ().addPostSelectionListener ( new ISelectionListener () {
-
-            @Override
-            public void selectionChanged ( final IWorkbenchPart part, final ISelection selection )
-            {
-                handleSelectionChanged ( selection );
-            }
-
-        } );
-        handleSelectionChanged ( getViewSite ().getWorkbenchWindow ().getSelectionService ().getSelection () );
         getSite ().setSelectionProvider ( this.viewer );
 
         contribueTo ( getViewSite () );
+
+        super.attachSelectionService ();
     }
 
-    protected void handleSelectionChanged ( final ISelection sel )
-    {
-        if ( sel == null || sel.isEmpty () )
-        {
-            return;
-        }
-        if ( ! ( sel instanceof IStructuredSelection ) )
-        {
-            return;
-        }
-
-        final Object o = ( (IStructuredSelection)sel ).getFirstElement ();
-        if ( ! ( o instanceof ChartViewer ) )
-        {
-            return;
-        }
-
-        setChartViewer ( (ChartViewer)o );
-    }
-
-    private void setChartViewer ( final ChartViewer chartViewer )
+    @Override
+    protected void setChartViewer ( final ChartViewer chartViewer )
     {
         if ( chartViewer != null )
         {

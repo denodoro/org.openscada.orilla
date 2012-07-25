@@ -1,12 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <genmodel:GenModel xmi:version="2.0"
-    xmlns:xmi="http://www.omg.org/XMI" xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.openscada.ui.chart.model/src"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.openscada.ui.chart.model/src"
     modelPluginID="org.openscada.ui.chart.model" modelName="Chart" codeFormatting="true"
     importerID="org.eclipse.emf.importer.ecore" complianceLevel="6.0" copyrightFields="false"
-    language="">
+    language="" runtimePlatform="RCP">
   <foreignModel>Chart.ecore</foreignModel>
   <genPackages prefix="Chart" basePackage="org.openscada.ui.chart.model" disposableProviderFactory="true"
       ecorePackage="Chart.ecore#/">
-    <genClasses ecoreClass="Chart.ecore#//Chart"/>
+    <genDataTypes ecoreDataType="Chart.ecore#//RGB"/>
+    <genClasses ecoreClass="Chart.ecore#//Chart">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Chart.ecore#//Chart/title"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Chart.ecore#//Chart/showCurrenTimeRuler"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Chart.ecore#//Chart/backgroundColor"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Chart.ecore#//Chart/bottom"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Chart.ecore#//Chart/top"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Chart.ecore#//Chart/left"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Chart.ecore#//Chart/right"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Chart.ecore#//Chart/selectedYAxis"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Chart.ecore#//Chart/selectedXAxis"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Chart.ecore#//Chart/inputs"/>
+    </genClasses>
+    <genClasses ecoreClass="Chart.ecore#//XAxis">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Chart.ecore#//XAxis/minimum"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Chart.ecore#//XAxis/maximum"/>
+    </genClasses>
+    <genClasses ecoreClass="Chart.ecore#//YAxis">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Chart.ecore#//YAxis/minimum"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Chart.ecore#//YAxis/maximum"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="Chart.ecore#//Axis">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Chart.ecore#//Axis/format"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Chart.ecore#//Axis/label"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="Chart.ecore#//DataSeries">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Chart.ecore#//DataSeries/label"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Chart.ecore#//DataSeries/x"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Chart.ecore#//DataSeries/y"/>
+    </genClasses>
+    <genClasses ecoreClass="Chart.ecore#//DataItemSeries">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Chart.ecore#//DataItemSeries/lineColor"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Chart.ecore#//DataItemSeries/lineWidth"/>
+    </genClasses>
+    <genClasses ecoreClass="Chart.ecore#//ArchiveSeries"/>
+    <genClasses image="false" ecoreClass="Chart.ecore#//Item">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Chart.ecore#//Item/itemId"/>
+    </genClasses>
+    <genClasses ecoreClass="Chart.ecore#//UriItem">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Chart.ecore#//UriItem/connectionUri"/>
+    </genClasses>
+    <genClasses ecoreClass="Chart.ecore#//IdItem">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Chart.ecore#//IdItem/connectionId"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="Chart.ecore#//ItemDataSeries">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Chart.ecore#//ItemDataSeries/item"/>
+    </genClasses>
   </genPackages>
 </genmodel:GenModel>

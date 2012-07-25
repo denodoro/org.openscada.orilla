@@ -20,7 +20,9 @@
 package org.openscada.ui.chart.viewer;
 
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.eclipse.core.databinding.DataBindingContext;
@@ -28,12 +30,14 @@ import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.core.databinding.observable.Observables;
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.list.WritableList;
+import org.eclipse.core.runtime.SafeRunner;
 import org.eclipse.emf.databinding.EMFObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.resource.LocalResourceManager;
 import org.eclipse.jface.resource.ResourceManager;
 import org.eclipse.jface.util.LocalSelectionTransfer;
+import org.eclipse.jface.util.SafeRunnable;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
@@ -117,6 +121,8 @@ public class ChartViewer
 
     private XAxis selectedXAxisElement;
 
+    private final Set<ChartViewerListener> listeners = new LinkedHashSet<ChartViewerListener> ();
+
     public ChartViewer ( final Composite parent, final Chart chart )
     {
         this.chart = chart;
@@ -167,6 +173,46 @@ public class ChartViewer
                 handleDispose ();
             }
         } );
+    }
+
+    public void addChartViewerListener ( final ChartViewerListener chartViewerListener )
+    {
+        this.listeners.add ( chartViewerListener );
+    }
+
+    public void removeChartViewerListener ( final ChartViewerListener chartViewerListener )
+    {
+        this.listeners.remove ( chartViewerListener );
+    }
+
+    private void fireInputAdded ( final ChartInput input )
+    {
+        for ( final ChartViewerListener listener : this.listeners )
+        {
+            SafeRunner.run ( new SafeRunnable () {
+
+                @Override
+                public void run () throws Exception
+                {
+                    listener.inputAdded ( input );
+                }
+            } );
+        }
+    }
+
+    private void fireInputRemoved ( final ChartInput input )
+    {
+        for ( final ChartViewerListener listener : this.listeners )
+        {
+            SafeRunner.run ( new SafeRunnable () {
+
+                @Override
+                public void run () throws Exception
+                {
+                    listener.inputRemoved ( input );
+                }
+            } );
+        }
     }
 
     public Realm getRealm ()
@@ -333,31 +379,7 @@ public class ChartViewer
             @Override
             public void drop ( final DropTargetEvent event )
             {
-                final ISelection selection = LocalSelectionTransfer.getTransfer ().getSelection ();
-
-                {
-                    final Collection<org.openscada.da.ui.connection.data.Item> data = org.openscada.da.ui.connection.data.ItemSelectionHelper.getSelection ( selection );
-                    if ( !data.isEmpty () )
-                    {
-                        for ( final Item item : data )
-                        {
-                            addItem ( item );
-                        }
-                        return;
-                    }
-                }
-
-                {
-                    final Collection<org.openscada.hd.ui.connection.data.Item> data = org.openscada.hd.ui.connection.data.ItemSelectionHelper.getSelection ( LocalSelectionTransfer.getTransfer ().getSelection () );
-                    if ( !data.isEmpty () )
-                    {
-                        for ( final org.openscada.hd.ui.connection.data.Item item : data )
-                        {
-                            addItem ( item );
-                        }
-                        return;
-                    }
-                }
+                handleDrop ();
             };
         };
     }
@@ -451,7 +473,7 @@ public class ChartViewer
         }
 
         final DataItemSeries input = ChartFactory.eINSTANCE.createDataItemSeries ();
-        input.setLabel ( item.toString () );
+        input.setLabel ( item.toLabel () );
         input.setItem ( itemRef );
         input.setX ( this.selectedXAxisElement );
         input.setY ( this.selectedYAxisElement );
@@ -490,6 +512,9 @@ public class ChartViewer
         }
 
         updateTitle ();
+
+        // fire events
+        fireInputAdded ( input );
     }
 
     public void removeInput ( final ChartInput input )
@@ -498,7 +523,10 @@ public class ChartViewer
         {
             setSelection ( null );
         }
-        this.items.remove ( input );
+        if ( this.items.remove ( input ) )
+        {
+            fireInputRemoved ( input );
+        }
     }
 
     protected void updateTitle ()
@@ -611,6 +639,40 @@ public class ChartViewer
         if ( x != null )
         {
             x.setNowCenter ();
+        }
+    }
+
+    public Chart getChartConfiguration ()
+    {
+        return this.chart;
+    }
+
+    private void handleDrop ()
+    {
+        final ISelection selection = LocalSelectionTransfer.getTransfer ().getSelection ();
+
+        {
+            final Collection<org.openscada.da.ui.connection.data.Item> data = org.openscada.da.ui.connection.data.ItemSelectionHelper.getSelection ( selection );
+            if ( !data.isEmpty () )
+            {
+                for ( final Item item : data )
+                {
+                    addItem ( item );
+                }
+                return;
+            }
+        }
+
+        {
+            final Collection<org.openscada.hd.ui.connection.data.Item> data = org.openscada.hd.ui.connection.data.ItemSelectionHelper.getSelection ( LocalSelectionTransfer.getTransfer ().getSelection () );
+            if ( !data.isEmpty () )
+            {
+                for ( final org.openscada.hd.ui.connection.data.Item item : data )
+                {
+                    addItem ( item );
+                }
+                return;
+            }
         }
     }
 }

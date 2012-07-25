@@ -16,8 +16,8 @@ import org.eclipse.emf.ecore.EObject;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link org.openscada.ui.chart.model.ChartModel.Axis#getFormat <em>Format</em>}</li>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.Axis#getLabel <em>Label</em>}</li>
+ *   <li>{@link org.openscada.ui.chart.model.ChartModel.Axis#getFormat <em>Format</em>}</li>
  * </ul>
  * </p>
  *

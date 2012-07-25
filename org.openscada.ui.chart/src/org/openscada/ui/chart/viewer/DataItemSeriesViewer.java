@@ -13,6 +13,7 @@ import org.openscada.ui.chart.model.ChartModel.Item;
 import org.openscada.ui.chart.model.ChartModel.UriItem;
 import org.openscada.ui.chart.model.ChartModel.XAxis;
 import org.openscada.ui.chart.model.ChartModel.YAxis;
+import org.openscada.ui.chart.view.input.ChartInput;
 import org.openscada.ui.chart.view.input.ItemObserver;
 
 public class DataItemSeriesViewer extends AbstractInputViewer implements InputViewer
@@ -81,4 +82,9 @@ public class DataItemSeriesViewer extends AbstractInputViewer implements InputVi
         }
     }
 
+    @Override
+    public boolean provides ( final ChartInput input )
+    {
+        return this.input == input;
+    }
 }

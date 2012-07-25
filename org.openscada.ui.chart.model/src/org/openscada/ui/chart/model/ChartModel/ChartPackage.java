@@ -181,22 +181,22 @@ public interface ChartPackage extends EPackage
     int AXIS = 3;
 
     /**
-     * The feature id for the '<em><b>Format</b></em>' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     * @ordered
-     */
-    int AXIS__FORMAT = 0;
-
-    /**
      * The feature id for the '<em><b>Label</b></em>' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int AXIS__LABEL = 1;
+    int AXIS__LABEL = 0;
+
+    /**
+     * The feature id for the '<em><b>Format</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int AXIS__FORMAT = 1;
 
     /**
      * The number of structural features of the '<em>Axis</em>' class.
@@ -218,15 +218,6 @@ public interface ChartPackage extends EPackage
     int XAXIS = 1;
 
     /**
-     * The feature id for the '<em><b>Format</b></em>' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     * @ordered
-     */
-    int XAXIS__FORMAT = AXIS__FORMAT;
-
-    /**
      * The feature id for the '<em><b>Label</b></em>' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -234,6 +225,15 @@ public interface ChartPackage extends EPackage
      * @ordered
      */
     int XAXIS__LABEL = AXIS__LABEL;
+
+    /**
+     * The feature id for the '<em><b>Format</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int XAXIS__FORMAT = AXIS__FORMAT;
 
     /**
      * The feature id for the '<em><b>Minimum</b></em>' attribute.
@@ -273,15 +273,6 @@ public interface ChartPackage extends EPackage
     int YAXIS = 2;
 
     /**
-     * The feature id for the '<em><b>Format</b></em>' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     * @ordered
-     */
-    int YAXIS__FORMAT = AXIS__FORMAT;
-
-    /**
      * The feature id for the '<em><b>Label</b></em>' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -289,6 +280,15 @@ public interface ChartPackage extends EPackage
      * @ordered
      */
     int YAXIS__LABEL = AXIS__LABEL;
+
+    /**
+     * The feature id for the '<em><b>Format</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int YAXIS__FORMAT = AXIS__FORMAT;
 
     /**
      * The feature id for the '<em><b>Minimum</b></em>' attribute.

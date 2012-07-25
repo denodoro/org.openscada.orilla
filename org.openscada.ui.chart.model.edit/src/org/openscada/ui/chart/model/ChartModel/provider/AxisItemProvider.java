@@ -60,8 +60,8 @@ public class AxisItemProvider extends ItemProviderAdapter implements IEditingDom
         {
             super.getPropertyDescriptors ( object );
 
-            addFormatPropertyDescriptor ( object );
             addLabelPropertyDescriptor ( object );
+            addFormatPropertyDescriptor ( object );
         }
         return itemPropertyDescriptors;
     }
@@ -97,7 +97,7 @@ public class AxisItemProvider extends ItemProviderAdapter implements IEditingDom
     @Override
     public String getText ( Object object )
     {
-        String label = ( (Axis)object ).getFormat ();
+        String label = ( (Axis)object ).getLabel ();
         return label == null || label.length () == 0 ? getString ( "_UI_Axis_type" ) : getString ( "_UI_Axis_type" ) + " " + label;
     }
 
@@ -115,8 +115,8 @@ public class AxisItemProvider extends ItemProviderAdapter implements IEditingDom
 
         switch ( notification.getFeatureID ( Axis.class ) )
         {
-            case ChartPackage.AXIS__FORMAT:
             case ChartPackage.AXIS__LABEL:
+            case ChartPackage.AXIS__FORMAT:
                 fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), false, true ) );
                 return;
         }

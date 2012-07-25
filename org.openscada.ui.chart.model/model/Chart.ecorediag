@@ -86,13 +86,13 @@
   <children xmi:type="notation:Node" xmi:id="_tQQI8NTCEeGG6ZRHVvsIug" type="1001">
     <children xmi:type="notation:Node" xmi:id="_tQQwANTCEeGG6ZRHVvsIug" type="4001"/>
     <children xmi:type="notation:Node" xmi:id="_tQQwAdTCEeGG6ZRHVvsIug" type="5001">
-      <children xmi:type="notation:Node" xmi:id="_0aSGsNTCEeGG6ZRHVvsIug" type="2001">
-        <element xmi:type="ecore:EAttribute" href="Chart.ecore#//Axis/format"/>
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_0aSGsdTCEeGG6ZRHVvsIug"/>
-      </children>
       <children xmi:type="notation:Node" xmi:id="_QLb5cNTDEeGG6ZRHVvsIug" type="2001">
         <element xmi:type="ecore:EAttribute" href="Chart.ecore#//Axis/label"/>
         <layoutConstraint xmi:type="notation:Location" xmi:id="_QLb5cdTDEeGG6ZRHVvsIug"/>
+      </children>
+      <children xmi:type="notation:Node" xmi:id="_0aSGsNTCEeGG6ZRHVvsIug" type="2001">
+        <element xmi:type="ecore:EAttribute" href="Chart.ecore#//Axis/format"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_0aSGsdTCEeGG6ZRHVvsIug"/>
       </children>
       <styles xmi:type="notation:DrawerStyle" xmi:id="_tQQwAtTCEeGG6ZRHVvsIug"/>
       <styles xmi:type="notation:SortingStyle" xmi:id="_tQRXENTCEeGG6ZRHVvsIug"/>

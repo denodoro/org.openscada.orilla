@@ -19,6 +19,14 @@
             name="Chart Controller"
             restorable="true">
       </view>
+      <view
+            allowMultiple="false"
+            category="org.openscada.da.ui.category"
+            class="org.openscada.ui.chart.view.ChartConfiguratorView"
+            id="org.openscada.da.ui.client.chart.ChartConfigurator"
+            name="Chart Configurator"
+            restorable="true">
+      </view>
    </extension>
    <extension
          point="org.eclipse.ui.popupMenus">

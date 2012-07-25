@@ -106,7 +106,7 @@ public class XAxisItemProvider extends AxisItemProvider implements IEditingDomai
     @Override
     public String getText ( Object object )
     {
-        String label = ( (XAxis)object ).getFormat ();
+        String label = ( (XAxis)object ).getLabel ();
         return label == null || label.length () == 0 ? getString ( "_UI_XAxis_type" ) : getString ( "_UI_XAxis_type" ) + " " + label;
     }
 

@@ -23,8 +23,8 @@ import org.openscada.ui.chart.model.ChartModel.ChartPackage;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.AxisImpl#getFormat <em>Format</em>}</li>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.AxisImpl#getLabel <em>Label</em>}</li>
+ *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.AxisImpl#getFormat <em>Format</em>}</li>
  * </ul>
  * </p>
  *
@@ -32,26 +32,6 @@ import org.openscada.ui.chart.model.ChartModel.ChartPackage;
  */
 public abstract class AxisImpl extends EObjectImpl implements Axis
 {
-    /**
-     * The default value of the '{@link #getFormat() <em>Format</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see #getFormat()
-     * @generated
-     * @ordered
-     */
-    protected static final String FORMAT_EDEFAULT = null;
-
-    /**
-     * The cached value of the '{@link #getFormat() <em>Format</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see #getFormat()
-     * @generated
-     * @ordered
-     */
-    protected String format = FORMAT_EDEFAULT;
-
     /**
      * The default value of the '{@link #getLabel() <em>Label</em>}' attribute.
      * <!-- begin-user-doc -->
@@ -71,6 +51,26 @@ public abstract class AxisImpl extends EObjectImpl implements Axis
      * @ordered
      */
     protected String label = LABEL_EDEFAULT;
+
+    /**
+     * The default value of the '{@link #getFormat() <em>Format</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getFormat()
+     * @generated
+     * @ordered
+     */
+    protected static final String FORMAT_EDEFAULT = null;
+
+    /**
+     * The cached value of the '{@link #getFormat() <em>Format</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getFormat()
+     * @generated
+     * @ordered
+     */
+    protected String format = FORMAT_EDEFAULT;
 
     /**
      * <!-- begin-user-doc -->
@@ -149,10 +149,10 @@ public abstract class AxisImpl extends EObjectImpl implements Axis
     {
         switch ( featureID )
         {
-            case ChartPackage.AXIS__FORMAT:
-                return getFormat ();
             case ChartPackage.AXIS__LABEL:
                 return getLabel ();
+            case ChartPackage.AXIS__FORMAT:
+                return getFormat ();
         }
         return super.eGet ( featureID, resolve, coreType );
     }
@@ -167,11 +167,11 @@ public abstract class AxisImpl extends EObjectImpl implements Axis
     {
         switch ( featureID )
         {
-            case ChartPackage.AXIS__FORMAT:
-                setFormat ( (String)newValue );
-                return;
             case ChartPackage.AXIS__LABEL:
                 setLabel ( (String)newValue );
+                return;
+            case ChartPackage.AXIS__FORMAT:
+                setFormat ( (String)newValue );
                 return;
         }
         super.eSet ( featureID, newValue );
@@ -187,11 +187,11 @@ public abstract class AxisImpl extends EObjectImpl implements Axis
     {
         switch ( featureID )
         {
-            case ChartPackage.AXIS__FORMAT:
-                setFormat ( FORMAT_EDEFAULT );
-                return;
             case ChartPackage.AXIS__LABEL:
                 setLabel ( LABEL_EDEFAULT );
+                return;
+            case ChartPackage.AXIS__FORMAT:
+                setFormat ( FORMAT_EDEFAULT );
                 return;
         }
         super.eUnset ( featureID );
@@ -207,10 +207,10 @@ public abstract class AxisImpl extends EObjectImpl implements Axis
     {
         switch ( featureID )
         {
-            case ChartPackage.AXIS__FORMAT:
-                return FORMAT_EDEFAULT == null ? format != null : !FORMAT_EDEFAULT.equals ( format );
             case ChartPackage.AXIS__LABEL:
                 return LABEL_EDEFAULT == null ? label != null : !LABEL_EDEFAULT.equals ( label );
+            case ChartPackage.AXIS__FORMAT:
+                return FORMAT_EDEFAULT == null ? format != null : !FORMAT_EDEFAULT.equals ( format );
         }
         return super.eIsSet ( featureID );
     }
@@ -227,10 +227,10 @@ public abstract class AxisImpl extends EObjectImpl implements Axis
             return super.toString ();
 
         StringBuffer result = new StringBuffer ( super.toString () );
-        result.append ( " (format: " );
-        result.append ( format );
-        result.append ( ", label: " );
+        result.append ( " (label: " );
         result.append ( label );
+        result.append ( ", format: " );
+        result.append ( format );
         result.append ( ')' );
         return result.toString ();
     }

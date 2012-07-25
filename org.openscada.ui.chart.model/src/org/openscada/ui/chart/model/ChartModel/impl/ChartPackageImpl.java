@@ -370,7 +370,7 @@ public class ChartPackageImpl extends EPackageImpl implements ChartPackage
      */
     public EAttribute getAxis_Format ()
     {
-        return (EAttribute)axisEClass.getEStructuralFeatures ().get ( 0 );
+        return (EAttribute)axisEClass.getEStructuralFeatures ().get ( 1 );
     }
 
     /**
@@ -380,7 +380,7 @@ public class ChartPackageImpl extends EPackageImpl implements ChartPackage
      */
     public EAttribute getAxis_Label ()
     {
-        return (EAttribute)axisEClass.getEStructuralFeatures ().get ( 1 );
+        return (EAttribute)axisEClass.getEStructuralFeatures ().get ( 0 );
     }
 
     /**
@@ -605,8 +605,8 @@ public class ChartPackageImpl extends EPackageImpl implements ChartPackage
         createEAttribute ( yAxisEClass, YAXIS__MAXIMUM );
 
         axisEClass = createEClass ( AXIS );
-        createEAttribute ( axisEClass, AXIS__FORMAT );
         createEAttribute ( axisEClass, AXIS__LABEL );
+        createEAttribute ( axisEClass, AXIS__FORMAT );
 
         dataSeriesEClass = createEClass ( DATA_SERIES );
         createEAttribute ( dataSeriesEClass, DATA_SERIES__LABEL );
@@ -695,8 +695,8 @@ public class ChartPackageImpl extends EPackageImpl implements ChartPackage
         initEAttribute ( getYAxis_Maximum (), ecorePackage.getEDouble (), "maximum", "100.0", 1, 1, YAxis.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
 
         initEClass ( axisEClass, Axis.class, "Axis", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS );
-        initEAttribute ( getAxis_Format (), ecorePackage.getEString (), "format", null, 0, 1, Axis.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
         initEAttribute ( getAxis_Label (), ecorePackage.getEString (), "label", null, 0, 1, Axis.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
+        initEAttribute ( getAxis_Format (), ecorePackage.getEString (), "format", null, 0, 1, Axis.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
 
         initEClass ( dataSeriesEClass, DataSeries.class, "DataSeries", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS );
         initEAttribute ( getDataSeries_Label (), ecorePackage.getEString (), "label", null, 0, 1, DataSeries.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );

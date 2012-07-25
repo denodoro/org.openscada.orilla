@@ -106,7 +106,7 @@ public class YAxisItemProvider extends AxisItemProvider implements IEditingDomai
     @Override
     public String getText ( Object object )
     {
-        String label = ( (YAxis)object ).getFormat ();
+        String label = ( (YAxis)object ).getLabel ();
         return label == null || label.length () == 0 ? getString ( "_UI_YAxis_type" ) : getString ( "_UI_YAxis_type" ) + " " + label;
     }
 
