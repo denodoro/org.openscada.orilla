@@ -159,8 +159,8 @@
   	<openscada.builder.copyFeature id="org.openscada.ui.chart"/>
   	<openscada.builder.copyPlugin id="org.openscada.ui.chart"/>
   	<openscada.builder.copyPlugin id="org.openscada.ui.chart.model"/>
-  	<openscada.builder.copyPlugin id="org.openscada.ui.chart.edit"/>
-	<openscada.builder.copyPlugin id="org.openscada.ui.chart.editor"/>
+  	<openscada.builder.copyPlugin id="org.openscada.ui.chart.model.edit"/>
+	<openscada.builder.copyPlugin id="org.openscada.ui.chart.model.editor"/>
   	
   	<!-- openSCADA CA UI -->
   	
