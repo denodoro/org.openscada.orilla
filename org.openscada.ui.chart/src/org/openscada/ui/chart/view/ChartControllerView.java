@@ -19,6 +19,7 @@
 
 package org.openscada.ui.chart.view;
 
+import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
@@ -44,13 +45,13 @@ public class ChartControllerView extends AbstractChartManagePart
 
     private TableViewer viewer;
 
-    public ChartControllerView ()
-    {
-    }
+    private DataBindingContext dbc;
 
     @Override
     public void createPartControl ( final Composite parent )
     {
+        this.dbc = new DataBindingContext ();
+
         parent.setLayout ( new FillLayout () );
         this.viewer = new TableViewer ( parent );
 
@@ -78,8 +79,16 @@ public class ChartControllerView extends AbstractChartManagePart
     }
 
     @Override
+    public void dispose ()
+    {
+        this.dbc.dispose ();
+        super.dispose ();
+    }
+
+    @Override
     protected void setChartViewer ( final ChartViewer chartViewer )
     {
+        // attach
         if ( chartViewer != null )
         {
             this.viewer.setInput ( chartViewer.getItems () );

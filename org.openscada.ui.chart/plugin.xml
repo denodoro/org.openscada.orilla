@@ -78,10 +78,6 @@
                optional="true">
          </commandParameter>
       </command>
-      <command
-            id="org.openscada.da.ui.client.chart.RemoteInput"
-            name="Remove">
-      </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -110,24 +106,6 @@
             class="org.openscada.ui.chart.commands.OpenChartViewWithParameters"
             commandId="org.openscada.da.client.chart.commands.OpenParametersCharView">
       </handler>
-      <handler
-            class="org.openscada.ui.chart.commands.RemoveInput"
-            commandId="org.openscada.da.ui.client.chart.RemoteInput">
-         <enabledWhen>
-            <and>
-               <with
-                     variable="selection">
-                  <iterate
-                        ifEmpty="false"
-                        operator="and">
-                     <instanceof
-                           value="org.openscada.ui.chart.view.input.ChartInput">
-                     </instanceof>
-                  </iterate>
-               </with>
-            </and>
-         </enabledWhen>
-      </handler>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -152,14 +130,6 @@
                   </or>
                </iterate>
             </visibleWhen>
-         </command>
-      </menuContribution>
-      <menuContribution
-            allPopups="false"
-            locationURI="popup:org.openscada.da.ui.client.chart.ChartController">
-         <command
-               commandId="org.openscada.da.ui.client.chart.RemoteInput"
-               style="push">
          </command>
       </menuContribution>
    </extension>
