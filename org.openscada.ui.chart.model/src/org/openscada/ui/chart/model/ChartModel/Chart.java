@@ -28,6 +28,7 @@ import org.eclipse.swt.graphics.RGB;
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.Chart#getSelectedYAxis <em>Selected YAxis</em>}</li>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.Chart#getSelectedXAxis <em>Selected XAxis</em>}</li>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.Chart#getInputs <em>Inputs</em>}</li>
+ *   <li>{@link org.openscada.ui.chart.model.ChartModel.Chart#isMutable <em>Mutable</em>}</li>
  * </ul>
  * </p>
  *
@@ -249,5 +250,32 @@ public interface Chart extends EObject
      * @generated
      */
     EList<DataSeries> getInputs ();
+
+    /**
+     * Returns the value of the '<em><b>Mutable</b></em>' attribute.
+     * The default value is <code>"true"</code>.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>Mutable</em>' attribute isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>Mutable</em>' attribute.
+     * @see #setMutable(boolean)
+     * @see org.openscada.ui.chart.model.ChartModel.ChartPackage#getChart_Mutable()
+     * @model default="true" required="true"
+     * @generated
+     */
+    boolean isMutable ();
+
+    /**
+     * Sets the value of the '{@link org.openscada.ui.chart.model.ChartModel.Chart#isMutable <em>Mutable</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>Mutable</em>' attribute.
+     * @see #isMutable()
+     * @generated
+     */
+    void setMutable ( boolean value );
 
 } // Chart

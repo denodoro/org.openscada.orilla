@@ -162,13 +162,22 @@ public interface ChartPackage extends EPackage
     int CHART__INPUTS = 9;
 
     /**
+     * The feature id for the '<em><b>Mutable</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int CHART__MUTABLE = 10;
+
+    /**
      * The number of structural features of the '<em>Chart</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int CHART_FEATURE_COUNT = 10;
+    int CHART_FEATURE_COUNT = 11;
 
     /**
      * The meta object id for the '{@link org.openscada.ui.chart.model.ChartModel.impl.AxisImpl <em>Axis</em>}' class.
@@ -779,6 +788,17 @@ public interface ChartPackage extends EPackage
     EReference getChart_Inputs ();
 
     /**
+     * Returns the meta object for the attribute '{@link org.openscada.ui.chart.model.ChartModel.Chart#isMutable <em>Mutable</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Mutable</em>'.
+     * @see org.openscada.ui.chart.model.ChartModel.Chart#isMutable()
+     * @see #getChart()
+     * @generated
+     */
+    EAttribute getChart_Mutable ();
+
+    /**
      * Returns the meta object for class '{@link org.openscada.ui.chart.model.ChartModel.XAxis <em>XAxis</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1166,6 +1186,14 @@ public interface ChartPackage extends EPackage
          * @generated
          */
         EReference CHART__INPUTS = eINSTANCE.getChart_Inputs ();
+
+        /**
+         * The meta object literal for the '<em><b>Mutable</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute CHART__MUTABLE = eINSTANCE.getChart_Mutable ();
 
         /**
          * The meta object literal for the '{@link org.openscada.ui.chart.model.ChartModel.impl.XAxisImpl <em>XAxis</em>}' class.

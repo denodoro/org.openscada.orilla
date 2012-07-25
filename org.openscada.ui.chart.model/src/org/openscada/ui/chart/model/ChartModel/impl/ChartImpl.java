@@ -44,6 +44,7 @@ import org.openscada.ui.chart.model.ChartModel.YAxis;
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.ChartImpl#getSelectedYAxis <em>Selected YAxis</em>}</li>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.ChartImpl#getSelectedXAxis <em>Selected XAxis</em>}</li>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.ChartImpl#getInputs <em>Inputs</em>}</li>
+ *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.ChartImpl#isMutable <em>Mutable</em>}</li>
  * </ul>
  * </p>
  *
@@ -180,6 +181,26 @@ public class ChartImpl extends EObjectImpl implements Chart
      * @ordered
      */
     protected EList<DataSeries> inputs;
+
+    /**
+     * The default value of the '{@link #isMutable() <em>Mutable</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #isMutable()
+     * @generated
+     * @ordered
+     */
+    protected static final boolean MUTABLE_EDEFAULT = true;
+
+    /**
+     * The cached value of the '{@link #isMutable() <em>Mutable</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #isMutable()
+     * @generated
+     * @ordered
+     */
+    protected boolean mutable = MUTABLE_EDEFAULT;
 
     /**
      * <!-- begin-user-doc -->
@@ -432,6 +453,29 @@ public class ChartImpl extends EObjectImpl implements Chart
      * <!-- end-user-doc -->
      * @generated
      */
+    public boolean isMutable ()
+    {
+        return mutable;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public void setMutable ( boolean newMutable )
+    {
+        boolean oldMutable = mutable;
+        mutable = newMutable;
+        if ( eNotificationRequired () )
+            eNotify ( new ENotificationImpl ( this, Notification.SET, ChartPackage.CHART__MUTABLE, oldMutable, mutable ) );
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     @Override
     public NotificationChain eInverseRemove ( InternalEObject otherEnd, int featureID, NotificationChain msgs )
     {
@@ -485,6 +529,8 @@ public class ChartImpl extends EObjectImpl implements Chart
                 return basicGetSelectedXAxis ();
             case ChartPackage.CHART__INPUTS:
                 return getInputs ();
+            case ChartPackage.CHART__MUTABLE:
+                return isMutable ();
         }
         return super.eGet ( featureID, resolve, coreType );
     }
@@ -535,6 +581,9 @@ public class ChartImpl extends EObjectImpl implements Chart
                 getInputs ().clear ();
                 getInputs ().addAll ( (Collection<? extends DataSeries>)newValue );
                 return;
+            case ChartPackage.CHART__MUTABLE:
+                setMutable ( (Boolean)newValue );
+                return;
         }
         super.eSet ( featureID, newValue );
     }
@@ -579,6 +628,9 @@ public class ChartImpl extends EObjectImpl implements Chart
             case ChartPackage.CHART__INPUTS:
                 getInputs ().clear ();
                 return;
+            case ChartPackage.CHART__MUTABLE:
+                setMutable ( MUTABLE_EDEFAULT );
+                return;
         }
         super.eUnset ( featureID );
     }
@@ -613,6 +665,8 @@ public class ChartImpl extends EObjectImpl implements Chart
                 return selectedXAxis != null;
             case ChartPackage.CHART__INPUTS:
                 return inputs != null && !inputs.isEmpty ();
+            case ChartPackage.CHART__MUTABLE:
+                return mutable != MUTABLE_EDEFAULT;
         }
         return super.eIsSet ( featureID );
     }
@@ -635,6 +689,8 @@ public class ChartImpl extends EObjectImpl implements Chart
         result.append ( showCurrenTimeRuler );
         result.append ( ", backgroundColor: " );
         result.append ( backgroundColor );
+        result.append ( ", mutable: " );
+        result.append ( mutable );
         result.append ( ')' );
         return result.toString ();
     }

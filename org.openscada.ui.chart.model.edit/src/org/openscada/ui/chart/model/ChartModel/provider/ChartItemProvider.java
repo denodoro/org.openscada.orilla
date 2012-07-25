@@ -68,6 +68,7 @@ public class ChartItemProvider extends ItemProviderAdapter implements IEditingDo
             addBackgroundColorPropertyDescriptor ( object );
             addSelectedYAxisPropertyDescriptor ( object );
             addSelectedXAxisPropertyDescriptor ( object );
+            addMutablePropertyDescriptor ( object );
         }
         return itemPropertyDescriptors;
     }
@@ -125,6 +126,17 @@ public class ChartItemProvider extends ItemProviderAdapter implements IEditingDo
     protected void addSelectedXAxisPropertyDescriptor ( Object object )
     {
         itemPropertyDescriptors.add ( createItemPropertyDescriptor ( ( (ComposeableAdapterFactory)adapterFactory ).getRootAdapterFactory (), getResourceLocator (), getString ( "_UI_Chart_selectedXAxis_feature" ), getString ( "_UI_PropertyDescriptor_description", "_UI_Chart_selectedXAxis_feature", "_UI_Chart_type" ), ChartPackage.Literals.CHART__SELECTED_XAXIS, true, false, true, null, null, null ) );
+    }
+
+    /**
+     * This adds a property descriptor for the Mutable feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    protected void addMutablePropertyDescriptor ( Object object )
+    {
+        itemPropertyDescriptors.add ( createItemPropertyDescriptor ( ( (ComposeableAdapterFactory)adapterFactory ).getRootAdapterFactory (), getResourceLocator (), getString ( "_UI_Chart_mutable_feature" ), getString ( "_UI_PropertyDescriptor_description", "_UI_Chart_mutable_feature", "_UI_Chart_type" ), ChartPackage.Literals.CHART__MUTABLE, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null ) );
     }
 
     /**
@@ -206,6 +218,7 @@ public class ChartItemProvider extends ItemProviderAdapter implements IEditingDo
             case ChartPackage.CHART__TITLE:
             case ChartPackage.CHART__SHOW_CURREN_TIME_RULER:
             case ChartPackage.CHART__BACKGROUND_COLOR:
+            case ChartPackage.CHART__MUTABLE:
                 fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), false, true ) );
                 return;
             case ChartPackage.CHART__BOTTOM:

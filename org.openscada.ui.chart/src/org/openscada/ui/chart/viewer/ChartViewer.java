@@ -123,6 +123,8 @@ public class ChartViewer
 
     private final Set<ChartViewerListener> listeners = new LinkedHashSet<ChartViewerListener> ();
 
+    private boolean mutable;
+
     public ChartViewer ( final Composite parent, final Chart chart )
     {
         this.chart = chart;
@@ -158,6 +160,7 @@ public class ChartViewer
 
         this.ctx.bindValue ( PojoObservables.observeValue ( this.manager, "title" ), EMFObservables.observeValue ( this.chart, ChartPackage.Literals.CHART__TITLE ) );
         this.ctx.bindValue ( PojoObservables.observeValue ( this, "showCurrentTimeRuler" ), EMFObservables.observeValue ( this.chart, ChartPackage.Literals.CHART__SHOW_CURREN_TIME_RULER ) );
+        this.ctx.bindValue ( PojoObservables.observeValue ( this, "mutable" ), EMFObservables.observeValue ( this.chart, ChartPackage.Literals.CHART__MUTABLE ) );
         this.ctx.bindValue ( PojoObservables.observeValue ( this, "chartBackground" ), EMFObservables.observeValue ( this.chart, ChartPackage.Literals.CHART__BACKGROUND_COLOR ) );
 
         this.ctx.bindValue ( PojoObservables.observeValue ( this, "selectedXAxis" ), EMFObservables.observeValue ( this.chart, ChartPackage.Literals.CHART__SELECTED_XAXIS ) );
@@ -173,6 +176,16 @@ public class ChartViewer
                 handleDispose ();
             }
         } );
+    }
+
+    public void setMutable ( final boolean mutable )
+    {
+        this.mutable = mutable;
+    }
+
+    public boolean isMutable ()
+    {
+        return this.mutable;
     }
 
     public void addChartViewerListener ( final ChartViewerListener chartViewerListener )
@@ -354,6 +367,10 @@ public class ChartViewer
             public void dragEnter ( final DropTargetEvent event )
             {
                 event.detail = DND.DROP_NONE;
+                if ( !ChartViewer.this.mutable )
+                {
+                    return;
+                }
 
                 final ISelection selection = LocalSelectionTransfer.getTransfer ().getSelection ();
 
@@ -649,8 +666,12 @@ public class ChartViewer
 
     private void handleDrop ()
     {
-        final ISelection selection = LocalSelectionTransfer.getTransfer ().getSelection ();
+        if ( !this.mutable )
+        {
+            return;
+        }
 
+        final ISelection selection = LocalSelectionTransfer.getTransfer ().getSelection ();
         {
             final Collection<org.openscada.da.ui.connection.data.Item> data = org.openscada.da.ui.connection.data.ItemSelectionHelper.getSelection ( selection );
             if ( !data.isEmpty () )
