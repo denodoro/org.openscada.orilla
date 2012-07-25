@@ -147,7 +147,7 @@ public class ChartConfiguratorView extends AbstractChartManagePart implements IV
         {
             final Chart element = chartViewer.getChartConfiguration ();
 
-            this.viewer.setInput ( element );
+            this.viewer.setInput ( element.eResource () );
         }
     }
 
@@ -164,6 +164,7 @@ public class ChartConfiguratorView extends AbstractChartManagePart implements IV
 
         parent.setLayout ( new FillLayout () );
         this.viewer = new TreeViewer ( parent );
+        this.viewer.setAutoExpandLevel ( 2 );
 
         this.viewer.setContentProvider ( new AdapterFactoryContentProvider ( this.factory ) );
         this.viewer.setLabelProvider ( new AdapterFactoryLabelProvider ( this.factory ) );
