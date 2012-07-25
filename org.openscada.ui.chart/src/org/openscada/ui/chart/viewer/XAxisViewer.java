@@ -36,14 +36,14 @@ public class XAxisViewer extends AbstractAxisViewer
 
     private final XAxisDynamicRenderer renderer;
 
-    public XAxisViewer ( final DataBindingContext dbc, final ChartManager manager, final XAxis axis )
+    public XAxisViewer ( final DataBindingContext dbc, final ChartManager manager, final XAxis axis, final boolean top )
     {
         super ( dbc, manager, axis );
 
         this.axis = axis;
 
         this.control = new org.openscada.chart.XAxis ();
-        this.renderer = this.manager.addDynamicXAxis ( this.control );
+        this.renderer = this.manager.addDynamicXAxis ( this.control, top );
 
         addBinding ( this.dbc.bindValue ( BeansObservables.observeValue ( this.control, "label" ), EMFObservables.observeValue ( this.axis, ChartPackage.Literals.AXIS__LABEL ) ) );
         addBinding ( this.dbc.bindValue ( BeansObservables.observeValue ( this.control, "min" ), EMFObservables.observeValue ( this.axis, ChartPackage.Literals.XAXIS__MINIMUM ) ) );
@@ -63,5 +63,6 @@ public class XAxisViewer extends AbstractAxisViewer
         super.dispose ();
 
         this.renderer.dispose ();
+        this.manager.layout ();
     }
 }

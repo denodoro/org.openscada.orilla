@@ -36,14 +36,14 @@ public class YAxisViewer extends AbstractAxisViewer
 
     private final YAxisDynamicRenderer renderer;
 
-    public YAxisViewer ( final DataBindingContext dbc, final ChartManager manager, final YAxis axis )
+    public YAxisViewer ( final DataBindingContext dbc, final ChartManager manager, final YAxis axis, final boolean left )
     {
         super ( dbc, manager, axis );
 
         this.axis = axis;
 
         this.control = new org.openscada.chart.YAxis ();
-        this.renderer = this.manager.addDynamicYAxis ( this.control );
+        this.renderer = this.manager.addDynamicYAxis ( this.control, left );
 
         addBinding ( this.dbc.bindValue ( BeansObservables.observeValue ( this.control, "label" ), EMFObservables.observeValue ( this.axis, ChartPackage.Literals.AXIS__LABEL ) ) );
         addBinding ( this.dbc.bindValue ( BeansObservables.observeValue ( this.control, "min" ), EMFObservables.observeValue ( this.axis, ChartPackage.Literals.YAXIS__MINIMUM ) ) );
@@ -58,6 +58,7 @@ public class YAxisViewer extends AbstractAxisViewer
         super.dispose ();
 
         this.renderer.dispose ();
+        this.manager.layout ();
     }
 
     public org.openscada.chart.YAxis getAxis ()

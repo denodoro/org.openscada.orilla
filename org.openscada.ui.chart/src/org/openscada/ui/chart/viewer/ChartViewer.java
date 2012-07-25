@@ -140,14 +140,14 @@ public class ChartViewer
 
         this.manager.createDropTarget ( new Transfer[] { LocalSelectionTransfer.getTransfer () }, createDropTarget () );
 
-        this.leftManager = new YAxisManager ( this.ctx, this.manager );
+        this.leftManager = new YAxisManager ( this.ctx, this.manager, true );
         this.ctx.bindList ( this.leftManager.getList (), EMFObservables.observeList ( chart, ChartPackage.Literals.CHART__LEFT ) );
-        this.rightManager = new YAxisManager ( this.ctx, this.manager );
+        this.rightManager = new YAxisManager ( this.ctx, this.manager, false );
         this.ctx.bindList ( this.rightManager.getList (), EMFObservables.observeList ( chart, ChartPackage.Literals.CHART__RIGHT ) );
 
-        this.topManager = new XAxisManager ( this.ctx, this.manager );
+        this.topManager = new XAxisManager ( this.ctx, this.manager, true );
         this.ctx.bindList ( this.topManager.getList (), EMFObservables.observeList ( chart, ChartPackage.Literals.CHART__TOP ) );
-        this.bottomManager = new XAxisManager ( this.ctx, this.manager );
+        this.bottomManager = new XAxisManager ( this.ctx, this.manager, false );
         this.ctx.bindList ( this.bottomManager.getList (), EMFObservables.observeList ( chart, ChartPackage.Literals.CHART__BOTTOM ) );
 
         this.xLocator = new SimpleAxisLocator<XAxis, XAxisViewer> ( this.topManager, this.bottomManager );

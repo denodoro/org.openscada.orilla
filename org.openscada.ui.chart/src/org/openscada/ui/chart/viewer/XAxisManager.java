@@ -30,15 +30,18 @@ public class XAxisManager extends AbstractAxisManager<XAxis, XAxisViewer>
 {
     private final Map<XAxis, XAxisViewer> axisMap = new HashMap<XAxis, XAxisViewer> ( 1 );
 
-    public XAxisManager ( final DataBindingContext dbc, final ChartManager manager )
+    private final boolean top;
+
+    public XAxisManager ( final DataBindingContext dbc, final ChartManager manager, final boolean top )
     {
         super ( dbc, manager );
+        this.top = top;
     }
 
     @Override
     protected void handleAdd ( final int index, final XAxis axis )
     {
-        final XAxisViewer viewer = new XAxisViewer ( this.dbc, this.manager, axis );
+        final XAxisViewer viewer = new XAxisViewer ( this.dbc, this.manager, axis, this.top );
         this.axisMap.put ( axis, viewer );
     }
 

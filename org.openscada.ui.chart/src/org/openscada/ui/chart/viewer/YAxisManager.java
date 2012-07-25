@@ -30,15 +30,19 @@ public class YAxisManager extends AbstractAxisManager<YAxis, YAxisViewer>
 {
     private final Map<YAxis, YAxisViewer> axisMap = new HashMap<YAxis, YAxisViewer> ( 1 );
 
-    public YAxisManager ( final DataBindingContext dbc, final ChartManager manager )
+    private final boolean left;
+
+    public YAxisManager ( final DataBindingContext dbc, final ChartManager manager, final boolean left )
     {
         super ( dbc, manager );
+
+        this.left = left;
     }
 
     @Override
     protected void handleAdd ( final int index, final YAxis axis )
     {
-        final YAxisViewer viewer = new YAxisViewer ( this.dbc, this.manager, axis );
+        final YAxisViewer viewer = new YAxisViewer ( this.dbc, this.manager, axis, this.left );
         this.axisMap.put ( axis, viewer );
     }
 
