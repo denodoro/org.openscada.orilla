@@ -78,6 +78,7 @@ public class ArchiveSeriesViewer extends AbstractInputViewer
         if ( this.input != null )
         {
             this.viewer.removeInput ( this.input );
+            this.input.dispose ();
             this.input = null;
         }
     }

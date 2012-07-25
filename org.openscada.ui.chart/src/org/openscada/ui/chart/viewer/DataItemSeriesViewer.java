@@ -100,6 +100,7 @@ public class DataItemSeriesViewer extends AbstractInputViewer implements InputVi
         if ( this.input != null )
         {
             this.viewer.removeInput ( this.input );
+            this.input.dispose ();
             setInput ( null );
         }
     }
