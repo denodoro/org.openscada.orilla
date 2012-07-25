@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
@@ -304,7 +305,7 @@ public class ChartView extends ViewPart
 
     private static Chart load ( final InputStream input ) throws IOException
     {
-        final Resource resource = new XMIResourceFactoryImpl ().createResource ( null );
+        final Resource resource = new XMIResourceFactoryImpl ().createResource ( URI.createURI ( "urn:memento" ) );
 
         final Map<?, ?> options = new HashMap<Object, Object> ();
         resource.load ( input, options );

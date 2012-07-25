@@ -1,3 +1,22 @@
+/*
+ * This file is part of the openSCADA project
+ * Copyright (C) 2011-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ *
+ * openSCADA is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * openSCADA is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with openSCADA. If not, see
+ * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
+ */
+
 package org.openscada.ui.chart.view;
 
 import java.util.Collection;
@@ -25,6 +44,8 @@ import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.emf.edit.ui.provider.UnwrappingSelectionProvider;
 import org.eclipse.emf.edit.ui.view.ExtendedPropertySheetPage;
+import org.eclipse.jface.action.IMenuListener;
+import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -43,7 +64,7 @@ import org.openscada.ui.chart.model.ChartModel.Chart;
 import org.openscada.ui.chart.model.ChartModel.provider.ChartItemProviderAdapterFactory;
 import org.openscada.ui.chart.viewer.ChartViewer;
 
-public class ChartConfiguratorView extends AbstractChartManagePart implements IViewerProvider, IEditingDomainProvider
+public class ChartConfiguratorView extends AbstractChartManagePart implements IViewerProvider, IEditingDomainProvider, IMenuListener
 {
 
     private TreeViewer viewer;
@@ -55,6 +76,8 @@ public class ChartConfiguratorView extends AbstractChartManagePart implements IV
     private AdapterFactoryEditingDomain editingDomain;
 
     private Composite container;
+
+    private ChartActionBarContributor actionBarContributor;
 
     private void createEditingDomain ()
     {
@@ -95,11 +118,14 @@ public class ChartConfiguratorView extends AbstractChartManagePart implements IV
         } );
 
         this.editingDomain = new AdapterFactoryEditingDomain ( this.factory, commandStack, new HashMap<Resource, Boolean> () );
+
+        this.actionBarContributor = new ChartActionBarContributor ();
     }
 
     @Override
     public void dispose ()
     {
+        this.actionBarContributor.dispose ();
         this.factory.dispose ();
 
         if ( this.propertySheetPage != null )
@@ -148,6 +174,12 @@ public class ChartConfiguratorView extends AbstractChartManagePart implements IV
         getViewSite ().setSelectionProvider ( this.viewer );
 
         attachSelectionService ();
+
+        getViewSite ().getActionBars ().getMenuManager ().add ( new Separator ( "additions" ) );
+
+        this.actionBarContributor.init ( getViewSite ().getActionBars () );
+        this.actionBarContributor.setViewPart ( this );
+        // this.actionBarContributor.setActiveView ( this );
     }
 
     /**
@@ -157,10 +189,11 @@ public class ChartConfiguratorView extends AbstractChartManagePart implements IV
      */
     protected void createContextMenuFor ( final StructuredViewer viewer )
     {
+
         final MenuManager contextMenu = new MenuManager ( "#PopUp" );
         contextMenu.add ( new Separator ( "additions" ) );
         contextMenu.setRemoveAllWhenShown ( true );
-        //  contextMenu.addMenuListener ( this );
+        contextMenu.addMenuListener ( this );
         final Menu menu = contextMenu.createContextMenu ( viewer.getControl () );
         viewer.getControl ().setMenu ( menu );
         getSite ().registerContextMenu ( contextMenu, new UnwrappingSelectionProvider ( viewer ) );
@@ -256,6 +289,12 @@ public class ChartConfiguratorView extends AbstractChartManagePart implements IV
     public Viewer getViewer ()
     {
         return this.viewer;
+    }
+
+    @Override
+    public void menuAboutToShow ( final IMenuManager manager )
+    {
+        this.actionBarContributor.menuAboutToShow ( manager );
     }
 
 }
