@@ -64,12 +64,12 @@ public interface DataItemSeries extends ItemDataSeries
      * </p>
      * <!-- end-user-doc -->
      * @return the value of the '<em>Line Width</em>' attribute.
-     * @see #setLineWidth(int)
+     * @see #setLineWidth(float)
      * @see org.openscada.ui.chart.model.ChartModel.ChartPackage#getDataItemSeries_LineWidth()
      * @model default="1" required="true"
      * @generated
      */
-    int getLineWidth ();
+    float getLineWidth ();
 
     /**
      * Sets the value of the '{@link org.openscada.ui.chart.model.ChartModel.DataItemSeries#getLineWidth <em>Line Width</em>}' attribute.
@@ -79,5 +79,5 @@ public interface DataItemSeries extends ItemDataSeries
      * @see #getLineWidth()
      * @generated
      */
-    void setLineWidth ( int value );
+    void setLineWidth ( float value );
 } // DataItemSeries

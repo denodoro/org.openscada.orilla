@@ -705,7 +705,7 @@ public class ChartPackageImpl extends EPackageImpl implements ChartPackage
 
         initEClass ( dataItemSeriesEClass, DataItemSeries.class, "DataItemSeries", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS );
         initEAttribute ( getDataItemSeries_LineColor (), this.getRGB (), "lineColor", null, 0, 1, DataItemSeries.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
-        initEAttribute ( getDataItemSeries_LineWidth (), ecorePackage.getEInt (), "lineWidth", "1", 1, 1, DataItemSeries.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
+        initEAttribute ( getDataItemSeries_LineWidth (), ecorePackage.getEFloat (), "lineWidth", "1", 1, 1, DataItemSeries.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
 
         initEClass ( archiveSeriesEClass, ArchiveSeries.class, "ArchiveSeries", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS );
 
@@ -742,6 +742,7 @@ public class ChartPackageImpl extends EPackageImpl implements ChartPackage
     {
         String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
         addAnnotation ( getChart_BackgroundColor (), source, new String[] { "name", "backgroundColor" } );
+        addAnnotation ( getAxis_Label (), source, new String[] { "wildcards", "", "name", "" } );
     }
 
 } //ChartPackageImpl

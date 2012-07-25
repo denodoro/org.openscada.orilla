@@ -64,7 +64,7 @@ public interface Axis extends EObject
      * @return the value of the '<em>Label</em>' attribute.
      * @see #setLabel(String)
      * @see org.openscada.ui.chart.model.ChartModel.ChartPackage#getAxis_Label()
-     * @model
+     * @model extendedMetaData="wildcards='' name=''"
      * @generated
      */
     String getLabel ();

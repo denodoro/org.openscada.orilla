@@ -82,7 +82,7 @@ public class DataItemSeriesItemProvider extends ItemDataSeriesItemProvider imple
      */
     protected void addLineWidthPropertyDescriptor ( Object object )
     {
-        itemPropertyDescriptors.add ( createItemPropertyDescriptor ( ( (ComposeableAdapterFactory)adapterFactory ).getRootAdapterFactory (), getResourceLocator (), getString ( "_UI_DataItemSeries_lineWidth_feature" ), getString ( "_UI_PropertyDescriptor_description", "_UI_DataItemSeries_lineWidth_feature", "_UI_DataItemSeries_type" ), ChartPackage.Literals.DATA_ITEM_SERIES__LINE_WIDTH, true, false, false, ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE, null, null ) );
+        itemPropertyDescriptors.add ( createItemPropertyDescriptor ( ( (ComposeableAdapterFactory)adapterFactory ).getRootAdapterFactory (), getResourceLocator (), getString ( "_UI_DataItemSeries_lineWidth_feature" ), getString ( "_UI_PropertyDescriptor_description", "_UI_DataItemSeries_lineWidth_feature", "_UI_DataItemSeries_type" ), ChartPackage.Literals.DATA_ITEM_SERIES__LINE_WIDTH, true, false, false, ItemPropertyDescriptor.REAL_VALUE_IMAGE, null, null ) );
     }
 
     /**

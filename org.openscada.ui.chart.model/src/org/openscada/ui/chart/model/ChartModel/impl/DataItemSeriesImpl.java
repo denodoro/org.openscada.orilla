@@ -61,7 +61,7 @@ public class DataItemSeriesImpl extends ItemDataSeriesImpl implements DataItemSe
      * @generated
      * @ordered
      */
-    protected static final int LINE_WIDTH_EDEFAULT = 1;
+    protected static final float LINE_WIDTH_EDEFAULT = 1.0F;
 
     /**
      * The cached value of the '{@link #getLineWidth() <em>Line Width</em>}' attribute.
@@ -71,7 +71,7 @@ public class DataItemSeriesImpl extends ItemDataSeriesImpl implements DataItemSe
      * @generated
      * @ordered
      */
-    protected int lineWidth = LINE_WIDTH_EDEFAULT;
+    protected float lineWidth = LINE_WIDTH_EDEFAULT;
 
     /**
      * <!-- begin-user-doc -->
@@ -122,7 +122,7 @@ public class DataItemSeriesImpl extends ItemDataSeriesImpl implements DataItemSe
      * <!-- end-user-doc -->
      * @generated
      */
-    public int getLineWidth ()
+    public float getLineWidth ()
     {
         return lineWidth;
     }
@@ -132,9 +132,9 @@ public class DataItemSeriesImpl extends ItemDataSeriesImpl implements DataItemSe
      * <!-- end-user-doc -->
      * @generated
      */
-    public void setLineWidth ( int newLineWidth )
+    public void setLineWidth ( float newLineWidth )
     {
-        int oldLineWidth = lineWidth;
+        float oldLineWidth = lineWidth;
         lineWidth = newLineWidth;
         if ( eNotificationRequired () )
             eNotify ( new ENotificationImpl ( this, Notification.SET, ChartPackage.DATA_ITEM_SERIES__LINE_WIDTH, oldLineWidth, lineWidth ) );
@@ -172,7 +172,7 @@ public class DataItemSeriesImpl extends ItemDataSeriesImpl implements DataItemSe
                 setLineColor ( (RGB)newValue );
                 return;
             case ChartPackage.DATA_ITEM_SERIES__LINE_WIDTH:
-                setLineWidth ( (Integer)newValue );
+                setLineWidth ( (Float)newValue );
                 return;
         }
         super.eSet ( featureID, newValue );
