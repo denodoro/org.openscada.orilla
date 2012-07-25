@@ -61,8 +61,8 @@ public class QuerySeriesData extends SeriesData
         super ( realm, xAxis, yAxis );
         this.item = item;
 
-        this.parameters = makeParameters ();
-        this.query = new ServiceQueryBuffer ( Activator.getDefault ().getBundle ().getBundleContext (), createRequest (), item.getId (), this.parameters = makeParameters () );
+        this.parameters = makeInitialParameters ();
+        this.query = new ServiceQueryBuffer ( Activator.getDefault ().getBundle ().getBundleContext (), createRequest (), item.getId (), this.parameters = makeInitialParameters () );
 
         this.query.addQueryListener ( new QueryListener () {
 
@@ -96,14 +96,13 @@ public class QuerySeriesData extends SeriesData
         fireUpdateListener ( this.query.getQueryParameters ().getStartTimestamp ().getTimeInMillis (), this.query.getQueryParameters ().getEndTimestamp ().getTimeInMillis () );
     }
 
-    private QueryParameters makeParameters ()
+    private QueryParameters makeInitialParameters ()
     {
         final Calendar start = Calendar.getInstance ();
+        start.setTimeInMillis ( getXAxis ().getMin () );
 
-        start.set ( Calendar.SECOND, 0 );
-
-        final Calendar end = (Calendar)start.clone ();
-        end.add ( Calendar.MINUTE, 15 );
+        final Calendar end = Calendar.getInstance ();
+        end.setTimeInMillis ( getXAxis ().getMax () );
 
         return new QueryParameters ( start, end, 25 );
     }

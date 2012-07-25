@@ -19,6 +19,9 @@
 
 package org.openscada.hd.ui.data;
 
+import org.openscada.core.client.Connection;
+import org.openscada.core.client.ConnectionState;
+import org.openscada.core.client.ConnectionStateListener;
 import org.openscada.core.connection.provider.ConnectionIdTracker;
 import org.openscada.core.connection.provider.ConnectionRequest;
 import org.openscada.core.connection.provider.ConnectionRequestTracker;
@@ -41,6 +44,15 @@ public class ServiceQueryBuffer extends AbstractQueryBuffer
         public void setConnection ( final ConnectionService connectionService )
         {
             ServiceQueryBuffer.this.setConnection ( connectionService );
+        }
+    };
+
+    private final ConnectionStateListener connectionStateListener = new ConnectionStateListener () {
+
+        @Override
+        public void stateChange ( final Connection connection, final ConnectionState state, final Throwable error )
+        {
+            handleConnectionStateChange ( connection, state, error );
         }
     };
 
@@ -93,8 +105,7 @@ public class ServiceQueryBuffer extends AbstractQueryBuffer
         }
 
         this.connection = (org.openscada.hd.connection.provider.ConnectionService)connectionService;
-
-        createQuery ( this.connection.getConnection (), this.itemId );
+        this.connection.getConnection ().addConnectionStateListener ( this.connectionStateListener );
     }
 
     private void detachConnection ()
@@ -103,7 +114,20 @@ public class ServiceQueryBuffer extends AbstractQueryBuffer
         {
             return;
         }
+        this.connection.getConnection ().removeConnectionStateListener ( this.connectionStateListener );
         this.connection = null;
+    }
+
+    protected void handleConnectionStateChange ( final Connection connection, final ConnectionState state, final Throwable error )
+    {
+        if ( state == ConnectionState.BOUND )
+        {
+            createQuery ( this.connection.getConnection (), this.itemId );
+        }
+        else
+        {
+            closeQuery ();
+        }
     }
 
 }

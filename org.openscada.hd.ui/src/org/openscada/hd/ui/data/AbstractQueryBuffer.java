@@ -201,6 +201,8 @@ public class AbstractQueryBuffer extends AbstractPropertyChange
 
     protected synchronized void updateParameters ( final QueryParameters parameters, final Set<String> valueTypes )
     {
+        logger.info ( "Update parameters - queryParameters: {}, valueTypeS: {}", parameters, valueTypes );
+
         final int count = parameters.getEntries ();
 
         this.valueInformation = new ValueInformation[count];
@@ -279,7 +281,7 @@ public class AbstractQueryBuffer extends AbstractPropertyChange
         closeQuery ();
     }
 
-    private void closeQuery ()
+    protected void closeQuery ()
     {
         if ( this.query != null )
         {
