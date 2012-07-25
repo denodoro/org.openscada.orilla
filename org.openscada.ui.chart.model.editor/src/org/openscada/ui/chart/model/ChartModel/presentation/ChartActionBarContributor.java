@@ -55,29 +55,6 @@ import org.eclipse.ui.PartInitException;
 public class ChartActionBarContributor extends EditingDomainActionBarContributor implements ISelectionChangedListener
 {
     /**
-     * Action to create objects from the Chart model.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public static class NewAction extends WorkbenchWindowActionDelegate
-    {
-        /**
-         * @see org.eclipse.ui.IActionDelegate#run(org.eclipse.jface.action.IAction)
-         * <!-- begin-user-doc -->
-         * <!-- end-user-doc -->
-         * @generated
-         */
-        public void run ( IAction action )
-        {
-            ChartModelWizard wizard = new ChartModelWizard ();
-            wizard.init ( getWindow ().getWorkbench (), StructuredSelection.EMPTY );
-            WizardDialog wizardDialog = new WizardDialog ( getWindow ().getShell (), wizard );
-            wizardDialog.open ();
-        }
-    }
-
-    /**
      * This keeps track of the active editor.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->

@@ -168,32 +168,8 @@ import org.eclipse.ui.actions.WorkspaceModifyOperation;
  * <!-- end-user-doc -->
  * @generated
  */
-public class ChartEditor extends MultiPageEditorPart implements IEditingDomainProvider, ISelectionProvider, IMenuListener, IViewerProvider
+public class ChartEditor extends MultiPageEditorPart implements IEditingDomainProvider, ISelectionProvider, IMenuListener, IViewerProvider, IGotoMarker
 {
-    /**
-     * The filters for file extensions supported by the editor.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public static final List<String> FILE_EXTENSION_FILTERS = prefixExtensions ( ChartModelWizard.FILE_EXTENSIONS, "*." );
-
-    /**
-     * Returns a new unmodifiable list containing prefixed versions of the extensions in the given list.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    private static List<String> prefixExtensions ( List<String> extensions, String prefix )
-    {
-        List<String> result = new ArrayList<String> ();
-        for ( String extension : extensions )
-        {
-            result.add ( prefix + extension );
-        }
-        return Collections.unmodifiableList ( result );
-    }
-
     /**
      * This keeps track of the editing domain that is used to track all changes to the model.
      * <!-- begin-user-doc -->
@@ -332,6 +308,15 @@ public class ChartEditor extends MultiPageEditorPart implements IEditingDomainPr
      * @generated
      */
     protected ISelection editorSelection = StructuredSelection.EMPTY;
+
+    /**
+     * The MarkerHelper is responsible for creating workspace resource markers presented
+     * in Eclipse's Problems View.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    protected MarkerHelper markerHelper = new EditUIMarkerHelper ();
 
     /**
      * This listens for when the outline becomes active
@@ -488,6 +473,99 @@ public class ChartEditor extends MultiPageEditorPart implements IEditingDomainPr
     };
 
     /**
+     * This listens for workspace changes.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    protected IResourceChangeListener resourceChangeListener = new IResourceChangeListener () {
+        public void resourceChanged ( IResourceChangeEvent event )
+        {
+            IResourceDelta delta = event.getDelta ();
+            try
+            {
+                class ResourceDeltaVisitor implements IResourceDeltaVisitor
+                {
+                    protected ResourceSet resourceSet = editingDomain.getResourceSet ();
+
+                    protected Collection<Resource> changedResources = new ArrayList<Resource> ();
+
+                    protected Collection<Resource> removedResources = new ArrayList<Resource> ();
+
+                    public boolean visit ( IResourceDelta delta )
+                    {
+                        if ( delta.getResource ().getType () == IResource.FILE )
+                        {
+                            if ( delta.getKind () == IResourceDelta.REMOVED || delta.getKind () == IResourceDelta.CHANGED && delta.getFlags () != IResourceDelta.MARKERS )
+                            {
+                                Resource resource = resourceSet.getResource ( URI.createPlatformResourceURI ( delta.getFullPath ().toString (), true ), false );
+                                if ( resource != null )
+                                {
+                                    if ( delta.getKind () == IResourceDelta.REMOVED )
+                                    {
+                                        removedResources.add ( resource );
+                                    }
+                                    else if ( !savedResources.remove ( resource ) )
+                                    {
+                                        changedResources.add ( resource );
+                                    }
+                                }
+                            }
+                        }
+
+                        return true;
+                    }
+
+                    public Collection<Resource> getChangedResources ()
+                    {
+                        return changedResources;
+                    }
+
+                    public Collection<Resource> getRemovedResources ()
+                    {
+                        return removedResources;
+                    }
+                }
+
+                final ResourceDeltaVisitor visitor = new ResourceDeltaVisitor ();
+                delta.accept ( visitor );
+
+                if ( !visitor.getRemovedResources ().isEmpty () )
+                {
+                    getSite ().getShell ().getDisplay ().asyncExec ( new Runnable () {
+                        public void run ()
+                        {
+                            removedResources.addAll ( visitor.getRemovedResources () );
+                            if ( !isDirty () )
+                            {
+                                getSite ().getPage ().closeEditor ( ChartEditor.this, false );
+                            }
+                        }
+                    } );
+                }
+
+                if ( !visitor.getChangedResources ().isEmpty () )
+                {
+                    getSite ().getShell ().getDisplay ().asyncExec ( new Runnable () {
+                        public void run ()
+                        {
+                            changedResources.addAll ( visitor.getChangedResources () );
+                            if ( getSite ().getPage ().getActiveEditor () == ChartEditor.this )
+                            {
+                                handleActivate ();
+                            }
+                        }
+                    } );
+                }
+            }
+            catch ( CoreException exception )
+            {
+                ChartEditorPlugin.INSTANCE.log ( exception );
+            }
+        }
+    };
+
+    /**
      * Handles activation of the editor or it's associated views.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -606,6 +684,7 @@ public class ChartEditor extends MultiPageEditorPart implements IEditingDomainPr
             {
                 ProblemEditorPart problemEditorPart = new ProblemEditorPart ();
                 problemEditorPart.setDiagnostic ( diagnostic );
+                problemEditorPart.setMarkerHelper ( markerHelper );
                 try
                 {
                     addPage ( ++lastEditorPage, problemEditorPart, getEditorInput () );
@@ -616,6 +695,22 @@ public class ChartEditor extends MultiPageEditorPart implements IEditingDomainPr
                 catch ( PartInitException exception )
                 {
                     ChartEditorPlugin.INSTANCE.log ( exception );
+                }
+            }
+
+            if ( markerHelper.hasMarkers ( editingDomain.getResourceSet () ) )
+            {
+                markerHelper.deleteMarkers ( editingDomain.getResourceSet () );
+                if ( diagnostic.getSeverity () != Diagnostic.OK )
+                {
+                    try
+                    {
+                        markerHelper.createMarkers ( diagnostic );
+                    }
+                    catch ( CoreException exception )
+                    {
+                        ChartEditorPlugin.INSTANCE.log ( exception );
+                    }
                 }
             }
         }
@@ -1312,6 +1407,10 @@ public class ChartEditor extends MultiPageEditorPart implements IEditingDomainPr
         {
             return getPropertySheetPage ();
         }
+        else if ( key.equals ( IGotoMarker.class ) )
+        {
+            return this;
+        }
         else
         {
             return super.getAdapter ( key );
@@ -1494,10 +1593,11 @@ public class ChartEditor extends MultiPageEditorPart implements IEditingDomainPr
 
         // Do the work within an operation because this is a long running activity that modifies the workbench.
         //
-        IRunnableWithProgress operation = new IRunnableWithProgress () {
+        WorkspaceModifyOperation operation = new WorkspaceModifyOperation () {
             // This is the method that gets invoked when the operation runs.
             //
-            public void run ( IProgressMonitor monitor )
+            @Override
+            public void execute ( IProgressMonitor monitor )
             {
                 // Save the resources to the file system.
                 //
@@ -1594,12 +1694,16 @@ public class ChartEditor extends MultiPageEditorPart implements IEditingDomainPr
     @Override
     public void doSaveAs ()
     {
-        String[] filters = FILE_EXTENSION_FILTERS.toArray ( new String[FILE_EXTENSION_FILTERS.size ()] );
-        String[] files = ChartEditorAdvisor.openFilePathDialog ( getSite ().getShell (), SWT.SAVE, filters );
-        if ( files.length > 0 )
+        SaveAsDialog saveAsDialog = new SaveAsDialog ( getSite ().getShell () );
+        saveAsDialog.open ();
+        IPath path = saveAsDialog.getResult ();
+        if ( path != null )
         {
-            URI uri = URI.createFileURI ( files[0] );
-            doSaveAs ( uri, new URIEditorInput ( uri ) );
+            IFile file = ResourcesPlugin.getWorkspace ().getRoot ().getFile ( path );
+            if ( file != null )
+            {
+                doSaveAs ( URI.createPlatformResourceURI ( file.getFullPath ().toString (), true ), new FileEditorInput ( file ) );
+            }
         }
     }
 
@@ -1618,6 +1722,35 @@ public class ChartEditor extends MultiPageEditorPart implements IEditingDomainPr
     }
 
     /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public void gotoMarker ( IMarker marker )
+    {
+        try
+        {
+            if ( marker.getType ().equals ( EValidator.MARKER ) )
+            {
+                String uriAttribute = marker.getAttribute ( EValidator.URI_ATTRIBUTE, null );
+                if ( uriAttribute != null )
+                {
+                    URI uri = URI.createURI ( uriAttribute );
+                    EObject eObject = editingDomain.getResourceSet ().getEObject ( uri, true );
+                    if ( eObject != null )
+                    {
+                        setSelectionToViewer ( Collections.singleton ( editingDomain.getWrapper ( eObject ) ) );
+                    }
+                }
+            }
+        }
+        catch ( CoreException exception )
+        {
+            ChartEditorPlugin.INSTANCE.log ( exception );
+        }
+    }
+
+    /**
      * This is called during startup.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1631,6 +1764,7 @@ public class ChartEditor extends MultiPageEditorPart implements IEditingDomainPr
         setPartName ( editorInput.getName () );
         site.setSelectionProvider ( this );
         site.getPage ().addPartListener ( partListener );
+        ResourcesPlugin.getWorkspace ().addResourceChangeListener ( resourceChangeListener, IResourceChangeEvent.POST_CHANGE );
     }
 
     /**
@@ -1815,6 +1949,8 @@ public class ChartEditor extends MultiPageEditorPart implements IEditingDomainPr
     public void dispose ()
     {
         updateProblemIndication = false;
+
+        ResourcesPlugin.getWorkspace ().removeResourceChangeListener ( resourceChangeListener );
 
         getSite ().getPage ().removePartListener ( partListener );
 
