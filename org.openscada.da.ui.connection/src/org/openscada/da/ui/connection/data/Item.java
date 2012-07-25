@@ -24,11 +24,12 @@ import java.io.Serializable;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.ui.IMemento;
+import org.openscada.core.ConnectionInformation;
 
 /**
  * A data item information object
+ * 
  * @author Jens Reimann
- *
  */
 public class Item implements Serializable
 {
@@ -230,4 +231,21 @@ public class Item implements Serializable
         return String.format ( "[%s: %s#%s]", this.type, this.connectionString, this.id );
     }
 
+    public String toLabel ()
+    {
+        if ( this.type == Type.URI )
+        {
+            try
+            {
+                final ConnectionInformation info = ConnectionInformation.fromURI ( this.connectionString );
+                return String.format ( "[%s: %s#%s]", this.type, info.toMaskedString (), this.id );
+            }
+            catch ( final Exception e )
+            {
+                // failed to convert to ConnectionInformation, falling back to "toString"
+            }
+        }
+
+        return String.format ( "[%s: %s#%s]", this.type, this.connectionString, this.id );
+    }
 }
