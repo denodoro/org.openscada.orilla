@@ -156,6 +156,16 @@ public class ItemObserver implements DataSourceListener, ChartInput
         connect ();
     }
 
+    public void setLineWidth ( final float lineWidth )
+    {
+        this.valueRenderer.setLineWidth ( lineWidth );
+    }
+
+    public float getLineWidth ()
+    {
+        return this.valueRenderer.getLineWidth ();
+    }
+
     public void setLineColor ( final RGB rgb )
     {
         if ( this.lineColor != null )

@@ -3,6 +3,7 @@ package org.openscada.ui.chart.viewer;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.beans.BeansObservables;
 import org.eclipse.core.databinding.beans.PojoObservables;
+import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.emf.databinding.EMFObservables;
 import org.eclipse.jface.resource.ResourceManager;
 import org.openscada.da.ui.connection.data.Item.Type;
@@ -26,7 +27,9 @@ public class DataItemSeriesViewer extends AbstractInputViewer implements InputVi
     {
         super ( dbc, element, viewer, resourceManager, xLocator, yLocator );
 
-        addBinding ( dbc.bindValue ( PojoObservables.observeDetailValue ( BeansObservables.observeValue ( this, "input" ), "lineColor", null ), EMFObservables.observeValue ( element, ChartPackage.Literals.DATA_ITEM_SERIES__LINE_COLOR ) ) );
+        final IObservableValue inputObserable = BeansObservables.observeValue ( this, "input" );
+        addBinding ( dbc.bindValue ( PojoObservables.observeDetailValue ( inputObserable, "lineColor", null ), EMFObservables.observeValue ( element, ChartPackage.Literals.DATA_ITEM_SERIES__LINE_COLOR ) ) );
+        addBinding ( dbc.bindValue ( PojoObservables.observeDetailValue ( inputObserable, "lineWidth", null ), EMFObservables.observeValue ( element, ChartPackage.Literals.DATA_ITEM_SERIES__LINE_WIDTH ) ) );
     }
 
     @Override
