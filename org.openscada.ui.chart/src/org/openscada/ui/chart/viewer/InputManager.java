@@ -88,7 +88,8 @@ public class InputManager
             }
         } );
 
-        this.viewer.addChartViewerListener ( this.chartViewerListener );
+        // don't attach and reflect changes
+        // this.viewer.addChartViewerListener ( this.chartViewerListener );
     }
 
     protected void handleListeChange ( final ListDiff diff )
