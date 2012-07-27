@@ -12,26 +12,29 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 
-import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.common.util.ResourceLocator;
+
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
-
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
-import org.openscada.ui.chart.model.ChartModel.ArchiveSeries;
-import org.openscada.ui.chart.model.ChartModel.ChartFactory;
+
+import org.openscada.ui.chart.model.ChartModel.ArchiveChannel;
 import org.openscada.ui.chart.model.ChartModel.ChartPackage;
 
 /**
- * This is the item provider adapter for a {@link org.openscada.ui.chart.model.ChartModel.ArchiveSeries} object.
+ * This is the item provider adapter for a {@link org.openscada.ui.chart.model.ChartModel.ArchiveChannel} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class ArchiveSeriesItemProvider extends ItemDataSeriesItemProvider implements IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource
+public class ArchiveChannelItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource
 {
     /**
      * This constructs an instance from a factory and a notifier.
@@ -39,7 +42,7 @@ public class ArchiveSeriesItemProvider extends ItemDataSeriesItemProvider implem
      * <!-- end-user-doc -->
      * @generated
      */
-    public ArchiveSeriesItemProvider ( AdapterFactory adapterFactory )
+    public ArchiveChannelItemProvider ( AdapterFactory adapterFactory )
     {
         super ( adapterFactory );
     }
@@ -57,45 +60,36 @@ public class ArchiveSeriesItemProvider extends ItemDataSeriesItemProvider implem
         {
             super.getPropertyDescriptors ( object );
 
+            addNamePropertyDescriptor ( object );
+            addLabelPropertyDescriptor ( object );
         }
         return itemPropertyDescriptors;
     }
 
     /**
-     * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
-     * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
-     * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
+     * This adds a property descriptor for the Name feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    @Override
-    public Collection<? extends EStructuralFeature> getChildrenFeatures ( Object object )
+    protected void addNamePropertyDescriptor ( Object object )
     {
-        if ( childrenFeatures == null )
-        {
-            super.getChildrenFeatures ( object );
-            childrenFeatures.add ( ChartPackage.Literals.ARCHIVE_SERIES__CHANNELS );
-        }
-        return childrenFeatures;
+        itemPropertyDescriptors.add ( createItemPropertyDescriptor ( ( (ComposeableAdapterFactory)adapterFactory ).getRootAdapterFactory (), getResourceLocator (), getString ( "_UI_ArchiveChannel_name_feature" ), getString ( "_UI_PropertyDescriptor_description", "_UI_ArchiveChannel_name_feature", "_UI_ArchiveChannel_type" ), ChartPackage.Literals.ARCHIVE_CHANNEL__NAME, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null ) );
     }
 
     /**
+     * This adds a property descriptor for the Label feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    @Override
-    protected EStructuralFeature getChildFeature ( Object object, Object child )
+    protected void addLabelPropertyDescriptor ( Object object )
     {
-        // Check the type of the specified child object and return the proper feature to use for
-        // adding (see {@link AddCommand}) it as a child.
-
-        return super.getChildFeature ( object, child );
+        itemPropertyDescriptors.add ( createItemPropertyDescriptor ( ( (ComposeableAdapterFactory)adapterFactory ).getRootAdapterFactory (), getResourceLocator (), getString ( "_UI_ArchiveChannel_label_feature" ), getString ( "_UI_PropertyDescriptor_description", "_UI_ArchiveChannel_label_feature", "_UI_ArchiveChannel_type" ), ChartPackage.Literals.ARCHIVE_CHANNEL__LABEL, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null ) );
     }
 
     /**
-     * This returns ArchiveSeries.gif.
+     * This returns ArchiveChannel.gif.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
@@ -103,7 +97,7 @@ public class ArchiveSeriesItemProvider extends ItemDataSeriesItemProvider implem
     @Override
     public Object getImage ( Object object )
     {
-        return overlayImage ( object, getResourceLocator ().getImage ( "full/obj16/ArchiveSeries" ) );
+        return overlayImage ( object, getResourceLocator ().getImage ( "full/obj16/ArchiveChannel" ) );
     }
 
     /**
@@ -115,8 +109,8 @@ public class ArchiveSeriesItemProvider extends ItemDataSeriesItemProvider implem
     @Override
     public String getText ( Object object )
     {
-        String label = ( (ArchiveSeries)object ).getLabel ();
-        return label == null || label.length () == 0 ? getString ( "_UI_ArchiveSeries_type" ) : getString ( "_UI_ArchiveSeries_type" ) + " " + label;
+        String label = ( (ArchiveChannel)object ).getName ();
+        return label == null || label.length () == 0 ? getString ( "_UI_ArchiveChannel_type" ) : getString ( "_UI_ArchiveChannel_type" ) + " " + label;
     }
 
     /**
@@ -131,10 +125,11 @@ public class ArchiveSeriesItemProvider extends ItemDataSeriesItemProvider implem
     {
         updateChildren ( notification );
 
-        switch ( notification.getFeatureID ( ArchiveSeries.class ) )
+        switch ( notification.getFeatureID ( ArchiveChannel.class ) )
         {
-            case ChartPackage.ARCHIVE_SERIES__CHANNELS:
-                fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), true, false ) );
+            case ChartPackage.ARCHIVE_CHANNEL__NAME:
+            case ChartPackage.ARCHIVE_CHANNEL__LABEL:
+                fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), false, true ) );
                 return;
         }
         super.notifyChanged ( notification );
@@ -151,8 +146,18 @@ public class ArchiveSeriesItemProvider extends ItemDataSeriesItemProvider implem
     protected void collectNewChildDescriptors ( Collection<Object> newChildDescriptors, Object object )
     {
         super.collectNewChildDescriptors ( newChildDescriptors, object );
+    }
 
-        newChildDescriptors.add ( createChildParameter ( ChartPackage.Literals.ARCHIVE_SERIES__CHANNELS, ChartFactory.eINSTANCE.createArchiveChannel () ) );
+    /**
+     * Return the resource locator for this item provider's resources.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    @Override
+    public ResourceLocator getResourceLocator ()
+    {
+        return ChartEditPlugin.INSTANCE;
     }
 
 }

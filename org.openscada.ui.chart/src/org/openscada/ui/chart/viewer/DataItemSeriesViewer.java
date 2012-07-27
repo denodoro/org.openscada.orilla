@@ -36,7 +36,7 @@ import org.openscada.ui.chart.model.ChartModel.YAxis;
 import org.openscada.ui.chart.view.input.ChartInput;
 import org.openscada.ui.chart.view.input.ItemObserver;
 
-public class DataItemSeriesViewer extends AbstractInputViewer implements InputViewer
+public class DataItemSeriesViewer extends AbstractItemInputViewer implements InputViewer
 {
     public static final String PROP_INPUT = "input";
 
@@ -52,7 +52,7 @@ public class DataItemSeriesViewer extends AbstractInputViewer implements InputVi
     }
 
     @Override
-    protected void checkCreateItem ()
+    protected void checkCreateInput ()
     {
         if ( this.item != null && this.xAxis != null && this.yAxis != null )
         {

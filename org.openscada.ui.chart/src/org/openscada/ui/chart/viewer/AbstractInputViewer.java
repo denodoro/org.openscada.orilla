@@ -25,7 +25,6 @@ import org.eclipse.emf.databinding.EMFObservables;
 import org.eclipse.jface.resource.LocalResourceManager;
 import org.eclipse.jface.resource.ResourceManager;
 import org.openscada.ui.chart.model.ChartModel.ChartPackage;
-import org.openscada.ui.chart.model.ChartModel.Item;
 import org.openscada.ui.chart.model.ChartModel.ItemDataSeries;
 import org.openscada.ui.chart.model.ChartModel.XAxis;
 import org.openscada.ui.chart.model.ChartModel.YAxis;
@@ -33,9 +32,11 @@ import org.openscada.ui.chart.model.ChartModel.YAxis;
 public abstract class AbstractInputViewer extends AbstractObserver implements InputViewer
 {
 
-    protected final ChartViewer viewer;
+    public static final String PROP_X_AXIS = "XAxis";
 
-    protected Item item;
+    public static final String PROP_Y_AXIS = "YAxis";
+
+    protected final ChartViewer viewer;
 
     protected XAxisViewer xAxis;
 
@@ -62,36 +63,20 @@ public abstract class AbstractInputViewer extends AbstractObserver implements In
 
         addBinding ( dbc.bindValue ( PojoObservables.observeValue ( this, "x" ), EMFObservables.observeValue ( element, ChartPackage.Literals.DATA_SERIES__X ) ) );
         addBinding ( dbc.bindValue ( PojoObservables.observeValue ( this, "y" ), EMFObservables.observeValue ( element, ChartPackage.Literals.DATA_SERIES__Y ) ) );
-
-        addBinding ( dbc.bindValue ( PojoObservables.observeValue ( this, "item" ), EMFObservables.observeValue ( element, ChartPackage.Literals.ITEM_DATA_SERIES__ITEM ) ) );
     }
 
-    protected abstract void checkCreateItem ();
+    protected abstract void checkCreateInput ();
 
     protected abstract void disposeInput ();
-
-    public void setItem ( final Item item )
-    {
-        disposeInput ();
-
-        this.item = item;
-
-        checkCreateItem ();
-    }
-
-    public Item getItem ()
-    {
-        return this.item;
-    }
 
     public void setX ( final org.openscada.ui.chart.model.ChartModel.XAxis x )
     {
         disposeInput ();
 
         this.x = x;
-        this.xAxis = this.xLocator.findAxis ( x );
+        setXAxis ( this.xLocator.findAxis ( x ) );
 
-        checkCreateItem ();
+        checkCreateInput ();
     }
 
     public XAxis getX ()
@@ -104,14 +89,34 @@ public abstract class AbstractInputViewer extends AbstractObserver implements In
         disposeInput ();
 
         this.y = y;
-        this.yAxis = this.yLocator.findAxis ( y );
+        setYAxis ( this.yLocator.findAxis ( y ) );
 
-        checkCreateItem ();
+        checkCreateInput ();
     }
 
     public YAxis getY ()
     {
         return this.y;
+    }
+
+    public YAxisViewer getYAxis ()
+    {
+        return this.yAxis;
+    }
+
+    public void setYAxis ( final YAxisViewer yAxis )
+    {
+        firePropertyChange ( PROP_Y_AXIS, this.yAxis, this.yAxis = yAxis );
+    }
+
+    public XAxisViewer getXAxis ()
+    {
+        return this.xAxis;
+    }
+
+    public void setXAxis ( final XAxisViewer xAxis )
+    {
+        firePropertyChange ( PROP_X_AXIS, this.xAxis, this.xAxis = xAxis );
     }
 
     @Override

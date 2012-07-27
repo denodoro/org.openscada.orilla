@@ -182,6 +182,14 @@ public class ChartSwitch<T> extends Switch<T>
                     result = defaultCase ( theEObject );
                 return result;
             }
+            case ChartPackage.ARCHIVE_CHANNEL:
+            {
+                ArchiveChannel archiveChannel = (ArchiveChannel)theEObject;
+                T result = caseArchiveChannel ( archiveChannel );
+                if ( result == null )
+                    result = defaultCase ( theEObject );
+                return result;
+            }
             default:
                 return defaultCase ( theEObject );
         }
@@ -359,6 +367,22 @@ public class ChartSwitch<T> extends Switch<T>
      * @generated
      */
     public T caseItemDataSeries ( ItemDataSeries object )
+    {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>Archive Channel</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>Archive Channel</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseArchiveChannel ( ArchiveChannel object )
     {
         return null;
     }

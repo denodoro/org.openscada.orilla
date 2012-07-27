@@ -19,11 +19,12 @@
 
 package org.openscada.ui.chart.view.input;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
 import org.openscada.chart.swt.render.StepRenderer;
-import org.openscada.hd.ui.connection.data.Item;
 import org.openscada.ui.chart.viewer.ChartViewer;
 
-public class ArchiveInput implements ChartInput
+public class ArchiveChannelInput implements ChartInput
 {
 
     private boolean disposed;
@@ -34,14 +35,14 @@ public class ArchiveInput implements ChartInput
 
     private QuerySeriesData data;
 
-    private final Item item;
+    private String label;
 
-    public ArchiveInput ( final Item item, final ChartViewer viewer, final QuerySeriesData querySeriesData )
+    public ArchiveChannelInput ( final ChartViewer viewer, final QueryChannelSeriesData data )
     {
-        this.item = item;
         this.viewer = viewer;
 
-        this.renderer = viewer.getManager ().createStepSeries ( querySeriesData );
+        this.renderer = viewer.getManager ().createStepSeries ( data );
+        this.renderer.setLineColor ( Display.getDefault ().getSystemColor ( SWT.COLOR_RED ) );
     }
 
     @Override
@@ -72,7 +73,12 @@ public class ArchiveInput implements ChartInput
     @Override
     public String getLabel ()
     {
-        return this.item.getId ();
+        return this.label;
+    }
+
+    public void setLabel ( final String label )
+    {
+        this.label = label;
     }
 
 }

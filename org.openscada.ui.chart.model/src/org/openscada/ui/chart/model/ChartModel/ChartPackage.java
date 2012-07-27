@@ -547,13 +547,22 @@ public interface ChartPackage extends EPackage
     int ARCHIVE_SERIES__ITEM = ITEM_DATA_SERIES__ITEM;
 
     /**
+     * The feature id for the '<em><b>Channels</b></em>' containment reference list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int ARCHIVE_SERIES__CHANNELS = ITEM_DATA_SERIES_FEATURE_COUNT + 0;
+
+    /**
      * The number of structural features of the '<em>Archive Series</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int ARCHIVE_SERIES_FEATURE_COUNT = ITEM_DATA_SERIES_FEATURE_COUNT + 0;
+    int ARCHIVE_SERIES_FEATURE_COUNT = ITEM_DATA_SERIES_FEATURE_COUNT + 1;
 
     /**
      * The meta object id for the '{@link org.openscada.ui.chart.model.ChartModel.impl.ItemImpl <em>Item</em>}' class.
@@ -658,6 +667,43 @@ public interface ChartPackage extends EPackage
     int ID_ITEM_FEATURE_COUNT = ITEM_FEATURE_COUNT + 1;
 
     /**
+     * The meta object id for the '{@link org.openscada.ui.chart.model.ChartModel.impl.ArchiveChannelImpl <em>Archive Channel</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.openscada.ui.chart.model.ChartModel.impl.ArchiveChannelImpl
+     * @see org.openscada.ui.chart.model.ChartModel.impl.ChartPackageImpl#getArchiveChannel()
+     * @generated
+     */
+    int ARCHIVE_CHANNEL = 11;
+
+    /**
+     * The feature id for the '<em><b>Name</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int ARCHIVE_CHANNEL__NAME = 0;
+
+    /**
+     * The feature id for the '<em><b>Label</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int ARCHIVE_CHANNEL__LABEL = 1;
+
+    /**
+     * The number of structural features of the '<em>Archive Channel</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int ARCHIVE_CHANNEL_FEATURE_COUNT = 2;
+
+    /**
      * The meta object id for the '<em>RGB</em>' data type.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -665,7 +711,7 @@ public interface ChartPackage extends EPackage
      * @see org.openscada.ui.chart.model.ChartModel.impl.ChartPackageImpl#getRGB()
      * @generated
      */
-    int RGB = 11;
+    int RGB = 12;
 
     /**
      * Returns the meta object for class '{@link org.openscada.ui.chart.model.ChartModel.Chart <em>Chart</em>}'.
@@ -980,6 +1026,17 @@ public interface ChartPackage extends EPackage
     EClass getArchiveSeries ();
 
     /**
+     * Returns the meta object for the containment reference list '{@link org.openscada.ui.chart.model.ChartModel.ArchiveSeries#getChannels <em>Channels</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the containment reference list '<em>Channels</em>'.
+     * @see org.openscada.ui.chart.model.ChartModel.ArchiveSeries#getChannels()
+     * @see #getArchiveSeries()
+     * @generated
+     */
+    EReference getArchiveSeries_Channels ();
+
+    /**
      * Returns the meta object for class '{@link org.openscada.ui.chart.model.ChartModel.Item <em>Item</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1062,6 +1119,38 @@ public interface ChartPackage extends EPackage
      * @generated
      */
     EReference getItemDataSeries_Item ();
+
+    /**
+     * Returns the meta object for class '{@link org.openscada.ui.chart.model.ChartModel.ArchiveChannel <em>Archive Channel</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>Archive Channel</em>'.
+     * @see org.openscada.ui.chart.model.ChartModel.ArchiveChannel
+     * @generated
+     */
+    EClass getArchiveChannel ();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.openscada.ui.chart.model.ChartModel.ArchiveChannel#getName <em>Name</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Name</em>'.
+     * @see org.openscada.ui.chart.model.ChartModel.ArchiveChannel#getName()
+     * @see #getArchiveChannel()
+     * @generated
+     */
+    EAttribute getArchiveChannel_Name ();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.openscada.ui.chart.model.ChartModel.ArchiveChannel#getLabel <em>Label</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Label</em>'.
+     * @see org.openscada.ui.chart.model.ChartModel.ArchiveChannel#getLabel()
+     * @see #getArchiveChannel()
+     * @generated
+     */
+    EAttribute getArchiveChannel_Label ();
 
     /**
      * Returns the meta object for data type '{@link org.eclipse.swt.graphics.RGB <em>RGB</em>}'.
@@ -1344,6 +1433,14 @@ public interface ChartPackage extends EPackage
         EClass ARCHIVE_SERIES = eINSTANCE.getArchiveSeries ();
 
         /**
+         * The meta object literal for the '<em><b>Channels</b></em>' containment reference list feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference ARCHIVE_SERIES__CHANNELS = eINSTANCE.getArchiveSeries_Channels ();
+
+        /**
          * The meta object literal for the '{@link org.openscada.ui.chart.model.ChartModel.impl.ItemImpl <em>Item</em>}' class.
          * <!-- begin-user-doc -->
          * <!-- end-user-doc -->
@@ -1414,6 +1511,32 @@ public interface ChartPackage extends EPackage
          * @generated
          */
         EReference ITEM_DATA_SERIES__ITEM = eINSTANCE.getItemDataSeries_Item ();
+
+        /**
+         * The meta object literal for the '{@link org.openscada.ui.chart.model.ChartModel.impl.ArchiveChannelImpl <em>Archive Channel</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.openscada.ui.chart.model.ChartModel.impl.ArchiveChannelImpl
+         * @see org.openscada.ui.chart.model.ChartModel.impl.ChartPackageImpl#getArchiveChannel()
+         * @generated
+         */
+        EClass ARCHIVE_CHANNEL = eINSTANCE.getArchiveChannel ();
+
+        /**
+         * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute ARCHIVE_CHANNEL__NAME = eINSTANCE.getArchiveChannel_Name ();
+
+        /**
+         * The meta object literal for the '<em><b>Label</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute ARCHIVE_CHANNEL__LABEL = eINSTANCE.getArchiveChannel_Label ();
 
         /**
          * The meta object literal for the '<em>RGB</em>' data type.

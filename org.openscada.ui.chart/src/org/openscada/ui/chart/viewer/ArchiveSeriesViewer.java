@@ -19,9 +19,19 @@
 
 package org.openscada.ui.chart.viewer;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.core.databinding.observable.list.IListChangeListener;
+import org.eclipse.core.databinding.observable.list.ListChangeEvent;
+import org.eclipse.core.databinding.observable.list.ListDiffVisitor;
+import org.eclipse.core.databinding.observable.list.WritableList;
+import org.eclipse.emf.databinding.EMFObservables;
 import org.eclipse.jface.resource.ResourceManager;
+import org.openscada.ui.chart.model.ChartModel.ArchiveChannel;
 import org.openscada.ui.chart.model.ChartModel.ArchiveSeries;
+import org.openscada.ui.chart.model.ChartModel.ChartPackage;
 import org.openscada.ui.chart.model.ChartModel.IdItem;
 import org.openscada.ui.chart.model.ChartModel.Item;
 import org.openscada.ui.chart.model.ChartModel.UriItem;
@@ -29,18 +39,82 @@ import org.openscada.ui.chart.model.ChartModel.XAxis;
 import org.openscada.ui.chart.model.ChartModel.YAxis;
 import org.openscada.ui.chart.view.input.ArchiveInput;
 import org.openscada.ui.chart.view.input.ChartInput;
+import org.openscada.ui.chart.view.input.QuerySeriesData;
 
-public class ArchiveSeriesViewer extends AbstractInputViewer
+public class ArchiveSeriesViewer extends AbstractItemInputViewer
 {
     private ArchiveInput input;
+
+    public static final String PROP_INPUT = "input";
+
+    public static final String PROP_QUERY_SERIES_DATA = "querySeriesData";
+
+    private final WritableList channels = new WritableList ();
+
+    private final Map<ArchiveChannel, ArchiveChannelViewer> viewerMap = new HashMap<ArchiveChannel, ArchiveChannelViewer> ();
+
+    private final DataBindingContext dbc;
+
+    private QuerySeriesData querySeriesData;
 
     public ArchiveSeriesViewer ( final DataBindingContext dbc, final ArchiveSeries element, final ChartViewer viewer, final ResourceManager resourceManager, final AxisLocator<XAxis, XAxisViewer> xLocator, final AxisLocator<YAxis, YAxisViewer> yLocator )
     {
         super ( dbc, element, viewer, resourceManager, xLocator, yLocator );
+
+        this.dbc = dbc;
+
+        this.channels.addListChangeListener ( new IListChangeListener () {
+
+            @Override
+            public void handleListChange ( final ListChangeEvent event )
+            {
+                event.diff.accept ( new ListDiffVisitor () {
+
+                    @Override
+                    public void handleRemove ( final int index, final Object element )
+                    {
+                        handleRemoveChannel ( (ArchiveChannel)element );
+                    }
+
+                    @Override
+                    public void handleAdd ( final int index, final Object element )
+                    {
+                        handleAddChannel ( (ArchiveChannel)element );
+                    }
+                } );
+            }
+        } );
+        addBinding ( dbc.bindList ( this.channels, EMFObservables.observeList ( element, ChartPackage.Literals.ARCHIVE_SERIES__CHANNELS ) ) );
+    }
+
+    protected void handleAddChannel ( final ArchiveChannel channel )
+    {
+        final ArchiveChannelViewer viewer = new ArchiveChannelViewer ( this.dbc, channel, this.viewer, this.resourceManager, this );
+        final ArchiveChannelViewer oldViewer = this.viewerMap.put ( channel, viewer );
+        if ( oldViewer != null )
+        {
+            oldViewer.dispose ();
+        }
+    }
+
+    protected void handleRemoveChannel ( final ArchiveChannel channel )
+    {
+        final ArchiveChannelViewer viewer = this.viewerMap.remove ( channel );
+        if ( viewer != null )
+        {
+            viewer.dispose ();
+        }
     }
 
     @Override
-    protected void checkCreateItem ()
+    public void dispose ()
+    {
+        super.dispose ();
+        this.channels.dispose ();
+    }
+
+    @Override
+    protected void checkCreateInput ()
     {
         if ( this.item != null && this.xAxis != null && this.yAxis != null )
         {
@@ -51,7 +125,8 @@ public class ArchiveSeriesViewer extends AbstractInputViewer
                 return;
             }
 
-            this.input = new ArchiveInput ( item, this.viewer, this.viewer.getRealm (), this.xAxis.getAxis (), this.yAxis.getAxis () );
+            setQuerySeriesData ( new QuerySeriesData ( item, this.viewer.getRealm (), this.xAxis.getAxis (), this.yAxis.getAxis () ) );
+            this.input = new ArchiveInput ( item, this.viewer, this.querySeriesData );
             this.viewer.addInput ( this.input );
         }
     }
@@ -72,6 +147,16 @@ public class ArchiveSeriesViewer extends AbstractInputViewer
         }
     }
 
+    protected void setInput ( final ArchiveInput input )
+    {
+        firePropertyChange ( PROP_INPUT, this.input, this.input = input );
+    }
+
+    public ArchiveInput getInput ()
+    {
+        return this.input;
+    }
+
     @Override
     protected void disposeInput ()
     {
@@ -81,11 +166,26 @@ public class ArchiveSeriesViewer extends AbstractInputViewer
             this.input.dispose ();
             this.input = null;
         }
+        if ( this.querySeriesData != null )
+        {
+            this.querySeriesData.dispose ();
+            setQuerySeriesData ( null );
+        }
     }
 
     @Override
     public boolean provides ( final ChartInput input )
     {
         return this.input == input;
+    }
+
+    public QuerySeriesData getQuerySeriesData ()
+    {
+        return this.querySeriesData;
+    }
+
+    public void setQuerySeriesData ( final QuerySeriesData querySeriesData )
+    {
+        firePropertyChange ( PROP_QUERY_SERIES_DATA, querySeriesData, this.querySeriesData = querySeriesData );
     }
 }

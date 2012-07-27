@@ -25,7 +25,7 @@ import java.util.Set;
 
 import org.openscada.chart.DataEntry;
 import org.openscada.chart.Realm;
-import org.openscada.chart.SeriesData;
+import org.openscada.chart.AbstractSeriesData;
 import org.openscada.chart.SeriesViewData;
 import org.openscada.chart.WritableSeriesData;
 import org.openscada.chart.XAxis;
@@ -43,7 +43,7 @@ import org.openscada.ui.chart.Activator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class QuerySeriesData extends SeriesData
+public class QuerySeriesData extends AbstractSeriesData
 {
 
     private final static Logger logger = LoggerFactory.getLogger ( QuerySeriesData.class );
@@ -155,8 +155,7 @@ public class QuerySeriesData extends SeriesData
         changeParameters ( new QueryParameters ( this.parameters.getStartTimestamp (), this.parameters.getEndTimestamp (), width ) );
     }
 
-    @Override
-    public SeriesViewData getViewData ()
+    public SeriesViewData getViewData ( final String type )
     {
         final WritableSeriesData data = new WritableSeriesData ();
 
@@ -166,7 +165,7 @@ public class QuerySeriesData extends SeriesData
             return data;
         }
 
-        final Value[] avgData = this.query.getValues ().get ( "AVG" );
+        final Value[] avgData = this.query.getValues ().get ( type );
         if ( avgData == null )
         {
             return data;
@@ -192,6 +191,12 @@ public class QuerySeriesData extends SeriesData
         }
 
         return data;
+    }
+
+    @Override
+    public SeriesViewData getViewData ()
+    {
+        return getViewData ( "AVG" );
     }
 
     @Override

@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
+import org.openscada.ui.chart.model.ChartModel.ArchiveChannel;
 import org.openscada.ui.chart.model.ChartModel.ArchiveSeries;
 import org.openscada.ui.chart.model.ChartModel.Axis;
 import org.openscada.ui.chart.model.ChartModel.Chart;
@@ -112,6 +113,13 @@ public class ChartPackageImpl extends EPackageImpl implements ChartPackage
      * @generated
      */
     private EClass itemDataSeriesEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass archiveChannelEClass = null;
 
     /**
      * <!-- begin-user-doc -->
@@ -478,6 +486,16 @@ public class ChartPackageImpl extends EPackageImpl implements ChartPackage
      * <!-- end-user-doc -->
      * @generated
      */
+    public EReference getArchiveSeries_Channels ()
+    {
+        return (EReference)archiveSeriesEClass.getEStructuralFeatures ().get ( 0 );
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     public EClass getItem ()
     {
         return itemEClass;
@@ -558,6 +576,36 @@ public class ChartPackageImpl extends EPackageImpl implements ChartPackage
      * <!-- end-user-doc -->
      * @generated
      */
+    public EClass getArchiveChannel ()
+    {
+        return archiveChannelEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getArchiveChannel_Name ()
+    {
+        return (EAttribute)archiveChannelEClass.getEStructuralFeatures ().get ( 0 );
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getArchiveChannel_Label ()
+    {
+        return (EAttribute)archiveChannelEClass.getEStructuralFeatures ().get ( 1 );
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     public EDataType getRGB ()
     {
         return rgbEDataType;
@@ -629,6 +677,7 @@ public class ChartPackageImpl extends EPackageImpl implements ChartPackage
         createEAttribute ( dataItemSeriesEClass, DATA_ITEM_SERIES__LINE_WIDTH );
 
         archiveSeriesEClass = createEClass ( ARCHIVE_SERIES );
+        createEReference ( archiveSeriesEClass, ARCHIVE_SERIES__CHANNELS );
 
         itemEClass = createEClass ( ITEM );
         createEAttribute ( itemEClass, ITEM__ITEM_ID );
@@ -641,6 +690,10 @@ public class ChartPackageImpl extends EPackageImpl implements ChartPackage
 
         itemDataSeriesEClass = createEClass ( ITEM_DATA_SERIES );
         createEReference ( itemDataSeriesEClass, ITEM_DATA_SERIES__ITEM );
+
+        archiveChannelEClass = createEClass ( ARCHIVE_CHANNEL );
+        createEAttribute ( archiveChannelEClass, ARCHIVE_CHANNEL__NAME );
+        createEAttribute ( archiveChannelEClass, ARCHIVE_CHANNEL__LABEL );
 
         // Create data types
         rgbEDataType = createEDataType ( RGB );
@@ -720,6 +773,7 @@ public class ChartPackageImpl extends EPackageImpl implements ChartPackage
         initEAttribute ( getDataItemSeries_LineWidth (), ecorePackage.getEFloat (), "lineWidth", "1", 1, 1, DataItemSeries.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
 
         initEClass ( archiveSeriesEClass, ArchiveSeries.class, "ArchiveSeries", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS );
+        initEReference ( getArchiveSeries_Channels (), this.getArchiveChannel (), null, "channels", null, 0, -1, ArchiveSeries.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
 
         initEClass ( itemEClass, Item.class, "Item", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS );
         initEAttribute ( getItem_ItemId (), ecorePackage.getEString (), "itemId", null, 1, 1, Item.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
@@ -732,6 +786,10 @@ public class ChartPackageImpl extends EPackageImpl implements ChartPackage
 
         initEClass ( itemDataSeriesEClass, ItemDataSeries.class, "ItemDataSeries", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS );
         initEReference ( getItemDataSeries_Item (), this.getItem (), null, "item", null, 1, 1, ItemDataSeries.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
+
+        initEClass ( archiveChannelEClass, ArchiveChannel.class, "ArchiveChannel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS );
+        initEAttribute ( getArchiveChannel_Name (), ecorePackage.getEString (), "name", null, 1, 1, ArchiveChannel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
+        initEAttribute ( getArchiveChannel_Label (), ecorePackage.getEString (), "label", null, 0, 1, ArchiveChannel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
 
         // Initialize data types
         initEDataType ( rgbEDataType, org.eclipse.swt.graphics.RGB.class, "RGB", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS );

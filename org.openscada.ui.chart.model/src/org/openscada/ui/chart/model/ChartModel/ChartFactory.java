@@ -90,6 +90,15 @@ public interface ChartFactory extends EFactory
     IdItem createIdItem ();
 
     /**
+     * Returns a new object of class '<em>Archive Channel</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>Archive Channel</em>'.
+     * @generated
+     */
+    ArchiveChannel createArchiveChannel ();
+
+    /**
      * Returns the package supported by this factory.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->

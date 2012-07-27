@@ -253,6 +253,31 @@ public class ChartItemProviderAdapterFactory extends ChartAdapterFactory impleme
     }
 
     /**
+     * This keeps track of the one adapter used for all {@link org.openscada.ui.chart.model.ChartModel.ArchiveChannel} instances.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    protected ArchiveChannelItemProvider archiveChannelItemProvider;
+
+    /**
+     * This creates an adapter for a {@link org.openscada.ui.chart.model.ChartModel.ArchiveChannel}.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    @Override
+    public Adapter createArchiveChannelAdapter ()
+    {
+        if ( archiveChannelItemProvider == null )
+        {
+            archiveChannelItemProvider = new ArchiveChannelItemProvider ( this );
+        }
+
+        return archiveChannelItemProvider;
+    }
+
+    /**
      * This returns the root adapter factory that contains this factory.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -377,6 +402,8 @@ public class ChartItemProviderAdapterFactory extends ChartAdapterFactory impleme
             uriItemItemProvider.dispose ();
         if ( idItemItemProvider != null )
             idItemItemProvider.dispose ();
+        if ( archiveChannelItemProvider != null )
+            archiveChannelItemProvider.dispose ();
     }
 
 }
