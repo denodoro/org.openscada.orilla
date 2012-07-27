@@ -16,6 +16,8 @@ public abstract class AbstractInput extends AbstractPropertyChange implements Ch
 
     private String selectedValue;
 
+    private String selectedQuality;
+
     private MouseMoveListener mouseMoveListener;
 
     private Control mouseMoveWidget;
@@ -37,7 +39,7 @@ public abstract class AbstractInput extends AbstractPropertyChange implements Ch
         setSelectedTimestamp ( date );
     }
 
-    public void setSelectedValue ( final String selectedValue )
+    protected void setSelectedValue ( final String selectedValue )
     {
         firePropertyChange ( PROP_SELECTED_VALUE, this.selectedValue, this.selectedValue = selectedValue );
     }
@@ -83,6 +85,17 @@ public abstract class AbstractInput extends AbstractPropertyChange implements Ch
     public void dispose ()
     {
         detachHover ();
+    }
+
+    @Override
+    public String getSelectedQuality ()
+    {
+        return this.selectedQuality;
+    }
+
+    protected void setSelectedQuality ( final String selectedQuality )
+    {
+        firePropertyChange ( PROP_SELECTED_QUALITY, this.selectedQuality, this.selectedQuality = selectedQuality );
     }
 
 }

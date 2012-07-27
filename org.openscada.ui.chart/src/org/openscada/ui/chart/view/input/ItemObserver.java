@@ -370,11 +370,14 @@ public class ItemObserver extends LineInput implements DataSourceListener, Chart
         {
             setSelectedValue ( null );
             super.setSelectedTimestamp ( null );
+            setSelectedQuality ( "0%" );
         }
         else
         {
             setSelectedValue ( String.format ( "%s", value.getValue () ) );
+            setSelectedQuality ( value.getValue () == null ? "0%" : "100%" );
             super.setSelectedTimestamp ( new Date ( value.getTimestamp () ) );
         }
     }
+
 }

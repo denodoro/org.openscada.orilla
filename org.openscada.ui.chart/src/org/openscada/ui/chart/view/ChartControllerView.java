@@ -114,12 +114,25 @@ public class ChartControllerView extends AbstractChartManagePart
             final TableViewerColumn col = new TableViewerColumn ( this.viewer, SWT.NONE );
             col.getColumn ().setText ( "Selected Value" );
             layout.setColumnData ( col.getColumn (), new ColumnWeightData ( 100 ) );
-            col.setLabelProvider ( new ObservableMapCellLabelProvider ( BeansObservables.observeMap ( provider.getRealizedElements (), ChartInput.PROP_SELECTED_TIMESTAMP ) ) {
+            col.setLabelProvider ( new ObservableMapCellLabelProvider ( BeansObservables.observeMap ( provider.getRealizedElements (), ChartInput.PROP_SELECTED_VALUE ) ) {
 
                 @Override
                 public void update ( final ViewerCell cell )
                 {
                     cell.setText ( ( (ChartInput)cell.getElement () ).getSelectedValue () );
+                }
+            } );
+        }
+        {
+            final TableViewerColumn col = new TableViewerColumn ( this.viewer, SWT.NONE );
+            col.getColumn ().setText ( "Selected Quality" );
+            layout.setColumnData ( col.getColumn (), new ColumnWeightData ( 100 ) );
+            col.setLabelProvider ( new ObservableMapCellLabelProvider ( BeansObservables.observeMap ( provider.getRealizedElements (), ChartInput.PROP_SELECTED_QUALITY ) ) {
+
+                @Override
+                public void update ( final ViewerCell cell )
+                {
+                    cell.setText ( ( (ChartInput)cell.getElement () ).getSelectedQuality () );
                 }
             } );
         }

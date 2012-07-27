@@ -219,12 +219,13 @@ public class ArchiveInput extends LineInput implements ChartInput
             if ( vi.getStartTimestamp ().before ( c ) && vi.getEndTimestamp ().after ( c ) )
             {
                 super.setSelectedTimestamp ( vi.getStartTimestamp ().getTime () );
-                setSelectedValue ( toString ( this.data.getQuery (), i, "AVG" ) );
+                setSelectedValue ( valueToString ( this.data.getQuery (), i, "AVG" ) );
+                setSelectedQuality ( qualityToString ( vi ) );
             }
         }
     }
 
-    private String toString ( final ServiceQueryBuffer query, final int index, final String channelName )
+    private String valueToString ( final ServiceQueryBuffer query, final int index, final String channelName )
     {
         final Value[] data = query.getValues ().get ( channelName );
         if ( data == null )
@@ -237,5 +238,14 @@ public class ArchiveInput extends LineInput implements ChartInput
         }
 
         return String.format ( "%s", data[index].toDouble () );
+    }
+
+    private String qualityToString ( final ValueInformation valueInformation )
+    {
+        if ( valueInformation == null )
+        {
+            return null;
+        }
+        return String.format ( "%.1f%%", valueInformation.getQuality () * 100.0 );
     }
 }
