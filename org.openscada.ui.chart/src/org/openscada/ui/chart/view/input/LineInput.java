@@ -24,8 +24,9 @@ import org.eclipse.jface.resource.ResourceManager;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.openscada.chart.swt.render.AbstractLineRender;
+import org.openscada.utils.beans.AbstractPropertyChange;
 
-public abstract class LineInput implements LinePropertiesSupporter
+public abstract class LineInput extends AbstractPropertyChange implements LinePropertiesSupporter
 {
 
     private final LocalResourceManager resourceManager;

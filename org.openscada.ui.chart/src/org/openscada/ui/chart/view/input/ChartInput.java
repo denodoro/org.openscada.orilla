@@ -30,4 +30,6 @@ public interface ChartInput
 
     public String getLabel ();
 
+    public String getState ();
+
 }

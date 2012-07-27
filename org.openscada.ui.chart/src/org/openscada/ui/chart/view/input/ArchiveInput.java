@@ -19,14 +19,22 @@
 
 package org.openscada.ui.chart.view.input;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 import org.eclipse.jface.resource.ResourceManager;
 import org.openscada.chart.swt.render.AbstractLineRender;
 import org.openscada.chart.swt.render.StepRenderer;
+import org.openscada.hd.QueryState;
 import org.openscada.hd.ui.connection.data.Item;
+import org.openscada.hd.ui.data.AbstractQueryBuffer;
+import org.openscada.hd.ui.data.ServiceQueryBuffer;
 import org.openscada.ui.chart.viewer.ChartViewer;
 
 public class ArchiveInput extends LineInput implements ChartInput
 {
+
+    private static final String PROP_STATE = "state";
 
     private boolean disposed;
 
@@ -34,9 +42,15 @@ public class ArchiveInput extends LineInput implements ChartInput
 
     private final StepRenderer renderer;
 
-    private QuerySeriesData data;
+    private final QuerySeriesData data;
 
     private final Item item;
+
+    private final ServiceQueryBuffer query;
+
+    private PropertyChangeListener queryListener;
+
+    private String state;
 
     public ArchiveInput ( final Item item, final ChartViewer viewer, final QuerySeriesData querySeriesData, final ResourceManager resourceManager )
     {
@@ -44,8 +58,34 @@ public class ArchiveInput extends LineInput implements ChartInput
 
         this.item = item;
         this.viewer = viewer;
+        this.data = querySeriesData;
 
         this.renderer = viewer.getManager ().createStepSeries ( querySeriesData );
+
+        this.query = querySeriesData.getQuery ();
+
+        this.query.addPropertyChangeListener ( this.queryListener = new PropertyChangeListener () {
+
+            @Override
+            public void propertyChange ( final PropertyChangeEvent evt )
+            {
+                queryPropertyChange ( evt );
+            }
+        } );
+
+        setState ( makeState () );
+    }
+
+    protected void queryPropertyChange ( final PropertyChangeEvent evt )
+    {
+        if ( AbstractQueryBuffer.PROP_STATE.equals ( evt.getPropertyName () ) )
+        {
+            setState ( makeState () );
+        }
+        else if ( AbstractQueryBuffer.PROP_PERCENT_FILLED.equals ( evt.getPropertyName () ) )
+        {
+            setState ( makeState () );
+        }
     }
 
     @Override
@@ -68,11 +108,16 @@ public class ArchiveInput extends LineInput implements ChartInput
         }
         this.disposed = true;
 
+        this.query.removePropertyChangeListener ( this.queryListener );
+
         this.viewer.removeInput ( this );
         this.viewer.getManager ().removeRenderer ( this.renderer );
 
         this.renderer.dispose ();
-        this.data.dispose ();
+        if ( this.data != null )
+        {
+            this.data.dispose ();
+        }
 
         super.dispose ();
     }
@@ -88,4 +133,36 @@ public class ArchiveInput extends LineInput implements ChartInput
         return this.item.getId ();
     }
 
+    protected String makeState ()
+    {
+        if ( this.query == null )
+        {
+            return null;
+        }
+
+        final QueryState state = this.query.getState ();
+        if ( state == null )
+        {
+            return null;
+        }
+
+        switch ( state )
+        {
+            case LOADING:
+                return String.format ( "%s (%.2f%%)", this.query.getState (), this.query.getPercentFilled () * 100.0 );
+            default:
+                return this.query.getState ().name ();
+        }
+    }
+
+    protected void setState ( final String state )
+    {
+        firePropertyChange ( PROP_STATE, this.state, this.state = state );
+    }
+
+    @Override
+    public String getState ()
+    {
+        return this.state;
+    }
 }

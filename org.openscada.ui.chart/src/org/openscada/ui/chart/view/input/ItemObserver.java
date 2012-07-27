@@ -37,6 +37,7 @@ import org.openscada.chart.swt.render.AbstractLineRender;
 import org.openscada.chart.swt.render.PositionYRuler;
 import org.openscada.chart.swt.render.StepRenderer;
 import org.openscada.core.Variant;
+import org.openscada.core.subscription.SubscriptionState;
 import org.openscada.da.client.DataItemValue;
 import org.openscada.da.ui.connection.data.DataItemHolder;
 import org.openscada.da.ui.connection.data.DataSourceListener;
@@ -46,6 +47,8 @@ import org.openscada.ui.chart.viewer.ChartViewer;
 
 public class ItemObserver extends LineInput implements DataSourceListener, ChartInput
 {
+    private static final String PROP_STATE = "state";
+
     private final Item item;
 
     private final WritableSeries valueSeries;
@@ -69,6 +72,8 @@ public class ItemObserver extends LineInput implements DataSourceListener, Chart
     private final ChartViewer viewer;
 
     private boolean disposed;
+
+    private SubscriptionState state;
 
     private static class LevelRuler
     {
@@ -281,9 +286,18 @@ public class ItemObserver extends LineInput implements DataSourceListener, Chart
                 @Override
                 public void run ()
                 {
+                    updateState ( value );
                     addNewValue ( value );
                 }
             } );
+        }
+    }
+
+    protected void updateState ( final DataItemValue value )
+    {
+        if ( value != null && this.state != value.getSubscriptionState () )
+        {
+            firePropertyChange ( PROP_STATE, this.state, this.state = value.getSubscriptionState () );
         }
     }
 
@@ -322,4 +336,10 @@ public class ItemObserver extends LineInput implements DataSourceListener, Chart
         return this.item.getId ();
     }
 
+    @Override
+    public String getState ()
+    {
+        final SubscriptionState state = this.state;
+        return state == null ? null : state.name ();
+    }
 }

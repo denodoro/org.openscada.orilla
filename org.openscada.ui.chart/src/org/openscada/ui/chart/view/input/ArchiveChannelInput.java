@@ -70,7 +70,7 @@ public class ArchiveChannelInput extends LineInput implements ChartInput
 
         this.renderer.dispose ();
         this.data.dispose ();
-        
+
         super.dispose ();
     }
 
@@ -90,4 +90,9 @@ public class ArchiveChannelInput extends LineInput implements ChartInput
         this.label = label;
     }
 
+    @Override
+    public String getState ()
+    {
+        return null;
+    }
 }

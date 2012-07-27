@@ -23,9 +23,9 @@ import java.util.Calendar;
 import java.util.Map;
 import java.util.Set;
 
+import org.openscada.chart.AbstractSeriesData;
 import org.openscada.chart.DataEntry;
 import org.openscada.chart.Realm;
-import org.openscada.chart.AbstractSeriesData;
 import org.openscada.chart.SeriesViewData;
 import org.openscada.chart.WritableSeriesData;
 import org.openscada.chart.XAxis;
@@ -84,6 +84,11 @@ public class QuerySeriesData extends AbstractSeriesData
                 handleUpdate ();
             }
         } );
+    }
+
+    public ServiceQueryBuffer getQuery ()
+    {
+        return this.query;
     }
 
     protected void handleUpdate ()

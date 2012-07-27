@@ -20,14 +20,16 @@
 package org.openscada.ui.chart.view;
 
 import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.core.databinding.beans.BeansObservables;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
+import org.eclipse.jface.databinding.viewers.ObservableMapCellLabelProvider;
+import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnWeightData;
-import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.ViewerCell;
@@ -53,23 +55,44 @@ public class ChartControllerView extends AbstractChartManagePart
         this.dbc = new DataBindingContext ();
 
         parent.setLayout ( new FillLayout () );
-        this.viewer = new TableViewer ( parent );
 
-        final TableLayout tableLayout = new TableLayout ();
-        this.viewer.getTable ().setLayout ( tableLayout );
+        final Composite wrapper = new Composite ( parent, SWT.NONE );
 
-        final TableViewerColumn col = new TableViewerColumn ( this.viewer, SWT.NONE );
-        tableLayout.addColumnData ( new ColumnWeightData ( 100, true ) );
-        col.setLabelProvider ( new CellLabelProvider () {
+        this.viewer = new TableViewer ( wrapper );
+        this.viewer.getTable ().setHeaderVisible ( true );
 
-            @Override
-            public void update ( final ViewerCell cell )
-            {
-                cell.setText ( ( (ChartInput)cell.getElement () ).getLabel () );
-            }
-        } );
+        final TableColumnLayout layout = new TableColumnLayout ();
+        wrapper.setLayout ( layout );
 
-        this.viewer.setContentProvider ( new ObservableListContentProvider () );
+        final ObservableListContentProvider provider = new ObservableListContentProvider ();
+        this.viewer.setContentProvider ( provider );
+
+        {
+            final TableViewerColumn col = new TableViewerColumn ( this.viewer, SWT.NONE );
+            col.getColumn ().setText ( "Input" );
+            layout.setColumnData ( col.getColumn (), new ColumnWeightData ( 100 ) );
+            col.setLabelProvider ( new CellLabelProvider () {
+
+                @Override
+                public void update ( final ViewerCell cell )
+                {
+                    cell.setText ( ( (ChartInput)cell.getElement () ).getLabel () );
+                }
+            } );
+        }
+        {
+            final TableViewerColumn col = new TableViewerColumn ( this.viewer, SWT.NONE );
+            col.getColumn ().setText ( "State" );
+            layout.setColumnData ( col.getColumn (), new ColumnWeightData ( 100 ) );
+            col.setLabelProvider ( new ObservableMapCellLabelProvider ( BeansObservables.observeMap ( provider.getRealizedElements (), "state" ) ) {
+
+                @Override
+                public void update ( final ViewerCell cell )
+                {
+                    cell.setText ( ( (ChartInput)cell.getElement () ).getState () );
+                }
+            } );
+        }
 
         getSite ().setSelectionProvider ( this.viewer );
 
