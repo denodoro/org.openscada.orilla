@@ -58,6 +58,8 @@ public class ArchiveChannelViewer extends AbstractObserver
 
     public ArchiveChannelViewer ( final DataBindingContext dbc, final ArchiveChannel element, final ChartViewer viewer, final ResourceManager resourceManager, final ArchiveSeriesViewer archiveSeriesViewer )
     {
+        super ();
+
         this.viewer = viewer;
 
         this.resourceManager = resourceManager;
@@ -76,7 +78,11 @@ public class ArchiveChannelViewer extends AbstractObserver
 
     public void setChannelName ( final String channelName )
     {
+        disposeInput ();
+
         this.channelName = channelName;
+
+        checkCreateInput ();
     }
 
     public String getChannelName ()
@@ -100,7 +106,7 @@ public class ArchiveChannelViewer extends AbstractObserver
 
     private void checkCreateInput ()
     {
-        if ( this.querySeriesData != null && this.xAxisViewer != null && this.yAxisViewer != null )
+        if ( this.querySeriesData != null && this.xAxisViewer != null && this.yAxisViewer != null && this.channelName != null )
         {
             this.data = new QueryChannelSeriesData ( this.viewer.getRealm (), this.xAxisViewer.getAxis (), this.yAxisViewer.getAxis (), this.querySeriesData, this.channelName );
             setInput ( new ArchiveChannelInput ( this.viewer, this.data, this.resourceManager ) );
