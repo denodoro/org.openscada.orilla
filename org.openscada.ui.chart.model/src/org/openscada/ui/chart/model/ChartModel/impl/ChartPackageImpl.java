@@ -25,6 +25,7 @@ import org.openscada.ui.chart.model.ChartModel.DataSeries;
 import org.openscada.ui.chart.model.ChartModel.IdItem;
 import org.openscada.ui.chart.model.ChartModel.Item;
 import org.openscada.ui.chart.model.ChartModel.ItemDataSeries;
+import org.openscada.ui.chart.model.ChartModel.LineProperties;
 import org.openscada.ui.chart.model.ChartModel.UriItem;
 import org.openscada.ui.chart.model.ChartModel.XAxis;
 import org.openscada.ui.chart.model.ChartModel.YAxis;
@@ -120,6 +121,13 @@ public class ChartPackageImpl extends EPackageImpl implements ChartPackage
      * @generated
      */
     private EClass archiveChannelEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass linePropertiesEClass = null;
 
     /**
      * <!-- begin-user-doc -->
@@ -456,19 +464,9 @@ public class ChartPackageImpl extends EPackageImpl implements ChartPackage
      * <!-- end-user-doc -->
      * @generated
      */
-    public EAttribute getDataItemSeries_LineColor ()
+    public EReference getDataItemSeries_LineProperties ()
     {
-        return (EAttribute)dataItemSeriesEClass.getEStructuralFeatures ().get ( 0 );
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public EAttribute getDataItemSeries_LineWidth ()
-    {
-        return (EAttribute)dataItemSeriesEClass.getEStructuralFeatures ().get ( 1 );
+        return (EReference)dataItemSeriesEClass.getEStructuralFeatures ().get ( 0 );
     }
 
     /**
@@ -489,6 +487,16 @@ public class ChartPackageImpl extends EPackageImpl implements ChartPackage
     public EReference getArchiveSeries_Channels ()
     {
         return (EReference)archiveSeriesEClass.getEStructuralFeatures ().get ( 0 );
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EReference getArchiveSeries_LineProperties ()
+    {
+        return (EReference)archiveSeriesEClass.getEStructuralFeatures ().get ( 1 );
     }
 
     /**
@@ -606,6 +614,46 @@ public class ChartPackageImpl extends EPackageImpl implements ChartPackage
      * <!-- end-user-doc -->
      * @generated
      */
+    public EReference getArchiveChannel_LineProperties ()
+    {
+        return (EReference)archiveChannelEClass.getEStructuralFeatures ().get ( 2 );
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EClass getLineProperties ()
+    {
+        return linePropertiesEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getLineProperties_Width ()
+    {
+        return (EAttribute)linePropertiesEClass.getEStructuralFeatures ().get ( 0 );
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getLineProperties_Color ()
+    {
+        return (EAttribute)linePropertiesEClass.getEStructuralFeatures ().get ( 1 );
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     public EDataType getRGB ()
     {
         return rgbEDataType;
@@ -673,11 +721,11 @@ public class ChartPackageImpl extends EPackageImpl implements ChartPackage
         createEReference ( dataSeriesEClass, DATA_SERIES__Y );
 
         dataItemSeriesEClass = createEClass ( DATA_ITEM_SERIES );
-        createEAttribute ( dataItemSeriesEClass, DATA_ITEM_SERIES__LINE_COLOR );
-        createEAttribute ( dataItemSeriesEClass, DATA_ITEM_SERIES__LINE_WIDTH );
+        createEReference ( dataItemSeriesEClass, DATA_ITEM_SERIES__LINE_PROPERTIES );
 
         archiveSeriesEClass = createEClass ( ARCHIVE_SERIES );
         createEReference ( archiveSeriesEClass, ARCHIVE_SERIES__CHANNELS );
+        createEReference ( archiveSeriesEClass, ARCHIVE_SERIES__LINE_PROPERTIES );
 
         itemEClass = createEClass ( ITEM );
         createEAttribute ( itemEClass, ITEM__ITEM_ID );
@@ -694,6 +742,11 @@ public class ChartPackageImpl extends EPackageImpl implements ChartPackage
         archiveChannelEClass = createEClass ( ARCHIVE_CHANNEL );
         createEAttribute ( archiveChannelEClass, ARCHIVE_CHANNEL__NAME );
         createEAttribute ( archiveChannelEClass, ARCHIVE_CHANNEL__LABEL );
+        createEReference ( archiveChannelEClass, ARCHIVE_CHANNEL__LINE_PROPERTIES );
+
+        linePropertiesEClass = createEClass ( LINE_PROPERTIES );
+        createEAttribute ( linePropertiesEClass, LINE_PROPERTIES__WIDTH );
+        createEAttribute ( linePropertiesEClass, LINE_PROPERTIES__COLOR );
 
         // Create data types
         rgbEDataType = createEDataType ( RGB );
@@ -769,11 +822,11 @@ public class ChartPackageImpl extends EPackageImpl implements ChartPackage
         initEReference ( getDataSeries_Y (), this.getYAxis (), null, "y", null, 1, 1, DataSeries.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
 
         initEClass ( dataItemSeriesEClass, DataItemSeries.class, "DataItemSeries", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS );
-        initEAttribute ( getDataItemSeries_LineColor (), this.getRGB (), "lineColor", null, 0, 1, DataItemSeries.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
-        initEAttribute ( getDataItemSeries_LineWidth (), ecorePackage.getEFloat (), "lineWidth", "1", 1, 1, DataItemSeries.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
+        initEReference ( getDataItemSeries_LineProperties (), this.getLineProperties (), null, "lineProperties", null, 1, 1, DataItemSeries.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
 
         initEClass ( archiveSeriesEClass, ArchiveSeries.class, "ArchiveSeries", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS );
         initEReference ( getArchiveSeries_Channels (), this.getArchiveChannel (), null, "channels", null, 0, -1, ArchiveSeries.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
+        initEReference ( getArchiveSeries_LineProperties (), this.getLineProperties (), null, "lineProperties", null, 1, 1, ArchiveSeries.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
 
         initEClass ( itemEClass, Item.class, "Item", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS );
         initEAttribute ( getItem_ItemId (), ecorePackage.getEString (), "itemId", null, 1, 1, Item.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
@@ -790,6 +843,11 @@ public class ChartPackageImpl extends EPackageImpl implements ChartPackage
         initEClass ( archiveChannelEClass, ArchiveChannel.class, "ArchiveChannel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS );
         initEAttribute ( getArchiveChannel_Name (), ecorePackage.getEString (), "name", null, 1, 1, ArchiveChannel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
         initEAttribute ( getArchiveChannel_Label (), ecorePackage.getEString (), "label", null, 0, 1, ArchiveChannel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
+        initEReference ( getArchiveChannel_LineProperties (), this.getLineProperties (), null, "lineProperties", null, 1, 1, ArchiveChannel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
+
+        initEClass ( linePropertiesEClass, LineProperties.class, "LineProperties", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS );
+        initEAttribute ( getLineProperties_Width (), ecorePackage.getEFloat (), "width", "1.0", 1, 1, LineProperties.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
+        initEAttribute ( getLineProperties_Color (), this.getRGB (), "color", "#000000", 1, 1, LineProperties.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
 
         // Initialize data types
         initEDataType ( rgbEDataType, org.eclipse.swt.graphics.RGB.class, "RGB", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS );
@@ -813,6 +871,7 @@ public class ChartPackageImpl extends EPackageImpl implements ChartPackage
         String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
         addAnnotation ( getChart_BackgroundColor (), source, new String[] { "name", "backgroundColor" } );
         addAnnotation ( getAxis_Label (), source, new String[] { "wildcards", "", "name", "" } );
+        addAnnotation ( getArchiveSeries_LineProperties (), source, new String[] { "wildcards", "", "name", "" } );
     }
 
 } //ChartPackageImpl

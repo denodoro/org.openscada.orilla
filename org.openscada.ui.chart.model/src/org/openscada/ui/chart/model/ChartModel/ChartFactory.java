@@ -99,6 +99,15 @@ public interface ChartFactory extends EFactory
     ArchiveChannel createArchiveChannel ();
 
     /**
+     * Returns a new object of class '<em>Line Properties</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>Line Properties</em>'.
+     * @generated
+     */
+    LineProperties createLineProperties ();
+
+    /**
      * Returns the package supported by this factory.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->

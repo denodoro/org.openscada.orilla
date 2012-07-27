@@ -76,6 +76,7 @@ public class ArchiveSeriesItemProvider extends ItemDataSeriesItemProvider implem
         {
             super.getChildrenFeatures ( object );
             childrenFeatures.add ( ChartPackage.Literals.ARCHIVE_SERIES__CHANNELS );
+            childrenFeatures.add ( ChartPackage.Literals.ARCHIVE_SERIES__LINE_PROPERTIES );
         }
         return childrenFeatures;
     }
@@ -134,6 +135,7 @@ public class ArchiveSeriesItemProvider extends ItemDataSeriesItemProvider implem
         switch ( notification.getFeatureID ( ArchiveSeries.class ) )
         {
             case ChartPackage.ARCHIVE_SERIES__CHANNELS:
+            case ChartPackage.ARCHIVE_SERIES__LINE_PROPERTIES:
                 fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), true, false ) );
                 return;
         }
@@ -153,6 +155,8 @@ public class ArchiveSeriesItemProvider extends ItemDataSeriesItemProvider implem
         super.collectNewChildDescriptors ( newChildDescriptors, object );
 
         newChildDescriptors.add ( createChildParameter ( ChartPackage.Literals.ARCHIVE_SERIES__CHANNELS, ChartFactory.eINSTANCE.createArchiveChannel () ) );
+
+        newChildDescriptors.add ( createChildParameter ( ChartPackage.Literals.ARCHIVE_SERIES__LINE_PROPERTIES, ChartFactory.eINSTANCE.createLineProperties () ) );
     }
 
 }

@@ -23,11 +23,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.core.databinding.beans.BeansObservables;
 import org.eclipse.core.databinding.observable.list.IListChangeListener;
 import org.eclipse.core.databinding.observable.list.ListChangeEvent;
 import org.eclipse.core.databinding.observable.list.ListDiffVisitor;
 import org.eclipse.core.databinding.observable.list.WritableList;
+import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.emf.databinding.EMFObservables;
+import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.resource.ResourceManager;
 import org.openscada.ui.chart.model.ChartModel.ArchiveChannel;
 import org.openscada.ui.chart.model.ChartModel.ArchiveSeries;
@@ -57,6 +60,10 @@ public class ArchiveSeriesViewer extends AbstractItemInputViewer
 
     private QuerySeriesData querySeriesData;
 
+    private final IObservableValue inputObservable;
+
+    private final IObservableValue linePropertiesObservable;
+
     public ArchiveSeriesViewer ( final DataBindingContext dbc, final ArchiveSeries element, final ChartViewer viewer, final ResourceManager resourceManager, final AxisLocator<XAxis, XAxisViewer> xLocator, final AxisLocator<YAxis, YAxisViewer> yLocator )
     {
         super ( dbc, element, viewer, resourceManager, xLocator, yLocator );
@@ -85,6 +92,11 @@ public class ArchiveSeriesViewer extends AbstractItemInputViewer
             }
         } );
         addBinding ( dbc.bindList ( this.channels, EMFObservables.observeList ( element, ChartPackage.Literals.ARCHIVE_SERIES__CHANNELS ) ) );
+
+        this.inputObservable = BeansObservables.observeValue ( this, PROP_INPUT );
+        this.linePropertiesObservable = EMFObservables.observeValue ( element, ChartPackage.Literals.ARCHIVE_SERIES__LINE_PROPERTIES );
+
+        addBindings ( LinePropertiesBinder.bind ( SWTObservables.getRealm ( viewer.getManager ().getDisplay () ), dbc, this.inputObservable, this.linePropertiesObservable ) );
     }
 
     protected void handleAddChannel ( final ArchiveChannel channel )
@@ -110,6 +122,10 @@ public class ArchiveSeriesViewer extends AbstractItemInputViewer
     public void dispose ()
     {
         super.dispose ();
+
+        this.inputObservable.dispose ();
+        this.linePropertiesObservable.dispose ();
+
         this.channels.dispose ();
     }
 
@@ -126,7 +142,7 @@ public class ArchiveSeriesViewer extends AbstractItemInputViewer
             }
 
             setQuerySeriesData ( new QuerySeriesData ( item, this.viewer.getRealm (), this.xAxis.getAxis (), this.yAxis.getAxis () ) );
-            this.input = new ArchiveInput ( item, this.viewer, this.querySeriesData );
+            this.input = new ArchiveInput ( item, this.viewer, this.querySeriesData, this.resourceManager );
             this.viewer.addInput ( this.input );
         }
     }

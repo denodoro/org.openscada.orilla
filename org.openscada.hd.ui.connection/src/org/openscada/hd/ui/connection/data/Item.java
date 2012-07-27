@@ -24,6 +24,7 @@ import java.io.Serializable;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.ui.IMemento;
+import org.openscada.core.ConnectionInformation;
 
 /**
  * A data item information object
@@ -118,6 +119,18 @@ public class Item implements Serializable
         else
         {
             return (Item)Platform.getAdapterManager ().getAdapter ( o, Item.class );
+        }
+    }
+
+    public String toLabel ()
+    {
+        try
+        {
+            return String.format ( "[URI: %s, itemId: %s]", ConnectionInformation.fromURI ( this.connectionString ).toMaskedString (), this.id );
+        }
+        catch ( final Exception e )
+        {
+            return String.format ( "[URI: %s, itemId: %s]", this.connectionString, this.id );
         }
     }
 }

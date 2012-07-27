@@ -56,13 +56,19 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="y" lowerBound="1" eType="#//YAxis"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DataItemSeries" eSuperTypes="#//ItemDataSeries">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lineColor" eType="#//RGB"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lineWidth" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat" defaultValueLiteral="1"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lineProperties" lowerBound="1"
+        eType="#//LineProperties" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ArchiveSeries" eSuperTypes="#//ItemDataSeries">
     <eStructuralFeatures xsi:type="ecore:EReference" name="channels" upperBound="-1"
         eType="#//ArchiveChannel" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lineProperties" lowerBound="1"
+        eType="#//LineProperties" containment="true">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="wildcards" value=""/>
+        <details key="name" value=""/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Item" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="itemId" lowerBound="1"
@@ -83,5 +89,13 @@
   <eClassifiers xsi:type="ecore:EClass" name="ArchiveChannel">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lineProperties" lowerBound="1"
+        eType="#//LineProperties" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LineProperties">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="width" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"
+        defaultValueLiteral="1.0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="color" lowerBound="1" eType="#//RGB"
+        defaultValueLiteral="#000000"/>
   </eClassifiers>
 </ecore:EPackage>

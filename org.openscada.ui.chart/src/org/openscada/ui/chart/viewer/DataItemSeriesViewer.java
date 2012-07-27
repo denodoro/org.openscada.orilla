@@ -21,9 +21,9 @@ package org.openscada.ui.chart.viewer;
 
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.beans.BeansObservables;
-import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.emf.databinding.EMFObservables;
+import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.resource.ResourceManager;
 import org.openscada.da.ui.connection.data.Item.Type;
 import org.openscada.ui.chart.model.ChartModel.ChartPackage;
@@ -42,13 +42,25 @@ public class DataItemSeriesViewer extends AbstractItemInputViewer implements Inp
 
     private ItemObserver input;
 
+    private final IObservableValue inputObservable;
+
+    private final IObservableValue linePropertiesObservable;
+
     public DataItemSeriesViewer ( final DataBindingContext dbc, final DataItemSeries element, final ChartViewer viewer, final ResourceManager resourceManager, final AxisLocator<XAxis, XAxisViewer> xLocator, final AxisLocator<YAxis, YAxisViewer> yLocator )
     {
         super ( dbc, element, viewer, resourceManager, xLocator, yLocator );
 
-        final IObservableValue inputObserable = BeansObservables.observeValue ( this, "input" );
-        addBinding ( dbc.bindValue ( PojoObservables.observeDetailValue ( inputObserable, "lineColor", null ), EMFObservables.observeValue ( element, ChartPackage.Literals.DATA_ITEM_SERIES__LINE_COLOR ) ) );
-        addBinding ( dbc.bindValue ( PojoObservables.observeDetailValue ( inputObserable, "lineWidth", null ), EMFObservables.observeValue ( element, ChartPackage.Literals.DATA_ITEM_SERIES__LINE_WIDTH ) ) );
+        this.inputObservable = BeansObservables.observeValue ( this, "input" );
+        this.linePropertiesObservable = EMFObservables.observeValue ( element, ChartPackage.Literals.DATA_ITEM_SERIES__LINE_PROPERTIES );
+
+        addBindings ( LinePropertiesBinder.bind ( SWTObservables.getRealm ( viewer.getManager ().getDisplay () ), dbc, this.inputObservable, this.linePropertiesObservable ) );
+    }
+
+    @Override
+    public void dispose ()
+    {
+        this.inputObservable.dispose ();
+        this.linePropertiesObservable.dispose ();
     }
 
     @Override

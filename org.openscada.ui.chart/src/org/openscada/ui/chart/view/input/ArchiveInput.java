@@ -19,11 +19,13 @@
 
 package org.openscada.ui.chart.view.input;
 
+import org.eclipse.jface.resource.ResourceManager;
+import org.openscada.chart.swt.render.AbstractLineRender;
 import org.openscada.chart.swt.render.StepRenderer;
 import org.openscada.hd.ui.connection.data.Item;
 import org.openscada.ui.chart.viewer.ChartViewer;
 
-public class ArchiveInput implements ChartInput
+public class ArchiveInput extends LineInput implements ChartInput
 {
 
     private boolean disposed;
@@ -36,8 +38,10 @@ public class ArchiveInput implements ChartInput
 
     private final Item item;
 
-    public ArchiveInput ( final Item item, final ChartViewer viewer, final QuerySeriesData querySeriesData )
+    public ArchiveInput ( final Item item, final ChartViewer viewer, final QuerySeriesData querySeriesData, final ResourceManager resourceManager )
     {
+        super ( resourceManager );
+
         this.item = item;
         this.viewer = viewer;
 
@@ -50,6 +54,12 @@ public class ArchiveInput implements ChartInput
     }
 
     @Override
+    protected AbstractLineRender getLineRenderer ()
+    {
+        return this.renderer;
+    }
+
+    @Override
     public void dispose ()
     {
         if ( this.disposed )
@@ -57,11 +67,14 @@ public class ArchiveInput implements ChartInput
             return;
         }
         this.disposed = true;
+
         this.viewer.removeInput ( this );
         this.viewer.getManager ().removeRenderer ( this.renderer );
 
         this.renderer.dispose ();
         this.data.dispose ();
+
+        super.dispose ();
     }
 
     @Override

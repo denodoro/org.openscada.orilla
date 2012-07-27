@@ -474,22 +474,13 @@ public interface ChartPackage extends EPackage
     int DATA_ITEM_SERIES__ITEM = ITEM_DATA_SERIES__ITEM;
 
     /**
-     * The feature id for the '<em><b>Line Color</b></em>' attribute.
+     * The feature id for the '<em><b>Line Properties</b></em>' containment reference.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int DATA_ITEM_SERIES__LINE_COLOR = ITEM_DATA_SERIES_FEATURE_COUNT + 0;
-
-    /**
-     * The feature id for the '<em><b>Line Width</b></em>' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     * @ordered
-     */
-    int DATA_ITEM_SERIES__LINE_WIDTH = ITEM_DATA_SERIES_FEATURE_COUNT + 1;
+    int DATA_ITEM_SERIES__LINE_PROPERTIES = ITEM_DATA_SERIES_FEATURE_COUNT + 0;
 
     /**
      * The number of structural features of the '<em>Data Item Series</em>' class.
@@ -498,7 +489,7 @@ public interface ChartPackage extends EPackage
      * @generated
      * @ordered
      */
-    int DATA_ITEM_SERIES_FEATURE_COUNT = ITEM_DATA_SERIES_FEATURE_COUNT + 2;
+    int DATA_ITEM_SERIES_FEATURE_COUNT = ITEM_DATA_SERIES_FEATURE_COUNT + 1;
 
     /**
      * The meta object id for the '{@link org.openscada.ui.chart.model.ChartModel.impl.ArchiveSeriesImpl <em>Archive Series</em>}' class.
@@ -556,13 +547,22 @@ public interface ChartPackage extends EPackage
     int ARCHIVE_SERIES__CHANNELS = ITEM_DATA_SERIES_FEATURE_COUNT + 0;
 
     /**
+     * The feature id for the '<em><b>Line Properties</b></em>' containment reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int ARCHIVE_SERIES__LINE_PROPERTIES = ITEM_DATA_SERIES_FEATURE_COUNT + 1;
+
+    /**
      * The number of structural features of the '<em>Archive Series</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int ARCHIVE_SERIES_FEATURE_COUNT = ITEM_DATA_SERIES_FEATURE_COUNT + 1;
+    int ARCHIVE_SERIES_FEATURE_COUNT = ITEM_DATA_SERIES_FEATURE_COUNT + 2;
 
     /**
      * The meta object id for the '{@link org.openscada.ui.chart.model.ChartModel.impl.ItemImpl <em>Item</em>}' class.
@@ -695,13 +695,59 @@ public interface ChartPackage extends EPackage
     int ARCHIVE_CHANNEL__LABEL = 1;
 
     /**
+     * The feature id for the '<em><b>Line Properties</b></em>' containment reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int ARCHIVE_CHANNEL__LINE_PROPERTIES = 2;
+
+    /**
      * The number of structural features of the '<em>Archive Channel</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int ARCHIVE_CHANNEL_FEATURE_COUNT = 2;
+    int ARCHIVE_CHANNEL_FEATURE_COUNT = 3;
+
+    /**
+     * The meta object id for the '{@link org.openscada.ui.chart.model.ChartModel.impl.LinePropertiesImpl <em>Line Properties</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.openscada.ui.chart.model.ChartModel.impl.LinePropertiesImpl
+     * @see org.openscada.ui.chart.model.ChartModel.impl.ChartPackageImpl#getLineProperties()
+     * @generated
+     */
+    int LINE_PROPERTIES = 12;
+
+    /**
+     * The feature id for the '<em><b>Width</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int LINE_PROPERTIES__WIDTH = 0;
+
+    /**
+     * The feature id for the '<em><b>Color</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int LINE_PROPERTIES__COLOR = 1;
+
+    /**
+     * The number of structural features of the '<em>Line Properties</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int LINE_PROPERTIES_FEATURE_COUNT = 2;
 
     /**
      * The meta object id for the '<em>RGB</em>' data type.
@@ -711,7 +757,7 @@ public interface ChartPackage extends EPackage
      * @see org.openscada.ui.chart.model.ChartModel.impl.ChartPackageImpl#getRGB()
      * @generated
      */
-    int RGB = 12;
+    int RGB = 13;
 
     /**
      * Returns the meta object for class '{@link org.openscada.ui.chart.model.ChartModel.Chart <em>Chart</em>}'.
@@ -994,26 +1040,15 @@ public interface ChartPackage extends EPackage
     EClass getDataItemSeries ();
 
     /**
-     * Returns the meta object for the attribute '{@link org.openscada.ui.chart.model.ChartModel.DataItemSeries#getLineColor <em>Line Color</em>}'.
+     * Returns the meta object for the containment reference '{@link org.openscada.ui.chart.model.ChartModel.DataItemSeries#getLineProperties <em>Line Properties</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @return the meta object for the attribute '<em>Line Color</em>'.
-     * @see org.openscada.ui.chart.model.ChartModel.DataItemSeries#getLineColor()
+     * @return the meta object for the containment reference '<em>Line Properties</em>'.
+     * @see org.openscada.ui.chart.model.ChartModel.DataItemSeries#getLineProperties()
      * @see #getDataItemSeries()
      * @generated
      */
-    EAttribute getDataItemSeries_LineColor ();
-
-    /**
-     * Returns the meta object for the attribute '{@link org.openscada.ui.chart.model.ChartModel.DataItemSeries#getLineWidth <em>Line Width</em>}'.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @return the meta object for the attribute '<em>Line Width</em>'.
-     * @see org.openscada.ui.chart.model.ChartModel.DataItemSeries#getLineWidth()
-     * @see #getDataItemSeries()
-     * @generated
-     */
-    EAttribute getDataItemSeries_LineWidth ();
+    EReference getDataItemSeries_LineProperties ();
 
     /**
      * Returns the meta object for class '{@link org.openscada.ui.chart.model.ChartModel.ArchiveSeries <em>Archive Series</em>}'.
@@ -1035,6 +1070,17 @@ public interface ChartPackage extends EPackage
      * @generated
      */
     EReference getArchiveSeries_Channels ();
+
+    /**
+     * Returns the meta object for the containment reference '{@link org.openscada.ui.chart.model.ChartModel.ArchiveSeries#getLineProperties <em>Line Properties</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the containment reference '<em>Line Properties</em>'.
+     * @see org.openscada.ui.chart.model.ChartModel.ArchiveSeries#getLineProperties()
+     * @see #getArchiveSeries()
+     * @generated
+     */
+    EReference getArchiveSeries_LineProperties ();
 
     /**
      * Returns the meta object for class '{@link org.openscada.ui.chart.model.ChartModel.Item <em>Item</em>}'.
@@ -1151,6 +1197,49 @@ public interface ChartPackage extends EPackage
      * @generated
      */
     EAttribute getArchiveChannel_Label ();
+
+    /**
+     * Returns the meta object for the containment reference '{@link org.openscada.ui.chart.model.ChartModel.ArchiveChannel#getLineProperties <em>Line Properties</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the containment reference '<em>Line Properties</em>'.
+     * @see org.openscada.ui.chart.model.ChartModel.ArchiveChannel#getLineProperties()
+     * @see #getArchiveChannel()
+     * @generated
+     */
+    EReference getArchiveChannel_LineProperties ();
+
+    /**
+     * Returns the meta object for class '{@link org.openscada.ui.chart.model.ChartModel.LineProperties <em>Line Properties</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>Line Properties</em>'.
+     * @see org.openscada.ui.chart.model.ChartModel.LineProperties
+     * @generated
+     */
+    EClass getLineProperties ();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.openscada.ui.chart.model.ChartModel.LineProperties#getWidth <em>Width</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Width</em>'.
+     * @see org.openscada.ui.chart.model.ChartModel.LineProperties#getWidth()
+     * @see #getLineProperties()
+     * @generated
+     */
+    EAttribute getLineProperties_Width ();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.openscada.ui.chart.model.ChartModel.LineProperties#getColor <em>Color</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Color</em>'.
+     * @see org.openscada.ui.chart.model.ChartModel.LineProperties#getColor()
+     * @see #getLineProperties()
+     * @generated
+     */
+    EAttribute getLineProperties_Color ();
 
     /**
      * Returns the meta object for data type '{@link org.eclipse.swt.graphics.RGB <em>RGB</em>}'.
@@ -1407,20 +1496,12 @@ public interface ChartPackage extends EPackage
         EClass DATA_ITEM_SERIES = eINSTANCE.getDataItemSeries ();
 
         /**
-         * The meta object literal for the '<em><b>Line Color</b></em>' attribute feature.
+         * The meta object literal for the '<em><b>Line Properties</b></em>' containment reference feature.
          * <!-- begin-user-doc -->
          * <!-- end-user-doc -->
          * @generated
          */
-        EAttribute DATA_ITEM_SERIES__LINE_COLOR = eINSTANCE.getDataItemSeries_LineColor ();
-
-        /**
-         * The meta object literal for the '<em><b>Line Width</b></em>' attribute feature.
-         * <!-- begin-user-doc -->
-         * <!-- end-user-doc -->
-         * @generated
-         */
-        EAttribute DATA_ITEM_SERIES__LINE_WIDTH = eINSTANCE.getDataItemSeries_LineWidth ();
+        EReference DATA_ITEM_SERIES__LINE_PROPERTIES = eINSTANCE.getDataItemSeries_LineProperties ();
 
         /**
          * The meta object literal for the '{@link org.openscada.ui.chart.model.ChartModel.impl.ArchiveSeriesImpl <em>Archive Series</em>}' class.
@@ -1439,6 +1520,14 @@ public interface ChartPackage extends EPackage
          * @generated
          */
         EReference ARCHIVE_SERIES__CHANNELS = eINSTANCE.getArchiveSeries_Channels ();
+
+        /**
+         * The meta object literal for the '<em><b>Line Properties</b></em>' containment reference feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference ARCHIVE_SERIES__LINE_PROPERTIES = eINSTANCE.getArchiveSeries_LineProperties ();
 
         /**
          * The meta object literal for the '{@link org.openscada.ui.chart.model.ChartModel.impl.ItemImpl <em>Item</em>}' class.
@@ -1537,6 +1626,40 @@ public interface ChartPackage extends EPackage
          * @generated
          */
         EAttribute ARCHIVE_CHANNEL__LABEL = eINSTANCE.getArchiveChannel_Label ();
+
+        /**
+         * The meta object literal for the '<em><b>Line Properties</b></em>' containment reference feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference ARCHIVE_CHANNEL__LINE_PROPERTIES = eINSTANCE.getArchiveChannel_LineProperties ();
+
+        /**
+         * The meta object literal for the '{@link org.openscada.ui.chart.model.ChartModel.impl.LinePropertiesImpl <em>Line Properties</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.openscada.ui.chart.model.ChartModel.impl.LinePropertiesImpl
+         * @see org.openscada.ui.chart.model.ChartModel.impl.ChartPackageImpl#getLineProperties()
+         * @generated
+         */
+        EClass LINE_PROPERTIES = eINSTANCE.getLineProperties ();
+
+        /**
+         * The meta object literal for the '<em><b>Width</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute LINE_PROPERTIES__WIDTH = eINSTANCE.getLineProperties_Width ();
+
+        /**
+         * The meta object literal for the '<em><b>Color</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute LINE_PROPERTIES__COLOR = eINSTANCE.getLineProperties_Color ();
 
         /**
          * The meta object literal for the '<em>RGB</em>' data type.

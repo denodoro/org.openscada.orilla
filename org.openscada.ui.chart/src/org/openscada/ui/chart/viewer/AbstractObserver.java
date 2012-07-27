@@ -34,6 +34,11 @@ public class AbstractObserver extends AbstractPropertyChange
         this.bindings.add ( binding );
     }
 
+    protected void addBindings ( final Collection<Binding> bindings )
+    {
+        this.bindings.addAll ( bindings );
+    }
+
     public void dispose ()
     {
         for ( final Binding binding : this.bindings )

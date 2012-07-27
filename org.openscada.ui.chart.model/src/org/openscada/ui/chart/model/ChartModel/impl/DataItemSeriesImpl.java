@@ -9,83 +9,49 @@ package org.openscada.ui.chart.model.ChartModel.impl;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
-
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.swt.graphics.RGB;
+import org.openscada.ui.chart.model.ChartModel.ChartFactory;
 import org.openscada.ui.chart.model.ChartModel.ChartPackage;
 import org.openscada.ui.chart.model.ChartModel.DataItemSeries;
-import org.openscada.ui.chart.model.ChartModel.Item;
+import org.openscada.ui.chart.model.ChartModel.LineProperties;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Data Item Series</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Data Item Series</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.DataItemSeriesImpl#getLineColor <em>Line Color</em>}</li>
- *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.DataItemSeriesImpl#getLineWidth <em>Line Width</em>}</li>
+ * <li>{@link org.openscada.ui.chart.model.ChartModel.impl.DataItemSeriesImpl#getLineProperties <em>Line Properties</em>}</li>
  * </ul>
  * </p>
- *
+ * 
  * @generated
  */
 public class DataItemSeriesImpl extends ItemDataSeriesImpl implements DataItemSeries
 {
     /**
-     * The default value of the '{@link #getLineColor() <em>Line Color</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see #getLineColor()
+     * The cached value of the '{@link #getLineProperties() <em>Line Properties</em>}' containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @see #getLineProperties()
      * @generated
      * @ordered
      */
-    protected static final RGB LINE_COLOR_EDEFAULT = null;
+    protected LineProperties lineProperties;
 
     /**
-     * The cached value of the '{@link #getLineColor() <em>Line Color</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see #getLineColor()
-     * @generated
-     * @ordered
-     */
-    protected RGB lineColor = LINE_COLOR_EDEFAULT;
-
-    /**
-     * The default value of the '{@link #getLineWidth() <em>Line Width</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see #getLineWidth()
-     * @generated
-     * @ordered
-     */
-    protected static final float LINE_WIDTH_EDEFAULT = 1.0F;
-
-    /**
-     * The cached value of the '{@link #getLineWidth() <em>Line Width</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see #getLineWidth()
-     * @generated
-     * @ordered
-     */
-    protected float lineWidth = LINE_WIDTH_EDEFAULT;
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated NOT
      */
     protected DataItemSeriesImpl ()
     {
         super ();
+        this.lineProperties = ChartFactory.eINSTANCE.createLineProperties ();
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     @Override
@@ -95,145 +61,151 @@ public class DataItemSeriesImpl extends ItemDataSeriesImpl implements DataItemSe
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public RGB getLineColor ()
-    {
-        return lineColor;
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public void setLineColor ( RGB newLineColor )
-    {
-        RGB oldLineColor = lineColor;
-        lineColor = newLineColor;
-        if ( eNotificationRequired () )
-            eNotify ( new ENotificationImpl ( this, Notification.SET, ChartPackage.DATA_ITEM_SERIES__LINE_COLOR, oldLineColor, lineColor ) );
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public float getLineWidth ()
-    {
-        return lineWidth;
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public void setLineWidth ( float newLineWidth )
-    {
-        float oldLineWidth = lineWidth;
-        lineWidth = newLineWidth;
-        if ( eNotificationRequired () )
-            eNotify ( new ENotificationImpl ( this, Notification.SET, ChartPackage.DATA_ITEM_SERIES__LINE_WIDTH, oldLineWidth, lineWidth ) );
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     @Override
-    public Object eGet ( int featureID, boolean resolve, boolean coreType )
+    public LineProperties getLineProperties ()
+    {
+        return this.lineProperties;
+    }
+
+    /**
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated
+     */
+    public NotificationChain basicSetLineProperties ( final LineProperties newLineProperties, NotificationChain msgs )
+    {
+        final LineProperties oldLineProperties = this.lineProperties;
+        this.lineProperties = newLineProperties;
+        if ( eNotificationRequired () )
+        {
+            final ENotificationImpl notification = new ENotificationImpl ( this, Notification.SET, ChartPackage.DATA_ITEM_SERIES__LINE_PROPERTIES, oldLineProperties, newLineProperties );
+            if ( msgs == null )
+            {
+                msgs = notification;
+            }
+            else
+            {
+                msgs.add ( notification );
+            }
+        }
+        return msgs;
+    }
+
+    /**
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated
+     */
+    @Override
+    public void setLineProperties ( final LineProperties newLineProperties )
+    {
+        if ( newLineProperties != this.lineProperties )
+        {
+            NotificationChain msgs = null;
+            if ( this.lineProperties != null )
+            {
+                msgs = ( (InternalEObject)this.lineProperties ).eInverseRemove ( this, EOPPOSITE_FEATURE_BASE - ChartPackage.DATA_ITEM_SERIES__LINE_PROPERTIES, null, msgs );
+            }
+            if ( newLineProperties != null )
+            {
+                msgs = ( (InternalEObject)newLineProperties ).eInverseAdd ( this, EOPPOSITE_FEATURE_BASE - ChartPackage.DATA_ITEM_SERIES__LINE_PROPERTIES, null, msgs );
+            }
+            msgs = basicSetLineProperties ( newLineProperties, msgs );
+            if ( msgs != null )
+            {
+                msgs.dispatch ();
+            }
+        }
+        else if ( eNotificationRequired () )
+        {
+            eNotify ( new ENotificationImpl ( this, Notification.SET, ChartPackage.DATA_ITEM_SERIES__LINE_PROPERTIES, newLineProperties, newLineProperties ) );
+        }
+    }
+
+    /**
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated
+     */
+    @Override
+    public NotificationChain eInverseRemove ( final InternalEObject otherEnd, final int featureID, final NotificationChain msgs )
     {
         switch ( featureID )
         {
-            case ChartPackage.DATA_ITEM_SERIES__LINE_COLOR:
-                return getLineColor ();
-            case ChartPackage.DATA_ITEM_SERIES__LINE_WIDTH:
-                return getLineWidth ();
+            case ChartPackage.DATA_ITEM_SERIES__LINE_PROPERTIES:
+                return basicSetLineProperties ( null, msgs );
+        }
+        return super.eInverseRemove ( otherEnd, featureID, msgs );
+    }
+
+    /**
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated
+     */
+    @Override
+    public Object eGet ( final int featureID, final boolean resolve, final boolean coreType )
+    {
+        switch ( featureID )
+        {
+            case ChartPackage.DATA_ITEM_SERIES__LINE_PROPERTIES:
+                return getLineProperties ();
         }
         return super.eGet ( featureID, resolve, coreType );
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     @Override
-    public void eSet ( int featureID, Object newValue )
+    public void eSet ( final int featureID, final Object newValue )
     {
         switch ( featureID )
         {
-            case ChartPackage.DATA_ITEM_SERIES__LINE_COLOR:
-                setLineColor ( (RGB)newValue );
-                return;
-            case ChartPackage.DATA_ITEM_SERIES__LINE_WIDTH:
-                setLineWidth ( (Float)newValue );
+            case ChartPackage.DATA_ITEM_SERIES__LINE_PROPERTIES:
+                setLineProperties ( (LineProperties)newValue );
                 return;
         }
         super.eSet ( featureID, newValue );
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     @Override
-    public void eUnset ( int featureID )
+    public void eUnset ( final int featureID )
     {
         switch ( featureID )
         {
-            case ChartPackage.DATA_ITEM_SERIES__LINE_COLOR:
-                setLineColor ( LINE_COLOR_EDEFAULT );
-                return;
-            case ChartPackage.DATA_ITEM_SERIES__LINE_WIDTH:
-                setLineWidth ( LINE_WIDTH_EDEFAULT );
+            case ChartPackage.DATA_ITEM_SERIES__LINE_PROPERTIES:
+                setLineProperties ( (LineProperties)null );
                 return;
         }
         super.eUnset ( featureID );
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     @Override
-    public boolean eIsSet ( int featureID )
+    public boolean eIsSet ( final int featureID )
     {
         switch ( featureID )
         {
-            case ChartPackage.DATA_ITEM_SERIES__LINE_COLOR:
-                return LINE_COLOR_EDEFAULT == null ? lineColor != null : !LINE_COLOR_EDEFAULT.equals ( lineColor );
-            case ChartPackage.DATA_ITEM_SERIES__LINE_WIDTH:
-                return lineWidth != LINE_WIDTH_EDEFAULT;
+            case ChartPackage.DATA_ITEM_SERIES__LINE_PROPERTIES:
+                return this.lineProperties != null;
         }
         return super.eIsSet ( featureID );
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    @Override
-    public String toString ()
-    {
-        if ( eIsProxy () )
-            return super.toString ();
-
-        StringBuffer result = new StringBuffer ( super.toString () );
-        result.append ( " (lineColor: " );
-        result.append ( lineColor );
-        result.append ( ", lineWidth: " );
-        result.append ( lineWidth );
-        result.append ( ')' );
-        return result.toString ();
     }
 
 } //DataItemSeriesImpl

@@ -16,8 +16,7 @@ import org.eclipse.swt.graphics.RGB;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link org.openscada.ui.chart.model.ChartModel.DataItemSeries#getLineColor <em>Line Color</em>}</li>
- *   <li>{@link org.openscada.ui.chart.model.ChartModel.DataItemSeries#getLineWidth <em>Line Width</em>}</li>
+ *   <li>{@link org.openscada.ui.chart.model.ChartModel.DataItemSeries#getLineProperties <em>Line Properties</em>}</li>
  * </ul>
  * </p>
  *
@@ -29,55 +28,28 @@ public interface DataItemSeries extends ItemDataSeries
 {
 
     /**
-     * Returns the value of the '<em><b>Line Color</b></em>' attribute.
+     * Returns the value of the '<em><b>Line Properties</b></em>' containment reference.
      * <!-- begin-user-doc -->
      * <p>
-     * If the meaning of the '<em>Line Color</em>' attribute isn't clear,
+     * If the meaning of the '<em>Line Properties</em>' containment reference isn't clear,
      * there really should be more of a description here...
      * </p>
      * <!-- end-user-doc -->
-     * @return the value of the '<em>Line Color</em>' attribute.
-     * @see #setLineColor(RGB)
-     * @see org.openscada.ui.chart.model.ChartModel.ChartPackage#getDataItemSeries_LineColor()
-     * @model dataType="org.openscada.ui.chart.model.ChartModel.RGB"
+     * @return the value of the '<em>Line Properties</em>' containment reference.
+     * @see #setLineProperties(LineProperties)
+     * @see org.openscada.ui.chart.model.ChartModel.ChartPackage#getDataItemSeries_LineProperties()
+     * @model containment="true" required="true"
      * @generated
      */
-    RGB getLineColor ();
+    LineProperties getLineProperties ();
 
     /**
-     * Sets the value of the '{@link org.openscada.ui.chart.model.ChartModel.DataItemSeries#getLineColor <em>Line Color</em>}' attribute.
+     * Sets the value of the '{@link org.openscada.ui.chart.model.ChartModel.DataItemSeries#getLineProperties <em>Line Properties</em>}' containment reference.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @param value the new value of the '<em>Line Color</em>' attribute.
-     * @see #getLineColor()
+     * @param value the new value of the '<em>Line Properties</em>' containment reference.
+     * @see #getLineProperties()
      * @generated
      */
-    void setLineColor ( RGB value );
-
-    /**
-     * Returns the value of the '<em><b>Line Width</b></em>' attribute.
-     * The default value is <code>"1"</code>.
-     * <!-- begin-user-doc -->
-     * <p>
-     * If the meaning of the '<em>Line Width</em>' attribute isn't clear,
-     * there really should be more of a description here...
-     * </p>
-     * <!-- end-user-doc -->
-     * @return the value of the '<em>Line Width</em>' attribute.
-     * @see #setLineWidth(float)
-     * @see org.openscada.ui.chart.model.ChartModel.ChartPackage#getDataItemSeries_LineWidth()
-     * @model default="1" required="true"
-     * @generated
-     */
-    float getLineWidth ();
-
-    /**
-     * Sets the value of the '{@link org.openscada.ui.chart.model.ChartModel.DataItemSeries#getLineWidth <em>Line Width</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @param value the new value of the '<em>Line Width</em>' attribute.
-     * @see #getLineWidth()
-     * @generated
-     */
-    void setLineWidth ( float value );
+    void setLineProperties ( LineProperties value );
 } // DataItemSeries

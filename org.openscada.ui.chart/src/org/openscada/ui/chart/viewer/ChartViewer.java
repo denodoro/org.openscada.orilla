@@ -449,7 +449,7 @@ public class ChartViewer
         itemRef.setConnectionUri ( item.getConnectionString () );
 
         final ArchiveSeries input = ChartFactory.eINSTANCE.createArchiveSeries ();
-        input.setLabel ( item.toString () );
+        input.setLabel ( item.toLabel () );
         input.setItem ( itemRef );
         input.setX ( this.selectedXAxisElement );
         input.setY ( this.selectedYAxisElement );
@@ -495,7 +495,7 @@ public class ChartViewer
         input.setX ( this.selectedXAxisElement );
         input.setY ( this.selectedYAxisElement );
 
-        input.setLineColor ( nextFreeColor () );
+        input.getLineProperties ().setColor ( nextFreeColor () );
 
         this.chart.getInputs ().add ( input );
     }

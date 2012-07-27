@@ -19,12 +19,12 @@
 
 package org.openscada.ui.chart.view.input;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Display;
+import org.eclipse.jface.resource.ResourceManager;
+import org.openscada.chart.swt.render.AbstractLineRender;
 import org.openscada.chart.swt.render.StepRenderer;
 import org.openscada.ui.chart.viewer.ChartViewer;
 
-public class ArchiveChannelInput implements ChartInput
+public class ArchiveChannelInput extends LineInput implements ChartInput
 {
 
     private boolean disposed;
@@ -37,17 +37,24 @@ public class ArchiveChannelInput implements ChartInput
 
     private String label;
 
-    public ArchiveChannelInput ( final ChartViewer viewer, final QueryChannelSeriesData data )
+    public ArchiveChannelInput ( final ChartViewer viewer, final QueryChannelSeriesData data, final ResourceManager resourceManager )
     {
+        super ( resourceManager );
+
         this.viewer = viewer;
 
         this.renderer = viewer.getManager ().createStepSeries ( data );
-        this.renderer.setLineColor ( Display.getDefault ().getSystemColor ( SWT.COLOR_RED ) );
     }
 
     @Override
     public void setSelection ( final boolean state )
     {
+    }
+
+    @Override
+    protected AbstractLineRender getLineRenderer ()
+    {
+        return this.renderer;
     }
 
     @Override
@@ -63,6 +70,8 @@ public class ArchiveChannelInput implements ChartInput
 
         this.renderer.dispose ();
         this.data.dispose ();
+        
+        super.dispose ();
     }
 
     @Override

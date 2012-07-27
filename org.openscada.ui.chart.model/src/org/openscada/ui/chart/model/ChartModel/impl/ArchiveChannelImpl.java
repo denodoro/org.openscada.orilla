@@ -7,24 +7,24 @@
 package org.openscada.ui.chart.model.ChartModel.impl;
 
 import org.eclipse.emf.common.notify.Notification;
-
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
-
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
-
 import org.openscada.ui.chart.model.ChartModel.ArchiveChannel;
+import org.openscada.ui.chart.model.ChartModel.ChartFactory;
 import org.openscada.ui.chart.model.ChartModel.ChartPackage;
+import org.openscada.ui.chart.model.ChartModel.LineProperties;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Archive Channel</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Archive Channel</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.ArchiveChannelImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.ArchiveChannelImpl#getLabel <em>Label</em>}</li>
+ *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.ArchiveChannelImpl#getLineProperties <em>Line Properties</em>}</li>
  * </ul>
  * </p>
  *
@@ -34,8 +34,7 @@ public class ArchiveChannelImpl extends EObjectImpl implements ArchiveChannel
 {
     /**
      * The default value of the '{@link #getName() <em>Name</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @see #getName()
      * @generated
      * @ordered
@@ -44,8 +43,7 @@ public class ArchiveChannelImpl extends EObjectImpl implements ArchiveChannel
 
     /**
      * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @see #getName()
      * @generated
      * @ordered
@@ -54,8 +52,7 @@ public class ArchiveChannelImpl extends EObjectImpl implements ArchiveChannel
 
     /**
      * The default value of the '{@link #getLabel() <em>Label</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @see #getLabel()
      * @generated
      * @ordered
@@ -64,8 +61,7 @@ public class ArchiveChannelImpl extends EObjectImpl implements ArchiveChannel
 
     /**
      * The cached value of the '{@link #getLabel() <em>Label</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @see #getLabel()
      * @generated
      * @ordered
@@ -73,18 +69,27 @@ public class ArchiveChannelImpl extends EObjectImpl implements ArchiveChannel
     protected String label = LABEL_EDEFAULT;
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * The cached value of the '{@link #getLineProperties() <em>Line Properties</em>}' containment reference.
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * @see #getLineProperties()
      * @generated
+     * @ordered
+     */
+    protected LineProperties lineProperties;
+
+    /**
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated NOT
      */
     protected ArchiveChannelImpl ()
     {
         super ();
+        this.lineProperties = ChartFactory.eINSTANCE.createLineProperties ();
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     @Override
@@ -94,20 +99,20 @@ public class ArchiveChannelImpl extends EObjectImpl implements ArchiveChannel
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public String getName ()
     {
         return name;
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public void setName ( String newName )
     {
         String oldName = name;
@@ -117,20 +122,20 @@ public class ArchiveChannelImpl extends EObjectImpl implements ArchiveChannel
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public String getLabel ()
     {
         return label;
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
+    @Override
     public void setLabel ( String newLabel )
     {
         String oldLabel = label;
@@ -140,8 +145,73 @@ public class ArchiveChannelImpl extends EObjectImpl implements ArchiveChannel
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * @generated
+     */
+    @Override
+    public LineProperties getLineProperties ()
+    {
+        return lineProperties;
+    }
+
+    /**
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * @generated
+     */
+    public NotificationChain basicSetLineProperties ( LineProperties newLineProperties, NotificationChain msgs )
+    {
+        LineProperties oldLineProperties = lineProperties;
+        lineProperties = newLineProperties;
+        if ( eNotificationRequired () )
+        {
+            ENotificationImpl notification = new ENotificationImpl ( this, Notification.SET, ChartPackage.ARCHIVE_CHANNEL__LINE_PROPERTIES, oldLineProperties, newLineProperties );
+            if ( msgs == null )
+                msgs = notification;
+            else
+                msgs.add ( notification );
+        }
+        return msgs;
+    }
+
+    /**
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * @generated
+     */
+    @Override
+    public void setLineProperties ( LineProperties newLineProperties )
+    {
+        if ( newLineProperties != lineProperties )
+        {
+            NotificationChain msgs = null;
+            if ( lineProperties != null )
+                msgs = ( (InternalEObject)lineProperties ).eInverseRemove ( this, EOPPOSITE_FEATURE_BASE - ChartPackage.ARCHIVE_CHANNEL__LINE_PROPERTIES, null, msgs );
+            if ( newLineProperties != null )
+                msgs = ( (InternalEObject)newLineProperties ).eInverseAdd ( this, EOPPOSITE_FEATURE_BASE - ChartPackage.ARCHIVE_CHANNEL__LINE_PROPERTIES, null, msgs );
+            msgs = basicSetLineProperties ( newLineProperties, msgs );
+            if ( msgs != null )
+                msgs.dispatch ();
+        }
+        else if ( eNotificationRequired () )
+            eNotify ( new ENotificationImpl ( this, Notification.SET, ChartPackage.ARCHIVE_CHANNEL__LINE_PROPERTIES, newLineProperties, newLineProperties ) );
+    }
+
+    /**
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * @generated
+     */
+    @Override
+    public NotificationChain eInverseRemove ( InternalEObject otherEnd, int featureID, NotificationChain msgs )
+    {
+        switch ( featureID )
+        {
+            case ChartPackage.ARCHIVE_CHANNEL__LINE_PROPERTIES:
+                return basicSetLineProperties ( null, msgs );
+        }
+        return super.eInverseRemove ( otherEnd, featureID, msgs );
+    }
+
+    /**
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     @Override
@@ -153,13 +223,14 @@ public class ArchiveChannelImpl extends EObjectImpl implements ArchiveChannel
                 return getName ();
             case ChartPackage.ARCHIVE_CHANNEL__LABEL:
                 return getLabel ();
+            case ChartPackage.ARCHIVE_CHANNEL__LINE_PROPERTIES:
+                return getLineProperties ();
         }
         return super.eGet ( featureID, resolve, coreType );
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     @Override
@@ -173,13 +244,15 @@ public class ArchiveChannelImpl extends EObjectImpl implements ArchiveChannel
             case ChartPackage.ARCHIVE_CHANNEL__LABEL:
                 setLabel ( (String)newValue );
                 return;
+            case ChartPackage.ARCHIVE_CHANNEL__LINE_PROPERTIES:
+                setLineProperties ( (LineProperties)newValue );
+                return;
         }
         super.eSet ( featureID, newValue );
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     @Override
@@ -193,13 +266,15 @@ public class ArchiveChannelImpl extends EObjectImpl implements ArchiveChannel
             case ChartPackage.ARCHIVE_CHANNEL__LABEL:
                 setLabel ( LABEL_EDEFAULT );
                 return;
+            case ChartPackage.ARCHIVE_CHANNEL__LINE_PROPERTIES:
+                setLineProperties ( (LineProperties)null );
+                return;
         }
         super.eUnset ( featureID );
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     @Override
@@ -211,13 +286,14 @@ public class ArchiveChannelImpl extends EObjectImpl implements ArchiveChannel
                 return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals ( name );
             case ChartPackage.ARCHIVE_CHANNEL__LABEL:
                 return LABEL_EDEFAULT == null ? label != null : !LABEL_EDEFAULT.equals ( label );
+            case ChartPackage.ARCHIVE_CHANNEL__LINE_PROPERTIES:
+                return lineProperties != null;
         }
         return super.eIsSet ( featureID );
     }
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
     @Override

@@ -278,6 +278,31 @@ public class ChartItemProviderAdapterFactory extends ChartAdapterFactory impleme
     }
 
     /**
+     * This keeps track of the one adapter used for all {@link org.openscada.ui.chart.model.ChartModel.LineProperties} instances.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    protected LinePropertiesItemProvider linePropertiesItemProvider;
+
+    /**
+     * This creates an adapter for a {@link org.openscada.ui.chart.model.ChartModel.LineProperties}.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    @Override
+    public Adapter createLinePropertiesAdapter ()
+    {
+        if ( linePropertiesItemProvider == null )
+        {
+            linePropertiesItemProvider = new LinePropertiesItemProvider ( this );
+        }
+
+        return linePropertiesItemProvider;
+    }
+
+    /**
      * This returns the root adapter factory that contains this factory.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -404,6 +429,8 @@ public class ChartItemProviderAdapterFactory extends ChartAdapterFactory impleme
             idItemItemProvider.dispose ();
         if ( archiveChannelItemProvider != null )
             archiveChannelItemProvider.dispose ();
+        if ( linePropertiesItemProvider != null )
+            linePropertiesItemProvider.dispose ();
     }
 
 }

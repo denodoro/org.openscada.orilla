@@ -90,6 +90,8 @@ public class ChartFactoryImpl extends EFactoryImpl implements ChartFactory
                 return createIdItem ();
             case ChartPackage.ARCHIVE_CHANNEL:
                 return createArchiveChannel ();
+            case ChartPackage.LINE_PROPERTIES:
+                return createLineProperties ();
             default:
                 throw new IllegalArgumentException ( "The class '" + eClass.getName () + "' is not a valid classifier" );
         }
@@ -213,6 +215,17 @@ public class ChartFactoryImpl extends EFactoryImpl implements ChartFactory
     {
         ArchiveChannelImpl archiveChannel = new ArchiveChannelImpl ();
         return archiveChannel;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public LineProperties createLineProperties ()
+    {
+        LinePropertiesImpl lineProperties = new LinePropertiesImpl ();
+        return lineProperties;
     }
 
     /**
