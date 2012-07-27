@@ -19,8 +19,15 @@
 
 package org.openscada.ui.chart.view.input;
 
+import java.util.Date;
+
 public interface ChartInput
 {
+    public static final String PROP_SELECTED_TIMESTAMP = "selectedTimestamp";
+
+    public static final String PROP_SELECTED_VALUE = "selectedValue";
+
+    public static final String PROP_STATE = "state";
 
     public void setSelection ( final boolean state );
 
@@ -32,4 +39,9 @@ public interface ChartInput
 
     public String getState ();
 
+    public String getSelectedValue ();
+
+    public Date getSelectedTimestamp ();
+
+    public void setSelection ( Date date );
 }

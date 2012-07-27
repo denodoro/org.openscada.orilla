@@ -21,11 +21,15 @@ package org.openscada.ui.chart.view.input;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Calendar;
+import java.util.Date;
 
 import org.eclipse.jface.resource.ResourceManager;
 import org.openscada.chart.swt.render.AbstractLineRender;
 import org.openscada.chart.swt.render.StepRenderer;
 import org.openscada.hd.QueryState;
+import org.openscada.hd.Value;
+import org.openscada.hd.ValueInformation;
 import org.openscada.hd.ui.connection.data.Item;
 import org.openscada.hd.ui.data.AbstractQueryBuffer;
 import org.openscada.hd.ui.data.ServiceQueryBuffer;
@@ -52,6 +56,8 @@ public class ArchiveInput extends LineInput implements ChartInput
 
     private String state;
 
+    private Date originalSelectedTimestamp;
+
     public ArchiveInput ( final Item item, final ChartViewer viewer, final QuerySeriesData querySeriesData, final ResourceManager resourceManager )
     {
         super ( resourceManager );
@@ -61,6 +67,8 @@ public class ArchiveInput extends LineInput implements ChartInput
         this.data = querySeriesData;
 
         this.renderer = viewer.getManager ().createStepSeries ( querySeriesData );
+
+        attachHover ( viewer, querySeriesData.getXAxis () );
 
         this.query = querySeriesData.getQuery ();
 
@@ -86,6 +94,10 @@ public class ArchiveInput extends LineInput implements ChartInput
         {
             setState ( makeState () );
         }
+
+        // FIXME: should be in "updateData"
+        // reset selected timestamp and update 
+        setSelection ( this.originalSelectedTimestamp );
     }
 
     @Override
@@ -164,5 +176,66 @@ public class ArchiveInput extends LineInput implements ChartInput
     public String getState ()
     {
         return this.state;
+    }
+
+    @Override
+    protected void setSelectedTimestamp ( final Date selectedTimestamp )
+    {
+        if ( selectedTimestamp == null )
+        {
+            return;
+        }
+
+        this.originalSelectedTimestamp = selectedTimestamp;
+
+        if ( this.data == null || this.data.getQuery () == null )
+        {
+            return;
+        }
+
+        final ValueInformation[] infos = this.data.getQuery ().getValueInformation ();
+
+        if ( infos == null )
+        {
+            return;
+        }
+
+        final Calendar c = Calendar.getInstance ();
+        c.setTime ( selectedTimestamp );
+
+        for ( int i = 0; i < infos.length; i++ )
+        {
+            final ValueInformation vi = infos[i];
+
+            if ( vi == null )
+            {
+                continue;
+            }
+            if ( vi.getStartTimestamp () == null || vi.getEndTimestamp () == null )
+            {
+                continue;
+            }
+
+            if ( vi.getStartTimestamp ().before ( c ) && vi.getEndTimestamp ().after ( c ) )
+            {
+                super.setSelectedTimestamp ( vi.getStartTimestamp ().getTime () );
+                setSelectedValue ( toString ( this.data.getQuery (), i, "AVG" ) );
+            }
+        }
+    }
+
+    private String toString ( final ServiceQueryBuffer query, final int index, final String channelName )
+    {
+        final Value[] data = query.getValues ().get ( channelName );
+        if ( data == null )
+        {
+            return null;
+        }
+        if ( index >= data.length )
+        {
+            return null;
+        }
+
+        return String.format ( "%s", data[index].toDouble () );
     }
 }

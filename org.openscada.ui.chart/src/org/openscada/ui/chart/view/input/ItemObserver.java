@@ -21,6 +21,7 @@ package org.openscada.ui.chart.view.input;
 
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.LinkedList;
 
 import org.eclipse.jface.resource.ResourceManager;
@@ -74,6 +75,8 @@ public class ItemObserver extends LineInput implements DataSourceListener, Chart
     private boolean disposed;
 
     private SubscriptionState state;
+
+    private Date originalSelectedTimestamp;
 
     private static class LevelRuler
     {
@@ -155,6 +158,8 @@ public class ItemObserver extends LineInput implements DataSourceListener, Chart
 
         this.valueRenderer = this.manager.createStepSeries ( this.valueSeries );
         connect ();
+
+        attachHover ( viewer, x );
     }
 
     @Override
@@ -314,6 +319,8 @@ public class ItemObserver extends LineInput implements DataSourceListener, Chart
         final DataEntry entry = makeEntry ( value );
         this.valueSeries.getData ().addAsLast ( entry );
         updateLevels ();
+
+        setSelection ( this.originalSelectedTimestamp );
     }
 
     private DataEntry makeEntry ( final DataItemValue value )
@@ -341,5 +348,33 @@ public class ItemObserver extends LineInput implements DataSourceListener, Chart
     {
         final SubscriptionState state = this.state;
         return state == null ? null : state.name ();
+    }
+
+    @Override
+    protected void setSelectedTimestamp ( final Date selectedTimestamp )
+    {
+        if ( selectedTimestamp == null )
+        {
+            return;
+        }
+
+        this.originalSelectedTimestamp = selectedTimestamp;
+
+        if ( this.valueSeries == null || this.valueSeries.getData () == null )
+        {
+            return;
+        }
+
+        final DataEntry value = this.valueSeries.getData ().getEntries ().lower ( new DataEntry ( selectedTimestamp.getTime (), null ) );
+        if ( value == null )
+        {
+            setSelectedValue ( null );
+            super.setSelectedTimestamp ( null );
+        }
+        else
+        {
+            setSelectedValue ( String.format ( "%s", value.getValue () ) );
+            super.setSelectedTimestamp ( new Date ( value.getTimestamp () ) );
+        }
     }
 }

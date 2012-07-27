@@ -20,6 +20,7 @@
 package org.openscada.ui.chart.viewer;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.Set;
@@ -46,6 +47,7 @@ import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Composite;
@@ -53,6 +55,8 @@ import org.eclipse.swt.widgets.Display;
 import org.openscada.chart.Realm;
 import org.openscada.chart.swt.DisplayRealm;
 import org.openscada.chart.swt.controller.MouseDragZoomer;
+import org.openscada.chart.swt.controller.MouseHover;
+import org.openscada.chart.swt.controller.MouseHover.Listener;
 import org.openscada.chart.swt.controller.MouseTransformer;
 import org.openscada.chart.swt.controller.MouseWheelZoomer;
 import org.openscada.chart.swt.manager.ChartManager;
@@ -125,6 +129,17 @@ public class ChartViewer
 
     private boolean mutable;
 
+    private final MouseHover.Listener hoverListener = new Listener () {
+
+        @Override
+        public void mouseMove ( final MouseEvent e, final long timestamp )
+        {
+            // no-op
+        }
+    };
+
+    private MouseHover mouseHover;
+
     public ChartViewer ( final Composite parent, final Chart chart )
     {
         this.chart = chart;
@@ -176,6 +191,20 @@ public class ChartViewer
                 handleDispose ();
             }
         } );
+    }
+
+    protected void handleMouseMove ( final MouseEvent e, final long timestamp )
+    {
+        setInputSelection ( timestamp );
+    }
+
+    private void setInputSelection ( final long timestamp )
+    {
+        final Date date = new Date ( timestamp );
+        for ( final Object input : this.items )
+        {
+            ( (ChartInput)input ).setSelection ( date );
+        }
     }
 
     public void setMutable ( final boolean mutable )
@@ -258,12 +287,19 @@ public class ChartViewer
             this.mouseWheelZoomer.dispose ();
             this.mouseWheelZoomer = null;
         }
+        if ( this.mouseHover != null )
+        {
+            this.mouseHover.dispose ();
+            this.mouseHover = null;
+        }
 
         if ( x != null && y != null )
         {
             this.mouseTransformer = new MouseTransformer ( this.manager.getChartArea (), x, y );
             this.mouseDragZoomer = new MouseDragZoomer ( this.manager.getChartArea (), x, y );
             this.mouseWheelZoomer = new MouseWheelZoomer ( this.manager.getChartArea (), x, y );
+            this.mouseHover = new MouseHover ( this.manager.getChartArea (), x, this.hoverListener );
+            this.mouseHover.setVisible ( true );
         }
 
         // update current time tracker

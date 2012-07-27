@@ -190,9 +190,16 @@ public class QuerySeriesData extends AbstractSeriesData
             }
 
             final long timestamp = info[i].getStartTimestamp ().getTimeInMillis ();
-            final Double value = avgData[i].toDouble ();
 
-            data.add ( new DataEntry ( timestamp, value ) );
+            if ( avgData[i] != null )
+            {
+                final Double value = avgData[i].toDouble ();
+                data.add ( new DataEntry ( timestamp, value ) );
+            }
+            else
+            {
+                data.add ( new DataEntry ( timestamp, null ) );
+            }
         }
 
         return data;

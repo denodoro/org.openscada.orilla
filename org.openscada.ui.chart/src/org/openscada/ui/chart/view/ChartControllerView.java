@@ -19,6 +19,9 @@
 
 package org.openscada.ui.chart.view;
 
+import java.text.DateFormat;
+import java.util.Date;
+
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.beans.BeansObservables;
 import org.eclipse.jface.action.IMenuListener;
@@ -84,12 +87,39 @@ public class ChartControllerView extends AbstractChartManagePart
             final TableViewerColumn col = new TableViewerColumn ( this.viewer, SWT.NONE );
             col.getColumn ().setText ( "State" );
             layout.setColumnData ( col.getColumn (), new ColumnWeightData ( 100 ) );
-            col.setLabelProvider ( new ObservableMapCellLabelProvider ( BeansObservables.observeMap ( provider.getRealizedElements (), "state" ) ) {
+            col.setLabelProvider ( new ObservableMapCellLabelProvider ( BeansObservables.observeMap ( provider.getRealizedElements (), ChartInput.PROP_STATE ) ) {
 
                 @Override
                 public void update ( final ViewerCell cell )
                 {
                     cell.setText ( ( (ChartInput)cell.getElement () ).getState () );
+                }
+            } );
+        }
+        {
+            final TableViewerColumn col = new TableViewerColumn ( this.viewer, SWT.NONE );
+            col.getColumn ().setText ( "Selected Timestamp" );
+            layout.setColumnData ( col.getColumn (), new ColumnWeightData ( 100 ) );
+            col.setLabelProvider ( new ObservableMapCellLabelProvider ( BeansObservables.observeMap ( provider.getRealizedElements (), ChartInput.PROP_SELECTED_TIMESTAMP ) ) {
+
+                @Override
+                public void update ( final ViewerCell cell )
+                {
+                    final Date timestamp = ( (ChartInput)cell.getElement () ).getSelectedTimestamp ();
+                    cell.setText ( timestamp == null ? null : DateFormat.getDateTimeInstance ().format ( timestamp ) );
+                }
+            } );
+        }
+        {
+            final TableViewerColumn col = new TableViewerColumn ( this.viewer, SWT.NONE );
+            col.getColumn ().setText ( "Selected Value" );
+            layout.setColumnData ( col.getColumn (), new ColumnWeightData ( 100 ) );
+            col.setLabelProvider ( new ObservableMapCellLabelProvider ( BeansObservables.observeMap ( provider.getRealizedElements (), ChartInput.PROP_SELECTED_TIMESTAMP ) ) {
+
+                @Override
+                public void update ( final ViewerCell cell )
+                {
+                    cell.setText ( ( (ChartInput)cell.getElement () ).getSelectedValue () );
                 }
             } );
         }
