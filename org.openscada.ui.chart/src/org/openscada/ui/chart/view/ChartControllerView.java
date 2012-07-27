@@ -31,12 +31,13 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.databinding.viewers.ObservableMapCellLabelProvider;
 import org.eclipse.jface.layout.TableColumnLayout;
-import org.eclipse.jface.viewers.CellLabelProvider;
+import org.eclipse.jface.viewers.ColumnPixelData;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
@@ -74,12 +75,35 @@ public class ChartControllerView extends AbstractChartManagePart
             final TableViewerColumn col = new TableViewerColumn ( this.viewer, SWT.NONE );
             col.getColumn ().setText ( "Input" );
             layout.setColumnData ( col.getColumn (), new ColumnWeightData ( 100 ) );
-            col.setLabelProvider ( new CellLabelProvider () {
+            col.setLabelProvider ( new ObservableMapCellLabelProvider ( BeansObservables.observeMap ( provider.getRealizedElements (), "label" ) ) {
 
                 @Override
                 public void update ( final ViewerCell cell )
                 {
                     cell.setText ( ( (ChartInput)cell.getElement () ).getLabel () );
+                }
+            } );
+        }
+        {
+            final TableViewerColumn col = new TableViewerColumn ( this.viewer, SWT.NONE );
+            col.getColumn ().setText ( "Preview" );
+            col.getColumn ().setAlignment ( SWT.CENTER );
+            layout.setColumnData ( col.getColumn (), new ColumnPixelData ( 50 ) );
+            col.setLabelProvider ( new ObservableMapCellLabelProvider ( BeansObservables.observeMap ( provider.getRealizedElements (), ChartInput.PROP_PREVIEW ) ) {
+
+                @Override
+                public void update ( final ViewerCell cell )
+                {
+                    final Rectangle rect = cell.getImageBounds ();
+
+                    if ( rect != null && rect.width > 0 && rect.height > 0 )
+                    {
+                        cell.setImage ( ( (ChartInput)cell.getElement () ).getPreview ( rect.width, rect.height ) );
+                    }
+                    else
+                    {
+                        cell.setImage ( ( (ChartInput)cell.getElement () ).getPreview ( 50, 20 ) );
+                    }
                 }
             } );
         }

@@ -21,6 +21,8 @@ package org.openscada.ui.chart.view.input;
 
 import java.util.Date;
 
+import org.eclipse.swt.graphics.Image;
+
 public interface ChartInput
 {
     public static final String PROP_SELECTED_TIMESTAMP = "selectedTimestamp";
@@ -30,6 +32,8 @@ public interface ChartInput
     public static final String PROP_SELECTED_QUALITY = "selectedQuality";
 
     public static final String PROP_STATE = "state";
+
+    public static final String PROP_PREVIEW = "preview";
 
     public void setSelection ( final boolean state );
 
@@ -48,4 +52,20 @@ public interface ChartInput
     public Date getSelectedTimestamp ();
 
     public void setSelection ( Date date );
+
+    /**
+     * Get rendered preview
+     * <p>
+     * The chart input implementation must dispose the created image. If the implemenation cannot create the image for the requested size it must return <code>null</code>.
+     * </p>
+     * 
+     * @param width
+     *            the requested width
+     * @param height
+     *            the requested height
+     * @return the rendered preview or <code>null</code>
+     */
+    public Image getPreview ( final int width, int height );
+
+    public Object getPreview ();
 }

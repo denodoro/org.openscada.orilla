@@ -25,6 +25,7 @@ import org.openscada.chart.SeriesDataListener;
 import org.openscada.chart.SeriesViewData;
 import org.openscada.chart.XAxis;
 import org.openscada.chart.YAxis;
+import org.openscada.hd.ui.data.ServiceQueryBuffer;
 
 public class QueryChannelSeriesData extends AbstractSeriesData
 {
@@ -56,6 +57,11 @@ public class QueryChannelSeriesData extends AbstractSeriesData
     {
         this.masterData.removeListener ( this.listener );
         super.dispose ();
+    }
+
+    public ServiceQueryBuffer getQuery ()
+    {
+        return this.masterData.getQuery ();
     }
 
     protected void handleUpdate ( final long startTimestamp, final long endTimestamp )

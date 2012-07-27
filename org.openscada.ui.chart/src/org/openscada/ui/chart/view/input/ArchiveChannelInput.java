@@ -24,7 +24,7 @@ import org.openscada.chart.swt.render.AbstractLineRender;
 import org.openscada.chart.swt.render.StepRenderer;
 import org.openscada.ui.chart.viewer.ChartViewer;
 
-public class ArchiveChannelInput extends LineInput implements ChartInput
+public class ArchiveChannelInput extends QueryInput
 {
 
     private boolean disposed;
@@ -44,6 +44,11 @@ public class ArchiveChannelInput extends LineInput implements ChartInput
         this.viewer = viewer;
 
         this.renderer = viewer.getManager ().createStepSeries ( data );
+        viewer.addInput ( this );
+
+        attachHover ( viewer, data.getXAxis () );
+
+        setQuery ( data.getQuery (), data.getChannelName () );
     }
 
     @Override
@@ -87,7 +92,7 @@ public class ArchiveChannelInput extends LineInput implements ChartInput
 
     public void setLabel ( final String label )
     {
-        this.label = label;
+        firePropertyChange ( "label", this.label, this.label = label );
     }
 
     @Override

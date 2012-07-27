@@ -19,10 +19,18 @@
 
 package org.openscada.ui.chart.view.input;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.jface.resource.LocalResourceManager;
 import org.eclipse.jface.resource.ResourceManager;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.widgets.Display;
 import org.openscada.chart.swt.render.AbstractLineRender;
 
 public abstract class LineInput extends AbstractInput implements LinePropertiesSupporter
@@ -31,6 +39,10 @@ public abstract class LineInput extends AbstractInput implements LinePropertiesS
     private final LocalResourceManager resourceManager;
 
     private Color lineColor;
+
+    private final Map<Point, Image> previews = new HashMap<Point, Image> ();
+
+    private Object preview;
 
     public LineInput ( final ResourceManager resourceManager )
     {
@@ -42,6 +54,7 @@ public abstract class LineInput extends AbstractInput implements LinePropertiesS
     {
         super.dispose ();
         this.resourceManager.dispose ();
+        disposePreviews ();
     }
 
     protected abstract AbstractLineRender getLineRenderer ();
@@ -59,6 +72,7 @@ public abstract class LineInput extends AbstractInput implements LinePropertiesS
             this.lineColor = this.resourceManager.createColor ( rgb );
             getLineRenderer ().setLineColor ( this.lineColor );
         }
+        fireUpdatePreviews ();
     }
 
     @Override
@@ -71,6 +85,7 @@ public abstract class LineInput extends AbstractInput implements LinePropertiesS
     public void setLineWidth ( final float width )
     {
         getLineRenderer ().setLineWidth ( width );
+        fireUpdatePreviews ();
     }
 
     @Override
@@ -79,4 +94,69 @@ public abstract class LineInput extends AbstractInput implements LinePropertiesS
         return getLineRenderer ().getLineWidth ();
     }
 
+    protected void fireUpdatePreviews ()
+    {
+        disposePreviews ();
+        setPreview ( new Object () );
+    }
+
+    private void setPreview ( final Object preview )
+    {
+        firePropertyChange ( PROP_PREVIEW, this.preview, this.preview = preview );
+    }
+
+    @Override
+    public Object getPreview ()
+    {
+        // this is just a dummy method
+        return this.preview;
+    }
+
+    private void disposePreviews ()
+    {
+        for ( final Image image : this.previews.values () )
+        {
+            image.dispose ();
+        }
+        this.previews.clear ();
+    }
+
+    @Override
+    public Image getPreview ( final int width, final int height )
+    {
+        final Point p = new Point ( width, height );
+        final Image img = this.previews.get ( p );
+        if ( img == null )
+        {
+            final Image newImage = makePreview ( p );
+            this.previews.put ( p, newImage );
+            return newImage;
+        }
+        return img;
+
+    }
+
+    private Image makePreview ( final Point p )
+    {
+        final Image img = new Image ( Display.getDefault (), p.x, p.y );
+
+        final GC gc = new GC ( img );
+        try
+        {
+            gc.setForeground ( img.getDevice ().getSystemColor ( SWT.COLOR_WHITE ) );
+            gc.setBackground ( img.getDevice ().getSystemColor ( SWT.COLOR_WHITE ) );
+            gc.fillRectangle ( 0, 0, p.x, p.y );
+
+            gc.setLineAttributes ( getLineRenderer ().getLineAttributes () );
+            gc.setForeground ( getLineRenderer ().getLineColor () );
+
+            gc.drawLine ( 0, p.y / 2, p.x, p.y / 2 );
+        }
+        finally
+        {
+            gc.dispose ();
+        }
+
+        return img;
+    }
 }
