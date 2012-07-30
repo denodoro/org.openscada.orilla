@@ -113,6 +113,10 @@ public class MonitorsView extends AbstractConditionQueryViewPart
         tableLayout.setColumnData ( col, new ColumnWeightData ( 100 ) );
 
         col = new TableColumn ( this.viewer.getTable (), SWT.NONE );
+        col.setText ( "Priority" );
+        tableLayout.setColumnData ( col, new ColumnWeightData ( 50 ) );
+
+        col = new TableColumn ( this.viewer.getTable (), SWT.NONE );
         col.setText ( "Value" );
         tableLayout.setColumnData ( col, new ColumnWeightData ( 50 ) );
 
@@ -141,7 +145,7 @@ public class MonitorsView extends AbstractConditionQueryViewPart
             }
         } );
         this.viewer.setContentProvider ( new ObservableSetContentProvider () );
-        this.viewer.setLabelProvider ( new MonitorsLabelProvider ( BeansObservables.observeMaps ( this.monitors, MonitorStatusBean.class, new String[] { "id", MonitorStatusBean.PROP_STATUS, MonitorStatusBean.PROP_STATUS_TIMESTAMP, MonitorStatusBean.PROP_VALUE, MonitorStatusBean.PROP_LAST_AKN_USER, MonitorStatusBean.PROP_LAST_AKN_TIMESTAMP } ) ) );
+        this.viewer.setLabelProvider ( new MonitorsLabelProvider ( BeansObservables.observeMaps ( this.monitors, MonitorStatusBean.class, new String[] { "id", MonitorStatusBean.PROP_STATUS, MonitorStatusBean.PROP_STATUS_TIMESTAMP, MonitorStatusBean.PROP_VALUE, MonitorStatusBean.PROP_LAST_AKN_USER, MonitorStatusBean.PROP_LAST_AKN_TIMESTAMP, MonitorStatusBean.PROP_LAST_FAIL_TIMESTAMP, MonitorStatusBean.PROP_ATTRIBUTES } ) ) );
         this.viewer.setInput ( this.monitors );
 
         getViewSite ().setSelectionProvider ( this.viewer );
@@ -155,6 +159,7 @@ public class MonitorsView extends AbstractConditionQueryViewPart
         final MenuManager menuMgr = new MenuManager ( "#PopupMenu", VIEW_ID );
         menuMgr.setRemoveAllWhenShown ( true );
         menuMgr.addMenuListener ( new IMenuListener () {
+            @Override
             public void menuAboutToShow ( final IMenuManager manager )
             {
                 fillContextMenu ( manager );
@@ -185,6 +190,7 @@ public class MonitorsView extends AbstractConditionQueryViewPart
 
         scheduleJob ( new Runnable () {
 
+            @Override
             public void run ()
             {
                 MonitorsView.this.monitorSet.clear ();
@@ -199,6 +205,7 @@ public class MonitorsView extends AbstractConditionQueryViewPart
     {
         scheduleJob ( new Runnable () {
 
+            @Override
             public void run ()
             {
                 performDataChanged ( addedOrUpdated, removed );
@@ -272,6 +279,7 @@ public class MonitorsView extends AbstractConditionQueryViewPart
 
         scheduleJob ( new Runnable () {
 
+            @Override
             public void run ()
             {
                 if ( MonitorsView.this.stateLabel.isDisposed () )

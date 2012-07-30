@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -20,6 +20,7 @@
 package org.openscada.ae.ui.connection.data;
 
 import java.util.Date;
+import java.util.Map;
 
 import org.openscada.ae.MonitorStatus;
 import org.openscada.ae.MonitorStatusInformation;
@@ -31,8 +32,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  * A bean holding the monitor status information for the viewer
+ * 
  * @author Jens Reimann
- *
  */
 public class MonitorStatusBean extends AbstractPropertyChange
 {
@@ -49,6 +50,10 @@ public class MonitorStatusBean extends AbstractPropertyChange
 
     public static final String PROP_LAST_AKN_TIMESTAMP = "lastAknTimestamp";
 
+    public static final String PROP_LAST_FAIL_TIMESTAMP = "lastFailTimestamp";
+
+    public static final String PROP_ATTRIBUTES = "attributes";
+
     private final ConnectionService connection;
 
     private final String id;
@@ -62,6 +67,10 @@ public class MonitorStatusBean extends AbstractPropertyChange
     private String lastAknUser;
 
     private Date lastAknTimestamp;
+
+    private Date lastFailTimestamp;
+
+    private Map<String, Variant> attributes;
 
     public MonitorStatusBean ( final ConnectionService connection, final String id )
     {
@@ -77,6 +86,8 @@ public class MonitorStatusBean extends AbstractPropertyChange
         this.value = information.getValue ();
         this.lastAknUser = information.getLastAknUser ();
         this.lastAknTimestamp = information.getLastAknTimestamp ();
+        this.lastFailTimestamp = information.getLastFailTimestamp ();
+        this.attributes = information.getAttributes ();
     }
 
     public String getId ()
@@ -96,9 +107,7 @@ public class MonitorStatusBean extends AbstractPropertyChange
 
     public void setStatus ( final MonitorStatus status )
     {
-        final MonitorStatus oldStatus = this.status;
-        this.status = status;
-        firePropertyChange ( PROP_STATUS, oldStatus, status );
+        firePropertyChange ( PROP_STATUS, this.status, this.status = status );
     }
 
     public void update ( final MonitorStatusInformation info )
@@ -117,9 +126,7 @@ public class MonitorStatusBean extends AbstractPropertyChange
 
     public void setStatusTimestamp ( final Date statusTimestamp )
     {
-        final Date oldStatusTimestamp = this.statusTimestamp;
-        this.statusTimestamp = statusTimestamp;
-        firePropertyChange ( PROP_STATUS_TIMESTAMP, oldStatusTimestamp, statusTimestamp );
+        firePropertyChange ( PROP_STATUS_TIMESTAMP, this.statusTimestamp, this.statusTimestamp = statusTimestamp );
     }
 
     public Variant getValue ()
@@ -129,9 +136,7 @@ public class MonitorStatusBean extends AbstractPropertyChange
 
     public void setValue ( final Variant value )
     {
-        final Variant oldValue = this.value;
-        this.value = value;
-        firePropertyChange ( PROP_VALUE, oldValue, value );
+        firePropertyChange ( PROP_VALUE, this.value, this.value = value );
     }
 
     public String getLastAknUser ()
@@ -141,9 +146,7 @@ public class MonitorStatusBean extends AbstractPropertyChange
 
     public void setLastAknUser ( final String lastAknUser )
     {
-        final String oldLastAknUser = this.lastAknUser;
-        this.lastAknUser = lastAknUser;
-        firePropertyChange ( PROP_LAST_AKN_USER, oldLastAknUser, lastAknUser );
+        firePropertyChange ( PROP_LAST_AKN_USER, this.lastAknUser, this.lastAknUser = lastAknUser );
     }
 
     public Date getLastAknTimestamp ()
@@ -153,14 +156,32 @@ public class MonitorStatusBean extends AbstractPropertyChange
 
     public void setLastAknTimestamp ( final Date lastAknTimestamp )
     {
-        final Date oldLastDateAknTimestamp = this.lastAknTimestamp;
-        this.lastAknTimestamp = lastAknTimestamp;
-        firePropertyChange ( PROP_LAST_AKN_TIMESTAMP, oldLastDateAknTimestamp, lastAknTimestamp );
+        firePropertyChange ( PROP_LAST_AKN_TIMESTAMP, this.lastAknTimestamp, this.lastAknTimestamp = lastAknTimestamp );
     }
 
     public void akn ()
     {
         logger.debug ( "Request ACK: {}", this.id );
         this.connection.getConnection ().acknowledge ( this.id, new Date () );
+    }
+
+    public Date getLastFailTimestamp ()
+    {
+        return this.lastFailTimestamp;
+    }
+
+    public void setLastFailTimestamp ( final Date lastFailTimestamp )
+    {
+        firePropertyChange ( PROP_LAST_FAIL_TIMESTAMP, this.lastFailTimestamp, this.lastFailTimestamp = lastFailTimestamp );
+    }
+
+    public Map<String, Variant> getAttributes ()
+    {
+        return this.attributes;
+    }
+
+    public void setAttributes ( final Map<String, Variant> attributes )
+    {
+        firePropertyChange ( PROP_ATTRIBUTES, this.attributes, this.attributes = attributes );
     }
 }

@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -20,6 +20,8 @@
 package org.openscada.ae.ui.testing.views;
 
 import java.text.DateFormat;
+import java.util.Date;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.databinding.observable.map.IMapChangeListener;
@@ -35,6 +37,7 @@ public class MonitorsLabelProvider extends CellLabelProvider
 {
 
     private final IMapChangeListener mapChangeListener = new IMapChangeListener () {
+        @Override
         public void handleMapChange ( final MapChangeEvent event )
         {
             final Set<?> affectedElements = event.diff.getChangedKeys ();
@@ -82,40 +85,65 @@ public class MonitorsLabelProvider extends CellLabelProvider
             final MonitorStatusBean info = (MonitorStatusBean)o;
             switch ( cell.getColumnIndex () )
             {
-            case 0:
-                cell.setText ( info.getId () );
-                break;
-            case 1:
-                cell.setText ( info.getStatus ().toString () );
-                break;
-            case 2:
-                if ( info.getStatusTimestamp () != null )
-                {
-                    cell.setText ( this.dateFormat.format ( info.getStatusTimestamp () ) );
-                }
-                else
-                {
-                    cell.setText ( "<none>" );
-                }
-                break;
-            case 3:
-                final Variant value = info.getValue ();
-                cell.setText ( value != null ? value.asString ( "<none>" ) : "<none>" );
-                break;
-            case 4:
-                cell.setText ( info.getLastAknUser () != null ? info.getLastAknUser () : "<unknown>" );
-                break;
-            case 5:
-                if ( info.getLastAknTimestamp () != null )
-                {
-                    cell.setText ( this.dateFormat.format ( info.getLastAknTimestamp () ) );
-                }
-                else
-                {
-                    cell.setText ( "<none>" );
-                }
-                break;
+                case 0: // id
+                    cell.setText ( info.getId () );
+                    break;
+                case 1: // state
+                    cell.setText ( info.getStatus ().toString () );
+                    break;
+                case 2: // timestamp
+                    cell.setText ( getTimestamp ( info.getStatusTimestamp () ) );
+                    break;
+                case 3: // priority
+                    cell.setText ( getAttribute ( info.getAttributes (), "priority", "<none>" ) );
+                    break;
+                case 4: // value
+                    cell.setText ( getValue ( info.getValue (), "<none>" ) );
+                    break;
+                case 5: // ack user
+                    cell.setText ( info.getLastAknUser () != null ? info.getLastAknUser () : "<unknown>" );
+                    break;
+                case 6: // ack timestamp
+                    cell.setText ( getTimestamp ( info.getLastAknTimestamp () ) );
+                    break;
+                case 7: // fail timestamp
+                    cell.setText ( getTimestamp ( info.getLastFailTimestamp () ) );
+                    break;
             }
         }
+    }
+
+    private String getTimestamp ( final Date timestamp )
+    {
+        if ( timestamp != null )
+        {
+            return this.dateFormat.format ( timestamp );
+        }
+        else
+        {
+            return "<none>";
+        }
+
+    }
+
+    private String getAttribute ( final Map<String, Variant> attributes, final String key, final String defaultString )
+    {
+        if ( attributes == null )
+        {
+            return null;
+        }
+
+        return getValue ( attributes.get ( key ), defaultString );
+    }
+
+    private String getValue ( final Variant value, final String defaultString )
+    {
+        if ( value == null )
+        {
+            return defaultString;
+        }
+
+        return value.asString ( defaultString );
+
     }
 }
