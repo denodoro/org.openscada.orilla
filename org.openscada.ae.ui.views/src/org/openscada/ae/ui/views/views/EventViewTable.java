@@ -20,7 +20,10 @@
 package org.openscada.ae.ui.views.views;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.databinding.observable.set.ISetChangeListener;
 import org.eclipse.core.databinding.observable.set.SetChangeEvent;
@@ -47,6 +50,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchActionConstants;
+import org.openscada.ae.Event.Fields;
 import org.openscada.ae.ui.views.Settings;
 import org.openscada.ae.ui.views.config.ColumnLabelProviderInformation;
 import org.openscada.ae.ui.views.dialog.SearchType;
@@ -143,7 +147,7 @@ public class EventViewTable extends Composite
         super ( parent, style );
         this.events = events;
 
-        this.columnInformations = columnInformations;
+        this.columnInformations = makeColumnInformations ( columnInformations );
 
         this.labelProviderSupport = new LabelProviderSupport ( Settings.getTimeZone () );
 
@@ -165,7 +169,6 @@ public class EventViewTable extends Composite
 
         final ObservableSetContentProvider contentProvider = new ObservableSetContentProvider ();
         this.tableViewer.setContentProvider ( contentProvider );
-        // this.tableViewer.setLabelProvider ( new EventLabelProvider ( Properties.observeEach ( contentProvider.getKnownElements (), BeanProperties.values ( new String[] { "id", "monitor" } ) ), this.localColumns, Settings.getTimeZone () ) ); //$NON-NLS-1$ //$NON-NLS-2$
         this.tableViewer.setInput ( this.events );
 
         contentProvider.getRealizedElements ().addSetChangeListener ( new ISetChangeListener () {
@@ -178,6 +181,36 @@ public class EventViewTable extends Composite
                 }
             }
         } );
+    }
+
+    /**
+     * Create column informations if none where provided
+     * 
+     * @param columnInformations
+     *            provided informations
+     * @return the created or provided informations, must never return <code>null</code>.
+     */
+    private static List<ColumnLabelProviderInformation> makeColumnInformations ( final List<ColumnLabelProviderInformation> columnInformations )
+    {
+        if ( columnInformations != null )
+        {
+            return columnInformations;
+        }
+
+        final List<ColumnLabelProviderInformation> result = new LinkedList<ColumnLabelProviderInformation> ();
+
+        result.add ( new ColumnLabelProviderInformation ( "ID", ColumnLabelProviderInformation.TYPE_ID, false, 100, null ) );
+        result.add ( new ColumnLabelProviderInformation ( "Source Timestamp", ColumnLabelProviderInformation.TYPE_SOURCE_TIMESTAMP, true, 100, null ) );
+        result.add ( new ColumnLabelProviderInformation ( "Entry Timestamp", ColumnLabelProviderInformation.TYPE_ENTRY_TIMESTAMP, true, 100, null ) );
+
+        for ( final Fields field : Fields.values () )
+        {
+            final Map<String, String> parameters = new HashMap<String, String> ( 1 );
+            parameters.put ( "key", field.getName () );
+            result.add ( new ColumnLabelProviderInformation ( field.getName (), ColumnLabelProviderInformation.TYPE_VARIANT, false, 100, parameters ) );
+        }
+
+        return result;
     }
 
     @Override

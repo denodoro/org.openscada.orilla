@@ -22,6 +22,14 @@ public class ColumnLabelProviderInformation
 
     private final int initialSize;
 
+    public static final String TYPE_ID = "id";
+
+    public static final String TYPE_SOURCE_TIMESTAMP = "sourceTimestamp";
+
+    public static final String TYPE_ENTRY_TIMESTAMP = "entryTimestamp";
+
+    public static final String TYPE_VARIANT = "variant";
+
     public ColumnLabelProviderInformation ( final String label, final String type, final boolean sortable, final int initialSize, final Map<String, String> parameters )
     {
         this.label = label;
@@ -58,19 +66,19 @@ public class ColumnLabelProviderInformation
 
     public CellLabelProvider createLabelProvider ( final LabelProviderSupport labelProviderSupport )
     {
-        if ( "id".equals ( this.type ) )
+        if ( TYPE_ID.equals ( this.type ) )
         {
             return new IdLabelProvider ();
         }
-        else if ( "sourceTimestamp".equals ( this.type ) )
+        else if ( TYPE_SOURCE_TIMESTAMP.equals ( this.type ) )
         {
             return new SourceTimestampLabelProvider ( labelProviderSupport );
         }
-        else if ( "entryTimestamp".equals ( this.type ) )
+        else if ( TYPE_ENTRY_TIMESTAMP.equals ( this.type ) )
         {
             return new EntryTimestampLabelProvider ( labelProviderSupport );
         }
-        else if ( "variant".equals ( this.type ) )
+        else if ( TYPE_VARIANT.equals ( this.type ) )
         {
             final String key = this.parameters.get ( "key" );
             final String decorationString = this.parameters.get ( "decoration" );
