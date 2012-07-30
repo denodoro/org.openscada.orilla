@@ -3,28 +3,32 @@
 <plugin>
    <extension
          point="org.eclipse.ui.views">
+   <category
+         id="org.openscada.ae.ui.testing.category"
+         name="openSCADA AE Testing">
+   </category>
       <view
             allowMultiple="false"
-            category="org.openscada.ae.ui.category"
+            category="org.openscada.ae.ui.testing.category"
             class="org.openscada.ae.ui.testing.views.MonitorsView"
             id="org.openscada.ae.ui.testing.views.MonitorsView"
-            name="Monitors"
+            name="Monitors Debug View"
             restorable="true">
       </view>
 	  <view
             allowMultiple="false"
-            category="org.openscada.ae.ui.category"
+            category="org.openscada.ae.ui.testing.category"
             class="org.openscada.ae.ui.testing.views.EventQueryView"
             id="org.openscada.ae.ui.testing.views.EventQueryView"
-            name="Event Query"
+            name="Event Query Debug View"
             restorable="true">
       </view>
    <view
          allowMultiple="false"
-         category="org.openscada.ae.ui.category"
+         category="org.openscada.ae.ui.testing.category"
          class="org.openscada.ae.ui.testing.views.QueryOfflineViewPart"
          id="org.openscada.ae.ui.testing.QueryOfflineView"
-         name="Offline Query View"
+         name="Offline Query Debug View"
          restorable="true">
    </view>
    </extension>
