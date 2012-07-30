@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -94,6 +94,7 @@ public class EventQueryView extends AbstractEventQueryViewPart
         final MenuManager menuMgr = new MenuManager ( "#PopupMenu", VIEW_ID );
         menuMgr.setRemoveAllWhenShown ( true );
         menuMgr.addMenuListener ( new IMenuListener () {
+            @Override
             public void menuAboutToShow ( final IMenuManager manager )
             {
                 fillContextMenu ( manager );
@@ -124,6 +125,7 @@ public class EventQueryView extends AbstractEventQueryViewPart
 
         scheduleJob ( new Runnable () {
 
+            @Override
             public void run ()
             {
                 EventQueryView.this.eventSet.clear ();
@@ -138,6 +140,7 @@ public class EventQueryView extends AbstractEventQueryViewPart
     {
         scheduleJob ( new Runnable () {
 
+            @Override
             public void run ()
             {
                 performDataChanged ( addedEvents );
@@ -189,6 +192,7 @@ public class EventQueryView extends AbstractEventQueryViewPart
 
         scheduleJob ( new Runnable () {
 
+            @Override
             public void run ()
             {
                 performEventStatusUpdate ( status );
@@ -207,11 +211,13 @@ public class EventQueryView extends AbstractEventQueryViewPart
 
         switch ( status )
         {
-        case DISCONNECTED:
-        case GRANTED:
-            this.events.clear ();
-            this.eventSet.clear ();
-            break;
+            case DISCONNECTED:
+            case GRANTED:
+                this.events.clear ();
+                this.eventSet.clear ();
+                break;
+            case CONNECTED:
+                break;
         }
     }
 }
