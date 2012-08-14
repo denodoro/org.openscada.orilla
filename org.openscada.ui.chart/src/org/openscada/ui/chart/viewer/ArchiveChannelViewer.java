@@ -28,9 +28,9 @@ import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.resource.ResourceManager;
 import org.openscada.ui.chart.model.ChartModel.ArchiveChannel;
 import org.openscada.ui.chart.model.ChartModel.ChartPackage;
-import org.openscada.ui.chart.view.input.ArchiveChannelInput;
-import org.openscada.ui.chart.view.input.QueryChannelSeriesData;
-import org.openscada.ui.chart.view.input.QuerySeriesData;
+import org.openscada.ui.chart.viewer.input.ArchiveChannelInput;
+import org.openscada.ui.chart.viewer.input.QueryChannelSeriesData;
+import org.openscada.ui.chart.viewer.input.QuerySeriesData;
 
 public class ArchiveChannelViewer extends AbstractObserver
 {

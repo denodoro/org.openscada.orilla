@@ -17,7 +17,7 @@
  * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
-package org.openscada.ui.chart.view.input;
+package org.openscada.ui.chart.viewer.input;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;

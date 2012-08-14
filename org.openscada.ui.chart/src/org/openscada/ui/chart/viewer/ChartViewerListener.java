@@ -19,7 +19,7 @@
 
 package org.openscada.ui.chart.viewer;
 
-import org.openscada.ui.chart.view.input.ChartInput;
+import org.openscada.ui.chart.viewer.input.ChartInput;
 
 public interface ChartViewerListener
 {

@@ -17,15 +17,14 @@
  * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
-package org.openscada.ui.chart.view.input;
+package org.openscada.ui.chart.viewer.input;
 
 import org.eclipse.jface.resource.ResourceManager;
 import org.openscada.chart.swt.render.AbstractLineRender;
 import org.openscada.chart.swt.render.StepRenderer;
-import org.openscada.hd.ui.connection.data.Item;
 import org.openscada.ui.chart.viewer.ChartViewer;
 
-public class ArchiveInput extends QueryInput
+public class ArchiveChannelInput extends QueryInput
 {
 
     private boolean disposed;
@@ -34,23 +33,22 @@ public class ArchiveInput extends QueryInput
 
     private final StepRenderer renderer;
 
-    private final QuerySeriesData data;
+    private QuerySeriesData data;
 
-    private final Item item;
+    private String label;
 
-    public ArchiveInput ( final Item item, final ChartViewer viewer, final QuerySeriesData querySeriesData, final ResourceManager resourceManager )
+    public ArchiveChannelInput ( final ChartViewer viewer, final QueryChannelSeriesData data, final ResourceManager resourceManager )
     {
         super ( resourceManager );
 
-        this.item = item;
         this.viewer = viewer;
-        this.data = querySeriesData;
 
-        this.renderer = viewer.getManager ().createStepSeries ( querySeriesData );
+        this.renderer = viewer.getManager ().createStepSeries ( data );
+        viewer.addInput ( this );
 
-        attachHover ( viewer, querySeriesData.getXAxis () );
+        attachHover ( viewer, data.getXAxis () );
 
-        setQuery ( querySeriesData.getQuery (), "AVG" );
+        setQuery ( data.getQuery (), data.getChannelName () );
     }
 
     @Override
@@ -72,15 +70,11 @@ public class ArchiveInput extends QueryInput
             return;
         }
         this.disposed = true;
-
         this.viewer.removeInput ( this );
         this.viewer.getManager ().removeRenderer ( this.renderer );
 
         this.renderer.dispose ();
-        if ( this.data != null )
-        {
-            this.data.dispose ();
-        }
+        this.data.dispose ();
 
         super.dispose ();
     }
@@ -93,7 +87,17 @@ public class ArchiveInput extends QueryInput
     @Override
     public String getLabel ()
     {
-        return this.item.getId ();
+        return this.label;
     }
 
+    public void setLabel ( final String label )
+    {
+        firePropertyChange ( "label", this.label, this.label = label );
+    }
+
+    @Override
+    public String getState ()
+    {
+        return null;
+    }
 }

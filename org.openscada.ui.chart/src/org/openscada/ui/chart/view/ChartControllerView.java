@@ -43,8 +43,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchActionConstants;
-import org.openscada.ui.chart.view.input.ChartInput;
 import org.openscada.ui.chart.viewer.ChartViewer;
+import org.openscada.ui.chart.viewer.input.ChartInput;
 
 public class ChartControllerView extends AbstractChartManagePart
 {
