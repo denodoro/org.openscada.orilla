@@ -104,7 +104,6 @@
   	<openscada.builder.copyPlugin id="org.openscada.ui.utils"/>
   	<openscada.builder.copyPlugin id="org.openscada.ui.localization"/>
   	<openscada.builder.copyPlugin id="org.openscada.ui.databinding"/>
-  	<openscada.builder.copyPlugin id="org.openscada.external.jfreechart"/>
   	
   	<!-- openSCADA Core UI -->
   	

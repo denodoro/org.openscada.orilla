@@ -19,8 +19,6 @@
 
 package org.openscada.da.client.dataitem.details.chart;
 
-import java.util.Calendar;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -29,68 +27,38 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.DateAxis;
-import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.axis.ValueAxis;
-import org.jfree.chart.labels.StandardXYToolTipGenerator;
-import org.jfree.chart.labels.XYToolTipGenerator;
-import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.XYStepRenderer;
-import org.jfree.chart.title.LegendTitle;
-import org.jfree.data.time.FixedMillisecond;
-import org.jfree.data.time.RegularTimePeriod;
-import org.jfree.data.time.TimeSeries;
-import org.jfree.data.time.TimeSeriesCollection;
-import org.jfree.data.time.TimeSeriesDataItem;
-import org.jfree.experimental.chart.swt.ChartComposite;
-import org.openscada.core.NotConvertableException;
-import org.openscada.core.NullValueException;
-import org.openscada.core.Variant;
+import org.eclipse.ui.statushandlers.StatusManager;
 import org.openscada.da.client.DataItemValue;
 import org.openscada.da.ui.connection.data.DataItemHolder;
+import org.openscada.da.ui.connection.data.Item;
+import org.openscada.ui.chart.model.ChartModel.Chart;
+import org.openscada.ui.chart.model.ChartModel.ChartFactory;
+import org.openscada.ui.chart.model.ChartModel.DataItemSeries;
+import org.openscada.ui.chart.model.ChartModel.IdItem;
+import org.openscada.ui.chart.model.ChartModel.UriItem;
+import org.openscada.ui.chart.model.ChartModel.XAxis;
+import org.openscada.ui.chart.model.ChartModel.YAxis;
+import org.openscada.ui.chart.viewer.ChartViewer;
+import org.openscada.ui.utils.status.StatusHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DetailsPart implements org.openscada.da.client.dataitem.details.part.DetailsPart
 {
-    private static final int REFRESH_DELAY = 500;
+
+    private final static Logger logger = LoggerFactory.getLogger ( DetailsPart.class );
 
     private Button startButton;
 
     private Composite wrapper;
 
-    private final TimeSeriesCollection dataset;
+    private Item item;
 
-    private ChartComposite frame;
-
-    private JFreeChart chart;
-
-    private DataItemValue currentValue;
-
-    private volatile Display display;
-
-    private TimeSeries series;
-
-    public DetailsPart ()
-    {
-        this.dataset = new TimeSeriesCollection ();
-    }
-
-    @Override
-    public void dispose ()
-    {
-        this.display = null;
-        if ( this.frame != null )
-        {
-            this.frame.dispose ();
-            this.frame = null;
-        }
-    }
+    private ChartViewer chart;
 
     @Override
     public void createPart ( final Composite parent )
     {
-        this.display = parent.getDisplay ();
         parent.setLayout ( new FillLayout () );
         createButton ( parent );
     }
@@ -109,167 +77,109 @@ public class DetailsPart implements org.openscada.da.client.dataitem.details.par
             @Override
             public void widgetSelected ( final SelectionEvent e )
             {
-                start ();
+                try
+                {
+                    start ();
+                }
+                catch ( final Exception ex )
+                {
+                    logger.error ( "Failed to start chart", ex );
+                    StatusManager.getManager ().handle ( StatusHelper.convertStatus ( Activator.PLUGIN_ID, ex ), StatusManager.BLOCK );
+                }
             }
         } );
     }
 
-    private void scheduleUpdate ()
+    @Override
+    public void dispose ()
     {
-        final Display display = this.display;
-
-        if ( display == null )
+        if ( this.chart != null )
         {
-            return;
-        }
-
-        if ( !display.isDisposed () )
-        {
-            display.timerExec ( REFRESH_DELAY, new Runnable () {
-
-                @Override
-                public void run ()
-                {
-                    if ( DetailsPart.this.display == null )
-                    {
-                        return;
-                    }
-
-                    triggerUpdate ();
-                    scheduleUpdate ();
-                }
-            } );
+            this.chart.dispose ();
+            this.chart = null;
         }
     }
 
-    protected void triggerUpdate ()
-    {
-        if ( !this.display.isDisposed () )
-        {
-            final ChartComposite frame = this.frame;
-            if ( frame != null )
-            {
-                frame.getDisplay ().asyncExec ( new Runnable () {
-
-                    @Override
-                    public void run ()
-                    {
-                        if ( !DetailsPart.this.frame.isDisposed () )
-                        {
-                            performUpdate ();
-                        }
-                    }
-                } );
-            }
-        }
-
-    }
-
-    protected void performUpdate ()
-    {
-        final Number n = convertToNumber ( this.currentValue );
-
-        final RegularTimePeriod time = new FixedMillisecond ( Calendar.getInstance ().getTime () );
-
-        final TimeSeriesDataItem di = new TimeSeriesDataItem ( time, n );
-
-        // final long end = this.series.getMaximumItemAge ();
-        // final long now = time.getLastMillisecond ();
-
-        this.series.add ( di );
-        this.frame.forceRedraw ();
-    }
-
-    @SuppressWarnings ( "deprecation" )
     protected void start ()
     {
         this.startButton.dispose ();
         this.startButton = null;
 
-        this.chart = createChart ();
+        if ( this.item == null )
+        {
+            return;
+        }
 
-        this.frame = new ChartComposite ( this.wrapper, SWT.NONE, this.chart, true );
-        this.frame.setLayoutData ( new GridData ( SWT.FILL, SWT.FILL, true, true ) );
+        org.openscada.ui.chart.model.ChartModel.Item item;
+
+        switch ( this.item.getType () )
+        {
+            case ID:
+                item = ChartFactory.eINSTANCE.createIdItem ();
+                ( (IdItem)item ).setConnectionId ( this.item.getConnectionString () );
+                break;
+            case URI:
+                item = ChartFactory.eINSTANCE.createUriItem ();
+                ( (UriItem)item ).setConnectionUri ( this.item.getConnectionString () );
+                break;
+            default:
+                return;
+        }
+
+        item.setItemId ( this.item.getId () );
+
+        final Chart chartModel = ChartFactory.eINSTANCE.createChart ();
+        chartModel.setMutable ( false );
+        chartModel.setShowCurrenTimeRuler ( true );
+        chartModel.setTitle ( "Current value" );
+
+        final XAxis x = ChartFactory.eINSTANCE.createXAxis ();
+        x.setLabel ( "Time" );
+        x.setFormat ( "%tc" );
+        x.setMinimum ( System.currentTimeMillis () );
+        x.setMaximum ( System.currentTimeMillis () + 900 * 1000 );
+
+        final YAxis y = ChartFactory.eINSTANCE.createYAxis ();
+        y.setLabel ( "Value" );
+        y.setFormat ( "%.2f" );
+        y.setMinimum ( -100.0 );
+        y.setMaximum ( 100.0 );
+
+        chartModel.setSelectedXAxis ( x );
+        chartModel.setSelectedYAxis ( y );
+
+        final DataItemSeries dataItemSeries = ChartFactory.eINSTANCE.createDataItemSeries ();
+        dataItemSeries.setX ( x );
+        dataItemSeries.setY ( y );
+        dataItemSeries.setLabel ( item.getItemId () );
+        dataItemSeries.setItem ( item );
+
+        chartModel.getBottom ().add ( x );
+        chartModel.getLeft ().add ( y );
+        chartModel.getInputs ().add ( dataItemSeries );
+
+        this.wrapper.setLayout ( new FillLayout () );
+        this.chart = new ChartViewer ( this.wrapper, chartModel );
         this.wrapper.layout ();
-
-        this.series = new TimeSeries ( "Aktuelle Wert", FixedMillisecond.class );
-        this.dataset.addSeries ( this.series );
-
-        scheduleUpdate ();
-    }
-
-    private JFreeChart createChart ()
-    {
-        final ValueAxis timeAxis = new DateAxis ();
-        timeAxis.setLowerMargin ( 0.02 ); // reduce the default margins 
-        timeAxis.setUpperMargin ( 0.02 );
-        final NumberAxis valueAxis = new NumberAxis ();
-        valueAxis.setAutoRangeIncludesZero ( false ); // override default
-        final XYPlot plot = new XYPlot ( this.dataset, timeAxis, valueAxis, null );
-
-        XYToolTipGenerator toolTipGenerator = null;
-        toolTipGenerator = StandardXYToolTipGenerator.getTimeSeriesInstance ();
-
-        // final XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer ( true, false );
-        final XYStepRenderer renderer = new XYStepRenderer ();
-        renderer.setBaseToolTipGenerator ( toolTipGenerator );
-        plot.setRenderer ( renderer );
-
-        final JFreeChart chart = new JFreeChart ( null, JFreeChart.DEFAULT_TITLE_FONT, plot, false );
-
-        chart.addLegend ( new LegendTitle ( plot ) );
-
-        return chart;
     }
 
     @Override
     public void setDataItem ( final DataItemHolder item )
     {
+        if ( item != null )
+        {
+            this.item = item.getItem ();
+        }
+        else
+        {
+            this.item = null;
+        }
     }
 
     @Override
     public void updateData ( final DataItemValue value )
     {
-        this.currentValue = value;
-    }
-
-    protected static Number convertToNumber ( final DataItemValue div )
-    {
-        if ( div == null )
-        {
-            return null;
-        }
-
-        final Variant value = div.getValue ();
-
-        Number n = null;
-
-        try
-        {
-            n = value.asDouble ();
-        }
-        catch ( final NullValueException e )
-        {
-        }
-        catch ( final NotConvertableException e )
-        {
-        }
-
-        if ( n == null )
-        {
-            try
-            {
-                n = value.asLong ();
-            }
-            catch ( final NullValueException e )
-            {
-            }
-            catch ( final NotConvertableException e )
-            {
-            }
-        }
-
-        return n;
+        // no-op
     }
 
 }

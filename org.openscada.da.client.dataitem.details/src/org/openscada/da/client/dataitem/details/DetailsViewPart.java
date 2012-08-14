@@ -46,8 +46,11 @@ public class DetailsViewPart extends ViewPart
     @Override
     public void saveState ( final IMemento memento )
     {
-        super.saveState ( memento );
-        this.initItem.saveTo ( memento );
+        if ( this.initItem != null )
+        {
+            super.saveState ( memento );
+            this.initItem.saveTo ( memento );
+        }
     }
 
     @Override
