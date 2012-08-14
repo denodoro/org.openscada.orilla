@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?eclipse version="3.2"?>
+<?eclipse version="3.4"?>
 <plugin>
-   <extension
+ <extension
          point="org.eclipse.ui.views">
       <view
             allowMultiple="true"
@@ -35,7 +35,7 @@
             id="org.openscada.da.client.chart.oc1"
             objectClass="org.openscada.da.ui.connection.data.DataItemHolder">
          <action
-               class="org.openscada.ui.chart.action.OpenChartAction"
+               class="org.openscada.ui.chart.view.action.OpenChartAction"
                id="org.openscada.da.client.chart.OpenChartAction"
                label="%action.viewAsChart.label"
                menubarPath="additions"/>
@@ -45,7 +45,7 @@
             id="org.openscada.da.client.chart.oc2"
             objectClass="org.openscada.da.ui.widgets.realtime.ListEntry">
          <action
-               class="org.openscada.ui.chart.action.OpenChartAction"
+               class="org.openscada.ui.chart.view.action.OpenChartAction"
                id="org.openscada.da.client.chart.OpenChartAction"
                label="%action.viewAsChart.label"
                menubarPath="additions"/>
@@ -82,7 +82,7 @@
    <extension
          point="org.eclipse.ui.handlers">
       <handler
-            class="org.openscada.ui.chart.commands.OpenChartView"
+            class="org.openscada.ui.chart.view.command.OpenChartView"
             commandId="org.openscada.da.client.chart.commands.OpenCharView">
          <enabledWhen>
             <with
@@ -103,7 +103,7 @@
          </enabledWhen>
       </handler>
       <handler
-            class="org.openscada.ui.chart.commands.OpenChartViewWithParameters"
+            class="org.openscada.ui.chart.view.command.OpenChartViewWithParameters"
             commandId="org.openscada.da.client.chart.commands.OpenParametersCharView">
       </handler>
    </extension>
@@ -133,5 +133,4 @@
          </command>
       </menuContribution>
    </extension>
-
 </plugin>

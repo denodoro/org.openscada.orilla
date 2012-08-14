@@ -168,13 +168,6 @@
          unpack="false"/>
 
    <plugin
-         id="org.openscada.external.jfreechart"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.openscada.hd.ui"
          download-size="0"
          install-size="0"

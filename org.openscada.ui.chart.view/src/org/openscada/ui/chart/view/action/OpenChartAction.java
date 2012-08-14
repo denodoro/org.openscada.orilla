@@ -17,7 +17,7 @@
  * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
-package org.openscada.ui.chart.action;
+package org.openscada.ui.chart.view.action;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -33,8 +33,7 @@ import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.PartInitException;
 import org.openscada.da.ui.connection.data.Item;
 import org.openscada.da.ui.connection.data.ItemSelectionHelper;
-import org.openscada.ui.chart.Activator;
-import org.openscada.ui.chart.Messages;
+import org.openscada.ui.chart.view.Activator;
 import org.openscada.ui.chart.view.ChartView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -89,12 +88,12 @@ public class OpenChartAction implements IViewActionDelegate, IObjectActionDelega
         catch ( final PartInitException e )
         {
             logger.error ( "Failed to create view", e ); //$NON-NLS-1$
-            Activator.getDefault ().getLog ().log ( new Status ( IStatus.ERROR, Activator.PLUGIN_ID, 0, Messages.getString ( "OpenChartAction.FailedToCreateChartView" ), e ) ); //$NON-NLS-1$
+            Activator.getDefault ().getLog ().log ( e.getStatus () );
         }
         catch ( final Exception e )
         {
             logger.error ( "Failed to create view", e ); //$NON-NLS-1$
-            Activator.getDefault ().getLog ().log ( new Status ( IStatus.ERROR, Activator.PLUGIN_ID, 1, Messages.getString ( "OpenChartAction.FailedToCreateChartView" ), e ) ); //$NON-NLS-1$
+            Activator.getDefault ().getLog ().log ( new Status ( IStatus.ERROR, Activator.PLUGIN_ID, 1, "Failed to create chart view", e ) );
         }
 
     }

@@ -158,6 +158,7 @@
   		
   	<openscada.builder.copyFeature id="org.openscada.ui.chart"/>
   	<openscada.builder.copyPlugin id="org.openscada.ui.chart"/>
+  	<openscada.builder.copyPlugin id="org.openscada.ui.chart.view"/>
   	<openscada.builder.copyPlugin id="org.openscada.ui.chart.model"/>
   	<openscada.builder.copyPlugin id="org.openscada.ui.chart.model.edit"/>
 	<openscada.builder.copyPlugin id="org.openscada.ui.chart.model.editor"/>
