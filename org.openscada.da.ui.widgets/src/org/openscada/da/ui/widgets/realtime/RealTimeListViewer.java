@@ -167,6 +167,11 @@ public class RealTimeListViewer implements RealtimeListAdapter
         this.list.add ( entry );
     }
 
+    public void clear ()
+    {
+        this.list.clear ();
+    }
+
     private void addDropSupport ()
     {
         this.viewer.addDropSupport ( DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_LINK, new Transfer[] { ItemTransfer.getInstance (), TextTransfer.getInstance () }, new ItemDropAdapter ( this.viewer, this ) );
