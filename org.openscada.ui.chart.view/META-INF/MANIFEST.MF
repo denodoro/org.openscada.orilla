@@ -29,3 +29,4 @@ Bundle-ActivationPolicy: lazy
 Import-Package: org.openscada.da.ui.connection.data;version="1.0.0",
  org.openscada.hd.ui.connection.data;version="1.0.0",
  org.slf4j;version="1.5.0"
+Bundle-Localization: plugin
