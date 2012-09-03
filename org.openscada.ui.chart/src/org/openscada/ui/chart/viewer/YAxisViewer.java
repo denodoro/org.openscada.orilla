@@ -24,7 +24,7 @@ import org.eclipse.core.databinding.beans.BeansObservables;
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.emf.databinding.EMFObservables;
 import org.openscada.chart.swt.manager.ChartManager;
-import org.openscada.chart.swt.render.YAxisDynamicRenderer;
+import org.openscada.chart.swt.render.YAxisDynamicWidget;
 import org.openscada.ui.chart.model.ChartModel.ChartPackage;
 import org.openscada.ui.chart.model.ChartModel.YAxis;
 
@@ -34,7 +34,7 @@ public class YAxisViewer extends AbstractAxisViewer
 
     private final org.openscada.chart.YAxis control;
 
-    private final YAxisDynamicRenderer renderer;
+    private final YAxisDynamicWidget renderer;
 
     public YAxisViewer ( final DataBindingContext dbc, final ChartManager manager, final YAxis axis, final boolean left )
     {

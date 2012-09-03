@@ -24,7 +24,7 @@ import org.eclipse.core.databinding.beans.BeansObservables;
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.emf.databinding.EMFObservables;
 import org.openscada.chart.swt.manager.ChartManager;
-import org.openscada.chart.swt.render.XAxisDynamicRenderer;
+import org.openscada.chart.swt.render.XAxisDynamicWidget;
 import org.openscada.ui.chart.model.ChartModel.ChartPackage;
 import org.openscada.ui.chart.model.ChartModel.XAxis;
 
@@ -34,7 +34,7 @@ public class XAxisViewer extends AbstractAxisViewer
 
     private final org.openscada.chart.XAxis control;
 
-    private final XAxisDynamicRenderer renderer;
+    private final XAxisDynamicWidget renderer;
 
     public XAxisViewer ( final DataBindingContext dbc, final ChartManager manager, final XAxis axis, final boolean top )
     {
