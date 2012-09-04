@@ -295,10 +295,10 @@ public class ChartViewer
 
         if ( x != null && y != null )
         {
-            this.mouseTransformer = new MouseTransformer ( this.manager.getChartArea (), x, y );
-            this.mouseDragZoomer = new MouseDragZoomer ( this.manager.getChartArea (), x, y );
-            this.mouseWheelZoomer = new MouseWheelZoomer ( this.manager.getChartArea (), x, y );
-            this.mouseHover = new MouseHover ( this.manager.getChartArea (), x, this.hoverListener );
+            this.mouseTransformer = new MouseTransformer ( this.manager.getChartRenderer (), x, y );
+            this.mouseDragZoomer = new MouseDragZoomer ( this.manager.getChartRenderer (), x, y );
+            this.mouseWheelZoomer = new MouseWheelZoomer ( this.manager.getChartRenderer (), x, y );
+            this.mouseHover = new MouseHover ( this.manager.getChartRenderer (), x, this.hoverListener );
             this.mouseHover.setVisible ( true );
         }
 
@@ -630,7 +630,7 @@ public class ChartViewer
 
         try
         {
-            this.manager.getChartArea ().setStale ( true );
+            this.manager.getChartRenderer ().setStale ( true );
             for ( final Object item : this.items )
             {
                 ( (ChartInput)item ).tick ( now );
@@ -638,7 +638,7 @@ public class ChartViewer
         }
         finally
         {
-            this.manager.getChartArea ().setStale ( false, true );
+            this.manager.getChartRenderer ().setStale ( false, true );
         }
     }
 
