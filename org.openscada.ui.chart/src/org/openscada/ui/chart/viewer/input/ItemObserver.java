@@ -99,7 +99,7 @@ public class ItemObserver extends LineInput implements DataSourceListener, Chart
             this.ruler = new PositionYRuler ( y, style );
             this.ruler.setAlpha ( this.alpha );
             this.ruler.setLineAttributes ( new LineAttributes ( lineWidth ) );
-            this.manager.addRenderer ( this.ruler );
+            this.manager.addRenderer ( this.ruler, 200 );
         }
 
         public void dispose ()

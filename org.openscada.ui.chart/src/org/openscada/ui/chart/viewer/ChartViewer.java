@@ -308,7 +308,7 @@ public class ChartViewer
         {
             this.timeRuler = new CurrentTimeRuler ( x );
             this.timeRuler.setColor ( this.manager.getDisplay ().getSystemColor ( SWT.COLOR_BLUE ) );
-            this.manager.addRenderer ( this.timeRuler );
+            this.manager.addRenderer ( this.timeRuler, 100 );
         }
         else if ( this.timeRuler != null && !this.showTimeRuler || x == null )
         {
