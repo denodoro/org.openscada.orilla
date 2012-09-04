@@ -259,7 +259,10 @@ public class ChartView extends ViewPart
     @Override
     public void dispose ()
     {
-        this.viewer.dispose ();
+        if ( this.viewer != null )
+        {
+            this.viewer.dispose ();
+        }
         super.dispose ();
     }
 

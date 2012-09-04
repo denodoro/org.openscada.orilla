@@ -79,7 +79,7 @@ public abstract class AbstractInput extends AbstractPropertyChange implements Ch
             @Override
             public void onMouseMove ( final MouseState state )
             {
-                handeMouseMove ( state, xAxis.translateToValue ( AbstractInput.this.chartRenderer.getClientArea ().width, state.x ) );
+                handeMouseMove ( state, xAxis.translateToValue ( AbstractInput.this.chartRenderer.getClientAreaProxy ().getClientRectangle ().width, state.x ) );
             }
         };
         this.chartRenderer.addMouseMoveListener ( this.mouseMoveListener );
