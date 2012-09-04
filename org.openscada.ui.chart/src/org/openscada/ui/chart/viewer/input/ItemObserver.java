@@ -33,7 +33,7 @@ import org.openscada.chart.Realm;
 import org.openscada.chart.WritableSeries;
 import org.openscada.chart.XAxis;
 import org.openscada.chart.YAxis;
-import org.openscada.chart.swt.manager.ChartManager;
+import org.openscada.chart.swt.ChartRenderer;
 import org.openscada.chart.swt.render.AbstractLineRender;
 import org.openscada.chart.swt.render.PositionYRuler;
 import org.openscada.chart.swt.render.StepRenderer;
@@ -60,8 +60,6 @@ public class ItemObserver extends LineInput implements DataSourceListener, Chart
 
     private DataEntry lastTickMarker;
 
-    private final ChartManager manager;
-
     private final StepRenderer valueRenderer;
 
     private boolean selection;
@@ -84,11 +82,11 @@ public class ItemObserver extends LineInput implements DataSourceListener, Chart
 
         private final PositionYRuler ruler;
 
-        private final ChartManager manager;
+        private final ChartRenderer manager;
 
         private final int alpha;
 
-        public LevelRuler ( final ChartManager manager, final String prefix, final YAxis y, final int style, final int alpha, final float lineWidth )
+        public LevelRuler ( final ChartRenderer manager, final String prefix, final YAxis y, final int style, final int alpha, final float lineWidth )
         {
             this.prefix = prefix;
 
@@ -150,13 +148,14 @@ public class ItemObserver extends LineInput implements DataSourceListener, Chart
 
         this.item = item;
         this.viewer = viewer;
-        this.manager = viewer.getManager ();
 
         this.y = y;
 
         this.valueSeries = new WritableSeries ( realm, x, y );
 
-        this.valueRenderer = this.manager.createStepSeries ( this.valueSeries );
+        this.valueRenderer = new StepRenderer ( viewer.getChartRenderer (), this.valueSeries );
+        viewer.getChartRenderer ().addRenderer ( this.valueRenderer, 0 );
+
         connect ();
 
         attachHover ( viewer, x );
@@ -206,7 +205,7 @@ public class ItemObserver extends LineInput implements DataSourceListener, Chart
 
     private LevelRuler makeLevelRuler ( final String prefix, final int style, final int alpha, final float lineWidth )
     {
-        final LevelRuler ruler = new LevelRuler ( this.manager, prefix, this.y, style, alpha, lineWidth );
+        final LevelRuler ruler = new LevelRuler ( this.viewer.getChartRenderer (), prefix, this.y, style, alpha, lineWidth );
 
         return ruler;
     }
@@ -225,7 +224,7 @@ public class ItemObserver extends LineInput implements DataSourceListener, Chart
         removeLevelRulers ();
 
         this.viewer.removeInput ( this );
-        this.manager.removeRenderer ( this.valueRenderer );
+        this.viewer.getChartRenderer ().removeRenderer ( this.valueRenderer );
         this.valueRenderer.dispose ();
         disconnect ();
     }

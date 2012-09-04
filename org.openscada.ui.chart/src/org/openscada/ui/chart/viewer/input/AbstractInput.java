@@ -21,10 +21,10 @@ package org.openscada.ui.chart.viewer.input;
 
 import java.util.Date;
 
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseMoveListener;
-import org.eclipse.swt.widgets.Control;
 import org.openscada.chart.XAxis;
+import org.openscada.chart.swt.ChartMouseListener.MouseState;
+import org.openscada.chart.swt.ChartMouseMoveListener;
+import org.openscada.chart.swt.ChartRenderer;
 import org.openscada.ui.chart.viewer.ChartViewer;
 import org.openscada.utils.beans.AbstractPropertyChange;
 
@@ -37,9 +37,9 @@ public abstract class AbstractInput extends AbstractPropertyChange implements Ch
 
     private String selectedQuality;
 
-    private MouseMoveListener mouseMoveListener;
+    private ChartMouseMoveListener mouseMoveListener;
 
-    private Control mouseMoveWidget;
+    private ChartRenderer chartRenderer;
 
     @Override
     public Date getSelectedTimestamp ()
@@ -73,29 +73,29 @@ public abstract class AbstractInput extends AbstractPropertyChange implements Ch
     {
         detachHover ();
 
-        this.mouseMoveWidget = viewer.getManager ().getChartArea ();
-        this.mouseMoveListener = new MouseMoveListener () {
+        this.chartRenderer = viewer.getChartRenderer ();
+        this.mouseMoveListener = new ChartMouseMoveListener () {
 
             @Override
-            public void mouseMove ( final MouseEvent e )
+            public void onMouseMove ( final MouseState state )
             {
-                handeMouseMove ( e, xAxis.translateToValue ( viewer.getManager ().getChartArea ().getClientArea ().width, e.x ) );
+                handeMouseMove ( state, xAxis.translateToValue ( AbstractInput.this.chartRenderer.getClientArea ().width, state.x ) );
             }
         };
-        this.mouseMoveWidget.addMouseMoveListener ( this.mouseMoveListener );
+        this.chartRenderer.addMouseMoveListener ( this.mouseMoveListener );
     }
 
     protected void detachHover ()
     {
-        if ( this.mouseMoveListener != null && this.mouseMoveWidget != null )
+        if ( this.mouseMoveListener != null && this.chartRenderer != null )
         {
-            this.mouseMoveWidget.removeMouseMoveListener ( this.mouseMoveListener );
+            this.chartRenderer.removeMouseMoveListener ( this.mouseMoveListener );
             this.mouseMoveListener = null;
-            this.mouseMoveWidget = null;
+            this.chartRenderer = null;
         }
     }
 
-    protected void handeMouseMove ( final MouseEvent e, final long timestamp )
+    protected void handeMouseMove ( final MouseState e, final long timestamp )
     {
         setSelectedTimestamp ( new Date ( timestamp ) );
     }

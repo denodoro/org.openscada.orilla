@@ -23,7 +23,8 @@ import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.beans.BeansObservables;
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.emf.databinding.EMFObservables;
-import org.openscada.chart.swt.manager.ChartManager;
+import org.eclipse.swt.SWT;
+import org.openscada.chart.swt.ChartRenderer;
 import org.openscada.chart.swt.render.YAxisDynamicRenderer;
 import org.openscada.ui.chart.model.ChartModel.ChartPackage;
 import org.openscada.ui.chart.model.ChartModel.YAxis;
@@ -36,14 +37,18 @@ public class YAxisViewer extends AbstractAxisViewer
 
     private final YAxisDynamicRenderer renderer;
 
-    public YAxisViewer ( final DataBindingContext dbc, final ChartManager manager, final YAxis axis, final boolean left )
+    public YAxisViewer ( final DataBindingContext dbc, final ChartRenderer manager, final YAxis axis, final boolean left )
     {
         super ( dbc, manager, axis );
 
         this.axis = axis;
 
         this.control = new org.openscada.chart.YAxis ();
-        this.renderer = this.manager.addDynamicYAxis ( this.control, left );
+
+        this.renderer = new YAxisDynamicRenderer ( manager );
+        this.renderer.setAxis ( this.control );
+        this.renderer.setAlign ( left ? SWT.LEFT : SWT.RIGHT );
+        manager.addRenderer ( this.renderer, -1 );
 
         addBinding ( this.dbc.bindValue ( BeansObservables.observeValue ( this.control, "label" ), EMFObservables.observeValue ( this.axis, ChartPackage.Literals.AXIS__LABEL ) ) );
         addBinding ( this.dbc.bindValue ( BeansObservables.observeValue ( this.control, "min" ), EMFObservables.observeValue ( this.axis, ChartPackage.Literals.YAXIS__MINIMUM ) ) );
@@ -58,7 +63,6 @@ public class YAxisViewer extends AbstractAxisViewer
         super.dispose ();
 
         this.renderer.dispose ();
-        this.manager.layout ();
     }
 
     public org.openscada.chart.YAxis getAxis ()

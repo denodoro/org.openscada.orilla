@@ -53,7 +53,7 @@ public class DataItemSeriesViewer extends AbstractItemInputViewer implements Inp
         this.inputObservable = BeansObservables.observeValue ( this, "input" );
         this.linePropertiesObservable = EMFObservables.observeValue ( element, ChartPackage.Literals.DATA_ITEM_SERIES__LINE_PROPERTIES );
 
-        addBindings ( LinePropertiesBinder.bind ( SWTObservables.getRealm ( viewer.getManager ().getDisplay () ), dbc, this.inputObservable, this.linePropertiesObservable ) );
+        addBindings ( LinePropertiesBinder.bind ( SWTObservables.getRealm ( viewer.getChartRenderer ().getDisplay () ), dbc, this.inputObservable, this.linePropertiesObservable ) );
     }
 
     @Override

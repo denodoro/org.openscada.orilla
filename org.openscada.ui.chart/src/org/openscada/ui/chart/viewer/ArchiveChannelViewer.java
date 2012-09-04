@@ -74,7 +74,7 @@ public class ArchiveChannelViewer extends AbstractObserver
         this.linePropertiesObservable = EMFObservables.observeValue ( element, ChartPackage.Literals.ARCHIVE_CHANNEL__LINE_PROPERTIES );
 
         addBinding ( dbc.bindValue ( PojoObservables.observeDetailValue ( this.inputObservable, "label", null ), EMFObservables.observeValue ( element, ChartPackage.Literals.ARCHIVE_CHANNEL__LABEL ) ) );
-        addBindings ( LinePropertiesBinder.bind ( SWTObservables.getRealm ( viewer.getManager ().getDisplay () ), dbc, this.inputObservable, this.linePropertiesObservable ) );
+        addBindings ( LinePropertiesBinder.bind ( SWTObservables.getRealm ( viewer.getChartRenderer ().getDisplay () ), dbc, this.inputObservable, this.linePropertiesObservable ) );
     }
 
     public void setChannelName ( final String channelName )

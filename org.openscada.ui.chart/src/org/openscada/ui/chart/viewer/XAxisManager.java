@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.core.databinding.DataBindingContext;
-import org.openscada.chart.swt.manager.ChartManager;
+import org.openscada.chart.swt.ChartRenderer;
 import org.openscada.ui.chart.model.ChartModel.XAxis;
 
 public class XAxisManager extends AbstractAxisManager<XAxis, XAxisViewer>
@@ -32,7 +32,7 @@ public class XAxisManager extends AbstractAxisManager<XAxis, XAxisViewer>
 
     private final boolean top;
 
-    public XAxisManager ( final DataBindingContext dbc, final ChartManager manager, final boolean top )
+    public XAxisManager ( final DataBindingContext dbc, final ChartRenderer manager, final boolean top )
     {
         super ( dbc, manager );
         this.top = top;

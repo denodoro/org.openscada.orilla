@@ -45,21 +45,20 @@ import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTargetAdapter;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.Transfer;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.openscada.chart.Realm;
+import org.openscada.chart.swt.ChartMouseListener.MouseState;
+import org.openscada.chart.swt.ChartRenderer;
 import org.openscada.chart.swt.DisplayRealm;
+import org.openscada.chart.swt.DisposeListener;
 import org.openscada.chart.swt.controller.MouseDragZoomer;
 import org.openscada.chart.swt.controller.MouseHover;
 import org.openscada.chart.swt.controller.MouseHover.Listener;
 import org.openscada.chart.swt.controller.MouseTransformer;
 import org.openscada.chart.swt.controller.MouseWheelZoomer;
-import org.openscada.chart.swt.manager.ChartManager;
 import org.openscada.chart.swt.render.CurrentTimeRuler;
 import org.openscada.da.ui.connection.data.Item;
 import org.openscada.ui.chart.model.ChartModel.ArchiveSeries;
@@ -75,7 +74,7 @@ import org.openscada.ui.chart.viewer.input.ChartInput;
 
 public class ChartViewer
 {
-    private final ChartManager manager;
+    private final ChartRenderer manager;
 
     private final WritableList items = new WritableList ( new LinkedList<Object> (), ChartInput.class );
 
@@ -132,7 +131,7 @@ public class ChartViewer
     private final MouseHover.Listener hoverListener = new Listener () {
 
         @Override
-        public void mouseMove ( final MouseEvent e, final long timestamp )
+        public void mouseMove ( final MouseState e, final long timestamp )
         {
             // no-op
         }
@@ -140,11 +139,11 @@ public class ChartViewer
 
     private MouseHover mouseHover;
 
-    public ChartViewer ( final Composite parent, final Chart chart )
+    public ChartViewer ( final ChartRenderer chartRenderer, final Chart chart )
     {
         this.chart = chart;
 
-        this.display = Display.getDefault ();
+        this.display = chartRenderer.getDisplay ();
 
         this.resourceManager = new LocalResourceManager ( JFaceResources.getResources ( this.display ) );
 
@@ -152,7 +151,7 @@ public class ChartViewer
 
         // create content
 
-        this.manager = new ChartManager ( parent, SWT.NONE );
+        this.manager = chartRenderer;
         this.realm = new DisplayRealm ( this.display );
 
         this.manager.createDropTarget ( new Transfer[] { LocalSelectionTransfer.getTransfer () }, createDropTarget () );
@@ -186,11 +185,16 @@ public class ChartViewer
         this.manager.addDisposeListener ( new DisposeListener () {
 
             @Override
-            public void widgetDisposed ( final DisposeEvent e )
+            public void onDispose ()
             {
                 handleDispose ();
             }
         } );
+    }
+
+    public ChartRenderer getChartRenderer ()
+    {
+        return this.manager;
     }
 
     protected void handleMouseMove ( final MouseEvent e, final long timestamp )
@@ -295,10 +299,10 @@ public class ChartViewer
 
         if ( x != null && y != null )
         {
-            this.mouseTransformer = new MouseTransformer ( this.manager.getChartRenderer (), x, y );
-            this.mouseDragZoomer = new MouseDragZoomer ( this.manager.getChartRenderer (), x, y );
-            this.mouseWheelZoomer = new MouseWheelZoomer ( this.manager.getChartRenderer (), x, y );
-            this.mouseHover = new MouseHover ( this.manager.getChartRenderer (), x, this.hoverListener );
+            this.mouseTransformer = new MouseTransformer ( this.manager, x, y );
+            this.mouseDragZoomer = new MouseDragZoomer ( this.manager, x, y );
+            this.mouseWheelZoomer = new MouseWheelZoomer ( this.manager, x, y );
+            this.mouseHover = new MouseHover ( this.manager, x, this.hoverListener );
             this.mouseHover.setVisible ( true );
         }
 
@@ -630,7 +634,7 @@ public class ChartViewer
 
         try
         {
-            this.manager.getChartRenderer ().setStale ( true );
+            this.manager.setStale ( true );
             for ( final Object item : this.items )
             {
                 ( (ChartInput)item ).tick ( now );
@@ -638,7 +642,7 @@ public class ChartViewer
         }
         finally
         {
-            this.manager.getChartRenderer ().setStale ( false, true );
+            this.manager.setStale ( false, true );
         }
     }
 
@@ -661,11 +665,6 @@ public class ChartViewer
     public IObservableList getItems ()
     {
         return Observables.unmodifiableObservableList ( this.items );
-    }
-
-    public ChartManager getManager ()
-    {
-        return this.manager;
     }
 
     public void showTimespan ( final long duration, final TimeUnit timeUnit )

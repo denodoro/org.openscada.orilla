@@ -28,6 +28,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.statushandlers.StatusManager;
+import org.openscada.chart.swt.ChartArea;
 import org.openscada.da.client.DataItemValue;
 import org.openscada.da.ui.connection.data.DataItemHolder;
 import org.openscada.da.ui.connection.data.Item;
@@ -55,6 +56,8 @@ public class DetailsPart implements org.openscada.da.client.dataitem.details.par
     private Item item;
 
     private ChartViewer chart;
+
+    private ChartArea chartArea;
 
     @Override
     public void createPart ( final Composite parent )
@@ -93,6 +96,11 @@ public class DetailsPart implements org.openscada.da.client.dataitem.details.par
     @Override
     public void dispose ()
     {
+        if ( this.chartArea != null )
+        {
+            this.chartArea.dispose ();
+            this.chartArea = null;
+        }
         if ( this.chart != null )
         {
             this.chart.dispose ();
@@ -159,7 +167,8 @@ public class DetailsPart implements org.openscada.da.client.dataitem.details.par
         chartModel.getInputs ().add ( dataItemSeries );
 
         this.wrapper.setLayout ( new FillLayout () );
-        this.chart = new ChartViewer ( this.wrapper, chartModel );
+        this.chartArea = new ChartArea ( this.wrapper, SWT.NONE );
+        this.chart = new ChartViewer ( this.chartArea.getChartRenderer (), chartModel );
         this.wrapper.layout ();
     }
 

@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.core.databinding.DataBindingContext;
-import org.openscada.chart.swt.manager.ChartManager;
+import org.openscada.chart.swt.ChartRenderer;
 import org.openscada.ui.chart.model.ChartModel.YAxis;
 
 public class YAxisManager extends AbstractAxisManager<YAxis, YAxisViewer>
@@ -32,7 +32,7 @@ public class YAxisManager extends AbstractAxisManager<YAxis, YAxisViewer>
 
     private final boolean left;
 
-    public YAxisManager ( final DataBindingContext dbc, final ChartManager manager, final boolean left )
+    public YAxisManager ( final DataBindingContext dbc, final ChartRenderer manager, final boolean left )
     {
         super ( dbc, manager );
 

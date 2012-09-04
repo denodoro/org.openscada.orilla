@@ -148,7 +148,12 @@ public abstract class LineInput extends AbstractInput implements LinePropertiesS
             gc.fillRectangle ( 0, 0, p.x, p.y );
 
             gc.setLineAttributes ( getLineRenderer ().getLineAttributes () );
-            gc.setForeground ( getLineRenderer ().getLineColor () );
+
+            final Color fgColor = getLineRenderer ().getLineColor ();
+            if ( fgColor != null )
+            {
+                gc.setForeground ( fgColor );
+            }
 
             gc.drawLine ( 0, p.y / 2, p.x, p.y / 2 );
         }

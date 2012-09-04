@@ -25,7 +25,7 @@ import org.eclipse.core.databinding.observable.list.ListChangeEvent;
 import org.eclipse.core.databinding.observable.list.ListDiff;
 import org.eclipse.core.databinding.observable.list.ListDiffVisitor;
 import org.eclipse.core.databinding.observable.list.WritableList;
-import org.openscada.chart.swt.manager.ChartManager;
+import org.openscada.chart.swt.ChartRenderer;
 
 public abstract class AbstractAxisManager<Key, Value>
 {
@@ -34,11 +34,11 @@ public abstract class AbstractAxisManager<Key, Value>
 
     protected final DataBindingContext dbc;
 
-    protected final ChartManager manager;
+    protected final ChartRenderer manager;
 
     private IListChangeListener listener;
 
-    public AbstractAxisManager ( final DataBindingContext dbc, final ChartManager manager )
+    public AbstractAxisManager ( final DataBindingContext dbc, final ChartRenderer manager )
     {
         this.dbc = dbc;
         this.manager = manager;

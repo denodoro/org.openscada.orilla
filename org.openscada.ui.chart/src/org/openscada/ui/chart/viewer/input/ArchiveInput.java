@@ -46,7 +46,8 @@ public class ArchiveInput extends QueryInput
         this.viewer = viewer;
         this.data = querySeriesData;
 
-        this.renderer = viewer.getManager ().createStepSeries ( querySeriesData );
+        this.renderer = new StepRenderer ( this.viewer.getChartRenderer (), querySeriesData );
+        viewer.getChartRenderer ().addRenderer ( this.renderer );
 
         attachHover ( viewer, querySeriesData.getXAxis () );
 
@@ -74,7 +75,7 @@ public class ArchiveInput extends QueryInput
         this.disposed = true;
 
         this.viewer.removeInput ( this );
-        this.viewer.getManager ().removeRenderer ( this.renderer );
+        this.viewer.getChartRenderer ().removeRenderer ( this.renderer );
 
         this.renderer.dispose ();
         if ( this.data != null )

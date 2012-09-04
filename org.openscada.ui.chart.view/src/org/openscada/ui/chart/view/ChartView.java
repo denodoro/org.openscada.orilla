@@ -41,6 +41,7 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IMemento;
@@ -50,6 +51,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.statushandlers.StatusManager;
+import org.openscada.chart.swt.ChartArea;
 import org.openscada.da.ui.connection.data.Item;
 import org.openscada.ui.chart.model.ChartModel.Chart;
 import org.openscada.ui.chart.model.ChartModel.ChartFactory;
@@ -123,6 +125,8 @@ public class ChartView extends ViewPart
 
     private Chart loadedConfiguration;
 
+    private ChartArea chartArea;
+
     private class TimeAction extends Action
     {
         protected final long duration;
@@ -181,7 +185,8 @@ public class ChartView extends ViewPart
             this.configuration = this.loadedConfiguration;
         }
 
-        this.viewer = new ChartViewer ( parent, this.configuration );
+        this.chartArea = new ChartArea ( parent, SWT.NONE );
+        this.viewer = new ChartViewer ( this.chartArea.getChartRenderer (), this.configuration );
 
         getSite ().setSelectionProvider ( new SelectionProviderImpl () );
         setAsSelection ();

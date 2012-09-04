@@ -96,7 +96,7 @@ public class ArchiveSeriesViewer extends AbstractItemInputViewer
         this.inputObservable = BeansObservables.observeValue ( this, PROP_INPUT );
         this.linePropertiesObservable = EMFObservables.observeValue ( element, ChartPackage.Literals.ARCHIVE_SERIES__LINE_PROPERTIES );
 
-        addBindings ( LinePropertiesBinder.bind ( SWTObservables.getRealm ( viewer.getManager ().getDisplay () ), dbc, this.inputObservable, this.linePropertiesObservable ) );
+        addBindings ( LinePropertiesBinder.bind ( SWTObservables.getRealm ( viewer.getChartRenderer ().getDisplay () ), dbc, this.inputObservable, this.linePropertiesObservable ) );
     }
 
     protected void handleAddChannel ( final ArchiveChannel channel )
