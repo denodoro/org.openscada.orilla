@@ -8,12 +8,23 @@ package org.openscada.ui.chart.model.ChartModel.util;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
-
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
-
 import org.eclipse.emf.ecore.EObject;
-
-import org.openscada.ui.chart.model.ChartModel.*;
+import org.openscada.ui.chart.model.ChartModel.ArchiveChannel;
+import org.openscada.ui.chart.model.ChartModel.ArchiveSeries;
+import org.openscada.ui.chart.model.ChartModel.Axis;
+import org.openscada.ui.chart.model.ChartModel.Chart;
+import org.openscada.ui.chart.model.ChartModel.ChartPackage;
+import org.openscada.ui.chart.model.ChartModel.DataItemSeries;
+import org.openscada.ui.chart.model.ChartModel.DataSeries;
+import org.openscada.ui.chart.model.ChartModel.IdItem;
+import org.openscada.ui.chart.model.ChartModel.Item;
+import org.openscada.ui.chart.model.ChartModel.ItemDataSeries;
+import org.openscada.ui.chart.model.ChartModel.LineProperties;
+import org.openscada.ui.chart.model.ChartModel.ScriptSeries;
+import org.openscada.ui.chart.model.ChartModel.UriItem;
+import org.openscada.ui.chart.model.ChartModel.XAxis;
+import org.openscada.ui.chart.model.ChartModel.YAxis;
 
 /**
  * <!-- begin-user-doc -->
@@ -152,6 +163,12 @@ public class ChartAdapterFactory extends AdapterFactoryImpl
         public Adapter caseLineProperties ( LineProperties object )
         {
             return createLinePropertiesAdapter ();
+        }
+
+        @Override
+        public Adapter caseScriptSeries ( ScriptSeries object )
+        {
+            return createScriptSeriesAdapter ();
         }
 
         @Override
@@ -366,6 +383,21 @@ public class ChartAdapterFactory extends AdapterFactoryImpl
      * @generated
      */
     public Adapter createLinePropertiesAdapter ()
+    {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.openscada.ui.chart.model.ChartModel.ScriptSeries <em>Script Series</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.openscada.ui.chart.model.ChartModel.ScriptSeries
+     * @generated
+     */
+    public Adapter createScriptSeriesAdapter ()
     {
         return null;
     }

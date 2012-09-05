@@ -7,7 +7,6 @@
 package org.openscada.ui.chart.model.ChartModel;
 
 import org.eclipse.emf.ecore.EObject;
-
 import org.eclipse.swt.graphics.RGB;
 
 /**

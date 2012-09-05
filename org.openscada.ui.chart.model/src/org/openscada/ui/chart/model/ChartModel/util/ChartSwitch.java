@@ -8,10 +8,22 @@ package org.openscada.ui.chart.model.ChartModel.util;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.util.Switch;
-
-import org.openscada.ui.chart.model.ChartModel.*;
+import org.openscada.ui.chart.model.ChartModel.ArchiveChannel;
+import org.openscada.ui.chart.model.ChartModel.ArchiveSeries;
+import org.openscada.ui.chart.model.ChartModel.Axis;
+import org.openscada.ui.chart.model.ChartModel.Chart;
+import org.openscada.ui.chart.model.ChartModel.ChartPackage;
+import org.openscada.ui.chart.model.ChartModel.DataItemSeries;
+import org.openscada.ui.chart.model.ChartModel.DataSeries;
+import org.openscada.ui.chart.model.ChartModel.IdItem;
+import org.openscada.ui.chart.model.ChartModel.Item;
+import org.openscada.ui.chart.model.ChartModel.ItemDataSeries;
+import org.openscada.ui.chart.model.ChartModel.LineProperties;
+import org.openscada.ui.chart.model.ChartModel.ScriptSeries;
+import org.openscada.ui.chart.model.ChartModel.UriItem;
+import org.openscada.ui.chart.model.ChartModel.XAxis;
+import org.openscada.ui.chart.model.ChartModel.YAxis;
 
 /**
  * <!-- begin-user-doc -->
@@ -194,6 +206,16 @@ public class ChartSwitch<T> extends Switch<T>
             {
                 LineProperties lineProperties = (LineProperties)theEObject;
                 T result = caseLineProperties ( lineProperties );
+                if ( result == null )
+                    result = defaultCase ( theEObject );
+                return result;
+            }
+            case ChartPackage.SCRIPT_SERIES:
+            {
+                ScriptSeries scriptSeries = (ScriptSeries)theEObject;
+                T result = caseScriptSeries ( scriptSeries );
+                if ( result == null )
+                    result = caseDataSeries ( scriptSeries );
                 if ( result == null )
                     result = defaultCase ( theEObject );
                 return result;
@@ -407,6 +429,22 @@ public class ChartSwitch<T> extends Switch<T>
      * @generated
      */
     public T caseLineProperties ( LineProperties object )
+    {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>Script Series</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>Script Series</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseScriptSeries ( ScriptSeries object )
     {
         return null;
     }

@@ -12,7 +12,6 @@ import java.util.Collection;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
-
 import org.eclipse.emf.edit.provider.ChangeNotifier;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
@@ -24,7 +23,6 @@ import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.INotifyChangedListener;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
-
 import org.openscada.ui.chart.model.ChartModel.util.ChartAdapterFactory;
 
 /**
@@ -303,6 +301,31 @@ public class ChartItemProviderAdapterFactory extends ChartAdapterFactory impleme
     }
 
     /**
+     * This keeps track of the one adapter used for all {@link org.openscada.ui.chart.model.ChartModel.ScriptSeries} instances.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    protected ScriptSeriesItemProvider scriptSeriesItemProvider;
+
+    /**
+     * This creates an adapter for a {@link org.openscada.ui.chart.model.ChartModel.ScriptSeries}.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    @Override
+    public Adapter createScriptSeriesAdapter ()
+    {
+        if ( scriptSeriesItemProvider == null )
+        {
+            scriptSeriesItemProvider = new ScriptSeriesItemProvider ( this );
+        }
+
+        return scriptSeriesItemProvider;
+    }
+
+    /**
      * This returns the root adapter factory that contains this factory.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -431,6 +454,8 @@ public class ChartItemProviderAdapterFactory extends ChartAdapterFactory impleme
             archiveChannelItemProvider.dispose ();
         if ( linePropertiesItemProvider != null )
             linePropertiesItemProvider.dispose ();
+        if ( scriptSeriesItemProvider != null )
+            scriptSeriesItemProvider.dispose ();
     }
 
 }

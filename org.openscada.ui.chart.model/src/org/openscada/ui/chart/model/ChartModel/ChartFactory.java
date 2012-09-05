@@ -108,6 +108,15 @@ public interface ChartFactory extends EFactory
     LineProperties createLineProperties ();
 
     /**
+     * Returns a new object of class '<em>Script Series</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>Script Series</em>'.
+     * @generated
+     */
+    ScriptSeries createScriptSeries ();
+
+    /**
      * Returns the package supported by this factory.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->

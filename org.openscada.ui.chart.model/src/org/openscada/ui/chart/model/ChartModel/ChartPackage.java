@@ -750,6 +750,70 @@ public interface ChartPackage extends EPackage
     int LINE_PROPERTIES_FEATURE_COUNT = 2;
 
     /**
+     * The meta object id for the '{@link org.openscada.ui.chart.model.ChartModel.impl.ScriptSeriesImpl <em>Script Series</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.openscada.ui.chart.model.ChartModel.impl.ScriptSeriesImpl
+     * @see org.openscada.ui.chart.model.ChartModel.impl.ChartPackageImpl#getScriptSeries()
+     * @generated
+     */
+    int SCRIPT_SERIES = 13;
+
+    /**
+     * The feature id for the '<em><b>Label</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int SCRIPT_SERIES__LABEL = DATA_SERIES__LABEL;
+
+    /**
+     * The feature id for the '<em><b>X</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int SCRIPT_SERIES__X = DATA_SERIES__X;
+
+    /**
+     * The feature id for the '<em><b>Y</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int SCRIPT_SERIES__Y = DATA_SERIES__Y;
+
+    /**
+     * The feature id for the '<em><b>Line Properties</b></em>' containment reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int SCRIPT_SERIES__LINE_PROPERTIES = DATA_SERIES_FEATURE_COUNT + 0;
+
+    /**
+     * The feature id for the '<em><b>Script</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int SCRIPT_SERIES__SCRIPT = DATA_SERIES_FEATURE_COUNT + 1;
+
+    /**
+     * The number of structural features of the '<em>Script Series</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int SCRIPT_SERIES_FEATURE_COUNT = DATA_SERIES_FEATURE_COUNT + 2;
+
+    /**
      * The meta object id for the '<em>RGB</em>' data type.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -757,7 +821,7 @@ public interface ChartPackage extends EPackage
      * @see org.openscada.ui.chart.model.ChartModel.impl.ChartPackageImpl#getRGB()
      * @generated
      */
-    int RGB = 13;
+    int RGB = 14;
 
     /**
      * Returns the meta object for class '{@link org.openscada.ui.chart.model.ChartModel.Chart <em>Chart</em>}'.
@@ -1242,6 +1306,38 @@ public interface ChartPackage extends EPackage
     EAttribute getLineProperties_Color ();
 
     /**
+     * Returns the meta object for class '{@link org.openscada.ui.chart.model.ChartModel.ScriptSeries <em>Script Series</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>Script Series</em>'.
+     * @see org.openscada.ui.chart.model.ChartModel.ScriptSeries
+     * @generated
+     */
+    EClass getScriptSeries ();
+
+    /**
+     * Returns the meta object for the containment reference '{@link org.openscada.ui.chart.model.ChartModel.ScriptSeries#getLineProperties <em>Line Properties</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the containment reference '<em>Line Properties</em>'.
+     * @see org.openscada.ui.chart.model.ChartModel.ScriptSeries#getLineProperties()
+     * @see #getScriptSeries()
+     * @generated
+     */
+    EReference getScriptSeries_LineProperties ();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.openscada.ui.chart.model.ChartModel.ScriptSeries#getScript <em>Script</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Script</em>'.
+     * @see org.openscada.ui.chart.model.ChartModel.ScriptSeries#getScript()
+     * @see #getScriptSeries()
+     * @generated
+     */
+    EAttribute getScriptSeries_Script ();
+
+    /**
      * Returns the meta object for data type '{@link org.eclipse.swt.graphics.RGB <em>RGB</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1660,6 +1756,32 @@ public interface ChartPackage extends EPackage
          * @generated
          */
         EAttribute LINE_PROPERTIES__COLOR = eINSTANCE.getLineProperties_Color ();
+
+        /**
+         * The meta object literal for the '{@link org.openscada.ui.chart.model.ChartModel.impl.ScriptSeriesImpl <em>Script Series</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.openscada.ui.chart.model.ChartModel.impl.ScriptSeriesImpl
+         * @see org.openscada.ui.chart.model.ChartModel.impl.ChartPackageImpl#getScriptSeries()
+         * @generated
+         */
+        EClass SCRIPT_SERIES = eINSTANCE.getScriptSeries ();
+
+        /**
+         * The meta object literal for the '<em><b>Line Properties</b></em>' containment reference feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference SCRIPT_SERIES__LINE_PROPERTIES = eINSTANCE.getScriptSeries_LineProperties ();
+
+        /**
+         * The meta object literal for the '<em><b>Script</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute SCRIPT_SERIES__SCRIPT = eINSTANCE.getScriptSeries_Script ();
 
         /**
          * The meta object literal for the '<em>RGB</em>' data type.

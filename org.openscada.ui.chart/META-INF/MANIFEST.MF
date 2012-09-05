@@ -38,6 +38,7 @@ Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: org.openscada.utils.beans;version="0.17.0",
  org.openscada.utils.codec;version="0.17.0",
+ org.openscada.utils.script;version="1.0.0",
  org.slf4j;version="1.5.8"
 Export-Package: org.openscada.ui.chart.viewer;version="1.0.0";
   uses:="org.eclipse.core.databinding.observable,

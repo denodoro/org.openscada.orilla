@@ -32,6 +32,7 @@ import org.eclipse.jface.resource.ResourceManager;
 import org.openscada.ui.chart.model.ChartModel.ArchiveSeries;
 import org.openscada.ui.chart.model.ChartModel.DataItemSeries;
 import org.openscada.ui.chart.model.ChartModel.DataSeries;
+import org.openscada.ui.chart.model.ChartModel.ScriptSeries;
 import org.openscada.ui.chart.model.ChartModel.XAxis;
 import org.openscada.ui.chart.model.ChartModel.YAxis;
 
@@ -101,6 +102,10 @@ public class InputManager
         else if ( element instanceof ArchiveSeries )
         {
             addInput ( element, new ArchiveSeriesViewer ( this.dbc, (ArchiveSeries)element, this.viewer, this.resourceManager, this.xLocator, this.yLocator ) );
+        }
+        else if ( element instanceof ScriptSeries )
+        {
+            addInput ( element, new ScriptSeriesViewer ( this.dbc, (ScriptSeries)element, this.viewer, this.resourceManager, this.xLocator, this.yLocator ) );
         }
     }
 

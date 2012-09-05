@@ -11,11 +11,8 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.common.util.ResourceLocator;
-
 import org.eclipse.emf.ecore.EStructuralFeature;
-
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -26,7 +23,6 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
-
 import org.openscada.ui.chart.model.ChartModel.Chart;
 import org.openscada.ui.chart.model.ChartModel.ChartFactory;
 import org.openscada.ui.chart.model.ChartModel.ChartPackage;
@@ -255,6 +251,8 @@ public class ChartItemProvider extends ItemProviderAdapter implements IEditingDo
         newChildDescriptors.add ( createChildParameter ( ChartPackage.Literals.CHART__INPUTS, ChartFactory.eINSTANCE.createDataItemSeries () ) );
 
         newChildDescriptors.add ( createChildParameter ( ChartPackage.Literals.CHART__INPUTS, ChartFactory.eINSTANCE.createArchiveSeries () ) );
+
+        newChildDescriptors.add ( createChildParameter ( ChartPackage.Literals.CHART__INPUTS, ChartFactory.eINSTANCE.createScriptSeries () ) );
     }
 
     /**

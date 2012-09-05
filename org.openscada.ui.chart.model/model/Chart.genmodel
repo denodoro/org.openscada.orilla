@@ -40,8 +40,7 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Chart.ecore#//DataSeries/y"/>
     </genClasses>
     <genClasses ecoreClass="Chart.ecore#//DataItemSeries">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Chart.ecore#//DataItemSeries/lineColor"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Chart.ecore#//DataItemSeries/lineWidth"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Chart.ecore#//DataItemSeries/lineProperties"/>
     </genClasses>
     <genClasses ecoreClass="Chart.ecore#//ArchiveSeries">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Chart.ecore#//ArchiveSeries/channels"/>
@@ -63,10 +62,15 @@
     <genClasses ecoreClass="Chart.ecore#//ArchiveChannel">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Chart.ecore#//ArchiveChannel/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Chart.ecore#//ArchiveChannel/label"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Chart.ecore#//ArchiveChannel/lineProperties"/>
     </genClasses>
     <genClasses ecoreClass="Chart.ecore#//LineProperties">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Chart.ecore#//LineProperties/width"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Chart.ecore#//LineProperties/color"/>
+    </genClasses>
+    <genClasses ecoreClass="Chart.ecore#//ScriptSeries">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Chart.ecore#//ScriptSeries/lineProperties"/>
+      <genFeatures createChild="false" propertyMultiLine="true" ecoreFeature="ecore:EAttribute Chart.ecore#//ScriptSeries/script"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

@@ -6,7 +6,6 @@
  */
 package org.openscada.ui.chart.model.ChartModel;
 
-import org.eclipse.swt.graphics.RGB;
 
 /**
  * <!-- begin-user-doc -->

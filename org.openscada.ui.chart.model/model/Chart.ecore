@@ -98,4 +98,9 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="color" lowerBound="1" eType="#//RGB"
         defaultValueLiteral="#000000"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ScriptSeries" eSuperTypes="#//DataSeries">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lineProperties" lowerBound="1"
+        eType="#//LineProperties" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="script" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
 </ecore:EPackage>

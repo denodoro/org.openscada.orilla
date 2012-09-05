@@ -16,13 +16,15 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.eclipse.swt.graphics.RGB;
-import org.openscada.ui.chart.model.ChartModel.*;
+import org.openscada.ui.chart.model.ChartModel.ArchiveChannel;
 import org.openscada.ui.chart.model.ChartModel.ArchiveSeries;
 import org.openscada.ui.chart.model.ChartModel.Chart;
 import org.openscada.ui.chart.model.ChartModel.ChartFactory;
 import org.openscada.ui.chart.model.ChartModel.ChartPackage;
 import org.openscada.ui.chart.model.ChartModel.DataItemSeries;
 import org.openscada.ui.chart.model.ChartModel.IdItem;
+import org.openscada.ui.chart.model.ChartModel.LineProperties;
+import org.openscada.ui.chart.model.ChartModel.ScriptSeries;
 import org.openscada.ui.chart.model.ChartModel.UriItem;
 import org.openscada.ui.chart.model.ChartModel.XAxis;
 import org.openscada.ui.chart.model.ChartModel.YAxis;
@@ -92,6 +94,8 @@ public class ChartFactoryImpl extends EFactoryImpl implements ChartFactory
                 return createArchiveChannel ();
             case ChartPackage.LINE_PROPERTIES:
                 return createLineProperties ();
+            case ChartPackage.SCRIPT_SERIES:
+                return createScriptSeries ();
             default:
                 throw new IllegalArgumentException ( "The class '" + eClass.getName () + "' is not a valid classifier" );
         }
@@ -226,6 +230,17 @@ public class ChartFactoryImpl extends EFactoryImpl implements ChartFactory
     {
         LinePropertiesImpl lineProperties = new LinePropertiesImpl ();
         return lineProperties;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public ScriptSeries createScriptSeries ()
+    {
+        ScriptSeriesImpl scriptSeries = new ScriptSeriesImpl ();
+        return scriptSeries;
     }
 
     /**

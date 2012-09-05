@@ -12,24 +12,26 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.openscada.ui.chart.model.ChartModel.ChartFactory;
 import org.openscada.ui.chart.model.ChartModel.ChartPackage;
-import org.openscada.ui.chart.model.ChartModel.ItemDataSeries;
+import org.openscada.ui.chart.model.ChartModel.ScriptSeries;
 
 /**
- * This is the item provider adapter for a {@link org.openscada.ui.chart.model.ChartModel.ItemDataSeries} object.
+ * This is the item provider adapter for a {@link org.openscada.ui.chart.model.ChartModel.ScriptSeries} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class ItemDataSeriesItemProvider extends DataSeriesItemProvider implements IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource
+public class ScriptSeriesItemProvider extends DataSeriesItemProvider implements IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource
 {
     /**
      * This constructs an instance from a factory and a notifier.
@@ -37,7 +39,7 @@ public class ItemDataSeriesItemProvider extends DataSeriesItemProvider implement
      * <!-- end-user-doc -->
      * @generated
      */
-    public ItemDataSeriesItemProvider ( AdapterFactory adapterFactory )
+    public ScriptSeriesItemProvider ( AdapterFactory adapterFactory )
     {
         super ( adapterFactory );
     }
@@ -55,8 +57,20 @@ public class ItemDataSeriesItemProvider extends DataSeriesItemProvider implement
         {
             super.getPropertyDescriptors ( object );
 
+            addScriptPropertyDescriptor ( object );
         }
         return itemPropertyDescriptors;
+    }
+
+    /**
+     * This adds a property descriptor for the Script feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    protected void addScriptPropertyDescriptor ( Object object )
+    {
+        itemPropertyDescriptors.add ( createItemPropertyDescriptor ( ( (ComposeableAdapterFactory)adapterFactory ).getRootAdapterFactory (), getResourceLocator (), getString ( "_UI_ScriptSeries_script_feature" ), getString ( "_UI_PropertyDescriptor_description", "_UI_ScriptSeries_script_feature", "_UI_ScriptSeries_type" ), ChartPackage.Literals.SCRIPT_SERIES__SCRIPT, true, true, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null ) );
     }
 
     /**
@@ -73,7 +87,7 @@ public class ItemDataSeriesItemProvider extends DataSeriesItemProvider implement
         if ( childrenFeatures == null )
         {
             super.getChildrenFeatures ( object );
-            childrenFeatures.add ( ChartPackage.Literals.ITEM_DATA_SERIES__ITEM );
+            childrenFeatures.add ( ChartPackage.Literals.SCRIPT_SERIES__LINE_PROPERTIES );
         }
         return childrenFeatures;
     }
@@ -93,6 +107,18 @@ public class ItemDataSeriesItemProvider extends DataSeriesItemProvider implement
     }
 
     /**
+     * This returns ScriptSeries.gif.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    @Override
+    public Object getImage ( Object object )
+    {
+        return overlayImage ( object, getResourceLocator ().getImage ( "full/obj16/ScriptSeries" ) );
+    }
+
+    /**
      * This returns the label text for the adapted class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -101,8 +127,8 @@ public class ItemDataSeriesItemProvider extends DataSeriesItemProvider implement
     @Override
     public String getText ( Object object )
     {
-        String label = ( (ItemDataSeries)object ).getLabel ();
-        return label == null || label.length () == 0 ? getString ( "_UI_ItemDataSeries_type" ) : getString ( "_UI_ItemDataSeries_type" ) + " " + label;
+        String label = ( (ScriptSeries)object ).getLabel ();
+        return label == null || label.length () == 0 ? getString ( "_UI_ScriptSeries_type" ) : getString ( "_UI_ScriptSeries_type" ) + " " + label;
     }
 
     /**
@@ -117,9 +143,12 @@ public class ItemDataSeriesItemProvider extends DataSeriesItemProvider implement
     {
         updateChildren ( notification );
 
-        switch ( notification.getFeatureID ( ItemDataSeries.class ) )
+        switch ( notification.getFeatureID ( ScriptSeries.class ) )
         {
-            case ChartPackage.ITEM_DATA_SERIES__ITEM:
+            case ChartPackage.SCRIPT_SERIES__SCRIPT:
+                fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), false, true ) );
+                return;
+            case ChartPackage.SCRIPT_SERIES__LINE_PROPERTIES:
                 fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), true, false ) );
                 return;
         }
@@ -138,9 +167,7 @@ public class ItemDataSeriesItemProvider extends DataSeriesItemProvider implement
     {
         super.collectNewChildDescriptors ( newChildDescriptors, object );
 
-        newChildDescriptors.add ( createChildParameter ( ChartPackage.Literals.ITEM_DATA_SERIES__ITEM, ChartFactory.eINSTANCE.createUriItem () ) );
-
-        newChildDescriptors.add ( createChildParameter ( ChartPackage.Literals.ITEM_DATA_SERIES__ITEM, ChartFactory.eINSTANCE.createIdItem () ) );
+        newChildDescriptors.add ( createChildParameter ( ChartPackage.Literals.SCRIPT_SERIES__LINE_PROPERTIES, ChartFactory.eINSTANCE.createLineProperties () ) );
     }
 
 }
