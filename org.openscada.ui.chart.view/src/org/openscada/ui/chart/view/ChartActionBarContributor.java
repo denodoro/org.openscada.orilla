@@ -19,10 +19,20 @@
 
 package org.openscada.ui.chart.view;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.emf.common.ui.viewer.IViewerProvider;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.xmi.impl.XMLResourceFactoryImpl;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
 import org.eclipse.emf.edit.ui.action.ControlAction;
@@ -49,9 +59,16 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.actions.BaseSelectionListenerAction;
 import org.eclipse.ui.statushandlers.StatusManager;
+import org.openscada.ui.chart.model.ChartModel.Chart;
+import org.openscada.ui.utils.status.StatusHelper;
 
 /**
  * This is the action bar contributor for the Chart model editor. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -60,6 +77,92 @@ import org.eclipse.ui.statushandlers.StatusManager;
  */
 public class ChartActionBarContributor extends EditingDomainActionBarContributor implements ISelectionChangedListener
 {
+
+    public static class SaveAsAction extends BaseSelectionListenerAction
+    {
+        private Chart chart;
+
+        public SaveAsAction ()
+        {
+            super ( "Save as…" );
+        }
+
+        @Override
+        public void run ()
+        {
+            if ( this.chart == null )
+            {
+                return;
+            }
+
+            final Shell shell = PlatformUI.getWorkbench ().getActiveWorkbenchWindow ().getShell ();
+
+            final FileDialog dlg = new FileDialog ( shell, SWT.SAVE );
+            dlg.setFilterExtensions ( new String[] { "*.chart" } );
+            dlg.setFilterNames ( new String[] { "openSCADA Chart Configuration" } );
+            dlg.setOverwrite ( true );
+            dlg.setText ( "Select the file to store the chart configurationt to" );
+
+            final String file = dlg.open ();
+
+            if ( file != null )
+            {
+                new Job ( "Perform save" ) {
+                    @Override
+                    protected org.eclipse.core.runtime.IStatus run ( final org.eclipse.core.runtime.IProgressMonitor monitor )
+                    {
+                        try
+                        {
+                            doSave ( file );
+                        }
+                        catch ( final IOException e )
+                        {
+                            return StatusHelper.convertStatus ( Activator.PLUGIN_ID, e );
+                        }
+                        finally
+                        {
+                            monitor.done ();
+                        }
+                        return Status.OK_STATUS;
+                    };
+                }.schedule ();
+            }
+        }
+
+        private void doSave ( final String file ) throws IOException
+        {
+            final ResourceSet rs = new ResourceSetImpl ();
+
+            rs.getResourceFactoryRegistry ().getExtensionToFactoryMap ().put ( "*", new XMLResourceFactoryImpl () ); //$NON-NLS-1$
+            final URI fileUri = URI.createFileURI ( file );
+            final Resource resource = rs.createResource ( fileUri );
+            resource.getContents ().add ( this.chart );
+
+            final Map<Object, Object> options = new HashMap<Object, Object> ();
+            //             options.put ( XMIResource., value )
+            resource.save ( options );
+        }
+
+        @Override
+        protected boolean updateSelection ( final IStructuredSelection selection )
+        {
+            this.chart = null;
+
+            if ( selection.isEmpty () )
+            {
+                return false;
+            }
+            final Object o = selection.getFirstElement ();
+            if ( ! ( o instanceof Chart ) )
+            {
+                return false;
+            }
+
+            this.chart = (Chart)o;
+
+            return true;
+        }
+    }
 
     /**
      * This keeps track of the active editor. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -86,7 +189,7 @@ public class ChartActionBarContributor extends EditingDomainActionBarContributor
         {
             try
             {
-                getPage ().showView ( "org.eclipse.ui.views.PropertySheet" );
+                getPage ().showView ( "org.eclipse.ui.views.PropertySheet" ); //$NON-NLS-1$
             }
             catch ( final PartInitException exception )
             {
@@ -94,6 +197,8 @@ public class ChartActionBarContributor extends EditingDomainActionBarContributor
             }
         }
     };
+
+    protected SaveAsAction saveAsAction = new SaveAsAction ();
 
     /**
      * This action refreshes the viewer of the current editor if the editor implements {@link org.eclipse.emf.common.ui.viewer.IViewerProvider}. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -443,6 +548,7 @@ public class ChartActionBarContributor extends EditingDomainActionBarContributor
 
         this.refreshViewerAction.setEnabled ( this.refreshViewerAction.isEnabled () );
         menuManager.insertAfter ( "ui-actions", this.refreshViewerAction );
+        menuManager.insertAfter ( "ui-actions", this.saveAsAction );
 
         super.addGlobalActions ( menuManager );
     }
@@ -505,6 +611,11 @@ public class ChartActionBarContributor extends EditingDomainActionBarContributor
             {
                 selectionProvider.removeSelectionChangedListener ( this.controlAction );
             }
+
+            if ( this.saveAsAction != null )
+            {
+                selectionProvider.removeSelectionChangedListener ( this.saveAsAction );
+            }
         }
     }
 
@@ -553,6 +664,11 @@ public class ChartActionBarContributor extends EditingDomainActionBarContributor
             {
                 selectionProvider.addSelectionChangedListener ( this.controlAction );
             }
+
+            if ( this.saveAsAction != null )
+            {
+                selectionProvider.addSelectionChangedListener ( this.saveAsAction );
+            }
         }
 
         update ();
@@ -582,6 +698,11 @@ public class ChartActionBarContributor extends EditingDomainActionBarContributor
             {
                 this.controlAction.updateSelection ( structuredSelection );
             }
+
+            if ( this.saveAsAction != null )
+            {
+                this.saveAsAction.selectionChanged ( structuredSelection );
+            }
         }
 
         this.undoAction.update ();
@@ -592,5 +713,4 @@ public class ChartActionBarContributor extends EditingDomainActionBarContributor
             this.loadResourceAction.update ();
         }
     }
-
 }
