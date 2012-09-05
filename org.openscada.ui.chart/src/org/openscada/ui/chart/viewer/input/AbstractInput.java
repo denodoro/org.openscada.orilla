@@ -21,6 +21,7 @@ package org.openscada.ui.chart.viewer.input;
 
 import java.util.Date;
 
+import org.eclipse.swt.graphics.Rectangle;
 import org.openscada.chart.XAxis;
 import org.openscada.chart.swt.ChartMouseListener.MouseState;
 import org.openscada.chart.swt.ChartMouseMoveListener;
@@ -79,7 +80,8 @@ public abstract class AbstractInput extends AbstractPropertyChange implements Ch
             @Override
             public void onMouseMove ( final MouseState state )
             {
-                handeMouseMove ( state, xAxis.translateToValue ( AbstractInput.this.chartRenderer.getClientAreaProxy ().getClientRectangle ().width, state.x ) );
+                final Rectangle chartRect = AbstractInput.this.chartRenderer.getClientAreaProxy ().getClientRectangle ();
+                handeMouseMove ( state, xAxis.translateToValue ( chartRect.width, state.x - chartRect.x ) );
             }
         };
         this.chartRenderer.addMouseMoveListener ( this.mouseMoveListener );
