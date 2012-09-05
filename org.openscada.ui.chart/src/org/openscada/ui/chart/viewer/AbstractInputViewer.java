@@ -25,7 +25,7 @@ import org.eclipse.emf.databinding.EMFObservables;
 import org.eclipse.jface.resource.LocalResourceManager;
 import org.eclipse.jface.resource.ResourceManager;
 import org.openscada.ui.chart.model.ChartModel.ChartPackage;
-import org.openscada.ui.chart.model.ChartModel.ItemDataSeries;
+import org.openscada.ui.chart.model.ChartModel.DataSeries;
 import org.openscada.ui.chart.model.ChartModel.XAxis;
 import org.openscada.ui.chart.model.ChartModel.YAxis;
 
@@ -52,7 +52,7 @@ public abstract class AbstractInputViewer extends AbstractObserver implements In
 
     protected final ResourceManager resourceManager;
 
-    public AbstractInputViewer ( final DataBindingContext dbc, final ItemDataSeries element, final ChartViewer viewer, final ResourceManager resourceManager, final AxisLocator<XAxis, XAxisViewer> xLocator, final AxisLocator<YAxis, YAxisViewer> yLocator )
+    public AbstractInputViewer ( final DataBindingContext dbc, final DataSeries element, final ChartViewer viewer, final ResourceManager resourceManager, final AxisLocator<XAxis, XAxisViewer> xLocator, final AxisLocator<YAxis, YAxisViewer> yLocator )
     {
         this.viewer = viewer;
 
