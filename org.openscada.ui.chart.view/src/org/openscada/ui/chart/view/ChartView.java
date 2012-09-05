@@ -390,6 +390,10 @@ public class ChartView extends ViewPart
 
         final PrintDialog dlg = new PrintDialog ( this.shell, SWT.APPLICATION_MODAL );
 
+        final PrinterData initialPd = Printer.getDefaultPrinterData ();
+        initialPd.orientation = PrinterData.LANDSCAPE;
+        dlg.setPrinterData ( initialPd );
+
         final PrinterData pd = dlg.open ();
 
         if ( pd != null )
@@ -398,8 +402,8 @@ public class ChartView extends ViewPart
             try
             {
                 printer.startJob ( "Chart" );
-
                 printer.startPage ();
+
                 final GC gc = new GC ( printer );
                 try
                 {
