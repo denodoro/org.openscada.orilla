@@ -62,7 +62,7 @@ public class ChartControllerView extends AbstractChartManagePart
 
         final Composite wrapper = new Composite ( parent, SWT.NONE );
 
-        this.viewer = new TableViewer ( wrapper );
+        this.viewer = new TableViewer ( wrapper, SWT.FULL_SELECTION );
         this.viewer.getTable ().setHeaderVisible ( true );
 
         final TableColumnLayout layout = new TableColumnLayout ();
