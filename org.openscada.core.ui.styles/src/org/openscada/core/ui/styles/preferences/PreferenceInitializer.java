@@ -37,6 +37,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer
      * 
      * @see org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer#initializeDefaultPreferences()
      */
+    @Override
     public void initializeDefaultPreferences ()
     {
         final IPreferenceStore store = Activator.getDefault ().getPreferenceStore ();
@@ -44,5 +45,6 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer
         PreferenceConverter.setDefault ( store, PreferenceConstants.P_BASE_BACKGROUND + "/" + Style.ALARM, new RGB ( 255, 0, 0 ) );
         PreferenceConverter.setDefault ( store, PreferenceConstants.P_BASE_BACKGROUND + "/" + Style.ERROR, new RGB ( 255, 0, 255 ) );
         PreferenceConverter.setDefault ( store, PreferenceConstants.P_BASE_BACKGROUND + "/" + Style.MANUAL, new RGB ( 100, 149, 237 ) );
+        PreferenceConverter.setDefault ( store, PreferenceConstants.P_BASE_BACKGROUND + "/" + Style.WARNING, new RGB ( 255, 222, 0 ) );
     }
 }

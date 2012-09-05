@@ -64,6 +64,14 @@
             </class>
       </detailsPart>
 	<detailsPart
+            name="%detailsPart.warnings.name"
+            sortKey="0501">
+            <class class="org.openscada.da.client.dataitem.details.part.sum.SumDetailsPart">
+            	<parameter name="label" value="%detailsPart.warnings.name"/>
+            	<parameter name="suffix" value=".warning"/>
+            </class>
+      </detailsPart>
+	<detailsPart
             name="%detailsPart.acks.name"
             sortKey="0502">
             <class class="org.openscada.da.client.dataitem.details.part.sum.SumDetailsPart">

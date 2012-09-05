@@ -31,6 +31,12 @@ public class Messages extends NLS
 
     public static String OverviewDetailsPart_AlarmLabel;
 
+    public static String OverviewDetailsPart_WarningActiveText;
+
+    public static String OverviewDetailsPart_WarningInactiveText;
+
+    public static String OverviewDetailsPart_WarningLabel;
+
     public static String OverviewDetailsPart_ConnectionLabel;
 
     public static String OverviewDetailsPart_ErrorActiveText;

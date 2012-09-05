@@ -53,6 +53,8 @@ public class OverviewDetailsPart extends AbstractBaseDetailsPart
 
     private Text blockedText;
 
+    private Text warnText;
+
     @Override
     public void createPart ( final Composite parent )
     {
@@ -77,6 +79,11 @@ public class OverviewDetailsPart extends AbstractBaseDetailsPart
         label.setText ( Messages.OverviewDetailsPart_SubscriptionStateLabel );
         this.stateText = new Text ( parent, SWT.READ_ONLY | SWT.BORDER );
         this.stateText.setLayoutData ( new GridData ( SWT.FILL, SWT.BEGINNING, true, false ) );
+
+        label = new Label ( parent, SWT.NONE );
+        label.setText ( Messages.OverviewDetailsPart_WarningLabel );
+        this.warnText = new Text ( parent, SWT.READ_ONLY | SWT.BORDER );
+        this.warnText.setLayoutData ( new GridData ( SWT.FILL, SWT.BEGINNING, true, false ) );
 
         label = new Label ( parent, SWT.NONE );
         label.setText ( Messages.OverviewDetailsPart_AlarmLabel );
@@ -124,6 +131,7 @@ public class OverviewDetailsPart extends AbstractBaseDetailsPart
             this.connectionUriText.setText ( "" ); //$NON-NLS-1$
             this.itemIdText.setText ( "" ); //$NON-NLS-1$
             this.stateText.setText ( "" ); //$NON-NLS-1$
+            this.warnText.setText ( "" ); //$NON-NLS-1$
             this.alarmText.setText ( "" ); //$NON-NLS-1$
             this.errorText.setText ( "" ); //$NON-NLS-1$
             this.manualText.setText ( "" ); //$NON-NLS-1$
@@ -171,6 +179,7 @@ public class OverviewDetailsPart extends AbstractBaseDetailsPart
             this.stateText.setText ( String.format ( Messages.OverviewDetailsPart_SubscriptionStateFormat, this.value.getSubscriptionState ().name (), this.value.getSubscriptionError ().getMessage () ) );
         }
 
+        this.warnText.setText ( this.value.isWarning () ? Messages.OverviewDetailsPart_WarningActiveText : Messages.OverviewDetailsPart_WarningInactiveText );
         this.alarmText.setText ( this.value.isAlarm () ? Messages.OverviewDetailsPart_AlarmActiveText : Messages.OverviewDetailsPart_AlarmInactiveText );
         this.errorText.setText ( this.value.isError () ? Messages.OverviewDetailsPart_ErrorActiveText : Messages.OverviewDetailsPart_ErrorInactiveText );
         this.manualText.setText ( this.value.isManual () ? Messages.OverviewDetailsPart_ManualActiveText : Messages.OverviewDetailsPart_ManualInactiveText );
