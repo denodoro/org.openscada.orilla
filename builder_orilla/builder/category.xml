@@ -6,6 +6,9 @@
    <feature url="features/org.openscada.orilla.sdk_1.0.0.qualifier.jar" id="org.openscada.orilla.sdk" version="1.0.0.qualifier">
       <category name="org.openscada.orilla.sdk.category"/>
    </feature>
+   <feature url="features/org.openscada.ui.chart.editor.feature_1.0.0.qualifier.jar" id="org.openscada.ui.chart.editor.feature" version="1.0.0.qualifier">
+      <category name="org.openscada.chart.editor"/>
+   </feature>
    <category-def name="org.openscada.orilla.category" label="openSCADA Orilla">
       <description>
          User interface components from openSCADA
@@ -14,6 +17,11 @@
    <category-def name="org.openscada.orilla.sdk.category" label="openSCADA Orilla SDK">
       <description>
          Binaries and sources of the openSCADA Orilla modules.
+      </description>
+   </category-def>
+   <category-def name="org.openscada.chart.editor" label="openSCADA Chart Configuration Editor">
+      <description>
+         An editor component for chart configurations.
       </description>
    </category-def>
 </site>
