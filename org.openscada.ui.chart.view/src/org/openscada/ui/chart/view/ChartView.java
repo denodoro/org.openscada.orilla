@@ -36,14 +36,20 @@ import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.printing.PrintDialog;
+import org.eclipse.swt.printing.Printer;
+import org.eclipse.swt.printing.PrinterData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IViewSite;
@@ -52,6 +58,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.statushandlers.StatusManager;
 import org.openscada.chart.swt.ChartArea;
+import org.openscada.chart.swt.SWTGraphics;
 import org.openscada.da.ui.connection.data.Item;
 import org.openscada.ui.chart.model.ChartModel.Chart;
 import org.openscada.ui.chart.model.ChartModel.ChartFactory;
@@ -79,6 +86,23 @@ public class ChartView extends ViewPart
         public void run ()
         {
             ChartView.this.viewer.setNowCenter ();
+        }
+    }
+
+    public class PrintAction extends Action
+    {
+
+        public PrintAction ()
+        {
+            super ( "Print…" );
+            setDescription ( "Print the current chart view" );
+            setToolTipText ( "Print the current chart view" );
+        }
+
+        @Override
+        public void run ()
+        {
+            print ();
         }
     }
 
@@ -126,6 +150,8 @@ public class ChartView extends ViewPart
     private Chart loadedConfiguration;
 
     private ChartArea chartArea;
+
+    private Shell shell;
 
     private class TimeAction extends Action
     {
@@ -175,6 +201,8 @@ public class ChartView extends ViewPart
     public void createPartControl ( final Composite parent )
     {
         parent.setLayout ( new FillLayout () );
+
+        this.shell = parent.getShell ();
 
         if ( this.loadedConfiguration == null )
         {
@@ -254,6 +282,9 @@ public class ChartView extends ViewPart
         toolBarManager.add ( new PageTimespanAction ( 1, TimeUnit.HOURS, "1h>", "Move forward 1 hour" ) );
         toolBarManager.add ( new PageTimespanAction ( 1, TimeUnit.DAYS, "1d>", "Move forward 1 day" ) );
 
+        toolBarManager.add ( new Separator () );
+
+        toolBarManager.add ( new PrintAction () );
     }
 
     @Override
@@ -346,6 +377,46 @@ public class ChartView extends ViewPart
         catch ( final Exception e )
         {
             StatusManager.getManager ().handle ( StatusHelper.convertStatus ( Activator.PLUGIN_ID, e ), StatusManager.LOG );
+        }
+    }
+
+    public void print ()
+    {
+        if ( Printer.getPrinterList ().length == 0 )
+        {
+            MessageDialog.openInformation ( this.shell, "No printer", "No installed printer could be found" );
+            return;
+        }
+
+        final PrintDialog dlg = new PrintDialog ( this.shell, SWT.APPLICATION_MODAL );
+
+        final PrinterData pd = dlg.open ();
+
+        if ( pd != null )
+        {
+            final Printer printer = new Printer ( pd );
+            try
+            {
+                printer.startJob ( "Chart" );
+
+                printer.startPage ();
+                final GC gc = new GC ( printer );
+                try
+                {
+                    this.viewer.getChartRenderer ().paint ( new SWTGraphics ( gc ) );
+                }
+                finally
+                {
+                    gc.dispose ();
+                }
+
+                printer.endPage ();
+                printer.endJob ();
+            }
+            finally
+            {
+                printer.dispose ();
+            }
         }
     }
 
