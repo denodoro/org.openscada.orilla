@@ -48,6 +48,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
@@ -203,6 +204,35 @@ public class ConfigurationFormToolkit
 
         final IObservableValue value = Observables.observeMapEntry ( data, attributeName, valueType );
         this.dbc.bindValue ( SWTObservables.observeText ( text, SWT.Modify ), value );
+    }
+
+    public void createStandardCombo ( final Composite parent, final String attributeName, final String label, final Object[] items, final IObservableMap data, final Object valueType )
+    {
+        final String[] stringItems = new String[items.length];
+
+        for ( int i = 0; i < items.length; i++ )
+        {
+            stringItems[i] = items[i].toString ();
+        }
+
+        createStandardCombo ( parent, attributeName, label, stringItems, data, valueType );
+    }
+
+    public void createStandardCombo ( final Composite parent, final String attributeName, final String label, final String[] items, final IObservableMap data, final Object valueType )
+    {
+        this.toolkit.createLabel ( parent, label + ":" );
+
+        final Combo combo = new Combo ( parent, SWT.DROP_DOWN );
+
+        combo.setItems ( items );
+        this.toolkit.adapt ( combo );
+
+        final GridData gd = new GridData ( GridData.FILL, GridData.BEGINNING, true, true );
+        gd.horizontalSpan = 2;
+        combo.setLayoutData ( gd );
+
+        final IObservableValue value = Observables.observeMapEntry ( data, attributeName, valueType );
+        this.dbc.bindValue ( SWTObservables.observeText ( combo ), value );
     }
 
     public void createStandardCheckbox ( final Composite parent, final String attributeName, final String label, final IObservableMap data, final Object valueType )

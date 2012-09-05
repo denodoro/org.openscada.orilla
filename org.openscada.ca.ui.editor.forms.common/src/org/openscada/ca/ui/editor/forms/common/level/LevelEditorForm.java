@@ -21,6 +21,7 @@ package org.openscada.ca.ui.editor.forms.common.level;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
+import org.openscada.ae.monitor.common.Severity;
 import org.openscada.ca.ui.editor.forms.common.ConfigurationFormToolkit;
 import org.openscada.ca.ui.editor.forms.common.StandardConfigurationForm;
 import org.openscada.ca.ui.editor.input.ConfigurationEditorInput;
@@ -43,7 +44,8 @@ public class LevelEditorForm extends StandardConfigurationForm
             // fields
             toolkit.createStandardText ( sectionClient, "preset", "Preset", "Preset value", input.getDataMap (), String.class );
             toolkit.createStandardCheckbox ( sectionClient, "active", "Active", input.getDataMap (), String.class );
-            toolkit.createStandardCheckbox ( sectionClient, "error", "As error", input.getDataMap (), String.class );
+            // toolkit.createStandardCheckbox ( sectionClient, "error", "As error", input.getDataMap (), String.class );
+            toolkit.createStandardCombo ( sectionClient, "severity", "Severity", Severity.values (), input.getDataMap (), String.class );
             toolkit.createStandardCheckbox ( sectionClient, "requireAck", "Require acknowledge", input.getDataMap (), String.class );
         }
 
