@@ -185,8 +185,6 @@ public class ChartConfiguratorView extends AbstractChartManagePart implements IV
 
     /**
      * This creates a context menu for the viewer and adds a listener as well registering the menu for extension. <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
-     * @generated
      */
     protected void createContextMenuFor ( final StructuredViewer viewer )
     {
