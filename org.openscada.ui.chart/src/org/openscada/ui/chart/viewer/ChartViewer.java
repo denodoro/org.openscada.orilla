@@ -459,7 +459,7 @@ public class ChartViewer
             return;
         }
 
-        this.display.timerExec ( 500, new Runnable () {
+        this.display.timerExec ( 250, new Runnable () {
 
             @Override
             public void run ()
