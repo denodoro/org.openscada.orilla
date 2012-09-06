@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -19,8 +19,7 @@
 
 package org.openscada.core.ui.styles;
 
-import org.eclipse.jface.resource.ColorDescriptor;
-import org.eclipse.swt.graphics.RGB;
+import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -33,10 +32,10 @@ public class Activator extends AbstractUIPlugin
     // The plug-in ID
     public static final String PLUGIN_ID = "org.openscada.core.ui.styles";
 
+    private DefaultStyleGeneratorImpl defaultStyleGenerator;
+
     // The shared instance
     private static Activator plugin;
-
-    private StyleManager styles;
 
     /**
      * The constructor
@@ -54,18 +53,20 @@ public class Activator extends AbstractUIPlugin
     {
         super.start ( context );
         plugin = this;
-        this.styles = new StyleManager ();
-
-        fillDefault ( this.styles );
+        this.defaultStyleGenerator = new DefaultStyleGeneratorImpl ();
     }
 
-    public static void fillDefault ( final StyleManager styles )
+    @Override
+    protected void initializeImageRegistry ( final ImageRegistry reg )
     {
-        styles.put ( Style.OK, new StyleInformation ( null, null, null ) );
-        styles.put ( Style.ALARM, new StyleInformation ( null, ColorDescriptor.createFrom ( new RGB ( 255, 0, 0 ) ), null ) );
-        styles.put ( Style.WARNING, new StyleInformation ( null, ColorDescriptor.createFrom ( new RGB ( 255, 222, 0 ) ), null ) );
-        styles.put ( Style.ERROR, new StyleInformation ( null, ColorDescriptor.createFrom ( new RGB ( 255, 0, 255 ) ), null ) );
-        styles.put ( Style.MANUAL, new StyleInformation ( null, ColorDescriptor.createFrom ( new RGB ( 100, 149, 237 ) ), null ) );
+        super.initializeImageRegistry ( reg );
+
+        reg.put ( "manual", imageDescriptorFromPlugin ( PLUGIN_ID, "icons/manual.png" ) );
+        reg.put ( "block", imageDescriptorFromPlugin ( PLUGIN_ID, "icons/block.png" ) );
+        reg.put ( "disconnected", imageDescriptorFromPlugin ( PLUGIN_ID, "icons/disconnected.png" ) );
+        reg.put ( "error", imageDescriptorFromPlugin ( PLUGIN_ID, "icons/error.png" ) );
+        reg.put ( "alarm", imageDescriptorFromPlugin ( PLUGIN_ID, "icons/alarm.png" ) );
+        reg.put ( "warning", imageDescriptorFromPlugin ( PLUGIN_ID, "icons/warning.png" ) );
     }
 
     /*
@@ -75,8 +76,8 @@ public class Activator extends AbstractUIPlugin
     @Override
     public void stop ( final BundleContext context ) throws Exception
     {
+        this.defaultStyleGenerator.dispose ();
         plugin = null;
-        this.styles = null;
         super.stop ( context );
     }
 
@@ -90,8 +91,8 @@ public class Activator extends AbstractUIPlugin
         return plugin;
     }
 
-    public static StyleInformation getStyle ( final Style style )
+    public static StyleGenerator getDefaultStyleGenerator ()
     {
-        return plugin.styles.getStyle ( style );
+        return Activator.plugin.defaultStyleGenerator;
     }
 }

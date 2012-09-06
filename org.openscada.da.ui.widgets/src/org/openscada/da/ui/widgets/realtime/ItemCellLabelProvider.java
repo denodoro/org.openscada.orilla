@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -24,7 +24,6 @@ import org.eclipse.jface.resource.LocalResourceManager;
 import org.eclipse.jface.resource.ResourceManager;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ViewerCell;
-import org.openscada.core.ui.styles.StyleInformation;
 
 public class ItemCellLabelProvider extends CellLabelProvider
 {
@@ -49,89 +48,62 @@ public class ItemCellLabelProvider extends CellLabelProvider
     {
         switch ( cell.getColumnIndex () )
         {
-        case 0:
-            cell.setText ( attributePair.key );
-            break;
-        case 2:
-            if ( attributePair.value != null )
-            {
-                cell.setText ( attributePair.value.getType ().name () );
-            }
-            break;
-        case 3:
-            if ( attributePair.value != null )
-            {
-                cell.setText ( attributePair.value.asString ( "<null>" ) ); //$NON-NLS-1$
-            }
-            break;
-        default:
-            break;
+            case 0:
+                cell.setText ( attributePair.key );
+                break;
+            case 2:
+                if ( attributePair.value != null )
+                {
+                    cell.setText ( attributePair.value.getType ().name () );
+                }
+                break;
+            case 3:
+                if ( attributePair.value != null )
+                {
+                    cell.setText ( attributePair.value.asString ( "<null>" ) ); //$NON-NLS-1$
+                }
+                break;
+            default:
+                break;
         }
     }
 
     private void updateListEntry ( final ListEntry listEntry, final ViewerCell cell )
     {
-        final StyleInformation si = org.openscada.da.ui.styles.Activator.getStyle ( listEntry.getItemValue () );
-
-        if ( si != null )
-        {
-            if ( si.getBackground () != null )
-            {
-                cell.setBackground ( this.resourceManager.createColor ( si.getBackground () ) );
-            }
-            else
-            {
-                cell.setBackground ( null );
-            }
-
-            if ( si.getForeground () != null )
-            {
-                cell.setForeground ( this.resourceManager.createColor ( si.getForeground () ) );
-            }
-            else
-            {
-                cell.setForeground ( null );
-            }
-
-            if ( si.getFont () != null )
-            {
-                cell.setFont ( this.resourceManager.createFont ( si.getFont () ) );
-            }
-            else
-            {
-                cell.setFont ( null );
-            }
-        }
+        cell.setFont ( listEntry.getFont () );
+        cell.setForeground ( listEntry.getForeground () );
+        cell.setBackground ( listEntry.getBackground () );
 
         switch ( cell.getColumnIndex () )
         {
-        case 0:
-            cell.setText ( listEntry.getDataItem ().getItem ().getId () );
-            break;
-        case 1:
-            if ( listEntry.getSubscriptionError () != null )
-            {
-                cell.setText ( String.format ( "%s (%s)", listEntry.getSubscriptionState (), listEntry.getSubscriptionError ().getMessage () ) ); //$NON-NLS-1$
-            }
-            else
-            {
-                cell.setText ( listEntry.getSubscriptionState ().name () );
-            }
-            break;
-        case 2:
-            if ( listEntry.getValue () != null )
-            {
-                cell.setText ( listEntry.getValue ().getType ().name () );
-            }
-            break;
-        case 3:
-            if ( listEntry.getValue () != null )
-            {
-                cell.setText ( listEntry.getValue ().asString ( "<null>" ) ); //$NON-NLS-1$
-            }
-            break;
-        default:
-            break;
+            case 0:
+                cell.setImage ( listEntry.getImage () );
+                cell.setText ( listEntry.getDataItem ().getItem ().getId () );
+                break;
+            case 1:
+                if ( listEntry.getSubscriptionError () != null )
+                {
+                    cell.setText ( String.format ( "%s (%s)", listEntry.getSubscriptionState (), listEntry.getSubscriptionError ().getMessage () ) ); //$NON-NLS-1$
+                }
+                else
+                {
+                    cell.setText ( listEntry.getSubscriptionState ().name () );
+                }
+                break;
+            case 2:
+                if ( listEntry.getValue () != null )
+                {
+                    cell.setText ( listEntry.getValue ().getType ().name () );
+                }
+                break;
+            case 3:
+                if ( listEntry.getValue () != null )
+                {
+                    cell.setText ( listEntry.getValue ().asString ( "<null>" ) ); //$NON-NLS-1$
+                }
+                break;
+            default:
+                break;
         }
     }
 

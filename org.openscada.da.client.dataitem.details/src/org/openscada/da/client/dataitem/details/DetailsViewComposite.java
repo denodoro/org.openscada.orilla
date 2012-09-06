@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -37,19 +37,24 @@ import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.openscada.core.ui.styles.StyleInformation;
+import org.openscada.core.ui.styles.StyleBlinker;
 import org.openscada.da.client.DataItemValue;
 import org.openscada.da.client.dataitem.details.part.DetailsPart;
 import org.openscada.da.ui.connection.data.DataItemHolder;
 import org.openscada.da.ui.connection.data.DataSourceListener;
 import org.openscada.da.ui.connection.data.Item;
+import org.openscada.da.ui.styles.DataItemValueStateExtractor;
 
 public class DetailsViewComposite extends Composite
 {
@@ -60,6 +65,8 @@ public class DetailsViewComposite extends Composite
 
     private CTabFolder tabFolder;
 
+    private Label headerIcon;
+
     private Label headerLabel;
 
     private Composite header;
@@ -69,6 +76,8 @@ public class DetailsViewComposite extends Composite
     private final LocalResourceManager resourceManager = new LocalResourceManager ( JFaceResources.getResources () );
 
     private final Display display;
+
+    private StyleBlinker blinker;
 
     public DetailsViewComposite ( final Composite parent, final int style )
     {
@@ -182,10 +191,22 @@ public class DetailsViewComposite extends Composite
         this.header.setLayoutData ( new GridData ( SWT.FILL, SWT.BEGINNING, true, false ) );
         this.header.setLayout ( new RowLayout ( SWT.HORIZONTAL ) );
 
+        this.headerIcon = new Label ( this.header, SWT.NONE );
+
         this.headerLabel = new Label ( this.header, SWT.NONE );
         this.headerLabel.setText ( Messages.DetailsViewComposite_EmptyDataItem );
 
         this.headerValueLabel = new Label ( this.header, SWT.NONE );
+
+        this.blinker = new StyleBlinker () {
+
+            @Override
+            public void update ( final Image image, final Color foreground, final Color background, final Font font )
+            {
+                handleStyleUpdate ( image, foreground, background, font );
+            }
+        };
+
     }
 
     private void handleDispose ()
@@ -198,11 +219,14 @@ public class DetailsViewComposite extends Composite
 
         this.resourceManager.dispose ();
 
+        this.blinker.dispose ();
     }
 
     /**
      * set the current data item
-     * @param item data item or <code>null</code> if none should be selected
+     * 
+     * @param item
+     *            data item or <code>null</code> if none should be selected
      */
     public void setDataItem ( final Item item )
     {
@@ -265,6 +289,33 @@ public class DetailsViewComposite extends Composite
 
     }
 
+    protected void handleStyleUpdate ( final Image image, final Color foreground, final Color background, final Font font )
+    {
+        if ( this.header.isDisposed () )
+        {
+            return;
+        }
+
+        applyWidget ( (Control)this.headerValueLabel, image, foreground, background, font );
+        applyWidget ( this.header, image, foreground, background, font );
+        applyWidget ( (Control)this.headerLabel, image, foreground, background, font );
+        applyWidget ( this.headerIcon, image, foreground, background, font );
+        this.header.layout ();
+    }
+
+    private static void applyWidget ( final Label label, final Image image, final Color foreground, final Color background, final Font font )
+    {
+        applyWidget ( (Control)label, image, foreground, background, font );
+        label.setImage ( image );
+    }
+
+    private static void applyWidget ( final Control label, final Image image, final Color foreground, final Color background, final Font font )
+    {
+        label.setForeground ( foreground );
+        label.setBackground ( background );
+        label.setFont ( font );
+    }
+
     private void updateHeader ( final DataItemValue value )
     {
         if ( this.headerValueLabel.isDisposed () )
@@ -272,31 +323,16 @@ public class DetailsViewComposite extends Composite
             return;
         }
 
+        this.blinker.setStyle ( org.openscada.core.ui.styles.Activator.getDefaultStyleGenerator ().generateStyle ( new DataItemValueStateExtractor ( value ) ) );
+
         if ( value == null )
         {
             this.headerValueLabel.setText ( Messages.DetailsViewComposite_NoValueText );
-            this.headerValueLabel.setForeground ( null );
-            this.headerLabel.setForeground ( null );
-            this.header.setForeground ( null );
-            this.headerValueLabel.setBackground ( null );
-            this.headerLabel.setBackground ( null );
-            this.header.setBackground ( null );
             return;
         }
 
         // set the value label
         this.headerValueLabel.setText ( value.toString () );
-
-        final StyleInformation style = org.openscada.da.ui.styles.Activator.getStyle ( value );
-        this.headerValueLabel.setForeground ( style.createForeground ( this.resourceManager ) );
-        this.headerValueLabel.setBackground ( style.createBackground ( this.resourceManager ) );
-        this.headerValueLabel.setFont ( style.createFont ( this.resourceManager ) );
-        this.header.setForeground ( style.createForeground ( this.resourceManager ) );
-        this.header.setBackground ( style.createBackground ( this.resourceManager ) );
-        this.header.setFont ( style.createFont ( this.resourceManager ) );
-        this.headerLabel.setForeground ( style.createForeground ( this.resourceManager ) );
-        this.headerLabel.setBackground ( style.createBackground ( this.resourceManager ) );
-        this.headerLabel.setFont ( style.createFont ( this.resourceManager ) );
 
         this.header.layout ();
     }

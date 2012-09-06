@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -18,6 +18,8 @@
  */
 
 package org.openscada.da.client.dataitem.details.extra.part;
+
+import java.util.EnumSet;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -43,35 +45,38 @@ import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.Shape;
 import org.eclipse.draw2d.Triangle;
 import org.eclipse.draw2d.geometry.Dimension;
-import org.eclipse.jface.resource.ColorDescriptor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.statushandlers.StatusManager;
 import org.openscada.core.Variant;
-import org.openscada.core.ui.styles.Style;
-import org.openscada.core.ui.styles.StyleInformation;
+import org.openscada.core.ui.styles.StateInformation.State;
+import org.openscada.core.ui.styles.StaticStateInformation;
+import org.openscada.core.ui.styles.StyleBlinker;
 import org.openscada.da.client.dataitem.details.extra.Activator;
-import org.openscada.ui.utils.blink.Blinker;
-import org.openscada.ui.utils.blink.Blinker.Handler;
-import org.openscada.ui.utils.blink.Blinker.State;
 
 public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
 {
 
-    private final class HandlerImplementation implements Handler
+    private class LevelBlinker extends StyleBlinker
     {
-        private final Shape tri;
+        private final IFigure figure;
 
-        public HandlerImplementation ( final Shape tri )
+        public LevelBlinker ( final IFigure figure )
         {
-            this.tri = tri;
+            this.figure = figure;
         }
 
         @Override
-        public void setState ( final State state )
+        public void update ( final Image image, final Color foreground, final Color background, final Font font )
         {
-            blink ( this.tri, state );
+            this.figure.setForegroundColor ( foreground );
+            this.figure.setBackgroundColor ( background );
+            this.figure.setFont ( font );
         }
+
     }
 
     private static final String TAG_FLOOR = "floor"; //$NON-NLS-1$
@@ -112,17 +117,17 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
 
     private Label presetFloor;
 
-    private Blinker blinkerHH;
+    private LevelBlinker blinkerHH;
 
-    private Blinker blinkerCeil;
+    private LevelBlinker blinkerCeil;
 
-    private Blinker blinkerH;
+    private LevelBlinker blinkerH;
 
-    private Blinker blinkerL;
+    private LevelBlinker blinkerL;
 
-    private Blinker blinkerLL;
+    private LevelBlinker blinkerLL;
 
-    private Blinker blinkerFloor;
+    private LevelBlinker blinkerFloor;
 
     private static final Dimension TRI_DIMENSION = new Dimension ( 50, 50 );
 
@@ -171,45 +176,14 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
         createConnection ( connLayer, this.presetLL, this.triLL );
         createConnection ( connLayer, this.presetFloor, this.rectFloor );
 
-        this.blinkerCeil = new Blinker ( new HandlerImplementation ( this.rectCeil ) );
-        this.blinkerHH = new Blinker ( new HandlerImplementation ( this.triHH ) );
-        this.blinkerH = new Blinker ( new HandlerImplementation ( this.triH ) );
-        this.blinkerL = new Blinker ( new HandlerImplementation ( this.triL ) );
-        this.blinkerLL = new Blinker ( new HandlerImplementation ( this.triLL ) );
-        this.blinkerFloor = new Blinker ( new HandlerImplementation ( this.rectFloor ) );
+        this.blinkerCeil = new LevelBlinker ( this.rectCeil );
+        this.blinkerHH = new LevelBlinker ( this.triHH );
+        this.blinkerH = new LevelBlinker ( this.triH );
+        this.blinkerL = new LevelBlinker ( this.triL );
+        this.blinkerLL = new LevelBlinker ( this.triLL );
+        this.blinkerFloor = new LevelBlinker ( this.rectFloor );
 
         return figure;
-    }
-
-    protected void blink ( final Shape shape, final State state )
-    {
-        final StyleInformation style;
-
-        switch ( state )
-        {
-        case DISCONNECTED:
-        case ERROR:
-            style = org.openscada.core.ui.styles.Activator.getStyle ( Style.ERROR );
-            break;
-
-        case ALARM:
-            style = org.openscada.core.ui.styles.Activator.getStyle ( Style.ALARM );
-            break;
-
-        case ALARM_1:
-            style = org.openscada.core.ui.styles.Activator.getStyle ( Style.ALARM );
-            break;
-
-        case OK:
-        case ALARM_0:
-        default:
-            style = new StyleInformation ( null, ColorDescriptor.createFrom ( ColorConstants.lightGray ), null );
-            break;
-        }
-
-        shape.setForegroundColor ( style.createForeground ( Activator.getResources () ) );
-        shape.setBackgroundColor ( style.createBackground ( Activator.getResources () ) );
-        shape.setFont ( style.createFont ( Activator.getResources () ) );
     }
 
     private void createConnection ( final Figure connLayer, final Label label, final Figure figure )
@@ -387,9 +361,32 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
         this.currentLabel.setText ( "" + this.value.getValue () ); //$NON-NLS-1$
     }
 
-    private void setBlinker ( final Blinker blinker, final String tag )
+    private void setBlinker ( final LevelBlinker blinker, final String tag )
     {
-        blinker.setState ( isAlarm ( tag ), isAckRequired ( tag ), false, isUnsafe ( tag ), isError ( tag ), false );
+        final EnumSet<State> states = EnumSet.noneOf ( State.class );
+
+        if ( isAlarm ( tag ) )
+        {
+            states.add ( State.ALARM );
+        }
+        if ( isWarning ( tag ) )
+        {
+            states.add ( State.WARNING );
+        }
+        if ( isAckRequired ( tag ) )
+        {
+            states.add ( State.ACK );
+        }
+        if ( isUnsafe ( tag ) )
+        {
+            states.add ( State.DISCONNECTED );
+        }
+        if ( isError ( tag ) )
+        {
+            states.add ( State.ERROR );
+        }
+
+        blinker.setStyle ( org.openscada.core.ui.styles.Activator.getDefaultStyleGenerator ().generateStyle ( new StaticStateInformation ( states ) ) );
     }
 
     private void setLabel ( final Label preset, final String string )
@@ -415,6 +412,8 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
     protected abstract void setActive ( final boolean state, final String tag );
 
     protected abstract boolean isError ( final String string );
+
+    protected abstract boolean isWarning ( final String string );
 
     protected abstract boolean isAlarm ( final String string );
 

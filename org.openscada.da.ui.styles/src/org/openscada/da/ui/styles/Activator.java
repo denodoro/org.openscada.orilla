@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -20,8 +20,6 @@
 package org.openscada.da.ui.styles;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.openscada.core.ui.styles.StyleInformation;
-import org.openscada.da.client.DataItemValue;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -36,8 +34,6 @@ public class Activator extends AbstractUIPlugin
     // The shared instance
     private static Activator plugin;
 
-    private StyleController controller;
-
     /**
      * The constructor
      */
@@ -49,42 +45,31 @@ public class Activator extends AbstractUIPlugin
      * (non-Javadoc)
      * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
      */
+    @Override
     public void start ( final BundleContext context ) throws Exception
     {
         super.start ( context );
         plugin = this;
-        this.controller = new StyleController ();
     }
 
     /*
      * (non-Javadoc)
      * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
      */
+    @Override
     public void stop ( final BundleContext context ) throws Exception
     {
-        this.controller = null;
         plugin = null;
         super.stop ( context );
     }
 
     /**
      * Returns the shared instance
-     *
+     * 
      * @return the shared instance
      */
     public static Activator getDefault ()
     {
         return plugin;
     }
-
-    public static StyleInformation getStyle ( final DataItemValue value )
-    {
-        return plugin.controller.getStyle ( plugin.controller.convertToStyle ( value ) );
-    }
-
-    public static StyleInformation getStyle ( final StyleInformation baseStyle, final DataItemValue value )
-    {
-        return plugin.controller.getStyle ( baseStyle, plugin.controller.convertToStyle ( value ) );
-    }
-
 }

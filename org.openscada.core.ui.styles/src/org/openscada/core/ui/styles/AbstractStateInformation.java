@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -19,20 +19,21 @@
 
 package org.openscada.core.ui.styles;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Set;
 
-public class StyleManager
+public class AbstractStateInformation implements StateInformation
 {
-    private final Map<Style, StyleInformation> styles = new HashMap<Style, StyleInformation> ();
+    private final Set<State> states;
 
-    public StyleInformation getStyle ( final Style style )
+    public AbstractStateInformation ( final Set<State> states )
     {
-        return this.styles.get ( style );
+        this.states = states;
     }
 
-    public void put ( final Style style, final StyleInformation styleInformation )
+    @Override
+    public Set<State> getStates ()
     {
-        this.styles.put ( style, styleInformation );
+        return this.states;
     }
+
 }

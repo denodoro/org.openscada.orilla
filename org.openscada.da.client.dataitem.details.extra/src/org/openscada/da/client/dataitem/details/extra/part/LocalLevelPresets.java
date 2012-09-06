@@ -51,6 +51,12 @@ public class LocalLevelPresets extends GenericLevelPresets
     }
 
     @Override
+    protected boolean isWarning ( final String string )
+    {
+        return getBooleanAttribute ( String.format ( "org.openscada.da.level.%s.warning", string ) ); //$NON-NLS-1$
+    }
+
+    @Override
     protected boolean isError ( final String string )
     {
         return getBooleanAttribute ( String.format ( "org.openscada.da.level.%s.error", string ) ); //$NON-NLS-1$

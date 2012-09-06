@@ -19,11 +19,34 @@
 
 package org.openscada.core.ui.styles;
 
-public enum Style
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.Image;
+
+public interface StyleHandler
 {
-    OK,
-    MANUAL,
-    WARNING,
-    ALARM,
-    ERROR, ;
+    public static class Style
+    {
+        public Image[] images;
+
+        public Color[] foregroundColor;
+
+        public Color[] backgroundColor;
+
+        public Font[] font;
+
+        public Style ()
+        {
+        }
+
+        public Style ( final Image[] images, final Color[] foregroundColor, final Color[] backgroundColor, final Font[] font )
+        {
+            this.images = images;
+            this.foregroundColor = foregroundColor;
+            this.backgroundColor = backgroundColor;
+            this.font = font;
+        }
+    }
+
+    public void setStyle ( Style style );
 }

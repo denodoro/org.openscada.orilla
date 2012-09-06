@@ -26,15 +26,21 @@ import java.util.Map;
 import java.util.Observable;
 
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 import org.openscada.core.Variant;
 import org.openscada.core.subscription.SubscriptionState;
+import org.openscada.core.ui.styles.StyleBlinker;
+import org.openscada.core.ui.styles.StyleHandler.Style;
 import org.openscada.da.client.DataItemValue;
 import org.openscada.da.ui.connection.data.DataItemHolder;
 import org.openscada.da.ui.connection.data.DataSourceListener;
 import org.openscada.da.ui.connection.data.Item;
+import org.openscada.da.ui.styles.DataItemValueStateExtractor;
 import org.openscada.da.ui.widgets.Activator;
 
 public class ListEntry extends Observable implements IAdaptable, IPropertySource, DataSourceListener
@@ -54,6 +60,30 @@ public class ListEntry extends Observable implements IAdaptable, IPropertySource
 
     private DataItemValue value;
 
+    private Style style;
+
+    private final StyleBlinker blinker;
+
+    private Image image;
+
+    private Color foreground;
+
+    private Color background;
+
+    private Font font;
+
+    public ListEntry ()
+    {
+        this.blinker = new StyleBlinker () {
+
+            @Override
+            public void update ( final Image image, final Color foreground, final Color background, final Font font )
+            {
+                handleStyleUpdate ( image, foreground, background, font );
+            }
+        };
+    }
+
     public Item getItem ()
     {
         return this.item;
@@ -71,8 +101,14 @@ public class ListEntry extends Observable implements IAdaptable, IPropertySource
         this.dataItem = new DataItemHolder ( Activator.getDefault ().getBundle ().getBundleContext (), item, this );
     }
 
+    public Style getStyle ()
+    {
+        return this.style;
+    }
+
     public void dispose ()
     {
+        this.blinker.dispose ();
         clear ();
     }
 
@@ -158,8 +194,40 @@ public class ListEntry extends Observable implements IAdaptable, IPropertySource
     public void updateData ( final DataItemValue value )
     {
         this.value = value;
+        this.style = org.openscada.core.ui.styles.Activator.getDefaultStyleGenerator ().generateStyle ( new DataItemValueStateExtractor ( value ) );
+        this.blinker.setStyle ( this.style );
         setChanged ();
         notifyObservers ( value );
+    }
+
+    protected void handleStyleUpdate ( final Image image, final Color foreground, final Color background, final Font font )
+    {
+        this.image = image;
+        this.foreground = foreground;
+        this.background = background;
+        this.font = font;
+        setChanged ();
+        notifyObservers ( this.value );
+    }
+
+    public Image getImage ()
+    {
+        return this.image;
+    }
+
+    public Color getBackground ()
+    {
+        return this.background;
+    }
+
+    public Color getForeground ()
+    {
+        return this.foreground;
+    }
+
+    public Font getFont ()
+    {
+        return this.font;
     }
 
     @Override

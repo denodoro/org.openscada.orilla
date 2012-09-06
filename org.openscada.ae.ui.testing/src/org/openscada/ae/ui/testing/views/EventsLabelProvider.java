@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -33,16 +33,13 @@ import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.LabelProviderChangedEvent;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.openscada.ae.Event;
-import org.openscada.ae.Event.Fields;
 import org.openscada.core.Variant;
-import org.openscada.core.ui.styles.Activator;
-import org.openscada.core.ui.styles.Style;
-import org.openscada.core.ui.styles.StyleInformation;
 
 public class EventsLabelProvider extends CellLabelProvider
 {
 
     private final IMapChangeListener mapChangeListener = new IMapChangeListener () {
+        @Override
         public void handleMapChange ( final MapChangeEvent event )
         {
             final Set<?> affectedElements = event.diff.getChangedKeys ();
@@ -112,59 +109,34 @@ public class EventsLabelProvider extends CellLabelProvider
         {
             final Event info = (Event)o;
 
-            StyleInformation style;
-
-            if ( isAlarm ( info ) )
-            {
-                style = Activator.getStyle ( Style.ALARM );
-            }
-            else
-            {
-                style = Activator.getStyle ( Style.OK );
-            }
-
-            cell.setBackground ( style.createBackground ( this.resourceManager ) );
-            cell.setFont ( style.createFont ( this.resourceManager ) );
-            cell.setForeground ( style.createForeground ( this.resourceManager ) );
-
             switch ( cell.getColumnIndex () )
             {
-            case 0:
-                cell.setText ( this.dateFormat.format ( info.getSourceTimestamp () ) );
-                break;
-            case 1:
-                cell.setText ( this.dateFormat.format ( info.getEntryTimestamp () ) );
-                break;
-            case 2:
-                cell.setText ( getAttributes ( info, Event.Fields.SOURCE.getName () ).asString ( "" ) );
-                break;
-            case 3:
-                cell.setText ( getAttributes ( info, Event.Fields.MONITOR_TYPE.getName () ).asString ( "" ) );
-                break;
-            case 4:
-                cell.setText ( getAttributes ( info, Event.Fields.EVENT_TYPE.getName () ).asString ( "" ) );
-                break;
-            case 5:
-                cell.setText ( getAttributes ( info, Event.Fields.ACTOR_NAME.getName () ).asString ( "" ) );
-                break;
-            case 6:
-                cell.setText ( getAttributes ( info, Event.Fields.VALUE.getName () ).asString ( "" ) );
-                break;
-            case 7:
-                cell.setText ( getAttributes ( info, Event.Fields.MESSAGE.getName () ).asString ( "" ) );
-                break;
+                case 0:
+                    cell.setText ( this.dateFormat.format ( info.getSourceTimestamp () ) );
+                    break;
+                case 1:
+                    cell.setText ( this.dateFormat.format ( info.getEntryTimestamp () ) );
+                    break;
+                case 2:
+                    cell.setText ( getAttributes ( info, Event.Fields.SOURCE.getName () ).asString ( "" ) );
+                    break;
+                case 3:
+                    cell.setText ( getAttributes ( info, Event.Fields.MONITOR_TYPE.getName () ).asString ( "" ) );
+                    break;
+                case 4:
+                    cell.setText ( getAttributes ( info, Event.Fields.EVENT_TYPE.getName () ).asString ( "" ) );
+                    break;
+                case 5:
+                    cell.setText ( getAttributes ( info, Event.Fields.ACTOR_NAME.getName () ).asString ( "" ) );
+                    break;
+                case 6:
+                    cell.setText ( getAttributes ( info, Event.Fields.VALUE.getName () ).asString ( "" ) );
+                    break;
+                case 7:
+                    cell.setText ( getAttributes ( info, Event.Fields.MESSAGE.getName () ).asString ( "" ) );
+                    break;
             }
         }
     }
 
-    private boolean isAlarm ( final Event info )
-    {
-        final Variant data = info.getField ( Fields.PRIORITY );
-        if ( data == null )
-        {
-            return false;
-        }
-        final long priority = data.asLong ( 0L );
-        return priority > 500;
-    }
 }

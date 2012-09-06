@@ -23,11 +23,10 @@ Require-Bundle: org.eclipse.ui,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Bundle-Localization: plugin
-Export-Package: org.openscada.da.client.dataitem.details.extra.part;version="0.18.0";
+Export-Package: org.openscada.da.client.dataitem.details.extra.part;version="1.0.0";
   uses:="org.eclipse.osgi.util,
    org.eclipse.swt.widgets,
    org.openscada.core,
    org.eclipse.draw2d,
-   org.openscada.ui.utils.blink,
    org.eclipse.jface.dialogs,
    org.openscada.da.client.dataitem.details.part"

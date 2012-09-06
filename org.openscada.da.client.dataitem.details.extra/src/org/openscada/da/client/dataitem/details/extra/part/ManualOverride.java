@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -42,15 +42,17 @@ import org.eclipse.draw2d.MouseMotionListener;
 import org.eclipse.draw2d.PolygonDecoration;
 import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.draw2d.RoundedRectangle;
-import org.eclipse.jface.resource.ColorDescriptor;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.resource.LocalResourceManager;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.openscada.core.Variant;
-import org.openscada.core.ui.styles.Style;
-import org.openscada.core.ui.styles.StyleInformation;
-import org.openscada.da.ui.styles.Activator;
+import org.openscada.core.ui.styles.StateInformation.State;
+import org.openscada.core.ui.styles.StaticStateInformation;
+import org.openscada.core.ui.styles.StyleBlinker;
 
 /**
  * A detail view for the manual override value, setting and getting the status
@@ -90,18 +92,19 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
 
     private PolylineConnection rm2pConnection;
 
-    private LocalResourceManager resourceManager;
-
-    private StyleInformation baseStyle;
+    private LocalResourceManager resourceManager;;
 
     private Figure rmvFigure;
 
     private Figure rpvFigure;
 
+    private StyleBlinker pvRectBlinker;
+
+    private StyleBlinker rvRectBlinker;
+
     @Override
     public void createPart ( final Composite parent )
     {
-        this.baseStyle = new StyleInformation ( null, ColorDescriptor.createFrom ( ColorConstants.lightGray ), null );
         this.resourceManager = new LocalResourceManager ( JFaceResources.getResources () );
 
         super.createPart ( parent );
@@ -178,6 +181,17 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
         this.rvRect.setBackgroundColor ( ColorConstants.lightGray );
         this.rvValue.setBorder ( new MarginBorder ( 10 ) );
         this.rvRect.add ( this.rvValue, BorderLayout.CENTER );
+
+        this.rvRectBlinker = new StyleBlinker () {
+
+            @Override
+            public void update ( final Image image, final Color foreground, final Color background, final Font font )
+            {
+                ManualOverride.this.rvRect.setBackgroundColor ( background );
+                ManualOverride.this.rvRect.setForegroundColor ( foreground );
+                ManualOverride.this.rvRect.setFont ( font );
+            }
+        };
 
         rvFigure.add ( this.rvRect, BorderLayout.CENTER );
         return rvFigure;
@@ -413,6 +427,17 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
         this.pvRect.setBackgroundColor ( ColorConstants.lightGray );
         this.pvRect.add ( this.pvValue, BorderLayout.CENTER );
 
+        this.pvRectBlinker = new StyleBlinker () {
+
+            @Override
+            public void update ( final Image image, final Color foreground, final Color background, final Font font )
+            {
+                ManualOverride.this.pvRect.setBackgroundColor ( background );
+                ManualOverride.this.pvRect.setForegroundColor ( foreground );
+                ManualOverride.this.pvRect.setFont ( font );
+            }
+        };
+
         pvFigure.add ( this.pvRect, BorderLayout.CENTER );
 
         this.pvRect.addMouseMotionListener ( new MouseMotionListener.Stub () {
@@ -480,6 +505,9 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
     public void dispose ()
     {
         this.resourceManager.dispose ();
+
+        this.pvRectBlinker.dispose ();
+
         super.dispose ();
     }
 
@@ -558,24 +586,23 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
         // set result value
         this.rvValue.setText ( this.value.getValue ().toString () );
 
-        final StyleInformation rvStyle = Activator.getStyle ( this.baseStyle, this.value );
-        this.rvRect.setForegroundColor ( rvStyle.createForeground ( this.resourceManager ) );
-        this.rvRect.setBackgroundColor ( rvStyle.createBackground ( this.resourceManager ) );
-        this.rvRect.setFont ( rvStyle.createFont ( this.resourceManager ) );
-
-        final StyleInformation pvStyle;
         if ( isRemoteManual () )
         {
-            pvStyle = org.openscada.core.ui.styles.Activator.getStyle ( Style.MANUAL );
+            this.pvRectBlinker.setStyle ( org.openscada.core.ui.styles.Activator.getDefaultStyleGenerator ().generateStyle ( new StaticStateInformation ( State.MANUAL ) ) );
         }
         else
         {
-            pvStyle = this.baseStyle;
+            this.pvRectBlinker.setStyle ( null );
         }
 
-        this.pvRect.setBackgroundColor ( pvStyle.createBackground ( this.resourceManager ) );
-        this.pvRect.setForegroundColor ( pvStyle.createForeground ( this.resourceManager ) );
-        this.pvRect.setFont ( pvStyle.createFont ( this.resourceManager ) );
+        if ( isManual () )
+        {
+            this.rvRectBlinker.setStyle ( org.openscada.core.ui.styles.Activator.getDefaultStyleGenerator ().generateStyle ( new StaticStateInformation ( State.MANUAL ) ) );
+        }
+        else
+        {
+            this.rvRectBlinker.setStyle ( null );
+        }
 
         // set manual value
         final Variant manualValue = this.value.getAttributes ().get ( "org.openscada.da.manual.value" ); //$NON-NLS-1$

@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -58,6 +58,7 @@ public class ToggleServiceImpl implements ToggleService, Runnable
         this.display = display;
     }
 
+    @Override
     public void addListener ( final int interval, final ToggleCallback bc ) throws ToggleError
     {
         final int intervalMs = interval * delay;
@@ -76,6 +77,7 @@ public class ToggleServiceImpl implements ToggleService, Runnable
         }
     }
 
+    @Override
     public void removeListener ( final ToggleCallback bc )
     {
         synchronized ( this.addRemoveLock )
@@ -105,6 +107,7 @@ public class ToggleServiceImpl implements ToggleService, Runnable
         this.running = true;
         this.display.asyncExec ( new Runnable () {
 
+            @Override
             public void run ()
             {
                 triggerNext ();
@@ -128,6 +131,7 @@ public class ToggleServiceImpl implements ToggleService, Runnable
         }
     }
 
+    @Override
     public void run ()
     {
         if ( !this.running )
