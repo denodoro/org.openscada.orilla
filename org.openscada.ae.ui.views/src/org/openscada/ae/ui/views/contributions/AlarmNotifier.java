@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -50,6 +51,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -70,12 +72,13 @@ import org.openscada.core.client.ConnectionState;
 import org.openscada.core.connection.provider.ConnectionIdTracker;
 import org.openscada.core.connection.provider.ConnectionTracker;
 import org.openscada.core.connection.provider.ConnectionTracker.Listener;
+import org.openscada.core.ui.styles.StateInformation;
+import org.openscada.core.ui.styles.StateInformation.State;
+import org.openscada.core.ui.styles.StaticStateInformation;
+import org.openscada.core.ui.styles.StyleBlinker;
 import org.openscada.da.client.DataItem;
 import org.openscada.da.client.DataItemValue;
 import org.openscada.da.connection.provider.ConnectionService;
-import org.openscada.ui.utils.blink.Blinker;
-import org.openscada.ui.utils.blink.Blinker.Handler;
-import org.openscada.ui.utils.blink.Blinker.State;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -121,7 +124,7 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution
 
     private Label bellIcon;
 
-    private Blinker blinker;
+    private StyleBlinker blinker;
 
     public AlarmNotifier ()
     {
@@ -190,19 +193,23 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution
             }
         } );
 
-        this.blinker = new Blinker ( new Handler () {
-
+        this.blinker = new StyleBlinker () {
             @Override
-            public void setState ( final State state )
+            public void update ( final Image image, final Color foreground, final Color background, final Font font )
             {
-                AlarmNotifier.this.setBlinkerState ( state );
+                handleStyleUpdate ( image, foreground, background, font );
             }
-        } );
-        this.blinker.setState ( false, false, false, true, false, false );
+        };
+        this.blinker.setStyle ( null );
 
         loadConfiguration ();
 
         return this.panel;
+    }
+
+    protected void handleStyleUpdate ( final Image image, final Color foreground, final Color background, final Font font )
+    {
+        setBackground ( background );
     }
 
     private void initMonitorStates ()
@@ -211,40 +218,6 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution
         {
             this.monitorStatus.put ( ms.name (), new AtomicInteger ( 0 ) );
         }
-    }
-
-    protected void setBlinkerState ( final State state )
-    {
-        trigger ( new Runnable () {
-
-            @Override
-            public void run ()
-            {
-                if ( AlarmNotifier.this.panel.isDisposed () )
-                {
-                    return;
-                }
-
-                switch ( state )
-                {
-                case ERROR:
-                case DISCONNECTED:
-                    setBackground ( AlarmNotifier.this.display.getSystemColor ( SWT.COLOR_MAGENTA ) );
-                    break;
-
-                case ALARM_1:
-                case ALARM:
-                    setBackground ( AlarmNotifier.this.display.getSystemColor ( SWT.COLOR_RED ) );
-                    break;
-
-                case OK:
-                case ALARM_0:
-                default:
-                    setBackground ( null );
-                    break;
-                }
-            }
-        } );
     }
 
     protected void setBackground ( final Color color )
@@ -447,7 +420,22 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution
 
     protected void updateState ()
     {
-        this.blinker.setState ( numberOfAlarms () > 0, numberOfAckAlarms () > 0, false, !this.connected, false, false );
+        final EnumSet<StateInformation.State> states = EnumSet.noneOf ( StateInformation.State.class );
+
+        if ( numberOfAlarms () > 0 )
+        {
+            states.add ( State.ALARM );
+        }
+        if ( numberOfAckAlarms () > 0 )
+        {
+            states.add ( State.ACK );
+        }
+        if ( !this.connected )
+        {
+            states.add ( State.DISCONNECTED );
+        }
+
+        this.blinker.setStyle ( org.openscada.core.ui.styles.Activator.getDefaultStyleGenerator ().generateStyle ( new StaticStateInformation ( states ) ) );
     }
 
     private void disableHorn ()

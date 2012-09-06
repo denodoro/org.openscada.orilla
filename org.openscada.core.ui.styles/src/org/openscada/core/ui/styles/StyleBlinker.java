@@ -22,6 +22,7 @@ package org.openscada.core.ui.styles;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Display;
 import org.openscada.core.ui.styles.StyleHandler.Style;
 import org.openscada.ui.utils.blink.AbstractBlinker;
 
@@ -33,6 +34,28 @@ public abstract class StyleBlinker extends AbstractBlinker
     private Style style;
 
     public void setStyle ( final Style style )
+    {
+        final Display display = Display.getDefault ();
+        if ( display.isDisposed () )
+        {
+            return;
+        }
+
+        Display.getDefault ().asyncExec ( new Runnable () {
+
+            @Override
+            public void run ()
+            {
+                if ( display.isDisposed () )
+                {
+                    return;
+                }
+                performSetStyle ( style );
+            }
+        } );
+    }
+
+    private void performSetStyle ( final Style style )
     {
         this.style = style;
         applyState ();
