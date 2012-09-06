@@ -68,19 +68,20 @@ public class ExcelCell implements Cell
 
         switch ( variant.getType () )
         {
-        case INT32:
-        case INT64:
-        case DOUBLE:
-            this.cell.setCellValue ( variant.asDouble ( 0.0 ) );
-            break;
-        case BOOLEAN:
-            this.cell.setCellValue ( variant.asBoolean () );
-            break;
-        case NULL:
-            break;
-        case STRING:
-            this.cell.setCellValue ( variant.asString ( "" ) );//$NON-NLS-1$
-            break;
+            case INT32:
+            case INT64:
+            case DOUBLE:
+                this.cell.setCellValue ( variant.asDouble ( 0.0 ) );
+                break;
+            case BOOLEAN:
+                this.cell.setCellValue ( variant.asBoolean () );
+                break;
+            case NULL:
+                break;
+            case UNKNOWN:
+            case STRING:
+                this.cell.setCellValue ( variant.asString ( "" ) );//$NON-NLS-1$
+                break;
         }
     }
 
