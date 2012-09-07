@@ -59,16 +59,45 @@ public abstract class StyleBlinker extends AbstractBlinker
     {
         this.style = style;
         applyState ();
-        if ( this.style != null )
+
+        if ( needBlink ( style ) )
         {
             enableBlinking ( 1 );
         }
         else
         {
-            // TODO: we could also check for resource lists > 1
-            // no style, no blinking
             enableBlinking ( 0 );
         }
+    }
+
+    protected boolean needBlink ( final Style style )
+    {
+        if ( style == null )
+        {
+            return false;
+        }
+
+        if ( style.backgroundColor != null && style.backgroundColor.length > 1 )
+        {
+            return true;
+        }
+
+        if ( style.images != null && style.images.length > 1 )
+        {
+            return true;
+        }
+
+        if ( style.foregroundColor != null && style.foregroundColor.length > 1 )
+        {
+            return true;
+        }
+
+        if ( style.font != null && style.font.length > 1 )
+        {
+            return true;
+        }
+
+        return false;
     }
 
     @Override
