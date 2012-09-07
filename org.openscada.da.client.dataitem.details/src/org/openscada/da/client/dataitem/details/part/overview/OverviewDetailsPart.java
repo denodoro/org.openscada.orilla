@@ -149,6 +149,12 @@ public class OverviewDetailsPart extends AbstractBaseDetailsPart
         }
 
         final Item item = itemHolder.getItem ();
+
+        if ( item == null )
+        {
+            return "";
+        }
+
         final String str = item.getConnectionString ();
 
         try
