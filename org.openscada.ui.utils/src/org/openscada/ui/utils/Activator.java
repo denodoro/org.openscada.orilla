@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -19,9 +19,10 @@
 
 package org.openscada.ui.utils;
 
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.openscada.ui.utils.toggle.ToggleCallback;
-import org.openscada.ui.utils.toggle.internal.ToggleServiceImpl;
+import org.openscada.ui.utils.blink.BlinkCallback;
+import org.openscada.ui.utils.blink.internal.DisplayBlinkServiceImpl;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -36,7 +37,7 @@ public class Activator extends AbstractUIPlugin
     // The shared instance
     private static Activator plugin;
 
-    private ToggleServiceImpl toggle;
+    private DisplayBlinkServiceImpl toggle;
 
     /**
      * The constructor
@@ -55,8 +56,16 @@ public class Activator extends AbstractUIPlugin
         super.start ( context );
         plugin = this;
 
-        this.toggle = new ToggleServiceImpl ( getWorkbench ().getDisplay () );
-        this.toggle.start ();
+        this.toggle = new DisplayBlinkServiceImpl ( getWorkbench ().getDisplay () );
+
+        Display.getDefault ().asyncExec ( new Runnable () {
+
+            @Override
+            public void run ()
+            {
+                Activator.this.toggle.start ();
+            }
+        } );
 
     }
 
@@ -67,7 +76,15 @@ public class Activator extends AbstractUIPlugin
     @Override
     public void stop ( final BundleContext context ) throws Exception
     {
-        this.toggle.stop ();
+        Display.getDefault ().asyncExec ( new Runnable () {
+
+            @Override
+            public void run ()
+            {
+                Activator.this.toggle.stop ();
+            }
+        } );
+
         this.toggle = null;
 
         plugin = null;
@@ -84,22 +101,22 @@ public class Activator extends AbstractUIPlugin
         return plugin;
     }
 
-    private void addToggle ( final int interval, final ToggleCallback callback )
+    private void addToggle ( final BlinkCallback callback )
     {
-        this.toggle.addListener ( interval, callback );
+        this.toggle.addListener ( callback );
     }
 
-    private void removeToggle ( final ToggleCallback callback )
+    private void removeToggle ( final BlinkCallback callback )
     {
         this.toggle.removeListener ( callback );
     }
 
-    public static void addDefaultToggle ( final int interval, final ToggleCallback callback )
+    public static void addDefaultToggle ( final BlinkCallback callback )
     {
-        getDefault ().addToggle ( interval, callback );
+        getDefault ().addToggle ( callback );
     }
 
-    public static void removeDefaultToggle ( final ToggleCallback callback )
+    public static void removeDefaultToggle ( final BlinkCallback callback )
     {
         final Activator defaultInstance = getDefault ();
         if ( defaultInstance != null )

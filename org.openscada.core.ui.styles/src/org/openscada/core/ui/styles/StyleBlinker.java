@@ -62,11 +62,11 @@ public abstract class StyleBlinker extends AbstractBlinker
 
         if ( needBlink ( style ) )
         {
-            enableBlinking ( 1 );
+            enableBlinking ( true );
         }
         else
         {
-            enableBlinking ( 0 );
+            enableBlinking ( false );
         }
     }
 
@@ -101,13 +101,10 @@ public abstract class StyleBlinker extends AbstractBlinker
     }
 
     @Override
-    public void toggle ( final boolean on )
+    public void toggle ( final int globalCounter )
     {
-        if ( on )
-        {
-            this.counter++;
-            applyState ();
-        }
+        this.counter = globalCounter;
+        applyState ();
     }
 
     private void applyState ()

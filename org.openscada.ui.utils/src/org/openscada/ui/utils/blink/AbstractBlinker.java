@@ -20,23 +20,14 @@
 package org.openscada.ui.utils.blink;
 
 import org.openscada.ui.utils.Activator;
-import org.openscada.ui.utils.toggle.ToggleCallback;
 
-public abstract class AbstractBlinker implements ToggleCallback
+public abstract class AbstractBlinker implements BlinkCallback
 {
 
-    private int frequency;
-
-    protected final int baseFrequency;
-
-    public AbstractBlinker ()
-    {
-        super ();
-        this.baseFrequency = Integer.getInteger ( "org.openscada.ui.blink.baseFrequency", 3 );
-    }
+    private boolean state;
 
     @Override
-    public abstract void toggle ( final boolean on );
+    public abstract void toggle ( int globalCounter );
 
     /**
      * Dispose the blinker
@@ -49,21 +40,20 @@ public abstract class AbstractBlinker implements ToggleCallback
         Activator.removeDefaultToggle ( this );
     }
 
-    protected void enableBlinking ( final int frequency )
+    protected void enableBlinking ( final boolean state )
     {
-        if ( this.frequency == frequency )
+        if ( this.state == state )
         {
             return;
         }
 
-        if ( this.frequency > 0 )
+        if ( state )
+        {
+            Activator.addDefaultToggle ( this );
+        }
+        else
         {
             Activator.removeDefaultToggle ( this );
-        }
-        this.frequency = frequency;
-        if ( this.frequency > 0 )
-        {
-            Activator.addDefaultToggle ( frequency * this.baseFrequency, this );
         }
     }
 
