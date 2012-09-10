@@ -49,6 +49,7 @@ public class Activator extends AbstractUIPlugin
      * (non-Javadoc)
      * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
      */
+    @Override
     public void start ( final BundleContext context ) throws Exception
     {
         super.start ( context );
@@ -63,6 +64,7 @@ public class Activator extends AbstractUIPlugin
      * (non-Javadoc)
      * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
      */
+    @Override
     public void stop ( final BundleContext context ) throws Exception
     {
         this.toggle.stop ();
@@ -74,7 +76,7 @@ public class Activator extends AbstractUIPlugin
 
     /**
      * Returns the shared instance
-     *
+     * 
      * @return the shared instance
      */
     public static Activator getDefault ()
@@ -82,19 +84,19 @@ public class Activator extends AbstractUIPlugin
         return plugin;
     }
 
-    public void addToggle ( final int interval, final ToggleCallback callback )
+    private void addToggle ( final int interval, final ToggleCallback callback )
     {
         this.toggle.addListener ( interval, callback );
+    }
+
+    private void removeToggle ( final ToggleCallback callback )
+    {
+        this.toggle.removeListener ( callback );
     }
 
     public static void addDefaultToggle ( final int interval, final ToggleCallback callback )
     {
         getDefault ().addToggle ( interval, callback );
-    }
-
-    public void removeToggle ( final ToggleCallback callback )
-    {
-        this.toggle.removeListener ( callback );
     }
 
     public static void removeDefaultToggle ( final ToggleCallback callback )

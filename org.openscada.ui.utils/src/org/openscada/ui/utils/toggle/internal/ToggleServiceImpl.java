@@ -30,7 +30,6 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.eclipse.swt.widgets.Display;
 import org.openscada.ui.utils.toggle.ToggleCallback;
-import org.openscada.ui.utils.toggle.ToggleError;
 import org.openscada.ui.utils.toggle.ToggleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,7 +58,7 @@ public class ToggleServiceImpl implements ToggleService, Runnable
     }
 
     @Override
-    public void addListener ( final int interval, final ToggleCallback bc ) throws ToggleError
+    public void addListener ( final int interval, final ToggleCallback bc )
     {
         final int intervalMs = interval * delay;
         synchronized ( this.addRemoveLock )
