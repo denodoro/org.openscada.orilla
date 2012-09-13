@@ -15,13 +15,8 @@
       </form>
       <form
             class="org.openscada.ca.ui.editor.forms.common.level.LevelEditorForm"
+            factoryId="org.openscada.ae.monitor.level"
             label="Level Monitor">
-            <factory>org.openscada.da.level.floor</factory>            
-            <factory>org.openscada.da.level.ceil</factory>
-            <factory>org.openscada.da.level.low</factory>
-            <factory>org.openscada.da.level.lowlow</factory>
-            <factory>org.openscada.da.level.high</factory>
-            <factory>org.openscada.da.level.highhigh</factory>
       </form>
       <form
             class="org.openscada.ca.ui.editor.forms.common.mapper.MapperEditorForm"

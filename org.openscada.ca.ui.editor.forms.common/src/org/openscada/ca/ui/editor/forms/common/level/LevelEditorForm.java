@@ -21,7 +21,7 @@ package org.openscada.ca.ui.editor.forms.common.level;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
-import org.openscada.ae.monitor.common.Severity;
+import org.openscada.ae.Severity;
 import org.openscada.ca.ui.editor.forms.common.ConfigurationFormToolkit;
 import org.openscada.ca.ui.editor.forms.common.StandardConfigurationForm;
 import org.openscada.ca.ui.editor.input.ConfigurationEditorInput;
@@ -39,14 +39,23 @@ public class LevelEditorForm extends StandardConfigurationForm
     protected void populateFormContent ( final ConfigurationFormToolkit toolkit, final ScrolledForm form, final ConfigurationEditorInput input )
     {
         {
-            final Composite sectionClient = toolkit.createStandardSection ( form.getBody (), "Monitor Information" );
+            final Composite sectionClient = toolkit.createStandardSection ( form.getBody (), "Level Information" );
 
             // fields
             toolkit.createStandardText ( sectionClient, "preset", "Preset", "Preset value", input.getDataMap (), String.class );
+            toolkit.createStandardCheckbox ( sectionClient, "includedOk", "If the value is equal to the preset the value is ok", input.getDataMap (), String.class );
+            toolkit.createStandardCheckbox ( sectionClient, "lowerOk", "If the value is lower than the preset it is ok", input.getDataMap (), String.class );
+            toolkit.createStandardCheckbox ( sectionClient, "cap", "Limit the value to the preset (min or max)", input.getDataMap (), String.class );
+        }
+
+        {
+            final Composite sectionClient = toolkit.createStandardSection ( form.getBody (), "Monitor Information" );
+            // monitor
             toolkit.createStandardCheckbox ( sectionClient, "active", "Active", input.getDataMap (), String.class );
             // toolkit.createStandardCheckbox ( sectionClient, "error", "As error", input.getDataMap (), String.class );
             toolkit.createStandardCombo ( sectionClient, "severity", "Severity", Severity.values (), input.getDataMap (), String.class );
             toolkit.createStandardCheckbox ( sectionClient, "requireAck", "Require acknowledge", input.getDataMap (), String.class );
+
         }
 
         {
