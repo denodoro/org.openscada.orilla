@@ -79,6 +79,10 @@
                </instanceof>
             </or>
          </possibleChildren>
+         <actionProvider
+               class="org.openscada.core.ui.connection.commands.CommonActionProvider"
+               priority="high">
+         </actionProvider>
       </navigatorContent>
    </extension>
    <extension
