@@ -25,6 +25,7 @@ import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.Observables;
 import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
+import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.databinding.swt.SWTObservables;
@@ -158,6 +159,7 @@ public class ConfigurationFormToolkit
         final Text text = this.toolkit.createText ( parent, "" );
         text.setMessage ( textMessage );
         text.setLayoutData ( new GridData ( GridData.FILL, GridData.BEGINNING, true, true ) );
+        text.setToolTipText ( textMessage );
 
         final IObservableValue value = Observables.observeMapEntry ( input.getDataMap (), attributeName, valueType );
         this.dbc.bindValue ( SWTObservables.observeText ( text, SWT.Modify ), value );
@@ -201,9 +203,20 @@ public class ConfigurationFormToolkit
         final GridData gd = new GridData ( GridData.FILL, multi ? GridData.FILL : GridData.BEGINNING, true, true );
         gd.horizontalSpan = 2;
         text.setLayoutData ( gd );
+        text.setToolTipText ( textMessage );
 
-        final IObservableValue value = Observables.observeMapEntry ( data, attributeName, valueType );
-        this.dbc.bindValue ( SWTObservables.observeText ( text, SWT.Modify ), value );
+        final IObservableValue value = Observables.observeMapEntry ( data, attributeName, String.class );
+
+        if ( valueType != null && valueType != String.class )
+        {
+            final WritableValue conversionValue = new WritableValue ( null, valueType );
+            this.dbc.bindValue ( SWTObservables.observeText ( text, SWT.Modify ), conversionValue );
+            this.dbc.bindValue ( conversionValue, value );
+        }
+        else
+        {
+            this.dbc.bindValue ( SWTObservables.observeText ( text, SWT.Modify ), value );
+        }
     }
 
     public void createStandardCombo ( final Composite parent, final String attributeName, final String label, final Object[] items, final IObservableMap data, final Object valueType )

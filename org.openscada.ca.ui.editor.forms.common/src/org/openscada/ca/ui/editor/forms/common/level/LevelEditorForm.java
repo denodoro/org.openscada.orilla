@@ -29,6 +29,8 @@ import org.openscada.ca.ui.editor.input.ConfigurationEditorInput;
 public class LevelEditorForm extends StandardConfigurationForm
 {
 
+    private static final String[] COMMON_PREFIXES = new String[] { "min", "lowlow", "low", "heigh", "heighheigh", "max" };
+
     @Override
     protected String getTitle ( final ConfigurationEditorInput input )
     {
@@ -42,7 +44,7 @@ public class LevelEditorForm extends StandardConfigurationForm
             final Composite sectionClient = toolkit.createStandardSection ( form.getBody (), "Level Information" );
 
             // fields
-            toolkit.createStandardText ( sectionClient, "preset", "Preset", "Preset value", input.getDataMap (), String.class );
+            toolkit.createStandardText ( sectionClient, "preset", "Preset", "Preset value", input.getDataMap (), Double.class );
             toolkit.createStandardCheckbox ( sectionClient, "includedOk", "If the value is equal to the preset the value is ok", input.getDataMap (), String.class );
             toolkit.createStandardCheckbox ( sectionClient, "lowerOk", "If the value is lower than the preset it is ok", input.getDataMap (), String.class );
             toolkit.createStandardCheckbox ( sectionClient, "cap", "Limit the value to the preset (min or max)", input.getDataMap (), String.class );
@@ -53,6 +55,7 @@ public class LevelEditorForm extends StandardConfigurationForm
             // monitor
             toolkit.createStandardCheckbox ( sectionClient, "active", "Active", input.getDataMap (), String.class );
             // toolkit.createStandardCheckbox ( sectionClient, "error", "As error", input.getDataMap (), String.class );
+            toolkit.createStandardCombo ( sectionClient, "prefix", "Prefix", LevelEditorForm.COMMON_PREFIXES, input.getDataMap (), String.class );
             toolkit.createStandardCombo ( sectionClient, "severity", "Severity", Severity.values (), input.getDataMap (), String.class );
             toolkit.createStandardCheckbox ( sectionClient, "requireAck", "Require acknowledge", input.getDataMap (), String.class );
 
@@ -63,6 +66,7 @@ public class LevelEditorForm extends StandardConfigurationForm
 
             // fields
             toolkit.createStandardLinkText ( sectionClient, "master.item", "master.id", "Master Item Id", "ID of the master item", input, null );
+            toolkit.createStandardText ( sectionClient, "handlerPriority", "Handler Priority", "The sort order for the master handler list", input.getDataMap (), Integer.class );
         }
 
         toolkit.createInfoSection ( form, input );
