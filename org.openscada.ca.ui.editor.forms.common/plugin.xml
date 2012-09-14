@@ -28,6 +28,11 @@
             factoryId="org.openscada.da.master.mapper"
             label="Mapper Master Handler">
       </form>
+      <form
+            class="org.openscada.ca.ui.editor.forms.common.marker.MarkerEditorForm"
+            factoryId="org.openscada.da.master.common.marker"
+            label="Marker">
+      </form>
    </extension>
 
 </plugin>
