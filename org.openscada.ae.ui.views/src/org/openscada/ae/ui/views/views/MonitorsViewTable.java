@@ -73,7 +73,8 @@ public class MonitorsViewTable extends Composite
         ACK_TIMESTAMP,
         ITEM,
         MESSAGE,
-        STATUS_TIMESTAMP;
+        STATUS_TIMESTAMP,
+        SEVERITY;
     }
 
     private static class Sorter extends ViewerSorter
@@ -98,42 +99,54 @@ public class MonitorsViewTable extends Composite
             Comparable v2 = 0;
             switch ( this.column )
             {
-            case ID:
-                v1 = m1.getId ();
-                v2 = m2.getId ();
-                break;
-            case STATE:
-                v1 = m1.getStatus ();
-                v2 = m2.getStatus ();
-                break;
-            case VALUE:
-                v1 = m1.getValue () == null ? Variant.NULL : m1.getValue ();
-                v2 = m2.getValue () == null ? Variant.NULL : m2.getValue ();
-                break;
-            case LAST_FAIL_TIMESTAMP:
-                v1 = m1.getLastFailTimestamp ();
-                v2 = m2.getLastFailTimestamp ();
-                break;
-            case ACK_USER:
-                v1 = m1.getLastAknUser () == null ? "" : m1.getLastAknUser (); //$NON-NLS-1$
-                v2 = m2.getLastAknUser () == null ? "" : m2.getLastAknUser (); //$NON-NLS-1$
-                break;
-            case ACK_TIMESTAMP:
-                v1 = m1.getLastAknTimestamp () == null ? DEFAULT_DATE : m1.getLastAknTimestamp ();
-                v2 = m2.getLastAknTimestamp () == null ? DEFAULT_DATE : m2.getLastAknTimestamp ();
-                break;
-            case ITEM:
-                v1 = m1.getAttributes ().get ( "item" ) == null ? Variant.NULL : m1.getAttributes ().get ( "item" ); //$NON-NLS-1$ //$NON-NLS-2$
-                v2 = m2.getAttributes ().get ( "item" ) == null ? Variant.NULL : m2.getAttributes ().get ( "item" ); //$NON-NLS-1$ //$NON-NLS-2$
-                break;
-            case MESSAGE:
-                v1 = m1.getAttributes ().get ( "message" ) == null ? Variant.NULL : m1.getAttributes ().get ( "message" ); //$NON-NLS-1$ //$NON-NLS-2$
-                v2 = m2.getAttributes ().get ( "message" ) == null ? Variant.NULL : m2.getAttributes ().get ( "message" ); //$NON-NLS-1$ //$NON-NLS-2$
-                break;
-            case STATUS_TIMESTAMP:
-                v1 = m1.getStatusTimestamp ();
-                v2 = m2.getStatusTimestamp ();
-                break;
+                case ID:
+                    v1 = m1.getId ();
+                    v2 = m2.getId ();
+                    break;
+                case STATE:
+                    v1 = m1.getStatus ();
+                    v2 = m2.getStatus ();
+                    break;
+                case VALUE:
+                    v1 = m1.getValue () == null ? Variant.NULL : m1.getValue ();
+                    v2 = m2.getValue () == null ? Variant.NULL : m2.getValue ();
+                    break;
+                case LAST_FAIL_TIMESTAMP:
+                    v1 = m1.getLastFailTimestamp ();
+                    v2 = m2.getLastFailTimestamp ();
+                    break;
+                case ACK_USER:
+                    v1 = m1.getLastAknUser () == null ? "" : m1.getLastAknUser (); //$NON-NLS-1$
+                    v2 = m2.getLastAknUser () == null ? "" : m2.getLastAknUser (); //$NON-NLS-1$
+                    break;
+                case ACK_TIMESTAMP:
+                    v1 = m1.getLastAknTimestamp () == null ? DEFAULT_DATE : m1.getLastAknTimestamp ();
+                    v2 = m2.getLastAknTimestamp () == null ? DEFAULT_DATE : m2.getLastAknTimestamp ();
+                    break;
+                case ITEM:
+                    v1 = m1.getAttributes ().get ( "item" ) == null ? Variant.NULL : m1.getAttributes ().get ( "item" ); //$NON-NLS-1$ //$NON-NLS-2$
+                    v2 = m2.getAttributes ().get ( "item" ) == null ? Variant.NULL : m2.getAttributes ().get ( "item" ); //$NON-NLS-1$ //$NON-NLS-2$
+                    break;
+                case MESSAGE:
+                    v1 = m1.getAttributes ().get ( "message" ) == null ? Variant.NULL : m1.getAttributes ().get ( "message" ); //$NON-NLS-1$ //$NON-NLS-2$
+                    v2 = m2.getAttributes ().get ( "message" ) == null ? Variant.NULL : m2.getAttributes ().get ( "message" ); //$NON-NLS-1$ //$NON-NLS-2$
+                    break;
+                case STATUS_TIMESTAMP:
+                    v1 = m1.getStatusTimestamp ();
+                    v2 = m2.getStatusTimestamp ();
+                    break;
+                case SEVERITY:
+                    v1 = m1.getSeverity ();
+                    v2 = m2.getSeverity ();
+                    break;
+            }
+            if ( v1 == v2 )
+            {
+                return 0;
+            }
+            if ( v1 == null )
+            {
+                return -1;
             }
             // first compare the given column
             int result = v1.compareTo ( v2 );
@@ -329,6 +342,14 @@ public class MonitorsViewTable extends Composite
         statusTimestampColumn.getColumn ().setResizable ( true );
         statusTimestampColumn.getColumn ().setMoveable ( true );
         statusTimestampColumn.getColumn ().addSelectionListener ( sortListener );
+        // serverity
+        final TableViewerColumn severityColumn = new TableViewerColumn ( table, SWT.NONE );
+        severityColumn.getColumn ().setText ( Messages.MonitorsViewTable_Severity );
+        severityColumn.getColumn ().setData ( COLUMN_KEY, Columns.SEVERITY );
+        severityColumn.getColumn ().setWidth ( 180 );
+        severityColumn.getColumn ().setResizable ( true );
+        severityColumn.getColumn ().setMoveable ( true );
+        severityColumn.getColumn ().addSelectionListener ( sortListener );
     }
 
     public void clear ()
@@ -355,6 +376,7 @@ public class MonitorsViewTable extends Composite
 
     /**
      * may only be called from GUI thread
+     * 
      * @return
      */
     public int numOfEntries ()

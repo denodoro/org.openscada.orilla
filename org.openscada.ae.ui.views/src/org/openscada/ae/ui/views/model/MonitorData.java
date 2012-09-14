@@ -24,6 +24,7 @@ import java.util.Map;
 
 import org.openscada.ae.MonitorStatus;
 import org.openscada.ae.MonitorStatusInformation;
+import org.openscada.ae.Severity;
 import org.openscada.core.Variant;
 import org.openscada.utils.lang.Immutable;
 
@@ -35,14 +36,14 @@ public class MonitorData extends MonitorStatusInformation
 {
     private static final long serialVersionUID = 6727349873713785401L;
 
-    public MonitorData ( final String id, final MonitorStatus status, final Date statusTimestamp, final Variant value, final Date lastAknTimestamp, final String lastAknUser, final Date lastFailTimestamp, final Map<String, Variant> attributes )
+    public MonitorData ( final String id, final MonitorStatus status, final Date statusTimestamp, final Severity severity, final Variant value, final Date lastAknTimestamp, final String lastAknUser, final Date lastFailTimestamp, final Map<String, Variant> attributes )
     {
-        super ( id, status, statusTimestamp, value, lastAknTimestamp, lastAknUser, lastFailTimestamp, attributes );
+        super ( id, status, statusTimestamp, severity, value, lastAknTimestamp, lastAknUser, lastFailTimestamp, attributes );
     }
 
     public MonitorData ( final MonitorStatusInformation monitor )
     {
-        super ( monitor.getId (), monitor.getStatus (), monitor.getStatusTimestamp (), monitor.getValue (), monitor.getLastAknTimestamp (), monitor.getLastAknUser (), monitor.getLastFailTimestamp (), monitor.getAttributes () );
+        super ( monitor.getId (), monitor.getStatus (), monitor.getStatusTimestamp (), monitor.getSeverity (), monitor.getValue (), monitor.getLastAknTimestamp (), monitor.getLastAknUser (), monitor.getLastFailTimestamp (), monitor.getAttributes () );
     }
 
     @Override
@@ -55,6 +56,7 @@ public class MonitorData extends MonitorStatusInformation
         result = prime * result + ( getLastAknUser () == null ? 0 : getLastAknUser ().hashCode () );
         result = prime * result + ( getStatus () == null ? 0 : getStatus ().hashCode () );
         result = prime * result + ( getStatusTimestamp () == null ? 0 : getStatusTimestamp ().hashCode () );
+        result = prime * result + ( getSeverity () == null ? 0 : getSeverity ().hashCode () );
         result = prime * result + ( getValue () == null ? 0 : getValue ().hashCode () );
         return result;
     }
@@ -127,6 +129,17 @@ public class MonitorData extends MonitorStatusInformation
             }
         }
         else if ( !getStatusTimestamp ().equals ( other.getStatusTimestamp () ) )
+        {
+            return false;
+        }
+        if ( getSeverity () == null )
+        {
+            if ( other.getSeverity () != null )
+            {
+                return false;
+            }
+        }
+        else if ( !getSeverity ().equals ( other.getSeverity () ) )
         {
             return false;
         }

@@ -63,7 +63,7 @@ public class MonitorTableLabelProvider extends ObservableMapLabelProvider
             switch ( monitor.getStatus () )
             {
                 case INACTIVE:
-                    return this.labelProviderSupport.getMaualImage ();
+                    break;
                 case UNSAFE:
                     return this.labelProviderSupport.getDisconnectedImage ();
                 case OK:
@@ -112,6 +112,8 @@ public class MonitorTableLabelProvider extends ObservableMapLabelProvider
                 return this.labelProviderSupport.toLabel ( monitor.getAttributes ().get ( "message" ) ); //$NON-NLS-1$
             case 8:
                 return this.labelProviderSupport.formatDate ( monitor.getStatusTimestamp () );
+            case 9:
+                return monitor.getSeverity () == null ? "" : monitor.getSeverity ().name ();
         }
         return Messages.MonitorTableLabelProvider_EmptyString;
     }

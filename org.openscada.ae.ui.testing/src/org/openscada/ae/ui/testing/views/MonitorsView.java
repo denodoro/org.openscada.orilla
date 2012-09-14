@@ -109,7 +109,7 @@ public class MonitorsView extends AbstractConditionQueryViewPart
         tableLayout.setColumnData ( col, new ColumnWeightData ( 50 ) );
 
         col = new TableColumn ( this.viewer.getTable (), SWT.NONE );
-        col.setText ( "Timestamp" );
+        col.setText ( "Change Timestamp" );
         tableLayout.setColumnData ( col, new ColumnWeightData ( 100 ) );
 
         col = new TableColumn ( this.viewer.getTable (), SWT.NONE );
