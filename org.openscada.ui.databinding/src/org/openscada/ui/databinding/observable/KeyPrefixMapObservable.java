@@ -162,10 +162,13 @@ public class KeyPrefixMapObservable extends ObservableMap
         // process removes
         for ( final Object key : diff.getRemovedKeys () )
         {
-            final String localKey = makeKey ( key );
-            oldValues.put ( localKey, diff.getOldValue ( key ) );
-            removed.add ( localKey );
-            this.wrappedMap.remove ( localKey );
+            if ( isPrefix ( key ) )
+            {
+                final String localKey = makeKey ( key );
+                oldValues.put ( localKey, diff.getOldValue ( key ) );
+                removed.add ( localKey );
+                this.wrappedMap.remove ( localKey );
+            }
         }
 
         fireMapChange ( createMapDiff ( added, changed, removed, newValues, oldValues ) );
