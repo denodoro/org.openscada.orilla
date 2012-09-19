@@ -54,6 +54,7 @@ public class MarkerEditorForm extends StandardConfigurationForm
             toolkit.createStandardText ( sectionClient, "handlerPriority", "Handler Priority", "The sort order for the master handler list", input.getDataMap (), Integer.class );
         }
 
+        toolkit.createListSection ( form, input, "master.id", "Master Items", ", ", ", ?" );
         toolkit.createTableSection ( form, input, "marker.", "Marker Values" );
 
     }

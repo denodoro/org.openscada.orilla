@@ -23,6 +23,7 @@ import java.util.Map;
 
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.Observables;
+import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.observable.value.WritableValue;
@@ -30,6 +31,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.databinding.viewers.IViewerObservableList;
+import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.databinding.viewers.ObservableValueEditingSupport;
 import org.eclipse.jface.databinding.viewers.ViewersObservables;
 import org.eclipse.jface.dialogs.InputDialog;
@@ -38,6 +40,7 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.ColumnWeightData;
+import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
@@ -69,6 +72,7 @@ import org.openscada.ca.ui.editor.forms.common.internal.Activator;
 import org.openscada.ca.ui.editor.input.ConfigurationEditorInput;
 import org.openscada.ui.databinding.observable.KeyPrefixMapObservable;
 import org.openscada.ui.databinding.observable.ObservableMapContentProvider;
+import org.openscada.ui.databinding.observable.StringSplitListObservable;
 
 public class ConfigurationFormToolkit
 {
@@ -265,6 +269,35 @@ public class ConfigurationFormToolkit
     public void createInfoSection ( final ScrolledForm form, final ConfigurationEditorInput input )
     {
         createTableSection ( form, input, "info.", "Informational Attributes" );
+    }
+
+    public void createListSection ( final ScrolledForm form, final ConfigurationEditorInput input, final String attribute, final String label, final String delimiter, final String pattern )
+    {
+        final IObservableList list = StringSplitListObservable.observeString ( Observables.observeMapEntry ( input.getDataMap (), attribute, String.class ), delimiter, pattern );
+
+        // section
+
+        final Section section = this.toolkit.createSection ( form.getBody (), ExpandableComposite.TITLE_BAR );
+        section.setText ( label );
+
+        final Composite client = this.toolkit.createComposite ( section, SWT.NONE );
+        section.setClient ( client );
+        this.toolkit.paintBordersFor ( client );
+
+        client.setLayout ( new GridLayout ( 1, true ) );
+        final GridData gd = new GridData ( GridData.FILL_BOTH );
+        gd.horizontalSpan = 2;
+        section.setLayoutData ( gd );
+
+        // fields
+        final ListViewer viewer = new ListViewer ( client );
+
+        viewer.setContentProvider ( new ObservableListContentProvider () );
+        viewer.setInput ( list );
+
+        viewer.getControl ().setLayoutData ( new GridData ( GridData.FILL_BOTH ) );
+
+        viewer.setSorter ( new ViewerSorter () );
     }
 
     public void createTableSection ( final ScrolledForm form, final ConfigurationEditorInput input, final String prefix, final String label )

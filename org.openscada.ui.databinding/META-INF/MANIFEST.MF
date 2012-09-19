@@ -17,6 +17,7 @@ Import-Package: org.eclipse.core.databinding.property.value,
  org.openscada.core.connection.provider;version="0.14.0",
  org.openscada.da.client;version="0.16.0",
  org.openscada.da.connection.provider;version="0.15.0",
+ org.openscada.utils.str;version="1.0.0",
  org.slf4j;version="1.5.0"
 Export-Package: org.openscada.ui.databinding;version="1.0.0";
   uses:="org.openscada.core.connection.provider,
