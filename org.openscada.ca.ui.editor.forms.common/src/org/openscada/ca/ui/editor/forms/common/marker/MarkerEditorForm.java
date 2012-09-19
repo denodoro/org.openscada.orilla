@@ -43,7 +43,7 @@ public class MarkerEditorForm extends StandardConfigurationForm
             // fields
             toolkit.createStandardCheckbox ( sectionClient, "active", "Is the marker active", input.getDataMap (), String.class );
             toolkit.createStandardCheckbox ( sectionClient, "exportAttribute", "Should the marker state be exported as DA attribute", input.getDataMap (), String.class );
-            toolkit.createStandardCheckbox ( sectionClient, "alwaysExport", "Should the marker be exported as DA attribute event when it is inactive", input.getDataMap (), String.class );
+            toolkit.createStandardCheckbox ( sectionClient, "alwaysExport", "Should the marker be exported as DA attribute even when it is inactive", input.getDataMap (), String.class );
         }
 
         {
