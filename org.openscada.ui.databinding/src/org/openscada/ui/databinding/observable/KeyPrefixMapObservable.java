@@ -254,10 +254,16 @@ public class KeyPrefixMapObservable extends ObservableMap
     {
         checkRealm ();
 
-        this.map.clear ();
+        for ( final Object key : this.wrappedMap.keySet () )
+        {
+            if ( key instanceof String )
+            {
+                this.map.remove ( reverseKey ( key ) );
+            }
+        }
     }
 
-    @SuppressWarnings ( "rawtypes" )
+    @SuppressWarnings ( { "rawtypes", "unchecked" } )
     @Override
     public void putAll ( final Map values )
     {
@@ -270,6 +276,8 @@ public class KeyPrefixMapObservable extends ObservableMap
             final String fullKey = reverseKey ( entry.getKey () );
             newValues.put ( fullKey, entry.getValue () );
         }
+
+        this.map.putAll ( newValues );
     }
 
     @Override
