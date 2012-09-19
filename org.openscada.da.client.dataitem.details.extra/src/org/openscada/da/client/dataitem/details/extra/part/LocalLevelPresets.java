@@ -29,43 +29,43 @@ public class LocalLevelPresets extends GenericLevelPresets
     @Override
     protected boolean isUnsafe ( final String string )
     {
-        return getBooleanAttribute ( String.format ( "org.openscada.da.level.%s.unsafe", string ) ); //$NON-NLS-1$
+        return getBooleanAttribute ( String.format ( "org.openscada.ae.monitor.level.%s.unsafe", string ) ); //$NON-NLS-1$
     }
 
     @Override
     protected boolean isActive ( final String string )
     {
-        return getBooleanAttribute ( String.format ( "org.openscada.da.level.%s.active", string ) ); //$NON-NLS-1$
+        return getBooleanAttribute ( String.format ( "org.openscada.ae.monitor.level.%s.active", string ) ); //$NON-NLS-1$
     }
 
     @Override
     protected Number getPreset ( final String string )
     {
-        return getNumberAttribute ( String.format ( "org.openscada.da.level.%s.preset", string ), null ); //$NON-NLS-1$
+        return getNumberAttribute ( String.format ( "org.openscada.ae.monitor.level.%s.preset", string ), null ); //$NON-NLS-1$
     }
 
     @Override
     protected boolean isAlarm ( final String string )
     {
-        return getBooleanAttribute ( String.format ( "org.openscada.da.level.%s.alarm", string ) ); //$NON-NLS-1$
+        return getBooleanAttribute ( String.format ( "org.openscada.ae.monitor.level.%s.alarm", string ) ); //$NON-NLS-1$
     }
 
     @Override
     protected boolean isWarning ( final String string )
     {
-        return getBooleanAttribute ( String.format ( "org.openscada.da.level.%s.warning", string ) ); //$NON-NLS-1$
+        return getBooleanAttribute ( String.format ( "org.openscada.ae.monitor.level.%s.warning", string ) ); //$NON-NLS-1$
     }
 
     @Override
     protected boolean isError ( final String string )
     {
-        return getBooleanAttribute ( String.format ( "org.openscada.da.level.%s.error", string ) ); //$NON-NLS-1$
+        return getBooleanAttribute ( String.format ( "org.openscada.ae.monitor.level.%s.error", string ) ); //$NON-NLS-1$
     }
 
     @Override
     protected boolean isAckRequired ( final String string )
     {
-        return getBooleanAttribute ( String.format ( "org.openscada.da.level.%s.ackRequired", string ) ); //$NON-NLS-1$
+        return getBooleanAttribute ( String.format ( "org.openscada.ae.monitor.level.%s.ackRequired", string ) ); //$NON-NLS-1$
     }
 
     @Override
@@ -73,7 +73,7 @@ public class LocalLevelPresets extends GenericLevelPresets
     {
         final Map<String, Variant> attributes = new HashMap<String, Variant> ();
 
-        attributes.put ( String.format ( "org.openscada.da.level.%s.preset", string ), value ); //$NON-NLS-1$
+        attributes.put ( String.format ( "org.openscada.ae.monitor.level.%s.preset", string ), value ); //$NON-NLS-1$
 
         this.item.writeAtrtibutes ( attributes );
     }
@@ -83,24 +83,60 @@ public class LocalLevelPresets extends GenericLevelPresets
     {
         final Map<String, Variant> attributes = new HashMap<String, Variant> ();
 
-        attributes.put ( String.format ( "org.openscada.da.level.%s.active", tag ), state ? Variant.TRUE : Variant.FALSE ); //$NON-NLS-1$
+        attributes.put ( String.format ( "org.openscada.ae.monitor.level.%s.active", tag ), state ? Variant.TRUE : Variant.FALSE ); //$NON-NLS-1$
 
         this.item.writeAtrtibutes ( attributes );
     }
 
-    private static final String[] TAGS = new String[] { "floor", "lowlow", "low", "high", "highhigh", "ceil" };
+    private static final String[] TAGS = new String[] { "min", "lowlow", "low", "high", "highhigh", "max" };
 
     @Override
     protected boolean isAvailable ()
     {
         for ( final String tag : TAGS )
         {
-            if ( hasAttribute ( String.format ( "org.openscada.da.level.%s.active", tag ) ) )//$NON-NLS-1$
+            if ( hasAttribute ( String.format ( "org.openscada.ae.monitor.level.%s.active", tag ) ) )//$NON-NLS-1$
             {
                 return true;
             }
         }
         return false;
+    }
+
+    @Override
+    protected String getMinTag ()
+    {
+        return "min";
+    }
+
+    @Override
+    protected String getMaxTag ()
+    {
+        return "max";
+    }
+
+    @Override
+    protected String getHighHighTag ()
+    {
+        return "highhigh";
+    }
+
+    @Override
+    protected String getHighTag ()
+    {
+        return "high";
+    }
+
+    @Override
+    protected String getLowTag ()
+    {
+        return "low";
+    }
+
+    @Override
+    protected String getLowLowTag ()
+    {
+        return "lowlow";
     }
 
 }

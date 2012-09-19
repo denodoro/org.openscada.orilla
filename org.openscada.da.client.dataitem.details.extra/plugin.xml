@@ -14,6 +14,11 @@
             sortKey="3000">
       </detailsPart>
       <detailsPart
+            class="org.openscada.da.client.dataitem.details.extra.part.LocalLevelPresetsOld"
+            name="Level Presets (openSCADA 0.18)"
+            sortKey="3001">
+      </detailsPart>
+      <detailsPart
             class="org.openscada.da.client.dataitem.details.extra.part.RemoteLevelPresets"
             name="%detailsPart.remoteLevelPresets.name"
             sortKey="3010">

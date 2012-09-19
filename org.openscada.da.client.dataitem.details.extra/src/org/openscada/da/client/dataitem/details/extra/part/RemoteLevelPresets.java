@@ -93,4 +93,41 @@ public class RemoteLevelPresets extends GenericLevelPresets
     {
         return hasAttribute ( "remote.level.high.alarm" ) || hasAttribute ( "remote.level.low.alarm" ) || hasAttribute ( "remote.level.highhigh.alarm" ) || hasAttribute ( "remote.level.lowlow.alarm" );
     }
+
+    @Override
+    protected String getMinTag ()
+    {
+        return "floor";
+    }
+
+    @Override
+    protected String getMaxTag ()
+    {
+        return "ceil";
+    }
+
+    @Override
+    protected String getHighHighTag ()
+    {
+        return "highhigh";
+    }
+
+    @Override
+    protected String getHighTag ()
+    {
+        return "high";
+    }
+
+    @Override
+    protected String getLowTag ()
+    {
+        return "low";
+    }
+
+    @Override
+    protected String getLowLowTag ()
+    {
+        return "lowlow";
+    }
+
 }

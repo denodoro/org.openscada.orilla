@@ -79,18 +79,6 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
 
     }
 
-    private static final String TAG_FLOOR = "floor"; //$NON-NLS-1$
-
-    private static final String TAG_LL = "lowlow"; //$NON-NLS-1$
-
-    private static final String TAG_L = "low"; //$NON-NLS-1$
-
-    private static final String TAG_H = "high"; //$NON-NLS-1$
-
-    private static final String TAG_HH = "highhigh"; //$NON-NLS-1$
-
-    private static final String TAG_CEIL = "ceil"; //$NON-NLS-1$
-
     private Triangle triHH;
 
     private Triangle triH;
@@ -186,6 +174,18 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
         return figure;
     }
 
+    protected abstract String getMinTag ();
+
+    protected abstract String getMaxTag ();
+
+    protected abstract String getHighHighTag ();
+
+    protected abstract String getHighTag ();
+
+    protected abstract String getLowTag ();
+
+    protected abstract String getLowLowTag ();
+
     private void createConnection ( final Figure connLayer, final Label label, final Figure figure )
     {
         final Connection c = new PolylineConnection ();
@@ -235,13 +235,13 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
         rect.setLineWidth ( 3 );
         rect.setCursor ( Display.getDefault ().getSystemCursor ( SWT.CURSOR_HAND ) );
         outerFigure.add ( rect, BorderLayout.TOP );
-        activate ( TAG_CEIL, rect );
+        activate ( getMaxTag (), rect );
 
         // create HH
-        this.triHH = createTri ( figure, TAG_HH, BorderLayout.TOP, PositionConstants.NORTH );
-        this.triH = createTri ( innerFigure, TAG_H, BorderLayout.TOP, PositionConstants.NORTH );
-        this.triL = createTri ( innerFigure, TAG_L, BorderLayout.BOTTOM, PositionConstants.SOUTH );
-        this.triLL = createTri ( figure, TAG_LL, BorderLayout.BOTTOM, PositionConstants.SOUTH );
+        this.triHH = createTri ( figure, getHighHighTag (), BorderLayout.TOP, PositionConstants.NORTH );
+        this.triH = createTri ( innerFigure, getHighTag (), BorderLayout.TOP, PositionConstants.NORTH );
+        this.triL = createTri ( innerFigure, getLowTag (), BorderLayout.BOTTOM, PositionConstants.SOUTH );
+        this.triLL = createTri ( figure, getLowLowTag (), BorderLayout.BOTTOM, PositionConstants.SOUTH );
 
         // create floor
         this.rectFloor = rect = new RectangleFigure ();
@@ -250,7 +250,7 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
         rect.setLineWidth ( 3 );
         rect.setCursor ( Display.getDefault ().getSystemCursor ( SWT.CURSOR_HAND ) );
         outerFigure.add ( rect, BorderLayout.BOTTOM );
-        activate ( TAG_FLOOR, rect );
+        activate ( getMinTag (), rect );
 
         figure.add ( innerFigure, BorderLayout.CENTER );
         outerFigure.add ( figure, BorderLayout.CENTER );
@@ -337,26 +337,26 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
             return;
         }
 
-        setTri ( this.rectCeil, TAG_CEIL );
-        setTri ( this.triHH, TAG_HH );
-        setTri ( this.triH, TAG_H );
-        setTri ( this.triL, TAG_L );
-        setTri ( this.triLL, TAG_LL );
-        setTri ( this.rectFloor, TAG_FLOOR );
+        setTri ( this.rectCeil, getMaxTag () );
+        setTri ( this.triHH, getHighHighTag () );
+        setTri ( this.triH, getHighTag () );
+        setTri ( this.triL, getLowTag () );
+        setTri ( this.triLL, getLowLowTag () );
+        setTri ( this.rectFloor, getMinTag () );
 
-        setBlinker ( this.blinkerCeil, TAG_CEIL );
-        setBlinker ( this.blinkerHH, TAG_HH );
-        setBlinker ( this.blinkerH, TAG_H );
-        setBlinker ( this.blinkerL, TAG_L );
-        setBlinker ( this.blinkerLL, TAG_LL );
-        setBlinker ( this.blinkerFloor, TAG_FLOOR );
+        setBlinker ( this.blinkerCeil, getMaxTag () );
+        setBlinker ( this.blinkerHH, getHighHighTag () );
+        setBlinker ( this.blinkerH, getHighTag () );
+        setBlinker ( this.blinkerL, getLowTag () );
+        setBlinker ( this.blinkerLL, getLowLowTag () );
+        setBlinker ( this.blinkerFloor, getMinTag () );
 
-        setLabel ( this.presetCeil, TAG_CEIL );
-        setLabel ( this.presetHH, TAG_HH );
-        setLabel ( this.presetH, TAG_H );
-        setLabel ( this.presetL, TAG_L );
-        setLabel ( this.presetLL, TAG_LL );
-        setLabel ( this.presetFloor, TAG_FLOOR );
+        setLabel ( this.presetCeil, getMaxTag () );
+        setLabel ( this.presetHH, getHighHighTag () );
+        setLabel ( this.presetH, getHighTag () );
+        setLabel ( this.presetL, getLowTag () );
+        setLabel ( this.presetLL, getLowLowTag () );
+        setLabel ( this.presetFloor, getMinTag () );
 
         this.currentLabel.setText ( "" + this.value.getValue () ); //$NON-NLS-1$
     }
