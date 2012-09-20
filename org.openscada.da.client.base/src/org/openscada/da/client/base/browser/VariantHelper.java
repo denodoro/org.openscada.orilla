@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -38,24 +38,27 @@ public class VariantHelper
             str.append ( "[" ); //$NON-NLS-1$
             switch ( vt )
             {
-            case NULL:
-                str.append ( "<null>" ); //$NON-NLS-1$
-                break;
-            case BOOLEAN:
-                str.append ( variant.asBoolean () ? "true" : "false" ); //$NON-NLS-1$ //$NON-NLS-2$
-                break;
-            case DOUBLE:
-                str.append ( variant.asDouble () );
-                break;
-            case LONG:
-                str.append ( variant.asLong () );
-                break;
-            case INT:
-                str.append ( variant.asInteger () );
-                break;
-            case STRING:
-                str.append ( variant.asString () );
-                break;
+                case NULL:
+                    str.append ( "<null>" ); //$NON-NLS-1$
+                    break;
+                case BOOLEAN:
+                    str.append ( variant.asBoolean () ? "true" : "false" ); //$NON-NLS-1$ //$NON-NLS-2$
+                    break;
+                case DOUBLE:
+                    str.append ( variant.asDouble () );
+                    break;
+                case LONG:
+                    str.append ( variant.asLong () );
+                    break;
+                case INT:
+                    str.append ( variant.asInteger () );
+                    break;
+                case STRING:
+                    str.append ( variant.asString () );
+                    break;
+                case STRING_CRLF:
+                    str.append ( variant.asString () );
+                    break;
             }
             str.append ( "]" ); //$NON-NLS-1$
             return str.toString ();
