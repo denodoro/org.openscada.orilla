@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: openSCADA Chart UI
-Bundle-SymbolicName: org.openscada.chart.ui
+Bundle-SymbolicName: org.openscada.chart.ui;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.openscada.chart.ui.Activator
 Bundle-Vendor: TH4 SYSTEMS GmbH
