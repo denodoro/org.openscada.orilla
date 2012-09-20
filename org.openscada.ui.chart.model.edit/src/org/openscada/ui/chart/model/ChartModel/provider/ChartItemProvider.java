@@ -166,6 +166,7 @@ public class ChartItemProvider extends ItemProviderAdapter implements IEditingDo
             childrenFeatures.add ( ChartPackage.Literals.CHART__LEFT );
             childrenFeatures.add ( ChartPackage.Literals.CHART__RIGHT );
             childrenFeatures.add ( ChartPackage.Literals.CHART__INPUTS );
+            childrenFeatures.add ( ChartPackage.Literals.CHART__CONTROLLERS );
         }
         return childrenFeatures;
     }
@@ -235,6 +236,7 @@ public class ChartItemProvider extends ItemProviderAdapter implements IEditingDo
             case ChartPackage.CHART__LEFT:
             case ChartPackage.CHART__RIGHT:
             case ChartPackage.CHART__INPUTS:
+            case ChartPackage.CHART__CONTROLLERS:
                 fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), true, false ) );
                 return;
         }
@@ -266,6 +268,8 @@ public class ChartItemProvider extends ItemProviderAdapter implements IEditingDo
         newChildDescriptors.add ( createChildParameter ( ChartPackage.Literals.CHART__INPUTS, ChartFactory.eINSTANCE.createArchiveSeries () ) );
 
         newChildDescriptors.add ( createChildParameter ( ChartPackage.Literals.CHART__INPUTS, ChartFactory.eINSTANCE.createScriptSeries () ) );
+
+        newChildDescriptors.add ( createChildParameter ( ChartPackage.Literals.CHART__CONTROLLERS, ChartFactory.eINSTANCE.createCurrentTimeController () ) );
     }
 
     /**

@@ -97,6 +97,8 @@ public class ChartFactoryImpl extends EFactoryImpl implements ChartFactory
                 return createLineProperties ();
             case ChartPackage.SCRIPT_SERIES:
                 return createScriptSeries ();
+            case ChartPackage.CURRENT_TIME_CONTROLLER:
+                return createCurrentTimeController ();
             default:
                 throw new IllegalArgumentException ( "The class '" + eClass.getName () + "' is not a valid classifier" );
         }
@@ -242,6 +244,17 @@ public class ChartFactoryImpl extends EFactoryImpl implements ChartFactory
     {
         ScriptSeriesImpl scriptSeries = new ScriptSeriesImpl ();
         return scriptSeries;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public CurrentTimeController createCurrentTimeController ()
+    {
+        CurrentTimeControllerImpl currentTimeController = new CurrentTimeControllerImpl ();
+        return currentTimeController;
     }
 
     /**

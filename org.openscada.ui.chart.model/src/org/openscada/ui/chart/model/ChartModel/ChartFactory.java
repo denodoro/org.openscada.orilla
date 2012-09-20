@@ -117,6 +117,15 @@ public interface ChartFactory extends EFactory
     ScriptSeries createScriptSeries ();
 
     /**
+     * Returns a new object of class '<em>Current Time Controller</em>'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return a new object of class '<em>Current Time Controller</em>'.
+     * @generated
+     */
+    CurrentTimeController createCurrentTimeController ();
+
+    /**
      * Returns the package supported by this factory.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->

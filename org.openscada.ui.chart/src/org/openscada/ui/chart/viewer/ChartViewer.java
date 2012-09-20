@@ -141,6 +141,8 @@ public class ChartViewer
 
     private MouseHover mouseHover;
 
+    private final ControllerManager controlleManager;
+
     public ChartViewer ( final ChartRenderer chartRenderer, final Chart chart )
     {
         this.chart = chart;
@@ -182,6 +184,9 @@ public class ChartViewer
 
         this.ctx.bindValue ( PojoObservables.observeValue ( this, "selectedXAxis" ), EMFObservables.observeValue ( this.chart, ChartPackage.Literals.CHART__SELECTED_XAXIS ) );
         this.ctx.bindValue ( PojoObservables.observeValue ( this, "selectedYAxis" ), EMFObservables.observeValue ( this.chart, ChartPackage.Literals.CHART__SELECTED_YAXIS ) );
+
+        this.controlleManager = new ControllerManager ( this.ctx, this.ctx.getValidationRealm (), this.xLocator );
+        this.ctx.bindList ( this.controlleManager.getList (), EMFObservables.observeList ( chart, ChartPackage.Literals.CHART__CONTROLLERS ) );
 
         startTimer ();
 
@@ -674,6 +679,8 @@ public class ChartViewer
         {
             ( (ChartInput)item ).dispose ();
         }
+
+        this.controlleManager.dispose ();
     }
 
     public IObservableList getItems ()

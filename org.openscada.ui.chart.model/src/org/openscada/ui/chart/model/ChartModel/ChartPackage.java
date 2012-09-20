@@ -180,13 +180,22 @@ public interface ChartPackage extends EPackage
     int CHART__SCROLLABLE = 11;
 
     /**
+     * The feature id for the '<em><b>Controllers</b></em>' containment reference list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int CHART__CONTROLLERS = 12;
+
+    /**
      * The number of structural features of the '<em>Chart</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int CHART_FEATURE_COUNT = 12;
+    int CHART_FEATURE_COUNT = 13;
 
     /**
      * The meta object id for the '{@link org.openscada.ui.chart.model.ChartModel.impl.AxisImpl <em>Axis</em>}' class.
@@ -850,6 +859,71 @@ public interface ChartPackage extends EPackage
     int SCRIPT_SERIES_FEATURE_COUNT = DATA_SERIES_FEATURE_COUNT + 2;
 
     /**
+     * The meta object id for the '{@link org.openscada.ui.chart.model.ChartModel.impl.ControllerImpl <em>Controller</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.openscada.ui.chart.model.ChartModel.impl.ControllerImpl
+     * @see org.openscada.ui.chart.model.ChartModel.impl.ChartPackageImpl#getController()
+     * @generated
+     */
+    int CONTROLLER = 14;
+
+    /**
+     * The number of structural features of the '<em>Controller</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int CONTROLLER_FEATURE_COUNT = 0;
+
+    /**
+     * The meta object id for the '{@link org.openscada.ui.chart.model.ChartModel.impl.CurrentTimeControllerImpl <em>Current Time Controller</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.openscada.ui.chart.model.ChartModel.impl.CurrentTimeControllerImpl
+     * @see org.openscada.ui.chart.model.ChartModel.impl.ChartPackageImpl#getCurrentTimeController()
+     * @generated
+     */
+    int CURRENT_TIME_CONTROLLER = 15;
+
+    /**
+     * The feature id for the '<em><b>Diff</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int CURRENT_TIME_CONTROLLER__DIFF = CONTROLLER_FEATURE_COUNT + 0;
+
+    /**
+     * The feature id for the '<em><b>Axis</b></em>' reference.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int CURRENT_TIME_CONTROLLER__AXIS = CONTROLLER_FEATURE_COUNT + 1;
+
+    /**
+     * The feature id for the '<em><b>Align Date Format</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int CURRENT_TIME_CONTROLLER__ALIGN_DATE_FORMAT = CONTROLLER_FEATURE_COUNT + 2;
+
+    /**
+     * The number of structural features of the '<em>Current Time Controller</em>' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int CURRENT_TIME_CONTROLLER_FEATURE_COUNT = CONTROLLER_FEATURE_COUNT + 3;
+
+    /**
      * The meta object id for the '<em>RGB</em>' data type.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -857,7 +931,7 @@ public interface ChartPackage extends EPackage
      * @see org.openscada.ui.chart.model.ChartModel.impl.ChartPackageImpl#getRGB()
      * @generated
      */
-    int RGB = 14;
+    int RGB = 16;
 
     /**
      * Returns the meta object for class '{@link org.openscada.ui.chart.model.ChartModel.Chart <em>Chart</em>}'.
@@ -1000,6 +1074,17 @@ public interface ChartPackage extends EPackage
      * @generated
      */
     EAttribute getChart_Scrollable ();
+
+    /**
+     * Returns the meta object for the containment reference list '{@link org.openscada.ui.chart.model.ChartModel.Chart#getControllers <em>Controllers</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the containment reference list '<em>Controllers</em>'.
+     * @see org.openscada.ui.chart.model.ChartModel.Chart#getControllers()
+     * @see #getChart()
+     * @generated
+     */
+    EReference getChart_Controllers ();
 
     /**
      * Returns the meta object for class '{@link org.openscada.ui.chart.model.ChartModel.XAxis <em>XAxis</em>}'.
@@ -1396,6 +1481,59 @@ public interface ChartPackage extends EPackage
     EAttribute getScriptSeries_Script ();
 
     /**
+     * Returns the meta object for class '{@link org.openscada.ui.chart.model.ChartModel.Controller <em>Controller</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>Controller</em>'.
+     * @see org.openscada.ui.chart.model.ChartModel.Controller
+     * @generated
+     */
+    EClass getController ();
+
+    /**
+     * Returns the meta object for class '{@link org.openscada.ui.chart.model.ChartModel.CurrentTimeController <em>Current Time Controller</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for class '<em>Current Time Controller</em>'.
+     * @see org.openscada.ui.chart.model.ChartModel.CurrentTimeController
+     * @generated
+     */
+    EClass getCurrentTimeController ();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.openscada.ui.chart.model.ChartModel.CurrentTimeController#getDiff <em>Diff</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Diff</em>'.
+     * @see org.openscada.ui.chart.model.ChartModel.CurrentTimeController#getDiff()
+     * @see #getCurrentTimeController()
+     * @generated
+     */
+    EAttribute getCurrentTimeController_Diff ();
+
+    /**
+     * Returns the meta object for the reference '{@link org.openscada.ui.chart.model.ChartModel.CurrentTimeController#getAxis <em>Axis</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the reference '<em>Axis</em>'.
+     * @see org.openscada.ui.chart.model.ChartModel.CurrentTimeController#getAxis()
+     * @see #getCurrentTimeController()
+     * @generated
+     */
+    EReference getCurrentTimeController_Axis ();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.openscada.ui.chart.model.ChartModel.CurrentTimeController#getAlignDateFormat <em>Align Date Format</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Align Date Format</em>'.
+     * @see org.openscada.ui.chart.model.ChartModel.CurrentTimeController#getAlignDateFormat()
+     * @see #getCurrentTimeController()
+     * @generated
+     */
+    EAttribute getCurrentTimeController_AlignDateFormat ();
+
+    /**
      * Returns the meta object for data type '{@link org.eclipse.swt.graphics.RGB <em>RGB</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1534,6 +1672,14 @@ public interface ChartPackage extends EPackage
          * @generated
          */
         EAttribute CHART__SCROLLABLE = eINSTANCE.getChart_Scrollable ();
+
+        /**
+         * The meta object literal for the '<em><b>Controllers</b></em>' containment reference list feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference CHART__CONTROLLERS = eINSTANCE.getChart_Controllers ();
 
         /**
          * The meta object literal for the '{@link org.openscada.ui.chart.model.ChartModel.impl.XAxisImpl <em>XAxis</em>}' class.
@@ -1856,6 +2002,50 @@ public interface ChartPackage extends EPackage
          * @generated
          */
         EAttribute SCRIPT_SERIES__SCRIPT = eINSTANCE.getScriptSeries_Script ();
+
+        /**
+         * The meta object literal for the '{@link org.openscada.ui.chart.model.ChartModel.impl.ControllerImpl <em>Controller</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.openscada.ui.chart.model.ChartModel.impl.ControllerImpl
+         * @see org.openscada.ui.chart.model.ChartModel.impl.ChartPackageImpl#getController()
+         * @generated
+         */
+        EClass CONTROLLER = eINSTANCE.getController ();
+
+        /**
+         * The meta object literal for the '{@link org.openscada.ui.chart.model.ChartModel.impl.CurrentTimeControllerImpl <em>Current Time Controller</em>}' class.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @see org.openscada.ui.chart.model.ChartModel.impl.CurrentTimeControllerImpl
+         * @see org.openscada.ui.chart.model.ChartModel.impl.ChartPackageImpl#getCurrentTimeController()
+         * @generated
+         */
+        EClass CURRENT_TIME_CONTROLLER = eINSTANCE.getCurrentTimeController ();
+
+        /**
+         * The meta object literal for the '<em><b>Diff</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute CURRENT_TIME_CONTROLLER__DIFF = eINSTANCE.getCurrentTimeController_Diff ();
+
+        /**
+         * The meta object literal for the '<em><b>Axis</b></em>' reference feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EReference CURRENT_TIME_CONTROLLER__AXIS = eINSTANCE.getCurrentTimeController_Axis ();
+
+        /**
+         * The meta object literal for the '<em><b>Align Date Format</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute CURRENT_TIME_CONTROLLER__ALIGN_DATE_FORMAT = eINSTANCE.getCurrentTimeController_AlignDateFormat ();
 
         /**
          * The meta object literal for the '<em>RGB</em>' data type.

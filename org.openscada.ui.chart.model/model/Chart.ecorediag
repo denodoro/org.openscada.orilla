@@ -315,6 +315,46 @@
     <element xmi:type="ecore:EClass" href="Chart.ecore#//ScriptSeries"/>
     <layoutConstraint xmi:type="notation:Bounds" xmi:id="_dYoMwvafEeGBWcuRoiHTUw" x="1116" y="408"/>
   </children>
+  <children xmi:type="notation:Node" xmi:id="_7CePkAMNEeKHwZBNinkcRA" type="1001">
+    <children xmi:type="notation:Node" xmi:id="_7CfdsAMNEeKHwZBNinkcRA" type="4001"/>
+    <children xmi:type="notation:Node" xmi:id="_7CgEwAMNEeKHwZBNinkcRA" type="5001">
+      <styles xmi:type="notation:DrawerStyle" xmi:id="_7CgEwQMNEeKHwZBNinkcRA"/>
+      <styles xmi:type="notation:SortingStyle" xmi:id="_7CgEwgMNEeKHwZBNinkcRA"/>
+      <styles xmi:type="notation:FilteringStyle" xmi:id="_7CgEwwMNEeKHwZBNinkcRA"/>
+    </children>
+    <children xmi:type="notation:Node" xmi:id="_7ChS4AMNEeKHwZBNinkcRA" type="5002">
+      <styles xmi:type="notation:DrawerStyle" xmi:id="_7ChS4QMNEeKHwZBNinkcRA"/>
+      <styles xmi:type="notation:SortingStyle" xmi:id="_7ChS4gMNEeKHwZBNinkcRA"/>
+      <styles xmi:type="notation:FilteringStyle" xmi:id="_7ChS4wMNEeKHwZBNinkcRA"/>
+    </children>
+    <styles xmi:type="notation:ShapeStyle" xmi:id="_7CePkQMNEeKHwZBNinkcRA" fontColor="4210752" fontName="Sans" fontHeight="10" fillColor="13761016" lineColor="8421504"/>
+    <element xmi:type="ecore:EClass" href="Chart.ecore#//Controller"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_7CePkgMNEeKHwZBNinkcRA" x="504" y="672"/>
+  </children>
+  <children xmi:type="notation:Node" xmi:id="_DtqeEAMOEeKHwZBNinkcRA" type="1001">
+    <children xmi:type="notation:Node" xmi:id="_DtrsMAMOEeKHwZBNinkcRA" type="4001"/>
+    <children xmi:type="notation:Node" xmi:id="_DtrsMQMOEeKHwZBNinkcRA" type="5001">
+      <children xmi:type="notation:Node" xmi:id="_GG-e0AMOEeKHwZBNinkcRA" type="2001">
+        <element xmi:type="ecore:EAttribute" href="Chart.ecore#//CurrentTimeController/diff"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_GG-e0QMOEeKHwZBNinkcRA"/>
+      </children>
+      <children xmi:type="notation:Node" xmi:id="_lqdW4AMSEeKHwZBNinkcRA" type="2001">
+        <element xmi:type="ecore:EAttribute" href="Chart.ecore#//CurrentTimeController/alignDateFormat"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_lqdW4QMSEeKHwZBNinkcRA"/>
+      </children>
+      <styles xmi:type="notation:DrawerStyle" xmi:id="_DtrsMgMOEeKHwZBNinkcRA"/>
+      <styles xmi:type="notation:SortingStyle" xmi:id="_DtrsMwMOEeKHwZBNinkcRA"/>
+      <styles xmi:type="notation:FilteringStyle" xmi:id="_DtrsNAMOEeKHwZBNinkcRA"/>
+    </children>
+    <children xmi:type="notation:Node" xmi:id="_DtsTQAMOEeKHwZBNinkcRA" type="5002">
+      <styles xmi:type="notation:DrawerStyle" xmi:id="_DtsTQQMOEeKHwZBNinkcRA"/>
+      <styles xmi:type="notation:SortingStyle" xmi:id="_DtsTQgMOEeKHwZBNinkcRA"/>
+      <styles xmi:type="notation:FilteringStyle" xmi:id="_DtsTQwMOEeKHwZBNinkcRA"/>
+    </children>
+    <styles xmi:type="notation:ShapeStyle" xmi:id="_DtqeEQMOEeKHwZBNinkcRA" fontColor="4210752" fontName="Sans" fontHeight="10" fillColor="13761016" lineColor="8421504"/>
+    <element xmi:type="ecore:EClass" href="Chart.ecore#//CurrentTimeController"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_DtqeEgMOEeKHwZBNinkcRA" x="695" y="676"/>
+  </children>
   <styles xmi:type="notation:DiagramStyle" xmi:id="_agBUMNSuEeGG6ZRHVvsIug"/>
   <element xmi:type="ecore:EPackage" href="Chart.ecore#/"/>
   <edges xmi:type="notation:Edge" xmi:id="_vBVsENTCEeGG6ZRHVvsIug" type="3003" source="_siN-QNTCEeGG6ZRHVvsIug" target="_tQQI8NTCEeGG6ZRHVvsIug">
@@ -564,5 +604,38 @@
     <styles xmi:type="notation:FontStyle" xmi:id="_ikHaMvafEeGBWcuRoiHTUw" fontColor="4210752" fontName="Sans" fontHeight="10"/>
     <element xmi:type="ecore:EReference" href="Chart.ecore#//ScriptSeries/lineProperties"/>
     <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_ikHaM_afEeGBWcuRoiHTUw" points="[35, 21, -357, -208]$[384, 196, -8, -33]"/>
+  </edges>
+  <edges xmi:type="notation:Edge" xmi:id="_-YoTEAMNEeKHwZBNinkcRA" type="3002" source="_ahG5UNSuEeGG6ZRHVvsIug" target="_7CePkAMNEeKHwZBNinkcRA">
+    <children xmi:type="notation:Node" xmi:id="_-Yo6IAMNEeKHwZBNinkcRA" type="4011">
+      <layoutConstraint xmi:type="notation:Location" xmi:id="_-Yo6IQMNEeKHwZBNinkcRA" x="-10" y="-10"/>
+    </children>
+    <children xmi:type="notation:Node" xmi:id="_-Yo6IgMNEeKHwZBNinkcRA" type="4012">
+      <layoutConstraint xmi:type="notation:Location" xmi:id="_-Yo6IwMNEeKHwZBNinkcRA" x="10" y="10"/>
+    </children>
+    <styles xmi:type="notation:ConnectorStyle" xmi:id="_-YoTEQMNEeKHwZBNinkcRA" lineColor="4210752"/>
+    <styles xmi:type="notation:FontStyle" xmi:id="_-YoTEgMNEeKHwZBNinkcRA" fontColor="4210752" fontName="Sans" fontHeight="10"/>
+    <element xmi:type="ecore:EReference" href="Chart.ecore#//Chart/controllers"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_-YoTEwMNEeKHwZBNinkcRA" points="[107, 21, -157, -38]$[314, 58, 50, -1]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_-YqIQAMNEeKHwZBNinkcRA" id="(0.672782874617737,0.7697456492637216)"/>
+  </edges>
+  <edges xmi:type="notation:Edge" xmi:id="_Fwt68AMOEeKHwZBNinkcRA" type="3003" source="_DtqeEAMOEeKHwZBNinkcRA" target="_7CePkAMNEeKHwZBNinkcRA">
+    <styles xmi:type="notation:ConnectorStyle" xmi:id="_Fwt68QMOEeKHwZBNinkcRA" routing="Rectilinear" lineColor="4210752"/>
+    <styles xmi:type="notation:FontStyle" xmi:id="_Fwt68gMOEeKHwZBNinkcRA" fontName="Sans"/>
+    <element xsi:nil="true"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_Fwt68wMOEeKHwZBNinkcRA" points="[-33, -7, 141, -3]$[-124, -7, 50, -3]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_Fww-QAMOEeKHwZBNinkcRA" id="(0.20481927710843373,0.4883720930232558)"/>
+  </edges>
+  <edges xmi:type="notation:Edge" xmi:id="_D6UvIAMQEeKHwZBNinkcRA" type="3002" source="_DtqeEAMOEeKHwZBNinkcRA" target="_r-uPoNTCEeGG6ZRHVvsIug">
+    <children xmi:type="notation:Node" xmi:id="_D6V9QAMQEeKHwZBNinkcRA" type="4011">
+      <layoutConstraint xmi:type="notation:Location" xmi:id="_D6V9QQMQEeKHwZBNinkcRA" x="-10" y="-10"/>
+    </children>
+    <children xmi:type="notation:Node" xmi:id="_D6V9QgMQEeKHwZBNinkcRA" type="4012">
+      <layoutConstraint xmi:type="notation:Location" xmi:id="_D6V9QwMQEeKHwZBNinkcRA" x="10" y="10"/>
+    </children>
+    <styles xmi:type="notation:ConnectorStyle" xmi:id="_D6UvIQMQEeKHwZBNinkcRA" lineColor="4210752"/>
+    <styles xmi:type="notation:FontStyle" xmi:id="_D6UvIgMQEeKHwZBNinkcRA" fontColor="4210752" fontName="Sans" fontHeight="10"/>
+    <element xmi:type="ecore:EReference" href="Chart.ecore#//CurrentTimeController/axis"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_D6UvIwMQEeKHwZBNinkcRA" points="[3, -24, -38, 296]$[42, -352, 1, -32]"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_D6ZAkAMQEeKHwZBNinkcRA" id="(0.18120805369127516,0.4852941176470588)"/>
   </edges>
 </notation:Diagram>

@@ -30,6 +30,7 @@ import org.eclipse.swt.graphics.RGB;
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.Chart#getInputs <em>Inputs</em>}</li>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.Chart#isMutable <em>Mutable</em>}</li>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.Chart#isScrollable <em>Scrollable</em>}</li>
+ *   <li>{@link org.openscada.ui.chart.model.ChartModel.Chart#getControllers <em>Controllers</em>}</li>
  * </ul>
  * </p>
  *
@@ -305,5 +306,21 @@ public interface Chart extends EObject
      * @generated
      */
     void setScrollable ( boolean value );
+
+    /**
+     * Returns the value of the '<em><b>Controllers</b></em>' containment reference list.
+     * The list contents are of type {@link org.openscada.ui.chart.model.ChartModel.Controller}.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>Controllers</em>' containment reference list isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>Controllers</em>' containment reference list.
+     * @see org.openscada.ui.chart.model.ChartModel.ChartPackage#getChart_Controllers()
+     * @model containment="true"
+     * @generated
+     */
+    EList<Controller> getControllers ();
 
 } // Chart

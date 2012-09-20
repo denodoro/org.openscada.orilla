@@ -29,6 +29,8 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="scrollable" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="controllers" upperBound="-1"
+        eType="#//Controller" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="RGB" instanceClassName="org.eclipse.swt.graphics.RGB"/>
   <eClassifiers xsi:type="ecore:EClass" name="XAxis" eSuperTypes="#//Axis">
@@ -105,5 +107,16 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="lineProperties" lowerBound="1"
         eType="#//LineProperties" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="script" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Controller" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CurrentTimeController" eSuperTypes="#//Controller">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="diff" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="axis" lowerBound="1" eType="#//XAxis"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="alignDateFormat" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A SimpleDateFormat which will be formatted and re-parsed in order to align the timestamp."/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
 </ecore:EPackage>

@@ -326,6 +326,31 @@ public class ChartItemProviderAdapterFactory extends ChartAdapterFactory impleme
     }
 
     /**
+     * This keeps track of the one adapter used for all {@link org.openscada.ui.chart.model.ChartModel.CurrentTimeController} instances.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    protected CurrentTimeControllerItemProvider currentTimeControllerItemProvider;
+
+    /**
+     * This creates an adapter for a {@link org.openscada.ui.chart.model.ChartModel.CurrentTimeController}.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    @Override
+    public Adapter createCurrentTimeControllerAdapter ()
+    {
+        if ( currentTimeControllerItemProvider == null )
+        {
+            currentTimeControllerItemProvider = new CurrentTimeControllerItemProvider ( this );
+        }
+
+        return currentTimeControllerItemProvider;
+    }
+
+    /**
      * This returns the root adapter factory that contains this factory.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -456,6 +481,8 @@ public class ChartItemProviderAdapterFactory extends ChartAdapterFactory impleme
             linePropertiesItemProvider.dispose ();
         if ( scriptSeriesItemProvider != null )
             scriptSeriesItemProvider.dispose ();
+        if ( currentTimeControllerItemProvider != null )
+            currentTimeControllerItemProvider.dispose ();
     }
 
 }

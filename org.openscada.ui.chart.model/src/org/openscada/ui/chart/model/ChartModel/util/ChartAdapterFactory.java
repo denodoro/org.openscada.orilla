@@ -173,6 +173,18 @@ public class ChartAdapterFactory extends AdapterFactoryImpl
         }
 
         @Override
+        public Adapter caseController ( Controller object )
+        {
+            return createControllerAdapter ();
+        }
+
+        @Override
+        public Adapter caseCurrentTimeController ( CurrentTimeController object )
+        {
+            return createCurrentTimeControllerAdapter ();
+        }
+
+        @Override
         public Adapter defaultCase ( EObject object )
         {
             return createEObjectAdapter ();
@@ -399,6 +411,36 @@ public class ChartAdapterFactory extends AdapterFactoryImpl
      * @generated
      */
     public Adapter createScriptSeriesAdapter ()
+    {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.openscada.ui.chart.model.ChartModel.Controller <em>Controller</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.openscada.ui.chart.model.ChartModel.Controller
+     * @generated
+     */
+    public Adapter createControllerAdapter ()
+    {
+        return null;
+    }
+
+    /**
+     * Creates a new adapter for an object of class '{@link org.openscada.ui.chart.model.ChartModel.CurrentTimeController <em>Current Time Controller</em>}'.
+     * <!-- begin-user-doc -->
+     * This default implementation returns null so that we can easily ignore cases;
+     * it's useful to ignore a case when inheritance will catch all the cases anyway.
+     * <!-- end-user-doc -->
+     * @return the new adapter.
+     * @see org.openscada.ui.chart.model.ChartModel.CurrentTimeController
+     * @generated
+     */
+    public Adapter createCurrentTimeControllerAdapter ()
     {
         return null;
     }

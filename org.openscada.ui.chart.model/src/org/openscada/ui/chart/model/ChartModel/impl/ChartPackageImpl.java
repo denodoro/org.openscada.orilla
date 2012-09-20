@@ -18,6 +18,8 @@ import org.openscada.ui.chart.model.ChartModel.Axis;
 import org.openscada.ui.chart.model.ChartModel.Chart;
 import org.openscada.ui.chart.model.ChartModel.ChartFactory;
 import org.openscada.ui.chart.model.ChartModel.ChartPackage;
+import org.openscada.ui.chart.model.ChartModel.Controller;
+import org.openscada.ui.chart.model.ChartModel.CurrentTimeController;
 import org.openscada.ui.chart.model.ChartModel.DataItemSeries;
 import org.openscada.ui.chart.model.ChartModel.DataSeries;
 import org.openscada.ui.chart.model.ChartModel.IdItem;
@@ -118,6 +120,20 @@ public class ChartPackageImpl extends EPackageImpl implements ChartPackage
      * @generated
      */
     private EClass scriptSeriesEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass controllerEClass = null;
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    private EClass currentTimeControllerEClass = null;
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -313,6 +329,16 @@ public class ChartPackageImpl extends EPackageImpl implements ChartPackage
     public EAttribute getChart_Scrollable ()
     {
         return (EAttribute)chartEClass.getEStructuralFeatures ().get ( 11 );
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EReference getChart_Controllers ()
+    {
+        return (EReference)chartEClass.getEStructuralFeatures ().get ( 12 );
     }
 
     /**
@@ -686,6 +712,56 @@ public class ChartPackageImpl extends EPackageImpl implements ChartPackage
     }
 
     /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EClass getController ()
+    {
+        return controllerEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EClass getCurrentTimeController ()
+    {
+        return currentTimeControllerEClass;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getCurrentTimeController_Diff ()
+    {
+        return (EAttribute)currentTimeControllerEClass.getEStructuralFeatures ().get ( 0 );
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EReference getCurrentTimeController_Axis ()
+    {
+        return (EReference)currentTimeControllerEClass.getEStructuralFeatures ().get ( 1 );
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getCurrentTimeController_AlignDateFormat ()
+    {
+        return (EAttribute)currentTimeControllerEClass.getEStructuralFeatures ().get ( 2 );
+    }
+
+    /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
@@ -737,6 +813,7 @@ public class ChartPackageImpl extends EPackageImpl implements ChartPackage
         createEReference ( chartEClass, CHART__INPUTS );
         createEAttribute ( chartEClass, CHART__MUTABLE );
         createEAttribute ( chartEClass, CHART__SCROLLABLE );
+        createEReference ( chartEClass, CHART__CONTROLLERS );
 
         xAxisEClass = createEClass ( XAXIS );
         createEAttribute ( xAxisEClass, XAXIS__MINIMUM );
@@ -788,6 +865,13 @@ public class ChartPackageImpl extends EPackageImpl implements ChartPackage
         createEReference ( scriptSeriesEClass, SCRIPT_SERIES__LINE_PROPERTIES );
         createEAttribute ( scriptSeriesEClass, SCRIPT_SERIES__SCRIPT );
 
+        controllerEClass = createEClass ( CONTROLLER );
+
+        currentTimeControllerEClass = createEClass ( CURRENT_TIME_CONTROLLER );
+        createEAttribute ( currentTimeControllerEClass, CURRENT_TIME_CONTROLLER__DIFF );
+        createEReference ( currentTimeControllerEClass, CURRENT_TIME_CONTROLLER__AXIS );
+        createEAttribute ( currentTimeControllerEClass, CURRENT_TIME_CONTROLLER__ALIGN_DATE_FORMAT );
+
         // Create data types
         rgbEDataType = createEDataType ( RGB );
     }
@@ -828,6 +912,7 @@ public class ChartPackageImpl extends EPackageImpl implements ChartPackage
         idItemEClass.getESuperTypes ().add ( this.getItem () );
         itemDataSeriesEClass.getESuperTypes ().add ( this.getDataSeries () );
         scriptSeriesEClass.getESuperTypes ().add ( this.getDataSeries () );
+        currentTimeControllerEClass.getESuperTypes ().add ( this.getController () );
 
         // Initialize classes and features; add operations and parameters
         initEClass ( chartEClass, Chart.class, "Chart", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS );
@@ -843,6 +928,7 @@ public class ChartPackageImpl extends EPackageImpl implements ChartPackage
         initEReference ( getChart_Inputs (), this.getDataSeries (), null, "inputs", null, 0, -1, Chart.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
         initEAttribute ( getChart_Mutable (), ecorePackage.getEBoolean (), "mutable", "true", 1, 1, Chart.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
         initEAttribute ( getChart_Scrollable (), ecorePackage.getEBoolean (), "scrollable", "true", 1, 1, Chart.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
+        initEReference ( getChart_Controllers (), this.getController (), null, "controllers", null, 0, -1, Chart.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
 
         initEClass ( xAxisEClass, XAxis.class, "XAxis", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS );
         initEAttribute ( getXAxis_Minimum (), ecorePackage.getELong (), "minimum", "0", 1, 1, XAxis.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
@@ -893,6 +979,13 @@ public class ChartPackageImpl extends EPackageImpl implements ChartPackage
         initEClass ( scriptSeriesEClass, ScriptSeries.class, "ScriptSeries", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS );
         initEReference ( getScriptSeries_LineProperties (), this.getLineProperties (), null, "lineProperties", null, 1, 1, ScriptSeries.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
         initEAttribute ( getScriptSeries_Script (), ecorePackage.getEString (), "script", null, 0, 1, ScriptSeries.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
+
+        initEClass ( controllerEClass, Controller.class, "Controller", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS );
+
+        initEClass ( currentTimeControllerEClass, CurrentTimeController.class, "CurrentTimeController", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS );
+        initEAttribute ( getCurrentTimeController_Diff (), ecorePackage.getELong (), "diff", "0", 1, 1, CurrentTimeController.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
+        initEReference ( getCurrentTimeController_Axis (), this.getXAxis (), null, "axis", null, 1, 1, CurrentTimeController.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
+        initEAttribute ( getCurrentTimeController_AlignDateFormat (), ecorePackage.getEString (), "alignDateFormat", null, 0, 1, CurrentTimeController.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
 
         // Initialize data types
         initEDataType ( rgbEDataType, org.eclipse.swt.graphics.RGB.class, "RGB", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS );

@@ -21,6 +21,7 @@ import org.eclipse.swt.graphics.RGB;
 import org.openscada.ui.chart.model.ChartModel.Chart;
 import org.openscada.ui.chart.model.ChartModel.ChartFactory;
 import org.openscada.ui.chart.model.ChartModel.ChartPackage;
+import org.openscada.ui.chart.model.ChartModel.Controller;
 import org.openscada.ui.chart.model.ChartModel.DataSeries;
 import org.openscada.ui.chart.model.ChartModel.XAxis;
 import org.openscada.ui.chart.model.ChartModel.YAxis;
@@ -44,6 +45,7 @@ import org.openscada.ui.chart.model.ChartModel.YAxis;
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.ChartImpl#getInputs <em>Inputs</em>}</li>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.ChartImpl#isMutable <em>Mutable</em>}</li>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.ChartImpl#isScrollable <em>Scrollable</em>}</li>
+ *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.ChartImpl#getControllers <em>Controllers</em>}</li>
  * </ul>
  * </p>
  *
@@ -220,6 +222,16 @@ public class ChartImpl extends EObjectImpl implements Chart
      * @ordered
      */
     protected boolean scrollable = SCROLLABLE_EDEFAULT;
+
+    /**
+     * The cached value of the '{@link #getControllers() <em>Controllers</em>}' containment reference list.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getControllers()
+     * @generated
+     * @ordered
+     */
+    protected EList<Controller> controllers;
 
     /**
      * <!-- begin-user-doc -->
@@ -518,6 +530,20 @@ public class ChartImpl extends EObjectImpl implements Chart
      * <!-- end-user-doc -->
      * @generated
      */
+    public EList<Controller> getControllers ()
+    {
+        if ( controllers == null )
+        {
+            controllers = new EObjectContainmentEList<Controller> ( Controller.class, this, ChartPackage.CHART__CONTROLLERS );
+        }
+        return controllers;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     @Override
     public NotificationChain eInverseRemove ( InternalEObject otherEnd, int featureID, NotificationChain msgs )
     {
@@ -533,6 +559,8 @@ public class ChartImpl extends EObjectImpl implements Chart
                 return ( (InternalEList<?>)getRight () ).basicRemove ( otherEnd, msgs );
             case ChartPackage.CHART__INPUTS:
                 return ( (InternalEList<?>)getInputs () ).basicRemove ( otherEnd, msgs );
+            case ChartPackage.CHART__CONTROLLERS:
+                return ( (InternalEList<?>)getControllers () ).basicRemove ( otherEnd, msgs );
         }
         return super.eInverseRemove ( otherEnd, featureID, msgs );
     }
@@ -575,6 +603,8 @@ public class ChartImpl extends EObjectImpl implements Chart
                 return isMutable ();
             case ChartPackage.CHART__SCROLLABLE:
                 return isScrollable ();
+            case ChartPackage.CHART__CONTROLLERS:
+                return getControllers ();
         }
         return super.eGet ( featureID, resolve, coreType );
     }
@@ -631,6 +661,10 @@ public class ChartImpl extends EObjectImpl implements Chart
             case ChartPackage.CHART__SCROLLABLE:
                 setScrollable ( (Boolean)newValue );
                 return;
+            case ChartPackage.CHART__CONTROLLERS:
+                getControllers ().clear ();
+                getControllers ().addAll ( (Collection<? extends Controller>)newValue );
+                return;
         }
         super.eSet ( featureID, newValue );
     }
@@ -681,6 +715,9 @@ public class ChartImpl extends EObjectImpl implements Chart
             case ChartPackage.CHART__SCROLLABLE:
                 setScrollable ( SCROLLABLE_EDEFAULT );
                 return;
+            case ChartPackage.CHART__CONTROLLERS:
+                getControllers ().clear ();
+                return;
         }
         super.eUnset ( featureID );
     }
@@ -719,6 +756,8 @@ public class ChartImpl extends EObjectImpl implements Chart
                 return mutable != MUTABLE_EDEFAULT;
             case ChartPackage.CHART__SCROLLABLE:
                 return scrollable != SCROLLABLE_EDEFAULT;
+            case ChartPackage.CHART__CONTROLLERS:
+                return controllers != null && !controllers.isEmpty ();
         }
         return super.eIsSet ( featureID );
     }

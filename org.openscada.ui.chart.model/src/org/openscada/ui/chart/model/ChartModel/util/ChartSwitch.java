@@ -221,6 +221,24 @@ public class ChartSwitch<T> extends Switch<T>
                     result = defaultCase ( theEObject );
                 return result;
             }
+            case ChartPackage.CONTROLLER:
+            {
+                Controller controller = (Controller)theEObject;
+                T result = caseController ( controller );
+                if ( result == null )
+                    result = defaultCase ( theEObject );
+                return result;
+            }
+            case ChartPackage.CURRENT_TIME_CONTROLLER:
+            {
+                CurrentTimeController currentTimeController = (CurrentTimeController)theEObject;
+                T result = caseCurrentTimeController ( currentTimeController );
+                if ( result == null )
+                    result = caseController ( currentTimeController );
+                if ( result == null )
+                    result = defaultCase ( theEObject );
+                return result;
+            }
             default:
                 return defaultCase ( theEObject );
         }
@@ -446,6 +464,38 @@ public class ChartSwitch<T> extends Switch<T>
      * @generated
      */
     public T caseScriptSeries ( ScriptSeries object )
+    {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>Controller</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>Controller</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseController ( Controller object )
+    {
+        return null;
+    }
+
+    /**
+     * Returns the result of interpreting the object as an instance of '<em>Current Time Controller</em>'.
+     * <!-- begin-user-doc -->
+     * This implementation returns null;
+     * returning a non-null result will terminate the switch.
+     * <!-- end-user-doc -->
+     * @param object the target of the switch.
+     * @return the result of interpreting the object as an instance of '<em>Current Time Controller</em>'.
+     * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+     * @generated
+     */
+    public T caseCurrentTimeController ( CurrentTimeController object )
     {
         return null;
     }
