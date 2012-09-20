@@ -60,6 +60,17 @@ public abstract class LineInput extends AbstractInput implements LinePropertiesS
     protected abstract AbstractLineRender getLineRenderer ();
 
     @Override
+    public void setVisible ( final boolean visible )
+    {
+        final AbstractLineRender renderer = getLineRenderer ();
+        if ( renderer != null )
+        {
+            renderer.setVisible ( visible );
+        }
+        super.setVisible ( visible );
+    }
+
+    @Override
     public void setLineColor ( final RGB rgb )
     {
         if ( this.lineColor != null )

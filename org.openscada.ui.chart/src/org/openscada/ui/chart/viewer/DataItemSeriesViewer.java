@@ -101,6 +101,7 @@ public class DataItemSeriesViewer extends AbstractItemInputViewer implements Inp
         firePropertyChange ( PROP_INPUT, this.input, this.input = input );
     }
 
+    @Override
     public ItemObserver getInput ()
     {
         return this.input;

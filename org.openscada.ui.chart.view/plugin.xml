@@ -27,6 +27,14 @@
             name="Chart Configurator"
             restorable="true">
       </view>
+      <view
+            allowMultiple="true"
+            category="org.openscada.da.ui.category"
+            class="org.openscada.ui.chart.view.ChartInputSelectorView"
+            id="org.openscada.ui.chart.view.ChartInputSelector"
+            name="Chart Input Selector"
+            restorable="true">
+      </view>
    </extension>
    <extension
          point="org.eclipse.ui.popupMenus">

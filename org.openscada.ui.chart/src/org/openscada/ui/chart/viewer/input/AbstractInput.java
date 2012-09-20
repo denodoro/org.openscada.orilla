@@ -42,6 +42,20 @@ public abstract class AbstractInput extends AbstractPropertyChange implements Ch
 
     private ChartRenderer chartRenderer;
 
+    private boolean visible = true;
+
+    public void setVisible ( final boolean visible )
+    {
+        this.visible = visible;
+        firePropertyChange ( PROP_VISIBLE, this.visible, this.visible = visible );
+    }
+
+    @Override
+    public boolean isVisible ()
+    {
+        return this.visible;
+    }
+
     @Override
     public Date getSelectedTimestamp ()
     {

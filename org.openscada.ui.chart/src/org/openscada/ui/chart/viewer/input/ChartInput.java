@@ -31,6 +31,8 @@ public interface ChartInput
 
     public static final String PROP_SELECTED_QUALITY = "selectedQuality";
 
+    public static final String PROP_VISIBLE = "visible";
+
     public static final String PROP_STATE = "state";
 
     public static final String PROP_PREVIEW = "preview";
@@ -40,6 +42,8 @@ public interface ChartInput
     public void dispose ();
 
     public void tick ( final long now );
+
+    public boolean isVisible ();
 
     public String getLabel ();
 

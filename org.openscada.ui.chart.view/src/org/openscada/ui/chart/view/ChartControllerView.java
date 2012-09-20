@@ -165,7 +165,7 @@ public class ChartControllerView extends AbstractChartManagePart
 
         contribueTo ( getViewSite () );
 
-        super.attachSelectionService ();
+        attachSelectionService ();
     }
 
     @Override

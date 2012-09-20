@@ -126,6 +126,10 @@
         <element xmi:type="ecore:EAttribute" href="Chart.ecore#//DataSeries/label"/>
         <layoutConstraint xmi:type="notation:Location" xmi:id="_Dw7NodTQEeGG6ZRHVvsIug"/>
       </children>
+      <children xmi:type="notation:Node" xmi:id="_rGyQIAMnEeKHwZBNinkcRA" type="2001">
+        <element xmi:type="ecore:EAttribute" href="Chart.ecore#//DataSeries/visible"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_rGyQIQMnEeKHwZBNinkcRA"/>
+      </children>
       <styles xmi:type="notation:DrawerStyle" xmi:id="_NC8BANTPEeGG6ZRHVvsIug"/>
       <styles xmi:type="notation:SortingStyle" xmi:id="_NC8BAdTPEeGG6ZRHVvsIug"/>
       <styles xmi:type="notation:FilteringStyle" xmi:id="_NC8BAtTPEeGG6ZRHVvsIug"/>

@@ -87,6 +87,9 @@ public interface CurrentTimeController extends Controller
      * there really should be more of a description here...
      * </p>
      * <!-- end-user-doc -->
+     * <!-- begin-model-doc -->
+     * A SimpleDateFormat which will be formatted and re-parsed in order to align the timestamp.
+     * <!-- end-model-doc -->
      * @return the value of the '<em>Align Date Format</em>' attribute.
      * @see #setAlignDateFormat(String)
      * @see org.openscada.ui.chart.model.ChartModel.ChartPackage#getCurrentTimeController_AlignDateFormat()

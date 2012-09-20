@@ -77,6 +77,7 @@ public class ScriptSeriesViewer extends AbstractInputViewer implements InputView
         firePropertyChange ( PROP_INPUT, this.input, this.input = input );
     }
 
+    @Override
     public ScriptInput getInput ()
     {
         return this.input;

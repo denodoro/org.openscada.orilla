@@ -19,6 +19,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.DataSeries#getLabel <em>Label</em>}</li>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.DataSeries#getX <em>X</em>}</li>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.DataSeries#getY <em>Y</em>}</li>
+ *   <li>{@link org.openscada.ui.chart.model.ChartModel.DataSeries#isVisible <em>Visible</em>}</li>
  * </ul>
  * </p>
  *
@@ -106,4 +107,31 @@ public interface DataSeries extends EObject
      * @generated
      */
     void setY ( YAxis value );
+
+    /**
+     * Returns the value of the '<em><b>Visible</b></em>' attribute.
+     * The default value is <code>"true"</code>.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>Visible</em>' attribute isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>Visible</em>' attribute.
+     * @see #setVisible(boolean)
+     * @see org.openscada.ui.chart.model.ChartModel.ChartPackage#getDataSeries_Visible()
+     * @model default="true" required="true"
+     * @generated
+     */
+    boolean isVisible ();
+
+    /**
+     * Sets the value of the '{@link org.openscada.ui.chart.model.ChartModel.DataSeries#isVisible <em>Visible</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>Visible</em>' attribute.
+     * @see #isVisible()
+     * @generated
+     */
+    void setVisible ( boolean value );
 } // DataSeries

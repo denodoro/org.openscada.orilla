@@ -482,6 +482,16 @@ public class ChartPackageImpl extends EPackageImpl implements ChartPackage
     }
 
     /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getDataSeries_Visible ()
+    {
+        return (EAttribute)dataSeriesEClass.getEStructuralFeatures ().get ( 3 );
+    }
+
+    /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
@@ -832,6 +842,7 @@ public class ChartPackageImpl extends EPackageImpl implements ChartPackage
         createEAttribute ( dataSeriesEClass, DATA_SERIES__LABEL );
         createEReference ( dataSeriesEClass, DATA_SERIES__X );
         createEReference ( dataSeriesEClass, DATA_SERIES__Y );
+        createEAttribute ( dataSeriesEClass, DATA_SERIES__VISIBLE );
 
         dataItemSeriesEClass = createEClass ( DATA_ITEM_SERIES );
         createEReference ( dataItemSeriesEClass, DATA_ITEM_SERIES__LINE_PROPERTIES );
@@ -947,6 +958,7 @@ public class ChartPackageImpl extends EPackageImpl implements ChartPackage
         initEAttribute ( getDataSeries_Label (), ecorePackage.getEString (), "label", null, 0, 1, DataSeries.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
         initEReference ( getDataSeries_X (), this.getXAxis (), null, "x", null, 1, 1, DataSeries.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
         initEReference ( getDataSeries_Y (), this.getYAxis (), null, "y", null, 1, 1, DataSeries.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
+        initEAttribute ( getDataSeries_Visible (), ecorePackage.getEBoolean (), "visible", "true", 1, 1, DataSeries.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
 
         initEClass ( dataItemSeriesEClass, DataItemSeries.class, "DataItemSeries", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS );
         initEReference ( getDataItemSeries_LineProperties (), this.getLineProperties (), null, "lineProperties", null, 1, 1, DataItemSeries.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );

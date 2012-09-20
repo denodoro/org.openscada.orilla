@@ -20,7 +20,9 @@
 package org.openscada.ui.chart.viewer;
 
 import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.core.databinding.beans.BeansObservables;
 import org.eclipse.core.databinding.beans.PojoObservables;
+import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.emf.databinding.EMFObservables;
 import org.eclipse.jface.resource.LocalResourceManager;
 import org.eclipse.jface.resource.ResourceManager;
@@ -28,6 +30,7 @@ import org.openscada.ui.chart.model.ChartModel.ChartPackage;
 import org.openscada.ui.chart.model.ChartModel.DataSeries;
 import org.openscada.ui.chart.model.ChartModel.XAxis;
 import org.openscada.ui.chart.model.ChartModel.YAxis;
+import org.openscada.ui.chart.viewer.input.AbstractInput;
 
 public abstract class AbstractInputViewer extends AbstractObserver implements InputViewer
 {
@@ -52,6 +55,10 @@ public abstract class AbstractInputViewer extends AbstractObserver implements In
 
     protected final ResourceManager resourceManager;
 
+    private boolean visibile;
+
+    private final IObservableValue inputObservable;
+
     public AbstractInputViewer ( final DataBindingContext dbc, final DataSeries element, final ChartViewer viewer, final ResourceManager resourceManager, final AxisLocator<XAxis, XAxisViewer> xLocator, final AxisLocator<YAxis, YAxisViewer> yLocator )
     {
         this.viewer = viewer;
@@ -61,13 +68,29 @@ public abstract class AbstractInputViewer extends AbstractObserver implements In
         this.xLocator = xLocator;
         this.yLocator = yLocator;
 
+        this.inputObservable = BeansObservables.observeValue ( this, "input" );
+
         addBinding ( dbc.bindValue ( PojoObservables.observeValue ( this, "x" ), EMFObservables.observeValue ( element, ChartPackage.Literals.DATA_SERIES__X ) ) );
         addBinding ( dbc.bindValue ( PojoObservables.observeValue ( this, "y" ), EMFObservables.observeValue ( element, ChartPackage.Literals.DATA_SERIES__Y ) ) );
+
+        addBinding ( dbc.bindValue ( PojoObservables.observeDetailValue ( this.inputObservable, "visible", Boolean.class ), EMFObservables.observeValue ( element, ChartPackage.Literals.DATA_SERIES__VISIBLE ) ) );
     }
+
+    public abstract AbstractInput getInput ();
 
     protected abstract void checkCreateInput ();
 
     protected abstract void disposeInput ();
+
+    public void setVisibile ( final boolean visibile )
+    {
+        this.visibile = visibile;
+    }
+
+    public boolean isVisibile ()
+    {
+        return this.visibile;
+    }
 
     public void setX ( final org.openscada.ui.chart.model.ChartModel.XAxis x )
     {
@@ -122,6 +145,8 @@ public abstract class AbstractInputViewer extends AbstractObserver implements In
     @Override
     public void dispose ()
     {
+        this.inputObservable.dispose ();
+
         super.dispose ();
         disposeInput ();
 

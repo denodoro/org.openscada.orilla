@@ -409,13 +409,22 @@ public interface ChartPackage extends EPackage
     int DATA_SERIES__Y = 2;
 
     /**
+     * The feature id for the '<em><b>Visible</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int DATA_SERIES__VISIBLE = 3;
+
+    /**
      * The number of structural features of the '<em>Data Series</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int DATA_SERIES_FEATURE_COUNT = 3;
+    int DATA_SERIES_FEATURE_COUNT = 4;
 
     /**
      * The meta object id for the '{@link org.openscada.ui.chart.model.ChartModel.impl.ItemDataSeriesImpl <em>Item Data Series</em>}' class.
@@ -453,6 +462,15 @@ public interface ChartPackage extends EPackage
      * @ordered
      */
     int ITEM_DATA_SERIES__Y = DATA_SERIES__Y;
+
+    /**
+     * The feature id for the '<em><b>Visible</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int ITEM_DATA_SERIES__VISIBLE = DATA_SERIES__VISIBLE;
 
     /**
      * The feature id for the '<em><b>Item</b></em>' containment reference.
@@ -508,6 +526,15 @@ public interface ChartPackage extends EPackage
      * @ordered
      */
     int DATA_ITEM_SERIES__Y = ITEM_DATA_SERIES__Y;
+
+    /**
+     * The feature id for the '<em><b>Visible</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int DATA_ITEM_SERIES__VISIBLE = ITEM_DATA_SERIES__VISIBLE;
 
     /**
      * The feature id for the '<em><b>Item</b></em>' containment reference.
@@ -572,6 +599,15 @@ public interface ChartPackage extends EPackage
      * @ordered
      */
     int ARCHIVE_SERIES__Y = ITEM_DATA_SERIES__Y;
+
+    /**
+     * The feature id for the '<em><b>Visible</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int ARCHIVE_SERIES__VISIBLE = ITEM_DATA_SERIES__VISIBLE;
 
     /**
      * The feature id for the '<em><b>Item</b></em>' containment reference.
@@ -830,6 +866,15 @@ public interface ChartPackage extends EPackage
      * @ordered
      */
     int SCRIPT_SERIES__Y = DATA_SERIES__Y;
+
+    /**
+     * The feature id for the '<em><b>Visible</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int SCRIPT_SERIES__VISIBLE = DATA_SERIES__VISIBLE;
 
     /**
      * The feature id for the '<em><b>Line Properties</b></em>' containment reference.
@@ -1235,6 +1280,17 @@ public interface ChartPackage extends EPackage
      * @generated
      */
     EReference getDataSeries_Y ();
+
+    /**
+     * Returns the meta object for the attribute '{@link org.openscada.ui.chart.model.ChartModel.DataSeries#isVisible <em>Visible</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Visible</em>'.
+     * @see org.openscada.ui.chart.model.ChartModel.DataSeries#isVisible()
+     * @see #getDataSeries()
+     * @generated
+     */
+    EAttribute getDataSeries_Visible ();
 
     /**
      * Returns the meta object for class '{@link org.openscada.ui.chart.model.ChartModel.DataItemSeries <em>Data Item Series</em>}'.
@@ -1800,6 +1856,14 @@ public interface ChartPackage extends EPackage
          * @generated
          */
         EReference DATA_SERIES__Y = eINSTANCE.getDataSeries_Y ();
+
+        /**
+         * The meta object literal for the '<em><b>Visible</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute DATA_SERIES__VISIBLE = eINSTANCE.getDataSeries_Visible ();
 
         /**
          * The meta object literal for the '{@link org.openscada.ui.chart.model.ChartModel.impl.DataItemSeriesImpl <em>Data Item Series</em>}' class.

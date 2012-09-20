@@ -26,6 +26,7 @@ import org.openscada.ui.chart.model.ChartModel.YAxis;
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.DataSeriesImpl#getLabel <em>Label</em>}</li>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.DataSeriesImpl#getX <em>X</em>}</li>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.DataSeriesImpl#getY <em>Y</em>}</li>
+ *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.DataSeriesImpl#isVisible <em>Visible</em>}</li>
  * </ul>
  * </p>
  *
@@ -72,6 +73,26 @@ public abstract class DataSeriesImpl extends EObjectImpl implements DataSeries
      * @ordered
      */
     protected YAxis y;
+
+    /**
+     * The default value of the '{@link #isVisible() <em>Visible</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #isVisible()
+     * @generated
+     * @ordered
+     */
+    protected static final boolean VISIBLE_EDEFAULT = true;
+
+    /**
+     * The cached value of the '{@link #isVisible() <em>Visible</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #isVisible()
+     * @generated
+     * @ordered
+     */
+    protected boolean visible = VISIBLE_EDEFAULT;
 
     /**
      * <!-- begin-user-doc -->
@@ -208,6 +229,29 @@ public abstract class DataSeriesImpl extends EObjectImpl implements DataSeries
      * <!-- end-user-doc -->
      * @generated
      */
+    public boolean isVisible ()
+    {
+        return visible;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public void setVisible ( boolean newVisible )
+    {
+        boolean oldVisible = visible;
+        visible = newVisible;
+        if ( eNotificationRequired () )
+            eNotify ( new ENotificationImpl ( this, Notification.SET, ChartPackage.DATA_SERIES__VISIBLE, oldVisible, visible ) );
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     @Override
     public Object eGet ( int featureID, boolean resolve, boolean coreType )
     {
@@ -223,6 +267,8 @@ public abstract class DataSeriesImpl extends EObjectImpl implements DataSeries
                 if ( resolve )
                     return getY ();
                 return basicGetY ();
+            case ChartPackage.DATA_SERIES__VISIBLE:
+                return isVisible ();
         }
         return super.eGet ( featureID, resolve, coreType );
     }
@@ -245,6 +291,9 @@ public abstract class DataSeriesImpl extends EObjectImpl implements DataSeries
                 return;
             case ChartPackage.DATA_SERIES__Y:
                 setY ( (YAxis)newValue );
+                return;
+            case ChartPackage.DATA_SERIES__VISIBLE:
+                setVisible ( (Boolean)newValue );
                 return;
         }
         super.eSet ( featureID, newValue );
@@ -269,6 +318,9 @@ public abstract class DataSeriesImpl extends EObjectImpl implements DataSeries
             case ChartPackage.DATA_SERIES__Y:
                 setY ( (YAxis)null );
                 return;
+            case ChartPackage.DATA_SERIES__VISIBLE:
+                setVisible ( VISIBLE_EDEFAULT );
+                return;
         }
         super.eUnset ( featureID );
     }
@@ -289,6 +341,8 @@ public abstract class DataSeriesImpl extends EObjectImpl implements DataSeries
                 return x != null;
             case ChartPackage.DATA_SERIES__Y:
                 return y != null;
+            case ChartPackage.DATA_SERIES__VISIBLE:
+                return visible != VISIBLE_EDEFAULT;
         }
         return super.eIsSet ( featureID );
     }
@@ -307,6 +361,8 @@ public abstract class DataSeriesImpl extends EObjectImpl implements DataSeries
         StringBuffer result = new StringBuffer ( super.toString () );
         result.append ( " (label: " );
         result.append ( label );
+        result.append ( ", visible: " );
+        result.append ( visible );
         result.append ( ')' );
         return result.toString ();
     }

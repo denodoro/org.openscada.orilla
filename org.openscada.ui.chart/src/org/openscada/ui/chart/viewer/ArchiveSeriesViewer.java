@@ -168,6 +168,7 @@ public class ArchiveSeriesViewer extends AbstractItemInputViewer
         firePropertyChange ( PROP_INPUT, this.input, this.input = input );
     }
 
+    @Override
     public ArchiveInput getInput ()
     {
         return this.input;

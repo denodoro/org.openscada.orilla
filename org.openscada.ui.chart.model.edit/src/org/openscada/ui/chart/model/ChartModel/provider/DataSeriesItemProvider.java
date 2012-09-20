@@ -60,6 +60,7 @@ public class DataSeriesItemProvider extends ItemProviderAdapter implements IEdit
             addLabelPropertyDescriptor ( object );
             addXPropertyDescriptor ( object );
             addYPropertyDescriptor ( object );
+            addVisiblePropertyDescriptor ( object );
         }
         return itemPropertyDescriptors;
     }
@@ -98,6 +99,17 @@ public class DataSeriesItemProvider extends ItemProviderAdapter implements IEdit
     }
 
     /**
+     * This adds a property descriptor for the Visible feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    protected void addVisiblePropertyDescriptor ( Object object )
+    {
+        itemPropertyDescriptors.add ( createItemPropertyDescriptor ( ( (ComposeableAdapterFactory)adapterFactory ).getRootAdapterFactory (), getResourceLocator (), getString ( "_UI_DataSeries_visible_feature" ), getString ( "_UI_PropertyDescriptor_description", "_UI_DataSeries_visible_feature", "_UI_DataSeries_type" ), ChartPackage.Literals.DATA_SERIES__VISIBLE, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null ) );
+    }
+
+    /**
      * This returns the label text for the adapted class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -125,6 +137,7 @@ public class DataSeriesItemProvider extends ItemProviderAdapter implements IEdit
         switch ( notification.getFeatureID ( DataSeries.class ) )
         {
             case ChartPackage.DATA_SERIES__LABEL:
+            case ChartPackage.DATA_SERIES__VISIBLE:
                 fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), false, true ) );
                 return;
         }
