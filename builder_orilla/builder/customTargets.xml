@@ -154,7 +154,9 @@
   	<openscada.builder.copyPlugin id="org.openscada.hd.ui.connection.creator.net" />
   	
 	<!-- openSCADA Chart UI -->
-  		
+  	
+  	<openscada.builder.copyPlugin id="org.openscada.chart.ui"/>
+  	
   	<openscada.builder.copyFeature id="org.openscada.ui.chart"/>
   	<openscada.builder.copyFeature id="org.openscada.ui.chart.editor"/>
   	<openscada.builder.copyPlugin id="org.openscada.ui.chart"/>
