@@ -208,13 +208,22 @@ public interface ChartPackage extends EPackage
     int AXIS__FORMAT = 1;
 
     /**
+     * The feature id for the '<em><b>Text Padding</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int AXIS__TEXT_PADDING = 2;
+
+    /**
      * The number of structural features of the '<em>Axis</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int AXIS_FEATURE_COUNT = 2;
+    int AXIS_FEATURE_COUNT = 3;
 
     /**
      * The meta object id for the '{@link org.openscada.ui.chart.model.ChartModel.impl.XAxisImpl <em>XAxis</em>}' class.
@@ -243,6 +252,15 @@ public interface ChartPackage extends EPackage
      * @ordered
      */
     int XAXIS__FORMAT = AXIS__FORMAT;
+
+    /**
+     * The feature id for the '<em><b>Text Padding</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int XAXIS__TEXT_PADDING = AXIS__TEXT_PADDING;
 
     /**
      * The feature id for the '<em><b>Minimum</b></em>' attribute.
@@ -298,6 +316,15 @@ public interface ChartPackage extends EPackage
      * @ordered
      */
     int YAXIS__FORMAT = AXIS__FORMAT;
+
+    /**
+     * The feature id for the '<em><b>Text Padding</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int YAXIS__TEXT_PADDING = AXIS__TEXT_PADDING;
 
     /**
      * The feature id for the '<em><b>Minimum</b></em>' attribute.
@@ -1040,6 +1067,17 @@ public interface ChartPackage extends EPackage
     EAttribute getAxis_Format ();
 
     /**
+     * Returns the meta object for the attribute '{@link org.openscada.ui.chart.model.ChartModel.Axis#getTextPadding <em>Text Padding</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Text Padding</em>'.
+     * @see org.openscada.ui.chart.model.ChartModel.Axis#getTextPadding()
+     * @see #getAxis()
+     * @generated
+     */
+    EAttribute getAxis_TextPadding ();
+
+    /**
      * Returns the meta object for the attribute '{@link org.openscada.ui.chart.model.ChartModel.Axis#getLabel <em>Label</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1538,6 +1576,14 @@ public interface ChartPackage extends EPackage
          * @generated
          */
         EAttribute AXIS__FORMAT = eINSTANCE.getAxis_Format ();
+
+        /**
+         * The meta object literal for the '<em><b>Text Padding</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute AXIS__TEXT_PADDING = eINSTANCE.getAxis_TextPadding ();
 
         /**
          * The meta object literal for the '<em><b>Label</b></em>' attribute feature.

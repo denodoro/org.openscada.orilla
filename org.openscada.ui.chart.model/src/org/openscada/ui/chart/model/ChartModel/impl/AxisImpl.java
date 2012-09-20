@@ -22,6 +22,7 @@ import org.openscada.ui.chart.model.ChartModel.ChartPackage;
  * <ul>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.AxisImpl#getLabel <em>Label</em>}</li>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.AxisImpl#getFormat <em>Format</em>}</li>
+ *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.AxisImpl#getTextPadding <em>Text Padding</em>}</li>
  * </ul>
  * </p>
  *
@@ -68,6 +69,26 @@ public abstract class AxisImpl extends EObjectImpl implements Axis
      * @ordered
      */
     protected String format = FORMAT_EDEFAULT;
+
+    /**
+     * The default value of the '{@link #getTextPadding() <em>Text Padding</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getTextPadding()
+     * @generated
+     * @ordered
+     */
+    protected static final int TEXT_PADDING_EDEFAULT = 10;
+
+    /**
+     * The cached value of the '{@link #getTextPadding() <em>Text Padding</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getTextPadding()
+     * @generated
+     * @ordered
+     */
+    protected int textPadding = TEXT_PADDING_EDEFAULT;
 
     /**
      * <!-- begin-user-doc -->
@@ -118,6 +139,29 @@ public abstract class AxisImpl extends EObjectImpl implements Axis
      * <!-- end-user-doc -->
      * @generated
      */
+    public int getTextPadding ()
+    {
+        return textPadding;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public void setTextPadding ( int newTextPadding )
+    {
+        int oldTextPadding = textPadding;
+        textPadding = newTextPadding;
+        if ( eNotificationRequired () )
+            eNotify ( new ENotificationImpl ( this, Notification.SET, ChartPackage.AXIS__TEXT_PADDING, oldTextPadding, textPadding ) );
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     public String getLabel ()
     {
         return label;
@@ -150,6 +194,8 @@ public abstract class AxisImpl extends EObjectImpl implements Axis
                 return getLabel ();
             case ChartPackage.AXIS__FORMAT:
                 return getFormat ();
+            case ChartPackage.AXIS__TEXT_PADDING:
+                return getTextPadding ();
         }
         return super.eGet ( featureID, resolve, coreType );
     }
@@ -169,6 +215,9 @@ public abstract class AxisImpl extends EObjectImpl implements Axis
                 return;
             case ChartPackage.AXIS__FORMAT:
                 setFormat ( (String)newValue );
+                return;
+            case ChartPackage.AXIS__TEXT_PADDING:
+                setTextPadding ( (Integer)newValue );
                 return;
         }
         super.eSet ( featureID, newValue );
@@ -190,6 +239,9 @@ public abstract class AxisImpl extends EObjectImpl implements Axis
             case ChartPackage.AXIS__FORMAT:
                 setFormat ( FORMAT_EDEFAULT );
                 return;
+            case ChartPackage.AXIS__TEXT_PADDING:
+                setTextPadding ( TEXT_PADDING_EDEFAULT );
+                return;
         }
         super.eUnset ( featureID );
     }
@@ -208,6 +260,8 @@ public abstract class AxisImpl extends EObjectImpl implements Axis
                 return LABEL_EDEFAULT == null ? label != null : !LABEL_EDEFAULT.equals ( label );
             case ChartPackage.AXIS__FORMAT:
                 return FORMAT_EDEFAULT == null ? format != null : !FORMAT_EDEFAULT.equals ( format );
+            case ChartPackage.AXIS__TEXT_PADDING:
+                return textPadding != TEXT_PADDING_EDEFAULT;
         }
         return super.eIsSet ( featureID );
     }
@@ -228,6 +282,8 @@ public abstract class AxisImpl extends EObjectImpl implements Axis
         result.append ( label );
         result.append ( ", format: " );
         result.append ( format );
+        result.append ( ", textPadding: " );
+        result.append ( textPadding );
         result.append ( ')' );
         return result.toString ();
     }
