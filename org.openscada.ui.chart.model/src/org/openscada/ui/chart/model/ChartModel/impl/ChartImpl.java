@@ -43,6 +43,7 @@ import org.openscada.ui.chart.model.ChartModel.YAxis;
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.ChartImpl#getSelectedXAxis <em>Selected XAxis</em>}</li>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.ChartImpl#getInputs <em>Inputs</em>}</li>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.ChartImpl#isMutable <em>Mutable</em>}</li>
+ *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.ChartImpl#isScrollable <em>Scrollable</em>}</li>
  * </ul>
  * </p>
  *
@@ -199,6 +200,26 @@ public class ChartImpl extends EObjectImpl implements Chart
      * @ordered
      */
     protected boolean mutable = MUTABLE_EDEFAULT;
+
+    /**
+     * The default value of the '{@link #isScrollable() <em>Scrollable</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #isScrollable()
+     * @generated
+     * @ordered
+     */
+    protected static final boolean SCROLLABLE_EDEFAULT = true;
+
+    /**
+     * The cached value of the '{@link #isScrollable() <em>Scrollable</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #isScrollable()
+     * @generated
+     * @ordered
+     */
+    protected boolean scrollable = SCROLLABLE_EDEFAULT;
 
     /**
      * <!-- begin-user-doc -->
@@ -474,6 +495,29 @@ public class ChartImpl extends EObjectImpl implements Chart
      * <!-- end-user-doc -->
      * @generated
      */
+    public boolean isScrollable ()
+    {
+        return scrollable;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public void setScrollable ( boolean newScrollable )
+    {
+        boolean oldScrollable = scrollable;
+        scrollable = newScrollable;
+        if ( eNotificationRequired () )
+            eNotify ( new ENotificationImpl ( this, Notification.SET, ChartPackage.CHART__SCROLLABLE, oldScrollable, scrollable ) );
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     @Override
     public NotificationChain eInverseRemove ( InternalEObject otherEnd, int featureID, NotificationChain msgs )
     {
@@ -529,6 +573,8 @@ public class ChartImpl extends EObjectImpl implements Chart
                 return getInputs ();
             case ChartPackage.CHART__MUTABLE:
                 return isMutable ();
+            case ChartPackage.CHART__SCROLLABLE:
+                return isScrollable ();
         }
         return super.eGet ( featureID, resolve, coreType );
     }
@@ -582,6 +628,9 @@ public class ChartImpl extends EObjectImpl implements Chart
             case ChartPackage.CHART__MUTABLE:
                 setMutable ( (Boolean)newValue );
                 return;
+            case ChartPackage.CHART__SCROLLABLE:
+                setScrollable ( (Boolean)newValue );
+                return;
         }
         super.eSet ( featureID, newValue );
     }
@@ -629,6 +678,9 @@ public class ChartImpl extends EObjectImpl implements Chart
             case ChartPackage.CHART__MUTABLE:
                 setMutable ( MUTABLE_EDEFAULT );
                 return;
+            case ChartPackage.CHART__SCROLLABLE:
+                setScrollable ( SCROLLABLE_EDEFAULT );
+                return;
         }
         super.eUnset ( featureID );
     }
@@ -665,6 +717,8 @@ public class ChartImpl extends EObjectImpl implements Chart
                 return inputs != null && !inputs.isEmpty ();
             case ChartPackage.CHART__MUTABLE:
                 return mutable != MUTABLE_EDEFAULT;
+            case ChartPackage.CHART__SCROLLABLE:
+                return scrollable != SCROLLABLE_EDEFAULT;
         }
         return super.eIsSet ( featureID );
     }
@@ -689,6 +743,8 @@ public class ChartImpl extends EObjectImpl implements Chart
         result.append ( backgroundColor );
         result.append ( ", mutable: " );
         result.append ( mutable );
+        result.append ( ", scrollable: " );
+        result.append ( scrollable );
         result.append ( ')' );
         return result.toString ();
     }

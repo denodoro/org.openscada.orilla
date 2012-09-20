@@ -9,6 +9,7 @@ package org.openscada.ui.chart.model.ChartModel.util;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
+import org.openscada.ui.chart.model.ChartModel.*;
 import org.openscada.ui.chart.model.ChartModel.ArchiveChannel;
 import org.openscada.ui.chart.model.ChartModel.ArchiveSeries;
 import org.openscada.ui.chart.model.ChartModel.Axis;

@@ -128,6 +128,8 @@ public class ChartViewer
 
     private boolean mutable;
 
+    private boolean scrollable;
+
     private final MouseHover.Listener hoverListener = new Listener () {
 
         @Override
@@ -175,6 +177,7 @@ public class ChartViewer
         this.ctx.bindValue ( PojoObservables.observeValue ( this.manager, "title" ), EMFObservables.observeValue ( this.chart, ChartPackage.Literals.CHART__TITLE ) );
         this.ctx.bindValue ( PojoObservables.observeValue ( this, "showCurrentTimeRuler" ), EMFObservables.observeValue ( this.chart, ChartPackage.Literals.CHART__SHOW_CURREN_TIME_RULER ) );
         this.ctx.bindValue ( PojoObservables.observeValue ( this, "mutable" ), EMFObservables.observeValue ( this.chart, ChartPackage.Literals.CHART__MUTABLE ) );
+        this.ctx.bindValue ( PojoObservables.observeValue ( this, "scrollable" ), EMFObservables.observeValue ( this.chart, ChartPackage.Literals.CHART__SCROLLABLE ) );
         this.ctx.bindValue ( PojoObservables.observeValue ( this, "chartBackground" ), EMFObservables.observeValue ( this.chart, ChartPackage.Literals.CHART__BACKGROUND_COLOR ) );
 
         this.ctx.bindValue ( PojoObservables.observeValue ( this, "selectedXAxis" ), EMFObservables.observeValue ( this.chart, ChartPackage.Literals.CHART__SELECTED_XAXIS ) );
@@ -190,6 +193,17 @@ public class ChartViewer
                 handleDispose ();
             }
         } );
+    }
+
+    public void setScrollable ( final boolean scrollable )
+    {
+        this.scrollable = scrollable;
+        updateState ();
+    }
+
+    public boolean isScrollable ()
+    {
+        return this.scrollable;
     }
 
     public ChartRenderer getChartRenderer ()
@@ -297,7 +311,7 @@ public class ChartViewer
             this.mouseHover = null;
         }
 
-        if ( x != null && y != null )
+        if ( x != null && y != null && isScrollable () )
         {
             this.mouseTransformer = new MouseTransformer ( this.manager, x, y );
             this.mouseDragZoomer = new MouseDragZoomer ( this.manager, x, y );

@@ -29,6 +29,7 @@ import org.eclipse.swt.graphics.RGB;
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.Chart#getSelectedXAxis <em>Selected XAxis</em>}</li>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.Chart#getInputs <em>Inputs</em>}</li>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.Chart#isMutable <em>Mutable</em>}</li>
+ *   <li>{@link org.openscada.ui.chart.model.ChartModel.Chart#isScrollable <em>Scrollable</em>}</li>
  * </ul>
  * </p>
  *
@@ -277,5 +278,32 @@ public interface Chart extends EObject
      * @generated
      */
     void setMutable ( boolean value );
+
+    /**
+     * Returns the value of the '<em><b>Scrollable</b></em>' attribute.
+     * The default value is <code>"true"</code>.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>Scrollable</em>' attribute isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>Scrollable</em>' attribute.
+     * @see #setScrollable(boolean)
+     * @see org.openscada.ui.chart.model.ChartModel.ChartPackage#getChart_Scrollable()
+     * @model default="true" required="true"
+     * @generated
+     */
+    boolean isScrollable ();
+
+    /**
+     * Sets the value of the '{@link org.openscada.ui.chart.model.ChartModel.Chart#isScrollable <em>Scrollable</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>Scrollable</em>' attribute.
+     * @see #isScrollable()
+     * @generated
+     */
+    void setScrollable ( boolean value );
 
 } // Chart

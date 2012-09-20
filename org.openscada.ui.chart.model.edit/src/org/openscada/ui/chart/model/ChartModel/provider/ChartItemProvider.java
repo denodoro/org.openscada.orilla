@@ -65,6 +65,7 @@ public class ChartItemProvider extends ItemProviderAdapter implements IEditingDo
             addSelectedYAxisPropertyDescriptor ( object );
             addSelectedXAxisPropertyDescriptor ( object );
             addMutablePropertyDescriptor ( object );
+            addScrollablePropertyDescriptor ( object );
         }
         return itemPropertyDescriptors;
     }
@@ -133,6 +134,17 @@ public class ChartItemProvider extends ItemProviderAdapter implements IEditingDo
     protected void addMutablePropertyDescriptor ( Object object )
     {
         itemPropertyDescriptors.add ( createItemPropertyDescriptor ( ( (ComposeableAdapterFactory)adapterFactory ).getRootAdapterFactory (), getResourceLocator (), getString ( "_UI_Chart_mutable_feature" ), getString ( "_UI_PropertyDescriptor_description", "_UI_Chart_mutable_feature", "_UI_Chart_type" ), ChartPackage.Literals.CHART__MUTABLE, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null ) );
+    }
+
+    /**
+     * This adds a property descriptor for the Scrollable feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    protected void addScrollablePropertyDescriptor ( Object object )
+    {
+        itemPropertyDescriptors.add ( createItemPropertyDescriptor ( ( (ComposeableAdapterFactory)adapterFactory ).getRootAdapterFactory (), getResourceLocator (), getString ( "_UI_Chart_scrollable_feature" ), getString ( "_UI_PropertyDescriptor_description", "_UI_Chart_scrollable_feature", "_UI_Chart_type" ), ChartPackage.Literals.CHART__SCROLLABLE, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null ) );
     }
 
     /**
@@ -215,6 +227,7 @@ public class ChartItemProvider extends ItemProviderAdapter implements IEditingDo
             case ChartPackage.CHART__SHOW_CURREN_TIME_RULER:
             case ChartPackage.CHART__BACKGROUND_COLOR:
             case ChartPackage.CHART__MUTABLE:
+            case ChartPackage.CHART__SCROLLABLE:
                 fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), false, true ) );
                 return;
             case ChartPackage.CHART__BOTTOM:

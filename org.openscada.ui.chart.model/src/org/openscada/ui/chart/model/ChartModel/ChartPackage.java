@@ -171,13 +171,22 @@ public interface ChartPackage extends EPackage
     int CHART__MUTABLE = 10;
 
     /**
+     * The feature id for the '<em><b>Scrollable</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int CHART__SCROLLABLE = 11;
+
+    /**
      * The number of structural features of the '<em>Chart</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int CHART_FEATURE_COUNT = 11;
+    int CHART_FEATURE_COUNT = 12;
 
     /**
      * The meta object id for the '{@link org.openscada.ui.chart.model.ChartModel.impl.AxisImpl <em>Axis</em>}' class.
@@ -982,6 +991,17 @@ public interface ChartPackage extends EPackage
     EAttribute getChart_Mutable ();
 
     /**
+     * Returns the meta object for the attribute '{@link org.openscada.ui.chart.model.ChartModel.Chart#isScrollable <em>Scrollable</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Scrollable</em>'.
+     * @see org.openscada.ui.chart.model.ChartModel.Chart#isScrollable()
+     * @see #getChart()
+     * @generated
+     */
+    EAttribute getChart_Scrollable ();
+
+    /**
      * Returns the meta object for class '{@link org.openscada.ui.chart.model.ChartModel.XAxis <em>XAxis</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1506,6 +1526,14 @@ public interface ChartPackage extends EPackage
          * @generated
          */
         EAttribute CHART__MUTABLE = eINSTANCE.getChart_Mutable ();
+
+        /**
+         * The meta object literal for the '<em><b>Scrollable</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute CHART__SCROLLABLE = eINSTANCE.getChart_Scrollable ();
 
         /**
          * The meta object literal for the '{@link org.openscada.ui.chart.model.ChartModel.impl.XAxisImpl <em>XAxis</em>}' class.
