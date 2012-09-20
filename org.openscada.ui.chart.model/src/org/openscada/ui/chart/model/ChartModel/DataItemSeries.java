@@ -6,7 +6,6 @@
  */
 package org.openscada.ui.chart.model.ChartModel;
 
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Data Item Series</b></em>'.
