@@ -31,7 +31,7 @@
             allowMultiple="true"
             category="org.openscada.da.ui.category"
             class="org.openscada.ui.chart.view.ChartInputSelectorView"
-            id="org.openscada.ui.chart.view.ChartInputSelector"
+            id="org.openscada.ui.chart.selector.ChartInputSelector"
             name="Chart Input Selector"
             restorable="true">
       </view>

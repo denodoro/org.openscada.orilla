@@ -33,34 +33,35 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.emf.databinding;bundle-version="1.2.0",
  org.eclipse.emf.ecore.xmi;bundle-version="2.7.0",
  org.openscada.ui.chart.model.edit;bundle-version="1.0.0",
- org.eclipse.emf.edit.ui;bundle-version="2.7.0"
+ org.eclipse.emf.edit.ui;bundle-version="2.7.0",
+ org.eclipse.core.databinding.property;bundle-version="1.4.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: org.openscada.utils.beans;version="0.17.0",
  org.openscada.utils.codec;version="0.17.0",
  org.openscada.utils.script;version="1.0.0",
  org.slf4j;version="1.5.8"
-Export-Package: org.openscada.ui.chart.viewer;version="1.0.0";
+Export-Package: org.openscada.ui.chart.selector;version="1.0.0";uses:="org.openscada.ui.chart.model.ChartModel,org.eclipse.swt.widgets",
+ org.openscada.ui.chart.viewer;version="1.0.0";
   uses:="org.eclipse.core.databinding.observable,
    org.openscada.hd.ui.connection.data,
    org.eclipse.core.databinding,
    org.eclipse.jface.resource,
-   org.openscada.chart.swt.manager,
    org.eclipse.swt.events,
    org.openscada.ui.chart.model.ChartModel,
    org.openscada.da.ui.connection.data,
+   org.openscada.chart.swt,
    org.openscada.utils.beans,
    org.openscada.chart,
    org.openscada.ui.chart.viewer.input,
    org.eclipse.core.databinding.observable.value,
    org.eclipse.swt.graphics,
-   org.eclipse.swt.widgets,
    org.eclipse.core.databinding.observable.list",
  org.openscada.ui.chart.viewer.input;version="1.0.0";
   uses:="org.eclipse.jface.resource,
    org.openscada.hd.ui.connection.data,
-   org.eclipse.swt.events,
    org.openscada.da.ui.connection.data,
+   org.openscada.chart.swt,
    org.openscada.hd.ui.data,
    org.openscada.ui.chart.viewer,
    org.openscada.utils.beans,

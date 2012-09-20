@@ -23,6 +23,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.openscada.ui.chart.model.ChartModel.Chart;
+import org.openscada.ui.chart.selector.ChartInputSelector;
 import org.openscada.ui.chart.viewer.ChartViewer;
 
 public class ChartInputSelectorView extends AbstractChartManagePart
