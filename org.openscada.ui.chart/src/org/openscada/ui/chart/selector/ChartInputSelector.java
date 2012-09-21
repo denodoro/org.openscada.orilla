@@ -35,6 +35,9 @@ import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.databinding.viewers.ViewerSupport;
 import org.eclipse.jface.databinding.viewers.ViewersObservables;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
+import org.eclipse.jface.viewers.ColumnWeightData;
+import org.eclipse.jface.viewers.TableLayout;
+import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -53,6 +56,11 @@ public class ChartInputSelector
 
     public ChartInputSelector ( final Composite parent, final Chart chart )
     {
+        this ( parent, chart, false );
+    }
+
+    public ChartInputSelector ( final Composite parent, final Chart chart, final boolean showHeader )
+    {
         this.viewer = CheckboxTableViewer.newCheckList ( parent, SWT.FULL_SELECTION );
         this.viewer.getControl ().addDisposeListener ( new DisposeListener () {
 
@@ -64,6 +72,19 @@ public class ChartInputSelector
         } );
 
         this.inputs = EMFObservables.observeList ( chart, ChartPackage.Literals.CHART__INPUTS );
+
+        if ( showHeader )
+        {
+            final TableLayout layout = new TableLayout ();
+
+            final TableViewerColumn col = new TableViewerColumn ( this.viewer, SWT.NONE );
+            col.getColumn ().setText ( "Channels" );
+            this.viewer.getTable ().setHeaderVisible ( true );
+
+            layout.addColumnData ( new ColumnWeightData ( 100 ) );
+
+            this.viewer.getTable ().setLayout ( layout );
+        }
 
         ViewerSupport.bind ( this.viewer, this.inputs, EMFProperties.value ( ChartPackage.Literals.DATA_SERIES__LABEL ) );
 
