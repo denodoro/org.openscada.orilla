@@ -54,6 +54,8 @@ public class DataItemSeriesViewer extends AbstractItemInputViewer implements Inp
         this.linePropertiesObservable = EMFObservables.observeValue ( element, ChartPackage.Literals.DATA_ITEM_SERIES__LINE_PROPERTIES );
 
         addBindings ( LinePropertiesBinder.bind ( SWTObservables.getRealm ( viewer.getChartRenderer ().getDisplay () ), dbc, this.inputObservable, this.linePropertiesObservable ) );
+
+        setInputObserable ( this.inputObservable );
     }
 
     @Override

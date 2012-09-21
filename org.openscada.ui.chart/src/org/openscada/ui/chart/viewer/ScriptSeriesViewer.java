@@ -52,6 +52,8 @@ public class ScriptSeriesViewer extends AbstractInputViewer implements InputView
 
         addBinding ( dbc.bindValue ( PojoObservables.observeDetailValue ( this.inputObservable, "script", null ), EMFObservables.observeValue ( element, ChartPackage.Literals.SCRIPT_SERIES__SCRIPT ) ) );
         addBindings ( LinePropertiesBinder.bind ( SWTObservables.getRealm ( viewer.getChartRenderer ().getDisplay () ), dbc, this.inputObservable, this.linePropertiesObservable ) );
+
+        setInputObserable ( this.inputObservable );
     }
 
     @Override

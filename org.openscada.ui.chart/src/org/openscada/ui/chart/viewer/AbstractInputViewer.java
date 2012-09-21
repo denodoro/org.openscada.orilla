@@ -75,7 +75,7 @@ public abstract class AbstractInputViewer extends AbstractObserver implements In
 
     }
 
-    protected void setInputObseravle ( final IObservableValue inputObservable )
+    protected void setInputObserable ( final IObservableValue inputObservable )
     {
         addBinding ( this.dbc.bindValue ( PojoObservables.observeDetailValue ( inputObservable, "visible", Boolean.class ), EMFObservables.observeValue ( this.element, ChartPackage.Literals.DATA_SERIES__VISIBLE ) ) );
     }
