@@ -46,8 +46,6 @@ import org.openscada.ui.chart.viewer.input.QuerySeriesData;
 
 public class ArchiveSeriesViewer extends AbstractItemInputViewer
 {
-    private ArchiveInput input;
-
     public static final String PROP_INPUT = "input";
 
     public static final String PROP_QUERY_SERIES_DATA = "querySeriesData";
@@ -63,6 +61,8 @@ public class ArchiveSeriesViewer extends AbstractItemInputViewer
     private final IObservableValue inputObservable;
 
     private final IObservableValue linePropertiesObservable;
+
+    private ArchiveInput input;
 
     public ArchiveSeriesViewer ( final DataBindingContext dbc, final ArchiveSeries element, final ChartViewer viewer, final ResourceManager resourceManager, final AxisLocator<XAxis, XAxisViewer> xLocator, final AxisLocator<YAxis, YAxisViewer> yLocator )
     {
@@ -142,9 +142,20 @@ public class ArchiveSeriesViewer extends AbstractItemInputViewer
             }
 
             setQuerySeriesData ( new QuerySeriesData ( item, this.viewer.getRealm (), this.xAxis.getAxis (), this.yAxis.getAxis () ) );
-            this.input = new ArchiveInput ( item, this.viewer, this.querySeriesData, this.resourceManager );
-            this.viewer.addInput ( this.input );
+            final ArchiveInput input = new ArchiveInput ( item, this.viewer, this.querySeriesData, this.resourceManager );
+            this.viewer.addInput ( input );
+            setInput ( input );
         }
+    }
+
+    private void setInput ( final ArchiveInput input )
+    {
+        firePropertyChange ( PROP_INPUT, this.input, this.input = input );
+    }
+
+    public ArchiveInput getInput ()
+    {
+        return this.input;
     }
 
     private org.openscada.hd.ui.connection.data.Item makeItem ( final Item item )
@@ -163,17 +174,6 @@ public class ArchiveSeriesViewer extends AbstractItemInputViewer
         }
     }
 
-    protected void setInput ( final ArchiveInput input )
-    {
-        firePropertyChange ( PROP_INPUT, this.input, this.input = input );
-    }
-
-    @Override
-    public ArchiveInput getInput ()
-    {
-        return this.input;
-    }
-
     @Override
     protected void disposeInput ()
     {
@@ -181,7 +181,7 @@ public class ArchiveSeriesViewer extends AbstractItemInputViewer
         {
             this.viewer.removeInput ( this.input );
             this.input.dispose ();
-            this.input = null;
+            setInput ( null );
         }
         if ( this.querySeriesData != null )
         {

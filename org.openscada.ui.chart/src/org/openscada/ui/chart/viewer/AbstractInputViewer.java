@@ -20,7 +20,6 @@
 package org.openscada.ui.chart.viewer;
 
 import org.eclipse.core.databinding.DataBindingContext;
-import org.eclipse.core.databinding.beans.BeansObservables;
 import org.eclipse.core.databinding.beans.PojoObservables;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.emf.databinding.EMFObservables;
@@ -30,7 +29,6 @@ import org.openscada.ui.chart.model.ChartModel.ChartPackage;
 import org.openscada.ui.chart.model.ChartModel.DataSeries;
 import org.openscada.ui.chart.model.ChartModel.XAxis;
 import org.openscada.ui.chart.model.ChartModel.YAxis;
-import org.openscada.ui.chart.viewer.input.AbstractInput;
 
 public abstract class AbstractInputViewer extends AbstractObserver implements InputViewer
 {
@@ -57,26 +55,30 @@ public abstract class AbstractInputViewer extends AbstractObserver implements In
 
     private boolean visibile;
 
-    private final IObservableValue inputObservable;
+    private final DataSeries element;
+
+    private final DataBindingContext dbc;
 
     public AbstractInputViewer ( final DataBindingContext dbc, final DataSeries element, final ChartViewer viewer, final ResourceManager resourceManager, final AxisLocator<XAxis, XAxisViewer> xLocator, final AxisLocator<YAxis, YAxisViewer> yLocator )
     {
+        this.element = element;
         this.viewer = viewer;
+        this.dbc = dbc;
 
         this.resourceManager = new LocalResourceManager ( resourceManager );
 
         this.xLocator = xLocator;
         this.yLocator = yLocator;
 
-        this.inputObservable = BeansObservables.observeValue ( this, "input" );
-
         addBinding ( dbc.bindValue ( PojoObservables.observeValue ( this, "x" ), EMFObservables.observeValue ( element, ChartPackage.Literals.DATA_SERIES__X ) ) );
         addBinding ( dbc.bindValue ( PojoObservables.observeValue ( this, "y" ), EMFObservables.observeValue ( element, ChartPackage.Literals.DATA_SERIES__Y ) ) );
 
-        addBinding ( dbc.bindValue ( PojoObservables.observeDetailValue ( this.inputObservable, "visible", Boolean.class ), EMFObservables.observeValue ( element, ChartPackage.Literals.DATA_SERIES__VISIBLE ) ) );
     }
 
-    public abstract AbstractInput getInput ();
+    protected void setInputObseravle ( final IObservableValue inputObservable )
+    {
+        addBinding ( this.dbc.bindValue ( PojoObservables.observeDetailValue ( inputObservable, "visible", Boolean.class ), EMFObservables.observeValue ( this.element, ChartPackage.Literals.DATA_SERIES__VISIBLE ) ) );
+    }
 
     protected abstract void checkCreateInput ();
 
@@ -145,8 +147,6 @@ public abstract class AbstractInputViewer extends AbstractObserver implements In
     @Override
     public void dispose ()
     {
-        this.inputObservable.dispose ();
-
         super.dispose ();
         disposeInput ();
 

@@ -40,17 +40,17 @@ public class DataItemSeriesViewer extends AbstractItemInputViewer implements Inp
 {
     public static final String PROP_INPUT = "input";
 
-    private ItemObserver input;
-
     private final IObservableValue inputObservable;
 
     private final IObservableValue linePropertiesObservable;
+
+    private ItemObserver input;
 
     public DataItemSeriesViewer ( final DataBindingContext dbc, final DataItemSeries element, final ChartViewer viewer, final ResourceManager resourceManager, final AxisLocator<XAxis, XAxisViewer> xLocator, final AxisLocator<YAxis, YAxisViewer> yLocator )
     {
         super ( dbc, element, viewer, resourceManager, xLocator, yLocator );
 
-        this.inputObservable = BeansObservables.observeValue ( this, "input" );
+        this.inputObservable = BeansObservables.observeValue ( this, PROP_INPUT );
         this.linePropertiesObservable = EMFObservables.observeValue ( element, ChartPackage.Literals.DATA_ITEM_SERIES__LINE_PROPERTIES );
 
         addBindings ( LinePropertiesBinder.bind ( SWTObservables.getRealm ( viewer.getChartRenderer ().getDisplay () ), dbc, this.inputObservable, this.linePropertiesObservable ) );
@@ -80,6 +80,16 @@ public class DataItemSeriesViewer extends AbstractItemInputViewer implements Inp
         }
     }
 
+    private void setInput ( final ItemObserver input )
+    {
+        firePropertyChange ( PROP_INPUT, this.input, this.input = input );
+    }
+
+    public ItemObserver getInput ()
+    {
+        return this.input;
+    }
+
     private org.openscada.da.ui.connection.data.Item makeItem ( final Item item )
     {
         if ( item instanceof IdItem )
@@ -96,15 +106,10 @@ public class DataItemSeriesViewer extends AbstractItemInputViewer implements Inp
         }
     }
 
-    protected void setInput ( final ItemObserver input )
-    {
-        firePropertyChange ( PROP_INPUT, this.input, this.input = input );
-    }
-
     @Override
-    public ItemObserver getInput ()
+    public boolean provides ( final ChartInput input )
     {
-        return this.input;
+        return this.input == input;
     }
 
     @Override
@@ -118,9 +123,4 @@ public class DataItemSeriesViewer extends AbstractItemInputViewer implements Inp
         }
     }
 
-    @Override
-    public boolean provides ( final ChartInput input )
-    {
-        return this.input == input;
-    }
 }

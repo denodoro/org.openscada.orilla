@@ -16,5 +16,13 @@
             class="org.openscada.ui.chart.model.ChartModel.ChartPackage"
             genModel="model/Chart.genmodel"/>
    </extension>
+   
+      <extension
+         point="org.eclipse.core.contenttype.contentTypes">
+      <file-association
+            content-type="org.eclipse.emf.ecore.xmi"
+            file-extensions="chart">
+      </file-association>
+   </extension>
 
 </plugin>

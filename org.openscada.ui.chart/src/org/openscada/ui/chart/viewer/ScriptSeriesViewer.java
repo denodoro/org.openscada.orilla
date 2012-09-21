@@ -47,7 +47,7 @@ public class ScriptSeriesViewer extends AbstractInputViewer implements InputView
     {
         super ( dbc, element, viewer, resourceManager, xLocator, yLocator );
 
-        this.inputObservable = BeansObservables.observeValue ( this, "input" );
+        this.inputObservable = BeansObservables.observeValue ( this, PROP_INPUT );
         this.linePropertiesObservable = EMFObservables.observeValue ( element, ChartPackage.Literals.SCRIPT_SERIES__LINE_PROPERTIES );
 
         addBinding ( dbc.bindValue ( PojoObservables.observeDetailValue ( this.inputObservable, "script", null ), EMFObservables.observeValue ( element, ChartPackage.Literals.SCRIPT_SERIES__SCRIPT ) ) );
@@ -77,7 +77,6 @@ public class ScriptSeriesViewer extends AbstractInputViewer implements InputView
         firePropertyChange ( PROP_INPUT, this.input, this.input = input );
     }
 
-    @Override
     public ScriptInput getInput ()
     {
         return this.input;
