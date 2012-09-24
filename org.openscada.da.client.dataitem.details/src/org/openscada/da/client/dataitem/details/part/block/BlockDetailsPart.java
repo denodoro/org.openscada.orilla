@@ -42,6 +42,8 @@ import org.openscada.da.client.dataitem.details.part.AbstractBaseDetailsPart;
 public class BlockDetailsPart extends AbstractBaseDetailsPart
 {
 
+    private static final String ATTR_ACTIVE = "org.openscada.da.master.common.block.active";
+
     private Label stateWidget;
 
     private Text userText;
@@ -116,7 +118,7 @@ public class BlockDetailsPart extends AbstractBaseDetailsPart
     {
         final Map<String, Variant> attributes = new HashMap<String, Variant> ();
 
-        attributes.put ( "org.openscada.da.master.common.block.active", Variant.FALSE ); //$NON-NLS-1$
+        attributes.put ( ATTR_ACTIVE, Variant.FALSE ); //$NON-NLS-1$
 
         this.item.writeAtrtibutes ( attributes );
     }
@@ -127,7 +129,7 @@ public class BlockDetailsPart extends AbstractBaseDetailsPart
 
         final Map<String, Variant> attributes = new HashMap<String, Variant> ();
 
-        attributes.put ( "org.openscada.da.master.common.block.active", Variant.TRUE ); //$NON-NLS-1$
+        attributes.put ( ATTR_ACTIVE, Variant.TRUE ); //$NON-NLS-1$
         if ( !text.isEmpty () )
         {
             attributes.put ( "org.openscada.da.master.common.block.note", Variant.valueOf ( text ) ); //$NON-NLS-1$
@@ -138,7 +140,12 @@ public class BlockDetailsPart extends AbstractBaseDetailsPart
 
     protected boolean isAvailable ()
     {
-        return isForceActive () || hasAttribute ( "org.openscada.da.master.common.block.active" );
+        return isForceActive () || hasAttribute ( ATTR_ACTIVE );
+    }
+
+    protected boolean isActive ()
+    {
+        return getBooleanAttribute ( ATTR_ACTIVE );
     }
 
     @Override
@@ -181,8 +188,8 @@ public class BlockDetailsPart extends AbstractBaseDetailsPart
         }
 
         // states
-        this.reasonText.setEnabled ( isAvailable () && value != null && !value.isBlocked () && value.isConnected () );
-        this.blockButton.setEnabled ( isAvailable () && value != null && !value.isBlocked () && value.isConnected () );
-        this.unblockButton.setEnabled ( isAvailable () && value != null && value.isBlocked () && value.isConnected () );
+        this.reasonText.setEnabled ( isAvailable () && value != null && !isActive () && value.isConnected () );
+        this.blockButton.setEnabled ( isAvailable () && value != null && !isActive () && value.isConnected () );
+        this.unblockButton.setEnabled ( isAvailable () && value != null && isActive () && value.isConnected () );
     }
 }
