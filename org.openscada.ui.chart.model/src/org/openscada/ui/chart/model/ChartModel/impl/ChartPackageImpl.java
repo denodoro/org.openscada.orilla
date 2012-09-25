@@ -222,11 +222,11 @@ public class ChartPackageImpl extends EPackageImpl implements ChartPackage
     }
 
     /**
-     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-    @Override
-    public EAttribute getChart_ShowCurrenTimeRuler ()
+    public EAttribute getChart_ShowCurrentTimeRuler ()
     {
         return (EAttribute)chartEClass.getEStructuralFeatures ().get ( 1 );
     }
@@ -812,7 +812,7 @@ public class ChartPackageImpl extends EPackageImpl implements ChartPackage
         // Create classes and their features
         chartEClass = createEClass ( CHART );
         createEAttribute ( chartEClass, CHART__TITLE );
-        createEAttribute ( chartEClass, CHART__SHOW_CURREN_TIME_RULER );
+        createEAttribute ( chartEClass, CHART__SHOW_CURRENT_TIME_RULER );
         createEAttribute ( chartEClass, CHART__BACKGROUND_COLOR );
         createEReference ( chartEClass, CHART__BOTTOM );
         createEReference ( chartEClass, CHART__TOP );
@@ -928,7 +928,7 @@ public class ChartPackageImpl extends EPackageImpl implements ChartPackage
         // Initialize classes and features; add operations and parameters
         initEClass ( chartEClass, Chart.class, "Chart", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS );
         initEAttribute ( getChart_Title (), ecorePackage.getEString (), "title", null, 0, 1, Chart.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
-        initEAttribute ( getChart_ShowCurrenTimeRuler (), ecorePackage.getEBoolean (), "showCurrenTimeRuler", "true", 1, 1, Chart.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
+        initEAttribute ( getChart_ShowCurrentTimeRuler (), ecorePackage.getEBoolean (), "showCurrentTimeRuler", "true", 1, 1, Chart.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
         initEAttribute ( getChart_BackgroundColor (), this.getRGB (), "backgroundColor", "#FFFFFF", 1, 1, Chart.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
         initEReference ( getChart_Bottom (), this.getXAxis (), null, "bottom", null, 0, -1, Chart.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
         initEReference ( getChart_Top (), this.getXAxis (), null, "top", null, 0, -1, Chart.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );

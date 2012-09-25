@@ -34,7 +34,7 @@ import org.openscada.ui.chart.model.ChartModel.YAxis;
  * The following features are implemented:
  * <ul>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.ChartImpl#getTitle <em>Title</em>}</li>
- *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.ChartImpl#isShowCurrenTimeRuler <em>Show Curren Time Ruler</em>}</li>
+ *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.ChartImpl#isShowCurrentTimeRuler <em>Show Current Time Ruler</em>}</li>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.ChartImpl#getBackgroundColor <em>Background Color</em>}</li>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.ChartImpl#getBottom <em>Bottom</em>}</li>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.ChartImpl#getTop <em>Top</em>}</li>
@@ -74,24 +74,24 @@ public class ChartImpl extends EObjectImpl implements Chart
     protected String title = TITLE_EDEFAULT;
 
     /**
-     * The default value of the '{@link #isShowCurrenTimeRuler() <em>Show Curren Time Ruler</em>}' attribute.
+     * The default value of the '{@link #isShowCurrentTimeRuler() <em>Show Current Time Ruler</em>}' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #isShowCurrenTimeRuler()
+     * @see #isShowCurrentTimeRuler()
      * @generated
      * @ordered
      */
-    protected static final boolean SHOW_CURREN_TIME_RULER_EDEFAULT = true;
+    protected static final boolean SHOW_CURRENT_TIME_RULER_EDEFAULT = true;
 
     /**
-     * The cached value of the '{@link #isShowCurrenTimeRuler() <em>Show Curren Time Ruler</em>}' attribute.
+     * The cached value of the '{@link #isShowCurrentTimeRuler() <em>Show Current Time Ruler</em>}' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #isShowCurrenTimeRuler()
+     * @see #isShowCurrentTimeRuler()
      * @generated
      * @ordered
      */
-    protected boolean showCurrenTimeRuler = SHOW_CURREN_TIME_RULER_EDEFAULT;
+    protected boolean showCurrentTimeRuler = SHOW_CURRENT_TIME_RULER_EDEFAULT;
 
     /**
      * The default value of the '{@link #getBackgroundColor() <em>Background Color</em>}' attribute.
@@ -282,9 +282,9 @@ public class ChartImpl extends EObjectImpl implements Chart
      * <!-- end-user-doc -->
      * @generated
      */
-    public boolean isShowCurrenTimeRuler ()
+    public boolean isShowCurrentTimeRuler ()
     {
-        return showCurrenTimeRuler;
+        return showCurrentTimeRuler;
     }
 
     /**
@@ -292,12 +292,12 @@ public class ChartImpl extends EObjectImpl implements Chart
      * <!-- end-user-doc -->
      * @generated
      */
-    public void setShowCurrenTimeRuler ( boolean newShowCurrenTimeRuler )
+    public void setShowCurrentTimeRuler ( boolean newShowCurrentTimeRuler )
     {
-        boolean oldShowCurrenTimeRuler = showCurrenTimeRuler;
-        showCurrenTimeRuler = newShowCurrenTimeRuler;
+        boolean oldShowCurrentTimeRuler = showCurrentTimeRuler;
+        showCurrentTimeRuler = newShowCurrentTimeRuler;
         if ( eNotificationRequired () )
-            eNotify ( new ENotificationImpl ( this, Notification.SET, ChartPackage.CHART__SHOW_CURREN_TIME_RULER, oldShowCurrenTimeRuler, showCurrenTimeRuler ) );
+            eNotify ( new ENotificationImpl ( this, Notification.SET, ChartPackage.CHART__SHOW_CURRENT_TIME_RULER, oldShowCurrentTimeRuler, showCurrentTimeRuler ) );
     }
 
     /**
@@ -577,8 +577,8 @@ public class ChartImpl extends EObjectImpl implements Chart
         {
             case ChartPackage.CHART__TITLE:
                 return getTitle ();
-            case ChartPackage.CHART__SHOW_CURREN_TIME_RULER:
-                return isShowCurrenTimeRuler ();
+            case ChartPackage.CHART__SHOW_CURRENT_TIME_RULER:
+                return isShowCurrentTimeRuler ();
             case ChartPackage.CHART__BACKGROUND_COLOR:
                 return getBackgroundColor ();
             case ChartPackage.CHART__BOTTOM:
@@ -623,8 +623,8 @@ public class ChartImpl extends EObjectImpl implements Chart
             case ChartPackage.CHART__TITLE:
                 setTitle ( (String)newValue );
                 return;
-            case ChartPackage.CHART__SHOW_CURREN_TIME_RULER:
-                setShowCurrenTimeRuler ( (Boolean)newValue );
+            case ChartPackage.CHART__SHOW_CURRENT_TIME_RULER:
+                setShowCurrentTimeRuler ( (Boolean)newValue );
                 return;
             case ChartPackage.CHART__BACKGROUND_COLOR:
                 setBackgroundColor ( (RGB)newValue );
@@ -682,8 +682,8 @@ public class ChartImpl extends EObjectImpl implements Chart
             case ChartPackage.CHART__TITLE:
                 setTitle ( TITLE_EDEFAULT );
                 return;
-            case ChartPackage.CHART__SHOW_CURREN_TIME_RULER:
-                setShowCurrenTimeRuler ( SHOW_CURREN_TIME_RULER_EDEFAULT );
+            case ChartPackage.CHART__SHOW_CURRENT_TIME_RULER:
+                setShowCurrentTimeRuler ( SHOW_CURRENT_TIME_RULER_EDEFAULT );
                 return;
             case ChartPackage.CHART__BACKGROUND_COLOR:
                 setBackgroundColor ( BACKGROUND_COLOR_EDEFAULT );
@@ -734,8 +734,8 @@ public class ChartImpl extends EObjectImpl implements Chart
         {
             case ChartPackage.CHART__TITLE:
                 return TITLE_EDEFAULT == null ? title != null : !TITLE_EDEFAULT.equals ( title );
-            case ChartPackage.CHART__SHOW_CURREN_TIME_RULER:
-                return showCurrenTimeRuler != SHOW_CURREN_TIME_RULER_EDEFAULT;
+            case ChartPackage.CHART__SHOW_CURRENT_TIME_RULER:
+                return showCurrentTimeRuler != SHOW_CURRENT_TIME_RULER_EDEFAULT;
             case ChartPackage.CHART__BACKGROUND_COLOR:
                 return BACKGROUND_COLOR_EDEFAULT == null ? backgroundColor != null : !BACKGROUND_COLOR_EDEFAULT.equals ( backgroundColor );
             case ChartPackage.CHART__BOTTOM:
@@ -776,8 +776,8 @@ public class ChartImpl extends EObjectImpl implements Chart
         StringBuffer result = new StringBuffer ( super.toString () );
         result.append ( " (title: " );
         result.append ( title );
-        result.append ( ", showCurrenTimeRuler: " );
-        result.append ( showCurrenTimeRuler );
+        result.append ( ", showCurrentTimeRuler: " );
+        result.append ( showCurrentTimeRuler );
         result.append ( ", backgroundColor: " );
         result.append ( backgroundColor );
         result.append ( ", mutable: " );

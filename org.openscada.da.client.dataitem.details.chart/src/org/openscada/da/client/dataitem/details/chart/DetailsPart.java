@@ -86,7 +86,7 @@ public class DetailsPart implements org.openscada.da.client.dataitem.details.par
                 }
                 catch ( final Exception ex )
                 {
-                    logger.error ( "Failed to start chart", ex );
+                    logger.error ( "Failed to start chart", ex ); //$NON-NLS-1$
                     StatusManager.getManager ().handle ( StatusHelper.convertStatus ( Activator.PLUGIN_ID, ex ), StatusManager.BLOCK );
                 }
             }
@@ -138,7 +138,7 @@ public class DetailsPart implements org.openscada.da.client.dataitem.details.par
 
         final Chart chartModel = ChartFactory.eINSTANCE.createChart ();
         chartModel.setMutable ( false );
-        chartModel.setShowCurrenTimeRuler ( true );
+        chartModel.setShowCurrentTimeRuler ( true );
         chartModel.setTitle ( "Current value" );
 
         final XAxis x = ChartFactory.eINSTANCE.createXAxis ();

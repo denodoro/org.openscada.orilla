@@ -5,7 +5,7 @@
     nsURI="http://openscada.org/UI/Chart" nsPrefix="chart">
   <eClassifiers xsi:type="ecore:EClass" name="Chart">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="showCurrenTimeRuler" lowerBound="1"
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="showCurrentTimeRuler" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="backgroundColor" lowerBound="1"
         eType="#//RGB" defaultValueLiteral="#FFFFFF">

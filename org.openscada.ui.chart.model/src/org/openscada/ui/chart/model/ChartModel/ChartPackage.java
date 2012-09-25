@@ -81,13 +81,13 @@ public interface ChartPackage extends EPackage
     int CHART__TITLE = 0;
 
     /**
-     * The feature id for the '<em><b>Show Curren Time Ruler</b></em>' attribute.
+     * The feature id for the '<em><b>Show Current Time Ruler</b></em>' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int CHART__SHOW_CURREN_TIME_RULER = 1;
+    int CHART__SHOW_CURRENT_TIME_RULER = 1;
 
     /**
      * The feature id for the '<em><b>Background Color</b></em>' attribute.
@@ -1000,15 +1000,15 @@ public interface ChartPackage extends EPackage
     EAttribute getChart_Title ();
 
     /**
-     * Returns the meta object for the attribute '{@link org.openscada.ui.chart.model.ChartModel.Chart#isShowCurrenTimeRuler <em>Show Curren Time Ruler</em>}'.
+     * Returns the meta object for the attribute '{@link org.openscada.ui.chart.model.ChartModel.Chart#isShowCurrentTimeRuler <em>Show Current Time Ruler</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @return the meta object for the attribute '<em>Show Curren Time Ruler</em>'.
-     * @see org.openscada.ui.chart.model.ChartModel.Chart#isShowCurrenTimeRuler()
+     * @return the meta object for the attribute '<em>Show Current Time Ruler</em>'.
+     * @see org.openscada.ui.chart.model.ChartModel.Chart#isShowCurrentTimeRuler()
      * @see #getChart()
      * @generated
      */
-    EAttribute getChart_ShowCurrenTimeRuler ();
+    EAttribute getChart_ShowCurrentTimeRuler ();
 
     /**
      * Returns the meta object for the attribute '{@link org.openscada.ui.chart.model.ChartModel.Chart#getBackgroundColor <em>Background Color</em>}'.
@@ -1642,12 +1642,12 @@ public interface ChartPackage extends EPackage
         EAttribute CHART__TITLE = eINSTANCE.getChart_Title ();
 
         /**
-         * The meta object literal for the '<em><b>Show Curren Time Ruler</b></em>' attribute feature.
+         * The meta object literal for the '<em><b>Show Current Time Ruler</b></em>' attribute feature.
          * <!-- begin-user-doc -->
          * <!-- end-user-doc -->
          * @generated
          */
-        EAttribute CHART__SHOW_CURREN_TIME_RULER = eINSTANCE.getChart_ShowCurrenTimeRuler ();
+        EAttribute CHART__SHOW_CURRENT_TIME_RULER = eINSTANCE.getChart_ShowCurrentTimeRuler ();
 
         /**
          * The meta object literal for the '<em><b>Background Color</b></em>' attribute feature.

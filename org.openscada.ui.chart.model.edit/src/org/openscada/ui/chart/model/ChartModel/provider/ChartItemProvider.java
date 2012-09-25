@@ -60,7 +60,7 @@ public class ChartItemProvider extends ItemProviderAdapter implements IEditingDo
             super.getPropertyDescriptors ( object );
 
             addTitlePropertyDescriptor ( object );
-            addShowCurrenTimeRulerPropertyDescriptor ( object );
+            addShowCurrentTimeRulerPropertyDescriptor ( object );
             addBackgroundColorPropertyDescriptor ( object );
             addSelectedYAxisPropertyDescriptor ( object );
             addSelectedXAxisPropertyDescriptor ( object );
@@ -82,14 +82,14 @@ public class ChartItemProvider extends ItemProviderAdapter implements IEditingDo
     }
 
     /**
-     * This adds a property descriptor for the Show Curren Time Ruler feature.
+     * This adds a property descriptor for the Show Current Time Ruler feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    protected void addShowCurrenTimeRulerPropertyDescriptor ( Object object )
+    protected void addShowCurrentTimeRulerPropertyDescriptor ( Object object )
     {
-        itemPropertyDescriptors.add ( createItemPropertyDescriptor ( ( (ComposeableAdapterFactory)adapterFactory ).getRootAdapterFactory (), getResourceLocator (), getString ( "_UI_Chart_showCurrenTimeRuler_feature" ), getString ( "_UI_PropertyDescriptor_description", "_UI_Chart_showCurrenTimeRuler_feature", "_UI_Chart_type" ), ChartPackage.Literals.CHART__SHOW_CURREN_TIME_RULER, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null ) );
+        itemPropertyDescriptors.add ( createItemPropertyDescriptor ( ( (ComposeableAdapterFactory)adapterFactory ).getRootAdapterFactory (), getResourceLocator (), getString ( "_UI_Chart_showCurrentTimeRuler_feature" ), getString ( "_UI_PropertyDescriptor_description", "_UI_Chart_showCurrentTimeRuler_feature", "_UI_Chart_type" ), ChartPackage.Literals.CHART__SHOW_CURRENT_TIME_RULER, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null ) );
     }
 
     /**
@@ -225,7 +225,7 @@ public class ChartItemProvider extends ItemProviderAdapter implements IEditingDo
         switch ( notification.getFeatureID ( Chart.class ) )
         {
             case ChartPackage.CHART__TITLE:
-            case ChartPackage.CHART__SHOW_CURREN_TIME_RULER:
+            case ChartPackage.CHART__SHOW_CURRENT_TIME_RULER:
             case ChartPackage.CHART__BACKGROUND_COLOR:
             case ChartPackage.CHART__MUTABLE:
             case ChartPackage.CHART__SCROLLABLE:

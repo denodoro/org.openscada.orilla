@@ -19,7 +19,7 @@ import org.eclipse.swt.graphics.RGB;
  * The following features are supported:
  * <ul>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.Chart#getTitle <em>Title</em>}</li>
- *   <li>{@link org.openscada.ui.chart.model.ChartModel.Chart#isShowCurrenTimeRuler <em>Show Curren Time Ruler</em>}</li>
+ *   <li>{@link org.openscada.ui.chart.model.ChartModel.Chart#isShowCurrentTimeRuler <em>Show Current Time Ruler</em>}</li>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.Chart#getBackgroundColor <em>Background Color</em>}</li>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.Chart#getBottom <em>Bottom</em>}</li>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.Chart#getTop <em>Top</em>}</li>
@@ -67,31 +67,31 @@ public interface Chart extends EObject
     void setTitle ( String value );
 
     /**
-     * Returns the value of the '<em><b>Show Curren Time Ruler</b></em>' attribute.
+     * Returns the value of the '<em><b>Show Current Time Ruler</b></em>' attribute.
      * The default value is <code>"true"</code>.
      * <!-- begin-user-doc -->
      * <p>
-     * If the meaning of the '<em>Show Curren Time Ruler</em>' attribute isn't clear,
+     * If the meaning of the '<em>Show Current Time Ruler</em>' attribute isn't clear,
      * there really should be more of a description here...
      * </p>
      * <!-- end-user-doc -->
-     * @return the value of the '<em>Show Curren Time Ruler</em>' attribute.
-     * @see #setShowCurrenTimeRuler(boolean)
-     * @see org.openscada.ui.chart.model.ChartModel.ChartPackage#getChart_ShowCurrenTimeRuler()
+     * @return the value of the '<em>Show Current Time Ruler</em>' attribute.
+     * @see #setShowCurrentTimeRuler(boolean)
+     * @see org.openscada.ui.chart.model.ChartModel.ChartPackage#getChart_ShowCurrentTimeRuler()
      * @model default="true" required="true"
      * @generated
      */
-    boolean isShowCurrenTimeRuler ();
+    boolean isShowCurrentTimeRuler ();
 
     /**
-     * Sets the value of the '{@link org.openscada.ui.chart.model.ChartModel.Chart#isShowCurrenTimeRuler <em>Show Curren Time Ruler</em>}' attribute.
+     * Sets the value of the '{@link org.openscada.ui.chart.model.ChartModel.Chart#isShowCurrentTimeRuler <em>Show Current Time Ruler</em>}' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @param value the new value of the '<em>Show Curren Time Ruler</em>' attribute.
-     * @see #isShowCurrenTimeRuler()
+     * @param value the new value of the '<em>Show Current Time Ruler</em>' attribute.
+     * @see #isShowCurrentTimeRuler()
      * @generated
      */
-    void setShowCurrenTimeRuler ( boolean value );
+    void setShowCurrentTimeRuler ( boolean value );
 
     /**
      * Returns the value of the '<em><b>Background Color</b></em>' attribute.

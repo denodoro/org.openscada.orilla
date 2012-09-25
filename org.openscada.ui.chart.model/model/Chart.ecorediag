@@ -12,7 +12,7 @@
         <layoutConstraint xmi:type="notation:Location" xmi:id="_m6U1odZXEeGG6ZRHVvsIug"/>
       </children>
       <children xmi:type="notation:Node" xmi:id="_1cbkYNS7EeGG6ZRHVvsIug" type="2001">
-        <element xmi:type="ecore:EAttribute" href="Chart.ecore#//Chart/showCurrenTimeRuler"/>
+        <element xmi:type="ecore:EAttribute" href="Chart.ecore#//Chart/showCurrentTimeRuler"/>
         <layoutConstraint xmi:type="notation:Location" xmi:id="_1cbkYdS7EeGG6ZRHVvsIug"/>
       </children>
       <children xmi:type="notation:Node" xmi:id="_I4qosNS-EeGG6ZRHVvsIug" type="2001">
