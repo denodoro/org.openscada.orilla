@@ -48,4 +48,5 @@ Export-Package: org.openscada.da.client.dataitem.details;version="1.0.0";
 Bundle-Localization: plugin
 Import-Package: org.openscada.da.core;version="0.16.0",
  org.openscada.ui.utils.blink;version="1.0.0",
+ org.openscada.utils.beans;version="1.0.0",
  org.openscada.utils.concurrent;version="0.15.0"

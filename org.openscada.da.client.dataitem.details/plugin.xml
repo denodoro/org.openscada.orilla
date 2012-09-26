@@ -47,38 +47,11 @@
             name="%detailsPart.overview.name"
             sortKey="0000">
       </detailsPart>
-      <detailsPart
-            name="%detailsPart.errors.name"
-            sortKey="0500">
-            <class class="org.openscada.da.client.dataitem.details.part.sum.SumDetailsPart">
-            	<parameter name="label" value="%detailsPart.errors.name"/>
-            	<parameter name="suffix" value=".error"/>
-            </class>
-      </detailsPart>
-	<detailsPart
-            name="%detailsPart.alarms.name"
-            sortKey="0501">
-            <class class="org.openscada.da.client.dataitem.details.part.sum.SumDetailsPart">
-            	<parameter name="label" value="%detailsPart.alarms.name"/>
-            	<parameter name="suffix" value=".alarm"/>
-            </class>
-      </detailsPart>
-	<detailsPart
-            name="%detailsPart.warnings.name"
-            sortKey="0501">
-            <class class="org.openscada.da.client.dataitem.details.part.sum.SumDetailsPart">
-            	<parameter name="label" value="%detailsPart.warnings.name"/>
-            	<parameter name="suffix" value=".warning"/>
-            </class>
-      </detailsPart>
-	<detailsPart
-            name="%detailsPart.acks.name"
-            sortKey="0502">
-            <class class="org.openscada.da.client.dataitem.details.part.sum.SumDetailsPart">
-            	<parameter name="label" value="%detailsPart.acks.name"/>
-            	<parameter name="suffix" value=".ackRequired"/>
-            </class>
-      </detailsPart>
+ <detailsPart
+       class="org.openscada.da.client.dataitem.details.part.flags.FlagsDetailsPart"
+       name="Common Flags"
+       sortKey="0400">
+ </detailsPart>
  <detailsPart
        class="org.openscada.da.client.dataitem.details.part.block.BlockDetailsPart"
        name="%detailsPart.blocking.name"
