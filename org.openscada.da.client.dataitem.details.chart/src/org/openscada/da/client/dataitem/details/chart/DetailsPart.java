@@ -30,6 +30,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.statushandlers.StatusManager;
 import org.openscada.chart.swt.ChartArea;
 import org.openscada.da.client.DataItemValue;
+import org.openscada.da.client.dataitem.details.VisibilityController;
 import org.openscada.da.ui.connection.data.DataItemHolder;
 import org.openscada.da.ui.connection.data.Item;
 import org.openscada.ui.chart.model.ChartModel.Chart;
@@ -191,4 +192,9 @@ public class DetailsPart implements org.openscada.da.client.dataitem.details.par
         // no-op
     }
 
+    @Override
+    public void setVisibilityController ( final VisibilityController visibilityController )
+    {
+        visibilityController.show ();
+    }
 }

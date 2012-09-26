@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -26,6 +26,7 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.LayeredPane;
 import org.eclipse.swt.widgets.Composite;
+import org.openscada.da.client.dataitem.details.VisibilityController;
 import org.openscada.da.client.dataitem.details.part.AbstractBaseDetailsPart;
 
 public abstract class AbstractBaseDraw2DDetailsPart extends AbstractBaseDetailsPart
@@ -35,6 +36,8 @@ public abstract class AbstractBaseDraw2DDetailsPart extends AbstractBaseDetailsP
     private IFigure rootFigure;
 
     private IFigure naFigure;
+
+    private VisibilityController visibilityController;
 
     @Override
     public void createPart ( final Composite parent )
@@ -57,8 +60,8 @@ public abstract class AbstractBaseDraw2DDetailsPart extends AbstractBaseDetailsP
 
     /**
      * Check if the functionality of this tab is available or not
-     * @return <code>true</code> if the functionality can be provided,
-     * <code>false</code> otherwise
+     * 
+     * @return <code>true</code> if the functionality can be provided, <code>false</code> otherwise
      */
     protected abstract boolean isAvailable ();
 
@@ -94,6 +97,8 @@ public abstract class AbstractBaseDraw2DDetailsPart extends AbstractBaseDetailsP
     {
         if ( isForceActive () || isAvailable () )
         {
+            this.visibilityController.show ();
+
             this.rootFigure.setVisible ( true );
             this.naFigure.setVisible ( false );
         }
@@ -101,7 +106,15 @@ public abstract class AbstractBaseDraw2DDetailsPart extends AbstractBaseDetailsP
         {
             this.rootFigure.setVisible ( false );
             this.naFigure.setVisible ( true );
+
+            this.visibilityController.hide ();
         }
+    }
+
+    @Override
+    public void setVisibilityController ( final VisibilityController visibilityController )
+    {
+        this.visibilityController = visibilityController;
     }
 
 }

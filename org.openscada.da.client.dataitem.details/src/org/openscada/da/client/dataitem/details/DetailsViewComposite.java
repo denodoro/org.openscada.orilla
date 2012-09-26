@@ -19,6 +19,8 @@
 
 package org.openscada.da.client.dataitem.details;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -34,7 +36,6 @@ import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.resource.LocalResourceManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
-import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Color;
@@ -48,6 +49,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 import org.openscada.core.ui.styles.StyleBlinker;
 import org.openscada.da.client.DataItemValue;
 import org.openscada.da.client.dataitem.details.part.DetailsPart;
@@ -110,12 +112,30 @@ public class DetailsViewComposite extends Composite
         {
             for ( final DetailsPartInformation info : getPartInformation () )
             {
-                final CTabItem tabItem = new CTabItem ( this.tabFolder, SWT.NONE );
-                final Composite parentComposite = new Composite ( this.tabFolder, SWT.NONE );
-                parentComposite.setLayout ( new FillLayout () );
-                tabItem.setControl ( parentComposite );
-                createDetailsPart ( tabItem, parentComposite, info );
+                final CTabVisibilityController controller = new CTabVisibilityController ( this.tabFolder, info.getLabel () ) {
 
+                    @Override
+                    protected Control createPart ( final Composite parent )
+                    {
+                        final Composite parentComposite = new Composite ( parent, SWT.NONE );
+                        parentComposite.setLayout ( new FillLayout () );
+                        try
+                        {
+                            info.getDetailsPart ().createPart ( parentComposite );
+                        }
+                        catch ( final Exception e )
+                        {
+                            final Text text = new Text ( parentComposite, SWT.MULTI | SWT.READ_ONLY );
+                            final StringWriter sw = new StringWriter ();
+                            e.printStackTrace ( new PrintWriter ( sw ) );
+                            text.setText ( sw.toString () );
+                        }
+                        return parentComposite;
+                    }
+                };
+                controller.create ();
+                info.getDetailsPart ().setVisibilityController ( controller );
+                this.detailParts.add ( info.getDetailsPart () );
             }
         }
         catch ( final CoreException e )
@@ -127,14 +147,6 @@ public class DetailsViewComposite extends Composite
             this.tabFolder.setSelection ( 0 );
         }
 
-    }
-
-    private void createDetailsPart ( final CTabItem tabItem, final Composite parent, final DetailsPartInformation info ) throws CoreException
-    {
-        tabItem.setText ( info.getLabel () );
-
-        info.getDetailsPart ().createPart ( parent );
-        this.detailParts.add ( info.getDetailsPart () );
     }
 
     private Collection<DetailsPartInformation> getPartInformation () throws CoreException

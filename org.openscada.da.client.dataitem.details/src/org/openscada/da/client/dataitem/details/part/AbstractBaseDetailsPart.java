@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -23,6 +23,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.openscada.core.Variant;
 import org.openscada.da.client.DataItemValue;
+import org.openscada.da.client.dataitem.details.VisibilityController;
 import org.openscada.da.ui.connection.data.DataItemHolder;
 
 public abstract class AbstractBaseDetailsPart implements DetailsPart
@@ -69,6 +70,7 @@ public abstract class AbstractBaseDetailsPart implements DetailsPart
 
     /**
      * Return if the value is unsafe
+     * 
      * @return <code>true</code> if the value part is unsafe, <code>false</code> otherwise
      */
     protected boolean isUnsafe ()
@@ -152,7 +154,9 @@ public abstract class AbstractBaseDetailsPart implements DetailsPart
 
     /**
      * Checks if the current value has the attribute set
-     * @param attributeName the attribute name to check
+     * 
+     * @param attributeName
+     *            the attribute name to check
      * @return <code>true</code> if the current value is available and the attribute is set
      */
     protected boolean hasAttribute ( final String attributeName )
@@ -167,6 +171,12 @@ public abstract class AbstractBaseDetailsPart implements DetailsPart
             return false;
         }
         return value.getAttributes ().containsKey ( attributeName );
+    }
+
+    @Override
+    public void setVisibilityController ( final VisibilityController visibilityController )
+    {
+        visibilityController.show ();
     }
 
 }

@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -22,19 +22,24 @@ package org.openscada.da.client.dataitem.details.part;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.services.IDisposable;
 import org.openscada.da.client.DataItemValue;
+import org.openscada.da.client.dataitem.details.VisibilityController;
 import org.openscada.da.ui.connection.data.DataItemHolder;
 
 public interface DetailsPart extends IDisposable
 {
     /**
      * create the details area
-     * @param parent the parent composite
+     * 
+     * @param parent
+     *            the parent composite
      */
     public void createPart ( Composite parent );
 
     /**
      * set to update the item instance
-     * @param item the data item
+     * 
+     * @param item
+     *            the data item
      */
     public void setDataItem ( DataItemHolder item );
 
@@ -43,7 +48,11 @@ public interface DetailsPart extends IDisposable
      * <p>
      * Will be called in the display thread
      * </p>
-     * @param value the current value or <code>null</code> if the data item is not connected
+     * 
+     * @param value
+     *            the current value or <code>null</code> if the data item is not connected
      */
     public void updateData ( DataItemValue value );
+
+    public void setVisibilityController ( VisibilityController visibilityController );
 }
