@@ -23,5 +23,12 @@
             name="%category.core.name">
       </category>
    </extension>
+   <extension
+         point="org.eclipse.ui.themes">
+      <themeElementCategory
+            id="org.openscada.theme"
+            label="openSCADA">
+      </themeElementCategory>
+   </extension>
 
 </plugin>

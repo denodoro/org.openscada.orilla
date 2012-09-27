@@ -3,11 +3,8 @@ package org.openscada.da.client.dataitem.details.part.flags;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
-import org.eclipse.core.databinding.observable.Diffs;
 import org.eclipse.core.databinding.observable.IObservable;
 import org.eclipse.core.databinding.observable.masterdetail.IObservableFactory;
 import org.eclipse.core.databinding.observable.set.IObservableSet;
@@ -16,6 +13,7 @@ import org.eclipse.jface.databinding.viewers.ObservableSetTreeContentProvider;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.LabelProviderChangedEvent;
 import org.eclipse.jface.viewers.StyledString;
+import org.eclipse.jface.viewers.StyledString.Styler;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
@@ -26,7 +24,6 @@ import org.openscada.core.Variant;
 import org.openscada.da.client.DataItemValue;
 import org.openscada.da.client.dataitem.details.part.AbstractBaseDetailsPart;
 import org.openscada.ui.databinding.ListeningStyledCellLabelProvider;
-import org.openscada.utils.beans.AbstractPropertyChange;
 
 public class FlagsDetailsPart extends AbstractBaseDetailsPart
 {
@@ -41,9 +38,15 @@ public class FlagsDetailsPart extends AbstractBaseDetailsPart
 
     public abstract static class AbstractLabelProvider extends ListeningStyledCellLabelProvider implements PropertyChangeListener
     {
+        protected final Styler activeStyler;
+
+        protected final Styler inactiveStyler;
+
         public AbstractLabelProvider ( final IObservableSet itemsThatNeedLabels )
         {
             super ( itemsThatNeedLabels );
+            this.activeStyler = StyledString.createColorRegistryStyler ( "org.openscada.da.client.dataitem.details.activeAttribute", null );
+            this.inactiveStyler = StyledString.createColorRegistryStyler ( "org.openscada.da.client.dataitem.details.inactiveAttribute", null );
         }
 
         @Override
@@ -100,10 +103,12 @@ public class FlagsDetailsPart extends AbstractBaseDetailsPart
             }
             else if ( ele instanceof AttributeEntry )
             {
-                cell.setText ( ( (AttributeEntry)ele ).getName () );
+                final StyledString str = new StyledString ();
+                str.append ( ( (AttributeEntry)ele ).getName (), ( (AttributeEntry)ele ).isActive () ? this.activeStyler : this.inactiveStyler );
+                cell.setText ( str.getString () );
+                cell.setStyleRanges ( str.getStyleRanges () );
             }
         }
-
     }
 
     public static class ColumnLabelStateProvider extends AbstractLabelProvider
@@ -123,177 +128,20 @@ public class FlagsDetailsPart extends AbstractBaseDetailsPart
             }
             else if ( ele instanceof AttributeEntry )
             {
-                cell.setText ( ( (AttributeEntry)ele ).isActive () ? "active" : "inactive" );
-            }
-        }
+                final StyledString str = new StyledString ();
 
-    }
-
-    public static class AttributeEntry
-    {
-        private final String name;
-
-        private final Variant value;
-
-        public AttributeEntry ( final String name, final Variant value )
-        {
-            this.name = name;
-            this.value = value;
-        }
-
-        public boolean isActive ()
-        {
-            if ( this.value == null )
-            {
-                return false;
-            }
-            return this.value.asBoolean ();
-        }
-
-        public String getName ()
-        {
-            return this.name;
-        }
-
-        public Variant getValue ()
-        {
-            return this.value;
-        }
-
-        @Override
-        public int hashCode ()
-        {
-            final int prime = 31;
-            int result = 1;
-            result = prime * result + ( this.name == null ? 0 : this.name.hashCode () );
-            return result;
-        }
-
-        @Override
-        public boolean equals ( final Object obj )
-        {
-            if ( this == obj )
-            {
-                return true;
-            }
-            if ( obj == null )
-            {
-                return false;
-            }
-            if ( getClass () != obj.getClass () )
-            {
-                return false;
-            }
-            final AttributeEntry other = (AttributeEntry)obj;
-            if ( this.name == null )
-            {
-                if ( other.name != null )
+                if ( ( (AttributeEntry)ele ).isActive () )
                 {
-                    return false;
+                    str.append ( "active", this.activeStyler );
                 }
-            }
-            else if ( !this.name.equals ( other.name ) )
-            {
-                return false;
-            }
-            return true;
-        }
-
-    }
-
-    public static class GroupEntry extends AbstractPropertyChange
-    {
-        public static final String PROP_COUNT = "count";
-
-        public static final String PROP_ACTIVE_COUNT = "activeCount";
-
-        public static final String PROP_LABEL = "label";
-
-        private final String attribute;
-
-        private int count;
-
-        private int activeCount;
-
-        private String label;
-
-        private final WritableSet entries = new WritableSet ();
-
-        public GroupEntry ( final String attribute, final String label )
-        {
-            this.attribute = attribute;
-            this.label = label;
-        }
-
-        public void setCount ( final int count )
-        {
-            firePropertyChange ( PROP_COUNT, this.count, this.count = count );
-        }
-
-        public int getCount ()
-        {
-            return this.count;
-        }
-
-        public void setActiveCount ( final int activeCount )
-        {
-            firePropertyChange ( PROP_ACTIVE_COUNT, this.activeCount, this.activeCount = activeCount );
-        }
-
-        public int getActiveCount ()
-        {
-            return this.activeCount;
-        }
-
-        public String getLabel ()
-        {
-            return this.label;
-        }
-
-        public void setLabel ( final String label )
-        {
-            firePropertyChange ( PROP_LABEL, this.label, this.label = label );
-        }
-
-        public String getAttribute ()
-        {
-            return this.attribute;
-        }
-
-        public void setState ( final Map<String, Variant> attrState )
-        {
-
-            if ( attrState == null )
-            {
-                setCount ( 0 );
-                return;
-            }
-
-            setCount ( attrState.size () );
-
-            int activeCount = 0;
-
-            final Set<AttributeEntry> attrs = new HashSet<FlagsDetailsPart.AttributeEntry> ();
-            for ( final Map.Entry<String, Variant> entry : attrState.entrySet () )
-            {
-                final AttributeEntry newEntry = new AttributeEntry ( entry.getKey (), entry.getValue () );
-                attrs.add ( newEntry );
-
-                if ( newEntry.isActive () )
+                else
                 {
-                    activeCount++;
+                    str.append ( "inactive", this.inactiveStyler );
                 }
+
+                cell.setText ( str.getString () );
+                cell.setStyleRanges ( str.getStyleRanges () );
             }
-
-            setActiveCount ( activeCount );
-
-            // apply only diff
-            Diffs.computeSetDiff ( this.entries, attrs ).applyTo ( this.entries );
-        }
-
-        public IObservableSet getEntries ()
-        {
-            return this.entries;
         }
 
     }

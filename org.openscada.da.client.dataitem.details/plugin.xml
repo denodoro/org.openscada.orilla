@@ -139,5 +139,22 @@
          </commandParameter>
       </command>
    </extension>
+   <extension
+         point="org.eclipse.ui.themes">
+      <colorDefinition
+            categoryId="org.openscada.theme"
+            id="org.openscada.da.client.dataitem.details.activeAttribute"
+            isEditable="true"
+            label="Active Attribute"
+            value="0,0,0">
+      </colorDefinition>
+      <colorDefinition
+            categoryId="org.openscada.theme"
+            id="org.openscada.da.client.dataitem.details.inactiveAttribute"
+            isEditable="true"
+            label="Inactive Attribute"
+            value="128,128,128">
+      </colorDefinition>
+   </extension>
 
 </plugin>
