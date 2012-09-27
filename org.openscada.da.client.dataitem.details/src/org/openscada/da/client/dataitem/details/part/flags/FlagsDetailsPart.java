@@ -15,6 +15,7 @@ import org.eclipse.core.databinding.observable.set.WritableSet;
 import org.eclipse.jface.databinding.viewers.ObservableSetTreeContentProvider;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.LabelProviderChangedEvent;
+import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
@@ -84,7 +85,18 @@ public class FlagsDetailsPart extends AbstractBaseDetailsPart
             final Object ele = cell.getElement ();
             if ( ele instanceof GroupEntry )
             {
-                cell.setText ( String.format ( "%s (%s)", ( (GroupEntry)ele ).getLabel (), ( (GroupEntry)ele ).getAttribute () ) );
+                final StyledString str = new StyledString ();
+                str.append ( ( (GroupEntry)ele ).getLabel () );
+                str.append ( " " );
+                str.append ( "[" + ( (GroupEntry)ele ).getAttribute () + "]", StyledString.DECORATIONS_STYLER );
+                str.append ( " " );
+
+                str.append ( "(" );
+                str.append ( "" + ( (GroupEntry)ele ).getActiveCount (), StyledString.COUNTER_STYLER );
+                str.append ( ")" );
+
+                cell.setText ( str.getString () );
+                cell.setStyleRanges ( str.getStyleRanges () );
             }
             else if ( ele instanceof AttributeEntry )
             {
