@@ -5,7 +5,7 @@
          point="org.eclipse.ui.views">
       <view
             allowMultiple="true"
-            category="org.openscada.da.ui.category"
+            category="org.openscada.chart.ui"
             class="org.openscada.ui.chart.view.ChartView"
             icon="icons/chartView.gif"
             id="org.openscada.da.ui.client.chart.ChartView"
@@ -13,7 +13,7 @@
             restorable="true"/>
       <view
             allowMultiple="false"
-            category="org.openscada.da.ui.category"
+            category="org.openscada.chart.ui"
             class="org.openscada.ui.chart.view.ChartControllerView"
             id="org.openscada.da.ui.client.chart.ChartController"
             name="Chart Controller"
@@ -21,7 +21,7 @@
       </view>
       <view
             allowMultiple="false"
-            category="org.openscada.da.ui.category"
+            category="org.openscada.chart.ui"
             class="org.openscada.ui.chart.view.ChartConfiguratorView"
             id="org.openscada.da.ui.client.chart.ChartConfigurator"
             name="Chart Configurator"
@@ -29,7 +29,7 @@
       </view>
       <view
             allowMultiple="true"
-            category="org.openscada.da.ui.category"
+            category="org.openscada.chart.ui"
             class="org.openscada.ui.chart.view.ChartInputSelectorView"
             id="org.openscada.ui.chart.selector.ChartInputSelector"
             name="Chart Input Selector"

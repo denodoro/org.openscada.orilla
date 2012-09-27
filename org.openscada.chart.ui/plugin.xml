@@ -55,5 +55,12 @@
          </view>
       </perspectiveExtension>
    </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            id="org.openscada.chart.ui"
+            name="openSCADA Chart">
+      </category>
+   </extension>
 
 </plugin>
