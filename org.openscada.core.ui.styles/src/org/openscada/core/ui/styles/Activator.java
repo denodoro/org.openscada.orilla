@@ -61,12 +61,12 @@ public class Activator extends AbstractUIPlugin
     {
         super.initializeImageRegistry ( reg );
 
-        reg.put ( "manual", imageDescriptorFromPlugin ( PLUGIN_ID, "icons/manual.png" ) );
-        reg.put ( "block", imageDescriptorFromPlugin ( PLUGIN_ID, "icons/block.png" ) );
-        reg.put ( "disconnected", imageDescriptorFromPlugin ( PLUGIN_ID, "icons/disconnected.png" ) );
-        reg.put ( "error", imageDescriptorFromPlugin ( PLUGIN_ID, "icons/error.png" ) );
-        reg.put ( "alarm", imageDescriptorFromPlugin ( PLUGIN_ID, "icons/alarm.png" ) );
-        reg.put ( "warning", imageDescriptorFromPlugin ( PLUGIN_ID, "icons/warning.png" ) );
+        reg.put ( ImageConstants.IMG_MANUAL, imageDescriptorFromPlugin ( PLUGIN_ID, "icons/manual.png" ) );
+        reg.put ( ImageConstants.IMG_BLOCK, imageDescriptorFromPlugin ( PLUGIN_ID, "icons/block.png" ) );
+        reg.put ( ImageConstants.IMG_DISCONNECTED, imageDescriptorFromPlugin ( PLUGIN_ID, "icons/disconnected.png" ) );
+        reg.put ( ImageConstants.IMG_ERROR, imageDescriptorFromPlugin ( PLUGIN_ID, "icons/error.png" ) );
+        reg.put ( ImageConstants.IMG_ALARM, imageDescriptorFromPlugin ( PLUGIN_ID, "icons/alarm.png" ) );
+        reg.put ( ImageConstants.IMG_WARNING, imageDescriptorFromPlugin ( PLUGIN_ID, "icons/warning.png" ) );
     }
 
     /*

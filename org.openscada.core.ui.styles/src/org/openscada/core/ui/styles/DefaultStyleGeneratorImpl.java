@@ -60,40 +60,40 @@ public class DefaultStyleGeneratorImpl implements StyleGenerator
         {
             background = this.resourceManager.createColor ( ColorDescriptor.createFrom ( new RGB ( 0, 0, 0 ) ) );
             foreground = this.resourceManager.createColor ( ColorDescriptor.createFrom ( new RGB ( 255, 255, 255 ) ) );
-            image = Activator.getDefault ().getImageRegistry ().get ( "block" );
+            image = Activator.getDefault ().getImageRegistry ().get ( ImageConstants.IMG_BLOCK );
         }
         if ( states.contains ( State.MANUAL ) )
         {
             background = this.resourceManager.createColor ( ColorDescriptor.createFrom ( new RGB ( 100, 149, 237 ) ) );
             foreground = null;
-            image = Activator.getDefault ().getImageRegistry ().get ( "manual" );
+            image = Activator.getDefault ().getImageRegistry ().get ( ImageConstants.IMG_MANUAL );
         }
         if ( states.contains ( State.WARNING ) )
         {
             background = this.resourceManager.createColor ( ColorDescriptor.createFrom ( new RGB ( 255, 222, 0 ) ) );
             foreground = null;
             monitorActive = true;
-            image = Activator.getDefault ().getImageRegistry ().get ( "warning" );
+            image = Activator.getDefault ().getImageRegistry ().get ( ImageConstants.IMG_WARNING );
         }
         if ( states.contains ( State.ALARM ) )
         {
             background = this.resourceManager.createColor ( ColorDescriptor.createFrom ( new RGB ( 235, 53, 37 ) ) );
             foreground = null;
             monitorActive = true;
-            image = Activator.getDefault ().getImageRegistry ().get ( "alarm" );
+            image = Activator.getDefault ().getImageRegistry ().get ( ImageConstants.IMG_ALARM );
         }
         if ( states.contains ( State.ERROR ) )
         {
             background = this.resourceManager.createColor ( ColorDescriptor.createFrom ( new RGB ( 233, 88, 254 ) ) );
             foreground = null;
             monitorActive = true;
-            image = Activator.getDefault ().getImageRegistry ().get ( "error" );
+            image = Activator.getDefault ().getImageRegistry ().get ( ImageConstants.IMG_ERROR );
         }
         if ( states.contains ( State.DISCONNECTED ) )
         {
             background = this.resourceManager.createColor ( ColorDescriptor.createFrom ( new RGB ( 233, 88, 254 ) ) );
             foreground = null;
-            image = Activator.getDefault ().getImageRegistry ().get ( "disconnected" );
+            image = Activator.getDefault ().getImageRegistry ().get ( ImageConstants.IMG_DISCONNECTED );
         }
 
         if ( states.contains ( State.ACK ) )
