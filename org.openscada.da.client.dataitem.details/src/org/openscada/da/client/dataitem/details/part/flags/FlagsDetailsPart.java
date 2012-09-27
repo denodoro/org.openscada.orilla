@@ -107,7 +107,7 @@ public class FlagsDetailsPart extends AbstractBaseDetailsPart
             final Object ele = cell.getElement ();
             if ( ele instanceof GroupEntry )
             {
-                cell.setText ( String.format ( "%s (%s active)", ( (GroupEntry)ele ).getCount (), ( (GroupEntry)ele ).getCount () ) );
+                cell.setText ( String.format ( "%s of %s", ( (GroupEntry)ele ).getActiveCount (), ( (GroupEntry)ele ).getCount () ) );
             }
             else if ( ele instanceof AttributeEntry )
             {
