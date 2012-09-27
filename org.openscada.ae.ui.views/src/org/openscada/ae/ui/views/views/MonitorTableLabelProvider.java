@@ -25,6 +25,7 @@ import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.jface.databinding.viewers.ObservableMapLabelProvider;
 import org.eclipse.swt.graphics.Image;
 import org.openscada.ae.MonitorStatusInformation;
+import org.openscada.ae.Severity;
 import org.openscada.ae.ui.views.model.DecoratedMonitor;
 
 public class MonitorTableLabelProvider extends ObservableMapLabelProvider
@@ -69,9 +70,16 @@ public class MonitorTableLabelProvider extends ObservableMapLabelProvider
                 case OK:
                     return this.labelProviderSupport.getOkImage ();
                 case NOT_OK:
-                    return this.labelProviderSupport.getAlarmImage ();
+                    //$FALL-THROUGH$
                 case NOT_OK_AKN:
-                    return this.labelProviderSupport.getAlarmImage ();
+                    if ( monitor.getSeverity () == Severity.WARNING )
+                    {
+                        return this.labelProviderSupport.getWarningImage ();
+                    }
+                    else
+                    {
+                        return this.labelProviderSupport.getAlarmImage ();
+                    }
                 case NOT_AKN:
                     return this.labelProviderSupport.getAckImage ();
                 case NOT_OK_NOT_AKN:

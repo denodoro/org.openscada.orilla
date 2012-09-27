@@ -29,9 +29,11 @@ import java.util.TimeZone;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.graphics.Image;
 import org.openscada.ae.Event.Fields;
+import org.openscada.ae.Severity;
 import org.openscada.ae.ui.views.Activator;
 import org.openscada.ae.ui.views.model.DecoratedEvent;
 import org.openscada.core.Variant;
+import org.openscada.core.ui.styles.ImageConstants;
 
 public class LabelProviderSupport
 {
@@ -52,7 +54,7 @@ public class LabelProviderSupport
 
     public static final NumberFormat nf6 = new DecimalFormat ( Messages.LabelProviderSupport_Format_NF6 );
 
-    private final Image alarmImage = Activator.getImageDescriptor ( "icons/monitor_alarm.png" ).createImage (); //$NON-NLS-1$
+    private final Image alarmImage;
 
     private final Image ackImage = Activator.getImageDescriptor ( "icons/monitor_ack.png" ).createImage (); //$NON-NLS-1$
 
@@ -60,9 +62,11 @@ public class LabelProviderSupport
 
     private final Image okImage = Activator.getImageDescriptor ( "icons/monitor_ok.png" ).createImage (); //$NON-NLS-1$
 
-    private final Image maualImage = Activator.getImageDescriptor ( "icons/monitor_manual.png" ).createImage (); //$NON-NLS-1$
+    private final Image maualImage;
 
-    private final Image disconnectedImage = Activator.getImageDescriptor ( "icons/monitor_disconnected.png" ).createImage (); //$NON-NLS-1$
+    private final Image disconnectedImage;
+
+    private final Image warningImage;
 
     private final Image userImage = Activator.getImageDescriptor ( "icons/user_icon.gif" ).createImage (); //$NON-NLS-1$
 
@@ -74,6 +78,11 @@ public class LabelProviderSupport
         this.df.setTimeZone ( timeZone );
         this.tf = new SimpleDateFormat ( Messages.LabelProviderSupport_TimeFormat );
         this.tf.setTimeZone ( timeZone );
+
+        this.alarmImage = org.openscada.core.ui.styles.Activator.getDefault ().getImageRegistry ().getDescriptor ( ImageConstants.IMG_ALARM ).createImage ();
+        this.warningImage = org.openscada.core.ui.styles.Activator.getDefault ().getImageRegistry ().getDescriptor ( ImageConstants.IMG_WARNING ).createImage ();
+        this.maualImage = org.openscada.core.ui.styles.Activator.getDefault ().getImageRegistry ().getDescriptor ( ImageConstants.IMG_MANUAL ).createImage ();
+        this.disconnectedImage = org.openscada.core.ui.styles.Activator.getDefault ().getImageRegistry ().getDescriptor ( ImageConstants.IMG_DISCONNECTED ).createImage ();
     }
 
     public DateFormat getDf ()
@@ -187,6 +196,8 @@ public class LabelProviderSupport
 
     public void decorateWithMonitorState ( final DecoratedEvent event, final ViewerCell cell )
     {
+        // FIXME: should be done using new StyleBlinker
+
         if ( !event.isActive () )
         {
             cell.setImage ( null );
@@ -196,10 +207,16 @@ public class LabelProviderSupport
             switch ( event.getMonitor ().getStatus () )
             {
                 case NOT_OK:
-                    cell.setImage ( this.alarmImage );
-                    break;
+                    //$FALL-THROUGH$
                 case NOT_OK_AKN:
-                    cell.setImage ( this.alarmImage );
+                    if ( event.getMonitor ().getSeverity () == Severity.WARNING )
+                    {
+                        cell.setImage ( this.warningImage );
+                    }
+                    else
+                    {
+                        cell.setImage ( this.alarmImage );
+                    }
                     break;
                 case NOT_AKN:
                     cell.setImage ( this.ackImage );
@@ -226,6 +243,12 @@ public class LabelProviderSupport
         this.disconnectedImage.dispose ();
         this.userImage.dispose ();
         this.systemImage.dispose ();
+        this.warningImage.dispose ();
+    }
+
+    public Image getWarningImage ()
+    {
+        return this.warningImage;
     }
 
     public Image getAlarmImage ()
