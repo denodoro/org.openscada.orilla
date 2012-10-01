@@ -21,17 +21,17 @@ import org.openscada.ui.chart.model.ChartModel.LineProperties;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.DataItemSeriesImpl#getLineProperties <em>Line Properties</em>}</li>
+ * <li>{@link org.openscada.ui.chart.model.ChartModel.impl.DataItemSeriesImpl#getLineProperties <em>Line Properties</em>}</li>
  * </ul>
  * </p>
- *
+ * 
  * @generated
  */
 public class DataItemSeriesImpl extends ItemDataSeriesImpl implements DataItemSeries
 {
     /**
-     * The cached value of the '{@link #getLineProperties() <em>Line Properties</em>}' containment reference.
-     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * The cached value of the '{@link #getLineProperties() <em>Line Properties</em>}' containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @see #getLineProperties()
      * @generated
      * @ordered
@@ -46,11 +46,12 @@ public class DataItemSeriesImpl extends ItemDataSeriesImpl implements DataItemSe
     protected DataItemSeriesImpl ()
     {
         super ();
-        this.lineProperties = ChartFactory.eINSTANCE.createLineProperties ();
+        setLineProperties ( ChartFactory.eINSTANCE.createLineProperties () );
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     @Override
@@ -61,61 +62,77 @@ public class DataItemSeriesImpl extends ItemDataSeriesImpl implements DataItemSe
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     @Override
     public LineProperties getLineProperties ()
     {
-        return lineProperties;
+        return this.lineProperties;
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
-    public NotificationChain basicSetLineProperties ( LineProperties newLineProperties, NotificationChain msgs )
+    public NotificationChain basicSetLineProperties ( final LineProperties newLineProperties, NotificationChain msgs )
     {
-        LineProperties oldLineProperties = lineProperties;
-        lineProperties = newLineProperties;
+        final LineProperties oldLineProperties = this.lineProperties;
+        this.lineProperties = newLineProperties;
         if ( eNotificationRequired () )
         {
-            ENotificationImpl notification = new ENotificationImpl ( this, Notification.SET, ChartPackage.DATA_ITEM_SERIES__LINE_PROPERTIES, oldLineProperties, newLineProperties );
+            final ENotificationImpl notification = new ENotificationImpl ( this, Notification.SET, ChartPackage.DATA_ITEM_SERIES__LINE_PROPERTIES, oldLineProperties, newLineProperties );
             if ( msgs == null )
+            {
                 msgs = notification;
+            }
             else
+            {
                 msgs.add ( notification );
+            }
         }
         return msgs;
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     @Override
-    public void setLineProperties ( LineProperties newLineProperties )
+    public void setLineProperties ( final LineProperties newLineProperties )
     {
-        if ( newLineProperties != lineProperties )
+        if ( newLineProperties != this.lineProperties )
         {
             NotificationChain msgs = null;
-            if ( lineProperties != null )
-                msgs = ( (InternalEObject)lineProperties ).eInverseRemove ( this, EOPPOSITE_FEATURE_BASE - ChartPackage.DATA_ITEM_SERIES__LINE_PROPERTIES, null, msgs );
+            if ( this.lineProperties != null )
+            {
+                msgs = ( (InternalEObject)this.lineProperties ).eInverseRemove ( this, EOPPOSITE_FEATURE_BASE - ChartPackage.DATA_ITEM_SERIES__LINE_PROPERTIES, null, msgs );
+            }
             if ( newLineProperties != null )
+            {
                 msgs = ( (InternalEObject)newLineProperties ).eInverseAdd ( this, EOPPOSITE_FEATURE_BASE - ChartPackage.DATA_ITEM_SERIES__LINE_PROPERTIES, null, msgs );
+            }
             msgs = basicSetLineProperties ( newLineProperties, msgs );
             if ( msgs != null )
+            {
                 msgs.dispatch ();
+            }
         }
         else if ( eNotificationRequired () )
+        {
             eNotify ( new ENotificationImpl ( this, Notification.SET, ChartPackage.DATA_ITEM_SERIES__LINE_PROPERTIES, newLineProperties, newLineProperties ) );
+        }
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     @Override
-    public NotificationChain eInverseRemove ( InternalEObject otherEnd, int featureID, NotificationChain msgs )
+    public NotificationChain eInverseRemove ( final InternalEObject otherEnd, final int featureID, final NotificationChain msgs )
     {
         switch ( featureID )
         {
@@ -127,10 +144,11 @@ public class DataItemSeriesImpl extends ItemDataSeriesImpl implements DataItemSe
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     @Override
-    public Object eGet ( int featureID, boolean resolve, boolean coreType )
+    public Object eGet ( final int featureID, final boolean resolve, final boolean coreType )
     {
         switch ( featureID )
         {
@@ -142,10 +160,11 @@ public class DataItemSeriesImpl extends ItemDataSeriesImpl implements DataItemSe
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     @Override
-    public void eSet ( int featureID, Object newValue )
+    public void eSet ( final int featureID, final Object newValue )
     {
         switch ( featureID )
         {
@@ -158,10 +177,11 @@ public class DataItemSeriesImpl extends ItemDataSeriesImpl implements DataItemSe
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     @Override
-    public void eUnset ( int featureID )
+    public void eUnset ( final int featureID )
     {
         switch ( featureID )
         {
@@ -174,15 +194,16 @@ public class DataItemSeriesImpl extends ItemDataSeriesImpl implements DataItemSe
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
      * @generated
      */
     @Override
-    public boolean eIsSet ( int featureID )
+    public boolean eIsSet ( final int featureID )
     {
         switch ( featureID )
         {
             case ChartPackage.DATA_ITEM_SERIES__LINE_PROPERTIES:
-                return lineProperties != null;
+                return this.lineProperties != null;
         }
         return super.eIsSet ( featureID );
     }
