@@ -32,6 +32,7 @@ import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.emf.databinding.EMFObservables;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.resource.ResourceManager;
+import org.openscada.hd.ui.connection.data.Item.Type;
 import org.openscada.ui.chart.model.ChartModel.ArchiveChannel;
 import org.openscada.ui.chart.model.ChartModel.ArchiveSeries;
 import org.openscada.ui.chart.model.ChartModel.ChartPackage;
@@ -164,11 +165,11 @@ public class ArchiveSeriesViewer extends AbstractItemInputViewer
     {
         if ( item instanceof IdItem )
         {
-            return null;
+            return new org.openscada.hd.ui.connection.data.Item ( ( (IdItem)item ).getConnectionId (), item.getItemId (), Type.ID );
         }
         else if ( item instanceof UriItem )
         {
-            return new org.openscada.hd.ui.connection.data.Item ( ( (UriItem)item ).getConnectionUri (), item.getItemId () );
+            return new org.openscada.hd.ui.connection.data.Item ( ( (UriItem)item ).getConnectionUri (), item.getItemId (), Type.URI );
         }
         else
         {

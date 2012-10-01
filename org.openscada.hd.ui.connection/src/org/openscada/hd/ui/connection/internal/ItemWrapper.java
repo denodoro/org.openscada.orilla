@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -24,6 +24,7 @@ import org.eclipse.core.runtime.PlatformObject;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.openscada.hd.HistoricalItemInformation;
 import org.openscada.hd.ui.connection.data.Item;
+import org.openscada.hd.ui.connection.data.Item.Type;
 
 public class ItemWrapper extends PlatformObject implements IAdaptable
 {
@@ -63,7 +64,7 @@ public class ItemWrapper extends PlatformObject implements IAdaptable
         }
         else if ( adapter == Item.class )
         {
-            return new Item ( this.connection.getService ().getConnection ().getConnectionInformation ().toString (), this.itemInformation.getId () );
+            return new Item ( this.connection.getService ().getConnection ().getConnectionInformation ().toString (), this.itemInformation.getId (), Type.URI );
         }
         return super.getAdapter ( adapter );
     }

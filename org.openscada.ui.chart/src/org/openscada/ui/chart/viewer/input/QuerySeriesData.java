@@ -62,7 +62,16 @@ public class QuerySeriesData extends AbstractSeriesData
         this.item = item;
 
         this.parameters = makeInitialParameters ();
-        this.query = new ServiceQueryBuffer ( Activator.getDefault ().getBundle ().getBundleContext (), createRequest (), item.getId (), this.parameters = makeInitialParameters () );
+
+        switch ( item.getType () )
+        {
+            case ID:
+                this.query = new ServiceQueryBuffer ( Activator.getDefault ().getBundle ().getBundleContext (), item.getConnectionString (), item.getId (), this.parameters = makeInitialParameters () );
+                break;
+            default:
+                this.query = new ServiceQueryBuffer ( Activator.getDefault ().getBundle ().getBundleContext (), createRequest (), item.getId (), this.parameters = makeInitialParameters () );
+                break;
+        }
 
         this.query.addQueryListener ( new QueryListener () {
 
