@@ -188,6 +188,12 @@ public abstract class QueryInput extends LineInput
             return null;
         }
 
+        final Value value = data[index];
+        if ( value == null )
+        {
+            return null;
+        }
+
         return String.format ( "%s", data[index].toDouble () );
     }
 
