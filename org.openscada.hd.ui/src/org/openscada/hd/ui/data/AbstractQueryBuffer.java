@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
 public class AbstractQueryBuffer extends AbstractPropertyChange
 {
 
-    private static final Logger logger = LoggerFactory.getLogger ( QueryBuffer.class );
+    private static final Logger logger = LoggerFactory.getLogger ( AbstractQueryBuffer.class );
 
     public static final String PROP_STATE = "state";
 
