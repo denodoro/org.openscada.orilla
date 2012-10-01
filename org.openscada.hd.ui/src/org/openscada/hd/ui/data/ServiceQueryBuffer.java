@@ -30,9 +30,13 @@ import org.openscada.core.connection.provider.ConnectionTracker;
 import org.openscada.core.connection.provider.ConnectionTracker.Listener;
 import org.openscada.hd.QueryParameters;
 import org.osgi.framework.BundleContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ServiceQueryBuffer extends AbstractQueryBuffer
 {
+
+    private final static Logger logger = LoggerFactory.getLogger ( ServiceQueryBuffer.class );
 
     private final ConnectionTracker tracker;
 
@@ -86,6 +90,8 @@ public class ServiceQueryBuffer extends AbstractQueryBuffer
 
     protected void setConnection ( final ConnectionService connectionService )
     {
+        logger.debug ( "Setting connection: {}", connectionService );
+
         detachConnection ();
         if ( connectionService != null )
         {
@@ -106,6 +112,10 @@ public class ServiceQueryBuffer extends AbstractQueryBuffer
 
         this.connection = (org.openscada.hd.connection.provider.ConnectionService)connectionService;
         this.connection.getConnection ().addConnectionStateListener ( this.connectionStateListener );
+
+        final org.openscada.hd.client.Connection c = this.connection.getConnection ();
+        // initial call
+        handleConnectionStateChange ( c, c.getState (), null );
     }
 
     private void detachConnection ()
@@ -120,6 +130,7 @@ public class ServiceQueryBuffer extends AbstractQueryBuffer
 
     protected void handleConnectionStateChange ( final Connection connection, final ConnectionState state, final Throwable error )
     {
+        logger.debug ( "Handle connection state change - connection: {}, state: {}", connection, state );
         if ( state == ConnectionState.BOUND )
         {
             createQuery ( this.connection.getConnection (), this.itemId );
