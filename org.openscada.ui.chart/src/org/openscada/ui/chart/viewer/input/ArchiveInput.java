@@ -94,7 +94,7 @@ public class ArchiveInput extends QueryInput
     @Override
     public String getLabel ()
     {
-        return this.item.getId ();
+        return this.item.getId () + "#AVG";
     }
 
 }
