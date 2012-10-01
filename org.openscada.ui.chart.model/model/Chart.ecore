@@ -73,7 +73,7 @@
         eType="#//LineProperties" containment="true">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="wildcards" value=""/>
-        <details key="name" value=""/>
+        <details key="name" value="lineProperties"/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>

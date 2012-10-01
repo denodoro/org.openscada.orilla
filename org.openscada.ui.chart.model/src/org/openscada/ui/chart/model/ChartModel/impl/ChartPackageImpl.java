@@ -1020,7 +1020,7 @@ public class ChartPackageImpl extends EPackageImpl implements ChartPackage
         String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
         addAnnotation ( getChart_BackgroundColor (), source, new String[] { "name", "backgroundColor" } );
         addAnnotation ( getAxis_Label (), source, new String[] { "name", "label" } );
-        addAnnotation ( getArchiveSeries_LineProperties (), source, new String[] { "wildcards", "", "name", "" } );
+        addAnnotation ( getArchiveSeries_LineProperties (), source, new String[] { "wildcards", "", "name", "lineProperties" } );
     }
 
 } //ChartPackageImpl

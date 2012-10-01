@@ -56,7 +56,7 @@ public interface ArchiveSeries extends ItemDataSeries
      * @see #setLineProperties(LineProperties)
      * @see org.openscada.ui.chart.model.ChartModel.ChartPackage#getArchiveSeries_LineProperties()
      * @model containment="true" required="true"
-     *        extendedMetaData="wildcards='' name=''"
+     *        extendedMetaData="wildcards='' name='lineProperties'"
      * @generated
      */
     LineProperties getLineProperties ();
