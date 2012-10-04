@@ -33,6 +33,14 @@ import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * A query buffer based on a tracked connection service
+ * <p>
+ * The query buffer must the opened using the {@link #open()} call.
+ * </p>
+ * 
+ * @author Jens Reimann
+ */
 public class ServiceQueryBuffer extends AbstractQueryBuffer
 {
 
@@ -67,7 +75,6 @@ public class ServiceQueryBuffer extends AbstractQueryBuffer
         setRequestParameters ( initialRequestParameters );
 
         this.tracker = new ConnectionRequestTracker ( context, connectionRequest, this.listener, org.openscada.hd.connection.provider.ConnectionService.class );
-        this.tracker.open ();
     }
 
     public ServiceQueryBuffer ( final BundleContext context, final String connectionId, final String itemId, final QueryParameters initialRequestParameters )
@@ -77,7 +84,6 @@ public class ServiceQueryBuffer extends AbstractQueryBuffer
         setRequestParameters ( initialRequestParameters );
 
         this.tracker = new ConnectionIdTracker ( context, connectionId, this.listener, org.openscada.hd.connection.provider.ConnectionService.class );
-        this.tracker.open ();
     }
 
     public void open ()

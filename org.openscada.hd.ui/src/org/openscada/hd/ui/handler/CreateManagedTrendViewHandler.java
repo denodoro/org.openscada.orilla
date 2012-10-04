@@ -26,7 +26,6 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.ui.IWorkbenchPage;
 import org.openscada.hd.QueryParameters;
 import org.openscada.hd.ui.Activator;
-import org.openscada.hd.ui.data.AbstractQueryBuffer;
 import org.openscada.hd.ui.data.ServiceQueryBuffer;
 import org.openscada.hd.ui.views.ManagingTrendView;
 import org.openscada.ui.databinding.AbstractSelectionHandler;
@@ -97,7 +96,9 @@ public class CreateManagedTrendViewHandler extends AbstractSelectionHandler
     {
         final String secondaryId = storageName.replace ( "_", "__" ).replace ( ':', '_' );
 
-        final AbstractQueryBuffer query = new ServiceQueryBuffer ( Activator.getDefault ().getBundle ().getBundleContext (), connectionId, storageName, makeDefaultParameters ( timespec ) );
+        final ServiceQueryBuffer query = new ServiceQueryBuffer ( Activator.getDefault ().getBundle ().getBundleContext (), connectionId, storageName, makeDefaultParameters ( timespec ) );
+
+        query.open ();
 
         final ManagingTrendView view = (ManagingTrendView)getWorkbenchWindow ().getActivePage ().showView ( ManagingTrendView.VIEW_ID, secondaryId, IWorkbenchPage.VIEW_ACTIVATE );
         view.setQuery ( query );
@@ -105,7 +106,8 @@ public class CreateManagedTrendViewHandler extends AbstractSelectionHandler
 
     /**
      * Create some reasonable default parameters
-     * @param timespec 
+     * 
+     * @param timespec
      * @return
      */
     private QueryParameters makeDefaultParameters ( final int[] timespec )

@@ -24,9 +24,13 @@ import org.openscada.chart.swt.render.AbstractLineRender;
 import org.openscada.chart.swt.render.StepRenderer;
 import org.openscada.hd.ui.connection.data.Item;
 import org.openscada.ui.chart.viewer.ChartViewer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ArchiveInput extends QueryInput
 {
+
+    private final static Logger logger = LoggerFactory.getLogger ( ArchiveInput.class );
 
     private boolean disposed;
 
@@ -49,6 +53,22 @@ public class ArchiveInput extends QueryInput
         attachHover ( viewer, querySeriesData.getXAxis () );
 
         setQuery ( querySeriesData.getQuery (), "AVG" );
+    }
+
+    @Override
+    public void setVisible ( final boolean visible )
+    {
+        // super.setVisible ( visible );
+        logger.debug ( "Setting channel visibility - name: {}#{}, visiblity: {}", new Object[] { this.data, getChannelName (), visible } );
+
+        if ( visible )
+        {
+            this.data.getQuery ().open ();
+        }
+        else
+        {
+            this.data.getQuery ().close ();
+        }
     }
 
     @Override

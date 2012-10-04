@@ -62,6 +62,11 @@ public abstract class QueryInput extends LineInput
         super.dispose ();
     }
 
+    protected String getChannelName ()
+    {
+        return this.channelName;
+    }
+
     protected void setQuery ( final ServiceQueryBuffer query, final String channelName )
     {
         this.query = query;
