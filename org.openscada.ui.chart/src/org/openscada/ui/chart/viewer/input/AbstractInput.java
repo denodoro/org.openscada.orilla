@@ -44,9 +44,11 @@ public abstract class AbstractInput extends AbstractPropertyChange implements Ch
 
     private boolean visible = true;
 
+    private String label;
+
+    @Override
     public void setVisible ( final boolean visible )
     {
-        this.visible = visible;
         firePropertyChange ( PROP_VISIBLE, this.visible, this.visible = visible );
     }
 
@@ -133,4 +135,14 @@ public abstract class AbstractInput extends AbstractPropertyChange implements Ch
         firePropertyChange ( PROP_SELECTED_QUALITY, this.selectedQuality, this.selectedQuality = selectedQuality );
     }
 
+    public void setLabel ( final String label )
+    {
+        firePropertyChange ( PROP_LABEL, this.label, this.label = label );
+    }
+
+    @Override
+    public String getLabel ()
+    {
+        return this.label;
+    }
 }

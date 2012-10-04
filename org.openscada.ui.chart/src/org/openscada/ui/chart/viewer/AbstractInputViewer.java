@@ -29,6 +29,7 @@ import org.openscada.ui.chart.model.ChartModel.ChartPackage;
 import org.openscada.ui.chart.model.ChartModel.DataSeries;
 import org.openscada.ui.chart.model.ChartModel.XAxis;
 import org.openscada.ui.chart.model.ChartModel.YAxis;
+import org.openscada.ui.chart.viewer.input.ChartInput;
 
 public abstract class AbstractInputViewer extends AbstractObserver implements InputViewer
 {
@@ -77,7 +78,8 @@ public abstract class AbstractInputViewer extends AbstractObserver implements In
 
     protected void setInputObserable ( final IObservableValue inputObservable )
     {
-        addBinding ( this.dbc.bindValue ( PojoObservables.observeDetailValue ( inputObservable, "visible", Boolean.class ), EMFObservables.observeValue ( this.element, ChartPackage.Literals.DATA_SERIES__VISIBLE ) ) );
+        addBinding ( this.dbc.bindValue ( PojoObservables.observeDetailValue ( inputObservable, ChartInput.PROP_VISIBLE, Boolean.class ), EMFObservables.observeValue ( this.element, ChartPackage.Literals.DATA_SERIES__VISIBLE ) ) );
+        addBinding ( this.dbc.bindValue ( PojoObservables.observeDetailValue ( inputObservable, ChartInput.PROP_LABEL, Boolean.class ), EMFObservables.observeValue ( this.element, ChartPackage.Literals.DATA_SERIES__LABEL ) ) );
     }
 
     protected abstract void checkCreateInput ();

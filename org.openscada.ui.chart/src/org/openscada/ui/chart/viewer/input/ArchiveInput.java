@@ -36,13 +36,10 @@ public class ArchiveInput extends QueryInput
 
     private final QuerySeriesData data;
 
-    private final Item item;
-
     public ArchiveInput ( final Item item, final ChartViewer viewer, final QuerySeriesData querySeriesData, final ResourceManager resourceManager )
     {
         super ( resourceManager );
 
-        this.item = item;
         this.viewer = viewer;
         this.data = querySeriesData;
 
@@ -89,12 +86,6 @@ public class ArchiveInput extends QueryInput
     @Override
     public void tick ( final long now )
     {
-    }
-
-    @Override
-    public String getLabel ()
-    {
-        return this.item.getId () + "#AVG";
     }
 
 }

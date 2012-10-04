@@ -104,7 +104,7 @@ public class ScriptInput extends LineInput
             this.scriptExecutor = null;
             this.scriptExecutor = new ScriptExecutor ( this.scriptEngineManager, "JavaScript", script, getClass ().getClassLoader () );
             this.dataSeries.regenerate ();
-            firePropertyChange ( "state", null, getState () );
+            firePropertyChange ( ChartInput.PROP_STATE, null, getState () );
         }
         catch ( final ScriptException e )
         {
@@ -141,12 +141,6 @@ public class ScriptInput extends LineInput
     @Override
     public void tick ( final long now )
     {
-    }
-
-    @Override
-    public String getLabel ()
-    {
-        return this.script;
     }
 
     @Override

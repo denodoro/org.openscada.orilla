@@ -337,12 +337,6 @@ public class ItemObserver extends LineInput implements DataSourceListener
     }
 
     @Override
-    public String getLabel ()
-    {
-        return this.item.getId ();
-    }
-
-    @Override
     public String getState ()
     {
         final SubscriptionState state = this.state;

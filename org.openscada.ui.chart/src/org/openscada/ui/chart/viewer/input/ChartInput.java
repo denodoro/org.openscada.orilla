@@ -37,6 +37,8 @@ public interface ChartInput
 
     public static final String PROP_PREVIEW = "preview";
 
+    public static final String PROP_LABEL = "label";
+
     public void setSelection ( final boolean state );
 
     public void dispose ();
@@ -72,4 +74,6 @@ public interface ChartInput
     public Image getPreview ( final int width, int height );
 
     public Object getPreview ();
+
+    public void setVisible ( boolean state );
 }

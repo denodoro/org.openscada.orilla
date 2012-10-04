@@ -19,20 +19,18 @@
 
 package org.openscada.ui.chart.selector;
 
+import org.eclipse.core.databinding.beans.BeanProperties;
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.map.IMapChangeListener;
 import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.core.databinding.observable.map.MapChangeEvent;
-import org.eclipse.core.databinding.observable.set.IObservableSet;
 import org.eclipse.core.databinding.observable.set.ISetChangeListener;
 import org.eclipse.core.databinding.observable.set.SetChangeEvent;
 import org.eclipse.core.databinding.property.Properties;
 import org.eclipse.core.databinding.property.value.IValueProperty;
-import org.eclipse.emf.databinding.EMFObservables;
-import org.eclipse.emf.databinding.EMFProperties;
 import org.eclipse.jface.databinding.viewers.IViewerObservableSet;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
-import org.eclipse.jface.databinding.viewers.ViewerSupport;
+import org.eclipse.jface.databinding.viewers.ObservableMapLabelProvider;
 import org.eclipse.jface.databinding.viewers.ViewersObservables;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.ColumnWeightData;
@@ -41,25 +39,52 @@ import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
-import org.openscada.ui.chart.model.ChartModel.Chart;
-import org.openscada.ui.chart.model.ChartModel.ChartPackage;
-import org.openscada.ui.chart.model.ChartModel.DataSeries;
+import org.openscada.ui.chart.viewer.ChartViewer;
+import org.openscada.ui.chart.viewer.input.ChartInput;
 
-public class ChartConfigurationInputSelector
+public class ChartInputSelector
 {
+    private final class ObservableMapLabelProviderExtension extends ObservableMapLabelProvider
+    {
+        private ObservableMapLabelProviderExtension ( final IObservableMap[] attributeMaps )
+        {
+            super ( attributeMaps );
+        }
+
+        @Override
+        public Image getColumnImage ( final Object element, final int columnIndex )
+        {
+            if ( columnIndex != 0 )
+            {
+                return super.getColumnImage ( element, columnIndex );
+            }
+            if ( ! ( element instanceof ChartInput ) )
+            {
+                return super.getColumnImage ( element, columnIndex );
+            }
+
+            return ( (ChartInput)element ).getPreview ( 30, 20 );
+        }
+    }
+
     private final CheckboxTableViewer viewer;
 
     private final IObservableList inputs;
 
     private final IViewerObservableSet checked;
 
-    public ChartConfigurationInputSelector ( final Composite parent, final Chart chart )
+    private final ObservableListContentProvider contentProvider;
+
+    private final IObservableMap visibleElements;
+
+    public ChartInputSelector ( final Composite parent, final ChartViewer chart )
     {
         this ( parent, chart, false );
     }
 
-    public ChartConfigurationInputSelector ( final Composite parent, final Chart chart, final boolean showHeader )
+    public ChartInputSelector ( final Composite parent, final ChartViewer chart, final boolean showHeader )
     {
         this.viewer = CheckboxTableViewer.newCheckList ( parent, SWT.FULL_SELECTION );
         this.viewer.getControl ().addDisposeListener ( new DisposeListener () {
@@ -71,7 +96,7 @@ public class ChartConfigurationInputSelector
             }
         } );
 
-        this.inputs = EMFObservables.observeList ( chart, ChartPackage.Literals.CHART__INPUTS );
+        this.inputs = chart.getItems ();
 
         if ( showHeader )
         {
@@ -86,63 +111,68 @@ public class ChartConfigurationInputSelector
             this.viewer.getTable ().setLayout ( layout );
         }
 
-        ViewerSupport.bind ( this.viewer, this.inputs, EMFProperties.value ( ChartPackage.Literals.DATA_SERIES__LABEL ) );
+        this.contentProvider = new ObservableListContentProvider ();
+        this.viewer.setContentProvider ( this.contentProvider );
+        this.viewer.setLabelProvider ( new ObservableMapLabelProviderExtension ( Properties.observeEach ( this.contentProvider.getKnownElements (), new IValueProperty[] { BeanProperties.value ( ChartInput.PROP_LABEL ), BeanProperties.value ( ChartInput.PROP_PREVIEW ) } ) ) );
+        this.viewer.setInput ( this.inputs );
 
-        final IObservableSet elements = ( (ObservableListContentProvider)this.viewer.getContentProvider () ).getKnownElements ();
-        final IObservableMap[] visibile = Properties.observeEach ( elements, new IValueProperty[] { EMFProperties.value ( ChartPackage.Literals.DATA_SERIES__VISIBLE ) } );
-
+        this.visibleElements = BeanProperties.value ( ChartInput.class, ChartInput.PROP_VISIBLE ).observeDetail ( this.contentProvider.getKnownElements () );
         this.checked = ViewersObservables.observeCheckedElements ( this.viewer, null );
 
-        // initial set
-        for ( final DataSeries series : chart.getInputs () )
+        for ( final Object key : this.visibleElements.keySet () )
         {
-            if ( series.isVisible () )
-            {
-                this.checked.add ( series );
-            }
+            checkEntry ( key );
         }
+        this.visibleElements.addMapChangeListener ( new IMapChangeListener () {
+
+            @Override
+            public void handleMapChange ( final MapChangeEvent event )
+            {
+                for ( final Object key : event.diff.getAddedKeys () )
+                {
+                    checkEntry ( key );
+                }
+                for ( final Object key : event.diff.getChangedKeys () )
+                {
+                    checkEntry ( key );
+                }
+            }
+
+        } );
 
         this.checked.addSetChangeListener ( new ISetChangeListener () {
 
             @Override
             public void handleSetChange ( final SetChangeEvent event )
             {
-                for ( final Object o : event.diff.getAdditions () )
-                {
-                    ( (DataSeries)o ).setVisible ( true );
-                }
                 for ( final Object o : event.diff.getRemovals () )
                 {
-                    ( (DataSeries)o ).setVisible ( false );
+                    ( (ChartInput)o ).setVisible ( false );
                 }
-            }
-        } );
-
-        visibile[0].addMapChangeListener ( new IMapChangeListener () {
-
-            @Override
-            public void handleMapChange ( final MapChangeEvent event )
-            {
-                for ( final Object o : event.diff.getChangedKeys () )
+                for ( final Object o : event.diff.getAdditions () )
                 {
-                    if ( (Boolean)event.diff.getNewValue ( o ) )
-                    {
-                        ChartConfigurationInputSelector.this.checked.add ( o );
-                    }
-                    else
-                    {
-                        ChartConfigurationInputSelector.this.checked.remove ( o );
-                    }
+                    ( (ChartInput)o ).setVisible ( true );
                 }
             }
         } );
+    }
 
+    private void checkEntry ( final Object key )
+    {
+        if ( ( (ChartInput)key ).isVisible () )
+        {
+            ChartInputSelector.this.checked.add ( key );
+        }
+        else
+        {
+            ChartInputSelector.this.checked.remove ( key );
+        }
     }
 
     protected void handleDispose ()
     {
-        this.viewer.getLabelProvider ().dispose ();
-        this.viewer.getContentProvider ().dispose ();
+        this.visibleElements.dispose ();
+        this.contentProvider.dispose ();
 
         this.checked.dispose ();
         this.inputs.dispose ();

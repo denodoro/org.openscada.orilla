@@ -35,8 +35,6 @@ public class ArchiveChannelInput extends QueryInput
 
     private QuerySeriesData data;
 
-    private String label;
-
     public ArchiveChannelInput ( final ChartViewer viewer, final QueryChannelSeriesData data, final ResourceManager resourceManager )
     {
         super ( resourceManager );
@@ -84,17 +82,6 @@ public class ArchiveChannelInput extends QueryInput
     @Override
     public void tick ( final long now )
     {
-    }
-
-    @Override
-    public String getLabel ()
-    {
-        return this.label;
-    }
-
-    public void setLabel ( final String label )
-    {
-        firePropertyChange ( "label", this.label, this.label = label );
     }
 
     @Override
