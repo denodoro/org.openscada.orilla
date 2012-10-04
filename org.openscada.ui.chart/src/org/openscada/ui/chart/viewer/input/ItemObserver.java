@@ -46,7 +46,7 @@ import org.openscada.da.ui.connection.data.Item;
 import org.openscada.ui.chart.Activator;
 import org.openscada.ui.chart.viewer.ChartViewer;
 
-public class ItemObserver extends LineInput implements DataSourceListener, ChartInput
+public class ItemObserver extends LineInput implements DataSourceListener
 {
     private static final String PROP_STATE = "state";
 
