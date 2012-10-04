@@ -28,6 +28,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.LineAttributes;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
@@ -119,7 +120,7 @@ public abstract class LineInput extends AbstractInput implements LinePropertiesS
     @Override
     public Object getPreview ()
     {
-        // this is just a dummy method
+        // this is just a dummy method required for triggering updates
         return this.preview;
     }
 
@@ -139,7 +140,7 @@ public abstract class LineInput extends AbstractInput implements LinePropertiesS
         final Image img = this.previews.get ( p );
         if ( img == null )
         {
-            final Image newImage = makePreview ( p );
+            final Image newImage = makePreview ( Display.getDefault (), getLineRenderer ().getLineAttributes (), getLineRenderer ().getLineColor (), p );
             this.previews.put ( p, newImage );
             return newImage;
         }
@@ -147,9 +148,9 @@ public abstract class LineInput extends AbstractInput implements LinePropertiesS
 
     }
 
-    private Image makePreview ( final Point p )
+    public static Image makePreview ( final Display display, final LineAttributes lineAttributes, final Color lineColor, final Point p )
     {
-        final Image img = new Image ( Display.getDefault (), p.x, p.y );
+        final Image img = new Image ( display, p.x, p.y );
 
         final GC gc = new GC ( img );
         try
@@ -158,12 +159,11 @@ public abstract class LineInput extends AbstractInput implements LinePropertiesS
             gc.setBackground ( img.getDevice ().getSystemColor ( SWT.COLOR_WHITE ) );
             gc.fillRectangle ( 0, 0, p.x, p.y );
 
-            gc.setLineAttributes ( getLineRenderer ().getLineAttributes () );
+            gc.setLineAttributes ( lineAttributes );
 
-            final Color fgColor = getLineRenderer ().getLineColor ();
-            if ( fgColor != null )
+            if ( lineColor != null )
             {
-                gc.setForeground ( fgColor );
+                gc.setForeground ( lineColor );
             }
 
             gc.drawLine ( 0, p.y / 2, p.x, p.y / 2 );
