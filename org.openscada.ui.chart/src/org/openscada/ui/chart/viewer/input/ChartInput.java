@@ -60,7 +60,7 @@ public interface ChartInput
     /**
      * Get rendered preview
      * <p>
-     * The chart input implementation must dispose the created image. If the implemenation cannot create the image for the requested size it must return <code>null</code>.
+     * The chart input implementation must dispose the created image. If the implementation cannot create the image for the requested size it must return <code>null</code>.
      * </p>
      * 
      * @param width
