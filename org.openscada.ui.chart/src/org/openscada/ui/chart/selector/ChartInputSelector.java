@@ -65,7 +65,7 @@ public class ChartInputSelector
                 return super.getColumnImage ( element, columnIndex );
             }
 
-            return ( (ChartInput)element ).getPreview ( 30, 20 );
+            return ( (ChartInput)element ).getPreview ( 30, 15 );
         }
     }
 
