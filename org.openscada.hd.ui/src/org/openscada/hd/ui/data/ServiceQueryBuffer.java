@@ -80,6 +80,11 @@ public class ServiceQueryBuffer extends AbstractQueryBuffer
         this.tracker.open ();
     }
 
+    public void open ()
+    {
+        this.tracker.open ();
+    }
+
     @Override
     public void close ()
     {
