@@ -46,7 +46,7 @@ import org.openscada.ui.chart.model.ChartModel.Chart;
 import org.openscada.ui.chart.model.ChartModel.ChartPackage;
 import org.openscada.ui.chart.model.ChartModel.DataSeries;
 
-public class ChartInputSelector
+public class ChartConfigurationInputSelector
 {
     private final CheckboxTableViewer viewer;
 
@@ -54,12 +54,12 @@ public class ChartInputSelector
 
     private final IViewerObservableSet checked;
 
-    public ChartInputSelector ( final Composite parent, final Chart chart )
+    public ChartConfigurationInputSelector ( final Composite parent, final Chart chart )
     {
         this ( parent, chart, false );
     }
 
-    public ChartInputSelector ( final Composite parent, final Chart chart, final boolean showHeader )
+    public ChartConfigurationInputSelector ( final Composite parent, final Chart chart, final boolean showHeader )
     {
         this.viewer = CheckboxTableViewer.newCheckList ( parent, SWT.FULL_SELECTION );
         this.viewer.getControl ().addDisposeListener ( new DisposeListener () {
@@ -127,11 +127,11 @@ public class ChartInputSelector
                 {
                     if ( (Boolean)event.diff.getNewValue ( o ) )
                     {
-                        ChartInputSelector.this.checked.add ( o );
+                        ChartConfigurationInputSelector.this.checked.add ( o );
                     }
                     else
                     {
-                        ChartInputSelector.this.checked.remove ( o );
+                        ChartConfigurationInputSelector.this.checked.remove ( o );
                     }
                 }
             }

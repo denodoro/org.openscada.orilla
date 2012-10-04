@@ -23,7 +23,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.openscada.ui.chart.model.ChartModel.Chart;
-import org.openscada.ui.chart.selector.ChartInputSelector;
+import org.openscada.ui.chart.selector.ChartConfigurationInputSelector;
 import org.openscada.ui.chart.viewer.ChartViewer;
 
 public class ChartInputSelectorView extends AbstractChartManagePart
@@ -33,7 +33,7 @@ public class ChartInputSelectorView extends AbstractChartManagePart
 
     private Composite parent;
 
-    private ChartInputSelector selector;
+    private ChartConfigurationInputSelector selector;
 
     private Chart configuration;
 
@@ -79,7 +79,7 @@ public class ChartInputSelectorView extends AbstractChartManagePart
             this.selector.dispose ();
             this.selector = null;
         }
-        this.selector = new ChartInputSelector ( this.parent, chartViewer.getChartConfiguration () );
+        this.selector = new ChartConfigurationInputSelector ( this.parent, chartViewer.getChartConfiguration () );
         this.parent.layout ();
     }
 }
