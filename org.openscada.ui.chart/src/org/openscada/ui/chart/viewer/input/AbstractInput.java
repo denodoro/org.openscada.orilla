@@ -42,7 +42,7 @@ public abstract class AbstractInput extends AbstractPropertyChange implements Ch
 
     private ChartRenderer chartRenderer;
 
-    private boolean visible = true;
+    private boolean visible;
 
     private String label;
 
