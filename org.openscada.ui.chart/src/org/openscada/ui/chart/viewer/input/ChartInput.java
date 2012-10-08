@@ -45,6 +45,8 @@ public interface ChartInput
 
     public void tick ( final long now );
 
+    public void setVisible ( boolean state );
+
     public boolean isVisible ();
 
     public String getLabel ();
@@ -74,6 +76,4 @@ public interface ChartInput
     public Image getPreview ( final int width, int height );
 
     public Object getPreview ();
-
-    public void setVisible ( boolean state );
 }
