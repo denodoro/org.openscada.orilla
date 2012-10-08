@@ -58,7 +58,8 @@ public class ArchiveInput extends QueryInput
     @Override
     public void setVisible ( final boolean visible )
     {
-        // super.setVisible ( visible );
+        super.setVisible ( visible );
+
         logger.debug ( "Setting channel visibility - name: {}#{}, visiblity: {}", new Object[] { this.data, getChannelName (), visible } );
 
         if ( visible )
