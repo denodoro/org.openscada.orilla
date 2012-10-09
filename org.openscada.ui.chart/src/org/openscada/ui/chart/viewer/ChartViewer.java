@@ -199,6 +199,8 @@ public class ChartViewer extends AbstractSelectionProvider
                 handleDispose ();
             }
         } );
+
+        setSelection ( new StructuredSelection ( this ) );
     }
 
     public void setScrollable ( final boolean scrollable )
