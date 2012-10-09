@@ -24,9 +24,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.eclipse.emf.common.util.URI;
@@ -38,10 +36,6 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.ISelectionProvider;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.layout.FillLayout;
@@ -103,41 +97,6 @@ public class ChartView extends ViewPart
         public void run ()
         {
             print ();
-        }
-    }
-
-    public class SelectionProviderImpl implements ISelectionProvider
-    {
-        private final Set<ISelectionChangedListener> listeners = new LinkedHashSet<ISelectionChangedListener> ();
-
-        private ISelection selection;
-
-        @Override
-        public void setSelection ( final ISelection selection )
-        {
-            this.selection = selection;
-            for ( final ISelectionChangedListener listener : this.listeners )
-            {
-                listener.selectionChanged ( new SelectionChangedEvent ( this, selection ) );
-            }
-        }
-
-        @Override
-        public void removeSelectionChangedListener ( final ISelectionChangedListener listener )
-        {
-            this.listeners.remove ( listener );
-        }
-
-        @Override
-        public ISelection getSelection ()
-        {
-            return this.selection;
-        }
-
-        @Override
-        public void addSelectionChangedListener ( final ISelectionChangedListener listener )
-        {
-            this.listeners.add ( listener );
         }
     }
 
@@ -216,8 +175,7 @@ public class ChartView extends ViewPart
         this.chartArea = new ChartArea ( parent, SWT.NONE );
         this.viewer = new ChartViewer ( this.chartArea.getChartRenderer (), this.configuration );
 
-        getSite ().setSelectionProvider ( new SelectionProviderImpl () );
-        setAsSelection ();
+        getSite ().setSelectionProvider ( this.viewer );
 
         getSite ().getWorkbenchWindow ().getSelectionService ().addPostSelectionListener ( new ISelectionListener () {
 
@@ -227,7 +185,7 @@ public class ChartView extends ViewPart
                 final Object sel = SelectionHelper.first ( selection, Object.class );
                 if ( sel == null )
                 {
-                    ChartView.this.viewer.setSelection ( null );
+                    ChartView.this.viewer.setSelection ( (ChartInput)null );
                 }
                 else if ( sel instanceof ChartInput )
                 {
@@ -300,13 +258,7 @@ public class ChartView extends ViewPart
     @Override
     public void setFocus ()
     {
-        setAsSelection ();
         this.viewer.setFocus ();
-    }
-
-    private void setAsSelection ()
-    {
-        getSite ().getSelectionProvider ().setSelection ( new StructuredSelection ( this.viewer ) );
     }
 
     @Override

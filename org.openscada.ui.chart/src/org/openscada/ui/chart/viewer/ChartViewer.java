@@ -40,6 +40,7 @@ import org.eclipse.jface.resource.ResourceManager;
 import org.eclipse.jface.util.LocalSelectionTransfer;
 import org.eclipse.jface.util.SafeRunnable;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTargetAdapter;
@@ -72,7 +73,7 @@ import org.openscada.ui.chart.model.ChartModel.XAxis;
 import org.openscada.ui.chart.model.ChartModel.YAxis;
 import org.openscada.ui.chart.viewer.input.ChartInput;
 
-public class ChartViewer
+public class ChartViewer extends AbstractSelectionProvider
 {
     private final ChartRenderer manager;
 
@@ -597,7 +598,7 @@ public class ChartViewer
     {
         if ( input == this.selection )
         {
-            setSelection ( null );
+            setSelection ( (ChartInput)null );
         }
         if ( this.items.remove ( input ) )
         {
@@ -668,6 +669,7 @@ public class ChartViewer
     public void setFocus ()
     {
         this.manager.setFocus ();
+        setSelection ( new StructuredSelection ( this ) );
     }
 
     public void dispose ()
@@ -752,4 +754,5 @@ public class ChartViewer
             }
         }
     }
+
 }
