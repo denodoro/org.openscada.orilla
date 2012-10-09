@@ -21,18 +21,18 @@ import org.openscada.ui.chart.model.ChartModel.ScriptSeries;
  * <p>
  * The following features are implemented:
  * <ul>
- * <li>{@link org.openscada.ui.chart.model.ChartModel.impl.ScriptSeriesImpl#getLineProperties <em>Line Properties</em>}</li>
- * <li>{@link org.openscada.ui.chart.model.ChartModel.impl.ScriptSeriesImpl#getScript <em>Script</em>}</li>
+ *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.ScriptSeriesImpl#getLineProperties <em>Line Properties</em>}</li>
+ *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.ScriptSeriesImpl#getScript <em>Script</em>}</li>
  * </ul>
  * </p>
- * 
+ *
  * @generated
  */
 public class ScriptSeriesImpl extends DataSeriesImpl implements ScriptSeries
 {
     /**
-     * The cached value of the '{@link #getLineProperties() <em>Line Properties</em>}' containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
+     * The cached value of the '{@link #getLineProperties() <em>Line Properties</em>}' containment reference.
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @see #getLineProperties()
      * @generated
      * @ordered
@@ -40,8 +40,8 @@ public class ScriptSeriesImpl extends DataSeriesImpl implements ScriptSeries
     protected LineProperties lineProperties;
 
     /**
-     * The default value of the '{@link #getScript() <em>Script</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
+     * The default value of the '{@link #getScript() <em>Script</em>}' attribute.
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @see #getScript()
      * @generated
      * @ordered
@@ -49,8 +49,8 @@ public class ScriptSeriesImpl extends DataSeriesImpl implements ScriptSeries
     protected static final String SCRIPT_EDEFAULT = null;
 
     /**
-     * The cached value of the '{@link #getScript() <em>Script</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
+     * The cached value of the '{@link #getScript() <em>Script</em>}' attribute.
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @see #getScript()
      * @generated
      * @ordered
@@ -70,7 +70,6 @@ public class ScriptSeriesImpl extends DataSeriesImpl implements ScriptSeries
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
@@ -81,104 +80,84 @@ public class ScriptSeriesImpl extends DataSeriesImpl implements ScriptSeries
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
     public LineProperties getLineProperties ()
     {
-        return this.lineProperties;
+        return lineProperties;
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
-    public NotificationChain basicSetLineProperties ( final LineProperties newLineProperties, NotificationChain msgs )
+    public NotificationChain basicSetLineProperties ( LineProperties newLineProperties, NotificationChain msgs )
     {
-        final LineProperties oldLineProperties = this.lineProperties;
-        this.lineProperties = newLineProperties;
+        LineProperties oldLineProperties = lineProperties;
+        lineProperties = newLineProperties;
         if ( eNotificationRequired () )
         {
-            final ENotificationImpl notification = new ENotificationImpl ( this, Notification.SET, ChartPackage.SCRIPT_SERIES__LINE_PROPERTIES, oldLineProperties, newLineProperties );
+            ENotificationImpl notification = new ENotificationImpl ( this, Notification.SET, ChartPackage.SCRIPT_SERIES__LINE_PROPERTIES, oldLineProperties, newLineProperties );
             if ( msgs == null )
-            {
                 msgs = notification;
-            }
             else
-            {
                 msgs.add ( notification );
-            }
         }
         return msgs;
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
-    public void setLineProperties ( final LineProperties newLineProperties )
+    public void setLineProperties ( LineProperties newLineProperties )
     {
-        if ( newLineProperties != this.lineProperties )
+        if ( newLineProperties != lineProperties )
         {
             NotificationChain msgs = null;
-            if ( this.lineProperties != null )
-            {
-                msgs = ( (InternalEObject)this.lineProperties ).eInverseRemove ( this, EOPPOSITE_FEATURE_BASE - ChartPackage.SCRIPT_SERIES__LINE_PROPERTIES, null, msgs );
-            }
+            if ( lineProperties != null )
+                msgs = ( (InternalEObject)lineProperties ).eInverseRemove ( this, EOPPOSITE_FEATURE_BASE - ChartPackage.SCRIPT_SERIES__LINE_PROPERTIES, null, msgs );
             if ( newLineProperties != null )
-            {
                 msgs = ( (InternalEObject)newLineProperties ).eInverseAdd ( this, EOPPOSITE_FEATURE_BASE - ChartPackage.SCRIPT_SERIES__LINE_PROPERTIES, null, msgs );
-            }
             msgs = basicSetLineProperties ( newLineProperties, msgs );
             if ( msgs != null )
-            {
                 msgs.dispatch ();
-            }
         }
         else if ( eNotificationRequired () )
-        {
             eNotify ( new ENotificationImpl ( this, Notification.SET, ChartPackage.SCRIPT_SERIES__LINE_PROPERTIES, newLineProperties, newLineProperties ) );
-        }
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
     public String getScript ()
     {
-        return this.script;
+        return script;
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
-    public void setScript ( final String newScript )
+    public void setScript ( String newScript )
     {
-        final String oldScript = this.script;
-        this.script = newScript;
+        String oldScript = script;
+        script = newScript;
         if ( eNotificationRequired () )
-        {
-            eNotify ( new ENotificationImpl ( this, Notification.SET, ChartPackage.SCRIPT_SERIES__SCRIPT, oldScript, this.script ) );
-        }
+            eNotify ( new ENotificationImpl ( this, Notification.SET, ChartPackage.SCRIPT_SERIES__SCRIPT, oldScript, script ) );
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
-    public NotificationChain eInverseRemove ( final InternalEObject otherEnd, final int featureID, final NotificationChain msgs )
+    public NotificationChain eInverseRemove ( InternalEObject otherEnd, int featureID, NotificationChain msgs )
     {
         switch ( featureID )
         {
@@ -190,11 +169,10 @@ public class ScriptSeriesImpl extends DataSeriesImpl implements ScriptSeries
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
-    public Object eGet ( final int featureID, final boolean resolve, final boolean coreType )
+    public Object eGet ( int featureID, boolean resolve, boolean coreType )
     {
         switch ( featureID )
         {
@@ -208,11 +186,10 @@ public class ScriptSeriesImpl extends DataSeriesImpl implements ScriptSeries
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
-    public void eSet ( final int featureID, final Object newValue )
+    public void eSet ( int featureID, Object newValue )
     {
         switch ( featureID )
         {
@@ -228,11 +205,10 @@ public class ScriptSeriesImpl extends DataSeriesImpl implements ScriptSeries
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
-    public void eUnset ( final int featureID )
+    public void eUnset ( int featureID )
     {
         switch ( featureID )
         {
@@ -248,38 +224,34 @@ public class ScriptSeriesImpl extends DataSeriesImpl implements ScriptSeries
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
-    public boolean eIsSet ( final int featureID )
+    public boolean eIsSet ( int featureID )
     {
         switch ( featureID )
         {
             case ChartPackage.SCRIPT_SERIES__LINE_PROPERTIES:
-                return this.lineProperties != null;
+                return lineProperties != null;
             case ChartPackage.SCRIPT_SERIES__SCRIPT:
-                return SCRIPT_EDEFAULT == null ? this.script != null : !SCRIPT_EDEFAULT.equals ( this.script );
+                return SCRIPT_EDEFAULT == null ? script != null : !SCRIPT_EDEFAULT.equals ( script );
         }
         return super.eIsSet ( featureID );
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
     public String toString ()
     {
         if ( eIsProxy () )
-        {
             return super.toString ();
-        }
 
-        final StringBuffer result = new StringBuffer ( super.toString () );
+        StringBuffer result = new StringBuffer ( super.toString () );
         result.append ( " (script: " );
-        result.append ( this.script );
+        result.append ( script );
         result.append ( ')' );
         return result.toString ();
     }

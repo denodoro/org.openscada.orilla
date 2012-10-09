@@ -189,13 +189,22 @@ public interface ChartPackage extends EPackage
     int CHART__CONTROLLERS = 12;
 
     /**
+     * The feature id for the '<em><b>Hoverable</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int CHART__HOVERABLE = 13;
+
+    /**
      * The number of structural features of the '<em>Chart</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int CHART_FEATURE_COUNT = 13;
+    int CHART_FEATURE_COUNT = 14;
 
     /**
      * The meta object id for the '{@link org.openscada.ui.chart.model.ChartModel.impl.AxisImpl <em>Axis</em>}' class.
@@ -1132,6 +1141,17 @@ public interface ChartPackage extends EPackage
     EReference getChart_Controllers ();
 
     /**
+     * Returns the meta object for the attribute '{@link org.openscada.ui.chart.model.ChartModel.Chart#isHoverable <em>Hoverable</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Hoverable</em>'.
+     * @see org.openscada.ui.chart.model.ChartModel.Chart#isHoverable()
+     * @see #getChart()
+     * @generated
+     */
+    EAttribute getChart_Hoverable ();
+
+    /**
      * Returns the meta object for class '{@link org.openscada.ui.chart.model.ChartModel.XAxis <em>XAxis</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1736,6 +1756,14 @@ public interface ChartPackage extends EPackage
          * @generated
          */
         EReference CHART__CONTROLLERS = eINSTANCE.getChart_Controllers ();
+
+        /**
+         * The meta object literal for the '<em><b>Hoverable</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute CHART__HOVERABLE = eINSTANCE.getChart_Hoverable ();
 
         /**
          * The meta object literal for the '{@link org.openscada.ui.chart.model.ChartModel.impl.XAxisImpl <em>XAxis</em>}' class.

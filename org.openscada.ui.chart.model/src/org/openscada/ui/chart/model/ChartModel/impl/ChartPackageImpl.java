@@ -342,6 +342,16 @@ public class ChartPackageImpl extends EPackageImpl implements ChartPackage
     }
 
     /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getChart_Hoverable ()
+    {
+        return (EAttribute)chartEClass.getEStructuralFeatures ().get ( 13 );
+    }
+
+    /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
@@ -824,6 +834,7 @@ public class ChartPackageImpl extends EPackageImpl implements ChartPackage
         createEAttribute ( chartEClass, CHART__MUTABLE );
         createEAttribute ( chartEClass, CHART__SCROLLABLE );
         createEReference ( chartEClass, CHART__CONTROLLERS );
+        createEAttribute ( chartEClass, CHART__HOVERABLE );
 
         xAxisEClass = createEClass ( XAXIS );
         createEAttribute ( xAxisEClass, XAXIS__MINIMUM );
@@ -940,6 +951,7 @@ public class ChartPackageImpl extends EPackageImpl implements ChartPackage
         initEAttribute ( getChart_Mutable (), ecorePackage.getEBoolean (), "mutable", "true", 1, 1, Chart.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
         initEAttribute ( getChart_Scrollable (), ecorePackage.getEBoolean (), "scrollable", "true", 1, 1, Chart.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
         initEReference ( getChart_Controllers (), this.getController (), null, "controllers", null, 0, -1, Chart.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
+        initEAttribute ( getChart_Hoverable (), ecorePackage.getEBoolean (), "hoverable", "true", 1, 1, Chart.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
 
         initEClass ( xAxisEClass, XAxis.class, "XAxis", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS );
         initEAttribute ( getXAxis_Minimum (), ecorePackage.getELong (), "minimum", "0", 1, 1, XAxis.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );

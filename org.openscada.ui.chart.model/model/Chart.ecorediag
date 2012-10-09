@@ -23,6 +23,10 @@
         <element xmi:type="ecore:EAttribute" href="Chart.ecore#//Chart/scrollable"/>
         <layoutConstraint xmi:type="notation:Location" xmi:id="_gvj8cAMNEeKHwZBNinkcRA"/>
       </children>
+      <children xmi:type="notation:Node" xmi:id="_lwcEcBH3EeKBy6bJscbSUQ" type="2001">
+        <element xmi:type="ecore:EAttribute" href="Chart.ecore#//Chart/hoverable"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_lwcEcRH3EeKBy6bJscbSUQ"/>
+      </children>
       <styles xmi:type="notation:DrawerStyle" xmi:id="_ahRRYdSuEeGG6ZRHVvsIug"/>
       <styles xmi:type="notation:SortingStyle" xmi:id="_ahRRYtSuEeGG6ZRHVvsIug"/>
       <styles xmi:type="notation:FilteringStyle" xmi:id="_ahRRY9SuEeGG6ZRHVvsIug"/>

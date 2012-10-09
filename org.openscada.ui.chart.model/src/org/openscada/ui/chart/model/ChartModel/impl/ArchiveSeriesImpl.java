@@ -27,18 +27,18 @@ import org.openscada.ui.chart.model.ChartModel.LineProperties;
  * <p>
  * The following features are implemented:
  * <ul>
- * <li>{@link org.openscada.ui.chart.model.ChartModel.impl.ArchiveSeriesImpl#getChannels <em>Channels</em>}</li>
- * <li>{@link org.openscada.ui.chart.model.ChartModel.impl.ArchiveSeriesImpl#getLineProperties <em>Line Properties</em>}</li>
+ *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.ArchiveSeriesImpl#getChannels <em>Channels</em>}</li>
+ *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.ArchiveSeriesImpl#getLineProperties <em>Line Properties</em>}</li>
  * </ul>
  * </p>
- * 
+ *
  * @generated
  */
 public class ArchiveSeriesImpl extends ItemDataSeriesImpl implements ArchiveSeries
 {
     /**
-     * The cached value of the '{@link #getChannels() <em>Channels</em>}' containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
+     * The cached value of the '{@link #getChannels() <em>Channels</em>}' containment reference list.
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @see #getChannels()
      * @generated
      * @ordered
@@ -46,8 +46,8 @@ public class ArchiveSeriesImpl extends ItemDataSeriesImpl implements ArchiveSeri
     protected EList<ArchiveChannel> channels;
 
     /**
-     * The cached value of the '{@link #getLineProperties() <em>Line Properties</em>}' containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
+     * The cached value of the '{@link #getLineProperties() <em>Line Properties</em>}' containment reference.
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @see #getLineProperties()
      * @generated
      * @ordered
@@ -67,7 +67,6 @@ public class ArchiveSeriesImpl extends ItemDataSeriesImpl implements ArchiveSeri
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
@@ -78,92 +77,75 @@ public class ArchiveSeriesImpl extends ItemDataSeriesImpl implements ArchiveSeri
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
     public EList<ArchiveChannel> getChannels ()
     {
-        if ( this.channels == null )
+        if ( channels == null )
         {
-            this.channels = new EObjectContainmentEList<ArchiveChannel> ( ArchiveChannel.class, this, ChartPackage.ARCHIVE_SERIES__CHANNELS );
+            channels = new EObjectContainmentEList<ArchiveChannel> ( ArchiveChannel.class, this, ChartPackage.ARCHIVE_SERIES__CHANNELS );
         }
-        return this.channels;
+        return channels;
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
     public LineProperties getLineProperties ()
     {
-        return this.lineProperties;
+        return lineProperties;
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
-    public NotificationChain basicSetLineProperties ( final LineProperties newLineProperties, NotificationChain msgs )
+    public NotificationChain basicSetLineProperties ( LineProperties newLineProperties, NotificationChain msgs )
     {
-        final LineProperties oldLineProperties = this.lineProperties;
-        this.lineProperties = newLineProperties;
+        LineProperties oldLineProperties = lineProperties;
+        lineProperties = newLineProperties;
         if ( eNotificationRequired () )
         {
-            final ENotificationImpl notification = new ENotificationImpl ( this, Notification.SET, ChartPackage.ARCHIVE_SERIES__LINE_PROPERTIES, oldLineProperties, newLineProperties );
+            ENotificationImpl notification = new ENotificationImpl ( this, Notification.SET, ChartPackage.ARCHIVE_SERIES__LINE_PROPERTIES, oldLineProperties, newLineProperties );
             if ( msgs == null )
-            {
                 msgs = notification;
-            }
             else
-            {
                 msgs.add ( notification );
-            }
         }
         return msgs;
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
-    public void setLineProperties ( final LineProperties newLineProperties )
+    public void setLineProperties ( LineProperties newLineProperties )
     {
-        if ( newLineProperties != this.lineProperties )
+        if ( newLineProperties != lineProperties )
         {
             NotificationChain msgs = null;
-            if ( this.lineProperties != null )
-            {
-                msgs = ( (InternalEObject)this.lineProperties ).eInverseRemove ( this, EOPPOSITE_FEATURE_BASE - ChartPackage.ARCHIVE_SERIES__LINE_PROPERTIES, null, msgs );
-            }
+            if ( lineProperties != null )
+                msgs = ( (InternalEObject)lineProperties ).eInverseRemove ( this, EOPPOSITE_FEATURE_BASE - ChartPackage.ARCHIVE_SERIES__LINE_PROPERTIES, null, msgs );
             if ( newLineProperties != null )
-            {
                 msgs = ( (InternalEObject)newLineProperties ).eInverseAdd ( this, EOPPOSITE_FEATURE_BASE - ChartPackage.ARCHIVE_SERIES__LINE_PROPERTIES, null, msgs );
-            }
             msgs = basicSetLineProperties ( newLineProperties, msgs );
             if ( msgs != null )
-            {
                 msgs.dispatch ();
-            }
         }
         else if ( eNotificationRequired () )
-        {
             eNotify ( new ENotificationImpl ( this, Notification.SET, ChartPackage.ARCHIVE_SERIES__LINE_PROPERTIES, newLineProperties, newLineProperties ) );
-        }
     }
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
-    public NotificationChain eInverseRemove ( final InternalEObject otherEnd, final int featureID, final NotificationChain msgs )
+    public NotificationChain eInverseRemove ( InternalEObject otherEnd, int featureID, NotificationChain msgs )
     {
         switch ( featureID )
         {
@@ -177,11 +159,10 @@ public class ArchiveSeriesImpl extends ItemDataSeriesImpl implements ArchiveSeri
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
-    public Object eGet ( final int featureID, final boolean resolve, final boolean coreType )
+    public Object eGet ( int featureID, boolean resolve, boolean coreType )
     {
         switch ( featureID )
         {
@@ -195,12 +176,11 @@ public class ArchiveSeriesImpl extends ItemDataSeriesImpl implements ArchiveSeri
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @SuppressWarnings ( "unchecked" )
     @Override
-    public void eSet ( final int featureID, final Object newValue )
+    public void eSet ( int featureID, Object newValue )
     {
         switch ( featureID )
         {
@@ -217,11 +197,10 @@ public class ArchiveSeriesImpl extends ItemDataSeriesImpl implements ArchiveSeri
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
-    public void eUnset ( final int featureID )
+    public void eUnset ( int featureID )
     {
         switch ( featureID )
         {
@@ -237,18 +216,17 @@ public class ArchiveSeriesImpl extends ItemDataSeriesImpl implements ArchiveSeri
 
     /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
-     * 
      * @generated
      */
     @Override
-    public boolean eIsSet ( final int featureID )
+    public boolean eIsSet ( int featureID )
     {
         switch ( featureID )
         {
             case ChartPackage.ARCHIVE_SERIES__CHANNELS:
-                return this.channels != null && !this.channels.isEmpty ();
+                return channels != null && !channels.isEmpty ();
             case ChartPackage.ARCHIVE_SERIES__LINE_PROPERTIES:
-                return this.lineProperties != null;
+                return lineProperties != null;
         }
         return super.eIsSet ( featureID );
     }

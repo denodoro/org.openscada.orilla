@@ -31,6 +31,7 @@ import org.eclipse.swt.graphics.RGB;
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.Chart#isMutable <em>Mutable</em>}</li>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.Chart#isScrollable <em>Scrollable</em>}</li>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.Chart#getControllers <em>Controllers</em>}</li>
+ *   <li>{@link org.openscada.ui.chart.model.ChartModel.Chart#isHoverable <em>Hoverable</em>}</li>
  * </ul>
  * </p>
  *
@@ -322,5 +323,32 @@ public interface Chart extends EObject
      * @generated
      */
     EList<Controller> getControllers ();
+
+    /**
+     * Returns the value of the '<em><b>Hoverable</b></em>' attribute.
+     * The default value is <code>"true"</code>.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>Hoverable</em>' attribute isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>Hoverable</em>' attribute.
+     * @see #setHoverable(boolean)
+     * @see org.openscada.ui.chart.model.ChartModel.ChartPackage#getChart_Hoverable()
+     * @model default="true" required="true"
+     * @generated
+     */
+    boolean isHoverable ();
+
+    /**
+     * Sets the value of the '{@link org.openscada.ui.chart.model.ChartModel.Chart#isHoverable <em>Hoverable</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>Hoverable</em>' attribute.
+     * @see #isHoverable()
+     * @generated
+     */
+    void setHoverable ( boolean value );
 
 } // Chart

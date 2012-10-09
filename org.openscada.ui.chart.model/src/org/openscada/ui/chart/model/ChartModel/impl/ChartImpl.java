@@ -46,6 +46,7 @@ import org.openscada.ui.chart.model.ChartModel.YAxis;
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.ChartImpl#isMutable <em>Mutable</em>}</li>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.ChartImpl#isScrollable <em>Scrollable</em>}</li>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.ChartImpl#getControllers <em>Controllers</em>}</li>
+ *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.ChartImpl#isHoverable <em>Hoverable</em>}</li>
  * </ul>
  * </p>
  *
@@ -232,6 +233,26 @@ public class ChartImpl extends EObjectImpl implements Chart
      * @ordered
      */
     protected EList<Controller> controllers;
+
+    /**
+     * The default value of the '{@link #isHoverable() <em>Hoverable</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #isHoverable()
+     * @generated
+     * @ordered
+     */
+    protected static final boolean HOVERABLE_EDEFAULT = true;
+
+    /**
+     * The cached value of the '{@link #isHoverable() <em>Hoverable</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #isHoverable()
+     * @generated
+     * @ordered
+     */
+    protected boolean hoverable = HOVERABLE_EDEFAULT;
 
     /**
      * <!-- begin-user-doc -->
@@ -544,6 +565,29 @@ public class ChartImpl extends EObjectImpl implements Chart
      * <!-- end-user-doc -->
      * @generated
      */
+    public boolean isHoverable ()
+    {
+        return hoverable;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public void setHoverable ( boolean newHoverable )
+    {
+        boolean oldHoverable = hoverable;
+        hoverable = newHoverable;
+        if ( eNotificationRequired () )
+            eNotify ( new ENotificationImpl ( this, Notification.SET, ChartPackage.CHART__HOVERABLE, oldHoverable, hoverable ) );
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     @Override
     public NotificationChain eInverseRemove ( InternalEObject otherEnd, int featureID, NotificationChain msgs )
     {
@@ -605,6 +649,8 @@ public class ChartImpl extends EObjectImpl implements Chart
                 return isScrollable ();
             case ChartPackage.CHART__CONTROLLERS:
                 return getControllers ();
+            case ChartPackage.CHART__HOVERABLE:
+                return isHoverable ();
         }
         return super.eGet ( featureID, resolve, coreType );
     }
@@ -665,6 +711,9 @@ public class ChartImpl extends EObjectImpl implements Chart
                 getControllers ().clear ();
                 getControllers ().addAll ( (Collection<? extends Controller>)newValue );
                 return;
+            case ChartPackage.CHART__HOVERABLE:
+                setHoverable ( (Boolean)newValue );
+                return;
         }
         super.eSet ( featureID, newValue );
     }
@@ -718,6 +767,9 @@ public class ChartImpl extends EObjectImpl implements Chart
             case ChartPackage.CHART__CONTROLLERS:
                 getControllers ().clear ();
                 return;
+            case ChartPackage.CHART__HOVERABLE:
+                setHoverable ( HOVERABLE_EDEFAULT );
+                return;
         }
         super.eUnset ( featureID );
     }
@@ -758,6 +810,8 @@ public class ChartImpl extends EObjectImpl implements Chart
                 return scrollable != SCROLLABLE_EDEFAULT;
             case ChartPackage.CHART__CONTROLLERS:
                 return controllers != null && !controllers.isEmpty ();
+            case ChartPackage.CHART__HOVERABLE:
+                return hoverable != HOVERABLE_EDEFAULT;
         }
         return super.eIsSet ( featureID );
     }
@@ -784,6 +838,8 @@ public class ChartImpl extends EObjectImpl implements Chart
         result.append ( mutable );
         result.append ( ", scrollable: " );
         result.append ( scrollable );
+        result.append ( ", hoverable: " );
+        result.append ( hoverable );
         result.append ( ')' );
         return result.toString ();
     }
