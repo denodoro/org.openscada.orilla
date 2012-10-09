@@ -131,6 +131,8 @@ public class ChartViewer extends AbstractSelectionProvider
 
     private boolean scrollable;
 
+    private boolean hoverable;
+
     private final MouseHover.Listener hoverListener = new Listener () {
 
         @Override
@@ -181,6 +183,7 @@ public class ChartViewer extends AbstractSelectionProvider
         this.ctx.bindValue ( PojoObservables.observeValue ( this, "showCurrentTimeRuler" ), EMFObservables.observeValue ( this.chart, ChartPackage.Literals.CHART__SHOW_CURRENT_TIME_RULER ) );
         this.ctx.bindValue ( PojoObservables.observeValue ( this, "mutable" ), EMFObservables.observeValue ( this.chart, ChartPackage.Literals.CHART__MUTABLE ) );
         this.ctx.bindValue ( PojoObservables.observeValue ( this, "scrollable" ), EMFObservables.observeValue ( this.chart, ChartPackage.Literals.CHART__SCROLLABLE ) );
+        this.ctx.bindValue ( PojoObservables.observeValue ( this, "hoverable" ), EMFObservables.observeValue ( this.chart, ChartPackage.Literals.CHART__HOVERABLE ) );
         this.ctx.bindValue ( PojoObservables.observeValue ( this, "chartBackground" ), EMFObservables.observeValue ( this.chart, ChartPackage.Literals.CHART__BACKGROUND_COLOR ) );
 
         this.ctx.bindValue ( PojoObservables.observeValue ( this, "selectedXAxis" ), EMFObservables.observeValue ( this.chart, ChartPackage.Literals.CHART__SELECTED_XAXIS ) );
@@ -212,6 +215,17 @@ public class ChartViewer extends AbstractSelectionProvider
     public boolean isScrollable ()
     {
         return this.scrollable;
+    }
+
+    public boolean isHoverable ()
+    {
+        return this.hoverable;
+    }
+
+    public void setHoverable ( final boolean hoverable )
+    {
+        this.hoverable = hoverable;
+        updateState ();
     }
 
     public ChartRenderer getChartRenderer ()
@@ -326,8 +340,11 @@ public class ChartViewer extends AbstractSelectionProvider
             this.mouseWheelZoomer = new MouseWheelZoomer ( this.manager, x, y );
         }
 
-        this.mouseHover = new MouseHover ( this.manager, x, this.hoverListener );
-        this.mouseHover.setVisible ( true );
+        if ( x != null && y != null && isHoverable () )
+        {
+            this.mouseHover = new MouseHover ( this.manager, x, this.hoverListener );
+            this.mouseHover.setVisible ( true );
+        }
 
         // update current time tracker
 
