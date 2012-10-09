@@ -90,7 +90,15 @@ public abstract class LineInput extends AbstractInput implements LinePropertiesS
     @Override
     public RGB getLineColor ()
     {
-        return this.lineColor != null ? this.lineColor.getRGB () : null;
+        if ( this.lineColor == null )
+        {
+            return null;
+        }
+        if ( this.lineColor.isDisposed () )
+        {
+            return null;
+        }
+        return this.lineColor.getRGB ();
     }
 
     @Override
