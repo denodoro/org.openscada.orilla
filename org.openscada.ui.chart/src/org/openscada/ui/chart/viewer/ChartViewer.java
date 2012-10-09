@@ -324,9 +324,10 @@ public class ChartViewer extends AbstractSelectionProvider
             this.mouseTransformer = new MouseTransformer ( this.manager, x, y );
             this.mouseDragZoomer = new MouseDragZoomer ( this.manager, x, y );
             this.mouseWheelZoomer = new MouseWheelZoomer ( this.manager, x, y );
-            this.mouseHover = new MouseHover ( this.manager, x, this.hoverListener );
-            this.mouseHover.setVisible ( true );
         }
+
+        this.mouseHover = new MouseHover ( this.manager, x, this.hoverListener );
+        this.mouseHover.setVisible ( true );
 
         // update current time tracker
 
