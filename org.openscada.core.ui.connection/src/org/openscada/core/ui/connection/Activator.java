@@ -38,6 +38,7 @@ import org.openscada.core.ui.connection.data.ConnectionDiscovererBean;
 import org.openscada.core.ui.connection.data.ConnectionHolder;
 import org.openscada.core.ui.connection.data.ConnectionHolderAdapterFactory;
 import org.openscada.core.ui.connection.data.ConnectionManager;
+import org.openscada.core.ui.connection.views.tree.ConnectionTreeManager;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -58,9 +59,13 @@ public class Activator extends AbstractUIPlugin
 
     private ObservableSet discoverers;
 
+    private WritableSet treeRoot;
+
     private final Map<Class<?>, IAdapterFactory> adaperFactories = new HashMap<Class<?>, IAdapterFactory> ();
 
     private ConnectionManager connectionManager;
+
+    private ConnectionTreeManager treeRootManager;
 
     public static final Root ROOT = new Root ();
 
@@ -82,6 +87,9 @@ public class Activator extends AbstractUIPlugin
     {
         super.start ( context );
         plugin = this;
+
+        this.treeRoot = new WritableSet ();
+        this.treeRootManager = new ConnectionTreeManager ( this.treeRoot );
 
         this.connectionManager = new ConnectionManager ( context );
 
@@ -110,6 +118,9 @@ public class Activator extends AbstractUIPlugin
             this.connectionManager = null;
         }
 
+        this.treeRootManager.dispose ();
+        this.treeRoot.dispose ();
+
         plugin = null;
         super.stop ( context );
     }
@@ -124,6 +135,11 @@ public class Activator extends AbstractUIPlugin
             }
             return Observables.proxyObservableSet ( this.discoverers );
         }
+    }
+
+    public ObservableSet getTreeRoot ()
+    {
+        return this.treeRoot;
     }
 
     private ObservableSet createDiscoverers ()

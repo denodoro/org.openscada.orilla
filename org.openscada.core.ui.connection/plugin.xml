@@ -84,6 +84,35 @@
                priority="high">
          </actionProvider>
       </navigatorContent>
+      <navigatorContent
+            activeByDefault="true"
+            appearsBefore="org.openscada.core.ui.connection.provider"
+            contentProvider="org.openscada.core.ui.connection.views.tree.ConnectionTreeContentProvider"
+            id="org.openscada.core.tree.ui.connection.provider"
+            labelProvider="org.openscada.core.ui.connection.views.tree.ConnectionTreeLabelProvider"
+            name="Connection Tree"
+            priority="normal">
+         <triggerPoints>
+            <or>
+               <instanceof
+                     value="org.openscada.core.ui.connection.Root">
+               </instanceof>
+               <instanceof
+                     value="org.openscada.core.ui.connection.views.tree.TreeNode">
+               </instanceof>
+            </or>
+         </triggerPoints>
+         <possibleChildren>
+            <or>
+               <instanceof
+                     value="org.openscada.core.ui.connection.data.ConnectionHolder">
+               </instanceof>
+               <instanceof
+                     value="org.openscada.core.ui.connection.views.tree.TreeNode">
+               </instanceof>
+            </or>
+         </possibleChildren>
+      </navigatorContent>
    </extension>
    <extension
          point="org.eclipse.ui.newWizards">
