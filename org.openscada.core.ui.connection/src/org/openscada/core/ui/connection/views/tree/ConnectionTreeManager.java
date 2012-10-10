@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.core.databinding.observable.Diffs;
+import org.eclipse.core.databinding.observable.Realm;
 import org.eclipse.core.databinding.observable.set.IObservableSet;
 import org.eclipse.core.databinding.observable.set.ISetChangeListener;
 import org.eclipse.core.databinding.observable.set.SetChangeEvent;
@@ -53,8 +54,11 @@ public class ConnectionTreeManager
 
     private final AllConnectionsNode allNode;
 
+    private final Realm realm;
+
     public ConnectionTreeManager ( final WritableSet treeRoot )
     {
+        this.realm = treeRoot.getRealm ();
         this.discoverers = Activator.getDefault ().getDiscovererSet ();
         this.discoverers.addSetChangeListener ( this.listener );
         handleDiff ( Diffs.createSetDiff ( this.discoverers, Collections.emptySet () ) );
@@ -64,10 +68,21 @@ public class ConnectionTreeManager
 
     public void dispose ()
     {
+        this.realm.exec ( new Runnable () {
+
+            @Override
+            public void run ()
+            {
+                handleDispose ();
+            }
+        } );
+    }
+
+    private void handleDispose ()
+    {
         this.discoverers.removeSetChangeListener ( this.listener );
 
         this.allNode.dispose ();
-
         this.allConnections.dispose ();
     }
 
@@ -106,4 +121,5 @@ public class ConnectionTreeManager
             }
         } );
     }
+
 }
