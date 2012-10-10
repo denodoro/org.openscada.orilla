@@ -133,9 +133,14 @@ public class LocalDataPage extends WizardPage
         if ( file != null )
         {
             this.fileName.setText ( file );
-            getWizard ().getDialogSettings ().put ( "welcomePage.file", file ); //$NON-NLS-1$
+            storeFileToPreferences ( file );
             loadFile ();
         }
+    }
+
+    private void storeFileToPreferences ( final String file )
+    {
+        getWizard ().getDialogSettings ().put ( "welcomePage.file", file ); //$NON-NLS-1$
     }
 
     protected void update ()
