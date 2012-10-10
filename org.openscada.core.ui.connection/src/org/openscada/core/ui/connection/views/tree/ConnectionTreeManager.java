@@ -31,6 +31,7 @@ import org.eclipse.core.databinding.observable.set.SetDiff;
 import org.eclipse.core.databinding.observable.set.WritableSet;
 import org.openscada.core.ui.connection.Activator;
 import org.openscada.core.ui.connection.data.ConnectionDiscovererBean;
+import org.openscada.core.ui.connection.views.tree.node.AllConnectionsNode;
 
 public class ConnectionTreeManager
 {
@@ -48,9 +49,9 @@ public class ConnectionTreeManager
 
     private final WritableSet allConnections = new WritableSet ();
 
-    private final TreeNode allNode;
-
     private final Map<ConnectionDiscovererBean, DiscovererListener> listenerMap = new HashMap<ConnectionDiscovererBean, DiscovererListener> ();
+
+    private final AllConnectionsNode allNode;
 
     public ConnectionTreeManager ( final WritableSet treeRoot )
     {
@@ -58,19 +59,7 @@ public class ConnectionTreeManager
         this.discoverers.addSetChangeListener ( this.listener );
         handleDiff ( Diffs.createSetDiff ( this.discoverers, Collections.emptySet () ) );
 
-        this.allNode = new TreeNode ( null, "All Connections" );
-        treeRoot.add ( this.allNode );
-
-        // Quick check ... re-implement
-        this.allConnections.addSetChangeListener ( new ISetChangeListener () {
-
-            @Override
-            public void handleSetChange ( final SetChangeEvent event )
-            {
-                ConnectionTreeManager.this.allNode.getConnections ().removeAll ( event.diff.getRemovals () );
-                ConnectionTreeManager.this.allNode.getConnections ().addAll ( event.diff.getAdditions () );
-            }
-        } );
+        this.allNode = new AllConnectionsNode ( treeRoot, this.allConnections );
     }
 
     public void dispose ()
@@ -78,6 +67,7 @@ public class ConnectionTreeManager
         this.discoverers.removeSetChangeListener ( this.listener );
 
         this.allNode.dispose ();
+
         this.allConnections.dispose ();
     }
 
