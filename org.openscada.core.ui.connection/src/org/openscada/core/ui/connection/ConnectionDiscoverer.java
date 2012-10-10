@@ -23,6 +23,17 @@ import org.eclipse.ui.services.IDisposable;
 
 public interface ConnectionDiscoverer extends IDisposable
 {
+    /**
+     * Add a new listener to receive events.
+     * <p>
+     * If the connection discoverer already has discovered connections before
+     * the listener is added the already known connections are already sent to
+     * the listener.
+     * </p>
+     * 
+     * @param listener
+     *            the listener to add
+     */
     public void addConnectionListener ( ConnectionDiscoveryListener listener );
 
     public void removeConnectionListener ( ConnectionDiscoveryListener listener );
