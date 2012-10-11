@@ -30,10 +30,11 @@ public class ConnectionHolderTester extends PropertyTester
 
     private final static Logger logger = LoggerFactory.getLogger ( ConnectionHolderTester.class );
 
+    @Override
     public boolean test ( final Object receiver, final String property, final Object[] args, final Object expectedValue )
     {
         logger.debug ( "Testing: {} for {}", receiver, property );
-        final ConnectionHolder holder = (ConnectionHolder)AdapterHelper.adapt ( receiver, ConnectionHolder.class );
+        final ConnectionHolder holder = AdapterHelper.adapt ( receiver, ConnectionHolder.class );
         if ( holder == null )
         {
             return false;
@@ -41,6 +42,11 @@ public class ConnectionHolderTester extends PropertyTester
 
         if ( "stored".equals ( property ) && expectedValue instanceof Boolean ) //$NON-NLS-1$
         {
+            if ( holder.getDiscoverer () == null )
+            {
+                return false;
+            }
+
             // check if the connection holder was coming from a store
             if ( (Boolean)expectedValue )
             {

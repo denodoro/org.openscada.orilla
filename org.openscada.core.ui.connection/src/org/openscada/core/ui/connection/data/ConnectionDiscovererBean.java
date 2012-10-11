@@ -32,7 +32,6 @@ import org.openscada.core.ui.connection.ConnectionDescriptor;
 import org.openscada.core.ui.connection.ConnectionDiscoverer;
 import org.openscada.core.ui.connection.ConnectionDiscoveryListener;
 import org.openscada.core.ui.connection.ConnectionStore;
-import org.osgi.framework.InvalidSyntaxException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -154,17 +153,9 @@ public class ConnectionDiscovererBean implements IAdaptable, ConnectionDiscovery
         {
             for ( final ConnectionDescriptor info : added )
             {
-                try
-                {
-                    final ConnectionHolder holder = new ConnectionHolder ( this, info );
-                    this.knownConnections.add ( holder );
-                    this.connections.put ( info, holder );
-                }
-                catch ( final InvalidSyntaxException e )
-                {
-                    logger.warn ( "Failed to create connection holder: {}", info, e );
-                }
-
+                final ConnectionHolder holder = new ConnectionHolder ( this, info );
+                this.knownConnections.add ( holder );
+                this.connections.put ( info, holder );
             }
         }
     }

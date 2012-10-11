@@ -29,7 +29,6 @@ import org.openscada.core.ui.connection.Activator;
 import org.openscada.core.ui.connection.ConnectionDescriptor;
 import org.openscada.core.ui.connection.data.ConnectionManager.Entry;
 import org.openscada.utils.beans.AbstractPropertyChange;
-import org.osgi.framework.InvalidSyntaxException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,7 +55,7 @@ public class ConnectionHolder extends AbstractPropertyChange implements Connecti
 
     private Entry entry;
 
-    public ConnectionHolder ( final ConnectionDiscovererBean discoverer, final ConnectionDescriptor info ) throws InvalidSyntaxException
+    public ConnectionHolder ( final ConnectionDiscovererBean discoverer, final ConnectionDescriptor info )
     {
         this.info = info;
         this.discoverer = discoverer;

@@ -48,23 +48,27 @@ public class ConnectionTreeManager
         }
     };
 
-    private final WritableSet allConnections = new WritableSet ();
-
     private final Map<ConnectionDiscovererBean, DiscovererListener> listenerMap = new HashMap<ConnectionDiscovererBean, DiscovererListener> ();
 
     private final Realm realm;
 
     private final WritableSet treeRoot;
 
+    private final ConnectionPoolManager poolManager;
+
     public ConnectionTreeManager ( final WritableSet treeRoot )
     {
         this.realm = treeRoot.getRealm ();
+
         this.treeRoot = treeRoot;
+
+        this.poolManager = new ConnectionPoolManager ();
+
         this.discoverers = Activator.getDefault ().getDiscovererSet ();
         this.discoverers.addSetChangeListener ( this.listener );
         handleDiff ( Diffs.createSetDiff ( this.discoverers, Collections.emptySet () ) );
 
-        treeRoot.add ( new AllConnectionsNode ( this.allConnections ) );
+        treeRoot.add ( new AllConnectionsNode ( this.poolManager ) );
     }
 
     public void dispose ()
@@ -83,7 +87,7 @@ public class ConnectionTreeManager
     {
         this.discoverers.removeSetChangeListener ( this.listener );
 
-        this.allConnections.dispose ();
+        this.poolManager.dispose ();
 
         for ( final Object o : this.treeRoot )
         {
@@ -118,17 +122,9 @@ public class ConnectionTreeManager
 
     private void handleAdd ( final ConnectionDiscovererBean connectionDiscoverer )
     {
-        final DiscovererListener listener = new DiscovererListener ( connectionDiscoverer );
+        final DiscovererListener listener = new DiscovererListener ( connectionDiscoverer, this.poolManager );
         this.listenerMap.put ( connectionDiscoverer, listener );
-        listener.getConnections ().addSetChangeListener ( new ISetChangeListener () {
 
-            @Override
-            public void handleSetChange ( final SetChangeEvent event )
-            {
-                ConnectionTreeManager.this.allConnections.removeAll ( event.diff.getRemovals () );
-                ConnectionTreeManager.this.allConnections.addAll ( event.diff.getAdditions () );
-            }
-        } );
     }
 
 }

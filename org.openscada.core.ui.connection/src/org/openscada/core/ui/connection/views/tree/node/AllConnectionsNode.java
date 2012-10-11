@@ -21,19 +21,19 @@ package org.openscada.core.ui.connection.views.tree.node;
 
 import org.eclipse.core.databinding.observable.set.ISetChangeListener;
 import org.eclipse.core.databinding.observable.set.SetChangeEvent;
-import org.eclipse.core.databinding.observable.set.WritableSet;
+import org.openscada.core.ui.connection.views.tree.ConnectionPoolManager;
 
 public class AllConnectionsNode extends DelegatingTreeNode implements ISetChangeListener
 {
 
-    private final WritableSet allConnections;
+    private final ConnectionPoolManager poolManager;
 
-    public AllConnectionsNode ( final WritableSet allConnections )
+    public AllConnectionsNode ( final ConnectionPoolManager poolManager )
     {
         super ( "All Connections" );
 
-        this.allConnections = allConnections;
-        allConnections.addSetChangeListener ( this );
+        this.poolManager = poolManager;
+        this.poolManager.getAllConnections ().addSetChangeListener ( this );
     }
 
     @Override
@@ -46,7 +46,7 @@ public class AllConnectionsNode extends DelegatingTreeNode implements ISetChange
     @Override
     public void dispose ()
     {
-        this.allConnections.removeSetChangeListener ( this );
+        this.poolManager.getAllConnections ().removeSetChangeListener ( this );
         super.dispose ();
     }
 }
