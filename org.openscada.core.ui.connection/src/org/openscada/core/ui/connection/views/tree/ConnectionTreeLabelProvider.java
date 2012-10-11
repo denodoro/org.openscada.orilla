@@ -53,7 +53,7 @@ public class ConnectionTreeLabelProvider extends CommonListeningLabelProvider im
     @Override
     public void updateLabel ( final StyledViewerLabel label, final Object element )
     {
-        if ( element instanceof TreeNodeImpl )
+        if ( element instanceof TreeNode )
         {
             final TreeNode node = (TreeNode)element;
             label.setText ( node.getName () );
@@ -63,7 +63,7 @@ public class ConnectionTreeLabelProvider extends CommonListeningLabelProvider im
     @Override
     public String getDescription ( final Object element )
     {
-        if ( element instanceof TreeNodeImpl )
+        if ( element instanceof TreeNode )
         {
             return null;
         }

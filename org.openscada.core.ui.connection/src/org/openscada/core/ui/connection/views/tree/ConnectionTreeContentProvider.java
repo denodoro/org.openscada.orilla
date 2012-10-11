@@ -30,7 +30,7 @@ public class ConnectionTreeContentProvider extends ObservableSetTreeContentProvi
         @Override
         public Object getParent ( final Object element )
         {
-            if ( element instanceof TreeNodeImpl )
+            if ( element instanceof TreeNode )
             {
                 final TreeNode parentNode = ( (TreeNode)element ).getParentNode ();
                 if ( parentNode != null )

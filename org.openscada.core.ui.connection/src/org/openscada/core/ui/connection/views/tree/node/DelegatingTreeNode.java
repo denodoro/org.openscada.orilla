@@ -19,34 +19,48 @@
 
 package org.openscada.core.ui.connection.views.tree.node;
 
-import org.eclipse.core.databinding.observable.set.ISetChangeListener;
-import org.eclipse.core.databinding.observable.set.SetChangeEvent;
-import org.eclipse.core.databinding.observable.set.WritableSet;
+import org.eclipse.core.databinding.observable.set.IObservableSet;
+import org.openscada.core.ui.connection.views.tree.TreeNode;
+import org.openscada.core.ui.connection.views.tree.TreeNodeImpl;
 
-public class AllConnectionsNode extends DelegatingTreeNode implements ISetChangeListener
+public class DelegatingTreeNode implements TreeNode
 {
 
-    private final WritableSet allConnections;
+    protected final TreeNodeImpl implNode;
 
-    public AllConnectionsNode ( final WritableSet allConnections )
+    public DelegatingTreeNode ( final String name )
     {
-        super ( "All Connections" );
-
-        this.allConnections = allConnections;
-        allConnections.addSetChangeListener ( this );
+        this.implNode = new TreeNodeImpl ( null, name );
     }
 
     @Override
-    public void handleSetChange ( final SetChangeEvent event )
+    public IObservableSet getChildren ()
     {
-        this.implNode.getConnections ().removeAll ( event.diff.getRemovals () );
-        this.implNode.getConnections ().addAll ( event.diff.getAdditions () );
+        return this.implNode.getChildren ();
+    }
+
+    @Override
+    public IObservableSet getConnections ()
+    {
+        return this.implNode.getConnections ();
+    }
+
+    @Override
+    public String getName ()
+    {
+        return this.implNode.getName ();
+    }
+
+    @Override
+    public TreeNode getParentNode ()
+    {
+        return this.implNode.getParentNode ();
     }
 
     @Override
     public void dispose ()
     {
-        this.allConnections.removeSetChangeListener ( this );
-        super.dispose ();
+        this.implNode.dispose ();
     }
+
 }

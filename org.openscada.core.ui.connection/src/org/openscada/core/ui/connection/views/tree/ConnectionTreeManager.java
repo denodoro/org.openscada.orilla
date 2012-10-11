@@ -52,18 +52,19 @@ public class ConnectionTreeManager
 
     private final Map<ConnectionDiscovererBean, DiscovererListener> listenerMap = new HashMap<ConnectionDiscovererBean, DiscovererListener> ();
 
-    private final AllConnectionsNode allNode;
-
     private final Realm realm;
+
+    private final WritableSet treeRoot;
 
     public ConnectionTreeManager ( final WritableSet treeRoot )
     {
         this.realm = treeRoot.getRealm ();
+        this.treeRoot = treeRoot;
         this.discoverers = Activator.getDefault ().getDiscovererSet ();
         this.discoverers.addSetChangeListener ( this.listener );
         handleDiff ( Diffs.createSetDiff ( this.discoverers, Collections.emptySet () ) );
 
-        this.allNode = new AllConnectionsNode ( treeRoot, this.allConnections );
+        treeRoot.add ( new AllConnectionsNode ( this.allConnections ) );
     }
 
     public void dispose ()
@@ -82,8 +83,16 @@ public class ConnectionTreeManager
     {
         this.discoverers.removeSetChangeListener ( this.listener );
 
-        this.allNode.dispose ();
         this.allConnections.dispose ();
+
+        for ( final Object o : this.treeRoot )
+        {
+            if ( o instanceof TreeNode )
+            {
+                ( (TreeNode)o ).dispose ();
+            }
+        }
+        this.treeRoot.clear ();
     }
 
     protected void handleDiff ( final SetDiff diff )
