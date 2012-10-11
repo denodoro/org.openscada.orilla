@@ -57,6 +57,11 @@
        name="%detailsPart.blocking.name"
        sortKey="0503">
  </detailsPart>
+ <detailsPart
+       class="org.openscada.da.client.dataitem.details.part.attrs.AttributesPart"
+       name="Attributes"
+       sortKey="0420">
+ </detailsPart>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
