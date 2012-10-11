@@ -218,7 +218,11 @@ public class FlagsDetailsPart extends AbstractBaseDetailsPart
             for ( final Object o : this.groupSet )
             {
                 final GroupEntry groupEntry = (GroupEntry)o;
-                if ( entry.getKey ().endsWith ( "." + groupEntry.getAttribute () ) )
+                if ( entry.getKey ().equals ( groupEntry.getAttribute () ) )
+                {
+                    addAttr ( state, groupEntry.getAttribute (), entry.getKey (), entry.getValue () );
+                }
+                else if ( entry.getKey ().endsWith ( "." + groupEntry.getAttribute () ) )
                 {
                     addAttr ( state, groupEntry.getAttribute (), entry.getKey (), entry.getValue () );
                 }
