@@ -33,6 +33,9 @@ import org.eclipse.core.databinding.observable.set.WritableSet;
 import org.openscada.core.ui.connection.Activator;
 import org.openscada.core.ui.connection.data.ConnectionDiscovererBean;
 import org.openscada.core.ui.connection.views.tree.node.AllConnectionsNode;
+import org.openscada.core.ui.connection.views.tree.node.GroupingNode;
+import org.openscada.core.ui.connection.views.tree.node.TargetGroupingProvider;
+import org.openscada.core.ui.connection.views.tree.node.UriGroupingProvider;
 
 public class ConnectionTreeManager
 {
@@ -69,6 +72,8 @@ public class ConnectionTreeManager
         handleDiff ( Diffs.createSetDiff ( this.discoverers, Collections.emptySet () ) );
 
         treeRoot.add ( new AllConnectionsNode ( this.poolManager ) );
+        treeRoot.add ( new GroupingNode ( "By URI", this.poolManager, new UriGroupingProvider () ) );
+        treeRoot.add ( new GroupingNode ( "By Target", this.poolManager, new TargetGroupingProvider () ) );
     }
 
     public void dispose ()

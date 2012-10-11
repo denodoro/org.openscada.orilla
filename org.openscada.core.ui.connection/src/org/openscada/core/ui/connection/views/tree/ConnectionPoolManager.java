@@ -48,6 +48,11 @@ public class ConnectionPoolManager
         this.connectionHolders.dispose ();
     }
 
+    /**
+     * Get an observable set containing {@link ConnectionHolder} instances
+     * 
+     * @return an observable set containing {@link ConnectionHolder} instances
+     */
     public IObservableSet getAllConnections ()
     {
         return this.connectionHolders;
