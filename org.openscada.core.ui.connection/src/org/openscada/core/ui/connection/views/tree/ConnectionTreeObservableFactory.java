@@ -35,7 +35,7 @@ final class ConnectionTreeObservableFactory implements IObservableFactory
         {
             return Observables.proxyObservableSet ( Activator.getDefault ().getTreeRoot () );
         }
-        else if ( target instanceof TreeNode )
+        else if ( target instanceof TreeNodeImpl )
         {
             return new UnionSet ( new IObservableSet[] { ( (TreeNode)target ).getChildren (), ( (TreeNode)target ).getConnections () } );
         }

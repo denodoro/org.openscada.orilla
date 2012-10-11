@@ -4,6 +4,7 @@ import org.eclipse.core.databinding.observable.set.ISetChangeListener;
 import org.eclipse.core.databinding.observable.set.SetChangeEvent;
 import org.eclipse.core.databinding.observable.set.WritableSet;
 import org.openscada.core.ui.connection.views.tree.TreeNode;
+import org.openscada.core.ui.connection.views.tree.TreeNodeImpl;
 
 public class AllConnectionsNode implements ISetChangeListener
 {
@@ -15,7 +16,7 @@ public class AllConnectionsNode implements ISetChangeListener
     public AllConnectionsNode ( final WritableSet treeRoot, final WritableSet allConnections )
     {
         this.allConnections = allConnections;
-        this.allNode = new TreeNode ( null, "All Connections" );
+        this.allNode = new TreeNodeImpl ( null, "All Connections" );
         treeRoot.add ( this.allNode );
 
         allConnections.addSetChangeListener ( this );

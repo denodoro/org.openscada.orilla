@@ -19,53 +19,19 @@
 
 package org.openscada.core.ui.connection.views.tree;
 
-import org.eclipse.core.databinding.observable.set.WritableSet;
+import org.eclipse.core.databinding.observable.set.IObservableSet;
 
-public class TreeNode
+public interface TreeNode
 {
-    private final TreeNode parentNode;
 
-    private final String name;
+    public abstract void dispose ();
 
-    private final WritableSet children;
+    public abstract IObservableSet getChildren ();
 
-    private final WritableSet connections;
+    public abstract IObservableSet getConnections ();
 
-    public TreeNode ( final TreeNode parentNode, final String name )
-    {
-        this.parentNode = parentNode;
-        this.name = name;
-        this.children = new WritableSet ();
-        this.connections = new WritableSet ();
-    }
+    public abstract String getName ();
 
-    public void dispose ()
-    {
-        this.connections.dispose ();
-        for ( final Object o : this.children )
-        {
-            ( (TreeNode)o ).getChildren ().dispose ();
-        }
-        this.children.dispose ();
-    }
+    public abstract TreeNode getParentNode ();
 
-    public WritableSet getChildren ()
-    {
-        return this.children;
-    }
-
-    public WritableSet getConnections ()
-    {
-        return this.connections;
-    }
-
-    public String getName ()
-    {
-        return this.name;
-    }
-
-    public TreeNode getParentNode ()
-    {
-        return this.parentNode;
-    }
 }
