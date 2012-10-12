@@ -166,7 +166,7 @@ public class QuerySeriesData extends AbstractSeriesData
     @Override
     public void setRequestWidth ( final int width )
     {
-        changeParameters ( new QueryParameters ( this.parameters.getStartTimestamp (), this.parameters.getEndTimestamp (), width ) );
+        changeParameters ( new QueryParameters ( this.parameters.getStartTimestamp (), this.parameters.getEndTimestamp (), Math.max ( 0, width ) ) );
     }
 
     public SeriesViewData getViewData ( final String type )
