@@ -19,6 +19,7 @@
 
 package org.openscada.da.client.dataitem.details.part.attrs;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -37,6 +38,7 @@ import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.openscada.core.Variant;
+import org.openscada.da.client.DataItemValue;
 import org.openscada.da.client.dataitem.details.part.AbstractBaseDetailsPart;
 
 public class AttributesPart extends AbstractBaseDetailsPart
@@ -154,16 +156,21 @@ public class AttributesPart extends AbstractBaseDetailsPart
     @Override
     protected void update ()
     {
-        final Set<Entry> newAttributes = convert ( getValue ().getAttributes () );
+        final Set<Entry> newAttributes = convert ( getValue () );
         final SetDiff diff = Diffs.computeSetDiff ( this.entries, newAttributes );
         diff.applyTo ( this.entries );
     }
 
-    private Set<Entry> convert ( final Map<String, Variant> attributes )
+    private Set<Entry> convert ( final DataItemValue value )
     {
-        final Set<Entry> entries = new HashSet<AttributesPart.Entry> ( attributes.size () );
+        if ( value == null || value.getAttributes () == null )
+        {
+            return Collections.emptySet ();
+        }
 
-        for ( final Map.Entry<String, Variant> entry : attributes.entrySet () )
+        final Set<Entry> entries = new HashSet<AttributesPart.Entry> ( value.getAttributes ().size () );
+
+        for ( final Map.Entry<String, Variant> entry : value.getAttributes ().entrySet () )
         {
             entries.add ( new Entry ( entry.getKey (), entry.getValue () ) );
         }
