@@ -72,6 +72,7 @@ import org.openscada.ui.chart.model.ChartModel.UriItem;
 import org.openscada.ui.chart.model.ChartModel.XAxis;
 import org.openscada.ui.chart.model.ChartModel.YAxis;
 import org.openscada.ui.chart.viewer.input.ChartInput;
+import org.openscada.ui.utils.AbstractSelectionProvider;
 
 public class ChartViewer extends AbstractSelectionProvider
 {
