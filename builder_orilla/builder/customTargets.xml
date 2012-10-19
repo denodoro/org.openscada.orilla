@@ -155,6 +155,7 @@
   	
 	<!-- openSCADA Chart UI -->
   	
+  	<openscada.builder.copyFeature id="org.openscada.chart.ui"/>
   	<openscada.builder.copyPlugin id="org.openscada.chart.ui"/>
   	
   	<openscada.builder.copyFeature id="org.openscada.ui.chart"/>
