@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
@@ -55,10 +56,8 @@ import org.openscada.chart.swt.ChartArea;
 import org.openscada.chart.swt.SWTGraphics;
 import org.openscada.da.ui.connection.data.Item;
 import org.openscada.ui.chart.model.ChartModel.Chart;
-import org.openscada.ui.chart.model.ChartModel.ChartFactory;
 import org.openscada.ui.chart.model.ChartModel.ChartPackage;
-import org.openscada.ui.chart.model.ChartModel.XAxis;
-import org.openscada.ui.chart.model.ChartModel.YAxis;
+import org.openscada.ui.chart.model.ChartModel.Charts;
 import org.openscada.ui.chart.viewer.ChartViewer;
 import org.openscada.ui.chart.viewer.input.ChartInput;
 import org.openscada.ui.databinding.SelectionHelper;
@@ -165,7 +164,7 @@ public class ChartView extends ViewPart
 
         if ( this.loadedConfiguration == null )
         {
-            this.configuration = makeDefaultConfiguration ();
+            this.configuration = Charts.makeDefaultConfiguration ();
         }
         else
         {
@@ -196,28 +195,6 @@ public class ChartView extends ViewPart
         } );
 
         fillToolbar ( getViewSite ().getActionBars ().getToolBarManager () );
-    }
-
-    private Chart makeDefaultConfiguration ()
-    {
-        final Chart configuration = ChartFactory.eINSTANCE.createChart ();
-
-        final YAxis y = ChartFactory.eINSTANCE.createYAxis ();
-        y.setLabel ( "Values" );
-        y.setFormat ( "%.2f" );
-        configuration.getLeft ().add ( y );
-
-        final XAxis x = ChartFactory.eINSTANCE.createXAxis ();
-        x.setLabel ( "Time" );
-        x.setFormat ( "%1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS.%1$tL" );
-        x.setMinimum ( System.currentTimeMillis () );
-        x.setMaximum ( System.currentTimeMillis () + 900 * 1000 );
-        configuration.getBottom ().add ( x );
-
-        configuration.setSelectedXAxis ( x );
-        configuration.setSelectedYAxis ( y );
-
-        return configuration;
     }
 
     private void fillToolbar ( final IToolBarManager toolBarManager )
@@ -301,6 +278,14 @@ public class ChartView extends ViewPart
         resource.load ( input, options );
 
         return (Chart)EcoreUtil.getObjectByType ( resource.getContents (), ChartPackage.Literals.CHART );
+    }
+
+    public void applyConfiguration ( final Chart configuration )
+    {
+        for ( final EStructuralFeature f : configuration.eClass ().getEAllStructuralFeatures () )
+        {
+            this.configuration.eSet ( f, configuration.eGet ( f ) );
+        }
     }
 
     @Override
@@ -387,6 +372,11 @@ public class ChartView extends ViewPart
     }
 
     public void addItem ( final Item item )
+    {
+        this.viewer.addItem ( item );
+    }
+
+    public void addItem ( final org.openscada.hd.ui.connection.data.Item item )
     {
         this.viewer.addItem ( item );
     }

@@ -5,31 +5,31 @@
          point="org.eclipse.ui.views">
       <view
             allowMultiple="true"
-            category="org.openscada.chart.ui"
+            category="org.openscada.ui.chart"
             class="org.openscada.ui.chart.view.ChartView"
             icon="icons/chartView.gif"
-            id="org.openscada.da.ui.client.chart.ChartView"
+            id="org.openscada.ui.chart.ChartView"
             name="%view.chartView.name"
             restorable="true"/>
       <view
             allowMultiple="false"
-            category="org.openscada.chart.ui"
+            category="org.openscada.ui.chart"
             class="org.openscada.ui.chart.view.ChartControllerView"
-            id="org.openscada.da.ui.client.chart.ChartController"
+            id="org.openscada.ui.chart.ChartController"
             name="Chart Controller"
             restorable="true">
       </view>
       <view
             allowMultiple="false"
-            category="org.openscada.chart.ui"
+            category="org.openscada.ui.chart"
             class="org.openscada.ui.chart.view.ChartConfiguratorView"
-            id="org.openscada.da.ui.client.chart.ChartConfigurator"
+            id="org.openscada.ui.chart.ChartConfigurator"
             name="Chart Configurator"
             restorable="true">
       </view>
       <view
             allowMultiple="true"
-            category="org.openscada.chart.ui"
+            category="org.openscada.ui.chart"
             class="org.openscada.ui.chart.view.ChartInputSelectorView"
             id="org.openscada.ui.chart.selector.ChartConfigurationInputSelector"
             name="Chart Input Selector"
@@ -40,7 +40,7 @@
          point="org.eclipse.ui.popupMenus">
       <objectContribution
             adaptable="false"
-            id="org.openscada.da.client.chart.oc1"
+            id="org.openscada.ui.chart.oc1"
             objectClass="org.openscada.da.ui.connection.data.DataItemHolder">
          <action
                class="org.openscada.ui.chart.view.action.OpenChartAction"
@@ -50,7 +50,7 @@
       </objectContribution>
       <objectContribution
             adaptable="false"
-            id="org.openscada.da.client.chart.oc2"
+            id="org.openscada.ui.chart.oc2"
             objectClass="org.openscada.da.ui.widgets.realtime.ListEntry">
          <action
                class="org.openscada.ui.chart.view.action.OpenChartAction"
@@ -62,27 +62,40 @@
    <extension
          point="org.eclipse.ui.commands">
       <command
-            categoryId="org.openscada.da.ui.category"
-            id="org.openscada.da.client.chart.commands.OpenCharView"
+            categoryId="org.openscada.ui.chart"
+            id="org.openscada.ui.chart.commands.OpenCharView"
             name="Open Chart">
       </command>
       <command
-            categoryId="org.openscada.da.ui.category"
-            id="org.openscada.da.client.chart.commands.OpenParametersCharView"
+            categoryId="org.openscada.ui.chart"
+            id="org.openscada.ui.chart.commands.OpenParametersCharView"
             name="Open Chart">
          <commandParameter
-               id="org.openscada.da.ui.client.chart.connectionId"
+               id="org.openscada.ui.chart.connectionId"
                name="Connection Id"
                optional="true">
          </commandParameter>
          <commandParameter
-               id="org.openscada.da.ui.client.chart.connectionString"
+               id="org.openscada.ui.chart.connectionString"
                name="Connection String (Uri)"
                optional="true">
          </commandParameter>
          <commandParameter
-               id="org.openscada.da.ui.client.chart.itemId"
+               id="org.openscada.ui.chart.itemId"
                name="Item ID"
+               optional="true">
+         </commandParameter>
+         <commandParameter
+               id="org.openscada.ui.chart.itemType"
+               name="Item Type"
+               optional="false">
+            <values
+                  class="org.openscada.ui.chart.view.command.ItemTypeParameters">
+            </values>
+         </commandParameter>
+         <commandParameter
+               id="org.openscada.ui.chart.queryTimespec"
+               name="Query Timespec"
                optional="true">
          </commandParameter>
       </command>
@@ -91,7 +104,7 @@
          point="org.eclipse.ui.handlers">
       <handler
             class="org.openscada.ui.chart.view.command.OpenChartView"
-            commandId="org.openscada.da.client.chart.commands.OpenCharView">
+            commandId="org.openscada.ui.chart.commands.OpenCharView">
          <enabledWhen>
             <with
                   variable="selection">
@@ -112,7 +125,7 @@
       </handler>
       <handler
             class="org.openscada.ui.chart.view.command.OpenChartViewWithParameters"
-            commandId="org.openscada.da.client.chart.commands.OpenParametersCharView">
+            commandId="org.openscada.ui.chart.commands.OpenParametersCharView">
       </handler>
    </extension>
    <extension
@@ -120,7 +133,7 @@
       <menuContribution
             locationURI="popup:org.openscada.core.ui.connection.ConnectionView#PopupMenu">
          <command
-               commandId="org.openscada.da.client.chart.commands.OpenCharView"
+               commandId="org.openscada.ui.chart.commands.OpenCharView"
                label="Open Chart View"
                style="push">
             <visibleWhen

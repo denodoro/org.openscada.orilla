@@ -25,6 +25,8 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.openscada.da.ui.connection.data.Item;
 import org.openscada.da.ui.connection.data.Item.Type;
+import org.openscada.ui.chart.model.ChartModel.Chart;
+import org.openscada.ui.chart.model.ChartModel.Charts;
 
 public class OpenChartViewWithParameters extends AbstractChartHandler
 {
@@ -35,14 +37,57 @@ public class OpenChartViewWithParameters extends AbstractChartHandler
         final String connectionId = event.getParameter ( "org.openscada.ui.chart.connectionId" );
         final String connectionString = event.getParameter ( "org.openscada.ui.chart.connectionString" );
         final String itemId = event.getParameter ( "org.openscada.ui.chart.itemId" );
+        final String itemType = event.getParameter ( "org.openscada.ui.chart.itemType" );
 
         if ( connectionId == null && connectionString == null )
         {
             return null;
         }
+        if ( itemType == null )
+        {
+            return null;
+        }
 
-        openChartView ( Arrays.asList ( new Item ( connectionId != null ? connectionId : connectionString, itemId, connectionId != null ? Type.ID : Type.URI ) ) );
+        final Chart configuration = makeConfiguration ( event );
+
+        if ( "da".equals ( itemType ) )
+        {
+            openDaChartView ( Arrays.asList ( new Item ( connectionId != null ? connectionId : connectionString, itemId, connectionId != null ? Type.ID : Type.URI ) ), configuration );
+        }
+        else if ( "hd".equals ( itemType ) )
+        {
+            openHdChartView ( Arrays.asList ( new org.openscada.hd.ui.connection.data.Item ( connectionId != null ? connectionId : connectionString, itemId, connectionId != null ? org.openscada.hd.ui.connection.data.Item.Type.ID : org.openscada.hd.ui.connection.data.Item.Type.URI ) ), configuration );
+        }
 
         return null;
+    }
+
+    private Chart makeConfiguration ( final ExecutionEvent event )
+    {
+        final String queryTimespec = event.getParameter ( "org.openscada.ui.chart.queryTimespec" );
+
+        final Chart configuration = Charts.makeDefaultConfiguration ();
+
+        if ( queryTimespec != null && !queryTimespec.isEmpty () )
+        {
+            final String toks[] = queryTimespec.split ( "[: ]+" );
+
+            final long now = System.currentTimeMillis ();
+
+            final int left = Integer.parseInt ( toks[0] );
+            final int right = Integer.parseInt ( toks[1] );
+            configuration.getSelectedXAxis ().setMinimum ( now - left );
+            configuration.getSelectedXAxis ().setMaximum ( now + right );
+
+            if ( toks.length >= 4 )
+            {
+                final double min = Double.parseDouble ( toks[2] );
+                final double max = Double.parseDouble ( toks[3] );
+                configuration.getSelectedYAxis ().setMinimum ( min );
+                configuration.getSelectedYAxis ().setMaximum ( max );
+            }
+        }
+
+        return configuration;
     }
 }

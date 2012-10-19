@@ -523,17 +523,38 @@ public class ChartViewer extends AbstractSelectionProvider
             return;
         }
 
-        org.openscada.ui.chart.model.ChartModel.UriItem itemRef = null;
+        org.openscada.ui.chart.model.ChartModel.Item itemRef = null;
 
-        itemRef = ChartFactory.eINSTANCE.createUriItem ();
-        itemRef.setItemId ( item.getId () );
-        itemRef.setConnectionUri ( item.getConnectionString () );
+        switch ( item.getType () )
+        {
+            case ID:
+            {
+                itemRef = ChartFactory.eINSTANCE.createIdItem ();
+                itemRef.setItemId ( item.getId () );
+                ( (IdItem)itemRef ).setConnectionId ( item.getConnectionString () );
+                break;
+            }
+            case URI:
+            {
+                itemRef = ChartFactory.eINSTANCE.createUriItem ();
+                itemRef.setItemId ( item.getId () );
+                ( (UriItem)itemRef ).setConnectionUri ( item.getConnectionString () );
+                break;
+            }
+        }
+
+        if ( itemRef == null )
+        {
+            return;
+        }
 
         final ArchiveSeries input = ChartFactory.eINSTANCE.createArchiveSeries ();
         input.setLabel ( item.toLabel () );
         input.setItem ( itemRef );
         input.setX ( this.selectedXAxisElement );
         input.setY ( this.selectedYAxisElement );
+
+        input.getLineProperties ().setColor ( nextFreeColor () );
 
         this.chart.getInputs ().add ( input );
     }

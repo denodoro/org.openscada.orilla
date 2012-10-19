@@ -19,16 +19,23 @@
 
 package org.openscada.ui.chart.view.command;
 
-import org.eclipse.core.commands.ExecutionEvent;
-import org.eclipse.core.commands.ExecutionException;
+import java.util.HashMap;
+import java.util.Map;
 
-public class OpenChartView extends AbstractChartHandler
+import org.eclipse.core.commands.IParameterValues;
+
+public class ItemTypeParameters implements IParameterValues
 {
 
     @Override
-    public Object execute ( final ExecutionEvent event ) throws ExecutionException
+    public Map<String, String> getParameterValues ()
     {
-        openDaChartView ( getItems (), null );
-        return null;
+        final Map<String, String> result = new HashMap<String, String> ();
+
+        result.put ( Messages.ItemTypeParameters_da_item_label, "da" ); //$NON-NLS-2$
+        result.put ( Messages.ItemTypeParameters_hd_item_label, "hd" ); //$NON-NLS-2$
+
+        return result;
     }
+
 }

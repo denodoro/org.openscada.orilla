@@ -27,12 +27,13 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.openscada.da.ui.connection.commands.AbstractItemHandler;
 import org.openscada.da.ui.connection.data.Item;
+import org.openscada.ui.chart.model.ChartModel.Chart;
 import org.openscada.ui.chart.view.ChartView;
 
 public abstract class AbstractChartHandler extends AbstractItemHandler
 {
 
-    protected void openChartView ( final Collection<Item> items ) throws ExecutionException
+    protected void openDaChartView ( final Collection<Item> items, final Chart configuration ) throws ExecutionException
     {
         if ( items.isEmpty () )
         {
@@ -54,13 +55,61 @@ public abstract class AbstractChartHandler extends AbstractItemHandler
             throw new ExecutionException ( "Failed to open view", e );
         }
 
-        for ( final Item item : items )
+        if ( viewer instanceof ChartView )
         {
-            if ( viewer instanceof ChartView )
+            if ( configuration != null )
+            {
+                ( (ChartView)viewer ).applyConfiguration ( configuration );
+            }
+
+            for ( final Item item : items )
+            {
+                ( (ChartView)viewer ).addItem ( item );
+
+            }
+        }
+    }
+
+    protected void openHdChartView ( final Collection<org.openscada.hd.ui.connection.data.Item> items, final Chart configuration ) throws ExecutionException
+    {
+        if ( items.isEmpty () )
+        {
+            return;
+        }
+        final StringBuilder sb = new StringBuilder ();
+        for ( final org.openscada.hd.ui.connection.data.Item item : items )
+        {
+            sb.append ( asSecondardId ( item ) );
+        }
+
+        IViewPart viewer;
+        try
+        {
+            viewer = getActivePage ().showView ( ChartView.VIEW_ID, sb.toString (), IWorkbenchPage.VIEW_ACTIVATE );
+        }
+        catch ( final PartInitException e )
+        {
+            throw new ExecutionException ( "Failed to open view", e );
+        }
+
+        if ( viewer instanceof ChartView )
+        {
+            if ( configuration != null )
+            {
+                ( (ChartView)viewer ).applyConfiguration ( configuration );
+            }
+
+            for ( final org.openscada.hd.ui.connection.data.Item item : items )
             {
                 ( (ChartView)viewer ).addItem ( item );
             }
         }
+
+    }
+
+    protected String asSecondardId ( final org.openscada.hd.ui.connection.data.Item item )
+    {
+        return item.getId ().replace ( "_", "__" ).replace ( ':', '_' );
     }
 
 }
