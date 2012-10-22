@@ -28,23 +28,23 @@
                relative="org.eclipse.ui.editorss">
          </view>
          <view
-               id="org.openscada.da.ui.client.chart.ChartView"
+               id="org.openscada.ui.chart.ChartView"
                minimized="false"
                relationship="bottom"
                relative="org.eclipse.ui.editorss">
          </view>
          <view
-               id="org.openscada.da.ui.client.chart.ChartController"
+               id="org.openscada.ui.chart.ChartController"
                minimized="false"
                ratio="0.75"
                relationship="bottom"
-               relative="org.openscada.da.ui.client.chart.ChartView">
+               relative="org.openscada.ui.chart.ChartView">
          </view>
          <view
-               id="org.openscada.da.ui.client.chart.ChartConfigurator"
+               id="org.openscada.ui.chart.ChartConfigurator"
                minimized="false"
                relationship="stack"
-               relative="org.openscada.da.ui.client.chart.ChartController">
+               relative="org.openscada.ui.chart.ChartController">
          </view>
          <view
                id="org.eclipse.ui.views.PropertySheet"
