@@ -142,10 +142,14 @@ public class AbstractQueryBuffer extends AbstractPropertyChange
      */
     public Map<String, Value[]> getValues ()
     {
-        final Map<String, Value[]> values = this.values;
-        if ( values == null )
+        final Map<String, Value[]> values;
+        synchronized ( this )
         {
-            return null;
+            values = this.values;
+            if ( values == null )
+            {
+                return null;
+            }
         }
         return new HashMap<String, Value[]> ( values );
     }
@@ -199,24 +203,30 @@ public class AbstractQueryBuffer extends AbstractPropertyChange
         }
     }
 
-    protected synchronized void updateParameters ( final QueryParameters parameters, final Set<String> valueTypes )
+    protected void updateParameters ( final QueryParameters parameters, final Set<String> valueTypes )
     {
         logger.info ( "Update parameters - queryParameters: {}, valueTypeS: {}", parameters, valueTypes );
 
         final int count = parameters.getEntries ();
 
-        this.valueInformation = new ValueInformation[count];
-        this.values = new HashMap<String, Value[]> ();
+        final ValueInformation[] newValueInformation = new ValueInformation[count];
+        final HashMap<String, Value[]> newValues = new HashMap<String, Value[]> ();
         for ( final String valueType : valueTypes )
         {
-            this.values.put ( valueType, new Value[count] );
+            newValues.put ( valueType, new Value[count] );
         }
 
-        fireParameterChange ( parameters, valueTypes );
+        synchronized ( this )
+        {
+            this.valueInformation = newValueInformation;
+            this.values = newValues;
 
-        setQueryParameters ( parameters );
-        setValueTypes ( valueTypes );
-        setFilled ( 0 );
+            fireParameterChange ( parameters, valueTypes );
+
+            setQueryParameters ( parameters );
+            setValueTypes ( valueTypes );
+            setFilled ( 0 );
+        }
     }
 
     private void setValueTypes ( final Set<String> valueTypes )
