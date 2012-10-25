@@ -136,10 +136,10 @@ public class CurrentTimeControllerItemProvider extends ControllerItemProvider im
 
         switch ( notification.getFeatureID ( CurrentTimeController.class ) )
         {
-            case ChartPackage.CURRENT_TIME_CONTROLLER__DIFF:
-            case ChartPackage.CURRENT_TIME_CONTROLLER__ALIGN_DATE_FORMAT:
-                fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), false, true ) );
-                return;
+        case ChartPackage.CURRENT_TIME_CONTROLLER__DIFF:
+        case ChartPackage.CURRENT_TIME_CONTROLLER__ALIGN_DATE_FORMAT:
+            fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), false, true ) );
+            return;
         }
         super.notifyChanged ( notification );
     }

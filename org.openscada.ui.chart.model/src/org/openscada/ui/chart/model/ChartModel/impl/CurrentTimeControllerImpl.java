@@ -204,14 +204,14 @@ public class CurrentTimeControllerImpl extends ControllerImpl implements Current
     {
         switch ( featureID )
         {
-            case ChartPackage.CURRENT_TIME_CONTROLLER__DIFF:
-                return getDiff ();
-            case ChartPackage.CURRENT_TIME_CONTROLLER__AXIS:
-                if ( resolve )
-                    return getAxis ();
-                return basicGetAxis ();
-            case ChartPackage.CURRENT_TIME_CONTROLLER__ALIGN_DATE_FORMAT:
-                return getAlignDateFormat ();
+        case ChartPackage.CURRENT_TIME_CONTROLLER__DIFF:
+            return getDiff ();
+        case ChartPackage.CURRENT_TIME_CONTROLLER__AXIS:
+            if ( resolve )
+                return getAxis ();
+            return basicGetAxis ();
+        case ChartPackage.CURRENT_TIME_CONTROLLER__ALIGN_DATE_FORMAT:
+            return getAlignDateFormat ();
         }
         return super.eGet ( featureID, resolve, coreType );
     }
@@ -226,15 +226,15 @@ public class CurrentTimeControllerImpl extends ControllerImpl implements Current
     {
         switch ( featureID )
         {
-            case ChartPackage.CURRENT_TIME_CONTROLLER__DIFF:
-                setDiff ( (Long)newValue );
-                return;
-            case ChartPackage.CURRENT_TIME_CONTROLLER__AXIS:
-                setAxis ( (XAxis)newValue );
-                return;
-            case ChartPackage.CURRENT_TIME_CONTROLLER__ALIGN_DATE_FORMAT:
-                setAlignDateFormat ( (String)newValue );
-                return;
+        case ChartPackage.CURRENT_TIME_CONTROLLER__DIFF:
+            setDiff ( (Long)newValue );
+            return;
+        case ChartPackage.CURRENT_TIME_CONTROLLER__AXIS:
+            setAxis ( (XAxis)newValue );
+            return;
+        case ChartPackage.CURRENT_TIME_CONTROLLER__ALIGN_DATE_FORMAT:
+            setAlignDateFormat ( (String)newValue );
+            return;
         }
         super.eSet ( featureID, newValue );
     }
@@ -249,15 +249,15 @@ public class CurrentTimeControllerImpl extends ControllerImpl implements Current
     {
         switch ( featureID )
         {
-            case ChartPackage.CURRENT_TIME_CONTROLLER__DIFF:
-                setDiff ( DIFF_EDEFAULT );
-                return;
-            case ChartPackage.CURRENT_TIME_CONTROLLER__AXIS:
-                setAxis ( (XAxis)null );
-                return;
-            case ChartPackage.CURRENT_TIME_CONTROLLER__ALIGN_DATE_FORMAT:
-                setAlignDateFormat ( ALIGN_DATE_FORMAT_EDEFAULT );
-                return;
+        case ChartPackage.CURRENT_TIME_CONTROLLER__DIFF:
+            setDiff ( DIFF_EDEFAULT );
+            return;
+        case ChartPackage.CURRENT_TIME_CONTROLLER__AXIS:
+            setAxis ( (XAxis)null );
+            return;
+        case ChartPackage.CURRENT_TIME_CONTROLLER__ALIGN_DATE_FORMAT:
+            setAlignDateFormat ( ALIGN_DATE_FORMAT_EDEFAULT );
+            return;
         }
         super.eUnset ( featureID );
     }
@@ -272,12 +272,12 @@ public class CurrentTimeControllerImpl extends ControllerImpl implements Current
     {
         switch ( featureID )
         {
-            case ChartPackage.CURRENT_TIME_CONTROLLER__DIFF:
-                return diff != DIFF_EDEFAULT;
-            case ChartPackage.CURRENT_TIME_CONTROLLER__AXIS:
-                return axis != null;
-            case ChartPackage.CURRENT_TIME_CONTROLLER__ALIGN_DATE_FORMAT:
-                return ALIGN_DATE_FORMAT_EDEFAULT == null ? alignDateFormat != null : !ALIGN_DATE_FORMAT_EDEFAULT.equals ( alignDateFormat );
+        case ChartPackage.CURRENT_TIME_CONTROLLER__DIFF:
+            return diff != DIFF_EDEFAULT;
+        case ChartPackage.CURRENT_TIME_CONTROLLER__AXIS:
+            return axis != null;
+        case ChartPackage.CURRENT_TIME_CONTROLLER__ALIGN_DATE_FORMAT:
+            return ALIGN_DATE_FORMAT_EDEFAULT == null ? alignDateFormat != null : !ALIGN_DATE_FORMAT_EDEFAULT.equals ( alignDateFormat );
         }
         return super.eIsSet ( featureID );
     }

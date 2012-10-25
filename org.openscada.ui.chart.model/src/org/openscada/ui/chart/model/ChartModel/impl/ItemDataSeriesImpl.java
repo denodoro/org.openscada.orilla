@@ -123,8 +123,8 @@ public abstract class ItemDataSeriesImpl extends DataSeriesImpl implements ItemD
     {
         switch ( featureID )
         {
-            case ChartPackage.ITEM_DATA_SERIES__ITEM:
-                return basicSetItem ( null, msgs );
+        case ChartPackage.ITEM_DATA_SERIES__ITEM:
+            return basicSetItem ( null, msgs );
         }
         return super.eInverseRemove ( otherEnd, featureID, msgs );
     }
@@ -139,8 +139,8 @@ public abstract class ItemDataSeriesImpl extends DataSeriesImpl implements ItemD
     {
         switch ( featureID )
         {
-            case ChartPackage.ITEM_DATA_SERIES__ITEM:
-                return getItem ();
+        case ChartPackage.ITEM_DATA_SERIES__ITEM:
+            return getItem ();
         }
         return super.eGet ( featureID, resolve, coreType );
     }
@@ -155,9 +155,9 @@ public abstract class ItemDataSeriesImpl extends DataSeriesImpl implements ItemD
     {
         switch ( featureID )
         {
-            case ChartPackage.ITEM_DATA_SERIES__ITEM:
-                setItem ( (Item)newValue );
-                return;
+        case ChartPackage.ITEM_DATA_SERIES__ITEM:
+            setItem ( (Item)newValue );
+            return;
         }
         super.eSet ( featureID, newValue );
     }
@@ -172,9 +172,9 @@ public abstract class ItemDataSeriesImpl extends DataSeriesImpl implements ItemD
     {
         switch ( featureID )
         {
-            case ChartPackage.ITEM_DATA_SERIES__ITEM:
-                setItem ( (Item)null );
-                return;
+        case ChartPackage.ITEM_DATA_SERIES__ITEM:
+            setItem ( (Item)null );
+            return;
         }
         super.eUnset ( featureID );
     }
@@ -189,8 +189,8 @@ public abstract class ItemDataSeriesImpl extends DataSeriesImpl implements ItemD
     {
         switch ( featureID )
         {
-            case ChartPackage.ITEM_DATA_SERIES__ITEM:
-                return item != null;
+        case ChartPackage.ITEM_DATA_SERIES__ITEM:
+            return item != null;
         }
         return super.eIsSet ( featureID );
     }

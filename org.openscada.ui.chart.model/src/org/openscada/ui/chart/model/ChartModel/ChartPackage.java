@@ -244,13 +244,22 @@ public interface ChartPackage extends EPackage
     int AXIS__TEXT_PADDING = 2;
 
     /**
+     * The feature id for the '<em><b>Color</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int AXIS__COLOR = 3;
+
+    /**
      * The number of structural features of the '<em>Axis</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int AXIS_FEATURE_COUNT = 3;
+    int AXIS_FEATURE_COUNT = 4;
 
     /**
      * The meta object id for the '{@link org.openscada.ui.chart.model.ChartModel.impl.XAxisImpl <em>XAxis</em>}' class.
@@ -288,6 +297,15 @@ public interface ChartPackage extends EPackage
      * @ordered
      */
     int XAXIS__TEXT_PADDING = AXIS__TEXT_PADDING;
+
+    /**
+     * The feature id for the '<em><b>Color</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int XAXIS__COLOR = AXIS__COLOR;
 
     /**
      * The feature id for the '<em><b>Minimum</b></em>' attribute.
@@ -352,6 +370,15 @@ public interface ChartPackage extends EPackage
      * @ordered
      */
     int YAXIS__TEXT_PADDING = AXIS__TEXT_PADDING;
+
+    /**
+     * The feature id for the '<em><b>Color</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int YAXIS__COLOR = AXIS__COLOR;
 
     /**
      * The feature id for the '<em><b>Minimum</b></em>' attribute.
@@ -1248,6 +1275,17 @@ public interface ChartPackage extends EPackage
     EAttribute getAxis_TextPadding ();
 
     /**
+     * Returns the meta object for the attribute '{@link org.openscada.ui.chart.model.ChartModel.Axis#getColor <em>Color</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Color</em>'.
+     * @see org.openscada.ui.chart.model.ChartModel.Axis#getColor()
+     * @see #getAxis()
+     * @generated
+     */
+    EAttribute getAxis_Color ();
+
+    /**
      * Returns the meta object for the attribute '{@link org.openscada.ui.chart.model.ChartModel.Axis#getLabel <em>Label</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1842,6 +1880,14 @@ public interface ChartPackage extends EPackage
          * @generated
          */
         EAttribute AXIS__TEXT_PADDING = eINSTANCE.getAxis_TextPadding ();
+
+        /**
+         * The meta object literal for the '<em><b>Color</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute AXIS__COLOR = eINSTANCE.getAxis_Color ();
 
         /**
          * The meta object literal for the '<em><b>Label</b></em>' attribute feature.

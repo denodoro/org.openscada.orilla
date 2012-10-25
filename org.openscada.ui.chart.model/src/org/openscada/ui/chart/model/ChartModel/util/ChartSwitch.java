@@ -89,158 +89,158 @@ public class ChartSwitch<T> extends Switch<T>
     {
         switch ( classifierID )
         {
-            case ChartPackage.CHART:
-            {
-                Chart chart = (Chart)theEObject;
-                T result = caseChart ( chart );
-                if ( result == null )
-                    result = defaultCase ( theEObject );
-                return result;
-            }
-            case ChartPackage.XAXIS:
-            {
-                XAxis xAxis = (XAxis)theEObject;
-                T result = caseXAxis ( xAxis );
-                if ( result == null )
-                    result = caseAxis ( xAxis );
-                if ( result == null )
-                    result = defaultCase ( theEObject );
-                return result;
-            }
-            case ChartPackage.YAXIS:
-            {
-                YAxis yAxis = (YAxis)theEObject;
-                T result = caseYAxis ( yAxis );
-                if ( result == null )
-                    result = caseAxis ( yAxis );
-                if ( result == null )
-                    result = defaultCase ( theEObject );
-                return result;
-            }
-            case ChartPackage.AXIS:
-            {
-                Axis axis = (Axis)theEObject;
-                T result = caseAxis ( axis );
-                if ( result == null )
-                    result = defaultCase ( theEObject );
-                return result;
-            }
-            case ChartPackage.DATA_SERIES:
-            {
-                DataSeries dataSeries = (DataSeries)theEObject;
-                T result = caseDataSeries ( dataSeries );
-                if ( result == null )
-                    result = defaultCase ( theEObject );
-                return result;
-            }
-            case ChartPackage.DATA_ITEM_SERIES:
-            {
-                DataItemSeries dataItemSeries = (DataItemSeries)theEObject;
-                T result = caseDataItemSeries ( dataItemSeries );
-                if ( result == null )
-                    result = caseItemDataSeries ( dataItemSeries );
-                if ( result == null )
-                    result = caseDataSeries ( dataItemSeries );
-                if ( result == null )
-                    result = defaultCase ( theEObject );
-                return result;
-            }
-            case ChartPackage.ARCHIVE_SERIES:
-            {
-                ArchiveSeries archiveSeries = (ArchiveSeries)theEObject;
-                T result = caseArchiveSeries ( archiveSeries );
-                if ( result == null )
-                    result = caseItemDataSeries ( archiveSeries );
-                if ( result == null )
-                    result = caseDataSeries ( archiveSeries );
-                if ( result == null )
-                    result = defaultCase ( theEObject );
-                return result;
-            }
-            case ChartPackage.ITEM:
-            {
-                Item item = (Item)theEObject;
-                T result = caseItem ( item );
-                if ( result == null )
-                    result = defaultCase ( theEObject );
-                return result;
-            }
-            case ChartPackage.URI_ITEM:
-            {
-                UriItem uriItem = (UriItem)theEObject;
-                T result = caseUriItem ( uriItem );
-                if ( result == null )
-                    result = caseItem ( uriItem );
-                if ( result == null )
-                    result = defaultCase ( theEObject );
-                return result;
-            }
-            case ChartPackage.ID_ITEM:
-            {
-                IdItem idItem = (IdItem)theEObject;
-                T result = caseIdItem ( idItem );
-                if ( result == null )
-                    result = caseItem ( idItem );
-                if ( result == null )
-                    result = defaultCase ( theEObject );
-                return result;
-            }
-            case ChartPackage.ITEM_DATA_SERIES:
-            {
-                ItemDataSeries itemDataSeries = (ItemDataSeries)theEObject;
-                T result = caseItemDataSeries ( itemDataSeries );
-                if ( result == null )
-                    result = caseDataSeries ( itemDataSeries );
-                if ( result == null )
-                    result = defaultCase ( theEObject );
-                return result;
-            }
-            case ChartPackage.ARCHIVE_CHANNEL:
-            {
-                ArchiveChannel archiveChannel = (ArchiveChannel)theEObject;
-                T result = caseArchiveChannel ( archiveChannel );
-                if ( result == null )
-                    result = defaultCase ( theEObject );
-                return result;
-            }
-            case ChartPackage.LINE_PROPERTIES:
-            {
-                LineProperties lineProperties = (LineProperties)theEObject;
-                T result = caseLineProperties ( lineProperties );
-                if ( result == null )
-                    result = defaultCase ( theEObject );
-                return result;
-            }
-            case ChartPackage.SCRIPT_SERIES:
-            {
-                ScriptSeries scriptSeries = (ScriptSeries)theEObject;
-                T result = caseScriptSeries ( scriptSeries );
-                if ( result == null )
-                    result = caseDataSeries ( scriptSeries );
-                if ( result == null )
-                    result = defaultCase ( theEObject );
-                return result;
-            }
-            case ChartPackage.CONTROLLER:
-            {
-                Controller controller = (Controller)theEObject;
-                T result = caseController ( controller );
-                if ( result == null )
-                    result = defaultCase ( theEObject );
-                return result;
-            }
-            case ChartPackage.CURRENT_TIME_CONTROLLER:
-            {
-                CurrentTimeController currentTimeController = (CurrentTimeController)theEObject;
-                T result = caseCurrentTimeController ( currentTimeController );
-                if ( result == null )
-                    result = caseController ( currentTimeController );
-                if ( result == null )
-                    result = defaultCase ( theEObject );
-                return result;
-            }
-            default:
-                return defaultCase ( theEObject );
+        case ChartPackage.CHART:
+        {
+            Chart chart = (Chart)theEObject;
+            T result = caseChart ( chart );
+            if ( result == null )
+                result = defaultCase ( theEObject );
+            return result;
+        }
+        case ChartPackage.XAXIS:
+        {
+            XAxis xAxis = (XAxis)theEObject;
+            T result = caseXAxis ( xAxis );
+            if ( result == null )
+                result = caseAxis ( xAxis );
+            if ( result == null )
+                result = defaultCase ( theEObject );
+            return result;
+        }
+        case ChartPackage.YAXIS:
+        {
+            YAxis yAxis = (YAxis)theEObject;
+            T result = caseYAxis ( yAxis );
+            if ( result == null )
+                result = caseAxis ( yAxis );
+            if ( result == null )
+                result = defaultCase ( theEObject );
+            return result;
+        }
+        case ChartPackage.AXIS:
+        {
+            Axis axis = (Axis)theEObject;
+            T result = caseAxis ( axis );
+            if ( result == null )
+                result = defaultCase ( theEObject );
+            return result;
+        }
+        case ChartPackage.DATA_SERIES:
+        {
+            DataSeries dataSeries = (DataSeries)theEObject;
+            T result = caseDataSeries ( dataSeries );
+            if ( result == null )
+                result = defaultCase ( theEObject );
+            return result;
+        }
+        case ChartPackage.DATA_ITEM_SERIES:
+        {
+            DataItemSeries dataItemSeries = (DataItemSeries)theEObject;
+            T result = caseDataItemSeries ( dataItemSeries );
+            if ( result == null )
+                result = caseItemDataSeries ( dataItemSeries );
+            if ( result == null )
+                result = caseDataSeries ( dataItemSeries );
+            if ( result == null )
+                result = defaultCase ( theEObject );
+            return result;
+        }
+        case ChartPackage.ARCHIVE_SERIES:
+        {
+            ArchiveSeries archiveSeries = (ArchiveSeries)theEObject;
+            T result = caseArchiveSeries ( archiveSeries );
+            if ( result == null )
+                result = caseItemDataSeries ( archiveSeries );
+            if ( result == null )
+                result = caseDataSeries ( archiveSeries );
+            if ( result == null )
+                result = defaultCase ( theEObject );
+            return result;
+        }
+        case ChartPackage.ITEM:
+        {
+            Item item = (Item)theEObject;
+            T result = caseItem ( item );
+            if ( result == null )
+                result = defaultCase ( theEObject );
+            return result;
+        }
+        case ChartPackage.URI_ITEM:
+        {
+            UriItem uriItem = (UriItem)theEObject;
+            T result = caseUriItem ( uriItem );
+            if ( result == null )
+                result = caseItem ( uriItem );
+            if ( result == null )
+                result = defaultCase ( theEObject );
+            return result;
+        }
+        case ChartPackage.ID_ITEM:
+        {
+            IdItem idItem = (IdItem)theEObject;
+            T result = caseIdItem ( idItem );
+            if ( result == null )
+                result = caseItem ( idItem );
+            if ( result == null )
+                result = defaultCase ( theEObject );
+            return result;
+        }
+        case ChartPackage.ITEM_DATA_SERIES:
+        {
+            ItemDataSeries itemDataSeries = (ItemDataSeries)theEObject;
+            T result = caseItemDataSeries ( itemDataSeries );
+            if ( result == null )
+                result = caseDataSeries ( itemDataSeries );
+            if ( result == null )
+                result = defaultCase ( theEObject );
+            return result;
+        }
+        case ChartPackage.ARCHIVE_CHANNEL:
+        {
+            ArchiveChannel archiveChannel = (ArchiveChannel)theEObject;
+            T result = caseArchiveChannel ( archiveChannel );
+            if ( result == null )
+                result = defaultCase ( theEObject );
+            return result;
+        }
+        case ChartPackage.LINE_PROPERTIES:
+        {
+            LineProperties lineProperties = (LineProperties)theEObject;
+            T result = caseLineProperties ( lineProperties );
+            if ( result == null )
+                result = defaultCase ( theEObject );
+            return result;
+        }
+        case ChartPackage.SCRIPT_SERIES:
+        {
+            ScriptSeries scriptSeries = (ScriptSeries)theEObject;
+            T result = caseScriptSeries ( scriptSeries );
+            if ( result == null )
+                result = caseDataSeries ( scriptSeries );
+            if ( result == null )
+                result = defaultCase ( theEObject );
+            return result;
+        }
+        case ChartPackage.CONTROLLER:
+        {
+            Controller controller = (Controller)theEObject;
+            T result = caseController ( controller );
+            if ( result == null )
+                result = defaultCase ( theEObject );
+            return result;
+        }
+        case ChartPackage.CURRENT_TIME_CONTROLLER:
+        {
+            CurrentTimeController currentTimeController = (CurrentTimeController)theEObject;
+            T result = caseCurrentTimeController ( currentTimeController );
+            if ( result == null )
+                result = caseController ( currentTimeController );
+            if ( result == null )
+                result = defaultCase ( theEObject );
+            return result;
+        }
+        default:
+            return defaultCase ( theEObject );
         }
     }
 

@@ -132,10 +132,10 @@ public class ArchiveSeriesItemProvider extends ItemDataSeriesItemProvider implem
 
         switch ( notification.getFeatureID ( ArchiveSeries.class ) )
         {
-            case ChartPackage.ARCHIVE_SERIES__CHANNELS:
-            case ChartPackage.ARCHIVE_SERIES__LINE_PROPERTIES:
-                fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), true, false ) );
-                return;
+        case ChartPackage.ARCHIVE_SERIES__CHANNELS:
+        case ChartPackage.ARCHIVE_SERIES__LINE_PROPERTIES:
+            fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), true, false ) );
+            return;
         }
         super.notifyChanged ( notification );
     }

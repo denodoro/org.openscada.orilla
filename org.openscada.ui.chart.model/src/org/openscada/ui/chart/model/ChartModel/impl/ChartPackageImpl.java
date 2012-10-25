@@ -442,6 +442,16 @@ public class ChartPackageImpl extends EPackageImpl implements ChartPackage
     }
 
     /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public EAttribute getAxis_Color ()
+    {
+        return (EAttribute)axisEClass.getEStructuralFeatures ().get ( 3 );
+    }
+
+    /**
      * <!-- begin-user-doc --> <!-- end-user-doc -->
      * @generated
      */
@@ -848,6 +858,7 @@ public class ChartPackageImpl extends EPackageImpl implements ChartPackage
         createEAttribute ( axisEClass, AXIS__LABEL );
         createEAttribute ( axisEClass, AXIS__FORMAT );
         createEAttribute ( axisEClass, AXIS__TEXT_PADDING );
+        createEAttribute ( axisEClass, AXIS__COLOR );
 
         dataSeriesEClass = createEClass ( DATA_SERIES );
         createEAttribute ( dataSeriesEClass, DATA_SERIES__LABEL );
@@ -965,6 +976,7 @@ public class ChartPackageImpl extends EPackageImpl implements ChartPackage
         initEAttribute ( getAxis_Label (), ecorePackage.getEString (), "label", null, 0, 1, Axis.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
         initEAttribute ( getAxis_Format (), ecorePackage.getEString (), "format", null, 0, 1, Axis.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
         initEAttribute ( getAxis_TextPadding (), ecorePackage.getEInt (), "textPadding", "10", 1, 1, Axis.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
+        initEAttribute ( getAxis_Color (), this.getRGB (), "color", "#000000", 0, 1, Axis.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );
 
         initEClass ( dataSeriesEClass, DataSeries.class, "DataSeries", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS );
         initEAttribute ( getDataSeries_Label (), ecorePackage.getEString (), "label", null, 0, 1, DataSeries.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED );

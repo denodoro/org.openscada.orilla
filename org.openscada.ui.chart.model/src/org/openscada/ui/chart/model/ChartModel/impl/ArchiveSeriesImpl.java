@@ -149,10 +149,10 @@ public class ArchiveSeriesImpl extends ItemDataSeriesImpl implements ArchiveSeri
     {
         switch ( featureID )
         {
-            case ChartPackage.ARCHIVE_SERIES__CHANNELS:
-                return ( (InternalEList<?>)getChannels () ).basicRemove ( otherEnd, msgs );
-            case ChartPackage.ARCHIVE_SERIES__LINE_PROPERTIES:
-                return basicSetLineProperties ( null, msgs );
+        case ChartPackage.ARCHIVE_SERIES__CHANNELS:
+            return ( (InternalEList<?>)getChannels () ).basicRemove ( otherEnd, msgs );
+        case ChartPackage.ARCHIVE_SERIES__LINE_PROPERTIES:
+            return basicSetLineProperties ( null, msgs );
         }
         return super.eInverseRemove ( otherEnd, featureID, msgs );
     }
@@ -166,10 +166,10 @@ public class ArchiveSeriesImpl extends ItemDataSeriesImpl implements ArchiveSeri
     {
         switch ( featureID )
         {
-            case ChartPackage.ARCHIVE_SERIES__CHANNELS:
-                return getChannels ();
-            case ChartPackage.ARCHIVE_SERIES__LINE_PROPERTIES:
-                return getLineProperties ();
+        case ChartPackage.ARCHIVE_SERIES__CHANNELS:
+            return getChannels ();
+        case ChartPackage.ARCHIVE_SERIES__LINE_PROPERTIES:
+            return getLineProperties ();
         }
         return super.eGet ( featureID, resolve, coreType );
     }
@@ -184,13 +184,13 @@ public class ArchiveSeriesImpl extends ItemDataSeriesImpl implements ArchiveSeri
     {
         switch ( featureID )
         {
-            case ChartPackage.ARCHIVE_SERIES__CHANNELS:
-                getChannels ().clear ();
-                getChannels ().addAll ( (Collection<? extends ArchiveChannel>)newValue );
-                return;
-            case ChartPackage.ARCHIVE_SERIES__LINE_PROPERTIES:
-                setLineProperties ( (LineProperties)newValue );
-                return;
+        case ChartPackage.ARCHIVE_SERIES__CHANNELS:
+            getChannels ().clear ();
+            getChannels ().addAll ( (Collection<? extends ArchiveChannel>)newValue );
+            return;
+        case ChartPackage.ARCHIVE_SERIES__LINE_PROPERTIES:
+            setLineProperties ( (LineProperties)newValue );
+            return;
         }
         super.eSet ( featureID, newValue );
     }
@@ -204,12 +204,12 @@ public class ArchiveSeriesImpl extends ItemDataSeriesImpl implements ArchiveSeri
     {
         switch ( featureID )
         {
-            case ChartPackage.ARCHIVE_SERIES__CHANNELS:
-                getChannels ().clear ();
-                return;
-            case ChartPackage.ARCHIVE_SERIES__LINE_PROPERTIES:
-                setLineProperties ( (LineProperties)null );
-                return;
+        case ChartPackage.ARCHIVE_SERIES__CHANNELS:
+            getChannels ().clear ();
+            return;
+        case ChartPackage.ARCHIVE_SERIES__LINE_PROPERTIES:
+            setLineProperties ( (LineProperties)null );
+            return;
         }
         super.eUnset ( featureID );
     }
@@ -223,10 +223,10 @@ public class ArchiveSeriesImpl extends ItemDataSeriesImpl implements ArchiveSeri
     {
         switch ( featureID )
         {
-            case ChartPackage.ARCHIVE_SERIES__CHANNELS:
-                return channels != null && !channels.isEmpty ();
-            case ChartPackage.ARCHIVE_SERIES__LINE_PROPERTIES:
-                return lineProperties != null;
+        case ChartPackage.ARCHIVE_SERIES__CHANNELS:
+            return channels != null && !channels.isEmpty ();
+        case ChartPackage.ARCHIVE_SERIES__LINE_PROPERTIES:
+            return lineProperties != null;
         }
         return super.eIsSet ( featureID );
     }

@@ -593,18 +593,18 @@ public class ChartImpl extends EObjectImpl implements Chart
     {
         switch ( featureID )
         {
-            case ChartPackage.CHART__BOTTOM:
-                return ( (InternalEList<?>)getBottom () ).basicRemove ( otherEnd, msgs );
-            case ChartPackage.CHART__TOP:
-                return ( (InternalEList<?>)getTop () ).basicRemove ( otherEnd, msgs );
-            case ChartPackage.CHART__LEFT:
-                return ( (InternalEList<?>)getLeft () ).basicRemove ( otherEnd, msgs );
-            case ChartPackage.CHART__RIGHT:
-                return ( (InternalEList<?>)getRight () ).basicRemove ( otherEnd, msgs );
-            case ChartPackage.CHART__INPUTS:
-                return ( (InternalEList<?>)getInputs () ).basicRemove ( otherEnd, msgs );
-            case ChartPackage.CHART__CONTROLLERS:
-                return ( (InternalEList<?>)getControllers () ).basicRemove ( otherEnd, msgs );
+        case ChartPackage.CHART__BOTTOM:
+            return ( (InternalEList<?>)getBottom () ).basicRemove ( otherEnd, msgs );
+        case ChartPackage.CHART__TOP:
+            return ( (InternalEList<?>)getTop () ).basicRemove ( otherEnd, msgs );
+        case ChartPackage.CHART__LEFT:
+            return ( (InternalEList<?>)getLeft () ).basicRemove ( otherEnd, msgs );
+        case ChartPackage.CHART__RIGHT:
+            return ( (InternalEList<?>)getRight () ).basicRemove ( otherEnd, msgs );
+        case ChartPackage.CHART__INPUTS:
+            return ( (InternalEList<?>)getInputs () ).basicRemove ( otherEnd, msgs );
+        case ChartPackage.CHART__CONTROLLERS:
+            return ( (InternalEList<?>)getControllers () ).basicRemove ( otherEnd, msgs );
         }
         return super.eInverseRemove ( otherEnd, featureID, msgs );
     }
@@ -619,38 +619,38 @@ public class ChartImpl extends EObjectImpl implements Chart
     {
         switch ( featureID )
         {
-            case ChartPackage.CHART__TITLE:
-                return getTitle ();
-            case ChartPackage.CHART__SHOW_CURRENT_TIME_RULER:
-                return isShowCurrentTimeRuler ();
-            case ChartPackage.CHART__BACKGROUND_COLOR:
-                return getBackgroundColor ();
-            case ChartPackage.CHART__BOTTOM:
-                return getBottom ();
-            case ChartPackage.CHART__TOP:
-                return getTop ();
-            case ChartPackage.CHART__LEFT:
-                return getLeft ();
-            case ChartPackage.CHART__RIGHT:
-                return getRight ();
-            case ChartPackage.CHART__SELECTED_YAXIS:
-                if ( resolve )
-                    return getSelectedYAxis ();
-                return basicGetSelectedYAxis ();
-            case ChartPackage.CHART__SELECTED_XAXIS:
-                if ( resolve )
-                    return getSelectedXAxis ();
-                return basicGetSelectedXAxis ();
-            case ChartPackage.CHART__INPUTS:
-                return getInputs ();
-            case ChartPackage.CHART__MUTABLE:
-                return isMutable ();
-            case ChartPackage.CHART__SCROLLABLE:
-                return isScrollable ();
-            case ChartPackage.CHART__CONTROLLERS:
-                return getControllers ();
-            case ChartPackage.CHART__HOVERABLE:
-                return isHoverable ();
+        case ChartPackage.CHART__TITLE:
+            return getTitle ();
+        case ChartPackage.CHART__SHOW_CURRENT_TIME_RULER:
+            return isShowCurrentTimeRuler ();
+        case ChartPackage.CHART__BACKGROUND_COLOR:
+            return getBackgroundColor ();
+        case ChartPackage.CHART__BOTTOM:
+            return getBottom ();
+        case ChartPackage.CHART__TOP:
+            return getTop ();
+        case ChartPackage.CHART__LEFT:
+            return getLeft ();
+        case ChartPackage.CHART__RIGHT:
+            return getRight ();
+        case ChartPackage.CHART__SELECTED_YAXIS:
+            if ( resolve )
+                return getSelectedYAxis ();
+            return basicGetSelectedYAxis ();
+        case ChartPackage.CHART__SELECTED_XAXIS:
+            if ( resolve )
+                return getSelectedXAxis ();
+            return basicGetSelectedXAxis ();
+        case ChartPackage.CHART__INPUTS:
+            return getInputs ();
+        case ChartPackage.CHART__MUTABLE:
+            return isMutable ();
+        case ChartPackage.CHART__SCROLLABLE:
+            return isScrollable ();
+        case ChartPackage.CHART__CONTROLLERS:
+            return getControllers ();
+        case ChartPackage.CHART__HOVERABLE:
+            return isHoverable ();
         }
         return super.eGet ( featureID, resolve, coreType );
     }
@@ -666,54 +666,54 @@ public class ChartImpl extends EObjectImpl implements Chart
     {
         switch ( featureID )
         {
-            case ChartPackage.CHART__TITLE:
-                setTitle ( (String)newValue );
-                return;
-            case ChartPackage.CHART__SHOW_CURRENT_TIME_RULER:
-                setShowCurrentTimeRuler ( (Boolean)newValue );
-                return;
-            case ChartPackage.CHART__BACKGROUND_COLOR:
-                setBackgroundColor ( (RGB)newValue );
-                return;
-            case ChartPackage.CHART__BOTTOM:
-                getBottom ().clear ();
-                getBottom ().addAll ( (Collection<? extends XAxis>)newValue );
-                return;
-            case ChartPackage.CHART__TOP:
-                getTop ().clear ();
-                getTop ().addAll ( (Collection<? extends XAxis>)newValue );
-                return;
-            case ChartPackage.CHART__LEFT:
-                getLeft ().clear ();
-                getLeft ().addAll ( (Collection<? extends YAxis>)newValue );
-                return;
-            case ChartPackage.CHART__RIGHT:
-                getRight ().clear ();
-                getRight ().addAll ( (Collection<? extends YAxis>)newValue );
-                return;
-            case ChartPackage.CHART__SELECTED_YAXIS:
-                setSelectedYAxis ( (YAxis)newValue );
-                return;
-            case ChartPackage.CHART__SELECTED_XAXIS:
-                setSelectedXAxis ( (XAxis)newValue );
-                return;
-            case ChartPackage.CHART__INPUTS:
-                getInputs ().clear ();
-                getInputs ().addAll ( (Collection<? extends DataSeries>)newValue );
-                return;
-            case ChartPackage.CHART__MUTABLE:
-                setMutable ( (Boolean)newValue );
-                return;
-            case ChartPackage.CHART__SCROLLABLE:
-                setScrollable ( (Boolean)newValue );
-                return;
-            case ChartPackage.CHART__CONTROLLERS:
-                getControllers ().clear ();
-                getControllers ().addAll ( (Collection<? extends Controller>)newValue );
-                return;
-            case ChartPackage.CHART__HOVERABLE:
-                setHoverable ( (Boolean)newValue );
-                return;
+        case ChartPackage.CHART__TITLE:
+            setTitle ( (String)newValue );
+            return;
+        case ChartPackage.CHART__SHOW_CURRENT_TIME_RULER:
+            setShowCurrentTimeRuler ( (Boolean)newValue );
+            return;
+        case ChartPackage.CHART__BACKGROUND_COLOR:
+            setBackgroundColor ( (RGB)newValue );
+            return;
+        case ChartPackage.CHART__BOTTOM:
+            getBottom ().clear ();
+            getBottom ().addAll ( (Collection<? extends XAxis>)newValue );
+            return;
+        case ChartPackage.CHART__TOP:
+            getTop ().clear ();
+            getTop ().addAll ( (Collection<? extends XAxis>)newValue );
+            return;
+        case ChartPackage.CHART__LEFT:
+            getLeft ().clear ();
+            getLeft ().addAll ( (Collection<? extends YAxis>)newValue );
+            return;
+        case ChartPackage.CHART__RIGHT:
+            getRight ().clear ();
+            getRight ().addAll ( (Collection<? extends YAxis>)newValue );
+            return;
+        case ChartPackage.CHART__SELECTED_YAXIS:
+            setSelectedYAxis ( (YAxis)newValue );
+            return;
+        case ChartPackage.CHART__SELECTED_XAXIS:
+            setSelectedXAxis ( (XAxis)newValue );
+            return;
+        case ChartPackage.CHART__INPUTS:
+            getInputs ().clear ();
+            getInputs ().addAll ( (Collection<? extends DataSeries>)newValue );
+            return;
+        case ChartPackage.CHART__MUTABLE:
+            setMutable ( (Boolean)newValue );
+            return;
+        case ChartPackage.CHART__SCROLLABLE:
+            setScrollable ( (Boolean)newValue );
+            return;
+        case ChartPackage.CHART__CONTROLLERS:
+            getControllers ().clear ();
+            getControllers ().addAll ( (Collection<? extends Controller>)newValue );
+            return;
+        case ChartPackage.CHART__HOVERABLE:
+            setHoverable ( (Boolean)newValue );
+            return;
         }
         super.eSet ( featureID, newValue );
     }
@@ -728,48 +728,48 @@ public class ChartImpl extends EObjectImpl implements Chart
     {
         switch ( featureID )
         {
-            case ChartPackage.CHART__TITLE:
-                setTitle ( TITLE_EDEFAULT );
-                return;
-            case ChartPackage.CHART__SHOW_CURRENT_TIME_RULER:
-                setShowCurrentTimeRuler ( SHOW_CURRENT_TIME_RULER_EDEFAULT );
-                return;
-            case ChartPackage.CHART__BACKGROUND_COLOR:
-                setBackgroundColor ( BACKGROUND_COLOR_EDEFAULT );
-                return;
-            case ChartPackage.CHART__BOTTOM:
-                getBottom ().clear ();
-                return;
-            case ChartPackage.CHART__TOP:
-                getTop ().clear ();
-                return;
-            case ChartPackage.CHART__LEFT:
-                getLeft ().clear ();
-                return;
-            case ChartPackage.CHART__RIGHT:
-                getRight ().clear ();
-                return;
-            case ChartPackage.CHART__SELECTED_YAXIS:
-                setSelectedYAxis ( (YAxis)null );
-                return;
-            case ChartPackage.CHART__SELECTED_XAXIS:
-                setSelectedXAxis ( (XAxis)null );
-                return;
-            case ChartPackage.CHART__INPUTS:
-                getInputs ().clear ();
-                return;
-            case ChartPackage.CHART__MUTABLE:
-                setMutable ( MUTABLE_EDEFAULT );
-                return;
-            case ChartPackage.CHART__SCROLLABLE:
-                setScrollable ( SCROLLABLE_EDEFAULT );
-                return;
-            case ChartPackage.CHART__CONTROLLERS:
-                getControllers ().clear ();
-                return;
-            case ChartPackage.CHART__HOVERABLE:
-                setHoverable ( HOVERABLE_EDEFAULT );
-                return;
+        case ChartPackage.CHART__TITLE:
+            setTitle ( TITLE_EDEFAULT );
+            return;
+        case ChartPackage.CHART__SHOW_CURRENT_TIME_RULER:
+            setShowCurrentTimeRuler ( SHOW_CURRENT_TIME_RULER_EDEFAULT );
+            return;
+        case ChartPackage.CHART__BACKGROUND_COLOR:
+            setBackgroundColor ( BACKGROUND_COLOR_EDEFAULT );
+            return;
+        case ChartPackage.CHART__BOTTOM:
+            getBottom ().clear ();
+            return;
+        case ChartPackage.CHART__TOP:
+            getTop ().clear ();
+            return;
+        case ChartPackage.CHART__LEFT:
+            getLeft ().clear ();
+            return;
+        case ChartPackage.CHART__RIGHT:
+            getRight ().clear ();
+            return;
+        case ChartPackage.CHART__SELECTED_YAXIS:
+            setSelectedYAxis ( (YAxis)null );
+            return;
+        case ChartPackage.CHART__SELECTED_XAXIS:
+            setSelectedXAxis ( (XAxis)null );
+            return;
+        case ChartPackage.CHART__INPUTS:
+            getInputs ().clear ();
+            return;
+        case ChartPackage.CHART__MUTABLE:
+            setMutable ( MUTABLE_EDEFAULT );
+            return;
+        case ChartPackage.CHART__SCROLLABLE:
+            setScrollable ( SCROLLABLE_EDEFAULT );
+            return;
+        case ChartPackage.CHART__CONTROLLERS:
+            getControllers ().clear ();
+            return;
+        case ChartPackage.CHART__HOVERABLE:
+            setHoverable ( HOVERABLE_EDEFAULT );
+            return;
         }
         super.eUnset ( featureID );
     }
@@ -784,34 +784,34 @@ public class ChartImpl extends EObjectImpl implements Chart
     {
         switch ( featureID )
         {
-            case ChartPackage.CHART__TITLE:
-                return TITLE_EDEFAULT == null ? title != null : !TITLE_EDEFAULT.equals ( title );
-            case ChartPackage.CHART__SHOW_CURRENT_TIME_RULER:
-                return showCurrentTimeRuler != SHOW_CURRENT_TIME_RULER_EDEFAULT;
-            case ChartPackage.CHART__BACKGROUND_COLOR:
-                return BACKGROUND_COLOR_EDEFAULT == null ? backgroundColor != null : !BACKGROUND_COLOR_EDEFAULT.equals ( backgroundColor );
-            case ChartPackage.CHART__BOTTOM:
-                return bottom != null && !bottom.isEmpty ();
-            case ChartPackage.CHART__TOP:
-                return top != null && !top.isEmpty ();
-            case ChartPackage.CHART__LEFT:
-                return left != null && !left.isEmpty ();
-            case ChartPackage.CHART__RIGHT:
-                return right != null && !right.isEmpty ();
-            case ChartPackage.CHART__SELECTED_YAXIS:
-                return selectedYAxis != null;
-            case ChartPackage.CHART__SELECTED_XAXIS:
-                return selectedXAxis != null;
-            case ChartPackage.CHART__INPUTS:
-                return inputs != null && !inputs.isEmpty ();
-            case ChartPackage.CHART__MUTABLE:
-                return mutable != MUTABLE_EDEFAULT;
-            case ChartPackage.CHART__SCROLLABLE:
-                return scrollable != SCROLLABLE_EDEFAULT;
-            case ChartPackage.CHART__CONTROLLERS:
-                return controllers != null && !controllers.isEmpty ();
-            case ChartPackage.CHART__HOVERABLE:
-                return hoverable != HOVERABLE_EDEFAULT;
+        case ChartPackage.CHART__TITLE:
+            return TITLE_EDEFAULT == null ? title != null : !TITLE_EDEFAULT.equals ( title );
+        case ChartPackage.CHART__SHOW_CURRENT_TIME_RULER:
+            return showCurrentTimeRuler != SHOW_CURRENT_TIME_RULER_EDEFAULT;
+        case ChartPackage.CHART__BACKGROUND_COLOR:
+            return BACKGROUND_COLOR_EDEFAULT == null ? backgroundColor != null : !BACKGROUND_COLOR_EDEFAULT.equals ( backgroundColor );
+        case ChartPackage.CHART__BOTTOM:
+            return bottom != null && !bottom.isEmpty ();
+        case ChartPackage.CHART__TOP:
+            return top != null && !top.isEmpty ();
+        case ChartPackage.CHART__LEFT:
+            return left != null && !left.isEmpty ();
+        case ChartPackage.CHART__RIGHT:
+            return right != null && !right.isEmpty ();
+        case ChartPackage.CHART__SELECTED_YAXIS:
+            return selectedYAxis != null;
+        case ChartPackage.CHART__SELECTED_XAXIS:
+            return selectedXAxis != null;
+        case ChartPackage.CHART__INPUTS:
+            return inputs != null && !inputs.isEmpty ();
+        case ChartPackage.CHART__MUTABLE:
+            return mutable != MUTABLE_EDEFAULT;
+        case ChartPackage.CHART__SCROLLABLE:
+            return scrollable != SCROLLABLE_EDEFAULT;
+        case ChartPackage.CHART__CONTROLLERS:
+            return controllers != null && !controllers.isEmpty ();
+        case ChartPackage.CHART__HOVERABLE:
+            return hoverable != HOVERABLE_EDEFAULT;
         }
         return super.eIsSet ( featureID );
     }

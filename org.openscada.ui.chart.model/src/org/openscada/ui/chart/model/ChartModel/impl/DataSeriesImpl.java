@@ -257,18 +257,18 @@ public abstract class DataSeriesImpl extends EObjectImpl implements DataSeries
     {
         switch ( featureID )
         {
-            case ChartPackage.DATA_SERIES__LABEL:
-                return getLabel ();
-            case ChartPackage.DATA_SERIES__X:
-                if ( resolve )
-                    return getX ();
-                return basicGetX ();
-            case ChartPackage.DATA_SERIES__Y:
-                if ( resolve )
-                    return getY ();
-                return basicGetY ();
-            case ChartPackage.DATA_SERIES__VISIBLE:
-                return isVisible ();
+        case ChartPackage.DATA_SERIES__LABEL:
+            return getLabel ();
+        case ChartPackage.DATA_SERIES__X:
+            if ( resolve )
+                return getX ();
+            return basicGetX ();
+        case ChartPackage.DATA_SERIES__Y:
+            if ( resolve )
+                return getY ();
+            return basicGetY ();
+        case ChartPackage.DATA_SERIES__VISIBLE:
+            return isVisible ();
         }
         return super.eGet ( featureID, resolve, coreType );
     }
@@ -283,18 +283,18 @@ public abstract class DataSeriesImpl extends EObjectImpl implements DataSeries
     {
         switch ( featureID )
         {
-            case ChartPackage.DATA_SERIES__LABEL:
-                setLabel ( (String)newValue );
-                return;
-            case ChartPackage.DATA_SERIES__X:
-                setX ( (XAxis)newValue );
-                return;
-            case ChartPackage.DATA_SERIES__Y:
-                setY ( (YAxis)newValue );
-                return;
-            case ChartPackage.DATA_SERIES__VISIBLE:
-                setVisible ( (Boolean)newValue );
-                return;
+        case ChartPackage.DATA_SERIES__LABEL:
+            setLabel ( (String)newValue );
+            return;
+        case ChartPackage.DATA_SERIES__X:
+            setX ( (XAxis)newValue );
+            return;
+        case ChartPackage.DATA_SERIES__Y:
+            setY ( (YAxis)newValue );
+            return;
+        case ChartPackage.DATA_SERIES__VISIBLE:
+            setVisible ( (Boolean)newValue );
+            return;
         }
         super.eSet ( featureID, newValue );
     }
@@ -309,18 +309,18 @@ public abstract class DataSeriesImpl extends EObjectImpl implements DataSeries
     {
         switch ( featureID )
         {
-            case ChartPackage.DATA_SERIES__LABEL:
-                setLabel ( LABEL_EDEFAULT );
-                return;
-            case ChartPackage.DATA_SERIES__X:
-                setX ( (XAxis)null );
-                return;
-            case ChartPackage.DATA_SERIES__Y:
-                setY ( (YAxis)null );
-                return;
-            case ChartPackage.DATA_SERIES__VISIBLE:
-                setVisible ( VISIBLE_EDEFAULT );
-                return;
+        case ChartPackage.DATA_SERIES__LABEL:
+            setLabel ( LABEL_EDEFAULT );
+            return;
+        case ChartPackage.DATA_SERIES__X:
+            setX ( (XAxis)null );
+            return;
+        case ChartPackage.DATA_SERIES__Y:
+            setY ( (YAxis)null );
+            return;
+        case ChartPackage.DATA_SERIES__VISIBLE:
+            setVisible ( VISIBLE_EDEFAULT );
+            return;
         }
         super.eUnset ( featureID );
     }
@@ -335,14 +335,14 @@ public abstract class DataSeriesImpl extends EObjectImpl implements DataSeries
     {
         switch ( featureID )
         {
-            case ChartPackage.DATA_SERIES__LABEL:
-                return LABEL_EDEFAULT == null ? label != null : !LABEL_EDEFAULT.equals ( label );
-            case ChartPackage.DATA_SERIES__X:
-                return x != null;
-            case ChartPackage.DATA_SERIES__Y:
-                return y != null;
-            case ChartPackage.DATA_SERIES__VISIBLE:
-                return visible != VISIBLE_EDEFAULT;
+        case ChartPackage.DATA_SERIES__LABEL:
+            return LABEL_EDEFAULT == null ? label != null : !LABEL_EDEFAULT.equals ( label );
+        case ChartPackage.DATA_SERIES__X:
+            return x != null;
+        case ChartPackage.DATA_SERIES__Y:
+            return y != null;
+        case ChartPackage.DATA_SERIES__VISIBLE:
+            return visible != VISIBLE_EDEFAULT;
         }
         return super.eIsSet ( featureID );
     }

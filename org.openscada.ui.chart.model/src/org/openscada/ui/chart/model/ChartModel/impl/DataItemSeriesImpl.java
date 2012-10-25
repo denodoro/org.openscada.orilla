@@ -119,8 +119,8 @@ public class DataItemSeriesImpl extends ItemDataSeriesImpl implements DataItemSe
     {
         switch ( featureID )
         {
-            case ChartPackage.DATA_ITEM_SERIES__LINE_PROPERTIES:
-                return basicSetLineProperties ( null, msgs );
+        case ChartPackage.DATA_ITEM_SERIES__LINE_PROPERTIES:
+            return basicSetLineProperties ( null, msgs );
         }
         return super.eInverseRemove ( otherEnd, featureID, msgs );
     }
@@ -134,8 +134,8 @@ public class DataItemSeriesImpl extends ItemDataSeriesImpl implements DataItemSe
     {
         switch ( featureID )
         {
-            case ChartPackage.DATA_ITEM_SERIES__LINE_PROPERTIES:
-                return getLineProperties ();
+        case ChartPackage.DATA_ITEM_SERIES__LINE_PROPERTIES:
+            return getLineProperties ();
         }
         return super.eGet ( featureID, resolve, coreType );
     }
@@ -149,9 +149,9 @@ public class DataItemSeriesImpl extends ItemDataSeriesImpl implements DataItemSe
     {
         switch ( featureID )
         {
-            case ChartPackage.DATA_ITEM_SERIES__LINE_PROPERTIES:
-                setLineProperties ( (LineProperties)newValue );
-                return;
+        case ChartPackage.DATA_ITEM_SERIES__LINE_PROPERTIES:
+            setLineProperties ( (LineProperties)newValue );
+            return;
         }
         super.eSet ( featureID, newValue );
     }
@@ -165,9 +165,9 @@ public class DataItemSeriesImpl extends ItemDataSeriesImpl implements DataItemSe
     {
         switch ( featureID )
         {
-            case ChartPackage.DATA_ITEM_SERIES__LINE_PROPERTIES:
-                setLineProperties ( (LineProperties)null );
-                return;
+        case ChartPackage.DATA_ITEM_SERIES__LINE_PROPERTIES:
+            setLineProperties ( (LineProperties)null );
+            return;
         }
         super.eUnset ( featureID );
     }
@@ -181,8 +181,8 @@ public class DataItemSeriesImpl extends ItemDataSeriesImpl implements DataItemSe
     {
         switch ( featureID )
         {
-            case ChartPackage.DATA_ITEM_SERIES__LINE_PROPERTIES:
-                return lineProperties != null;
+        case ChartPackage.DATA_ITEM_SERIES__LINE_PROPERTIES:
+            return lineProperties != null;
         }
         return super.eIsSet ( featureID );
     }

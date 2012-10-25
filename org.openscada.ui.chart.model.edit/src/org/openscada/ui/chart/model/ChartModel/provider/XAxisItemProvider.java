@@ -122,10 +122,10 @@ public class XAxisItemProvider extends AxisItemProvider implements IEditingDomai
 
         switch ( notification.getFeatureID ( XAxis.class ) )
         {
-            case ChartPackage.XAXIS__MINIMUM:
-            case ChartPackage.XAXIS__MAXIMUM:
-                fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), false, true ) );
-                return;
+        case ChartPackage.XAXIS__MINIMUM:
+        case ChartPackage.XAXIS__MAXIMUM:
+            fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), false, true ) );
+            return;
         }
         super.notifyChanged ( notification );
     }
