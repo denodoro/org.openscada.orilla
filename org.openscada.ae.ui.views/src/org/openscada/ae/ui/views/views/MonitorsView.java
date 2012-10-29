@@ -91,12 +91,12 @@ public class MonitorsView extends MonitorSubscriptionAlarmsEventsView
         setMonitorsId ( cfg.getMonitorQueryId () );
         switch ( cfg.getConnectionType () )
         {
-        case URI:
-            setConnectionUri ( cfg.getConnectionString () );
-            break;
-        case ID:
-            setConnectionId ( cfg.getConnectionString () );
-            break;
+            case URI:
+                setConnectionUri ( cfg.getConnectionString () );
+                break;
+            case ID:
+                setConnectionId ( cfg.getConnectionString () );
+                break;
         }
 
         if ( cfg.getLabel () != null )
@@ -137,15 +137,30 @@ public class MonitorsView extends MonitorSubscriptionAlarmsEventsView
             @Override
             public void run ()
             {
-                MonitorsView.this.getStateLabel ().setText ( createStatusLabel () );
+                setStatusBarText ( createStatusLabel () );
             }
         } );
+    }
+
+    protected void setStatusBarText ( final String string )
+    {
+        if ( getStateLabel ().isDisposed () )
+        {
+            return;
+        }
+
+        getStateLabel ().setText ( string );
     }
 
     protected String createStatusLabel ()
     {
         final List<String> labels = new LinkedList<String> ();
         labels.add ( getLabelForConnection () );
+
+        if ( this.monitorSubscriptionState != null )
+        {
+            labels.add ( this.monitorSubscriptionState.toString () );
+        }
 
         if ( this.monitorsId != null )
         {

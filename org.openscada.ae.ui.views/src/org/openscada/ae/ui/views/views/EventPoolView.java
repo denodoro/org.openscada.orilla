@@ -106,16 +106,20 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
     private ScheduledExecutorService scheduler;
 
     /**
-     * The maximum number of event that will be kept when cleaning up the event list
+     * The maximum number of event that will be kept when cleaning up the event
+     * list
      */
     private int maxNumberOfEvents = 0;
 
     /**
-     * The total maximum when the scroll lock will be overridden and events are removed down to {@link #maxNumberOfEvents}
+     * The total maximum when the scroll lock will be overridden and events are
+     * removed down to {@link #maxNumberOfEvents}
      */
     private int forceEventLimit = 0;
 
     private List<ColumnLabelProviderInformation> columnInformation;
+
+    protected SubscriptionState eventPoolSubscriptionState;
 
     public String getPoolId ()
     {
@@ -139,7 +143,8 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
     }
 
     /**
-     * This is a callback that will allow us to create the viewer and initialize it.
+     * This is a callback that will allow us to create the viewer and initialize
+     * it.
      */
     @Override
     public void createPartControl ( final Composite parent )
@@ -541,7 +546,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
     private void performDataChanged ( final MonitorStatusInformation[] addedOrUpdated, final String[] removed )
     {
         // FIXME: check if addAll is really necessary
-        EventPoolView.this.pool.addAll ( decorateEvents ( addedOrUpdated, removed ) );
+        this.pool.addAll ( decorateEvents ( addedOrUpdated, removed ) );
     }
 
     private Set<DecoratedEvent> decorateEvents ( final MonitorStatusInformation[] monitors, final String[] removed )
@@ -624,6 +629,8 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
 
     private void statusChangedEventSubscription ( final SubscriptionState state )
     {
+        this.eventPoolSubscriptionState = state;
+        updateStatusBar ();
     }
 
     @Override
@@ -645,7 +652,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
             @Override
             public void run ()
             {
-                EventPoolView.this.getStateLabel ().setText ( createStatusLabel () );
+                setStatusBarText ( createStatusLabel () );
             }
         } );
     }
@@ -654,6 +661,11 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
     {
         final List<String> labels = new LinkedList<String> ();
         labels.add ( getLabelForConnection () );
+
+        if ( this.eventPoolSubscriptionState != null )
+        {
+            labels.add ( this.eventPoolSubscriptionState.toString () );
+        }
 
         if ( this.poolId != null )
         {
@@ -713,5 +725,15 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
         unSubscribe ();
         this.scheduler.shutdown ();
         this.scheduler = null;
+    }
+
+    private void setStatusBarText ( final String string )
+    {
+        if ( getStateLabel ().isDisposed () )
+        {
+            return;
+        }
+
+        getStateLabel ().setText ( string );
     }
 }

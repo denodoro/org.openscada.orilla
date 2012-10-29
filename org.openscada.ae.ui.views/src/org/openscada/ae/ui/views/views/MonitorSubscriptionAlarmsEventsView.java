@@ -50,6 +50,8 @@ public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarms
 
     private MonitorListener monitorListener;
 
+    protected SubscriptionState monitorSubscriptionState;
+
     @Override
     protected Realm getRealm ()
     {
@@ -149,6 +151,7 @@ public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarms
 
     public void statusChangedMonitorSubscription ( final SubscriptionState state )
     {
+        this.monitorSubscriptionState = state;
         updateStatusBar ();
     }
 
