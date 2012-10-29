@@ -76,7 +76,7 @@ public abstract class AbstractConditionQueryViewPart extends AbstractEntryViewPa
             this.listener.dispose ();
             this.listener = null;
         }
-        this.entry.getConnection ().getConnection ().setConditionListener ( this.entry.getEntry ().getId (), this.listener = new ConditionListenerImpl () );
+        this.entry.getConnection ().getConnection ().setMonitorListener ( this.entry.getEntry ().getId (), this.listener = new ConditionListenerImpl () );
     }
 
     protected abstract void handleDataChanged ( final MonitorStatusInformation[] addedOrUpdated, final String[] removed, final boolean full );
@@ -93,7 +93,7 @@ public abstract class AbstractConditionQueryViewPart extends AbstractEntryViewPa
                 this.listener.dispose ();
                 this.listener = null;
             }
-            this.entry.getConnection ().getConnection ().setConditionListener ( this.entry.getEntry ().getId (), null );
+            this.entry.getConnection ().getConnection ().setMonitorListener ( this.entry.getEntry ().getId (), null );
             this.entry = null;
         }
     }
