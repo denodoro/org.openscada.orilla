@@ -162,7 +162,7 @@ public class MonitorStatusBean extends AbstractPropertyChange
     public void akn ()
     {
         logger.debug ( "Request ACK: {}", this.id );
-        this.connection.getConnection ().acknowledge ( this.id, new Date () );
+        this.connection.getConnection ().acknowledge ( this.id, new Date (), null );
     }
 
     public Date getLastFailTimestamp ()

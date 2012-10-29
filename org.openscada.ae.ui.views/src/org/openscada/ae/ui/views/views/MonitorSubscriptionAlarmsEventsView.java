@@ -261,7 +261,7 @@ public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarms
     {
         if ( getConnection () != null && getConnection ().getState () == ConnectionState.BOUND )
         {
-            getConnection ().acknowledge ( monitorId, timestamp );
+            getConnection ().acknowledge ( monitorId, timestamp, null );
         }
     }
 
