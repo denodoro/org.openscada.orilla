@@ -385,32 +385,32 @@ public class ChartEditor extends MultiPageEditorPart implements IEditingDomainPr
             {
                 switch ( notification.getFeatureID ( Resource.class ) )
                 {
-                    case Resource.RESOURCE__IS_LOADED:
-                    case Resource.RESOURCE__ERRORS:
-                    case Resource.RESOURCE__WARNINGS:
+                case Resource.RESOURCE__IS_LOADED:
+                case Resource.RESOURCE__ERRORS:
+                case Resource.RESOURCE__WARNINGS:
+                {
+                    Resource resource = (Resource)notification.getNotifier ();
+                    Diagnostic diagnostic = analyzeResourceProblems ( resource, null );
+                    if ( diagnostic.getSeverity () != Diagnostic.OK )
                     {
-                        Resource resource = (Resource)notification.getNotifier ();
-                        Diagnostic diagnostic = analyzeResourceProblems ( resource, null );
-                        if ( diagnostic.getSeverity () != Diagnostic.OK )
-                        {
-                            resourceToDiagnosticMap.put ( resource, diagnostic );
-                        }
-                        else
-                        {
-                            resourceToDiagnosticMap.remove ( resource );
-                        }
-
-                        if ( updateProblemIndication )
-                        {
-                            getSite ().getShell ().getDisplay ().asyncExec ( new Runnable () {
-                                public void run ()
-                                {
-                                    updateProblemIndication ();
-                                }
-                            } );
-                        }
-                        break;
+                        resourceToDiagnosticMap.put ( resource, diagnostic );
                     }
+                    else
+                    {
+                        resourceToDiagnosticMap.remove ( resource );
+                    }
+
+                    if ( updateProblemIndication )
+                    {
+                        getSite ().getShell ().getDisplay ().asyncExec ( new Runnable () {
+                            public void run ()
+                            {
+                                updateProblemIndication ();
+                            }
+                        } );
+                    }
+                    break;
+                }
                 }
             }
             else
@@ -1812,22 +1812,22 @@ public class ChartEditor extends MultiPageEditorPart implements IEditingDomainPr
                 Collection<?> collection = ( (IStructuredSelection)selection ).toList ();
                 switch ( collection.size () )
                 {
-                    case 0:
-                    {
-                        statusLineManager.setMessage ( getString ( "_UI_NoObjectSelected" ) );
-                        break;
-                    }
-                    case 1:
-                    {
-                        String text = new AdapterFactoryItemDelegator ( adapterFactory ).getText ( collection.iterator ().next () );
-                        statusLineManager.setMessage ( getString ( "_UI_SingleObjectSelected", text ) );
-                        break;
-                    }
-                    default:
-                    {
-                        statusLineManager.setMessage ( getString ( "_UI_MultiObjectSelected", Integer.toString ( collection.size () ) ) );
-                        break;
-                    }
+                case 0:
+                {
+                    statusLineManager.setMessage ( getString ( "_UI_NoObjectSelected" ) );
+                    break;
+                }
+                case 1:
+                {
+                    String text = new AdapterFactoryItemDelegator ( adapterFactory ).getText ( collection.iterator ().next () );
+                    statusLineManager.setMessage ( getString ( "_UI_SingleObjectSelected", text ) );
+                    break;
+                }
+                default:
+                {
+                    statusLineManager.setMessage ( getString ( "_UI_MultiObjectSelected", Integer.toString ( collection.size () ) ) );
+                    break;
+                }
                 }
             }
             else

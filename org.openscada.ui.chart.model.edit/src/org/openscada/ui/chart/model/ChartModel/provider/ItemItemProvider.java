@@ -100,9 +100,9 @@ public class ItemItemProvider extends ItemProviderAdapter implements IEditingDom
 
         switch ( notification.getFeatureID ( Item.class ) )
         {
-            case ChartPackage.ITEM__ITEM_ID:
-                fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), false, true ) );
-                return;
+        case ChartPackage.ITEM__ITEM_ID:
+            fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), false, true ) );
+            return;
         }
         super.notifyChanged ( notification );
     }

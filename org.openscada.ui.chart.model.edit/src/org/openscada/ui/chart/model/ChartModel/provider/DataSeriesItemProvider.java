@@ -136,10 +136,10 @@ public class DataSeriesItemProvider extends ItemProviderAdapter implements IEdit
 
         switch ( notification.getFeatureID ( DataSeries.class ) )
         {
-            case ChartPackage.DATA_SERIES__LABEL:
-            case ChartPackage.DATA_SERIES__VISIBLE:
-                fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), false, true ) );
-                return;
+        case ChartPackage.DATA_SERIES__LABEL:
+        case ChartPackage.DATA_SERIES__VISIBLE:
+            fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), false, true ) );
+            return;
         }
         super.notifyChanged ( notification );
     }

@@ -148,10 +148,10 @@ public class LinePropertiesImpl extends EObjectImpl implements LineProperties
     {
         switch ( featureID )
         {
-            case ChartPackage.LINE_PROPERTIES__WIDTH:
-                return getWidth ();
-            case ChartPackage.LINE_PROPERTIES__COLOR:
-                return getColor ();
+        case ChartPackage.LINE_PROPERTIES__WIDTH:
+            return getWidth ();
+        case ChartPackage.LINE_PROPERTIES__COLOR:
+            return getColor ();
         }
         return super.eGet ( featureID, resolve, coreType );
     }
@@ -166,12 +166,12 @@ public class LinePropertiesImpl extends EObjectImpl implements LineProperties
     {
         switch ( featureID )
         {
-            case ChartPackage.LINE_PROPERTIES__WIDTH:
-                setWidth ( (Float)newValue );
-                return;
-            case ChartPackage.LINE_PROPERTIES__COLOR:
-                setColor ( (RGB)newValue );
-                return;
+        case ChartPackage.LINE_PROPERTIES__WIDTH:
+            setWidth ( (Float)newValue );
+            return;
+        case ChartPackage.LINE_PROPERTIES__COLOR:
+            setColor ( (RGB)newValue );
+            return;
         }
         super.eSet ( featureID, newValue );
     }
@@ -186,12 +186,12 @@ public class LinePropertiesImpl extends EObjectImpl implements LineProperties
     {
         switch ( featureID )
         {
-            case ChartPackage.LINE_PROPERTIES__WIDTH:
-                setWidth ( WIDTH_EDEFAULT );
-                return;
-            case ChartPackage.LINE_PROPERTIES__COLOR:
-                setColor ( COLOR_EDEFAULT );
-                return;
+        case ChartPackage.LINE_PROPERTIES__WIDTH:
+            setWidth ( WIDTH_EDEFAULT );
+            return;
+        case ChartPackage.LINE_PROPERTIES__COLOR:
+            setColor ( COLOR_EDEFAULT );
+            return;
         }
         super.eUnset ( featureID );
     }
@@ -206,10 +206,10 @@ public class LinePropertiesImpl extends EObjectImpl implements LineProperties
     {
         switch ( featureID )
         {
-            case ChartPackage.LINE_PROPERTIES__WIDTH:
-                return width != WIDTH_EDEFAULT;
-            case ChartPackage.LINE_PROPERTIES__COLOR:
-                return COLOR_EDEFAULT == null ? color != null : !COLOR_EDEFAULT.equals ( color );
+        case ChartPackage.LINE_PROPERTIES__WIDTH:
+            return width != WIDTH_EDEFAULT;
+        case ChartPackage.LINE_PROPERTIES__COLOR:
+            return COLOR_EDEFAULT == null ? color != null : !COLOR_EDEFAULT.equals ( color );
         }
         return super.eIsSet ( featureID );
     }

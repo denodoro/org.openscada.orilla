@@ -131,9 +131,9 @@ public class DataItemSeriesItemProvider extends ItemDataSeriesItemProvider imple
 
         switch ( notification.getFeatureID ( DataItemSeries.class ) )
         {
-            case ChartPackage.DATA_ITEM_SERIES__LINE_PROPERTIES:
-                fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), true, false ) );
-                return;
+        case ChartPackage.DATA_ITEM_SERIES__LINE_PROPERTIES:
+            fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), true, false ) );
+            return;
         }
         super.notifyChanged ( notification );
     }

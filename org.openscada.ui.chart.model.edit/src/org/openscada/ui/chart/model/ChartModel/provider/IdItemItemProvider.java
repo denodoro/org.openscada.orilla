@@ -110,9 +110,9 @@ public class IdItemItemProvider extends ItemItemProvider implements IEditingDoma
 
         switch ( notification.getFeatureID ( IdItem.class ) )
         {
-            case ChartPackage.ID_ITEM__CONNECTION_ID:
-                fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), false, true ) );
-                return;
+        case ChartPackage.ID_ITEM__CONNECTION_ID:
+            fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), false, true ) );
+            return;
         }
         super.notifyChanged ( notification );
     }

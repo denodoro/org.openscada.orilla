@@ -110,9 +110,9 @@ public class UriItemItemProvider extends ItemItemProvider implements IEditingDom
 
         switch ( notification.getFeatureID ( UriItem.class ) )
         {
-            case ChartPackage.URI_ITEM__CONNECTION_URI:
-                fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), false, true ) );
-                return;
+        case ChartPackage.URI_ITEM__CONNECTION_URI:
+            fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), false, true ) );
+            return;
         }
         super.notifyChanged ( notification );
     }
