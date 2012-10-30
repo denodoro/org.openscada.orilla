@@ -63,9 +63,9 @@ public class LocalLevelPresets extends GenericLevelPresets
     }
 
     @Override
-    protected boolean isAckRequired ( final String string )
+    protected boolean isAckRequired ( final String string, final String severity )
     {
-        return getBooleanAttribute ( String.format ( "org.openscada.ae.monitor.level.%s.ackRequired", string ) ); //$NON-NLS-1$
+        return getBooleanAttribute ( String.format ( "org.openscada.ae.monitor.level.%s.%s.ackRequired", string, severity ) ); //$NON-NLS-1$
     }
 
     @Override

@@ -373,9 +373,17 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
         {
             states.add ( State.WARNING );
         }
-        if ( isAckRequired ( tag ) )
+        if ( isAckRequired ( tag, "warning" ) )
         {
-            states.add ( State.ACK );
+            states.add ( State.WARNING_ACK );
+        }
+        if ( isAckRequired ( tag, "alarm" ) )
+        {
+            states.add ( State.ALARM_ACK );
+        }
+        if ( isAckRequired ( tag, "error" ) )
+        {
+            states.add ( State.ERROR_ACK );
         }
         if ( isUnsafe ( tag ) )
         {
@@ -417,7 +425,7 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
 
     protected abstract boolean isAlarm ( final String string );
 
-    protected abstract boolean isAckRequired ( final String string );
+    protected abstract boolean isAckRequired ( final String string, final String severity );
 
     protected abstract Number getPreset ( final String string );
 

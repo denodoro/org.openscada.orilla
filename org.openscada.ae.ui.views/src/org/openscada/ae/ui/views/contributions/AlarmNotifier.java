@@ -427,13 +427,15 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution
     {
         final EnumSet<StateInformation.State> states = EnumSet.noneOf ( StateInformation.State.class );
 
+        // FIXME: this is wrong ... should consider other severities
+
         if ( numberOfAlarms () > 0 )
         {
             states.add ( State.ALARM );
         }
         if ( numberOfAckAlarms () > 0 )
         {
-            states.add ( State.ACK );
+            states.add ( State.ALARM_ACK );
         }
         if ( !this.connected )
         {

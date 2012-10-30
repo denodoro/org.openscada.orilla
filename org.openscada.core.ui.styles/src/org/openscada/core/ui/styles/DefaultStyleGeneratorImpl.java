@@ -33,6 +33,20 @@ import org.openscada.core.ui.styles.StyleHandler.Style;
 public class DefaultStyleGeneratorImpl implements StyleGenerator
 {
 
+    private static final RGB COLOR_DISCONNECTED_BG = new RGB ( 233, 88, 254 );
+
+    private static final RGB COLOR_ERROR_BG = new RGB ( 233, 88, 254 );
+
+    private static final RGB COLOR_ALARM_BG = new RGB ( 235, 53, 37 );
+
+    private static final RGB COLOR_WARNING_BG = new RGB ( 255, 222, 0 );
+
+    private static final RGB COLOR_MANUAL_BG = new RGB ( 100, 149, 237 );
+
+    private static final RGB COLOR_BLOCK_FG = new RGB ( 255, 255, 255 );
+
+    private static final RGB COLOR_BLOCK_BG = new RGB ( 0, 0, 0 );
+
     private final LocalResourceManager resourceManager;
 
     public DefaultStyleGeneratorImpl ()
@@ -54,51 +68,83 @@ public class DefaultStyleGeneratorImpl implements StyleGenerator
         Color background = null;
         Color foreground = null;
 
-        boolean monitorActive = false;
+        boolean blink = false;
+        boolean fast = true;
+
+        boolean warningActive = false;
+        boolean alarmActive = false;
+        boolean errorActive = false;
 
         if ( states.contains ( State.BLOCK ) )
         {
-            background = this.resourceManager.createColor ( ColorDescriptor.createFrom ( new RGB ( 0, 0, 0 ) ) );
-            foreground = this.resourceManager.createColor ( ColorDescriptor.createFrom ( new RGB ( 255, 255, 255 ) ) );
+            background = (Color)this.resourceManager.get ( ColorDescriptor.createFrom ( COLOR_BLOCK_BG ) );
+            foreground = (Color)this.resourceManager.get ( ColorDescriptor.createFrom ( COLOR_BLOCK_FG ) );
             image = Activator.getDefault ().getImageRegistry ().get ( ImageConstants.IMG_BLOCK );
         }
         if ( states.contains ( State.MANUAL ) )
         {
-            background = this.resourceManager.createColor ( ColorDescriptor.createFrom ( new RGB ( 100, 149, 237 ) ) );
+            background = (Color)this.resourceManager.get ( ColorDescriptor.createFrom ( COLOR_MANUAL_BG ) );
             foreground = null;
             image = Activator.getDefault ().getImageRegistry ().get ( ImageConstants.IMG_MANUAL );
         }
         if ( states.contains ( State.WARNING ) )
         {
-            background = this.resourceManager.createColor ( ColorDescriptor.createFrom ( new RGB ( 255, 222, 0 ) ) );
+            warningActive = true;
+            blink = false;
+            background = (Color)this.resourceManager.get ( ColorDescriptor.createFrom ( COLOR_WARNING_BG ) );
             foreground = null;
-            monitorActive = true;
             image = Activator.getDefault ().getImageRegistry ().get ( ImageConstants.IMG_WARNING );
+        }
+        if ( states.contains ( State.WARNING_ACK ) )
+        {
+            background = (Color)this.resourceManager.get ( ColorDescriptor.createFrom ( COLOR_WARNING_BG ) );
+            foreground = null;
+            image = Activator.getDefault ().getImageRegistry ().get ( ImageConstants.IMG_WARNING );
+            blink = true;
+            fast = warningActive;
         }
         if ( states.contains ( State.ALARM ) )
         {
-            background = this.resourceManager.createColor ( ColorDescriptor.createFrom ( new RGB ( 235, 53, 37 ) ) );
+            alarmActive = true;
+            blink = false;
+            background = (Color)this.resourceManager.get ( ColorDescriptor.createFrom ( COLOR_ALARM_BG ) );
             foreground = null;
-            monitorActive = true;
             image = Activator.getDefault ().getImageRegistry ().get ( ImageConstants.IMG_ALARM );
+        }
+        if ( states.contains ( State.ALARM_ACK ) )
+        {
+            background = (Color)this.resourceManager.get ( ColorDescriptor.createFrom ( COLOR_ALARM_BG ) );
+            foreground = null;
+            image = Activator.getDefault ().getImageRegistry ().get ( ImageConstants.IMG_ALARM );
+            blink = true;
+            fast = alarmActive;
         }
         if ( states.contains ( State.ERROR ) )
         {
-            background = this.resourceManager.createColor ( ColorDescriptor.createFrom ( new RGB ( 233, 88, 254 ) ) );
+            errorActive = true;
+            blink = false;
+            background = (Color)this.resourceManager.get ( ColorDescriptor.createFrom ( COLOR_ERROR_BG ) );
             foreground = null;
-            monitorActive = true;
             image = Activator.getDefault ().getImageRegistry ().get ( ImageConstants.IMG_ERROR );
+        }
+        if ( states.contains ( State.ERROR_ACK ) )
+        {
+            background = (Color)this.resourceManager.get ( ColorDescriptor.createFrom ( COLOR_ERROR_BG ) );
+            foreground = null;
+            image = Activator.getDefault ().getImageRegistry ().get ( ImageConstants.IMG_ERROR );
+            blink = true;
+            fast = errorActive;
         }
         if ( states.contains ( State.DISCONNECTED ) )
         {
-            background = this.resourceManager.createColor ( ColorDescriptor.createFrom ( new RGB ( 233, 88, 254 ) ) );
+            background = (Color)this.resourceManager.get ( ColorDescriptor.createFrom ( COLOR_DISCONNECTED_BG ) );
             foreground = null;
             image = Activator.getDefault ().getImageRegistry ().get ( ImageConstants.IMG_DISCONNECTED );
         }
 
-        if ( states.contains ( State.ACK ) )
+        if ( blink )
         {
-            if ( monitorActive )
+            if ( fast )
             {
                 return new Style ( new Image[] { image, null }, new Color[] { foreground, null }, new Color[] { background, null }, null );
             }

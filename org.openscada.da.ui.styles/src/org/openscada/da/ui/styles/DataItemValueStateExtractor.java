@@ -66,9 +66,17 @@ public class DataItemValueStateExtractor extends AbstractStateInformation
         {
             result.add ( State.DISCONNECTED );
         }
-        if ( value.isAttribute ( "ackRequired", false ) )
+        if ( value.isAttribute ( "warning.ackRequired", false ) )
         {
-            result.add ( State.ACK );
+            result.add ( State.WARNING_ACK );
+        }
+        if ( value.isAttribute ( "alarm.ackRequired", false ) )
+        {
+            result.add ( State.ALARM_ACK );
+        }
+        if ( value.isAttribute ( "error.ackRequired", false ) )
+        {
+            result.add ( State.ERROR_ACK );
         }
 
         return result;

@@ -31,7 +31,9 @@ public interface StateInformation
         ALARM,
         ERROR,
         DISCONNECTED,
-        ACK,
+        WARNING_ACK,
+        ALARM_ACK,
+        ERROR_ACK
     }
 
     public Set<State> getStates ();

@@ -19,12 +19,37 @@
 
 package org.openscada.core.ui.styles;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.RGB;
 
 public interface StyleHandler
 {
+    public static class RGBInformation
+    {
+        private final RGB rgb;
+
+        public RGBInformation ( final RGB rgb )
+        {
+            this.rgb = rgb;
+        }
+
+        public String toHex ()
+        {
+            return String.format ( "#%02x%02x%02x", rgb.red, rgb.green, rgb.blue );
+        }
+
+        @Override
+        public String toString ()
+        {
+            return toHex ();
+        }
+    }
+
     public static class Style
     {
         public Image[] images;
@@ -45,6 +70,38 @@ public interface StyleHandler
             this.foregroundColor = foregroundColor;
             this.backgroundColor = backgroundColor;
             this.font = font;
+        }
+
+        public Color[] getBackgroundColor ()
+        {
+            return this.backgroundColor;
+        }
+
+        public List<RGBInformation> getBackgroundColorAsList ()
+        {
+            return convertColors ( this.backgroundColor );
+        }
+
+        public List<RGBInformation> getForegroundColorAsList ()
+        {
+            return convertColors ( this.foregroundColor );
+        }
+
+        private static List<RGBInformation> convertColors ( final Color[] colors )
+        {
+            final List<RGBInformation> result = new ArrayList<StyleHandler.RGBInformation> ( colors.length );
+            for ( final Color color : colors )
+            {
+                if ( color != null )
+                {
+                    result.add ( new RGBInformation ( color.getRGB () ) );
+                }
+                else
+                {
+                    result.add ( null );
+                }
+            }
+            return result;
         }
     }
 
