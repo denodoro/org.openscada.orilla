@@ -11,7 +11,7 @@ public class Messages extends NLS
 
     private static final String BUNDLE_NAME = "org.openscada.ae.ui.views.messages"; //$NON-NLS-1$
 
-    public static String Acknowledge;
+    // public static String Acknowledge;
 
     public static String ID;
 
@@ -41,9 +41,9 @@ public class Messages extends NLS
 
     public static String search_for_events_description;
 
-    public static String QBE;
+    // public static String QBE;
 
-    public static String free_form_query;
+    // public static String free_form_query;
 
     public static String filter_must_not_be_null;
 
@@ -62,6 +62,40 @@ public class Messages extends NLS
     public static String add_or_condition;
 
     public static String clear;
+
+    public static String sourceTimestamp;
+
+    public static String entryTimestamp;
+
+    public static String message;
+
+    public static String monitorType;
+
+    public static String eventType;
+
+    public static String item;
+
+    public static String value;
+
+    public static String priority;
+
+    public static String source;
+
+    public static String actorType;
+
+    public static String actorName;
+
+    public static String component;
+
+    public static String system;
+
+    public static String hive;
+
+    public static String location;
+
+    public static String messageSource;
+
+    public static String comment;
 
     static
     {

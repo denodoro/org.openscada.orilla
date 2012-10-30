@@ -44,7 +44,6 @@ import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.statushandlers.StatusManager;
-import org.openscada.ae.Event;
 import org.openscada.ae.ui.views.Activator;
 import org.openscada.ae.ui.views.Messages;
 import org.openscada.core.Variant;
@@ -364,24 +363,24 @@ public class FilterQueryByExampleComposite extends Composite
                 filterChangedListener.onFilterChanged ( new Pair<SearchType, String> ( SearchType.SIMPLE, filterString ) );
             };
         };
-        this.fields.put ( "sourceTimestamp", new DateFieldEntry ( this, "sourceTimestamp", Messages.getString ( "sourceTimestamp" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-        this.fields.put ( "entryTimestamp", new DateFieldEntry ( this, "entryTimestamp", Messages.getString ( "entryTimestamp" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        this.fields.put ( "sourceTimestamp", new DateFieldEntry ( this, "sourceTimestamp", Messages.sourceTimestamp, filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        this.fields.put ( "entryTimestamp", new DateFieldEntry ( this, "entryTimestamp", Messages.entryTimestamp, filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-        this.fields.put ( "message", new TextFieldEntry ( this, "message", Messages.getString ( "message" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-        this.fields.put ( "monitorType", new TextFieldEntry ( this, "monitorType", Messages.getString ( "monitorType" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-        this.fields.put ( "eventType", new TextFieldEntry ( this, "eventType", Messages.getString ( "eventType" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-        this.fields.put ( "item", new TextFieldEntry ( this, "item", Messages.getString ( "item" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-        this.fields.put ( "value", new TextFieldEntry ( this, "value", Messages.getString ( "value" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-        this.fields.put ( "priority", new TextFieldEntry ( this, "priority", Messages.getString ( "priority" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-        this.fields.put ( "source", new TextFieldEntry ( this, "source", Messages.getString ( "source" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-        this.fields.put ( "actorType", new TextFieldEntry ( this, "actorType", Messages.getString ( "actorType" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-        this.fields.put ( "actorName", new TextFieldEntry ( this, "actorName", Messages.getString ( "actorName" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-        this.fields.put ( "component", new TextFieldEntry ( this, "component", Messages.getString ( "component" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-        this.fields.put ( "system", new TextFieldEntry ( this, "system", Messages.getString ( "system" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-        this.fields.put ( "hive", new TextFieldEntry ( this, "hive", Messages.getString ( "hive" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-        this.fields.put ( "location", new TextFieldEntry ( this, "location", Messages.getString ( "location" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-        this.fields.put ( Event.Fields.MESSAGE_CODE.getName (), new TextFieldEntry ( this, Event.Fields.MESSAGE_CODE.getName (), Messages.getString ( Event.Fields.MESSAGE_CODE.getName () ), filterModified ) );
-        this.fields.put ( "comment", new TextFieldEntry ( this, "comment", Messages.getString ( "comment" ), filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        this.fields.put ( "message", new TextFieldEntry ( this, "message", Messages.message, filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        this.fields.put ( "monitorType", new TextFieldEntry ( this, "monitorType", Messages.monitorType, filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        this.fields.put ( "eventType", new TextFieldEntry ( this, "eventType", Messages.eventType, filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        this.fields.put ( "item", new TextFieldEntry ( this, "item", Messages.item, filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        this.fields.put ( "value", new TextFieldEntry ( this, "value", Messages.value, filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        this.fields.put ( "priority", new TextFieldEntry ( this, "priority", Messages.priority, filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        this.fields.put ( "source", new TextFieldEntry ( this, "source", Messages.source, filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        this.fields.put ( "actorType", new TextFieldEntry ( this, "actorType", Messages.actorType, filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        this.fields.put ( "actorName", new TextFieldEntry ( this, "actorName", Messages.actorName, filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        this.fields.put ( "component", new TextFieldEntry ( this, "component", Messages.component, filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        this.fields.put ( "system", new TextFieldEntry ( this, "system", Messages.system, filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        this.fields.put ( "hive", new TextFieldEntry ( this, "hive", Messages.hive, filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        this.fields.put ( "location", new TextFieldEntry ( this, "location", Messages.location, filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        this.fields.put ( "messageSource", new TextFieldEntry ( this, "messageSource", Messages.messageSource, filterModified ) );
+        this.fields.put ( "comment", new TextFieldEntry ( this, "comment", Messages.comment, filterModified ) ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
         // clear button
         this.clearButton = new Button ( this, SWT.PUSH );
@@ -415,7 +414,7 @@ public class FilterQueryByExampleComposite extends Composite
     private void populateFromFilter ( final String filterString )
     {
         // no filter given
-        if ( filterString == null || filterString.length () == 0 )
+        if ( ( filterString == null ) || ( filterString.length () == 0 ) )
         {
             return;
         }
@@ -453,7 +452,7 @@ public class FilterQueryByExampleComposite extends Composite
                 final FilterExpression subFilterExpression = (FilterExpression)subFilter;
                 if ( subFilterExpression.getOperator () == Operator.NOT )
                 {
-                    if ( subFilterExpression.getFilterSet ().size () == 1 && subFilterExpression.getFilterSet ().get ( 0 ).isAssertion () )
+                    if ( ( subFilterExpression.getFilterSet ().size () == 1 ) && subFilterExpression.getFilterSet ().get ( 0 ).isAssertion () )
                     {
                         populateFromAssertion ( true, (FilterAssertion)subFilterExpression.getFilterSet ().get ( 0 ) );
                     }
@@ -464,27 +463,27 @@ public class FilterQueryByExampleComposite extends Composite
                     String attribute = null;
                     String from = null;
                     String to = null;
-                    if ( subFilterExpression.getFilterSet ().size () == 1 || subFilterExpression.getFilterSet ().size () == 2 && subFilterExpression.getFilterSet ().get ( 0 ).isAssertion () )
+                    if ( ( subFilterExpression.getFilterSet ().size () == 1 ) || ( ( subFilterExpression.getFilterSet ().size () == 2 ) && subFilterExpression.getFilterSet ().get ( 0 ).isAssertion () ) )
                     {
                         final FilterAssertion filterAssertion = (FilterAssertion)subFilterExpression.getFilterSet ().get ( 0 );
                         attribute = filterAssertion.getAttribute ();
-                        if ( filterAssertion != null && filterAssertion.getAssertion () == Assertion.GREATEREQ )
+                        if ( ( filterAssertion != null ) && ( filterAssertion.getAssertion () == Assertion.GREATEREQ ) )
                         {
                             from = (String)filterAssertion.getValue ();
                         }
-                        else if ( filterAssertion != null && filterAssertion.getAssertion () == Assertion.LESSEQ )
+                        else if ( ( filterAssertion != null ) && ( filterAssertion.getAssertion () == Assertion.LESSEQ ) )
                         {
                             to = (String)filterAssertion.getValue ();
                         }
                     }
-                    if ( subFilterExpression.getFilterSet ().size () == 2 && subFilterExpression.getFilterSet ().get ( 1 ).isAssertion () )
+                    if ( ( subFilterExpression.getFilterSet ().size () == 2 ) && subFilterExpression.getFilterSet ().get ( 1 ).isAssertion () )
                     {
                         final FilterAssertion filterAssertion = (FilterAssertion)subFilterExpression.getFilterSet ().get ( 1 );
-                        if ( filterAssertion != null && filterAssertion.getAssertion () == Assertion.GREATEREQ )
+                        if ( ( filterAssertion != null ) && ( filterAssertion.getAssertion () == Assertion.GREATEREQ ) )
                         {
                             from = (String)filterAssertion.getValue ();
                         }
-                        else if ( filterAssertion != null && filterAssertion.getAssertion () == Assertion.LESSEQ )
+                        else if ( ( filterAssertion != null ) && ( filterAssertion.getAssertion () == Assertion.LESSEQ ) )
                         {
                             to = (String)filterAssertion.getValue ();
                         }

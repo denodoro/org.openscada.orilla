@@ -63,9 +63,9 @@ public class Messages extends NLS
 
     public static String EventHistoryView_Sep;
 
-    public static String EventLabelProvider_EmptyString;
+    // public static String EventLabelProvider_EmptyString;
 
-    public static String EventLabelProvider_Error;
+    // public static String EventLabelProvider_Error;
 
     public static String EventPoolView_Action_Filter_Name;
 
