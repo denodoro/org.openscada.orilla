@@ -48,11 +48,14 @@ public class AttributesPart extends AbstractBaseDetailsPart
     {
         private final String name;
 
-        private final Variant value;
+        private final String type;
 
-        public Entry ( final String name, final Variant value )
+        private final String value;
+
+        public Entry ( final String name, final String type, final String value )
         {
             this.name = name;
+            this.type = type;
             this.value = value;
         }
 
@@ -61,9 +64,14 @@ public class AttributesPart extends AbstractBaseDetailsPart
             return this.name;
         }
 
-        public Variant getValue ()
+        public String getValue ()
         {
             return this.value;
+        }
+
+        public String getType ()
+        {
+            return this.type;
         }
 
         @Override
@@ -72,6 +80,7 @@ public class AttributesPart extends AbstractBaseDetailsPart
             final int prime = 31;
             int result = 1;
             result = prime * result + ( this.name == null ? 0 : this.name.hashCode () );
+            result = prime * result + ( this.type == null ? 0 : this.type.hashCode () );
             result = prime * result + ( this.value == null ? 0 : this.value.hashCode () );
             return result;
         }
@@ -100,6 +109,17 @@ public class AttributesPart extends AbstractBaseDetailsPart
                 }
             }
             else if ( !this.name.equals ( other.name ) )
+            {
+                return false;
+            }
+            if ( this.type == null )
+            {
+                if ( other.type != null )
+                {
+                    return false;
+                }
+            }
+            else if ( !this.type.equals ( other.type ) )
             {
                 return false;
             }
@@ -135,13 +155,17 @@ public class AttributesPart extends AbstractBaseDetailsPart
         tableLayout.addColumnData ( new ColumnWeightData ( 50 ) );
 
         final TableViewerColumn col2 = new TableViewerColumn ( this.viewer, SWT.NONE );
-        col2.getColumn ().setText ( Messages.AttributesPart_ValueLabel );
+        col2.getColumn ().setText ( Messages.AttributesPart_TypeLabel );
+        tableLayout.addColumnData ( new ColumnWeightData ( 20 ) );
+
+        final TableViewerColumn col3 = new TableViewerColumn ( this.viewer, SWT.NONE );
+        col3.getColumn ().setText ( Messages.AttributesPart_ValueLabel );
         tableLayout.addColumnData ( new ColumnWeightData ( 50 ) );
 
         this.viewer.getTable ().setHeaderVisible ( true );
         this.viewer.getTable ().setLayout ( tableLayout );
 
-        ViewerSupport.bind ( this.viewer, this.entries, new IValueProperty[] { PojoProperties.value ( "name" ), PojoProperties.value ( "value" ) } ); //$NON-NLS-1$ //$NON-NLS-2$
+        ViewerSupport.bind ( this.viewer, this.entries, new IValueProperty[] { PojoProperties.value ( "name" ), PojoProperties.value ( "type" ), PojoProperties.value ( "value" ) } ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
         this.viewer.setComparator ( new ViewerComparator () );
     }
@@ -172,7 +196,15 @@ public class AttributesPart extends AbstractBaseDetailsPart
 
         for ( final Map.Entry<String, Variant> entry : value.getAttributes ().entrySet () )
         {
-            entries.add ( new Entry ( entry.getKey (), entry.getValue () ) );
+            final Variant entryValue = entry.getValue ();
+            if ( entryValue != null )
+            {
+                entries.add ( new Entry ( entry.getKey (), entryValue.getType ().toString (), entryValue.toLabel () ) );
+            }
+            else
+            {
+                entries.add ( new Entry ( entry.getKey (), null, null ) );
+            }
         }
 
         return entries;

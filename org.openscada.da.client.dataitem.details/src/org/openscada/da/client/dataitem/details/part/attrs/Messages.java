@@ -8,6 +8,8 @@ public class Messages extends NLS
 
     public static String AttributesPart_NameLabel;
 
+    public static String AttributesPart_TypeLabel;
+
     public static String AttributesPart_ValueLabel;
     static
     {
