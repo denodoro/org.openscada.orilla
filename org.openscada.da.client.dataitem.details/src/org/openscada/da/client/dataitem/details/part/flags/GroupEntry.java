@@ -90,7 +90,6 @@ public class GroupEntry extends AbstractPropertyChange
 
     public void setState ( final Map<String, Variant> attrState )
     {
-
         if ( attrState == null )
         {
             setCount ( 0 );

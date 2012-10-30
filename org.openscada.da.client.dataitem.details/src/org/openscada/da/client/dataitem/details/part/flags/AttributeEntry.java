@@ -58,6 +58,7 @@ public class AttributeEntry
         final int prime = 31;
         int result = 1;
         result = prime * result + ( this.name == null ? 0 : this.name.hashCode () );
+        result = prime * result + ( this.value == null ? 0 : this.value.hashCode () );
         return result;
     }
 
@@ -85,6 +86,17 @@ public class AttributeEntry
             }
         }
         else if ( !this.name.equals ( other.name ) )
+        {
+            return false;
+        }
+        if ( this.value == null )
+        {
+            if ( other.value != null )
+            {
+                return false;
+            }
+        }
+        else if ( !this.value.equals ( other.value ) )
         {
             return false;
         }
