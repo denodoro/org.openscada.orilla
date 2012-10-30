@@ -147,15 +147,15 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
         final Figure figure = new Figure ();
         figure.setLayoutManager ( new GridLayout ( 1, false ) );
 
-        figure.add ( this.presetCeil = new Label ( Messages.LevelPresets_InitialLabel ), new GridData ( GridData.CENTER, GridData.FILL, true, true ) );
-        figure.add ( this.presetHH = new Label ( Messages.LevelPresets_InitialLabel ), new GridData ( GridData.CENTER, GridData.FILL, true, true ) );
-        figure.add ( this.presetH = new Label ( Messages.LevelPresets_InitialLabel ), new GridData ( GridData.CENTER, GridData.FILL, true, true ) );
+        figure.add ( this.presetCeil = new Label ( "" ), new GridData ( GridData.CENTER, GridData.FILL, true, true ) ); //$NON-NLS-1$
+        figure.add ( this.presetHH = new Label ( "" ), new GridData ( GridData.CENTER, GridData.FILL, true, true ) ); //$NON-NLS-1$
+        figure.add ( this.presetH = new Label ( "" ), new GridData ( GridData.CENTER, GridData.FILL, true, true ) ); //$NON-NLS-1$
 
-        figure.add ( this.currentLabel = new Label ( Messages.LevelPresets_InitialLabel ), new GridData ( GridData.CENTER, GridData.FILL, true, true ) );
+        figure.add ( this.currentLabel = new Label ( "" ), new GridData ( GridData.CENTER, GridData.FILL, true, true ) ); //$NON-NLS-1$
 
-        figure.add ( this.presetL = new Label ( Messages.LevelPresets_InitialLabel ), new GridData ( GridData.CENTER, GridData.FILL, true, true ) );
-        figure.add ( this.presetLL = new Label ( Messages.LevelPresets_InitialLabel ), new GridData ( GridData.CENTER, GridData.FILL, true, true ) );
-        figure.add ( this.presetFloor = new Label ( Messages.LevelPresets_InitialLabel ), new GridData ( GridData.CENTER, GridData.FILL, true, true ) );
+        figure.add ( this.presetL = new Label ( "" ), new GridData ( GridData.CENTER, GridData.FILL, true, true ) ); //$NON-NLS-1$
+        figure.add ( this.presetLL = new Label ( "" ), new GridData ( GridData.CENTER, GridData.FILL, true, true ) ); //$NON-NLS-1$
+        figure.add ( this.presetFloor = new Label ( "" ), new GridData ( GridData.CENTER, GridData.FILL, true, true ) ); //$NON-NLS-1$
 
         createConnection ( connLayer, this.presetCeil, this.rectCeil );
         createConnection ( connLayer, this.presetHH, this.triHH );

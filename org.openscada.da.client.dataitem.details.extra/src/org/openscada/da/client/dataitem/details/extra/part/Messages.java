@@ -35,8 +35,6 @@ public class Messages extends NLS
 
     public static String LevelPresets_EmtyNum;
 
-    public static String LevelPresets_InitialLabel;
-
     public static String LevelPresets_NumFormat;
 
     public static String ManualOverride_LocalManualValue_Label;
@@ -56,6 +54,7 @@ public class Messages extends NLS
     public static String VariantEntryDialog_Dialog_Title;
 
     public static String VariantEntryDialog_ErrorMessage;
+
     public static String VariantEntryDialog_NoConverter;
 
     public static String VariantEntryDialog_NoValue;
