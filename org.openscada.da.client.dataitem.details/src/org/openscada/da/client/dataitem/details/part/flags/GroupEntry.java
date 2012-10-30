@@ -31,11 +31,11 @@ import org.openscada.utils.beans.AbstractPropertyChange;
 
 public class GroupEntry extends AbstractPropertyChange
 {
-    public static final String PROP_COUNT = "count";
+    public static final String PROP_COUNT = "count"; //$NON-NLS-1$
 
-    public static final String PROP_ACTIVE_COUNT = "activeCount";
+    public static final String PROP_ACTIVE_COUNT = "activeCount"; //$NON-NLS-1$
 
-    public static final String PROP_LABEL = "label";
+    public static final String PROP_LABEL = "label"; //$NON-NLS-1$
 
     private final String attribute;
 

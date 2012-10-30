@@ -64,8 +64,8 @@ public class FlagsDetailsPart extends AbstractBaseDetailsPart
         public AbstractLabelProvider ( final IObservableSet itemsThatNeedLabels )
         {
             super ( itemsThatNeedLabels );
-            this.activeStyler = StyledString.createColorRegistryStyler ( "org.openscada.da.client.dataitem.details.activeAttribute", null );
-            this.inactiveStyler = StyledString.createColorRegistryStyler ( "org.openscada.da.client.dataitem.details.inactiveAttribute", null );
+            this.activeStyler = StyledString.createColorRegistryStyler ( "org.openscada.da.client.dataitem.details.activeAttribute", null ); //$NON-NLS-1$
+            this.inactiveStyler = StyledString.createColorRegistryStyler ( "org.openscada.da.client.dataitem.details.inactiveAttribute", null ); //$NON-NLS-1$
         }
 
         @Override
@@ -109,13 +109,13 @@ public class FlagsDetailsPart extends AbstractBaseDetailsPart
             {
                 final StyledString str = new StyledString ();
                 str.append ( ( (GroupEntry)ele ).getLabel () );
-                str.append ( " " );
-                str.append ( "[" + ( (GroupEntry)ele ).getAttribute () + "]", StyledString.DECORATIONS_STYLER );
-                str.append ( " " );
+                str.append ( " " ); //$NON-NLS-1$
+                str.append ( "[" + ( (GroupEntry)ele ).getAttribute () + "]", StyledString.DECORATIONS_STYLER ); //$NON-NLS-1$ //$NON-NLS-2$
+                str.append ( " " ); //$NON-NLS-1$
 
-                str.append ( "(" );
-                str.append ( "" + ( (GroupEntry)ele ).getActiveCount (), StyledString.COUNTER_STYLER );
-                str.append ( ")" );
+                str.append ( "(" ); //$NON-NLS-1$
+                str.append ( "" + ( (GroupEntry)ele ).getActiveCount (), StyledString.COUNTER_STYLER ); //$NON-NLS-1$
+                str.append ( ")" ); //$NON-NLS-1$
 
                 cell.setText ( str.getString () );
                 cell.setStyleRanges ( str.getStyleRanges () );
@@ -143,7 +143,7 @@ public class FlagsDetailsPart extends AbstractBaseDetailsPart
             final Object ele = cell.getElement ();
             if ( ele instanceof GroupEntry )
             {
-                cell.setText ( String.format ( "%s of %s", ( (GroupEntry)ele ).getActiveCount (), ( (GroupEntry)ele ).getCount () ) );
+                cell.setText ( String.format ( Messages.FlagsDetailsPart_GroupSumFormat, ( (GroupEntry)ele ).getActiveCount (), ( (GroupEntry)ele ).getCount () ) );
             }
             else if ( ele instanceof AttributeEntry )
             {
@@ -151,11 +151,11 @@ public class FlagsDetailsPart extends AbstractBaseDetailsPart
 
                 if ( ( (AttributeEntry)ele ).isActive () )
                 {
-                    str.append ( "active", this.activeStyler );
+                    str.append ( Messages.FlagsDetailsPart_ActiveMarker, this.activeStyler );
                 }
                 else
                 {
-                    str.append ( "inactive", this.inactiveStyler );
+                    str.append ( Messages.FlagsDetailsPart_InactiveMarker, this.inactiveStyler );
                 }
 
                 cell.setText ( str.getString () );
@@ -198,12 +198,12 @@ public class FlagsDetailsPart extends AbstractBaseDetailsPart
         final TableLayout tableLayout = new TableLayout ();
 
         this.col1 = new TreeViewerColumn ( this.viewer, SWT.NONE );
-        this.col1.getColumn ().setText ( "Flag" );
+        this.col1.getColumn ().setText ( Messages.FlagsDetailsPart_ColFlagLabel );
         tableLayout.addColumnData ( new ColumnWeightData ( 100 ) );
         this.col1.setLabelProvider ( new ColumnLabelLabelProvider ( contentProvider.getRealizedElements () ) );
 
         this.col2 = new TreeViewerColumn ( this.viewer, SWT.NONE );
-        this.col2.getColumn ().setText ( "State" );
+        this.col2.getColumn ().setText ( Messages.FlagsDetailsPart_ColStateLabel );
         tableLayout.addColumnData ( new ColumnWeightData ( 100 ) );
         this.col2.setLabelProvider ( new ColumnLabelStateProvider ( contentProvider.getRealizedElements () ) );
 
@@ -214,11 +214,11 @@ public class FlagsDetailsPart extends AbstractBaseDetailsPart
 
         this.viewer.setInput ( this.groupSet );
 
-        this.groupSet.add ( new GroupEntry ( "error", "Errors" ) );
-        this.groupSet.add ( new GroupEntry ( "alarm", "Alarms" ) );
-        this.groupSet.add ( new GroupEntry ( "warning", "Warnings" ) );
-        this.groupSet.add ( new GroupEntry ( "blocked", "Blockings" ) );
-        this.groupSet.add ( new GroupEntry ( "ackRequired", "Acknowledgements" ) );
+        this.groupSet.add ( new GroupEntry ( "error", Messages.FlagsDetailsPart_GroupErrorLabel ) ); //$NON-NLS-1$
+        this.groupSet.add ( new GroupEntry ( "alarm", Messages.FlagsDetailsPart_GroupAlarmLabel ) ); //$NON-NLS-1$
+        this.groupSet.add ( new GroupEntry ( "warning", Messages.FlagsDetailsPart_GroupWarningLabel ) ); //$NON-NLS-1$
+        this.groupSet.add ( new GroupEntry ( "blocked", Messages.FlagsDetailsPart_GroupBlockingLabel ) ); //$NON-NLS-1$
+        this.groupSet.add ( new GroupEntry ( "ackRequired", Messages.FlagsDetailsPart_GroupAknLabel ) ); //$NON-NLS-1$
     }
 
     @Override
@@ -241,7 +241,7 @@ public class FlagsDetailsPart extends AbstractBaseDetailsPart
                 {
                     addAttr ( state, groupEntry.getAttribute (), entry.getKey (), entry.getValue () );
                 }
-                else if ( entry.getKey ().endsWith ( "." + groupEntry.getAttribute () ) )
+                else if ( entry.getKey ().endsWith ( "." + groupEntry.getAttribute () ) ) //$NON-NLS-1$
                 {
                     addAttr ( state, groupEntry.getAttribute (), entry.getKey (), entry.getValue () );
                 }
