@@ -49,7 +49,7 @@
       </detailsPart>
  <detailsPart
        class="org.openscada.da.client.dataitem.details.part.flags.FlagsDetailsPart"
-       name="Common Flags"
+       name="%detailsPart.flags.name"
        sortKey="0400">
  </detailsPart>
  <detailsPart
@@ -59,7 +59,7 @@
  </detailsPart>
  <detailsPart
        class="org.openscada.da.client.dataitem.details.part.attrs.AttributesPart"
-       name="Attributes"
+       name="%detailsPart.attributes.name"
        sortKey="0420">
  </detailsPart>
    </extension>
@@ -124,22 +124,22 @@
       </command>
       <command
             categoryId="org.openscada.da.ui.category"
-            description="Open the details dialog for one item. Either by connection ID or connection URI."
+            description="%command.openDetails.description"
             id="org.openscada.da.client.dataitem.details.openDetailsDialog"
-            name="Data Item Details Dialog">
+            name="%command.openDetails.name">
          <commandParameter
                id="org.openscada.da.client.dataitem.details.itemId"
-               name="Item ID"
+               name="%commandParameter.openDetails.itemId.name"
                optional="false">
          </commandParameter>
          <commandParameter
                id="org.openscada.da.client.dataitem.details.connectionId"
-               name="Connection ID"
+               name="%commandParameter.openDetails.connectionId.name"
                optional="true">
          </commandParameter>
          <commandParameter
                id="org.openscada.da.client.dataitem.details.connectionUri"
-               name="Connection URI"
+               name="%commandParameter.openDetails.connectionUri.name"
                optional="true">
          </commandParameter>
       </command>
@@ -150,14 +150,14 @@
             categoryId="org.openscada.theme"
             id="org.openscada.da.client.dataitem.details.activeAttribute"
             isEditable="true"
-            label="Active Attribute"
+            label="%colorDefinition.activeAttribute.label"
             value="0,0,0">
       </colorDefinition>
       <colorDefinition
             categoryId="org.openscada.theme"
             id="org.openscada.da.client.dataitem.details.inactiveAttribute"
             isEditable="true"
-            label="Inactive Attribute"
+            label="%colorDefinition.inactiveAttribute.label"
             value="128,128,128">
       </colorDefinition>
    </extension>
