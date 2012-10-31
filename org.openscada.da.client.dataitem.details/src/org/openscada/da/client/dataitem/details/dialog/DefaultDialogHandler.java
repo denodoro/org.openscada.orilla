@@ -31,9 +31,9 @@ public class DefaultDialogHandler extends AbstractSelectionHandler
     @Override
     public Object execute ( final ExecutionEvent event ) throws ExecutionException
     {
-        final String connectionId = event.getParameter ( "org.openscada.da.client.dataitem.details.connectionId" );
-        final String connectionUri = event.getParameter ( "org.openscada.da.client.dataitem.details.connectionUri" );
-        final String itemId = event.getParameter ( "org.openscada.da.client.dataitem.details.itemId" );
+        final String connectionId = event.getParameter ( "org.openscada.da.client.dataitem.details.connectionId" ); //$NON-NLS-1$
+        final String connectionUri = event.getParameter ( "org.openscada.da.client.dataitem.details.connectionUri" ); //$NON-NLS-1$
+        final String itemId = event.getParameter ( "org.openscada.da.client.dataitem.details.itemId" ); //$NON-NLS-1$
 
         if ( connectionId == null && connectionUri == null || itemId == null )
         {

@@ -30,11 +30,11 @@ import org.osgi.framework.BundleContext;
 public class Activator extends AbstractUIPlugin
 {
 
-    public static final String IMG_BLOCK_UNLOCKED = "block.unlocked";
+    public static final String IMG_BLOCK_UNLOCKED = "block.unlocked"; //$NON-NLS-1$
 
-    public static final String IMG_BLOCK_LOCKED = "block.locked";
+    public static final String IMG_BLOCK_LOCKED = "block.locked"; //$NON-NLS-1$
 
-    public static final String IMG_BLOCK_DEFAULT = "block.default";
+    public static final String IMG_BLOCK_DEFAULT = "block.default"; //$NON-NLS-1$
 
     // The plug-in ID
     public static final String PLUGIN_ID = "org.openscada.da.client.dataitem.details"; //$NON-NLS-1$
@@ -78,8 +78,8 @@ public class Activator extends AbstractUIPlugin
     {
         super.initializeImageRegistry ( reg );
         reg.put ( IMG_BLOCK_DEFAULT, ImageDescriptor.getMissingImageDescriptor () );
-        reg.put ( IMG_BLOCK_LOCKED, ImageDescriptor.createFromFile ( Activator.class, "icons/locked.gif" ) );
-        reg.put ( IMG_BLOCK_UNLOCKED, ImageDescriptor.createFromFile ( Activator.class, "icons/unlocked.gif" ) );
+        reg.put ( IMG_BLOCK_LOCKED, ImageDescriptor.createFromFile ( Activator.class, "icons/locked.gif" ) ); //$NON-NLS-1$
+        reg.put ( IMG_BLOCK_UNLOCKED, ImageDescriptor.createFromFile ( Activator.class, "icons/unlocked.gif" ) ); //$NON-NLS-1$
     }
 
     /**

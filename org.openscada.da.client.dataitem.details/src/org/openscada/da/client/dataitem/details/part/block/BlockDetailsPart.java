@@ -42,7 +42,7 @@ import org.openscada.da.client.dataitem.details.part.AbstractBaseDetailsPart;
 public class BlockDetailsPart extends AbstractBaseDetailsPart
 {
 
-    private static final String ATTR_ACTIVE = "org.openscada.da.master.common.block.active";
+    private static final String ATTR_ACTIVE = "org.openscada.da.master.common.block.active"; //$NON-NLS-1$
 
     private Label stateWidget;
 

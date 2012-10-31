@@ -145,14 +145,14 @@ public class OverviewDetailsPart extends AbstractBaseDetailsPart
     {
         if ( itemHolder == null || itemHolder.getItem () == null )
         {
-            return "";
+            return ""; //$NON-NLS-1$
         }
 
         final Item item = itemHolder.getItem ();
 
         if ( item == null )
         {
-            return "";
+            return ""; //$NON-NLS-1$
         }
 
         final String str = item.getConnectionString ();
