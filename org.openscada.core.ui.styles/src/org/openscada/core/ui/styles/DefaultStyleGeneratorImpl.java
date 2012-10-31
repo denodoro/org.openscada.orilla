@@ -21,7 +21,6 @@ package org.openscada.core.ui.styles;
 
 import java.util.Set;
 
-import org.eclipse.jface.resource.ColorDescriptor;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.resource.LocalResourceManager;
 import org.eclipse.swt.graphics.Color;
@@ -49,9 +48,31 @@ public class DefaultStyleGeneratorImpl implements StyleGenerator
 
     private final LocalResourceManager resourceManager;
 
+    private final Color colorBgDisconnected;
+
+    private final Color colorBgError;
+
+    private final Color colorBgAlarm;
+
+    private final Color colorBgWarning;
+
+    private final Color colorBgManual;
+
+    private final Color colorBgBlock;
+
+    private final Color colorFgBlock;
+
     public DefaultStyleGeneratorImpl ()
     {
         this.resourceManager = new LocalResourceManager ( JFaceResources.getResources () );
+
+        this.colorBgDisconnected = this.resourceManager.createColor ( COLOR_DISCONNECTED_BG );
+        this.colorBgError = this.resourceManager.createColor ( COLOR_ERROR_BG );
+        this.colorBgAlarm = this.resourceManager.createColor ( COLOR_ALARM_BG );
+        this.colorBgWarning = this.resourceManager.createColor ( COLOR_WARNING_BG );
+        this.colorBgManual = this.resourceManager.createColor ( COLOR_MANUAL_BG );
+        this.colorBgBlock = this.resourceManager.createColor ( COLOR_BLOCK_BG );
+        this.colorFgBlock = this.resourceManager.createColor ( COLOR_BLOCK_FG );
     }
 
     @Override
@@ -77,13 +98,13 @@ public class DefaultStyleGeneratorImpl implements StyleGenerator
 
         if ( states.contains ( State.BLOCK ) )
         {
-            background = (Color)this.resourceManager.get ( ColorDescriptor.createFrom ( COLOR_BLOCK_BG ) );
-            foreground = (Color)this.resourceManager.get ( ColorDescriptor.createFrom ( COLOR_BLOCK_FG ) );
+            background = this.colorBgBlock;
+            foreground = this.colorFgBlock;
             image = Activator.getDefault ().getImageRegistry ().get ( ImageConstants.IMG_BLOCK );
         }
         if ( states.contains ( State.MANUAL ) )
         {
-            background = (Color)this.resourceManager.get ( ColorDescriptor.createFrom ( COLOR_MANUAL_BG ) );
+            background = this.colorBgManual;
             foreground = null;
             image = Activator.getDefault ().getImageRegistry ().get ( ImageConstants.IMG_MANUAL );
         }
@@ -91,13 +112,13 @@ public class DefaultStyleGeneratorImpl implements StyleGenerator
         {
             warningActive = true;
             blink = false;
-            background = (Color)this.resourceManager.get ( ColorDescriptor.createFrom ( COLOR_WARNING_BG ) );
+            background = this.colorBgWarning;
             foreground = null;
             image = Activator.getDefault ().getImageRegistry ().get ( ImageConstants.IMG_WARNING );
         }
         if ( states.contains ( State.WARNING_ACK ) )
         {
-            background = (Color)this.resourceManager.get ( ColorDescriptor.createFrom ( COLOR_WARNING_BG ) );
+            background = this.colorBgWarning;
             foreground = null;
             image = Activator.getDefault ().getImageRegistry ().get ( ImageConstants.IMG_WARNING );
             blink = true;
@@ -107,13 +128,13 @@ public class DefaultStyleGeneratorImpl implements StyleGenerator
         {
             alarmActive = true;
             blink = false;
-            background = (Color)this.resourceManager.get ( ColorDescriptor.createFrom ( COLOR_ALARM_BG ) );
+            background = this.colorBgAlarm;
             foreground = null;
             image = Activator.getDefault ().getImageRegistry ().get ( ImageConstants.IMG_ALARM );
         }
         if ( states.contains ( State.ALARM_ACK ) )
         {
-            background = (Color)this.resourceManager.get ( ColorDescriptor.createFrom ( COLOR_ALARM_BG ) );
+            background = this.colorBgAlarm;
             foreground = null;
             image = Activator.getDefault ().getImageRegistry ().get ( ImageConstants.IMG_ALARM );
             blink = true;
@@ -123,13 +144,13 @@ public class DefaultStyleGeneratorImpl implements StyleGenerator
         {
             errorActive = true;
             blink = false;
-            background = (Color)this.resourceManager.get ( ColorDescriptor.createFrom ( COLOR_ERROR_BG ) );
+            background = this.colorBgError;
             foreground = null;
             image = Activator.getDefault ().getImageRegistry ().get ( ImageConstants.IMG_ERROR );
         }
         if ( states.contains ( State.ERROR_ACK ) )
         {
-            background = (Color)this.resourceManager.get ( ColorDescriptor.createFrom ( COLOR_ERROR_BG ) );
+            background = this.colorBgError;
             foreground = null;
             image = Activator.getDefault ().getImageRegistry ().get ( ImageConstants.IMG_ERROR );
             blink = true;
@@ -137,7 +158,7 @@ public class DefaultStyleGeneratorImpl implements StyleGenerator
         }
         if ( states.contains ( State.DISCONNECTED ) )
         {
-            background = (Color)this.resourceManager.get ( ColorDescriptor.createFrom ( COLOR_DISCONNECTED_BG ) );
+            background = this.colorBgDisconnected;
             foreground = null;
             image = Activator.getDefault ().getImageRegistry ().get ( ImageConstants.IMG_DISCONNECTED );
         }
