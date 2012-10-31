@@ -128,6 +128,7 @@
   	<openscada.builder.copyPlugin id="org.openscada.da.client.connector"/>
   	<openscada.builder.copyPlugin id="org.openscada.da.client.dataitem.details"/>
   	<openscada.builder.copyPlugin id="org.openscada.da.client.dataitem.details.chart"/>
+  	<openscada.builder.copyPlugin id="org.openscada.da.client.dataitem.details.chart.nl1"/>
   	<openscada.builder.copyPlugin id="org.openscada.da.client.dataitem.details.extra"/>
   	<openscada.builder.copyPlugin id="org.openscada.da.client.signalGenerator"/>
   	<openscada.builder.copyPlugin id="org.openscada.da.client.test"/>
