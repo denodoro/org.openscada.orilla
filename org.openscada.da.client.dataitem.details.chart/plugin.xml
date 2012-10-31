@@ -5,7 +5,7 @@
          point="org.openscada.da.client.dataitem.details.DetailsViewPart">
       <detailsPart
             class="org.openscada.da.client.dataitem.details.chart.DetailsPart"
-            name="Chart"
+            name="%detailsPart.chart.name"
             sortKey="40">
       </detailsPart>
    </extension>

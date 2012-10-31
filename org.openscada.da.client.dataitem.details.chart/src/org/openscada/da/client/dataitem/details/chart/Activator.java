@@ -23,5 +23,5 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 public class Activator extends AbstractUIPlugin
 {
-    public static final String PLUGIN_ID = "org.openscada.da.client.dataitem.details.chart";
+    public static final String PLUGIN_ID = "org.openscada.da.client.dataitem.details.chart"; //$NON-NLS-1$
 }

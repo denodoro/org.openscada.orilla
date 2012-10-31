@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: openSCADA Chart Detail Page
+Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: org.openscada.da.client.dataitem.details.chart;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-Vendor: TH4 SYSTEMS GmbH
+Bundle-Vendor: %Bundle-Vendor
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.openscada.da.client.dataitem.details;bundle-version="1.0.0",
  org.openscada.core;bundle-version="1.0.0",

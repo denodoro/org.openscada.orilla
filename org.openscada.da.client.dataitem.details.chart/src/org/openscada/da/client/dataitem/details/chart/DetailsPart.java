@@ -76,7 +76,7 @@ public class DetailsPart implements org.openscada.da.client.dataitem.details.par
 
         this.startButton = new Button ( this.wrapper, SWT.PUSH );
         this.startButton.setLayoutData ( new GridData ( SWT.CENTER, SWT.CENTER, true, true ) );
-        this.startButton.setText ( "Start" );
+        this.startButton.setText ( Messages.DetailsPart_startButton_label );
         this.startButton.addSelectionListener ( new SelectionAdapter () {
             @Override
             public void widgetSelected ( final SelectionEvent e )
@@ -140,17 +140,17 @@ public class DetailsPart implements org.openscada.da.client.dataitem.details.par
         final Chart chartModel = ChartFactory.eINSTANCE.createChart ();
         chartModel.setMutable ( false );
         chartModel.setShowCurrentTimeRuler ( true );
-        chartModel.setTitle ( "Current value" );
+        chartModel.setTitle ( Messages.DetailsPart_ChartModel_title );
 
         final XAxis x = ChartFactory.eINSTANCE.createXAxis ();
-        x.setLabel ( "Time" );
-        x.setFormat ( "%tc" );
+        x.setLabel ( Messages.DetailsPart_ChartModel_x_label );
+        x.setFormat ( Messages.DetailsPart_ChartModel_x_format );
         x.setMinimum ( System.currentTimeMillis () );
         x.setMaximum ( System.currentTimeMillis () + 900 * 1000 );
 
         final YAxis y = ChartFactory.eINSTANCE.createYAxis ();
-        y.setLabel ( "Value" );
-        y.setFormat ( "%.2f" );
+        y.setLabel ( Messages.DetailsPart_ChartModel_y_label );
+        y.setFormat ( Messages.DetailsPart_ChartModel_y_format );
         y.setMinimum ( -100.0 );
         y.setMaximum ( 100.0 );
 
