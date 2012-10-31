@@ -77,6 +77,7 @@ public class ConnectionInformationWrapper extends WritableSet
                 if ( bean == null )
                 {
                     bean = new InformationBean ();
+                    bean.setLabel ( entry.getLabel () );
                     this.beans.put ( entry.getKey (), bean );
                     add ( bean );
                 }
