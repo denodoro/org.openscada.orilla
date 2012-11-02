@@ -36,4 +36,9 @@ public class AbstractStateInformation implements StateInformation
         return this.states;
     }
 
+    @Override
+    public String toString ()
+    {
+        return "" + this.states;
+    }
 }
