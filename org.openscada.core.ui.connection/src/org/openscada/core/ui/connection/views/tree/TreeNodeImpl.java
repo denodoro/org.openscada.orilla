@@ -19,6 +19,7 @@
 
 package org.openscada.core.ui.connection.views.tree;
 
+import org.eclipse.core.databinding.observable.Realm;
 import org.eclipse.core.databinding.observable.set.WritableSet;
 
 public class TreeNodeImpl implements TreeNode
@@ -31,12 +32,12 @@ public class TreeNodeImpl implements TreeNode
 
     private final WritableSet connections;
 
-    public TreeNodeImpl ( final TreeNode parentNode, final String name )
+    public TreeNodeImpl ( final Realm realm, final TreeNode parentNode, final String name )
     {
         this.parentNode = parentNode;
         this.name = name;
-        this.children = new WritableSet ();
-        this.connections = new WritableSet ();
+        this.children = new WritableSet ( realm );
+        this.connections = new WritableSet ( realm );
     }
 
     /* (non-Javadoc)

@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.databinding.observable.Realm;
 import org.openscada.core.ui.connection.data.ConnectionHolder;
 
 public class GroupChildNode extends DelegatingTreeNode
@@ -32,9 +33,12 @@ public class GroupChildNode extends DelegatingTreeNode
 
     private final Map<String, GroupChildNode> children = new HashMap<String, GroupChildNode> ();
 
-    public GroupChildNode ( final String name, final GroupChildNode parentNode )
+    private final Realm realm;
+
+    public GroupChildNode ( final Realm realm, final String name, final GroupChildNode parentNode )
     {
-        super ( name );
+        super ( realm, name );
+        this.realm = realm;
         this.parentNode = parentNode;
     }
 
@@ -60,7 +64,7 @@ public class GroupChildNode extends DelegatingTreeNode
             GroupChildNode child = this.children.get ( name );
             if ( child == null )
             {
-                child = new GroupChildNode ( name, this );
+                child = new GroupChildNode ( this.realm, name, this );
                 this.children.put ( name, child );
                 this.implNode.getChildren ().add ( child );
             }

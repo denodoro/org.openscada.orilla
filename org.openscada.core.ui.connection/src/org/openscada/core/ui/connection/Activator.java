@@ -88,7 +88,7 @@ public class Activator extends AbstractUIPlugin
         super.start ( context );
         plugin = this;
 
-        this.treeRoot = new WritableSet ();
+        this.treeRoot = new WritableSet ( SWTObservables.getRealm ( getWorkbench ().getDisplay () ) );
         this.treeRootManager = new ConnectionTreeManager ( this.treeRoot );
 
         this.connectionManager = new ConnectionManager ( context );

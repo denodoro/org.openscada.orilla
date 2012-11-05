@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.core.databinding.observable.Realm;
 import org.eclipse.core.databinding.observable.set.IObservableSet;
 import org.eclipse.core.databinding.observable.set.WritableSet;
 import org.openscada.core.ui.connection.ConnectionDescriptor;
@@ -32,14 +33,15 @@ import org.openscada.core.ui.connection.data.ConnectionHolder;
 public class ConnectionPoolManager
 {
 
-    private final WritableSet connectionHolders = new WritableSet ();
+    private final WritableSet connectionHolders;
 
     private final Map<ConnectionDescriptor, Set<DiscovererListener>> descriptorMap = new HashMap<ConnectionDescriptor, Set<DiscovererListener>> ();
 
     private final Map<ConnectionDescriptor, ConnectionHolder> holderMap = new HashMap<ConnectionDescriptor, ConnectionHolder> ();
 
-    public ConnectionPoolManager ()
+    public ConnectionPoolManager ( final Realm realm )
     {
+        this.connectionHolders = new WritableSet ( realm );
     }
 
     public void dispose ()

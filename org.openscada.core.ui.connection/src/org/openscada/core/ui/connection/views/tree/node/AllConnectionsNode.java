@@ -19,6 +19,7 @@
 
 package org.openscada.core.ui.connection.views.tree.node;
 
+import org.eclipse.core.databinding.observable.Realm;
 import org.eclipse.core.databinding.observable.set.ISetChangeListener;
 import org.eclipse.core.databinding.observable.set.SetChangeEvent;
 import org.openscada.core.ui.connection.views.tree.ConnectionPoolManager;
@@ -28,9 +29,9 @@ public class AllConnectionsNode extends DelegatingTreeNode implements ISetChange
 
     private final ConnectionPoolManager poolManager;
 
-    public AllConnectionsNode ( final ConnectionPoolManager poolManager )
+    public AllConnectionsNode ( final Realm realm, final ConnectionPoolManager poolManager )
     {
-        super ( "All Connections" );
+        super ( realm, "All Connections" );
 
         this.poolManager = poolManager;
         this.poolManager.getAllConnections ().addSetChangeListener ( this );

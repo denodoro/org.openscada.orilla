@@ -19,6 +19,7 @@
 
 package org.openscada.core.ui.connection.views.tree.node;
 
+import org.eclipse.core.databinding.observable.Realm;
 import org.eclipse.core.databinding.observable.set.IObservableSet;
 import org.openscada.core.ui.connection.views.tree.TreeNode;
 import org.openscada.core.ui.connection.views.tree.TreeNodeImpl;
@@ -28,9 +29,9 @@ public class DelegatingTreeNode implements TreeNode
 
     protected final TreeNodeImpl implNode;
 
-    public DelegatingTreeNode ( final String name )
+    public DelegatingTreeNode ( final Realm realm, final String name )
     {
-        this.implNode = new TreeNodeImpl ( null, name );
+        this.implNode = new TreeNodeImpl ( realm, null, name );
     }
 
     @Override

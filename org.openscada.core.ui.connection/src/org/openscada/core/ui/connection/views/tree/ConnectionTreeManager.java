@@ -65,15 +65,27 @@ public class ConnectionTreeManager
 
         this.treeRoot = treeRoot;
 
-        this.poolManager = new ConnectionPoolManager ();
+        this.poolManager = new ConnectionPoolManager ( this.realm );
 
         this.discoverers = Activator.getDefault ().getDiscovererSet ();
         this.discoverers.addSetChangeListener ( this.listener );
         handleDiff ( Diffs.createSetDiff ( this.discoverers, Collections.emptySet () ) );
 
-        treeRoot.add ( new AllConnectionsNode ( this.poolManager ) );
-        treeRoot.add ( new GroupingNode ( "By URI", this.poolManager, new UriGroupingProvider () ) );
-        treeRoot.add ( new GroupingNode ( "By Target", this.poolManager, new TargetGroupingProvider () ) );
+        treeRoot.getRealm ().asyncExec ( new Runnable () {
+
+            @Override
+            public void run ()
+            {
+                addInitial ( treeRoot );
+            }
+        } );
+    }
+
+    private void addInitial ( final WritableSet treeRoot )
+    {
+        treeRoot.add ( new AllConnectionsNode ( this.realm, this.poolManager ) );
+        treeRoot.add ( new GroupingNode ( this.realm, "By URI", this.poolManager, new UriGroupingProvider () ) );
+        treeRoot.add ( new GroupingNode ( this.realm, "By Target", this.poolManager, new TargetGroupingProvider () ) );
     }
 
     public void dispose ()
@@ -129,7 +141,6 @@ public class ConnectionTreeManager
     {
         final DiscovererListener listener = new DiscovererListener ( connectionDiscoverer, this.poolManager );
         this.listenerMap.put ( connectionDiscoverer, listener );
-
     }
 
 }

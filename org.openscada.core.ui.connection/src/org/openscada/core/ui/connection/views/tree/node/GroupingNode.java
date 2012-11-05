@@ -25,6 +25,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.databinding.observable.Realm;
 import org.eclipse.core.databinding.observable.set.ISetChangeListener;
 import org.eclipse.core.databinding.observable.set.SetChangeEvent;
 import org.eclipse.core.databinding.observable.set.SetDiff;
@@ -50,9 +51,9 @@ public class GroupingNode extends GroupChildNode
 
     private final Map<ConnectionDescriptor, List<String>> pathMap = new HashMap<ConnectionDescriptor, List<String>> ();
 
-    public GroupingNode ( final String name, final ConnectionPoolManager poolManager, final GroupingProvider groupingProvider )
+    public GroupingNode ( final Realm realm, final String name, final ConnectionPoolManager poolManager, final GroupingProvider groupingProvider )
     {
-        super ( name, null );
+        super ( realm, name, null );
 
         this.poolManager = poolManager;
         this.groupingProvider = groupingProvider;
