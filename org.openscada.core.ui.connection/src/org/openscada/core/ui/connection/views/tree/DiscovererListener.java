@@ -59,7 +59,6 @@ public class DiscovererListener
 
     protected void handleSetChange ( final SetDiff diff )
     {
-
         final Set<ConnectionDescriptor> additions = new HashSet<ConnectionDescriptor> ( diff.getAdditions ().size () );
         final Set<ConnectionDescriptor> removals = new HashSet<ConnectionDescriptor> ( diff.getRemovals ().size () );
 

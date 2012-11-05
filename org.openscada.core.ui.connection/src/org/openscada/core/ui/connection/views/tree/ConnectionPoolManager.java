@@ -62,6 +62,18 @@ public class ConnectionPoolManager
 
     public void handleChange ( final DiscovererListener discovererListener, final Set<ConnectionDescriptor> additions, final Set<ConnectionDescriptor> removals )
     {
+        this.connectionHolders.getRealm ().asyncExec ( new Runnable () {
+
+            @Override
+            public void run ()
+            {
+                applyChange ( discovererListener, additions, removals );
+            }
+        } );
+    }
+
+    private void applyChange ( final DiscovererListener discovererListener, final Set<ConnectionDescriptor> additions, final Set<ConnectionDescriptor> removals )
+    {
         for ( final ConnectionDescriptor desc : removals )
         {
             remove ( discovererListener, desc );
