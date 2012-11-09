@@ -44,6 +44,7 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.statushandlers.StatusManager;
+import org.openscada.ca.connection.provider.ConnectionService;
 import org.openscada.ca.oscar.OscarLoader;
 import org.openscada.ca.ui.importer.Activator;
 import org.openscada.ca.ui.util.DiffController;
@@ -56,9 +57,12 @@ public class LocalDataPage extends WizardPage
 
     private Label dataLabel;
 
-    protected LocalDataPage ( final DiffController mergeController )
+    private final ConnectionService service;
+
+    protected LocalDataPage ( final ConnectionService service, final DiffController mergeController )
     {
         super ( "welcomePage" ); //$NON-NLS-1$
+        this.service = service;
         setTitle ( Messages.LocalDataPage_Title );
 
         this.mergeController = mergeController;
@@ -74,7 +78,7 @@ public class LocalDataPage extends WizardPage
         label.setText ( Messages.LocalDataPage_FileLabel );
 
         this.fileName = new Text ( wrapper, SWT.BORDER );
-        final String file = getWizard ().getDialogSettings ().get ( "welcomePage.file" ); //$NON-NLS-1$
+        final String file = loadFileFromPreferences ();
         if ( file != null )
         {
             this.fileName.setText ( file );
@@ -138,9 +142,26 @@ public class LocalDataPage extends WizardPage
         }
     }
 
+    private String loadFileFromPreferences ()
+    {
+        return getWizard ().getDialogSettings ().get ( makeKey () );
+    }
+
+    private String makeKey ()
+    {
+        try
+        {
+            return "welcomePage.file." + this.service.getConnection ().getConnectionInformation ().toMaskedString (); //$NON-NLS-1$
+        }
+        catch ( final Exception e )
+        {
+            return "welcomePage.file"; //$NON-NLS-1$
+        }
+    }
+
     private void storeFileToPreferences ( final String file )
     {
-        getWizard ().getDialogSettings ().put ( "welcomePage.file", file ); //$NON-NLS-1$
+        getWizard ().getDialogSettings ().put ( makeKey (), file );
     }
 
     protected void update ()
