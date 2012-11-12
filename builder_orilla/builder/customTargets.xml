@@ -137,6 +137,8 @@
   	<openscada.builder.copyPlugin id="org.openscada.da.ui.styles"/>
   	<openscada.builder.copyPlugin id="org.openscada.da.ui.widgets"/>
   	
+  	<openscada.builder.copyPlugin id="org.openscada.da.ui.summary.explorer" />
+  	
   	<!-- openSCADA AE UI -->
   	  	
   	<openscada.builder.copyPlugin id="org.openscada.ae.ui"/>
