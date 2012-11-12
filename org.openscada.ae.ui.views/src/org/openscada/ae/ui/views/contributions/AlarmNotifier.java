@@ -51,7 +51,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -76,6 +75,7 @@ import org.openscada.core.ui.styles.StateInformation;
 import org.openscada.core.ui.styles.StateInformation.State;
 import org.openscada.core.ui.styles.StaticStateInformation;
 import org.openscada.core.ui.styles.StyleBlinker;
+import org.openscada.core.ui.styles.StyleBlinker.CurrentStyle;
 import org.openscada.da.client.DataItem;
 import org.openscada.da.client.DataItemValue;
 import org.openscada.da.connection.provider.ConnectionService;
@@ -195,9 +195,9 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution
 
         this.blinker = new StyleBlinker () {
             @Override
-            public void update ( final Image image, final Color foreground, final Color background, final Font font )
+            public void update ( final CurrentStyle style )
             {
-                handleStyleUpdate ( image, foreground, background, font );
+                handleStyleUpdate ( style );
             }
         };
         this.blinker.setStyle ( null );
@@ -207,9 +207,9 @@ public class AlarmNotifier extends WorkbenchWindowControlContribution
         return this.panel;
     }
 
-    protected void handleStyleUpdate ( final Image image, final Color foreground, final Color background, final Font font )
+    protected void handleStyleUpdate ( final CurrentStyle style )
     {
-        setBackground ( background );
+        setBackground ( style.background );
     }
 
     private void initMonitorStates ()

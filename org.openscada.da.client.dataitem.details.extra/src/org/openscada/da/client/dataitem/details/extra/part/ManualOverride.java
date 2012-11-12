@@ -45,9 +45,6 @@ import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.resource.LocalResourceManager;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.openscada.core.Variant;
 import org.openscada.core.ui.styles.StateInformation.State;
@@ -185,11 +182,11 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
         this.rvRectBlinker = new StyleBlinker () {
 
             @Override
-            public void update ( final Image image, final Color foreground, final Color background, final Font font )
+            public void update ( final CurrentStyle style )
             {
-                ManualOverride.this.rvRect.setBackgroundColor ( background );
-                ManualOverride.this.rvRect.setForegroundColor ( foreground );
-                ManualOverride.this.rvRect.setFont ( font );
+                ManualOverride.this.rvRect.setBackgroundColor ( style.background );
+                ManualOverride.this.rvRect.setForegroundColor ( style.foreground );
+                ManualOverride.this.rvRect.setFont ( style.font );
             }
         };
 
@@ -430,11 +427,11 @@ public class ManualOverride extends AbstractBaseDraw2DDetailsPart
         this.pvRectBlinker = new StyleBlinker () {
 
             @Override
-            public void update ( final Image image, final Color foreground, final Color background, final Font font )
+            public void update ( final CurrentStyle style )
             {
-                ManualOverride.this.pvRect.setBackgroundColor ( background );
-                ManualOverride.this.pvRect.setForegroundColor ( foreground );
-                ManualOverride.this.pvRect.setFont ( font );
+                ManualOverride.this.pvRect.setBackgroundColor ( style.background );
+                ManualOverride.this.pvRect.setForegroundColor ( style.foreground );
+                ManualOverride.this.pvRect.setFont ( style.font );
             }
         };
 

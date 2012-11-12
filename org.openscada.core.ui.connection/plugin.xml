@@ -359,6 +359,9 @@
          <adapter
                type="org.eclipse.ui.views.properties.IPropertySource">
          </adapter>
+         <adapter
+               type="org.openscada.core.connection.provider.ConnectionService">
+         </adapter>
       </factory>
    </extension>
 

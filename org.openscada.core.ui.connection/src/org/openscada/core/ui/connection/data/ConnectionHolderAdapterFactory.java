@@ -39,7 +39,7 @@ public class ConnectionHolderAdapterFactory implements IAdapterFactory
 
         if ( adaptableObject instanceof ConnectionHolder && adapterType == IPropertySource.class )
         {
-            return new PropertySourceWrapper ( ( (ConnectionHolder)adaptableObject ) );
+            return new PropertySourceWrapper ( (ConnectionHolder)adaptableObject );
         }
         if ( adaptableObject instanceof IAdaptable )
         {

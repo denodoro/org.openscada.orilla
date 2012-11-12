@@ -38,9 +38,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -51,6 +48,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.openscada.core.ui.styles.StyleBlinker;
+import org.openscada.core.ui.styles.StyleBlinker.CurrentStyle;
 import org.openscada.da.client.DataItemValue;
 import org.openscada.da.client.dataitem.details.part.DetailsPart;
 import org.openscada.da.ui.connection.data.DataItemHolder;
@@ -213,9 +211,9 @@ public class DetailsViewComposite extends Composite
         this.blinker = new StyleBlinker () {
 
             @Override
-            public void update ( final Image image, final Color foreground, final Color background, final Font font )
+            public void update ( final CurrentStyle style )
             {
-                handleStyleUpdate ( image, foreground, background, font );
+                handleStyleUpdate ( style );
             }
         };
 
@@ -301,31 +299,31 @@ public class DetailsViewComposite extends Composite
 
     }
 
-    protected void handleStyleUpdate ( final Image image, final Color foreground, final Color background, final Font font )
+    protected void handleStyleUpdate ( final CurrentStyle style )
     {
         if ( this.header.isDisposed () )
         {
             return;
         }
 
-        applyWidget ( (Control)this.headerValueLabel, image, foreground, background, font );
-        applyWidget ( this.header, image, foreground, background, font );
-        applyWidget ( (Control)this.headerLabel, image, foreground, background, font );
-        applyWidget ( this.headerIcon, image, foreground, background, font );
+        applyWidget ( (Control)this.headerValueLabel, style );
+        applyWidget ( this.header, style );
+        applyWidget ( (Control)this.headerLabel, style );
+        applyWidget ( this.headerIcon, style );
         this.header.layout ();
     }
 
-    private static void applyWidget ( final Label label, final Image image, final Color foreground, final Color background, final Font font )
+    private static void applyWidget ( final Label label, final CurrentStyle style )
     {
-        applyWidget ( (Control)label, image, foreground, background, font );
-        label.setImage ( image );
+        applyWidget ( (Control)label, style );
+        label.setImage ( style.image );
     }
 
-    private static void applyWidget ( final Control label, final Image image, final Color foreground, final Color background, final Font font )
+    private static void applyWidget ( final Control label, final CurrentStyle style )
     {
-        label.setForeground ( foreground );
-        label.setBackground ( background );
-        label.setFont ( font );
+        label.setForeground ( style.foreground );
+        label.setBackground ( style.background );
+        label.setFont ( style.font );
     }
 
     private void updateHeader ( final DataItemValue value )

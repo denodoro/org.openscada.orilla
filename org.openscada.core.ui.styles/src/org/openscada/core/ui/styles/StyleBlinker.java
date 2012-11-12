@@ -29,6 +29,35 @@ import org.openscada.ui.utils.blink.AbstractBlinker;
 public abstract class StyleBlinker extends AbstractBlinker
 {
 
+    public static class CurrentStyle
+    {
+        public static final CurrentStyle EMPTY = new CurrentStyle ();
+
+        private CurrentStyle ()
+        {
+            this.image = null;
+            this.foreground = null;
+            this.background = null;
+            this.font = null;
+        }
+
+        public CurrentStyle ( final Image image, final Color foreground, final Color background, final Font font )
+        {
+            this.image = image;
+            this.foreground = foreground;
+            this.background = background;
+            this.font = font;
+        }
+
+        public final Image image;
+
+        public final Color foreground;
+
+        public final Color background;
+
+        public final Font font;
+    }
+
     private int counter;
 
     private Style style;
@@ -111,7 +140,7 @@ public abstract class StyleBlinker extends AbstractBlinker
     {
         if ( this.style == null )
         {
-            update ( null, null, null, null );
+            update ( CurrentStyle.EMPTY );
             return;
         }
 
@@ -155,9 +184,9 @@ public abstract class StyleBlinker extends AbstractBlinker
             font = this.style.font[this.counter % this.style.font.length];
         }
 
-        update ( image, foreground, background, font );
+        update ( new CurrentStyle ( image, foreground, background, font ) );
     }
 
-    public abstract void update ( final Image image, final Color foreground, final Color background, final Font font );
+    public abstract void update ( CurrentStyle currentStyle );
 
 }

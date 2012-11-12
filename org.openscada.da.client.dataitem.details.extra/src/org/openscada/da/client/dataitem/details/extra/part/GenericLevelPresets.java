@@ -46,9 +46,6 @@ import org.eclipse.draw2d.Shape;
 import org.eclipse.draw2d.Triangle;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.statushandlers.StatusManager;
 import org.openscada.core.Variant;
@@ -70,11 +67,11 @@ public abstract class GenericLevelPresets extends AbstractBaseDraw2DDetailsPart
         }
 
         @Override
-        public void update ( final Image image, final Color foreground, final Color background, final Font font )
+        public void update ( final CurrentStyle currentStyle )
         {
-            this.figure.setForegroundColor ( foreground );
-            this.figure.setBackgroundColor ( background );
-            this.figure.setFont ( font );
+            this.figure.setForegroundColor ( currentStyle.foreground );
+            this.figure.setBackgroundColor ( currentStyle.background );
+            this.figure.setFont ( currentStyle.font );
         }
 
     }

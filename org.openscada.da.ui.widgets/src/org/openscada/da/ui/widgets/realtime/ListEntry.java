@@ -35,6 +35,7 @@ import org.eclipse.ui.views.properties.PropertyDescriptor;
 import org.openscada.core.Variant;
 import org.openscada.core.subscription.SubscriptionState;
 import org.openscada.core.ui.styles.StyleBlinker;
+import org.openscada.core.ui.styles.StyleBlinker.CurrentStyle;
 import org.openscada.core.ui.styles.StyleHandler.Style;
 import org.openscada.da.client.DataItemValue;
 import org.openscada.da.ui.connection.data.DataItemHolder;
@@ -64,22 +65,16 @@ public class ListEntry extends Observable implements IAdaptable, IPropertySource
 
     private final StyleBlinker blinker;
 
-    private Image image;
-
-    private Color foreground;
-
-    private Color background;
-
-    private Font font;
+    private CurrentStyle currentStyle = CurrentStyle.EMPTY;
 
     public ListEntry ()
     {
         this.blinker = new StyleBlinker () {
 
             @Override
-            public void update ( final Image image, final Color foreground, final Color background, final Font font )
+            public void update ( final CurrentStyle style )
             {
-                handleStyleUpdate ( image, foreground, background, font );
+                handleStyleUpdate ( style );
             }
         };
     }
@@ -200,34 +195,31 @@ public class ListEntry extends Observable implements IAdaptable, IPropertySource
         notifyObservers ( value );
     }
 
-    protected void handleStyleUpdate ( final Image image, final Color foreground, final Color background, final Font font )
+    protected void handleStyleUpdate ( final CurrentStyle style )
     {
-        this.image = image;
-        this.foreground = foreground;
-        this.background = background;
-        this.font = font;
+        this.currentStyle = style;
         setChanged ();
         notifyObservers ( this.value );
     }
 
     public Image getImage ()
     {
-        return this.image;
+        return this.currentStyle.image;
     }
 
     public Color getBackground ()
     {
-        return this.background;
+        return this.currentStyle.background;
     }
 
     public Color getForeground ()
     {
-        return this.foreground;
+        return this.currentStyle.foreground;
     }
 
     public Font getFont ()
     {
-        return this.font;
+        return this.currentStyle.font;
     }
 
     @Override
