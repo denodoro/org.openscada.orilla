@@ -23,6 +23,13 @@ import java.util.EnumSet;
 
 public class StaticStateInformation extends AbstractStateInformation
 {
+    public static final StaticStateInformation EMPTY;
+
+    static
+    {
+        EMPTY = new StaticStateInformation ( EnumSet.noneOf ( State.class ) );
+    }
+
     public StaticStateInformation ( final State state )
     {
         super ( EnumSet.of ( state ) );
