@@ -30,9 +30,11 @@ public class SelectionHelper
 {
 
     /**
-     * Create an iterator that iterates only over objects in the selection of the provided type
+     * Create an iterator that iterates only over objects in the selection of
+     * the provided type
      * <p>
-     * This implementation will only work with {@link IStructuredSelection} but does not fail for others.
+     * This implementation will only work with {@link IStructuredSelection} but
+     * does not fail for others.
      * </p>
      * 
      * @param selection
@@ -85,6 +87,15 @@ public class SelectionHelper
                 if ( clazz.isAssignableFrom ( o.getClass () ) )
                 {
                     result.add ( clazz.cast ( o ) );
+                }
+
+                else
+                {
+                    final T ro = AdapterHelper.adapt ( o, clazz );
+                    if ( ro != null )
+                    {
+                        result.add ( ro );
+                    }
                 }
             }
         }
