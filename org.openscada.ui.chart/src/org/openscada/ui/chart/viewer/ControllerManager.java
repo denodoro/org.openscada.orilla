@@ -97,6 +97,12 @@ public class ControllerManager
 
     public void dispose ()
     {
+        for ( final ChartController chartController : this.controllerMap.values () )
+        {
+            chartController.dispose ();
+        }
+        this.controllerMap.clear ();
+
         this.list.dispose ();
     }
 
