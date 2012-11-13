@@ -23,7 +23,6 @@ import org.openscada.ui.chart.model.ChartModel.ChartPackage;
  * The following features are implemented:
  * <ul>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.AxisImpl#getLabel <em>Label</em>}</li>
- *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.AxisImpl#getFormat <em>Format</em>}</li>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.AxisImpl#getTextPadding <em>Text Padding</em>}</li>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.AxisImpl#getColor <em>Color</em>}</li>
  * </ul>
@@ -52,26 +51,6 @@ public abstract class AxisImpl extends EObjectImpl implements Axis
      * @ordered
      */
     protected String label = LABEL_EDEFAULT;
-
-    /**
-     * The default value of the '{@link #getFormat() <em>Format</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see #getFormat()
-     * @generated
-     * @ordered
-     */
-    protected static final String FORMAT_EDEFAULT = null;
-
-    /**
-     * The cached value of the '{@link #getFormat() <em>Format</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see #getFormat()
-     * @generated
-     * @ordered
-     */
-    protected String format = FORMAT_EDEFAULT;
 
     /**
      * The default value of the '{@link #getTextPadding() <em>Text Padding</em>}' attribute.
@@ -132,29 +111,6 @@ public abstract class AxisImpl extends EObjectImpl implements Axis
     protected EClass eStaticClass ()
     {
         return ChartPackage.Literals.AXIS;
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public String getFormat ()
-    {
-        return format;
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public void setFormat ( String newFormat )
-    {
-        String oldFormat = format;
-        format = newFormat;
-        if ( eNotificationRequired () )
-            eNotify ( new ENotificationImpl ( this, Notification.SET, ChartPackage.AXIS__FORMAT, oldFormat, format ) );
     }
 
     /**
@@ -238,8 +194,6 @@ public abstract class AxisImpl extends EObjectImpl implements Axis
         {
             case ChartPackage.AXIS__LABEL:
                 return getLabel ();
-            case ChartPackage.AXIS__FORMAT:
-                return getFormat ();
             case ChartPackage.AXIS__TEXT_PADDING:
                 return getTextPadding ();
             case ChartPackage.AXIS__COLOR:
@@ -260,9 +214,6 @@ public abstract class AxisImpl extends EObjectImpl implements Axis
         {
             case ChartPackage.AXIS__LABEL:
                 setLabel ( (String)newValue );
-                return;
-            case ChartPackage.AXIS__FORMAT:
-                setFormat ( (String)newValue );
                 return;
             case ChartPackage.AXIS__TEXT_PADDING:
                 setTextPadding ( (Integer)newValue );
@@ -287,9 +238,6 @@ public abstract class AxisImpl extends EObjectImpl implements Axis
             case ChartPackage.AXIS__LABEL:
                 setLabel ( LABEL_EDEFAULT );
                 return;
-            case ChartPackage.AXIS__FORMAT:
-                setFormat ( FORMAT_EDEFAULT );
-                return;
             case ChartPackage.AXIS__TEXT_PADDING:
                 setTextPadding ( TEXT_PADDING_EDEFAULT );
                 return;
@@ -312,8 +260,6 @@ public abstract class AxisImpl extends EObjectImpl implements Axis
         {
             case ChartPackage.AXIS__LABEL:
                 return LABEL_EDEFAULT == null ? label != null : !LABEL_EDEFAULT.equals ( label );
-            case ChartPackage.AXIS__FORMAT:
-                return FORMAT_EDEFAULT == null ? format != null : !FORMAT_EDEFAULT.equals ( format );
             case ChartPackage.AXIS__TEXT_PADDING:
                 return textPadding != TEXT_PADDING_EDEFAULT;
             case ChartPackage.AXIS__COLOR:
@@ -336,8 +282,6 @@ public abstract class AxisImpl extends EObjectImpl implements Axis
         StringBuffer result = new StringBuffer ( super.toString () );
         result.append ( " (label: " );
         result.append ( label );
-        result.append ( ", format: " );
-        result.append ( format );
         result.append ( ", textPadding: " );
         result.append ( textPadding );
         result.append ( ", color: " );

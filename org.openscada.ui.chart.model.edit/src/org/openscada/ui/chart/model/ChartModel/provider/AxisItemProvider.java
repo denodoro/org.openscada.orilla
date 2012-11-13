@@ -58,22 +58,10 @@ public class AxisItemProvider extends ItemProviderAdapter implements IEditingDom
             super.getPropertyDescriptors ( object );
 
             addLabelPropertyDescriptor ( object );
-            addFormatPropertyDescriptor ( object );
             addTextPaddingPropertyDescriptor ( object );
             addColorPropertyDescriptor ( object );
         }
         return itemPropertyDescriptors;
-    }
-
-    /**
-     * This adds a property descriptor for the Format feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    protected void addFormatPropertyDescriptor ( Object object )
-    {
-        itemPropertyDescriptors.add ( createItemPropertyDescriptor ( ( (ComposeableAdapterFactory)adapterFactory ).getRootAdapterFactory (), getResourceLocator (), getString ( "_UI_Axis_format_feature" ), getString ( "_UI_PropertyDescriptor_description", "_UI_Axis_format_feature", "_UI_Axis_type" ), ChartPackage.Literals.AXIS__FORMAT, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null ) );
     }
 
     /**
@@ -137,7 +125,6 @@ public class AxisItemProvider extends ItemProviderAdapter implements IEditingDom
         switch ( notification.getFeatureID ( Axis.class ) )
         {
             case ChartPackage.AXIS__LABEL:
-            case ChartPackage.AXIS__FORMAT:
             case ChartPackage.AXIS__TEXT_PADDING:
             case ChartPackage.AXIS__COLOR:
                 fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), false, true ) );

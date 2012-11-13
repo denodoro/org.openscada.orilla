@@ -57,6 +57,7 @@ public class YAxisItemProvider extends AxisItemProvider implements IEditingDomai
 
             addMinimumPropertyDescriptor ( object );
             addMaximumPropertyDescriptor ( object );
+            addLabelVisiblePropertyDescriptor ( object );
         }
         return itemPropertyDescriptors;
     }
@@ -81,6 +82,17 @@ public class YAxisItemProvider extends AxisItemProvider implements IEditingDomai
     protected void addMaximumPropertyDescriptor ( Object object )
     {
         itemPropertyDescriptors.add ( createItemPropertyDescriptor ( ( (ComposeableAdapterFactory)adapterFactory ).getRootAdapterFactory (), getResourceLocator (), getString ( "_UI_YAxis_maximum_feature" ), getString ( "_UI_PropertyDescriptor_description", "_UI_YAxis_maximum_feature", "_UI_YAxis_type" ), ChartPackage.Literals.YAXIS__MAXIMUM, true, false, false, ItemPropertyDescriptor.REAL_VALUE_IMAGE, null, null ) );
+    }
+
+    /**
+     * This adds a property descriptor for the Label Visible feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    protected void addLabelVisiblePropertyDescriptor ( Object object )
+    {
+        itemPropertyDescriptors.add ( createItemPropertyDescriptor ( ( (ComposeableAdapterFactory)adapterFactory ).getRootAdapterFactory (), getResourceLocator (), getString ( "_UI_YAxis_labelVisible_feature" ), getString ( "_UI_PropertyDescriptor_description", "_UI_YAxis_labelVisible_feature", "_UI_YAxis_type" ), ChartPackage.Literals.YAXIS__LABEL_VISIBLE, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null ) );
     }
 
     /**
@@ -124,6 +136,7 @@ public class YAxisItemProvider extends AxisItemProvider implements IEditingDomai
         {
             case ChartPackage.YAXIS__MINIMUM:
             case ChartPackage.YAXIS__MAXIMUM:
+            case ChartPackage.YAXIS__LABEL_VISIBLE:
                 fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), false, true ) );
                 return;
         }

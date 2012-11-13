@@ -150,7 +150,6 @@ public class DetailsPart implements org.openscada.da.client.dataitem.details.par
 
         final YAxis y = ChartFactory.eINSTANCE.createYAxis ();
         y.setLabel ( Messages.DetailsPart_ChartModel_y_label );
-        y.setFormat ( Messages.DetailsPart_ChartModel_y_format );
         y.setMinimum ( -100.0 );
         y.setMaximum ( 100.0 );
 

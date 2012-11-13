@@ -226,22 +226,13 @@ public interface ChartPackage extends EPackage
     int AXIS__LABEL = 0;
 
     /**
-     * The feature id for the '<em><b>Format</b></em>' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     * @ordered
-     */
-    int AXIS__FORMAT = 1;
-
-    /**
      * The feature id for the '<em><b>Text Padding</b></em>' attribute.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int AXIS__TEXT_PADDING = 2;
+    int AXIS__TEXT_PADDING = 1;
 
     /**
      * The feature id for the '<em><b>Color</b></em>' attribute.
@@ -250,7 +241,7 @@ public interface ChartPackage extends EPackage
      * @generated
      * @ordered
      */
-    int AXIS__COLOR = 3;
+    int AXIS__COLOR = 2;
 
     /**
      * The number of structural features of the '<em>Axis</em>' class.
@@ -259,7 +250,7 @@ public interface ChartPackage extends EPackage
      * @generated
      * @ordered
      */
-    int AXIS_FEATURE_COUNT = 4;
+    int AXIS_FEATURE_COUNT = 3;
 
     /**
      * The meta object id for the '{@link org.openscada.ui.chart.model.ChartModel.impl.XAxisImpl <em>XAxis</em>}' class.
@@ -279,15 +270,6 @@ public interface ChartPackage extends EPackage
      * @ordered
      */
     int XAXIS__LABEL = AXIS__LABEL;
-
-    /**
-     * The feature id for the '<em><b>Format</b></em>' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     * @ordered
-     */
-    int XAXIS__FORMAT = AXIS__FORMAT;
 
     /**
      * The feature id for the '<em><b>Text Padding</b></em>' attribute.
@@ -326,13 +308,22 @@ public interface ChartPackage extends EPackage
     int XAXIS__MAXIMUM = AXIS_FEATURE_COUNT + 1;
 
     /**
+     * The feature id for the '<em><b>Format</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int XAXIS__FORMAT = AXIS_FEATURE_COUNT + 2;
+
+    /**
      * The number of structural features of the '<em>XAxis</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int XAXIS_FEATURE_COUNT = AXIS_FEATURE_COUNT + 2;
+    int XAXIS_FEATURE_COUNT = AXIS_FEATURE_COUNT + 3;
 
     /**
      * The meta object id for the '{@link org.openscada.ui.chart.model.ChartModel.impl.YAxisImpl <em>YAxis</em>}' class.
@@ -352,15 +343,6 @@ public interface ChartPackage extends EPackage
      * @ordered
      */
     int YAXIS__LABEL = AXIS__LABEL;
-
-    /**
-     * The feature id for the '<em><b>Format</b></em>' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     * @ordered
-     */
-    int YAXIS__FORMAT = AXIS__FORMAT;
 
     /**
      * The feature id for the '<em><b>Text Padding</b></em>' attribute.
@@ -399,13 +381,22 @@ public interface ChartPackage extends EPackage
     int YAXIS__MAXIMUM = AXIS_FEATURE_COUNT + 1;
 
     /**
+     * The feature id for the '<em><b>Label Visible</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     * @ordered
+     */
+    int YAXIS__LABEL_VISIBLE = AXIS_FEATURE_COUNT + 2;
+
+    /**
      * The number of structural features of the '<em>YAxis</em>' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      * @ordered
      */
-    int YAXIS_FEATURE_COUNT = AXIS_FEATURE_COUNT + 2;
+    int YAXIS_FEATURE_COUNT = AXIS_FEATURE_COUNT + 3;
 
     /**
      * The meta object id for the '{@link org.openscada.ui.chart.model.ChartModel.impl.DataSeriesImpl <em>Data Series</em>}' class.
@@ -1211,6 +1202,17 @@ public interface ChartPackage extends EPackage
     EAttribute getXAxis_Maximum ();
 
     /**
+     * Returns the meta object for the attribute '{@link org.openscada.ui.chart.model.ChartModel.XAxis#getFormat <em>Format</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Format</em>'.
+     * @see org.openscada.ui.chart.model.ChartModel.XAxis#getFormat()
+     * @see #getXAxis()
+     * @generated
+     */
+    EAttribute getXAxis_Format ();
+
+    /**
      * Returns the meta object for class '{@link org.openscada.ui.chart.model.ChartModel.YAxis <em>YAxis</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1243,6 +1245,17 @@ public interface ChartPackage extends EPackage
     EAttribute getYAxis_Maximum ();
 
     /**
+     * Returns the meta object for the attribute '{@link org.openscada.ui.chart.model.ChartModel.YAxis#isLabelVisible <em>Label Visible</em>}'.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @return the meta object for the attribute '<em>Label Visible</em>'.
+     * @see org.openscada.ui.chart.model.ChartModel.YAxis#isLabelVisible()
+     * @see #getYAxis()
+     * @generated
+     */
+    EAttribute getYAxis_LabelVisible ();
+
+    /**
      * Returns the meta object for class '{@link org.openscada.ui.chart.model.ChartModel.Axis <em>Axis</em>}'.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -1251,17 +1264,6 @@ public interface ChartPackage extends EPackage
      * @generated
      */
     EClass getAxis ();
-
-    /**
-     * Returns the meta object for the attribute '{@link org.openscada.ui.chart.model.ChartModel.Axis#getFormat <em>Format</em>}'.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @return the meta object for the attribute '<em>Format</em>'.
-     * @see org.openscada.ui.chart.model.ChartModel.Axis#getFormat()
-     * @see #getAxis()
-     * @generated
-     */
-    EAttribute getAxis_Format ();
 
     /**
      * Returns the meta object for the attribute '{@link org.openscada.ui.chart.model.ChartModel.Axis#getTextPadding <em>Text Padding</em>}'.
@@ -1830,6 +1832,14 @@ public interface ChartPackage extends EPackage
         EAttribute XAXIS__MAXIMUM = eINSTANCE.getXAxis_Maximum ();
 
         /**
+         * The meta object literal for the '<em><b>Format</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute XAXIS__FORMAT = eINSTANCE.getXAxis_Format ();
+
+        /**
          * The meta object literal for the '{@link org.openscada.ui.chart.model.ChartModel.impl.YAxisImpl <em>YAxis</em>}' class.
          * <!-- begin-user-doc -->
          * <!-- end-user-doc -->
@@ -1856,6 +1866,14 @@ public interface ChartPackage extends EPackage
         EAttribute YAXIS__MAXIMUM = eINSTANCE.getYAxis_Maximum ();
 
         /**
+         * The meta object literal for the '<em><b>Label Visible</b></em>' attribute feature.
+         * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+         * @generated
+         */
+        EAttribute YAXIS__LABEL_VISIBLE = eINSTANCE.getYAxis_LabelVisible ();
+
+        /**
          * The meta object literal for the '{@link org.openscada.ui.chart.model.ChartModel.impl.AxisImpl <em>Axis</em>}' class.
          * <!-- begin-user-doc -->
          * <!-- end-user-doc -->
@@ -1864,14 +1882,6 @@ public interface ChartPackage extends EPackage
          * @generated
          */
         EClass AXIS = eINSTANCE.getAxis ();
-
-        /**
-         * The meta object literal for the '<em><b>Format</b></em>' attribute feature.
-         * <!-- begin-user-doc -->
-         * <!-- end-user-doc -->
-         * @generated
-         */
-        EAttribute AXIS__FORMAT = eINSTANCE.getAxis_Format ();
 
         /**
          * The meta object literal for the '<em><b>Text Padding</b></em>' attribute feature.

@@ -58,6 +58,10 @@
         <element xmi:type="ecore:EAttribute" href="Chart.ecore#//XAxis/maximum"/>
         <layoutConstraint xmi:type="notation:Location" xmi:id="_WTFNIdTDEeGG6ZRHVvsIug"/>
       </children>
+      <children xmi:type="notation:Node" xmi:id="_0aSGsNTCEeGG6ZRHVvsIug" type="2001">
+        <element xmi:type="ecore:EAttribute" href="Chart.ecore#//XAxis/format"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_0aSGsdTCEeGG6ZRHVvsIug"/>
+      </children>
       <styles xmi:type="notation:DrawerStyle" xmi:id="_r-wr4dTCEeGG6ZRHVvsIug"/>
       <styles xmi:type="notation:SortingStyle" xmi:id="_r-wr4tTCEeGG6ZRHVvsIug"/>
       <styles xmi:type="notation:FilteringStyle" xmi:id="_r-wr49TCEeGG6ZRHVvsIug"/>
@@ -82,6 +86,10 @@
         <element xmi:type="ecore:EAttribute" href="Chart.ecore#//YAxis/maximum"/>
         <layoutConstraint xmi:type="notation:Location" xmi:id="_Ur1igdTDEeGG6ZRHVvsIug"/>
       </children>
+      <children xmi:type="notation:Node" xmi:id="_WdAXwS2wEeKiiKm91SKMbQ" type="2001">
+        <element xmi:type="ecore:EAttribute" href="Chart.ecore#//YAxis/labelVisible"/>
+        <layoutConstraint xmi:type="notation:Location" xmi:id="_WdAXwi2wEeKiiKm91SKMbQ"/>
+      </children>
       <styles xmi:type="notation:DrawerStyle" xmi:id="_siPMYNTCEeGG6ZRHVvsIug"/>
       <styles xmi:type="notation:SortingStyle" xmi:id="_siPMYdTCEeGG6ZRHVvsIug"/>
       <styles xmi:type="notation:FilteringStyle" xmi:id="_siPMYtTCEeGG6ZRHVvsIug"/>
@@ -101,10 +109,6 @@
       <children xmi:type="notation:Node" xmi:id="_QLb5cNTDEeGG6ZRHVvsIug" type="2001">
         <element xmi:type="ecore:EAttribute" href="Chart.ecore#//Axis/label"/>
         <layoutConstraint xmi:type="notation:Location" xmi:id="_QLb5cdTDEeGG6ZRHVvsIug"/>
-      </children>
-      <children xmi:type="notation:Node" xmi:id="_0aSGsNTCEeGG6ZRHVvsIug" type="2001">
-        <element xmi:type="ecore:EAttribute" href="Chart.ecore#//Axis/format"/>
-        <layoutConstraint xmi:type="notation:Location" xmi:id="_0aSGsdTCEeGG6ZRHVvsIug"/>
       </children>
       <children xmi:type="notation:Node" xmi:id="_PgNJ8AMMEeKHwZBNinkcRA" type="2001">
         <element xmi:type="ecore:EAttribute" href="Chart.ecore#//Axis/textPadding"/>

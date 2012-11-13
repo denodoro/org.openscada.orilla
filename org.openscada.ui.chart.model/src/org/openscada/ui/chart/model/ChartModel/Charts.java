@@ -28,7 +28,6 @@ public class Charts
 
         final YAxis y = ChartFactory.eINSTANCE.createYAxis ();
         y.setLabel ( Messages.Charts_Label_Values );
-        y.setFormat ( "%.2f" ); //$NON-NLS-1$ 
         configuration.getLeft ().add ( y );
 
         final XAxis x = ChartFactory.eINSTANCE.createXAxis ();

@@ -54,7 +54,7 @@ public class YAxisViewer extends AbstractAxisViewer
         addBinding ( this.dbc.bindValue ( BeansObservables.observeValue ( this.control, "min" ), EMFObservables.observeValue ( this.axis, ChartPackage.Literals.YAXIS__MINIMUM ) ) );
         addBinding ( this.dbc.bindValue ( BeansObservables.observeValue ( this.control, "max" ), EMFObservables.observeValue ( this.axis, ChartPackage.Literals.YAXIS__MAXIMUM ) ) );
 
-        addBinding ( this.dbc.bindValue ( PojoObservables.observeValue ( this.renderer, "format" ), EMFObservables.observeValue ( this.axis, ChartPackage.Literals.AXIS__FORMAT ) ) );
+        addBinding ( this.dbc.bindValue ( PojoObservables.observeValue ( this.renderer, "showLabels" ), EMFObservables.observeValue ( this.axis, ChartPackage.Literals.YAXIS__LABEL_VISIBLE ) ) );
         addBinding ( this.dbc.bindValue ( PojoObservables.observeValue ( this.renderer, "textPadding" ), EMFObservables.observeValue ( this.axis, ChartPackage.Literals.AXIS__TEXT_PADDING ) ) );
         addBinding ( this.dbc.bindValue ( PojoObservables.observeValue ( this.renderer, "color" ), EMFObservables.observeValue ( this.axis, ChartPackage.Literals.AXIS__COLOR ) ) );
     }

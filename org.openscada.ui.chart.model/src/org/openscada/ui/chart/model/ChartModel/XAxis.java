@@ -16,6 +16,7 @@ package org.openscada.ui.chart.model.ChartModel;
  * <ul>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.XAxis#getMinimum <em>Minimum</em>}</li>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.XAxis#getMaximum <em>Maximum</em>}</li>
+ *   <li>{@link org.openscada.ui.chart.model.ChartModel.XAxis#getFormat <em>Format</em>}</li>
  * </ul>
  * </p>
  *
@@ -79,4 +80,30 @@ public interface XAxis extends Axis
      * @generated
      */
     void setMaximum ( long value );
+
+    /**
+     * Returns the value of the '<em><b>Format</b></em>' attribute.
+     * <!-- begin-user-doc -->
+     * <p>
+     * If the meaning of the '<em>Format</em>' attribute isn't clear,
+     * there really should be more of a description here...
+     * </p>
+     * <!-- end-user-doc -->
+     * @return the value of the '<em>Format</em>' attribute.
+     * @see #setFormat(String)
+     * @see org.openscada.ui.chart.model.ChartModel.ChartPackage#getXAxis_Format()
+     * @model
+     * @generated
+     */
+    String getFormat ();
+
+    /**
+     * Sets the value of the '{@link org.openscada.ui.chart.model.ChartModel.XAxis#getFormat <em>Format</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @param value the new value of the '<em>Format</em>' attribute.
+     * @see #getFormat()
+     * @generated
+     */
+    void setFormat ( String value );
 } // XAxis

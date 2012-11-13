@@ -18,7 +18,6 @@ import org.eclipse.swt.graphics.RGB;
  * The following features are supported:
  * <ul>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.Axis#getLabel <em>Label</em>}</li>
- *   <li>{@link org.openscada.ui.chart.model.ChartModel.Axis#getFormat <em>Format</em>}</li>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.Axis#getTextPadding <em>Text Padding</em>}</li>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.Axis#getColor <em>Color</em>}</li>
  * </ul>
@@ -30,32 +29,6 @@ import org.eclipse.swt.graphics.RGB;
  */
 public interface Axis extends EObject
 {
-    /**
-     * Returns the value of the '<em><b>Format</b></em>' attribute.
-     * <!-- begin-user-doc -->
-     * <p>
-     * If the meaning of the '<em>Format</em>' attribute isn't clear,
-     * there really should be more of a description here...
-     * </p>
-     * <!-- end-user-doc -->
-     * @return the value of the '<em>Format</em>' attribute.
-     * @see #setFormat(String)
-     * @see org.openscada.ui.chart.model.ChartModel.ChartPackage#getAxis_Format()
-     * @model
-     * @generated
-     */
-    String getFormat ();
-
-    /**
-     * Sets the value of the '{@link org.openscada.ui.chart.model.ChartModel.Axis#getFormat <em>Format</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @param value the new value of the '<em>Format</em>' attribute.
-     * @see #getFormat()
-     * @generated
-     */
-    void setFormat ( String value );
-
     /**
      * Returns the value of the '<em><b>Text Padding</b></em>' attribute.
      * The default value is <code>"10"</code>.
