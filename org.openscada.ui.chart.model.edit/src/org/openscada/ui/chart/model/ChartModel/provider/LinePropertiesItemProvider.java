@@ -124,10 +124,10 @@ public class LinePropertiesItemProvider extends ItemProviderAdapter implements I
 
         switch ( notification.getFeatureID ( LineProperties.class ) )
         {
-        case ChartPackage.LINE_PROPERTIES__WIDTH:
-        case ChartPackage.LINE_PROPERTIES__COLOR:
-            fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), false, true ) );
-            return;
+            case ChartPackage.LINE_PROPERTIES__WIDTH:
+            case ChartPackage.LINE_PROPERTIES__COLOR:
+                fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), false, true ) );
+                return;
         }
         super.notifyChanged ( notification );
     }

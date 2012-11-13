@@ -16,12 +16,12 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.eclipse.swt.graphics.RGB;
-import org.openscada.ui.chart.model.ChartModel.*;
 import org.openscada.ui.chart.model.ChartModel.ArchiveChannel;
 import org.openscada.ui.chart.model.ChartModel.ArchiveSeries;
 import org.openscada.ui.chart.model.ChartModel.Chart;
 import org.openscada.ui.chart.model.ChartModel.ChartFactory;
 import org.openscada.ui.chart.model.ChartModel.ChartPackage;
+import org.openscada.ui.chart.model.ChartModel.CurrentTimeController;
 import org.openscada.ui.chart.model.ChartModel.DataItemSeries;
 import org.openscada.ui.chart.model.ChartModel.IdItem;
 import org.openscada.ui.chart.model.ChartModel.LineProperties;
@@ -77,30 +77,30 @@ public class ChartFactoryImpl extends EFactoryImpl implements ChartFactory
     {
         switch ( eClass.getClassifierID () )
         {
-        case ChartPackage.CHART:
-            return createChart ();
-        case ChartPackage.XAXIS:
-            return createXAxis ();
-        case ChartPackage.YAXIS:
-            return createYAxis ();
-        case ChartPackage.DATA_ITEM_SERIES:
-            return createDataItemSeries ();
-        case ChartPackage.ARCHIVE_SERIES:
-            return createArchiveSeries ();
-        case ChartPackage.URI_ITEM:
-            return createUriItem ();
-        case ChartPackage.ID_ITEM:
-            return createIdItem ();
-        case ChartPackage.ARCHIVE_CHANNEL:
-            return createArchiveChannel ();
-        case ChartPackage.LINE_PROPERTIES:
-            return createLineProperties ();
-        case ChartPackage.SCRIPT_SERIES:
-            return createScriptSeries ();
-        case ChartPackage.CURRENT_TIME_CONTROLLER:
-            return createCurrentTimeController ();
-        default:
-            throw new IllegalArgumentException ( "The class '" + eClass.getName () + "' is not a valid classifier" );
+            case ChartPackage.CHART:
+                return createChart ();
+            case ChartPackage.XAXIS:
+                return createXAxis ();
+            case ChartPackage.YAXIS:
+                return createYAxis ();
+            case ChartPackage.DATA_ITEM_SERIES:
+                return createDataItemSeries ();
+            case ChartPackage.ARCHIVE_SERIES:
+                return createArchiveSeries ();
+            case ChartPackage.URI_ITEM:
+                return createUriItem ();
+            case ChartPackage.ID_ITEM:
+                return createIdItem ();
+            case ChartPackage.ARCHIVE_CHANNEL:
+                return createArchiveChannel ();
+            case ChartPackage.LINE_PROPERTIES:
+                return createLineProperties ();
+            case ChartPackage.SCRIPT_SERIES:
+                return createScriptSeries ();
+            case ChartPackage.CURRENT_TIME_CONTROLLER:
+                return createCurrentTimeController ();
+            default:
+                throw new IllegalArgumentException ( "The class '" + eClass.getName () + "' is not a valid classifier" );
         }
     }
 
@@ -113,10 +113,10 @@ public class ChartFactoryImpl extends EFactoryImpl implements ChartFactory
     {
         switch ( eDataType.getClassifierID () )
         {
-        case ChartPackage.RGB:
-            return createRGBFromString ( eDataType, initialValue );
-        default:
-            throw new IllegalArgumentException ( "The datatype '" + eDataType.getName () + "' is not a valid classifier" );
+            case ChartPackage.RGB:
+                return createRGBFromString ( eDataType, initialValue );
+            default:
+                throw new IllegalArgumentException ( "The datatype '" + eDataType.getName () + "' is not a valid classifier" );
         }
     }
 
@@ -129,10 +129,10 @@ public class ChartFactoryImpl extends EFactoryImpl implements ChartFactory
     {
         switch ( eDataType.getClassifierID () )
         {
-        case ChartPackage.RGB:
-            return convertRGBToString ( eDataType, instanceValue );
-        default:
-            throw new IllegalArgumentException ( "The datatype '" + eDataType.getName () + "' is not a valid classifier" );
+            case ChartPackage.RGB:
+                return convertRGBToString ( eDataType, instanceValue );
+            default:
+                throw new IllegalArgumentException ( "The datatype '" + eDataType.getName () + "' is not a valid classifier" );
         }
     }
 

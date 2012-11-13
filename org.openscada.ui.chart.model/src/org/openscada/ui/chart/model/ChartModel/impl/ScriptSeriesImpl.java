@@ -161,8 +161,8 @@ public class ScriptSeriesImpl extends DataSeriesImpl implements ScriptSeries
     {
         switch ( featureID )
         {
-        case ChartPackage.SCRIPT_SERIES__LINE_PROPERTIES:
-            return basicSetLineProperties ( null, msgs );
+            case ChartPackage.SCRIPT_SERIES__LINE_PROPERTIES:
+                return basicSetLineProperties ( null, msgs );
         }
         return super.eInverseRemove ( otherEnd, featureID, msgs );
     }
@@ -176,10 +176,10 @@ public class ScriptSeriesImpl extends DataSeriesImpl implements ScriptSeries
     {
         switch ( featureID )
         {
-        case ChartPackage.SCRIPT_SERIES__LINE_PROPERTIES:
-            return getLineProperties ();
-        case ChartPackage.SCRIPT_SERIES__SCRIPT:
-            return getScript ();
+            case ChartPackage.SCRIPT_SERIES__LINE_PROPERTIES:
+                return getLineProperties ();
+            case ChartPackage.SCRIPT_SERIES__SCRIPT:
+                return getScript ();
         }
         return super.eGet ( featureID, resolve, coreType );
     }
@@ -193,12 +193,12 @@ public class ScriptSeriesImpl extends DataSeriesImpl implements ScriptSeries
     {
         switch ( featureID )
         {
-        case ChartPackage.SCRIPT_SERIES__LINE_PROPERTIES:
-            setLineProperties ( (LineProperties)newValue );
-            return;
-        case ChartPackage.SCRIPT_SERIES__SCRIPT:
-            setScript ( (String)newValue );
-            return;
+            case ChartPackage.SCRIPT_SERIES__LINE_PROPERTIES:
+                setLineProperties ( (LineProperties)newValue );
+                return;
+            case ChartPackage.SCRIPT_SERIES__SCRIPT:
+                setScript ( (String)newValue );
+                return;
         }
         super.eSet ( featureID, newValue );
     }
@@ -212,12 +212,12 @@ public class ScriptSeriesImpl extends DataSeriesImpl implements ScriptSeries
     {
         switch ( featureID )
         {
-        case ChartPackage.SCRIPT_SERIES__LINE_PROPERTIES:
-            setLineProperties ( (LineProperties)null );
-            return;
-        case ChartPackage.SCRIPT_SERIES__SCRIPT:
-            setScript ( SCRIPT_EDEFAULT );
-            return;
+            case ChartPackage.SCRIPT_SERIES__LINE_PROPERTIES:
+                setLineProperties ( (LineProperties)null );
+                return;
+            case ChartPackage.SCRIPT_SERIES__SCRIPT:
+                setScript ( SCRIPT_EDEFAULT );
+                return;
         }
         super.eUnset ( featureID );
     }
@@ -231,10 +231,10 @@ public class ScriptSeriesImpl extends DataSeriesImpl implements ScriptSeries
     {
         switch ( featureID )
         {
-        case ChartPackage.SCRIPT_SERIES__LINE_PROPERTIES:
-            return lineProperties != null;
-        case ChartPackage.SCRIPT_SERIES__SCRIPT:
-            return SCRIPT_EDEFAULT == null ? script != null : !SCRIPT_EDEFAULT.equals ( script );
+            case ChartPackage.SCRIPT_SERIES__LINE_PROPERTIES:
+                return lineProperties != null;
+            case ChartPackage.SCRIPT_SERIES__SCRIPT:
+                return SCRIPT_EDEFAULT == null ? script != null : !SCRIPT_EDEFAULT.equals ( script );
         }
         return super.eIsSet ( featureID );
     }

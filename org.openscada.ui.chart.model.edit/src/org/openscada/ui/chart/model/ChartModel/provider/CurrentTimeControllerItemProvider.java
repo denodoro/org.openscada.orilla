@@ -11,7 +11,6 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -21,7 +20,6 @@ import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
-
 import org.openscada.ui.chart.model.ChartModel.ChartPackage;
 import org.openscada.ui.chart.model.ChartModel.CurrentTimeController;
 
@@ -136,10 +134,10 @@ public class CurrentTimeControllerItemProvider extends ControllerItemProvider im
 
         switch ( notification.getFeatureID ( CurrentTimeController.class ) )
         {
-        case ChartPackage.CURRENT_TIME_CONTROLLER__DIFF:
-        case ChartPackage.CURRENT_TIME_CONTROLLER__ALIGN_DATE_FORMAT:
-            fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), false, true ) );
-            return;
+            case ChartPackage.CURRENT_TIME_CONTROLLER__DIFF:
+            case ChartPackage.CURRENT_TIME_CONTROLLER__ALIGN_DATE_FORMAT:
+                fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), false, true ) );
+                return;
         }
         super.notifyChanged ( notification );
     }

@@ -101,8 +101,8 @@ public class IdItemImpl extends ItemImpl implements IdItem
     {
         switch ( featureID )
         {
-        case ChartPackage.ID_ITEM__CONNECTION_ID:
-            return getConnectionId ();
+            case ChartPackage.ID_ITEM__CONNECTION_ID:
+                return getConnectionId ();
         }
         return super.eGet ( featureID, resolve, coreType );
     }
@@ -117,9 +117,9 @@ public class IdItemImpl extends ItemImpl implements IdItem
     {
         switch ( featureID )
         {
-        case ChartPackage.ID_ITEM__CONNECTION_ID:
-            setConnectionId ( (String)newValue );
-            return;
+            case ChartPackage.ID_ITEM__CONNECTION_ID:
+                setConnectionId ( (String)newValue );
+                return;
         }
         super.eSet ( featureID, newValue );
     }
@@ -134,9 +134,9 @@ public class IdItemImpl extends ItemImpl implements IdItem
     {
         switch ( featureID )
         {
-        case ChartPackage.ID_ITEM__CONNECTION_ID:
-            setConnectionId ( CONNECTION_ID_EDEFAULT );
-            return;
+            case ChartPackage.ID_ITEM__CONNECTION_ID:
+                setConnectionId ( CONNECTION_ID_EDEFAULT );
+                return;
         }
         super.eUnset ( featureID );
     }
@@ -151,8 +151,8 @@ public class IdItemImpl extends ItemImpl implements IdItem
     {
         switch ( featureID )
         {
-        case ChartPackage.ID_ITEM__CONNECTION_ID:
-            return CONNECTION_ID_EDEFAULT == null ? connectionId != null : !CONNECTION_ID_EDEFAULT.equals ( connectionId );
+            case ChartPackage.ID_ITEM__CONNECTION_ID:
+                return CONNECTION_ID_EDEFAULT == null ? connectionId != null : !CONNECTION_ID_EDEFAULT.equals ( connectionId );
         }
         return super.eIsSet ( featureID );
     }

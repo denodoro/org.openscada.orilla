@@ -236,14 +236,14 @@ public abstract class AxisImpl extends EObjectImpl implements Axis
     {
         switch ( featureID )
         {
-        case ChartPackage.AXIS__LABEL:
-            return getLabel ();
-        case ChartPackage.AXIS__FORMAT:
-            return getFormat ();
-        case ChartPackage.AXIS__TEXT_PADDING:
-            return getTextPadding ();
-        case ChartPackage.AXIS__COLOR:
-            return getColor ();
+            case ChartPackage.AXIS__LABEL:
+                return getLabel ();
+            case ChartPackage.AXIS__FORMAT:
+                return getFormat ();
+            case ChartPackage.AXIS__TEXT_PADDING:
+                return getTextPadding ();
+            case ChartPackage.AXIS__COLOR:
+                return getColor ();
         }
         return super.eGet ( featureID, resolve, coreType );
     }
@@ -258,18 +258,18 @@ public abstract class AxisImpl extends EObjectImpl implements Axis
     {
         switch ( featureID )
         {
-        case ChartPackage.AXIS__LABEL:
-            setLabel ( (String)newValue );
-            return;
-        case ChartPackage.AXIS__FORMAT:
-            setFormat ( (String)newValue );
-            return;
-        case ChartPackage.AXIS__TEXT_PADDING:
-            setTextPadding ( (Integer)newValue );
-            return;
-        case ChartPackage.AXIS__COLOR:
-            setColor ( (RGB)newValue );
-            return;
+            case ChartPackage.AXIS__LABEL:
+                setLabel ( (String)newValue );
+                return;
+            case ChartPackage.AXIS__FORMAT:
+                setFormat ( (String)newValue );
+                return;
+            case ChartPackage.AXIS__TEXT_PADDING:
+                setTextPadding ( (Integer)newValue );
+                return;
+            case ChartPackage.AXIS__COLOR:
+                setColor ( (RGB)newValue );
+                return;
         }
         super.eSet ( featureID, newValue );
     }
@@ -284,18 +284,18 @@ public abstract class AxisImpl extends EObjectImpl implements Axis
     {
         switch ( featureID )
         {
-        case ChartPackage.AXIS__LABEL:
-            setLabel ( LABEL_EDEFAULT );
-            return;
-        case ChartPackage.AXIS__FORMAT:
-            setFormat ( FORMAT_EDEFAULT );
-            return;
-        case ChartPackage.AXIS__TEXT_PADDING:
-            setTextPadding ( TEXT_PADDING_EDEFAULT );
-            return;
-        case ChartPackage.AXIS__COLOR:
-            setColor ( COLOR_EDEFAULT );
-            return;
+            case ChartPackage.AXIS__LABEL:
+                setLabel ( LABEL_EDEFAULT );
+                return;
+            case ChartPackage.AXIS__FORMAT:
+                setFormat ( FORMAT_EDEFAULT );
+                return;
+            case ChartPackage.AXIS__TEXT_PADDING:
+                setTextPadding ( TEXT_PADDING_EDEFAULT );
+                return;
+            case ChartPackage.AXIS__COLOR:
+                setColor ( COLOR_EDEFAULT );
+                return;
         }
         super.eUnset ( featureID );
     }
@@ -310,14 +310,14 @@ public abstract class AxisImpl extends EObjectImpl implements Axis
     {
         switch ( featureID )
         {
-        case ChartPackage.AXIS__LABEL:
-            return LABEL_EDEFAULT == null ? label != null : !LABEL_EDEFAULT.equals ( label );
-        case ChartPackage.AXIS__FORMAT:
-            return FORMAT_EDEFAULT == null ? format != null : !FORMAT_EDEFAULT.equals ( format );
-        case ChartPackage.AXIS__TEXT_PADDING:
-            return textPadding != TEXT_PADDING_EDEFAULT;
-        case ChartPackage.AXIS__COLOR:
-            return COLOR_EDEFAULT == null ? color != null : !COLOR_EDEFAULT.equals ( color );
+            case ChartPackage.AXIS__LABEL:
+                return LABEL_EDEFAULT == null ? label != null : !LABEL_EDEFAULT.equals ( label );
+            case ChartPackage.AXIS__FORMAT:
+                return FORMAT_EDEFAULT == null ? format != null : !FORMAT_EDEFAULT.equals ( format );
+            case ChartPackage.AXIS__TEXT_PADDING:
+                return textPadding != TEXT_PADDING_EDEFAULT;
+            case ChartPackage.AXIS__COLOR:
+                return COLOR_EDEFAULT == null ? color != null : !COLOR_EDEFAULT.equals ( color );
         }
         return super.eIsSet ( featureID );
     }

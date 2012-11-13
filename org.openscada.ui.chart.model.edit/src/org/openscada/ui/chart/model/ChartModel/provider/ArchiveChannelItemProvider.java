@@ -159,13 +159,13 @@ public class ArchiveChannelItemProvider extends ItemProviderAdapter implements I
 
         switch ( notification.getFeatureID ( ArchiveChannel.class ) )
         {
-        case ChartPackage.ARCHIVE_CHANNEL__NAME:
-        case ChartPackage.ARCHIVE_CHANNEL__LABEL:
-            fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), false, true ) );
-            return;
-        case ChartPackage.ARCHIVE_CHANNEL__LINE_PROPERTIES:
-            fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), true, false ) );
-            return;
+            case ChartPackage.ARCHIVE_CHANNEL__NAME:
+            case ChartPackage.ARCHIVE_CHANNEL__LABEL:
+                fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), false, true ) );
+                return;
+            case ChartPackage.ARCHIVE_CHANNEL__LINE_PROPERTIES:
+                fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), true, false ) );
+                return;
         }
         super.notifyChanged ( notification );
     }

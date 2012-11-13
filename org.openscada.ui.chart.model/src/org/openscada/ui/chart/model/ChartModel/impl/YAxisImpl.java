@@ -145,10 +145,10 @@ public class YAxisImpl extends AxisImpl implements YAxis
     {
         switch ( featureID )
         {
-        case ChartPackage.YAXIS__MINIMUM:
-            return getMinimum ();
-        case ChartPackage.YAXIS__MAXIMUM:
-            return getMaximum ();
+            case ChartPackage.YAXIS__MINIMUM:
+                return getMinimum ();
+            case ChartPackage.YAXIS__MAXIMUM:
+                return getMaximum ();
         }
         return super.eGet ( featureID, resolve, coreType );
     }
@@ -163,12 +163,12 @@ public class YAxisImpl extends AxisImpl implements YAxis
     {
         switch ( featureID )
         {
-        case ChartPackage.YAXIS__MINIMUM:
-            setMinimum ( (Double)newValue );
-            return;
-        case ChartPackage.YAXIS__MAXIMUM:
-            setMaximum ( (Double)newValue );
-            return;
+            case ChartPackage.YAXIS__MINIMUM:
+                setMinimum ( (Double)newValue );
+                return;
+            case ChartPackage.YAXIS__MAXIMUM:
+                setMaximum ( (Double)newValue );
+                return;
         }
         super.eSet ( featureID, newValue );
     }
@@ -183,12 +183,12 @@ public class YAxisImpl extends AxisImpl implements YAxis
     {
         switch ( featureID )
         {
-        case ChartPackage.YAXIS__MINIMUM:
-            setMinimum ( MINIMUM_EDEFAULT );
-            return;
-        case ChartPackage.YAXIS__MAXIMUM:
-            setMaximum ( MAXIMUM_EDEFAULT );
-            return;
+            case ChartPackage.YAXIS__MINIMUM:
+                setMinimum ( MINIMUM_EDEFAULT );
+                return;
+            case ChartPackage.YAXIS__MAXIMUM:
+                setMaximum ( MAXIMUM_EDEFAULT );
+                return;
         }
         super.eUnset ( featureID );
     }
@@ -203,10 +203,10 @@ public class YAxisImpl extends AxisImpl implements YAxis
     {
         switch ( featureID )
         {
-        case ChartPackage.YAXIS__MINIMUM:
-            return minimum != MINIMUM_EDEFAULT;
-        case ChartPackage.YAXIS__MAXIMUM:
-            return maximum != MAXIMUM_EDEFAULT;
+            case ChartPackage.YAXIS__MINIMUM:
+                return minimum != MINIMUM_EDEFAULT;
+            case ChartPackage.YAXIS__MAXIMUM:
+                return maximum != MAXIMUM_EDEFAULT;
         }
         return super.eIsSet ( featureID );
     }

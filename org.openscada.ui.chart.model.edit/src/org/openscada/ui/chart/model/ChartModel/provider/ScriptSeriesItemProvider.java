@@ -145,12 +145,12 @@ public class ScriptSeriesItemProvider extends DataSeriesItemProvider implements 
 
         switch ( notification.getFeatureID ( ScriptSeries.class ) )
         {
-        case ChartPackage.SCRIPT_SERIES__SCRIPT:
-            fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), false, true ) );
-            return;
-        case ChartPackage.SCRIPT_SERIES__LINE_PROPERTIES:
-            fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), true, false ) );
-            return;
+            case ChartPackage.SCRIPT_SERIES__SCRIPT:
+                fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), false, true ) );
+                return;
+            case ChartPackage.SCRIPT_SERIES__LINE_PROPERTIES:
+                fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), true, false ) );
+                return;
         }
         super.notifyChanged ( notification );
     }

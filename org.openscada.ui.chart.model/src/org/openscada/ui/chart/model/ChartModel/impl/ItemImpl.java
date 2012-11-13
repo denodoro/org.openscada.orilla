@@ -102,8 +102,8 @@ public abstract class ItemImpl extends EObjectImpl implements Item
     {
         switch ( featureID )
         {
-        case ChartPackage.ITEM__ITEM_ID:
-            return getItemId ();
+            case ChartPackage.ITEM__ITEM_ID:
+                return getItemId ();
         }
         return super.eGet ( featureID, resolve, coreType );
     }
@@ -118,9 +118,9 @@ public abstract class ItemImpl extends EObjectImpl implements Item
     {
         switch ( featureID )
         {
-        case ChartPackage.ITEM__ITEM_ID:
-            setItemId ( (String)newValue );
-            return;
+            case ChartPackage.ITEM__ITEM_ID:
+                setItemId ( (String)newValue );
+                return;
         }
         super.eSet ( featureID, newValue );
     }
@@ -135,9 +135,9 @@ public abstract class ItemImpl extends EObjectImpl implements Item
     {
         switch ( featureID )
         {
-        case ChartPackage.ITEM__ITEM_ID:
-            setItemId ( ITEM_ID_EDEFAULT );
-            return;
+            case ChartPackage.ITEM__ITEM_ID:
+                setItemId ( ITEM_ID_EDEFAULT );
+                return;
         }
         super.eUnset ( featureID );
     }
@@ -152,8 +152,8 @@ public abstract class ItemImpl extends EObjectImpl implements Item
     {
         switch ( featureID )
         {
-        case ChartPackage.ITEM__ITEM_ID:
-            return ITEM_ID_EDEFAULT == null ? itemId != null : !ITEM_ID_EDEFAULT.equals ( itemId );
+            case ChartPackage.ITEM__ITEM_ID:
+                return ITEM_ID_EDEFAULT == null ? itemId != null : !ITEM_ID_EDEFAULT.equals ( itemId );
         }
         return super.eIsSet ( featureID );
     }

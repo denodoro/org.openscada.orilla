@@ -204,8 +204,8 @@ public class ArchiveChannelImpl extends EObjectImpl implements ArchiveChannel
     {
         switch ( featureID )
         {
-        case ChartPackage.ARCHIVE_CHANNEL__LINE_PROPERTIES:
-            return basicSetLineProperties ( null, msgs );
+            case ChartPackage.ARCHIVE_CHANNEL__LINE_PROPERTIES:
+                return basicSetLineProperties ( null, msgs );
         }
         return super.eInverseRemove ( otherEnd, featureID, msgs );
     }
@@ -219,12 +219,12 @@ public class ArchiveChannelImpl extends EObjectImpl implements ArchiveChannel
     {
         switch ( featureID )
         {
-        case ChartPackage.ARCHIVE_CHANNEL__NAME:
-            return getName ();
-        case ChartPackage.ARCHIVE_CHANNEL__LABEL:
-            return getLabel ();
-        case ChartPackage.ARCHIVE_CHANNEL__LINE_PROPERTIES:
-            return getLineProperties ();
+            case ChartPackage.ARCHIVE_CHANNEL__NAME:
+                return getName ();
+            case ChartPackage.ARCHIVE_CHANNEL__LABEL:
+                return getLabel ();
+            case ChartPackage.ARCHIVE_CHANNEL__LINE_PROPERTIES:
+                return getLineProperties ();
         }
         return super.eGet ( featureID, resolve, coreType );
     }
@@ -238,15 +238,15 @@ public class ArchiveChannelImpl extends EObjectImpl implements ArchiveChannel
     {
         switch ( featureID )
         {
-        case ChartPackage.ARCHIVE_CHANNEL__NAME:
-            setName ( (String)newValue );
-            return;
-        case ChartPackage.ARCHIVE_CHANNEL__LABEL:
-            setLabel ( (String)newValue );
-            return;
-        case ChartPackage.ARCHIVE_CHANNEL__LINE_PROPERTIES:
-            setLineProperties ( (LineProperties)newValue );
-            return;
+            case ChartPackage.ARCHIVE_CHANNEL__NAME:
+                setName ( (String)newValue );
+                return;
+            case ChartPackage.ARCHIVE_CHANNEL__LABEL:
+                setLabel ( (String)newValue );
+                return;
+            case ChartPackage.ARCHIVE_CHANNEL__LINE_PROPERTIES:
+                setLineProperties ( (LineProperties)newValue );
+                return;
         }
         super.eSet ( featureID, newValue );
     }
@@ -260,15 +260,15 @@ public class ArchiveChannelImpl extends EObjectImpl implements ArchiveChannel
     {
         switch ( featureID )
         {
-        case ChartPackage.ARCHIVE_CHANNEL__NAME:
-            setName ( NAME_EDEFAULT );
-            return;
-        case ChartPackage.ARCHIVE_CHANNEL__LABEL:
-            setLabel ( LABEL_EDEFAULT );
-            return;
-        case ChartPackage.ARCHIVE_CHANNEL__LINE_PROPERTIES:
-            setLineProperties ( (LineProperties)null );
-            return;
+            case ChartPackage.ARCHIVE_CHANNEL__NAME:
+                setName ( NAME_EDEFAULT );
+                return;
+            case ChartPackage.ARCHIVE_CHANNEL__LABEL:
+                setLabel ( LABEL_EDEFAULT );
+                return;
+            case ChartPackage.ARCHIVE_CHANNEL__LINE_PROPERTIES:
+                setLineProperties ( (LineProperties)null );
+                return;
         }
         super.eUnset ( featureID );
     }
@@ -282,12 +282,12 @@ public class ArchiveChannelImpl extends EObjectImpl implements ArchiveChannel
     {
         switch ( featureID )
         {
-        case ChartPackage.ARCHIVE_CHANNEL__NAME:
-            return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals ( name );
-        case ChartPackage.ARCHIVE_CHANNEL__LABEL:
-            return LABEL_EDEFAULT == null ? label != null : !LABEL_EDEFAULT.equals ( label );
-        case ChartPackage.ARCHIVE_CHANNEL__LINE_PROPERTIES:
-            return lineProperties != null;
+            case ChartPackage.ARCHIVE_CHANNEL__NAME:
+                return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals ( name );
+            case ChartPackage.ARCHIVE_CHANNEL__LABEL:
+                return LABEL_EDEFAULT == null ? label != null : !LABEL_EDEFAULT.equals ( label );
+            case ChartPackage.ARCHIVE_CHANNEL__LINE_PROPERTIES:
+                return lineProperties != null;
         }
         return super.eIsSet ( featureID );
     }

@@ -119,9 +119,9 @@ public class ItemDataSeriesItemProvider extends DataSeriesItemProvider implement
 
         switch ( notification.getFeatureID ( ItemDataSeries.class ) )
         {
-        case ChartPackage.ITEM_DATA_SERIES__ITEM:
-            fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), true, false ) );
-            return;
+            case ChartPackage.ITEM_DATA_SERIES__ITEM:
+                fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), true, false ) );
+                return;
         }
         super.notifyChanged ( notification );
     }

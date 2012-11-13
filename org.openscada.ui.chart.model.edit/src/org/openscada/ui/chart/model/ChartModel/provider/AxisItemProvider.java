@@ -136,12 +136,12 @@ public class AxisItemProvider extends ItemProviderAdapter implements IEditingDom
 
         switch ( notification.getFeatureID ( Axis.class ) )
         {
-        case ChartPackage.AXIS__LABEL:
-        case ChartPackage.AXIS__FORMAT:
-        case ChartPackage.AXIS__TEXT_PADDING:
-        case ChartPackage.AXIS__COLOR:
-            fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), false, true ) );
-            return;
+            case ChartPackage.AXIS__LABEL:
+            case ChartPackage.AXIS__FORMAT:
+            case ChartPackage.AXIS__TEXT_PADDING:
+            case ChartPackage.AXIS__COLOR:
+                fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), false, true ) );
+                return;
         }
         super.notifyChanged ( notification );
     }

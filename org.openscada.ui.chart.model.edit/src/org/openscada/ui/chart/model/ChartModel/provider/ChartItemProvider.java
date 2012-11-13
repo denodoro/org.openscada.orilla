@@ -236,22 +236,22 @@ public class ChartItemProvider extends ItemProviderAdapter implements IEditingDo
 
         switch ( notification.getFeatureID ( Chart.class ) )
         {
-        case ChartPackage.CHART__TITLE:
-        case ChartPackage.CHART__SHOW_CURRENT_TIME_RULER:
-        case ChartPackage.CHART__BACKGROUND_COLOR:
-        case ChartPackage.CHART__MUTABLE:
-        case ChartPackage.CHART__SCROLLABLE:
-        case ChartPackage.CHART__HOVERABLE:
-            fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), false, true ) );
-            return;
-        case ChartPackage.CHART__BOTTOM:
-        case ChartPackage.CHART__TOP:
-        case ChartPackage.CHART__LEFT:
-        case ChartPackage.CHART__RIGHT:
-        case ChartPackage.CHART__INPUTS:
-        case ChartPackage.CHART__CONTROLLERS:
-            fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), true, false ) );
-            return;
+            case ChartPackage.CHART__TITLE:
+            case ChartPackage.CHART__SHOW_CURRENT_TIME_RULER:
+            case ChartPackage.CHART__BACKGROUND_COLOR:
+            case ChartPackage.CHART__MUTABLE:
+            case ChartPackage.CHART__SCROLLABLE:
+            case ChartPackage.CHART__HOVERABLE:
+                fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), false, true ) );
+                return;
+            case ChartPackage.CHART__BOTTOM:
+            case ChartPackage.CHART__TOP:
+            case ChartPackage.CHART__LEFT:
+            case ChartPackage.CHART__RIGHT:
+            case ChartPackage.CHART__INPUTS:
+            case ChartPackage.CHART__CONTROLLERS:
+                fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), true, false ) );
+                return;
         }
         super.notifyChanged ( notification );
     }

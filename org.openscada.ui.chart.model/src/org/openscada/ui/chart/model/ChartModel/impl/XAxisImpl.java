@@ -145,10 +145,10 @@ public class XAxisImpl extends AxisImpl implements XAxis
     {
         switch ( featureID )
         {
-        case ChartPackage.XAXIS__MINIMUM:
-            return getMinimum ();
-        case ChartPackage.XAXIS__MAXIMUM:
-            return getMaximum ();
+            case ChartPackage.XAXIS__MINIMUM:
+                return getMinimum ();
+            case ChartPackage.XAXIS__MAXIMUM:
+                return getMaximum ();
         }
         return super.eGet ( featureID, resolve, coreType );
     }
@@ -163,12 +163,12 @@ public class XAxisImpl extends AxisImpl implements XAxis
     {
         switch ( featureID )
         {
-        case ChartPackage.XAXIS__MINIMUM:
-            setMinimum ( (Long)newValue );
-            return;
-        case ChartPackage.XAXIS__MAXIMUM:
-            setMaximum ( (Long)newValue );
-            return;
+            case ChartPackage.XAXIS__MINIMUM:
+                setMinimum ( (Long)newValue );
+                return;
+            case ChartPackage.XAXIS__MAXIMUM:
+                setMaximum ( (Long)newValue );
+                return;
         }
         super.eSet ( featureID, newValue );
     }
@@ -183,12 +183,12 @@ public class XAxisImpl extends AxisImpl implements XAxis
     {
         switch ( featureID )
         {
-        case ChartPackage.XAXIS__MINIMUM:
-            setMinimum ( MINIMUM_EDEFAULT );
-            return;
-        case ChartPackage.XAXIS__MAXIMUM:
-            setMaximum ( MAXIMUM_EDEFAULT );
-            return;
+            case ChartPackage.XAXIS__MINIMUM:
+                setMinimum ( MINIMUM_EDEFAULT );
+                return;
+            case ChartPackage.XAXIS__MAXIMUM:
+                setMaximum ( MAXIMUM_EDEFAULT );
+                return;
         }
         super.eUnset ( featureID );
     }
@@ -203,10 +203,10 @@ public class XAxisImpl extends AxisImpl implements XAxis
     {
         switch ( featureID )
         {
-        case ChartPackage.XAXIS__MINIMUM:
-            return minimum != MINIMUM_EDEFAULT;
-        case ChartPackage.XAXIS__MAXIMUM:
-            return maximum != MAXIMUM_EDEFAULT;
+            case ChartPackage.XAXIS__MINIMUM:
+                return minimum != MINIMUM_EDEFAULT;
+            case ChartPackage.XAXIS__MAXIMUM:
+                return maximum != MAXIMUM_EDEFAULT;
         }
         return super.eIsSet ( featureID );
     }

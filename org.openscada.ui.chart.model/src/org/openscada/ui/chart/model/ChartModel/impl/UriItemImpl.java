@@ -101,8 +101,8 @@ public class UriItemImpl extends ItemImpl implements UriItem
     {
         switch ( featureID )
         {
-        case ChartPackage.URI_ITEM__CONNECTION_URI:
-            return getConnectionUri ();
+            case ChartPackage.URI_ITEM__CONNECTION_URI:
+                return getConnectionUri ();
         }
         return super.eGet ( featureID, resolve, coreType );
     }
@@ -117,9 +117,9 @@ public class UriItemImpl extends ItemImpl implements UriItem
     {
         switch ( featureID )
         {
-        case ChartPackage.URI_ITEM__CONNECTION_URI:
-            setConnectionUri ( (String)newValue );
-            return;
+            case ChartPackage.URI_ITEM__CONNECTION_URI:
+                setConnectionUri ( (String)newValue );
+                return;
         }
         super.eSet ( featureID, newValue );
     }
@@ -134,9 +134,9 @@ public class UriItemImpl extends ItemImpl implements UriItem
     {
         switch ( featureID )
         {
-        case ChartPackage.URI_ITEM__CONNECTION_URI:
-            setConnectionUri ( CONNECTION_URI_EDEFAULT );
-            return;
+            case ChartPackage.URI_ITEM__CONNECTION_URI:
+                setConnectionUri ( CONNECTION_URI_EDEFAULT );
+                return;
         }
         super.eUnset ( featureID );
     }
@@ -151,8 +151,8 @@ public class UriItemImpl extends ItemImpl implements UriItem
     {
         switch ( featureID )
         {
-        case ChartPackage.URI_ITEM__CONNECTION_URI:
-            return CONNECTION_URI_EDEFAULT == null ? connectionUri != null : !CONNECTION_URI_EDEFAULT.equals ( connectionUri );
+            case ChartPackage.URI_ITEM__CONNECTION_URI:
+                return CONNECTION_URI_EDEFAULT == null ? connectionUri != null : !CONNECTION_URI_EDEFAULT.equals ( connectionUri );
         }
         return super.eIsSet ( featureID );
     }
