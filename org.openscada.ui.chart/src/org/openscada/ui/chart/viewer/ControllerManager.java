@@ -11,10 +11,10 @@ import org.eclipse.core.databinding.observable.list.ListDiff;
 import org.eclipse.core.databinding.observable.list.ListDiffVisitor;
 import org.eclipse.core.databinding.observable.list.WritableList;
 import org.openscada.ui.chart.model.ChartModel.Controller;
-import org.openscada.ui.chart.model.ChartModel.CurrentTimeController;
 import org.openscada.ui.chart.model.ChartModel.XAxis;
 import org.openscada.ui.chart.viewer.controller.ChartController;
-import org.openscada.ui.chart.viewer.controller.CurrentTimeChartController;
+import org.openscada.ui.chart.viewer.controller.ChartControllerFactory;
+import org.openscada.ui.databinding.AdapterHelper;
 
 public class ControllerManager
 {
@@ -81,13 +81,25 @@ public class ControllerManager
         }
     }
 
-    private ChartController createController ( final Controller controller )
+    private ChartControllerFactory createFactory ( final Controller controller )
     {
-        if ( controller instanceof CurrentTimeController )
+        final ChartControllerFactory factory = AdapterHelper.adapt ( controller, ChartControllerFactory.class );
+        if ( factory != null )
         {
-            return new CurrentTimeChartController ( this.ctx, this.realm, (CurrentTimeController)controller, this.xLocator );
+            return factory;
         }
         return null;
+    }
+
+    private ChartController createController ( final Controller controller )
+    {
+        final ChartControllerFactory factory = createFactory ( controller );
+        if ( factory == null )
+        {
+            return null;
+        }
+
+        return factory.create ( this, controller );
     }
 
     public WritableList getList ()
@@ -106,4 +118,18 @@ public class ControllerManager
         this.list.dispose ();
     }
 
+    public DataBindingContext getContext ()
+    {
+        return this.ctx;
+    }
+
+    public Realm getRealm ()
+    {
+        return this.realm;
+    }
+
+    public AxisLocator<XAxis, XAxisViewer> getXLocator ()
+    {
+        return this.xLocator;
+    }
 }

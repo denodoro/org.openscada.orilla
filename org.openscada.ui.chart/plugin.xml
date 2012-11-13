@@ -15,5 +15,15 @@
             name="openSCADA Chart">
       </category>
    </extension>
+   <extension
+         point="org.eclipse.core.runtime.adapters">
+      <factory
+            adaptableType="org.openscada.ui.chart.model.ChartModel.CurrentTimeController"
+            class="org.openscada.ui.chart.viewer.controller.time.AdapterFactory">
+         <adapter
+               type="org.openscada.ui.chart.viewer.controller.ChartControllerFactory">
+         </adapter>
+      </factory>
+   </extension>
 
 </plugin>

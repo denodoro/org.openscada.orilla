@@ -17,7 +17,7 @@
  * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
-package org.openscada.ui.chart.viewer.controller;
+package org.openscada.ui.chart.viewer.controller.time;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -33,6 +33,7 @@ import org.openscada.ui.chart.model.ChartModel.XAxis;
 import org.openscada.ui.chart.viewer.AbstractObserver;
 import org.openscada.ui.chart.viewer.AxisLocator;
 import org.openscada.ui.chart.viewer.XAxisViewer;
+import org.openscada.ui.chart.viewer.controller.ChartController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
