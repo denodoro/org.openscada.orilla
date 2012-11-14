@@ -16,7 +16,6 @@ package org.openscada.ui.chart.model.ChartModel;
  * <ul>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.YAxis#getMinimum <em>Minimum</em>}</li>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.YAxis#getMaximum <em>Maximum</em>}</li>
- *   <li>{@link org.openscada.ui.chart.model.ChartModel.YAxis#isLabelVisible <em>Label Visible</em>}</li>
  * </ul>
  * </p>
  *
@@ -80,31 +79,4 @@ public interface YAxis extends Axis
      * @generated
      */
     void setMaximum ( double value );
-
-    /**
-     * Returns the value of the '<em><b>Label Visible</b></em>' attribute.
-     * The default value is <code>"true"</code>.
-     * <!-- begin-user-doc -->
-     * <p>
-     * If the meaning of the '<em>Label Visible</em>' attribute isn't clear,
-     * there really should be more of a description here...
-     * </p>
-     * <!-- end-user-doc -->
-     * @return the value of the '<em>Label Visible</em>' attribute.
-     * @see #setLabelVisible(boolean)
-     * @see org.openscada.ui.chart.model.ChartModel.ChartPackage#getYAxis_LabelVisible()
-     * @model default="true" required="true"
-     * @generated
-     */
-    boolean isLabelVisible ();
-
-    /**
-     * Sets the value of the '{@link org.openscada.ui.chart.model.ChartModel.YAxis#isLabelVisible <em>Label Visible</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @param value the new value of the '<em>Label Visible</em>' attribute.
-     * @see #isLabelVisible()
-     * @generated
-     */
-    void setLabelVisible ( boolean value );
 } // YAxis

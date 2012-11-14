@@ -21,7 +21,6 @@ import org.openscada.ui.chart.model.ChartModel.YAxis;
  * <ul>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.YAxisImpl#getMinimum <em>Minimum</em>}</li>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.YAxisImpl#getMaximum <em>Maximum</em>}</li>
- *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.YAxisImpl#isLabelVisible <em>Label Visible</em>}</li>
  * </ul>
  * </p>
  *
@@ -68,26 +67,6 @@ public class YAxisImpl extends AxisImpl implements YAxis
      * @ordered
      */
     protected double maximum = MAXIMUM_EDEFAULT;
-
-    /**
-     * The default value of the '{@link #isLabelVisible() <em>Label Visible</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see #isLabelVisible()
-     * @generated
-     * @ordered
-     */
-    protected static final boolean LABEL_VISIBLE_EDEFAULT = true;
-
-    /**
-     * The cached value of the '{@link #isLabelVisible() <em>Label Visible</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see #isLabelVisible()
-     * @generated
-     * @ordered
-     */
-    protected boolean labelVisible = LABEL_VISIBLE_EDEFAULT;
 
     /**
      * <!-- begin-user-doc -->
@@ -161,29 +140,6 @@ public class YAxisImpl extends AxisImpl implements YAxis
      * <!-- end-user-doc -->
      * @generated
      */
-    public boolean isLabelVisible ()
-    {
-        return labelVisible;
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public void setLabelVisible ( boolean newLabelVisible )
-    {
-        boolean oldLabelVisible = labelVisible;
-        labelVisible = newLabelVisible;
-        if ( eNotificationRequired () )
-            eNotify ( new ENotificationImpl ( this, Notification.SET, ChartPackage.YAXIS__LABEL_VISIBLE, oldLabelVisible, labelVisible ) );
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
     @Override
     public Object eGet ( int featureID, boolean resolve, boolean coreType )
     {
@@ -193,8 +149,6 @@ public class YAxisImpl extends AxisImpl implements YAxis
                 return getMinimum ();
             case ChartPackage.YAXIS__MAXIMUM:
                 return getMaximum ();
-            case ChartPackage.YAXIS__LABEL_VISIBLE:
-                return isLabelVisible ();
         }
         return super.eGet ( featureID, resolve, coreType );
     }
@@ -214,9 +168,6 @@ public class YAxisImpl extends AxisImpl implements YAxis
                 return;
             case ChartPackage.YAXIS__MAXIMUM:
                 setMaximum ( (Double)newValue );
-                return;
-            case ChartPackage.YAXIS__LABEL_VISIBLE:
-                setLabelVisible ( (Boolean)newValue );
                 return;
         }
         super.eSet ( featureID, newValue );
@@ -238,9 +189,6 @@ public class YAxisImpl extends AxisImpl implements YAxis
             case ChartPackage.YAXIS__MAXIMUM:
                 setMaximum ( MAXIMUM_EDEFAULT );
                 return;
-            case ChartPackage.YAXIS__LABEL_VISIBLE:
-                setLabelVisible ( LABEL_VISIBLE_EDEFAULT );
-                return;
         }
         super.eUnset ( featureID );
     }
@@ -259,8 +207,6 @@ public class YAxisImpl extends AxisImpl implements YAxis
                 return minimum != MINIMUM_EDEFAULT;
             case ChartPackage.YAXIS__MAXIMUM:
                 return maximum != MAXIMUM_EDEFAULT;
-            case ChartPackage.YAXIS__LABEL_VISIBLE:
-                return labelVisible != LABEL_VISIBLE_EDEFAULT;
         }
         return super.eIsSet ( featureID );
     }
@@ -281,8 +227,6 @@ public class YAxisImpl extends AxisImpl implements YAxis
         result.append ( minimum );
         result.append ( ", maximum: " );
         result.append ( maximum );
-        result.append ( ", labelVisible: " );
-        result.append ( labelVisible );
         result.append ( ')' );
         return result.toString ();
     }

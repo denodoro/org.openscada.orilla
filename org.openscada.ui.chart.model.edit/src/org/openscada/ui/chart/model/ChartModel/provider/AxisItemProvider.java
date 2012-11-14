@@ -60,6 +60,8 @@ public class AxisItemProvider extends ItemProviderAdapter implements IEditingDom
             addLabelPropertyDescriptor ( object );
             addTextPaddingPropertyDescriptor ( object );
             addColorPropertyDescriptor ( object );
+            addLabelVisiblePropertyDescriptor ( object );
+            addFormatPropertyDescriptor ( object );
         }
         return itemPropertyDescriptors;
     }
@@ -84,6 +86,28 @@ public class AxisItemProvider extends ItemProviderAdapter implements IEditingDom
     protected void addColorPropertyDescriptor ( Object object )
     {
         itemPropertyDescriptors.add ( createItemPropertyDescriptor ( ( (ComposeableAdapterFactory)adapterFactory ).getRootAdapterFactory (), getResourceLocator (), getString ( "_UI_Axis_color_feature" ), getString ( "_UI_PropertyDescriptor_description", "_UI_Axis_color_feature", "_UI_Axis_type" ), ChartPackage.Literals.AXIS__COLOR, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null ) );
+    }
+
+    /**
+     * This adds a property descriptor for the Label Visible feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    protected void addLabelVisiblePropertyDescriptor ( Object object )
+    {
+        itemPropertyDescriptors.add ( createItemPropertyDescriptor ( ( (ComposeableAdapterFactory)adapterFactory ).getRootAdapterFactory (), getResourceLocator (), getString ( "_UI_Axis_labelVisible_feature" ), getString ( "_UI_PropertyDescriptor_description", "_UI_Axis_labelVisible_feature", "_UI_Axis_type" ), ChartPackage.Literals.AXIS__LABEL_VISIBLE, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null ) );
+    }
+
+    /**
+     * This adds a property descriptor for the Format feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    protected void addFormatPropertyDescriptor ( Object object )
+    {
+        itemPropertyDescriptors.add ( createItemPropertyDescriptor ( ( (ComposeableAdapterFactory)adapterFactory ).getRootAdapterFactory (), getResourceLocator (), getString ( "_UI_Axis_format_feature" ), getString ( "_UI_PropertyDescriptor_description", "_UI_Axis_format_feature", "_UI_Axis_type" ), ChartPackage.Literals.AXIS__FORMAT, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null ) );
     }
 
     /**
@@ -127,6 +151,8 @@ public class AxisItemProvider extends ItemProviderAdapter implements IEditingDom
             case ChartPackage.AXIS__LABEL:
             case ChartPackage.AXIS__TEXT_PADDING:
             case ChartPackage.AXIS__COLOR:
+            case ChartPackage.AXIS__LABEL_VISIBLE:
+            case ChartPackage.AXIS__FORMAT:
                 fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), false, true ) );
                 return;
         }

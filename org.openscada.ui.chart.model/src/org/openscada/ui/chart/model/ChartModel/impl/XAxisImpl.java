@@ -21,7 +21,6 @@ import org.openscada.ui.chart.model.ChartModel.XAxis;
  * <ul>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.XAxisImpl#getMinimum <em>Minimum</em>}</li>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.XAxisImpl#getMaximum <em>Maximum</em>}</li>
- *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.XAxisImpl#getFormat <em>Format</em>}</li>
  * </ul>
  * </p>
  *
@@ -68,26 +67,6 @@ public class XAxisImpl extends AxisImpl implements XAxis
      * @ordered
      */
     protected long maximum = MAXIMUM_EDEFAULT;
-
-    /**
-     * The default value of the '{@link #getFormat() <em>Format</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see #getFormat()
-     * @generated
-     * @ordered
-     */
-    protected static final String FORMAT_EDEFAULT = null;
-
-    /**
-     * The cached value of the '{@link #getFormat() <em>Format</em>}' attribute.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see #getFormat()
-     * @generated
-     * @ordered
-     */
-    protected String format = FORMAT_EDEFAULT;
 
     /**
      * <!-- begin-user-doc -->
@@ -161,29 +140,6 @@ public class XAxisImpl extends AxisImpl implements XAxis
      * <!-- end-user-doc -->
      * @generated
      */
-    public String getFormat ()
-    {
-        return format;
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public void setFormat ( String newFormat )
-    {
-        String oldFormat = format;
-        format = newFormat;
-        if ( eNotificationRequired () )
-            eNotify ( new ENotificationImpl ( this, Notification.SET, ChartPackage.XAXIS__FORMAT, oldFormat, format ) );
-    }
-
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
     @Override
     public Object eGet ( int featureID, boolean resolve, boolean coreType )
     {
@@ -193,8 +149,6 @@ public class XAxisImpl extends AxisImpl implements XAxis
                 return getMinimum ();
             case ChartPackage.XAXIS__MAXIMUM:
                 return getMaximum ();
-            case ChartPackage.XAXIS__FORMAT:
-                return getFormat ();
         }
         return super.eGet ( featureID, resolve, coreType );
     }
@@ -214,9 +168,6 @@ public class XAxisImpl extends AxisImpl implements XAxis
                 return;
             case ChartPackage.XAXIS__MAXIMUM:
                 setMaximum ( (Long)newValue );
-                return;
-            case ChartPackage.XAXIS__FORMAT:
-                setFormat ( (String)newValue );
                 return;
         }
         super.eSet ( featureID, newValue );
@@ -238,9 +189,6 @@ public class XAxisImpl extends AxisImpl implements XAxis
             case ChartPackage.XAXIS__MAXIMUM:
                 setMaximum ( MAXIMUM_EDEFAULT );
                 return;
-            case ChartPackage.XAXIS__FORMAT:
-                setFormat ( FORMAT_EDEFAULT );
-                return;
         }
         super.eUnset ( featureID );
     }
@@ -259,8 +207,6 @@ public class XAxisImpl extends AxisImpl implements XAxis
                 return minimum != MINIMUM_EDEFAULT;
             case ChartPackage.XAXIS__MAXIMUM:
                 return maximum != MAXIMUM_EDEFAULT;
-            case ChartPackage.XAXIS__FORMAT:
-                return FORMAT_EDEFAULT == null ? format != null : !FORMAT_EDEFAULT.equals ( format );
         }
         return super.eIsSet ( featureID );
     }
@@ -281,8 +227,6 @@ public class XAxisImpl extends AxisImpl implements XAxis
         result.append ( minimum );
         result.append ( ", maximum: " );
         result.append ( maximum );
-        result.append ( ", format: " );
-        result.append ( format );
         result.append ( ')' );
         return result.toString ();
     }

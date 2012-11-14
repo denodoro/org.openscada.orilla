@@ -25,6 +25,8 @@ import org.openscada.ui.chart.model.ChartModel.ChartPackage;
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.AxisImpl#getLabel <em>Label</em>}</li>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.AxisImpl#getTextPadding <em>Text Padding</em>}</li>
  *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.AxisImpl#getColor <em>Color</em>}</li>
+ *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.AxisImpl#isLabelVisible <em>Label Visible</em>}</li>
+ *   <li>{@link org.openscada.ui.chart.model.ChartModel.impl.AxisImpl#getFormat <em>Format</em>}</li>
  * </ul>
  * </p>
  *
@@ -91,6 +93,46 @@ public abstract class AxisImpl extends EObjectImpl implements Axis
      * @ordered
      */
     protected RGB color = COLOR_EDEFAULT;
+
+    /**
+     * The default value of the '{@link #isLabelVisible() <em>Label Visible</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #isLabelVisible()
+     * @generated
+     * @ordered
+     */
+    protected static final boolean LABEL_VISIBLE_EDEFAULT = true;
+
+    /**
+     * The cached value of the '{@link #isLabelVisible() <em>Label Visible</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #isLabelVisible()
+     * @generated
+     * @ordered
+     */
+    protected boolean labelVisible = LABEL_VISIBLE_EDEFAULT;
+
+    /**
+     * The default value of the '{@link #getFormat() <em>Format</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getFormat()
+     * @generated
+     * @ordered
+     */
+    protected static final String FORMAT_EDEFAULT = null;
+
+    /**
+     * The cached value of the '{@link #getFormat() <em>Format</em>}' attribute.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see #getFormat()
+     * @generated
+     * @ordered
+     */
+    protected String format = FORMAT_EDEFAULT;
 
     /**
      * <!-- begin-user-doc -->
@@ -164,6 +206,52 @@ public abstract class AxisImpl extends EObjectImpl implements Axis
      * <!-- end-user-doc -->
      * @generated
      */
+    public boolean isLabelVisible ()
+    {
+        return labelVisible;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public void setLabelVisible ( boolean newLabelVisible )
+    {
+        boolean oldLabelVisible = labelVisible;
+        labelVisible = newLabelVisible;
+        if ( eNotificationRequired () )
+            eNotify ( new ENotificationImpl ( this, Notification.SET, ChartPackage.AXIS__LABEL_VISIBLE, oldLabelVisible, labelVisible ) );
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public String getFormat ()
+    {
+        return format;
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    public void setFormat ( String newFormat )
+    {
+        String oldFormat = format;
+        format = newFormat;
+        if ( eNotificationRequired () )
+            eNotify ( new ENotificationImpl ( this, Notification.SET, ChartPackage.AXIS__FORMAT, oldFormat, format ) );
+    }
+
+    /**
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
     public String getLabel ()
     {
         return label;
@@ -198,6 +286,10 @@ public abstract class AxisImpl extends EObjectImpl implements Axis
                 return getTextPadding ();
             case ChartPackage.AXIS__COLOR:
                 return getColor ();
+            case ChartPackage.AXIS__LABEL_VISIBLE:
+                return isLabelVisible ();
+            case ChartPackage.AXIS__FORMAT:
+                return getFormat ();
         }
         return super.eGet ( featureID, resolve, coreType );
     }
@@ -220,6 +312,12 @@ public abstract class AxisImpl extends EObjectImpl implements Axis
                 return;
             case ChartPackage.AXIS__COLOR:
                 setColor ( (RGB)newValue );
+                return;
+            case ChartPackage.AXIS__LABEL_VISIBLE:
+                setLabelVisible ( (Boolean)newValue );
+                return;
+            case ChartPackage.AXIS__FORMAT:
+                setFormat ( (String)newValue );
                 return;
         }
         super.eSet ( featureID, newValue );
@@ -244,6 +342,12 @@ public abstract class AxisImpl extends EObjectImpl implements Axis
             case ChartPackage.AXIS__COLOR:
                 setColor ( COLOR_EDEFAULT );
                 return;
+            case ChartPackage.AXIS__LABEL_VISIBLE:
+                setLabelVisible ( LABEL_VISIBLE_EDEFAULT );
+                return;
+            case ChartPackage.AXIS__FORMAT:
+                setFormat ( FORMAT_EDEFAULT );
+                return;
         }
         super.eUnset ( featureID );
     }
@@ -264,6 +368,10 @@ public abstract class AxisImpl extends EObjectImpl implements Axis
                 return textPadding != TEXT_PADDING_EDEFAULT;
             case ChartPackage.AXIS__COLOR:
                 return COLOR_EDEFAULT == null ? color != null : !COLOR_EDEFAULT.equals ( color );
+            case ChartPackage.AXIS__LABEL_VISIBLE:
+                return labelVisible != LABEL_VISIBLE_EDEFAULT;
+            case ChartPackage.AXIS__FORMAT:
+                return FORMAT_EDEFAULT == null ? format != null : !FORMAT_EDEFAULT.equals ( format );
         }
         return super.eIsSet ( featureID );
     }
@@ -286,6 +394,10 @@ public abstract class AxisImpl extends EObjectImpl implements Axis
         result.append ( textPadding );
         result.append ( ", color: " );
         result.append ( color );
+        result.append ( ", labelVisible: " );
+        result.append ( labelVisible );
+        result.append ( ", format: " );
+        result.append ( format );
         result.append ( ')' );
         return result.toString ();
     }

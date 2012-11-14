@@ -57,7 +57,6 @@ public class XAxisItemProvider extends AxisItemProvider implements IEditingDomai
 
             addMinimumPropertyDescriptor ( object );
             addMaximumPropertyDescriptor ( object );
-            addFormatPropertyDescriptor ( object );
         }
         return itemPropertyDescriptors;
     }
@@ -82,17 +81,6 @@ public class XAxisItemProvider extends AxisItemProvider implements IEditingDomai
     protected void addMaximumPropertyDescriptor ( Object object )
     {
         itemPropertyDescriptors.add ( createItemPropertyDescriptor ( ( (ComposeableAdapterFactory)adapterFactory ).getRootAdapterFactory (), getResourceLocator (), getString ( "_UI_XAxis_maximum_feature" ), getString ( "_UI_PropertyDescriptor_description", "_UI_XAxis_maximum_feature", "_UI_XAxis_type" ), ChartPackage.Literals.XAXIS__MAXIMUM, true, false, false, ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE, null, null ) );
-    }
-
-    /**
-     * This adds a property descriptor for the Format feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    protected void addFormatPropertyDescriptor ( Object object )
-    {
-        itemPropertyDescriptors.add ( createItemPropertyDescriptor ( ( (ComposeableAdapterFactory)adapterFactory ).getRootAdapterFactory (), getResourceLocator (), getString ( "_UI_XAxis_format_feature" ), getString ( "_UI_PropertyDescriptor_description", "_UI_XAxis_format_feature", "_UI_XAxis_type" ), ChartPackage.Literals.XAXIS__FORMAT, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null ) );
     }
 
     /**
@@ -136,7 +124,6 @@ public class XAxisItemProvider extends AxisItemProvider implements IEditingDomai
         {
             case ChartPackage.XAXIS__MINIMUM:
             case ChartPackage.XAXIS__MAXIMUM:
-            case ChartPackage.XAXIS__FORMAT:
                 fireNotifyChanged ( new ViewerNotification ( notification, notification.getNotifier (), false, true ) );
                 return;
         }
