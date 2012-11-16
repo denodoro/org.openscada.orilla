@@ -20,6 +20,7 @@
 package org.openscada.ca.ui.importer.wizard;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.Map;
@@ -114,7 +115,7 @@ public class RemoteDataPage extends WizardPage
 
         final String selectedFileName = getWizard ().getDialogSettings ().get ( "localDataPage.file" ); //$NON-NLS-1$
 
-        if ( selectedFileName != null && selectedFileName.length () > 0 )
+        if ( ( selectedFileName != null ) && ( selectedFileName.length () > 0 ) )
         {
             dlg.setFileName ( selectedFileName );
         }
@@ -137,11 +138,19 @@ public class RemoteDataPage extends WizardPage
                 @Override
                 public void run ( final IProgressMonitor monitor ) throws InvocationTargetException, InterruptedException
                 {
-                    OscarLoader loader;
+                    final File localFile = new File ( file );
+                    final Map<String, Map<String, Map<String, String>>> data;
                     try
                     {
                         monitor.beginTask ( Messages.RemoteDataPage_TaskName, IProgressMonitor.UNKNOWN );
-                        loader = new OscarLoader ( new File ( file ) );
+                        if ( OscarLoader.isOscar ( localFile ) )
+                        {
+                            data = new OscarLoader ( localFile ).getData ();
+                        }
+                        else
+                        {
+                            data = OscarLoader.loadJsonData ( new FileInputStream ( file ) );
+                        }
                     }
                     catch ( final Exception e )
                     {
@@ -151,8 +160,8 @@ public class RemoteDataPage extends WizardPage
                     {
                         monitor.done ();
                     }
-                    RemoteDataPage.this.mergeController.setRemoteData ( loader.getData () );
-                    RemoteDataPage.this.count = count ( loader.getData () );
+                    RemoteDataPage.this.mergeController.setRemoteData ( data );
+                    RemoteDataPage.this.count = count ( data );
                 }
             } );
 
