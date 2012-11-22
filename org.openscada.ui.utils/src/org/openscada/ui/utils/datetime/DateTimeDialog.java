@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -61,6 +61,20 @@ public class DateTimeDialog extends Dialog
         this.time = time;
     }
 
+    public void setTime ( final Date date )
+    {
+        final Calendar c = Calendar.getInstance ();
+        c.setTime ( date );
+        this.time = c;
+    }
+
+    public void setTime ( final long millis )
+    {
+        final Calendar c = Calendar.getInstance ();
+        c.setTimeInMillis ( millis );
+        this.time = c;
+    }
+
     @Override
     protected Control createDialogArea ( final Composite parent )
     {
@@ -79,6 +93,7 @@ public class DateTimeDialog extends Dialog
 
         this.input.addModifyListener ( new ModifyListener () {
 
+            @Override
             public void modifyText ( final ModifyEvent e )
             {
                 update ();
