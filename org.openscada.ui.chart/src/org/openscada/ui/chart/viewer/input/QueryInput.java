@@ -21,13 +21,12 @@ package org.openscada.ui.chart.viewer.input;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import org.eclipse.jface.resource.ResourceManager;
 import org.openscada.hd.QueryState;
-import org.openscada.hd.Value;
-import org.openscada.hd.ValueInformation;
+import org.openscada.hd.data.ValueInformation;
 import org.openscada.hd.ui.data.AbstractQueryBuffer;
 import org.openscada.hd.ui.data.ServiceQueryBuffer;
 
@@ -148,32 +147,34 @@ public abstract class QueryInput extends LineInput
             return;
         }
 
-        final ValueInformation[] infos = this.query.getValueInformation ();
+        final List<ValueInformation> infos = this.query.getValueInformation ();
 
         if ( infos == null )
         {
             return;
         }
 
-        final Calendar c = Calendar.getInstance ();
-        c.setTime ( selectedTimestamp );
+        final Date c = selectedTimestamp;
 
-        for ( int i = 0; i < infos.length; i++ )
+        for ( int i = 0; i < infos.size (); i++ )
         {
-            final ValueInformation vi = infos[i];
+            final ValueInformation vi = infos.get ( i );
 
             if ( vi == null )
             {
                 continue;
             }
+
+            /*
             if ( vi.getStartTimestamp () == null || vi.getEndTimestamp () == null )
             {
                 continue;
             }
+            */
 
-            if ( vi.getStartTimestamp ().before ( c ) && vi.getEndTimestamp ().after ( c ) )
+            if ( new Date ( vi.getStartTimestamp () ).before ( c ) && new Date ( vi.getEndTimestamp () ).after ( c ) )
             {
-                super.setSelectedTimestamp ( vi.getStartTimestamp ().getTime () );
+                super.setSelectedTimestamp ( new Date ( vi.getStartTimestamp () ) );
                 setSelectedValue ( valueToString ( this.query, i, this.channelName ) );
                 setSelectedQuality ( qualityToString ( vi ) );
                 break;
@@ -183,23 +184,23 @@ public abstract class QueryInput extends LineInput
 
     private static String valueToString ( final ServiceQueryBuffer query, final int index, final String channelName )
     {
-        final Value[] data = query.getValues ().get ( channelName );
+        final List<Double> data = query.getValues ().get ( channelName );
         if ( data == null )
         {
             return null;
         }
-        if ( index >= data.length )
+        if ( index >= data.size () )
         {
             return null;
         }
 
-        final Value value = data[index];
+        final Double value = data.get ( index );
         if ( value == null )
         {
             return null;
         }
 
-        return String.format ( "%s", data[index].toDouble () );
+        return String.format ( "%s", value );
     }
 
     private static String qualityToString ( final ValueInformation valueInformation )

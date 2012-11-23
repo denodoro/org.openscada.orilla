@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -16,11 +16,12 @@
  * version 3 along with OpenSCADA. If not, see
  * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
+
 package org.openscada.hd.ui.connection.internal;
 
 import java.util.Calendar;
 
-import org.openscada.hd.QueryParameters;
+import org.openscada.hd.data.QueryParameters;
 import org.openscada.hd.ui.data.QueryBuffer;
 
 public class QueryBufferBean extends QueryBuffer
@@ -40,7 +41,7 @@ public class QueryBufferBean extends QueryBuffer
         start.add ( Calendar.MINUTE, -500 );
         end.add ( Calendar.MINUTE, 10 );
 
-        return new QueryParameters ( start, end, 25 );
+        return new QueryParameters ( start.getTimeInMillis (), end.getTimeInMillis (), 25 );
     }
 
     public QueryWrapper getParent ()

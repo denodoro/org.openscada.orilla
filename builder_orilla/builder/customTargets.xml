@@ -154,6 +154,7 @@
   	<openscada.builder.copyPlugin id="org.openscada.hd.ui.printing"/>
   	<openscada.builder.copyPlugin id="org.openscada.hd.ui.connection" />
   	<openscada.builder.copyPlugin id="org.openscada.hd.ui.connection.creator.net" />
+  	<openscada.builder.copyPlugin id="org.openscada.hd.ui.connection.creator.ngp" />
   	
 	<!-- openSCADA Chart UI -->
   	

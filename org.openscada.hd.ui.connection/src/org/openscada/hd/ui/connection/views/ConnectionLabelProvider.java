@@ -28,8 +28,8 @@ import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.resource.LocalResourceManager;
 import org.eclipse.jface.resource.ResourceManager;
 import org.eclipse.jface.viewers.StyledString;
-import org.openscada.hd.QueryParameters;
 import org.openscada.hd.QueryState;
+import org.openscada.hd.data.QueryParameters;
 import org.openscada.hd.ui.connection.internal.ItemListWrapper;
 import org.openscada.hd.ui.connection.internal.ItemWrapper;
 import org.openscada.hd.ui.connection.internal.QueryBufferBean;
@@ -116,7 +116,7 @@ public class ConnectionLabelProvider extends CommonListeningLabelProvider implem
 
     private void updateItem ( final StyledViewerLabel label, final ItemWrapper element )
     {
-        label.setText ( element.getItemInformation ().getId () );
+        label.setText ( element.getItemInformation ().getItemId () );
         label.setImage ( this.resource.createImage ( ImageDescriptor.createFromFile ( ConnectionLabelProvider.class, "icons/item.gif" ) ) ); //$NON-NLS-1$
     }
 

@@ -23,6 +23,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Calendar;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -43,10 +44,9 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.openscada.hd.QueryParameters;
 import org.openscada.hd.QueryState;
-import org.openscada.hd.Value;
-import org.openscada.hd.ValueInformation;
+import org.openscada.hd.data.QueryParameters;
+import org.openscada.hd.data.ValueInformation;
 import org.openscada.hd.ui.data.AbstractQueryBuffer;
 import org.openscada.ui.utils.datetime.DateTimeDialog;
 import org.slf4j.Logger;
@@ -156,7 +156,7 @@ public class QueryControlView extends QueryViewPart implements PropertyChangeLis
                     return;
                 }
 
-                QueryControlView.this.requestParameters = new QueryParameters ( c, QueryControlView.this.requestParameters.getEndTimestamp (), QueryControlView.this.requestParameters.getEntries () );
+                QueryControlView.this.requestParameters = new QueryParameters ( c.getTimeInMillis (), QueryControlView.this.requestParameters.getEndTimestamp (), QueryControlView.this.requestParameters.getNumberOfEntries () );
                 updateRequestParameters ();
             };
         } );
@@ -185,7 +185,7 @@ public class QueryControlView extends QueryViewPart implements PropertyChangeLis
                     return;
                 }
 
-                QueryControlView.this.requestParameters = new QueryParameters ( QueryControlView.this.requestParameters.getStartTimestamp (), c, QueryControlView.this.requestParameters.getEntries () );
+                QueryControlView.this.requestParameters = new QueryParameters ( QueryControlView.this.requestParameters.getStartTimestamp (), c.getTimeInMillis (), QueryControlView.this.requestParameters.getNumberOfEntries () );
                 updateRequestParameters ();
             };
         } );
@@ -300,8 +300,11 @@ public class QueryControlView extends QueryViewPart implements PropertyChangeLis
 
     protected void changeRequest ( final int secondsOffset, final int secondsScale )
     {
-        final Calendar start = this.requestParameters.getStartTimestamp ();
-        final Calendar end = this.requestParameters.getEndTimestamp ();
+        final Calendar start = Calendar.getInstance ();
+        start.setTimeInMillis ( this.requestParameters.getStartTimestamp () );
+
+        final Calendar end = Calendar.getInstance ();
+        end.setTimeInMillis ( this.requestParameters.getEndTimestamp () );
 
         start.add ( Calendar.SECOND, secondsOffset );
         end.add ( Calendar.SECOND, secondsOffset );
@@ -316,7 +319,7 @@ public class QueryControlView extends QueryViewPart implements PropertyChangeLis
         diff *= 1000;
         end.setTimeInMillis ( start.getTimeInMillis () + diff );
 
-        this.requestParameters = new QueryParameters ( start, end, this.requestParameters.getEntries () );
+        this.requestParameters = new QueryParameters ( start.getTimeInMillis (), end.getTimeInMillis (), this.requestParameters.getNumberOfEntries () );
         updateRequestParameters ();
     }
 
@@ -348,7 +351,7 @@ public class QueryControlView extends QueryViewPart implements PropertyChangeLis
             {
                 QueryControlView.this.startTimestampRequestText.setText ( String.format ( Messages.QueryControlView_Format_Request_Date, QueryControlView.this.requestParameters.getStartTimestamp () ) );
                 QueryControlView.this.endTimestampRequestText.setText ( String.format ( Messages.QueryControlView_Format_Request_Date, QueryControlView.this.requestParameters.getEndTimestamp () ) );
-                QueryControlView.this.entriesRequestText.setText ( String.format ( Messages.QueryControlView_Format_Request_Entries, QueryControlView.this.requestParameters.getEntries () ) );
+                QueryControlView.this.entriesRequestText.setText ( String.format ( Messages.QueryControlView_Format_Request_Entries, QueryControlView.this.requestParameters.getNumberOfEntries () ) );
             }
         } );
     }
@@ -375,14 +378,14 @@ public class QueryControlView extends QueryViewPart implements PropertyChangeLis
         {
             this.query.removePropertyChangeListener ( this );
 
-            this.stateText.setText ( Messages.QueryControlView_EmptyString );
-            this.startTimestampRequestText.setText ( Messages.QueryControlView_EmptyString );
-            this.endTimestampRequestText.setText ( Messages.QueryControlView_EmptyString );
-            this.entriesRequestText.setText ( Messages.QueryControlView_EmptyString );
+            this.stateText.setText ( "" ); //$NON-NLS-1$
+            this.startTimestampRequestText.setText ( "" ); //$NON-NLS-1$
+            this.endTimestampRequestText.setText ( "" ); //$NON-NLS-1$
+            this.entriesRequestText.setText ( "" ); //$NON-NLS-1$
 
-            this.startTimestampText.setText ( Messages.QueryControlView_EmptyString );
-            this.endTimestampText.setText ( Messages.QueryControlView_EmptyString );
-            this.entriesText.setText ( Messages.QueryControlView_EmptyString );
+            this.startTimestampText.setText ( "" ); //$NON-NLS-1$
+            this.endTimestampText.setText ( "" ); //$NON-NLS-1$
+            this.entriesText.setText ( "" ); //$NON-NLS-1$
 
             for ( final Control control : this.controls )
             {
@@ -400,7 +403,7 @@ public class QueryControlView extends QueryViewPart implements PropertyChangeLis
     }
 
     @Override
-    public void updateData ( final int index, final Map<String, Value[]> values, final ValueInformation[] valueInformation )
+    public void updateData ( final int index, final Map<String, List<Double>> values, final List<ValueInformation> valueInformation )
     {
     }
 
@@ -414,7 +417,7 @@ public class QueryControlView extends QueryViewPart implements PropertyChangeLis
             {
                 QueryControlView.this.startTimestampText.setText ( String.format ( Messages.QueryControlView_Format_Query_Date, parameters.getStartTimestamp () ) );
                 QueryControlView.this.endTimestampText.setText ( String.format ( Messages.QueryControlView_Format_Query_Date, parameters.getEndTimestamp () ) );
-                QueryControlView.this.entriesText.setText ( String.format ( Messages.QueryControlView_Format_Query_Entries, parameters.getEntries () ) );
+                QueryControlView.this.entriesText.setText ( String.format ( Messages.QueryControlView_Format_Query_Entries, parameters.getNumberOfEntries () ) );
             }
         } );
     }

@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -37,29 +37,33 @@ final class ItemPropertySource implements IPropertySource
         this.itemWrapper = itemWrapper;
     }
 
+    @Override
     public void setPropertyValue ( final Object id, final Object value )
     {
     }
 
+    @Override
     public void resetPropertyValue ( final Object id )
     {
     }
 
+    @Override
     public boolean isPropertySet ( final Object id )
     {
         return false;
     }
 
+    @Override
     public Object getPropertyValue ( final Object id )
     {
         if ( id instanceof Properties )
         {
             switch ( (Properties)id )
             {
-            case CONNECTION_URI:
-                return this.itemWrapper.getConnection ().getService ().getConnection ().getConnectionInformation ().toString ();
-            case ITEM_ID:
-                return this.itemWrapper.getItemInformation ().getId ();
+                case CONNECTION_URI:
+                    return this.itemWrapper.getConnection ().getService ().getConnection ().getConnectionInformation ().toString ();
+                case ITEM_ID:
+                    return this.itemWrapper.getItemInformation ().getItemId ();
             }
         }
         else if ( id instanceof String )
@@ -69,6 +73,7 @@ final class ItemPropertySource implements IPropertySource
         return null;
     }
 
+    @Override
     public IPropertyDescriptor[] getPropertyDescriptors ()
     {
         final Collection<IPropertyDescriptor> result = new ArrayList<IPropertyDescriptor> ();
@@ -93,6 +98,7 @@ final class ItemPropertySource implements IPropertySource
         return result.toArray ( new IPropertyDescriptor[0] );
     }
 
+    @Override
     public Object getEditableValue ()
     {
         return null;

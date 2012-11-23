@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -20,6 +20,7 @@
 package org.openscada.hd.ui.views;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -33,10 +34,9 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.openscada.hd.QueryListener;
-import org.openscada.hd.QueryParameters;
 import org.openscada.hd.QueryState;
-import org.openscada.hd.Value;
-import org.openscada.hd.ValueInformation;
+import org.openscada.hd.data.QueryParameters;
+import org.openscada.hd.data.ValueInformation;
 
 public class QueryDataView extends QueryViewPart implements QueryListener
 {
@@ -98,7 +98,7 @@ public class QueryDataView extends QueryViewPart implements QueryListener
     }
 
     @Override
-    public void updateData ( final int index, final Map<String, Value[]> values, final ValueInformation[] valueInformation )
+    public void updateData ( final int index, final Map<String, List<Double>> values, final List<ValueInformation> valueInformation )
     {
         getDisplay ().asyncExec ( new Runnable () {
 
@@ -110,16 +110,16 @@ public class QueryDataView extends QueryViewPart implements QueryListener
         } );
     }
 
-    private void handleUpdateData ( final int index, final Map<String, Value[]> values, final ValueInformation[] valueInformation )
+    private void handleUpdateData ( final int index, final Map<String, List<Double>> values, final List<ValueInformation> valueInformation )
     {
         // FIXME: implement faster
-        final int len = valueInformation.length;
+        final int len = valueInformation.size ();
         for ( int i = 0; i < len; i++ )
         {
             final TableItem item = this.table.getItem ( i + index );
 
-            final double quality = valueInformation[i].getQuality ();
-            final double manual = valueInformation[i].getManualPercentage ();
+            final double quality = valueInformation.get ( i ).getQuality ();
+            final double manual = valueInformation.get ( i ).getManualPercentage ();
 
             item.setText ( 0, String.format ( Messages.QueryDataView_Format_Index, index + i ) );
             item.setText ( 1, String.format ( Messages.QueryDataView_Format_Quality, quality ) );
@@ -127,12 +127,12 @@ public class QueryDataView extends QueryViewPart implements QueryListener
 
             for ( int j = 0; j < this.colNames.length; j++ )
             {
-                final Value[] value = values.get ( this.colNames[j] );
-                item.setText ( j + FIX_FRONT_COLS, getValueString ( value[i] ) );
+                final List<Double> value = values.get ( this.colNames[j] );
+                item.setText ( j + FIX_FRONT_COLS, getValueString ( value.get ( i ) ) );
             }
 
-            item.setText ( this.colNames.length + FIX_FRONT_COLS, "" + valueInformation[i].getSourceValues () ); //$NON-NLS-1$
-            item.setText ( this.colNames.length + FIX_FRONT_COLS + 1, String.format ( Messages.QueryDataView_InfoFormat, valueInformation[i].getStartTimestamp (), valueInformation[i].getEndTimestamp () ) );
+            item.setText ( this.colNames.length + FIX_FRONT_COLS, "" + valueInformation.get ( i ).getSourceValues () ); //$NON-NLS-1$
+            item.setText ( this.colNames.length + FIX_FRONT_COLS + 1, String.format ( Messages.QueryDataView_InfoFormat, valueInformation.get ( i ).getStartTimestamp (), valueInformation.get ( i ).getEndTimestamp () ) );
 
             if ( quality < 0.33 )
             {
@@ -146,32 +146,17 @@ public class QueryDataView extends QueryViewPart implements QueryListener
         }
     }
 
-    private String getValueString ( final Value value )
+    private String getValueString ( final Double value )
     {
-        final Number num = value.toNumber ();
-        if ( num instanceof Double )
+        if ( value.isInfinite () )
         {
-            final Double dNum = (Double)num;
-            if ( dNum.isInfinite () )
-            {
-                return Messages.QueryDataView_Infinity;
-            }
-            else if ( dNum.isNaN () )
-            {
-                return Messages.QueryDataView_NaN;
-            }
-            return String.format ( Messages.QueryDataView_Format_Value, dNum );
+            return Messages.QueryDataView_Infinity;
         }
-        else if ( num instanceof Long )
+        else if ( value.isNaN () )
         {
-            final Long lNum = (Long)num;
-            return String.format ( "%s", lNum ); //$NON-NLS-1$
+            return Messages.QueryDataView_NaN;
         }
-        else
-        {
-            return String.format ( Messages.QueryDataView_Format_Value, value.toDouble () );
-        }
-
+        return String.format ( Messages.QueryDataView_Format_Value, value );
     }
 
     protected Display getDisplay ()
@@ -194,7 +179,7 @@ public class QueryDataView extends QueryViewPart implements QueryListener
             @Override
             public void run ()
             {
-                setDataSize ( parameters.getEntries (), valueTypes );
+                setDataSize ( parameters.getNumberOfEntries (), valueTypes );
             }
         } );
     }

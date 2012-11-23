@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -20,6 +20,7 @@
 package org.openscada.hd.ui.printing;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.swt.graphics.Color;
@@ -29,17 +30,16 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.printing.Printer;
-import org.openscada.hd.Value;
-import org.openscada.hd.ValueInformation;
+import org.openscada.hd.data.ValueInformation;
 
 public class PrintProcessor
 {
 
-    private final ValueInformation[] valueInformation;
+    private final List<ValueInformation> valueInformation;
 
-    private final Map<String, Value[]> values;
+    private final Map<String, List<Double>> values;
 
-    public PrintProcessor ( final ValueInformation[] vis, final Map<String, Value[]> values )
+    public PrintProcessor ( final List<ValueInformation> vis, final Map<String, List<Double>> values )
     {
         this.valueInformation = vis;
         this.values = values;
@@ -51,11 +51,10 @@ public class PrintProcessor
         double maxX = Double.NEGATIVE_INFINITY;
         double minX = Double.POSITIVE_INFINITY;
 
-        for ( final Value[] vs : this.values.values () )
+        for ( final List<Double> vs : this.values.values () )
         {
-            for ( final Value v : vs )
+            for ( final Double d : vs )
             {
-                final double d = v.toDouble ();
                 if ( d > maxX )
                 {
                     maxX = d;
@@ -77,11 +76,13 @@ public class PrintProcessor
         {
             if ( startTimestamp == null || startTimestamp.after ( vi.getStartTimestamp () ) )
             {
-                startTimestamp = vi.getStartTimestamp ();
+                startTimestamp = Calendar.getInstance ();
+                startTimestamp.setTimeInMillis ( vi.getStartTimestamp () );
             }
             if ( endTimestamp == null || endTimestamp.before ( vi.getEndTimestamp () ) )
             {
-                endTimestamp = vi.getEndTimestamp ();
+                endTimestamp = Calendar.getInstance ();
+                endTimestamp.setTimeInMillis ( vi.getEndTimestamp () );
             }
         }
 
@@ -123,19 +124,19 @@ public class PrintProcessor
         gc.setForeground ( color );
         gc.drawRectangle ( drawBounds );
 
-        for ( final Map.Entry<String, Value[]> row : this.values.entrySet () )
+        for ( final Map.Entry<String, List<Double>> row : this.values.entrySet () )
         {
             drawRow ( device, gc, row.getKey (), row.getValue (), drawBounds, minX, maxX );
         }
     }
 
-    private void drawRow ( final Device device, final GC gc, final String label, final Value[] data, final Rectangle bounds, final double minX, final double maxX )
+    private void drawRow ( final Device device, final GC gc, final String label, final List<Double> data, final Rectangle bounds, final double minX, final double maxX )
     {
         final Rectangle deviceBounds = device.getBounds ();
 
         gc.setLineWidth ( 1 );
 
-        final int size = data.length;
+        final int size = data.size ();
 
         final double diff = maxX - minX;
 
@@ -143,12 +144,12 @@ public class PrintProcessor
         for ( int i = 0; i < size; i++ )
         {
             // final Value v = data[i];
-            final ValueInformation info = this.valueInformation[i];
+            final ValueInformation info = this.valueInformation.get ( i );
 
             if ( info.getQuality () > 0.75 )
             {
                 final double posX = (double)bounds.width / (double)size * i;
-                final double posY = data[i].toDouble () / diff * bounds.height;
+                final double posY = data.get ( i ) / diff * bounds.height;
 
                 final Point point = new Point ( (int)posX + bounds.x, (int)posY + bounds.y );
 

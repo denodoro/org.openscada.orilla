@@ -19,18 +19,20 @@
 
 package org.openscada.hd.ui.data;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.openscada.hd.Query;
 import org.openscada.hd.QueryListener;
-import org.openscada.hd.QueryParameters;
 import org.openscada.hd.QueryState;
-import org.openscada.hd.Value;
-import org.openscada.hd.ValueInformation;
 import org.openscada.hd.client.Connection;
+import org.openscada.hd.data.QueryParameters;
+import org.openscada.hd.data.ValueInformation;
 import org.openscada.utils.beans.AbstractPropertyChange;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,9 +68,9 @@ public class AbstractQueryBuffer extends AbstractPropertyChange
 
     private Set<String> valueTypes;
 
-    private ValueInformation[] valueInformation;
+    private List<ValueInformation> valueInformation;
 
-    private HashMap<String, Value[]> values;
+    private HashMap<String, List<Double>> values;
 
     private int filled;
 
@@ -130,7 +132,7 @@ public class AbstractQueryBuffer extends AbstractPropertyChange
      * 
      * @return the current value information
      */
-    public ValueInformation[] getValueInformation ()
+    public List<ValueInformation> getValueInformation ()
     {
         return this.valueInformation;
     }
@@ -140,9 +142,9 @@ public class AbstractQueryBuffer extends AbstractPropertyChange
      * 
      * @return the current values
      */
-    public Map<String, Value[]> getValues ()
+    public Map<String, List<Double>> getValues ()
     {
-        final Map<String, Value[]> values;
+        final Map<String, List<Double>> values;
         synchronized ( this )
         {
             values = this.values;
@@ -151,28 +153,31 @@ public class AbstractQueryBuffer extends AbstractPropertyChange
                 return null;
             }
         }
-        return new HashMap<String, Value[]> ( values );
+        return new HashMap<String, List<Double>> ( values );
     }
 
-    protected synchronized void updateData ( final int index, final Map<String, Value[]> values, final ValueInformation[] valueInformation )
+    protected synchronized void updateData ( final int index, final Map<String, List<Double>> values, final List<ValueInformation> valueInformation )
     {
-        final int count = valueInformation.length;
+        final int count = valueInformation.size ();
 
         int filled = this.filled;
         for ( int i = 0; i < count; i++ )
         {
-            if ( this.valueInformation[i + index] == null )
+            if ( this.valueInformation.get ( i + index ) == null )
             {
                 filled++;
             }
-            this.valueInformation[i + index] = valueInformation[i];
+            this.valueInformation.set ( i + index, valueInformation.get ( i ) );
         }
 
         for ( final String type : this.valueTypes )
         {
-            final Value[] src = values.get ( type );
-            final Value[] dst = this.values.get ( type );
-            System.arraycopy ( src, 0, dst, index, count );
+            final List<Double> src = values.get ( type );
+            final List<Double> dst = this.values.get ( type );
+
+            final List<Double> sub = dst.subList ( index, index + count );
+            sub.clear ();
+            sub.addAll ( src );
         }
 
         // update stats
@@ -187,7 +192,7 @@ public class AbstractQueryBuffer extends AbstractPropertyChange
         this.filled = filled;
         firePropertyChange ( PROP_FILLED, oldFilled, filled );
 
-        final double percentFilled = (double)filled / (double)this.queryParameters.getEntries ();
+        final double percentFilled = filled / (double)this.queryParameters.getNumberOfEntries ();
         setPercentFilled ( percentFilled );
     }
 
@@ -207,13 +212,14 @@ public class AbstractQueryBuffer extends AbstractPropertyChange
     {
         logger.info ( "Update parameters - queryParameters: {}, valueTypeS: {}", parameters, valueTypes );
 
-        final int count = parameters.getEntries ();
+        final int count = parameters.getNumberOfEntries ();
 
-        final ValueInformation[] newValueInformation = new ValueInformation[count];
-        final HashMap<String, Value[]> newValues = new HashMap<String, Value[]> ();
+        final List<ValueInformation> newValueInformation = new ArrayList<ValueInformation> ( Arrays.asList ( new ValueInformation[count] ) );
+        final HashMap<String, List<Double>> newValues = new HashMap<String, List<Double>> ();
+
         for ( final String valueType : valueTypes )
         {
-            newValues.put ( valueType, new Value[count] );
+            newValues.put ( valueType, new ArrayList<Double> ( Arrays.asList ( new Double[count] ) ) );
         }
 
         synchronized ( this )
@@ -232,6 +238,7 @@ public class AbstractQueryBuffer extends AbstractPropertyChange
     private void setValueTypes ( final Set<String> valueTypes )
     {
         logger.debug ( "Set value types: {}", valueTypes ); //$NON-NLS-1$
+
         final Set<String> oldValueTypes = this.valueTypes;
         this.valueTypes = valueTypes;
         firePropertyChange ( PROP_VALUE_TYPES, oldValueTypes, valueTypes );
@@ -262,7 +269,7 @@ public class AbstractQueryBuffer extends AbstractPropertyChange
         firePropertyChange ( PROP_STATE, oldState, state );
     }
 
-    private void fireDataChange ( final int index, final Map<String, Value[]> values, final ValueInformation[] valueInformation )
+    private void fireDataChange ( final int index, final Map<String, List<Double>> values, final List<ValueInformation> valueInformation )
     {
         for ( final QueryListener listener : this.listeners )
         {
@@ -335,16 +342,16 @@ public class AbstractQueryBuffer extends AbstractPropertyChange
 
     private void transmitKnownData ( final QueryListener listener )
     {
-        if ( this.valueInformation == null || this.valueInformation.length == 0 )
+        if ( this.valueInformation == null || this.valueInformation.size () == 0 )
         {
             return;
         }
 
         int start = 0;
         int count = 0;
-        for ( int i = 0; i < this.valueInformation.length; i++ )
+        for ( int i = 0; i < this.valueInformation.size (); i++ )
         {
-            if ( this.valueInformation[i] == null )
+            if ( this.valueInformation.get ( i ) == null )
             {
                 if ( count > 0 )
                 {
@@ -371,16 +378,14 @@ public class AbstractQueryBuffer extends AbstractPropertyChange
 
     private void sendCache ( final QueryListener listener, final int start, final int count )
     {
-        logger.info ( "Sending cache: start:{} - count:{}", new Object[] { start, count } ); //$NON-NLS-1$
-        final ValueInformation[] info = new ValueInformation[count];
-        System.arraycopy ( this.valueInformation, start, info, 0, count );
+        logger.info ( "Sending cache: start: {} - count: {}", new Object[] { start, count } ); //$NON-NLS-1$
+        final List<ValueInformation> info = new ArrayList<ValueInformation> ( this.valueInformation.subList ( start, start + count ) );
 
-        final Map<String, Value[]> values = new HashMap<String, Value[]> ();
+        final Map<String, List<Double>> values = new HashMap<String, List<Double>> ();
         for ( final String type : this.valueTypes )
         {
-            final Value[] src = this.values.get ( type );
-            final Value[] dst = new Value[count];
-            System.arraycopy ( src, start, dst, 0, count );
+            final List<Double> src = this.values.get ( type );
+            final List<Double> dst = new ArrayList<Double> ( src.subList ( start, start + count ) );
             values.put ( type, dst );
         }
 
@@ -410,7 +415,7 @@ public class AbstractQueryBuffer extends AbstractPropertyChange
             }
 
             @Override
-            public void updateData ( final int index, final Map<String, Value[]> values, final ValueInformation[] valueInformation )
+            public void updateData ( final int index, final Map<String, List<Double>> values, final List<ValueInformation> valueInformation )
             {
                 AbstractQueryBuffer.this.updateData ( index, values, valueInformation );
             }

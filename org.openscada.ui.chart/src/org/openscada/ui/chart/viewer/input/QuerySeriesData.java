@@ -19,7 +19,7 @@
 
 package org.openscada.ui.chart.viewer.input;
 
-import java.util.Calendar;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -33,10 +33,9 @@ import org.openscada.chart.YAxis;
 import org.openscada.core.ConnectionInformation;
 import org.openscada.core.connection.provider.ConnectionRequest;
 import org.openscada.hd.QueryListener;
-import org.openscada.hd.QueryParameters;
 import org.openscada.hd.QueryState;
-import org.openscada.hd.Value;
-import org.openscada.hd.ValueInformation;
+import org.openscada.hd.data.QueryParameters;
+import org.openscada.hd.data.ValueInformation;
 import org.openscada.hd.ui.connection.data.Item;
 import org.openscada.hd.ui.data.ServiceQueryBuffer;
 import org.openscada.ui.chart.Activator;
@@ -88,7 +87,7 @@ public class QuerySeriesData extends AbstractSeriesData
             }
 
             @Override
-            public void updateData ( final int index, final Map<String, Value[]> values, final ValueInformation[] valueInformation )
+            public void updateData ( final int index, final Map<String, List<Double>> values, final List<ValueInformation> valueInformation )
             {
                 handleUpdate ();
             }
@@ -107,18 +106,12 @@ public class QuerySeriesData extends AbstractSeriesData
         {
             return;
         }
-        fireUpdateListener ( this.query.getQueryParameters ().getStartTimestamp ().getTimeInMillis (), this.query.getQueryParameters ().getEndTimestamp ().getTimeInMillis () );
+        fireUpdateListener ( this.query.getQueryParameters ().getStartTimestamp (), this.query.getQueryParameters ().getEndTimestamp () );
     }
 
     private QueryParameters makeInitialParameters ()
     {
-        final Calendar start = Calendar.getInstance ();
-        start.setTimeInMillis ( getXAxis ().getMin () );
-
-        final Calendar end = Calendar.getInstance ();
-        end.setTimeInMillis ( getXAxis ().getMax () );
-
-        return new QueryParameters ( start, end, 25 );
+        return new QueryParameters ( getXAxis ().getMin (), getXAxis ().getMax (), 25 );
     }
 
     private ConnectionRequest createRequest ()
@@ -131,13 +124,7 @@ public class QuerySeriesData extends AbstractSeriesData
     {
         logger.info ( "Setting request window - start: {}, end: {}", startTimestamp, endTimestamp );
 
-        final Calendar start = Calendar.getInstance ();
-        start.setTimeInMillis ( startTimestamp );
-
-        final Calendar end = Calendar.getInstance ();
-        end.setTimeInMillis ( endTimestamp );
-
-        changeParameters ( new QueryParameters ( start, end, this.parameters.getEntries () ) );
+        changeParameters ( new QueryParameters ( startTimestamp, endTimestamp, this.parameters.getNumberOfEntries () ) );
     }
 
     private void checkRequest ()
@@ -173,36 +160,36 @@ public class QuerySeriesData extends AbstractSeriesData
     {
         final WritableSeriesData data = new WritableSeriesData ();
 
-        final Map<String, Value[]> values = this.query.getValues ();
+        final Map<String, List<Double>> values = this.query.getValues ();
         if ( values == null )
         {
             return data;
         }
 
-        final Value[] avgData = this.query.getValues ().get ( type );
+        final List<Double> avgData = this.query.getValues ().get ( type );
         if ( avgData == null )
         {
             return data;
         }
 
-        final ValueInformation[] info = this.query.getValueInformation ();
-        if ( info == null || info.length != avgData.length )
+        final List<ValueInformation> info = this.query.getValueInformation ();
+        if ( info == null || info.size () != avgData.size () )
         {
             return data;
         }
 
-        for ( int i = 0; i < info.length; i++ )
+        for ( int i = 0; i < info.size (); i++ )
         {
-            if ( info[i] == null || info[i].getStartTimestamp () == null )
+            if ( info.get ( i ) == null )
             {
                 continue;
             }
 
-            final long timestamp = info[i].getStartTimestamp ().getTimeInMillis ();
+            final long timestamp = info.get ( i ).getStartTimestamp ();
 
-            if ( avgData[i] != null )
+            if ( avgData.get ( i ) != null )
             {
-                final Double value = avgData[i].toDouble ();
+                final Double value = avgData.get ( i );
                 data.add ( new DataEntry ( timestamp, value ) );
             }
             else

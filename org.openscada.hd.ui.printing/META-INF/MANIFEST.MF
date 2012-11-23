@@ -11,5 +11,6 @@ Require-Bundle: org.eclipse.ui,
  org.openscada.hd.ui;bundle-version="0.15.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
-Import-Package: org.openscada.hd;version="0.15.0",
- org.openscada.ui.databinding;version="0.14.0"
+Import-Package: org.openscada.hd;version="1.0.0",
+ org.openscada.hd.data;version="1.0.0",
+ org.openscada.ui.databinding;version="1.0.0"

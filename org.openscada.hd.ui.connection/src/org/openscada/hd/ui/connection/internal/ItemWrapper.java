@@ -22,7 +22,7 @@ package org.openscada.hd.ui.connection.internal;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.PlatformObject;
 import org.eclipse.ui.views.properties.IPropertySource;
-import org.openscada.hd.HistoricalItemInformation;
+import org.openscada.hd.data.HistoricalItemInformation;
 import org.openscada.hd.ui.connection.data.Item;
 import org.openscada.hd.ui.connection.data.Item.Type;
 
@@ -64,7 +64,7 @@ public class ItemWrapper extends PlatformObject implements IAdaptable
         }
         else if ( adapter == Item.class )
         {
-            return new Item ( this.connection.getService ().getConnection ().getConnectionInformation ().toString (), this.itemInformation.getId (), Type.URI );
+            return new Item ( this.connection.getService ().getConnection ().getConnectionInformation ().toString (), this.itemInformation.getItemId (), Type.URI );
         }
         return super.getAdapter ( adapter );
     }

@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2011 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -19,6 +19,7 @@
 
 package org.openscada.hd.ui.printing;
 
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.commands.ExecutionEvent;
@@ -26,8 +27,7 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.swt.printing.PrintDialog;
 import org.eclipse.swt.printing.Printer;
 import org.eclipse.swt.printing.PrinterData;
-import org.openscada.hd.Value;
-import org.openscada.hd.ValueInformation;
+import org.openscada.hd.data.ValueInformation;
 import org.openscada.hd.ui.connection.handler.AbstractQueryHandler;
 import org.openscada.hd.ui.data.AbstractQueryBuffer;
 
@@ -46,8 +46,8 @@ public class PrintCommand extends AbstractQueryHandler
 
     private void printQuery ( final AbstractQueryBuffer query )
     {
-        final ValueInformation[] vis = query.getValueInformation ();
-        final Map<String, Value[]> values = query.getValues ();
+        final List<ValueInformation> vis = query.getValueInformation ();
+        final Map<String, List<Double>> values = query.getValues ();
 
         final PrintDialog dlg = new PrintDialog ( getWorkbenchWindow ().getShell () );
 

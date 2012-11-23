@@ -28,7 +28,7 @@ import org.openscada.core.connection.provider.ConnectionRequestTracker;
 import org.openscada.core.connection.provider.ConnectionService;
 import org.openscada.core.connection.provider.ConnectionTracker;
 import org.openscada.core.connection.provider.ConnectionTracker.Listener;
-import org.openscada.hd.QueryParameters;
+import org.openscada.hd.data.QueryParameters;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

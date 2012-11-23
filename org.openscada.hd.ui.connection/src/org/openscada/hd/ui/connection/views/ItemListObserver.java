@@ -24,9 +24,9 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.databinding.observable.set.WritableSet;
-import org.openscada.hd.HistoricalItemInformation;
 import org.openscada.hd.ItemListListener;
 import org.openscada.hd.connection.provider.ConnectionService;
+import org.openscada.hd.data.HistoricalItemInformation;
 import org.openscada.hd.ui.connection.internal.ConnectionWrapper;
 import org.openscada.hd.ui.connection.internal.ItemWrapper;
 import org.slf4j.Logger;
@@ -109,7 +109,7 @@ public class ItemListObserver extends WritableSet implements ItemListListener
                 for ( final HistoricalItemInformation item : addedOrModified )
                 {
                     final ItemWrapper wrapper = new ItemWrapper ( this.connection, item );
-                    this.items.put ( item.getId (), wrapper );
+                    this.items.put ( item.getItemId (), wrapper );
                     add ( wrapper );
                 }
             }

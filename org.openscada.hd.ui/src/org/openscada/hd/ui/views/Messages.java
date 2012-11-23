@@ -47,8 +47,6 @@ public class Messages extends NLS
 
     public static String QueryControlView_Add3_Button_Text;
 
-    public static String QueryControlView_EmptyString;
-
     public static String QueryControlView_Format_Query_Date;
 
     public static String QueryControlView_Format_Query_Entries;
