@@ -22,8 +22,9 @@ package org.openscada.ui.utils.status;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.openscada.utils.ExceptionHelper;
 
-public class StatusHelper
+public class StatusHelper extends ExceptionHelper
 {
     public static IStatus convertStatus ( final String pluginId, final Throwable e )
     {
@@ -40,49 +41,4 @@ public class StatusHelper
         return new Status ( IStatus.ERROR, pluginId, getMessage ( e ), e );
     }
 
-    /**
-     * Get the root cause of an exception
-     * @param e the exception to check, must not be <code>null</code>
-     * @return the root cause, is never <code>null</code>
-     */
-    public static Throwable getRootCause ( Throwable e )
-    {
-        while ( e.getCause () != null )
-        {
-            e = e.getCause ();
-        }
-        return e;
-    }
-
-    /**
-     * Get the message of the root cause
-     * @param e the exception from which the message should be extracted
-     * @return the message of the root cause
-     * @see StatusHelper#extractMessage(Throwable)
-     */
-    public static String getMessage ( final Throwable e )
-    {
-        return extractMessage ( getRootCause ( e ) );
-    }
-
-    /**
-     * Extract the message from an exception
-     * @param e the exception to extract the message from
-     * @return either the localized message, the message or the class name (in that order)
-     */
-    public static String extractMessage ( final Throwable e )
-    {
-        if ( e.getLocalizedMessage () != null )
-        {
-            return e.getLocalizedMessage ();
-        }
-        else if ( e.getMessage () != null )
-        {
-            return e.getMessage ();
-        }
-        else
-        {
-            return e.getClass ().getName ();
-        }
-    }
 }
