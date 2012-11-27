@@ -137,13 +137,32 @@ public class ConnectionInformationList
             @Override
             public void run ()
             {
-                if ( old != null )
-                {
-                    ConnectionInformationList.this.list.remove ( old );
-                }
-                ConnectionInformationList.this.list.add ( o );
+                addService ( o, old );
             }
         } );
+    }
+
+    private void addService ( final Object o, final Object old )
+    {
+        if ( this.list.isDisposed () )
+        {
+            return;
+        }
+
+        try
+        {
+            this.list.setStale ( true );
+
+            if ( old != null )
+            {
+                this.list.remove ( old );
+            }
+            this.list.add ( o );
+        }
+        finally
+        {
+            this.list.setStale ( false );
+        }
     }
 
     public IObservableSet getList ()
@@ -164,4 +183,5 @@ public class ConnectionInformationList
             this.list.dispose ();
         }
     }
+
 }
