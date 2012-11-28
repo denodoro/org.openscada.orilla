@@ -33,7 +33,7 @@ import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
-import org.openscada.ca.ConfigurationInformation;
+import org.openscada.ca.data.ConfigurationInformation;
 import org.openscada.ca.ui.jobs.LoadJob;
 import org.openscada.ca.ui.jobs.UpdateJob;
 

@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -16,6 +16,7 @@
  * version 3 along with OpenSCADA. If not, see
  * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
+
 package org.openscada.ca.ui.util;
 
 import java.util.Collection;
@@ -25,9 +26,9 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.openscada.ca.ConfigurationInformation;
-import org.openscada.ca.FactoryInformation;
 import org.openscada.ca.client.Connection;
+import org.openscada.ca.data.ConfigurationInformation;
+import org.openscada.ca.data.FactoryInformation;
 import org.openscada.utils.concurrent.NotifyFuture;
 
 public class ConfigurationHelper
@@ -60,8 +61,11 @@ public class ConfigurationHelper
 
     /**
      * Convert from the remote data format to local data format
-     * @param remoteData remote data
-     * @param data local data target
+     * 
+     * @param remoteData
+     *            remote data
+     * @param data
+     *            local data target
      * @return the number of entries found
      */
     public static long convert ( final Collection<FactoryInformation> remoteData, final Map<String, Map<String, Map<String, String>>> data )
@@ -88,7 +92,9 @@ public class ConfigurationHelper
 
     /**
      * Convert from the remote data format to local data format
-     * @param remoteData the remote data format
+     * 
+     * @param remoteData
+     *            the remote data format
      * @return the local data format
      */
     public static Map<String, Map<String, Map<String, String>>> convert ( final Collection<FactoryInformation> remoteData )

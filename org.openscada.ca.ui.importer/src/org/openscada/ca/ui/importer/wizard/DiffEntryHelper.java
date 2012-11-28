@@ -25,7 +25,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.openscada.ca.DiffEntry;
+import org.openscada.ca.data.DiffEntry;
 
 public final class DiffEntryHelper
 {

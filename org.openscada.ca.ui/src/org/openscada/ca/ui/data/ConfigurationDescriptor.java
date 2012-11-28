@@ -20,7 +20,7 @@
 package org.openscada.ca.ui.data;
 
 import org.eclipse.core.runtime.IAdaptable;
-import org.openscada.ca.ConfigurationInformation;
+import org.openscada.ca.data.ConfigurationInformation;
 
 public class ConfigurationDescriptor implements IAdaptable
 {

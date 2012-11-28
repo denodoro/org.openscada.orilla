@@ -24,8 +24,8 @@ import java.util.List;
 import org.eclipse.jface.viewers.ILazyTreeContentProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
-import org.openscada.ca.DiffEntry;
-import org.openscada.ca.DiffEntry.Operation;
+import org.openscada.ca.data.DiffEntry;
+import org.openscada.ca.data.Operation;
 
 public class LazyDiffEntryTreeProvider implements ILazyTreeContentProvider
 {

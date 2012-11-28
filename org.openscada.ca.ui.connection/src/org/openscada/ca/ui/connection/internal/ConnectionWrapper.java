@@ -25,9 +25,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.core.databinding.observable.set.WritableSet;
-import org.openscada.ca.FactoryInformation;
 import org.openscada.ca.client.FactoriesListener;
 import org.openscada.ca.connection.provider.ConnectionService;
+import org.openscada.ca.data.FactoryInformation;
 import org.openscada.ca.ui.connection.data.FactoryInformationBean;
 import org.openscada.core.ui.connection.data.ConnectionHolder;
 
@@ -60,6 +60,7 @@ public class ConnectionWrapper extends WritableSet implements PropertyChangeList
         super.dispose ();
     }
 
+    @Override
     public synchronized void propertyChange ( final PropertyChangeEvent evt )
     {
         triggerUpdate ();
@@ -69,6 +70,7 @@ public class ConnectionWrapper extends WritableSet implements PropertyChangeList
     {
         getRealm ().asyncExec ( new Runnable () {
 
+            @Override
             public void run ()
             {
                 update ();
@@ -101,6 +103,7 @@ public class ConnectionWrapper extends WritableSet implements PropertyChangeList
     {
         this.service.getConnection ().addFactoriesListener ( this.listener = new FactoriesListener () {
 
+            @Override
             public void updateFactories ( final FactoryInformation[] factories )
             {
                 ConnectionWrapper.this.dataChanged ( factories );
@@ -137,6 +140,7 @@ public class ConnectionWrapper extends WritableSet implements PropertyChangeList
     {
         getRealm ().asyncExec ( new Runnable () {
 
+            @Override
             public void run ()
             {
                 handleDataChanged ( factories );

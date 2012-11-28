@@ -17,17 +17,22 @@
  * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
 
-package org.openscada.ca.ui.jobs;
+package org.openscada.ca.ui.importer.wizard;
 
-import java.util.Map;
+import java.util.Comparator;
 
 import org.openscada.ca.data.DiffEntry;
-import org.openscada.ca.data.Operation;
 
-public class UpdateJob extends DiffJob
+public class DiffEntryComparator implements Comparator<DiffEntry>
 {
-    public UpdateJob ( final String connectionUri, final String factoryId, final String configurationId, final Map<String, String> data )
+    @Override
+    public int compare ( final DiffEntry o1, final DiffEntry o2 )
     {
-        super ( String.format ( "Updating: %s/%s", factoryId, configurationId ), connectionUri, new DiffEntry ( factoryId, configurationId, Operation.UPDATE_SET, null, data ) );
+        final int rc = o1.getFactoryId ().compareTo ( o2.getFactoryId () );
+        if ( rc != 0 )
+        {
+            return rc;
+        }
+        return o1.getConfigurationId ().compareTo ( o2.getConfigurationId () );
     }
 }

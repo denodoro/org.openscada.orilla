@@ -19,7 +19,7 @@
 
 package org.openscada.ca.ui.importer.wizard;
 
-import org.openscada.ca.DiffEntry;
+import org.openscada.ca.data.DiffEntry;
 
 public final class DiffSubEntry implements Comparable<DiffSubEntry>
 {

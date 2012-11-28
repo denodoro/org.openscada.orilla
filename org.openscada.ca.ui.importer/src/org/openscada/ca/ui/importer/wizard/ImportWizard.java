@@ -36,8 +36,8 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.statushandlers.StatusManager;
-import org.openscada.ca.DiffEntry;
 import org.openscada.ca.connection.provider.ConnectionService;
+import org.openscada.ca.data.DiffEntry;
 import org.openscada.ca.ui.importer.Activator;
 import org.openscada.ca.ui.importer.preferences.PreferenceConstants;
 import org.openscada.ca.ui.util.DiffController;
@@ -125,7 +125,7 @@ public class ImportWizard extends Wizard implements IImportWizard
             for ( final Iterable<DiffEntry> i : splitted )
             {
                 sub.subTask ( String.format ( Messages.ImportWizard_SubTaskName, pos, size ) );
-                final Collection<DiffEntry> entries = new LinkedList<DiffEntry> ();
+                final List<DiffEntry> entries = new LinkedList<DiffEntry> ();
                 Iterables.addAll ( entries, i );
                 final NotifyFuture<Void> future = this.connection.getConnection ().applyDiff ( entries );
                 future.get ();

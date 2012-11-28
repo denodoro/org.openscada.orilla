@@ -20,8 +20,8 @@
 package org.openscada.ca.ui.connection.data;
 
 import org.eclipse.core.runtime.IAdaptable;
-import org.openscada.ca.ConfigurationInformation;
 import org.openscada.ca.connection.provider.ConnectionService;
+import org.openscada.ca.data.ConfigurationInformation;
 import org.openscada.ca.ui.data.ConfigurationEditorSourceInformation;
 
 public class ConfigurationInformationBean implements IAdaptable

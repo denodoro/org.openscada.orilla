@@ -40,7 +40,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.statushandlers.StatusManager;
-import org.openscada.ca.DiffEntry;
+import org.openscada.ca.data.DiffEntry;
 import org.openscada.ca.ui.importer.Activator;
 import org.openscada.ca.ui.util.DiffController;
 
@@ -137,7 +137,7 @@ public class PreviewPage extends WizardPage
 
     private void setMergeResult ( final List<DiffEntry> merge )
     {
-        Collections.sort ( merge );
+        Collections.sort ( merge, new DiffEntryComparator () );
 
         this.viewer.setInput ( merge );
 

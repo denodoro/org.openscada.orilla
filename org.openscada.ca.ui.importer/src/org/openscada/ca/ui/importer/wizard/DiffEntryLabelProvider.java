@@ -23,7 +23,7 @@ import java.util.Map;
 
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ViewerCell;
-import org.openscada.ca.DiffEntry;
+import org.openscada.ca.data.DiffEntry;
 
 public class DiffEntryLabelProvider extends CellLabelProvider
 {

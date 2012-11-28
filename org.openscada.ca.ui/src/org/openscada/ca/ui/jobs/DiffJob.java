@@ -20,15 +20,15 @@
 package org.openscada.ca.ui.jobs;
 
 import java.util.Arrays;
-import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.openscada.ca.DiffEntry;
 import org.openscada.ca.client.Connection;
+import org.openscada.ca.data.DiffEntry;
 import org.openscada.ca.ui.Activator;
 import org.openscada.core.ConnectionInformation;
 import org.openscada.core.connection.provider.ConnectionRequest;
@@ -38,7 +38,7 @@ import org.openscada.core.connection.provider.ConnectionService;
 public class DiffJob extends Job
 {
 
-    private final Collection<DiffEntry> diffEntries;
+    private final List<DiffEntry> diffEntries;
 
     private final String connectionUri;
 
@@ -54,7 +54,7 @@ public class DiffJob extends Job
         this.diffEntries = Arrays.asList ( diffEntry );
     }
 
-    public DiffJob ( final String jobName, final String connectionUri, final Collection<DiffEntry> diffEntries )
+    public DiffJob ( final String jobName, final String connectionUri, final List<DiffEntry> diffEntries )
     {
         super ( jobName );
         this.connectionUri = connectionUri;
@@ -62,7 +62,7 @@ public class DiffJob extends Job
         this.diffEntries = diffEntries;
     }
 
-    public DiffJob ( final String jobName, final ConnectionService connectionService, final Collection<DiffEntry> diffEntries )
+    public DiffJob ( final String jobName, final ConnectionService connectionService, final List<DiffEntry> diffEntries )
     {
         super ( jobName );
         this.connectionUri = null;

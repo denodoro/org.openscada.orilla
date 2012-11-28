@@ -31,7 +31,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.junit.Before;
 import org.junit.Test;
-import org.openscada.ca.DiffEntry;
+import org.openscada.ca.data.DiffEntry;
 import org.openscada.ca.ui.util.DiffController;
 
 public class MergeTest

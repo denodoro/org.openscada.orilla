@@ -29,9 +29,9 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.openscada.ca.DiffEntry;
-import org.openscada.ca.DiffEntry.Operation;
-import org.openscada.ca.FactoryInformation;
+import org.openscada.ca.data.DiffEntry;
+import org.openscada.ca.data.FactoryInformation;
+import org.openscada.ca.data.Operation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -106,7 +106,7 @@ public class DiffController
             // if the target does not contain our factory
             if ( !this.remoteData.containsKey ( factoryEntry.getKey () ) )
             {
-                addAll ( factoryEntry.getKey (), result, factoryEntry.getValue (), DiffEntry.Operation.ADD );
+                addAll ( factoryEntry.getKey (), result, factoryEntry.getValue (), Operation.ADD );
             }
             else
             {
@@ -115,7 +115,7 @@ public class DiffController
                 {
                     if ( !remoteFactory.containsKey ( cfgEntry.getKey () ) )
                     {
-                        result.add ( new DiffEntry ( factoryEntry.getKey (), cfgEntry.getKey (), Operation.ADD, cfgEntry.getValue () ) );
+                        result.add ( new DiffEntry ( factoryEntry.getKey (), cfgEntry.getKey (), Operation.ADD, null, cfgEntry.getValue () ) );
                     }
                     else
                     {
@@ -149,7 +149,7 @@ public class DiffController
             // if the target does not contain our factory
             if ( !this.localData.containsKey ( factoryEntry.getKey () ) )
             {
-                addAll ( factoryEntry.getKey (), result, factoryEntry.getValue (), DiffEntry.Operation.DELETE );
+                addAll ( factoryEntry.getKey (), result, factoryEntry.getValue (), Operation.DELETE );
             }
             else
             {
@@ -158,7 +158,7 @@ public class DiffController
                 {
                     if ( !localFactory.containsKey ( cfgEntry.getKey () ) )
                     {
-                        result.add ( new DiffEntry ( factoryEntry.getKey (), cfgEntry.getKey (), Operation.DELETE, cfgEntry.getValue () ) );
+                        result.add ( new DiffEntry ( factoryEntry.getKey (), cfgEntry.getKey (), Operation.DELETE, null, cfgEntry.getValue () ) );
                     }
                 }
             }
@@ -228,8 +228,11 @@ public class DiffController
 
     /**
      * Check of two data sets are equal
-     * @param localData the local file data
-     * @param remoteData the remote server data
+     * 
+     * @param localData
+     *            the local file data
+     * @param remoteData
+     *            the remote server data
      * @return the result
      */
     private boolean isEqual ( final Map<String, String> localData, final Map<String, String> remoteData )
@@ -241,7 +244,7 @@ public class DiffController
     {
         for ( final Map.Entry<String, Map<String, String>> cfgEntry : value.entrySet () )
         {
-            result.add ( new DiffEntry ( factoryId, cfgEntry.getKey (), operation, cfgEntry.getValue () ) );
+            result.add ( new DiffEntry ( factoryId, cfgEntry.getKey (), operation, null, cfgEntry.getValue () ) );
         }
     }
 

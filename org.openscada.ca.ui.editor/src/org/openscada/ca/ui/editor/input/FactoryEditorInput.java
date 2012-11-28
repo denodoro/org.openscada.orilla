@@ -1,6 +1,6 @@
 /*
  * This file is part of the OpenSCADA project
- * Copyright (C) 2006-2010 TH4 SYSTEMS GmbH (http://th4-systems.com)
+ * Copyright (C) 2006-2012 TH4 SYSTEMS GmbH (http://th4-systems.com)
  *
  * OpenSCADA is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License version 3
@@ -22,14 +22,15 @@ package org.openscada.ca.ui.editor.input;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
-import org.openscada.ca.DiffEntry;
-import org.openscada.ca.DiffEntry.Operation;
 import org.openscada.ca.connection.provider.ConnectionService;
+import org.openscada.ca.data.DiffEntry;
+import org.openscada.ca.data.Operation;
 import org.openscada.ca.ui.jobs.DiffJob;
 import org.openscada.ca.ui.jobs.LoadFactoryJob;
 
@@ -104,11 +105,11 @@ public class FactoryEditorInput implements IEditorInput
 
     public Job createDeleteJob ( final Collection<String> items )
     {
-        final Collection<DiffEntry> diffEntries = new LinkedList<DiffEntry> ();
+        final List<DiffEntry> diffEntries = new LinkedList<DiffEntry> ();
 
         for ( final String configurationId : items )
         {
-            diffEntries.add ( new DiffEntry ( this.factoryId, configurationId, Operation.DELETE, null ) );
+            diffEntries.add ( new DiffEntry ( this.factoryId, configurationId, Operation.DELETE, null, null ) );
         }
 
         return new DiffJob ( "Delete configurations", this.connectionService, diffEntries );
@@ -116,7 +117,7 @@ public class FactoryEditorInput implements IEditorInput
 
     public Job createCreateJob ( final String configurationId )
     {
-        final DiffEntry entry = new DiffEntry ( this.factoryId, configurationId, Operation.ADD, Collections.<String, String> emptyMap () );
+        final DiffEntry entry = new DiffEntry ( this.factoryId, configurationId, Operation.ADD, null, Collections.<String, String> emptyMap () );
 
         return new DiffJob ( "Create configuration", this.connectionService, entry );
     }

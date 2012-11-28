@@ -42,8 +42,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.statushandlers.StatusManager;
-import org.openscada.ca.FactoryInformation;
 import org.openscada.ca.connection.provider.ConnectionService;
+import org.openscada.ca.data.FactoryInformation;
 import org.openscada.ca.oscar.OscarLoader;
 import org.openscada.ca.ui.importer.Activator;
 import org.openscada.ca.ui.util.ConfigurationHelper;
@@ -115,7 +115,7 @@ public class RemoteDataPage extends WizardPage
 
         final String selectedFileName = getWizard ().getDialogSettings ().get ( "localDataPage.file" ); //$NON-NLS-1$
 
-        if ( ( selectedFileName != null ) && ( selectedFileName.length () > 0 ) )
+        if ( selectedFileName != null && selectedFileName.length () > 0 )
         {
             dlg.setFileName ( selectedFileName );
         }

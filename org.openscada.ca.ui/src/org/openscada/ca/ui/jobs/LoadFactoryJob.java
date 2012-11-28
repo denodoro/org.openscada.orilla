@@ -26,8 +26,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.openscada.ca.FactoryInformation;
 import org.openscada.ca.connection.provider.ConnectionService;
+import org.openscada.ca.data.FactoryInformation;
 import org.openscada.ca.ui.Activator;
 import org.openscada.utils.concurrent.NotifyFuture;
 

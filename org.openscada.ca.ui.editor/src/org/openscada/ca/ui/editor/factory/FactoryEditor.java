@@ -22,6 +22,7 @@ package org.openscada.ca.ui.editor.factory;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
@@ -58,8 +59,8 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
-import org.openscada.ca.ConfigurationInformation;
-import org.openscada.ca.FactoryInformation;
+import org.openscada.ca.data.ConfigurationInformation;
+import org.openscada.ca.data.FactoryInformation;
 import org.openscada.ca.ui.data.ConfigurationDescriptor;
 import org.openscada.ca.ui.editor.EditorHelper;
 import org.openscada.ca.ui.editor.input.FactoryEditorInput;
@@ -167,18 +168,18 @@ public class FactoryEditor extends EditorPart
         }
     }
 
-    private ConfigurationDescriptor[] convert ( final ConfigurationInformation[] configurations, final String connectionUri )
+    private ConfigurationDescriptor[] convert ( final List<ConfigurationInformation> configurations, final String connectionUri )
     {
         if ( configurations == null )
         {
             return null;
         }
 
-        final ConfigurationDescriptor[] result = new ConfigurationDescriptor[configurations.length];
-        for ( int i = 0; i < configurations.length; i++ )
+        final ConfigurationDescriptor[] result = new ConfigurationDescriptor[configurations.size ()];
+        for ( int i = 0; i < configurations.size (); i++ )
         {
             final ConfigurationDescriptor newEntry = new ConfigurationDescriptor ();
-            final ConfigurationInformation entry = configurations[i];
+            final ConfigurationInformation entry = configurations.get ( i );
 
             newEntry.setConfigurationInformation ( entry );
             newEntry.setConnectionUri ( connectionUri );

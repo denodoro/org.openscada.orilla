@@ -16,6 +16,7 @@
  * version 3 along with OpenSCADA. If not, see
  * <http://opensource.org/licenses/lgpl-3.0.html> for a copy of the LGPLv3 License.
  */
+
 package org.openscada.ca.ui.exporter.wizard;
 
 import java.io.File;
@@ -35,8 +36,8 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IExportWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.statushandlers.StatusManager;
-import org.openscada.ca.FactoryInformation;
 import org.openscada.ca.connection.provider.ConnectionService;
+import org.openscada.ca.data.FactoryInformation;
 import org.openscada.ca.oscar.OscarWriter;
 import org.openscada.ca.ui.exporter.Activator;
 import org.openscada.ca.ui.util.ConfigurationHelper;
@@ -83,6 +84,7 @@ public class ExportWizard extends Wizard implements IExportWizard
             final File file = this.page.getFile ();
             getContainer ().run ( true, true, new IRunnableWithProgress () {
 
+                @Override
                 public void run ( final IProgressMonitor monitor ) throws InvocationTargetException, InterruptedException
                 {
                     try
@@ -116,6 +118,7 @@ public class ExportWizard extends Wizard implements IExportWizard
         writer.write ( file );
     }
 
+    @Override
     public void init ( final IWorkbench workbench, final IStructuredSelection selection )
     {
         this.connection = getConnection ( selection );
