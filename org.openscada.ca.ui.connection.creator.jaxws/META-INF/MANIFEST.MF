@@ -7,10 +7,9 @@ Bundle-Activator: org.openscada.ca.ui.connection.creator.jaxws.Activator
 Bundle-Vendor: TH4 SYSTEMS GmbH
 Require-Bundle: org.eclipse.ui;bundle-version="3.5.0",
  org.eclipse.core.runtime;bundle-version="3.5.0",
- org.openscada.core.ui.connection.creator;bundle-version="0.14.0",
- org.openscada.core.client;bundle-version="0.14.0",
- org.openscada.ca;bundle-version="0.15.0",
- org.openscada.ca.connection.provider;bundle-version="0.15.0"
+ org.openscada.core.ui.connection.creator;bundle-version="1.0.0",
+ org.openscada.core.client;bundle-version="1.0.0",
+ org.openscada.ca.connection.provider;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Import-Package: org.openscada.ca.client;version="1.0.0",
