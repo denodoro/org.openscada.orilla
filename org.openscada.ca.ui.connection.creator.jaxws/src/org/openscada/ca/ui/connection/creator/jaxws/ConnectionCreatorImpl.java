@@ -19,8 +19,6 @@
 
 package org.openscada.ca.ui.connection.creator.jaxws;
 
-import org.openscada.ca.client.Connection;
-import org.openscada.ca.client.jaxws.ConnectionImpl;
 import org.openscada.ca.connection.provider.ConnectionServiceImpl;
 import org.openscada.core.ConnectionInformation;
 import org.openscada.core.connection.provider.ConnectionService;
@@ -31,7 +29,6 @@ public class ConnectionCreatorImpl implements ConnectionCreator
     @Override
     public ConnectionService createConnection ( final ConnectionInformation connectionInformation, final Integer autoReconnectDelay, final boolean lazyActivation )
     {
-        final Connection c = new ConnectionImpl ( connectionInformation );
-        return new ConnectionServiceImpl ( c, autoReconnectDelay );
+        return new ConnectionServiceImpl ( new DummyConnection ( connectionInformation ), autoReconnectDelay );
     }
 }
