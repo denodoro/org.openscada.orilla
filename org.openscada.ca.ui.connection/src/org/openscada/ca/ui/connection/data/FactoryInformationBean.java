@@ -161,14 +161,17 @@ public class FactoryInformationBean extends AbstractPropertyChange implements Co
     @Override
     public void stateChange ( final Connection connection, final ConnectionState state, final Throwable error )
     {
-        if ( state == ConnectionState.BOUND )
+        if ( state != ConnectionState.BOUND )
         {
-            // loadConfiguration ();
-        }
-        else
-        {
-            setFactoryInformation ( null );
-            setState ( State.LAZY );
+            this.configurations.getRealm ().asyncExec ( new Runnable () {
+
+                @Override
+                public void run ()
+                {
+                    setFactoryInformation ( null );
+                    setState ( State.LAZY );
+                }
+            } );
         }
     }
 
