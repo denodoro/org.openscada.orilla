@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.openscada.core.ui.connection.ConnectionDescriptor;
 import org.openscada.core.ui.connection.ConnectionStore;
@@ -38,6 +39,7 @@ public class DefaultFileResourceDiscoverer extends ResourceDiscoverer implements
         load ( getFile () );
     }
 
+    @Override
     public void add ( final ConnectionDescriptor connectionInformation ) throws CoreException
     {
         if ( addConnection ( connectionInformation ) )
@@ -46,6 +48,7 @@ public class DefaultFileResourceDiscoverer extends ResourceDiscoverer implements
         }
     }
 
+    @Override
     public void remove ( final ConnectionDescriptor connectionInformation ) throws CoreException
     {
         if ( removeConnection ( connectionInformation ) )
@@ -54,13 +57,20 @@ public class DefaultFileResourceDiscoverer extends ResourceDiscoverer implements
         }
     }
 
+    @Override
+    public void update ( final ConnectionDescriptor oldConnectionDescriptor, final ConnectionDescriptor newConnectionDescriptor ) throws CoreException
+    {
+        remove ( oldConnectionDescriptor );
+        add ( newConnectionDescriptor );
+    }
+
     private void store () throws CoreException
     {
         PrintWriter printer = null;
         try
         {
             printer = new PrintWriter ( getFile () );
-            for ( final ConnectionDescriptor descriptor : this.getConnections () )
+            for ( final ConnectionDescriptor descriptor : getConnections () )
             {
                 if ( descriptor.getServiceId () != null )
                 {
@@ -74,7 +84,7 @@ public class DefaultFileResourceDiscoverer extends ResourceDiscoverer implements
         }
         catch ( final IOException e )
         {
-            throw new CoreException ( new Status ( Status.ERROR, Activator.PLUGIN_ID, Messages.DefaultFileResourceDiscoverer_ErrorStore, e ) );
+            throw new CoreException ( new Status ( IStatus.ERROR, Activator.PLUGIN_ID, Messages.DefaultFileResourceDiscoverer_ErrorStore, e ) );
         }
         finally
         {

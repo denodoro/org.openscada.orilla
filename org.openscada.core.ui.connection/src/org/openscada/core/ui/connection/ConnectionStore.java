@@ -23,9 +23,9 @@ import org.eclipse.core.runtime.CoreException;
 
 public interface ConnectionStore
 {
+    public void remove ( final ConnectionDescriptor connectionDescriptor ) throws CoreException;
 
-    public abstract void remove ( final ConnectionDescriptor connectionDescriptor ) throws CoreException;
+    public void add ( final ConnectionDescriptor connectionDescriptor ) throws CoreException;
 
-    public abstract void add ( final ConnectionDescriptor connectionDescriptor ) throws CoreException;
-
+    public void update ( ConnectionDescriptor oldConnectionDescriptor, ConnectionDescriptor newConnectionDescriptor ) throws CoreException;
 }

@@ -27,6 +27,7 @@ import java.util.prefs.PreferenceChangeListener;
 import java.util.prefs.Preferences;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.openscada.core.ui.connection.ConnectionDescriptor;
 import org.openscada.core.ui.connection.ConnectionStore;
@@ -53,6 +54,7 @@ public abstract class AbstractPreferencesDiscoverer extends ResourceDiscoverer i
 
         getNode ().addPreferenceChangeListener ( this.listener = new PreferenceChangeListener () {
 
+            @Override
             public void preferenceChange ( final PreferenceChangeEvent evt )
             {
                 if ( PREF_NAME.equals ( evt.getKey () ) )
@@ -82,6 +84,7 @@ public abstract class AbstractPreferencesDiscoverer extends ResourceDiscoverer i
         loadAll ();
     }
 
+    @Override
     public void add ( final ConnectionDescriptor connectionInformation ) throws CoreException
     {
         if ( addConnection ( connectionInformation ) )
@@ -90,12 +93,20 @@ public abstract class AbstractPreferencesDiscoverer extends ResourceDiscoverer i
         }
     }
 
+    @Override
     public void remove ( final ConnectionDescriptor connectionInformation ) throws CoreException
     {
         if ( removeConnection ( connectionInformation ) )
         {
             store ();
         }
+    }
+
+    @Override
+    public void update ( final ConnectionDescriptor oldConnectionDescriptor, final ConnectionDescriptor newConnectionDescriptor ) throws CoreException
+    {
+        remove ( oldConnectionDescriptor );
+        add ( newConnectionDescriptor );
     }
 
     private void store () throws CoreException
@@ -105,7 +116,7 @@ public abstract class AbstractPreferencesDiscoverer extends ResourceDiscoverer i
         try
         {
             printer = new PrintWriter ( sw );
-            for ( final ConnectionDescriptor descriptor : this.getConnections () )
+            for ( final ConnectionDescriptor descriptor : getConnections () )
             {
                 if ( descriptor.getServiceId () != null )
                 {
@@ -124,7 +135,7 @@ public abstract class AbstractPreferencesDiscoverer extends ResourceDiscoverer i
         }
         catch ( final Exception e )
         {
-            throw new CoreException ( new Status ( Status.ERROR, Activator.PLUGIN_ID, Messages.UserDiscoverer_ErrorStore, e ) );
+            throw new CoreException ( new Status ( IStatus.ERROR, Activator.PLUGIN_ID, Messages.UserDiscoverer_ErrorStore, e ) );
         }
         finally
         {

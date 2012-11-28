@@ -64,6 +64,7 @@ public class AddConnectionWizard extends Wizard implements INewWizard
         return connectionInformation != null;
     }
 
+    @Override
     public void init ( final IWorkbench workbench, final IStructuredSelection selection )
     {
         final Object o = selection.getFirstElement ();
@@ -73,15 +74,15 @@ public class AddConnectionWizard extends Wizard implements INewWizard
             return;
         }
 
-        this.store = (ConnectionStore)AdapterHelper.adapt ( o, ConnectionStore.class );
+        this.store = AdapterHelper.adapt ( o, ConnectionStore.class );
         logger.info ( "Store is: {}", this.store ); //$NON-NLS-1$
 
-        final ConnectionHolder holder = (ConnectionHolder)AdapterHelper.adapt ( o, ConnectionHolder.class );
+        final ConnectionHolder holder = AdapterHelper.adapt ( o, ConnectionHolder.class );
         if ( holder != null )
         {
             if ( this.store == null )
             {
-                this.store = (ConnectionStore)AdapterHelper.adapt ( holder.getDiscoverer (), ConnectionStore.class );
+                this.store = AdapterHelper.adapt ( holder.getDiscoverer (), ConnectionStore.class );
             }
             this.preset = holder.getConnectionInformation ();
         }
