@@ -130,6 +130,21 @@
                class="org.openscada.core.ui.connection.data.ConnectionHolder">
          </selection>
       </wizard>
+      <wizard
+            canFinishEarly="true"
+            category="org.openscada.core.ui.category"
+            class="org.openscada.core.ui.connection.wizards.EditConnectionWizard"
+            hasPages="true"
+            id="org.openscada.core.ui.connection.EditConnection"
+            name="%wizard.editConnection.name"
+            project="false">
+         <selection
+               class="org.openscada.core.ui.connection.ConnectionStore">
+         </selection>
+         <selection
+               class="org.openscada.core.ui.connection.data.ConnectionHolder">
+         </selection>
+      </wizard>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -253,6 +268,26 @@
                         value="true">
                   </systemTest>
                </and>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="org.eclipse.ui.newWizard"
+               label="%command.editConnection.label"
+               style="push">
+            <parameter
+                  name="newWizardId"
+                  value="org.openscada.core.ui.connection.EditConnection">
+            </parameter>
+            <visibleWhen
+                  checkEnabled="false">
+               <iterate
+                     ifEmpty="false"
+                     operator="and">
+                  <test
+                        property="org.openscada.core.ui.connection.data.ConnectionHolder.stored"
+                        value="true">
+                  </test>
+               </iterate>
             </visibleWhen>
          </command>
          
