@@ -6,7 +6,7 @@
       <creator
             class="org.openscada.hd.ui.connection.creator.ngp.ConnectionCreatorImpl"
             driver="ngp"
-            id="org.openscada.da.ui.connection.creator.ngp.ConnectionCreator"
+            id="org.openscada.hd.ui.connection.creator.ngp.ConnectionCreator"
             interface="hd">
       </creator>
    </extension>
