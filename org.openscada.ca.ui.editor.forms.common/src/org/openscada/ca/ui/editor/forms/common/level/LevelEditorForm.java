@@ -21,7 +21,7 @@ package org.openscada.ca.ui.editor.forms.common.level;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
-import org.openscada.ae.Severity;
+import org.openscada.ae.data.Severity;
 import org.openscada.ca.ui.editor.forms.common.ConfigurationFormToolkit;
 import org.openscada.ca.ui.editor.forms.common.StandardConfigurationForm;
 import org.openscada.ca.ui.editor.input.ConfigurationEditorInput;

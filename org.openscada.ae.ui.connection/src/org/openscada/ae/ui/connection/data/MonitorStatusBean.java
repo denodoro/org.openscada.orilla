@@ -22,9 +22,9 @@ package org.openscada.ae.ui.connection.data;
 import java.util.Date;
 import java.util.Map;
 
-import org.openscada.ae.MonitorStatus;
-import org.openscada.ae.MonitorStatusInformation;
 import org.openscada.ae.connection.provider.ConnectionService;
+import org.openscada.ae.data.MonitorStatus;
+import org.openscada.ae.data.MonitorStatusInformation;
 import org.openscada.core.Variant;
 import org.openscada.utils.beans.AbstractPropertyChange;
 import org.slf4j.Logger;
@@ -82,12 +82,24 @@ public class MonitorStatusBean extends AbstractPropertyChange
     {
         this ( connection, information.getId () );
         this.status = information.getStatus ();
-        this.statusTimestamp = information.getStatusTimestamp ();
+        this.statusTimestamp = new Date ( information.getStatusTimestamp () );
         this.value = information.getValue ();
         this.lastAknUser = information.getLastAknUser ();
-        this.lastAknTimestamp = information.getLastAknTimestamp ();
-        this.lastFailTimestamp = information.getLastFailTimestamp ();
+        this.lastAknTimestamp = makeDate ( information.getLastAknTimestamp () );
+        this.lastFailTimestamp = makeDate ( information.getLastFailTimestamp () );
         this.attributes = information.getAttributes ();
+    }
+
+    private static Date makeDate ( final Long timestamp )
+    {
+        if ( timestamp == null )
+        {
+            return null;
+        }
+        else
+        {
+            return new Date ( timestamp );
+        }
     }
 
     public String getId ()
@@ -113,9 +125,9 @@ public class MonitorStatusBean extends AbstractPropertyChange
     public void update ( final MonitorStatusInformation info )
     {
         setStatus ( info.getStatus () );
-        setStatusTimestamp ( info.getStatusTimestamp () );
+        setStatusTimestamp ( new Date ( info.getStatusTimestamp () ) );
         setValue ( info.getValue () );
-        setLastAknTimestamp ( info.getLastAknTimestamp () );
+        setLastAknTimestamp ( makeDate ( info.getLastAknTimestamp () ) );
         setLastAknUser ( info.getLastAknUser () );
     }
 

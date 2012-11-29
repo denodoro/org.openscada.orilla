@@ -19,8 +19,8 @@
 
 package org.openscada.ae.ui.connection.data;
 
-import org.openscada.ae.BrowserEntry;
 import org.openscada.ae.connection.provider.ConnectionService;
+import org.openscada.ae.data.BrowserEntry;
 
 public class BrowserEntryBean
 {

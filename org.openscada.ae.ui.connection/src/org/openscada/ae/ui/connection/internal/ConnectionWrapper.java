@@ -22,12 +22,14 @@ package org.openscada.ae.ui.connection.internal;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.core.databinding.observable.set.WritableSet;
-import org.openscada.ae.BrowserEntry;
 import org.openscada.ae.BrowserListener;
 import org.openscada.ae.connection.provider.ConnectionService;
+import org.openscada.ae.data.BrowserEntry;
 import org.openscada.ae.ui.connection.data.BrowserEntryBean;
 import org.openscada.core.ui.connection.data.ConnectionHolder;
 import org.slf4j.Logger;
@@ -64,6 +66,7 @@ public class ConnectionWrapper extends WritableSet implements PropertyChangeList
         super.dispose ();
     }
 
+    @Override
     public synchronized void propertyChange ( final PropertyChangeEvent evt )
     {
         triggerUpdate ();
@@ -73,6 +76,7 @@ public class ConnectionWrapper extends WritableSet implements PropertyChangeList
     {
         getRealm ().asyncExec ( new Runnable () {
 
+            @Override
             public void run ()
             {
                 update ();
@@ -105,7 +109,8 @@ public class ConnectionWrapper extends WritableSet implements PropertyChangeList
     {
         this.service.getConnection ().addBrowserListener ( this.listener = new BrowserListener () {
 
-            public void dataChanged ( final BrowserEntry[] addedOrUpdated, final String[] removed, final boolean full )
+            @Override
+            public void dataChanged ( final List<BrowserEntry> addedOrUpdated, final Set<String> removed, final boolean full )
             {
                 ConnectionWrapper.this.dataChanged ( addedOrUpdated, removed, full );
             }
@@ -135,10 +140,11 @@ public class ConnectionWrapper extends WritableSet implements PropertyChangeList
         return this.service;
     }
 
-    public void dataChanged ( final BrowserEntry[] addedOrUpdated, final String[] removed, final boolean full )
+    public void dataChanged ( final List<BrowserEntry> addedOrUpdated, final Set<String> removed, final boolean full )
     {
         getRealm ().asyncExec ( new Runnable () {
 
+            @Override
             public void run ()
             {
                 handleDataChanged ( addedOrUpdated, removed, full );
@@ -147,7 +153,7 @@ public class ConnectionWrapper extends WritableSet implements PropertyChangeList
         } );
     }
 
-    protected void handleDataChanged ( final BrowserEntry[] addedOrUpdated, final String[] removed, final boolean full )
+    protected void handleDataChanged ( final List<BrowserEntry> addedOrUpdated, final Set<String> removed, final boolean full )
     {
         if ( isDisposed () )
         {

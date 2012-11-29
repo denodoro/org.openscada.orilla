@@ -20,6 +20,7 @@
 package org.openscada.ae.ui.testing.views;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.databinding.observable.Realm;
@@ -39,7 +40,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.openscada.ae.Event;
-import org.openscada.core.subscription.SubscriptionState;
+import org.openscada.core.data.SubscriptionState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -136,7 +137,7 @@ public class EventQueryView extends AbstractEventQueryViewPart
     }
 
     @Override
-    protected void handleDataChanged ( final Event[] addedEvents )
+    protected void handleDataChanged ( final List<Event> addedEvents )
     {
         scheduleJob ( new Runnable () {
 
@@ -148,7 +149,7 @@ public class EventQueryView extends AbstractEventQueryViewPart
         } );
     }
 
-    protected void performDataChanged ( final Event[] addedEvents )
+    protected void performDataChanged ( final List<Event> addedEvents )
     {
         try
         {

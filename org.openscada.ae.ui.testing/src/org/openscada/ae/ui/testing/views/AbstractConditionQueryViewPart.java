@@ -19,11 +19,14 @@
 
 package org.openscada.ae.ui.testing.views;
 
-import org.openscada.ae.BrowserType;
-import org.openscada.ae.MonitorStatusInformation;
+import java.util.List;
+import java.util.Set;
+
 import org.openscada.ae.client.MonitorListener;
+import org.openscada.ae.data.BrowserType;
+import org.openscada.ae.data.MonitorStatusInformation;
 import org.openscada.ae.ui.connection.data.BrowserEntryBean;
-import org.openscada.core.subscription.SubscriptionState;
+import org.openscada.core.data.SubscriptionState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,19 +43,21 @@ public abstract class AbstractConditionQueryViewPart extends AbstractEntryViewPa
             this.disposed = true;
         }
 
+        @Override
         public synchronized void statusChanged ( final SubscriptionState state )
         {
             if ( !this.disposed )
             {
-                AbstractConditionQueryViewPart.this.handleStatusChanged ( state );
+                handleStatusChanged ( state );
             }
         }
 
-        public synchronized void dataChanged ( final MonitorStatusInformation[] addedOrUpdated, final String[] removed )
+        @Override
+        public synchronized void dataChanged ( final List<MonitorStatusInformation> addedOrUpdated, final Set<String> removed, final boolean full )
         {
             if ( !this.disposed )
             {
-                AbstractConditionQueryViewPart.this.handleDataChanged ( addedOrUpdated, removed, false );
+                handleDataChanged ( addedOrUpdated, removed, full );
             }
         }
     }
@@ -62,7 +67,7 @@ public abstract class AbstractConditionQueryViewPart extends AbstractEntryViewPa
     @Override
     protected boolean isSupported ( final BrowserEntryBean query )
     {
-        return query.getEntry ().getTypes ().contains ( BrowserType.CONDITIONS );
+        return query.getEntry ().getTypes ().contains ( BrowserType.MONITORS );
     }
 
     @Override
@@ -79,7 +84,7 @@ public abstract class AbstractConditionQueryViewPart extends AbstractEntryViewPa
         this.entry.getConnection ().getConnection ().setMonitorListener ( this.entry.getEntry ().getId (), this.listener = new ConditionListenerImpl () );
     }
 
-    protected abstract void handleDataChanged ( final MonitorStatusInformation[] addedOrUpdated, final String[] removed, final boolean full );
+    protected abstract void handleDataChanged ( final List<MonitorStatusInformation> addedOrUpdated, final Set<String> removed, final boolean full );
 
     protected abstract void handleStatusChanged ( final SubscriptionState state );
 

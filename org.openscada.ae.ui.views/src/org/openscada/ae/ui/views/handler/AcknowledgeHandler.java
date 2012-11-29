@@ -25,7 +25,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.ui.IWorkbenchPart;
-import org.openscada.ae.MonitorStatus;
+import org.openscada.ae.data.MonitorStatus;
 import org.openscada.ae.ui.views.views.MonitorSubscriptionAlarmsEventsView;
 import org.openscada.ui.databinding.AbstractSelectionHandler;
 import org.openscada.ui.databinding.AdapterHelper;

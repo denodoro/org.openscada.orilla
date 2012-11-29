@@ -33,7 +33,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 import org.openscada.core.Variant;
-import org.openscada.core.subscription.SubscriptionState;
+import org.openscada.core.data.SubscriptionState;
 import org.openscada.core.ui.styles.StyleBlinker;
 import org.openscada.core.ui.styles.StyleBlinker.CurrentStyle;
 import org.openscada.core.ui.styles.StyleHandler.Style;

@@ -21,7 +21,7 @@ package org.openscada.ae.ui.views.handler;
 
 import java.util.Date;
 
-import org.openscada.ae.MonitorStatus;
+import org.openscada.ae.data.MonitorStatus;
 import org.openscada.utils.lang.Immutable;
 
 @Immutable
@@ -32,6 +32,11 @@ public class AckInformation
     private final Date timestamp;
 
     private final MonitorStatus monitorStatus;
+
+    public AckInformation ( final String monitorId, final Long timestamp, final MonitorStatus monitorStatus )
+    {
+        this ( monitorId, timestamp == null ? null : new Date ( timestamp ), monitorStatus );
+    }
 
     public AckInformation ( final String monitorId, final Date timestamp, final MonitorStatus monitorStatus )
     {

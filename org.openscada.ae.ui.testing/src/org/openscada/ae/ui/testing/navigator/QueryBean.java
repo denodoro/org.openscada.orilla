@@ -19,7 +19,7 @@
 
 package org.openscada.ae.ui.testing.navigator;
 
-import java.util.Arrays;
+import java.util.List;
 
 import org.eclipse.core.databinding.observable.Observables;
 import org.eclipse.core.databinding.observable.set.IObservableSet;
@@ -27,7 +27,7 @@ import org.eclipse.core.databinding.observable.set.WritableSet;
 import org.openscada.ae.Event;
 import org.openscada.ae.Query;
 import org.openscada.ae.QueryListener;
-import org.openscada.ae.QueryState;
+import org.openscada.ae.data.QueryState;
 import org.openscada.utils.beans.AbstractPropertyChange;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,9 +71,9 @@ public class QueryBean extends AbstractPropertyChange implements QueryListener
     }
 
     @Override
-    public void queryData ( final Event[] events )
+    public void queryData ( final List<Event> events )
     {
-        logger.debug ( "Received {} events", events.length );
+        logger.debug ( "Received {} events", events.size () );
 
         this.events.getRealm ().asyncExec ( new Runnable () {
 
@@ -86,11 +86,11 @@ public class QueryBean extends AbstractPropertyChange implements QueryListener
 
     }
 
-    protected void addData ( final Event[] events )
+    protected void addData ( final List<Event> events )
     {
         final long tix = System.currentTimeMillis ();
         final int oldSize = this.events.size ();
-        this.events.addAll ( Arrays.asList ( events ) );
+        this.events.addAll ( events );
         final int newSize = this.events.size ();
         logger.debug ( "String delta: {}", System.currentTimeMillis () - tix );
 

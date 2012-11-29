@@ -22,7 +22,7 @@ package org.openscada.ae.ui.views.model;
 import java.io.Serializable;
 
 import org.eclipse.core.runtime.IAdaptable;
-import org.openscada.ae.MonitorStatusInformation;
+import org.openscada.ae.data.MonitorStatusInformation;
 import org.openscada.ae.ui.views.handler.AckInformation;
 import org.openscada.utils.beans.AbstractPropertyChange;
 

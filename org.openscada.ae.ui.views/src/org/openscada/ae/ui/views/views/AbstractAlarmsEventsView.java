@@ -37,9 +37,9 @@ import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
-import org.openscada.ae.BrowserType;
 import org.openscada.ae.client.Connection;
 import org.openscada.ae.connection.provider.ConnectionService;
+import org.openscada.ae.data.BrowserType;
 import org.openscada.ae.ui.connection.data.BrowserEntryBean;
 import org.openscada.ae.ui.views.Activator;
 import org.openscada.ae.ui.views.CustomizableAction;
@@ -57,7 +57,6 @@ import org.slf4j.LoggerFactory;
 
 /**
  * @author jrose
- *
  */
 public abstract class AbstractAlarmsEventsView extends ViewPart
 {
@@ -223,7 +222,7 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
     }
 
     /**
-     * onConnect is only called if connection is actually there 
+     * onConnect is only called if connection is actually there
      */
     protected void onConnect ()
     {
@@ -231,8 +230,9 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
     }
 
     /**
-     * onDisonnect is only called if connection is not there or no connection is found at all
-     * it also maybe called multiple times 
+     * onDisonnect is only called if connection is not there or no connection is
+     * found at all
+     * it also maybe called multiple times
      */
     protected void onDisconnect ()
     {
@@ -366,7 +366,7 @@ public abstract class AbstractAlarmsEventsView extends ViewPart
             {
                 watchPool ( browserEntryBean.getEntry ().getId () );
             }
-            if ( browserEntryBean.getEntry ().getTypes ().contains ( BrowserType.CONDITIONS ) )
+            if ( browserEntryBean.getEntry ().getTypes ().contains ( BrowserType.MONITORS ) )
             {
                 watchMonitors ( browserEntryBean.getEntry ().getId () );
             }

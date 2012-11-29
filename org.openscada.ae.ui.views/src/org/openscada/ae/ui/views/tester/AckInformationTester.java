@@ -20,7 +20,7 @@
 package org.openscada.ae.ui.views.tester;
 
 import org.eclipse.core.expressions.PropertyTester;
-import org.openscada.ae.MonitorStatus;
+import org.openscada.ae.data.MonitorStatus;
 import org.openscada.ae.ui.views.handler.AckInformation;
 import org.openscada.ui.databinding.AdapterHelper;
 

@@ -61,7 +61,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.menus.WorkbenchWindowControlContribution;
-import org.openscada.ae.MonitorStatus;
+import org.openscada.ae.data.MonitorStatus;
 import org.openscada.ae.ui.views.Activator;
 import org.openscada.ae.ui.views.config.AlarmNotifierConfiguration;
 import org.openscada.ae.ui.views.config.ConfigurationHelper;

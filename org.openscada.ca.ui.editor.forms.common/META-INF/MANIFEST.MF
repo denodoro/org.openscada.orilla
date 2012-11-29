@@ -22,4 +22,5 @@ Export-Package: org.openscada.ca.ui.editor.forms.common;version="1.0.0";
    org.openscada.ca.ui.editor.config.form,
    org.eclipse.swt.widgets,
    org.eclipse.ui.forms.widgets"
-Import-Package: org.openscada.ae;version="1.0.0"
+Import-Package: org.openscada.ae;version="1.0.0",
+ org.openscada.ae.data;version="1.0.0"

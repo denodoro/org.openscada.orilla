@@ -21,11 +21,12 @@ package org.openscada.ae.ui.views.model;
 
 import java.io.Serializable;
 import java.util.Comparator;
+import java.util.Date;
 
 import org.eclipse.core.runtime.IAdaptable;
 import org.openscada.ae.Event;
-import org.openscada.ae.MonitorStatus;
-import org.openscada.ae.MonitorStatusInformation;
+import org.openscada.ae.data.MonitorStatus;
+import org.openscada.ae.data.MonitorStatusInformation;
 import org.openscada.ae.ui.views.handler.AckInformation;
 import org.openscada.utils.beans.AbstractPropertyChange;
 
@@ -134,7 +135,7 @@ public class DecoratedEvent extends AbstractPropertyChange implements Serializab
         {
             return false;
         }
-        if ( this.event.getSourceTimestamp ().compareTo ( this.monitor.getStatusTimestamp () ) >= 0 )
+        if ( this.event.getSourceTimestamp ().compareTo ( new Date ( this.monitor.getStatusTimestamp () ) ) >= 0 )
         {
             return true;
         }

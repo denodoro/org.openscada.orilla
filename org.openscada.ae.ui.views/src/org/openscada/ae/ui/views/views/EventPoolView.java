@@ -20,7 +20,6 @@
 package org.openscada.ae.ui.views.views;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -54,8 +53,8 @@ import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 import org.openscada.ae.Event;
 import org.openscada.ae.Event.Fields;
-import org.openscada.ae.MonitorStatusInformation;
 import org.openscada.ae.client.EventListener;
+import org.openscada.ae.data.MonitorStatusInformation;
 import org.openscada.ae.ui.views.Activator;
 import org.openscada.ae.ui.views.CustomizableAction;
 import org.openscada.ae.ui.views.config.ColumnLabelProviderInformation;
@@ -68,7 +67,7 @@ import org.openscada.ae.ui.views.model.DecoratedMonitor;
 import org.openscada.ae.ui.views.model.MonitorData;
 import org.openscada.ae.ui.views.preferences.PreferenceConstants;
 import org.openscada.core.Variant;
-import org.openscada.core.subscription.SubscriptionState;
+import org.openscada.core.data.SubscriptionState;
 import org.openscada.utils.concurrent.NamedThreadFactory;
 import org.openscada.utils.lang.Pair;
 import org.openscada.utils.str.StringHelper;
@@ -341,7 +340,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
                 }
 
                 @Override
-                public void dataChanged ( final Event[] addedEvents )
+                public void dataChanged ( final List<Event> addedEvents )
                 {
                     EventPoolView.this.dataChanged ( addedEvents );
                 }
@@ -364,7 +363,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
         clear ();
     }
 
-    protected void dataChanged ( final Event[] addedEvents )
+    protected void dataChanged ( final List<Event> addedEvents )
     {
         synchronized ( this.jobLock )
         {
@@ -375,7 +374,7 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
                 created = true;
             }
 
-            this.eventList.addAll ( Arrays.asList ( addedEvents ) );
+            this.eventList.addAll ( addedEvents );
 
             if ( created )
             {
@@ -531,25 +530,25 @@ public class EventPoolView extends MonitorSubscriptionAlarmsEventsView
     }
 
     @Override
-    public void dataChanged ( final MonitorStatusInformation[] addedOrUpdated, final String[] removed )
+    public void dataChanged ( final List<MonitorStatusInformation> addedOrUpdated, final Set<String> removed, final boolean full )
     {
-        super.dataChanged ( addedOrUpdated, removed );
+        super.dataChanged ( addedOrUpdated, removed, full );
         scheduleJob ( new Runnable () {
             @Override
             public void run ()
             {
-                performDataChanged ( addedOrUpdated, removed );
+                performDataChanged ( addedOrUpdated, removed, full );
             }
         } );
     }
 
-    private void performDataChanged ( final MonitorStatusInformation[] addedOrUpdated, final String[] removed )
+    private void performDataChanged ( final List<MonitorStatusInformation> addedOrUpdated, final Set<String> removed, final boolean full )
     {
         // FIXME: check if addAll is really necessary
-        this.pool.addAll ( decorateEvents ( addedOrUpdated, removed ) );
+        this.pool.addAll ( decorateEvents ( addedOrUpdated, removed, full ) );
     }
 
-    private Set<DecoratedEvent> decorateEvents ( final MonitorStatusInformation[] monitors, final String[] removed )
+    private Set<DecoratedEvent> decorateEvents ( final List<MonitorStatusInformation> monitors, final Set<String> removed, final boolean full )
     {
         final Set<DecoratedEvent> result = new HashSet<DecoratedEvent> ();
         if ( monitors != null )

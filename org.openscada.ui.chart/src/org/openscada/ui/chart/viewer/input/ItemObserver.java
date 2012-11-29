@@ -38,7 +38,7 @@ import org.openscada.chart.swt.render.AbstractLineRender;
 import org.openscada.chart.swt.render.PositionYRuler;
 import org.openscada.chart.swt.render.StepRenderer;
 import org.openscada.core.Variant;
-import org.openscada.core.subscription.SubscriptionState;
+import org.openscada.core.data.SubscriptionState;
 import org.openscada.da.client.DataItemValue;
 import org.openscada.da.ui.connection.data.DataItemHolder;
 import org.openscada.da.ui.connection.data.DataSourceListener;

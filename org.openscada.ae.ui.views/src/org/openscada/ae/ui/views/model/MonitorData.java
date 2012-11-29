@@ -19,12 +19,11 @@
 
 package org.openscada.ae.ui.views.model;
 
-import java.util.Date;
 import java.util.Map;
 
-import org.openscada.ae.MonitorStatus;
-import org.openscada.ae.MonitorStatusInformation;
-import org.openscada.ae.Severity;
+import org.openscada.ae.data.MonitorStatus;
+import org.openscada.ae.data.MonitorStatusInformation;
+import org.openscada.ae.data.Severity;
 import org.openscada.core.Variant;
 import org.openscada.utils.lang.Immutable;
 
@@ -36,7 +35,7 @@ public class MonitorData extends MonitorStatusInformation
 {
     private static final long serialVersionUID = 6727349873713785401L;
 
-    public MonitorData ( final String id, final MonitorStatus status, final Date statusTimestamp, final Severity severity, final Variant value, final Date lastAknTimestamp, final String lastAknUser, final Date lastFailTimestamp, final Map<String, Variant> attributes )
+    public MonitorData ( final String id, final MonitorStatus status, final long statusTimestamp, final Severity severity, final Variant value, final Long lastAknTimestamp, final String lastAknUser, final Long lastFailTimestamp, final Map<String, Variant> attributes )
     {
         super ( id, status, statusTimestamp, severity, value, lastAknTimestamp, lastAknUser, lastFailTimestamp, attributes );
     }
@@ -55,7 +54,7 @@ public class MonitorData extends MonitorStatusInformation
         result = prime * result + ( getLastAknTimestamp () == null ? 0 : getLastAknTimestamp ().hashCode () );
         result = prime * result + ( getLastAknUser () == null ? 0 : getLastAknUser ().hashCode () );
         result = prime * result + ( getStatus () == null ? 0 : getStatus ().hashCode () );
-        result = prime * result + ( getStatusTimestamp () == null ? 0 : getStatusTimestamp ().hashCode () );
+        result = prime * result + (int) ( getStatusTimestamp () ^ getStatusTimestamp () >>> 32 );
         result = prime * result + ( getSeverity () == null ? 0 : getSeverity ().hashCode () );
         result = prime * result + ( getValue () == null ? 0 : getValue ().hashCode () );
         return result;
@@ -121,14 +120,7 @@ public class MonitorData extends MonitorStatusInformation
         {
             return false;
         }
-        if ( getStatusTimestamp () == null )
-        {
-            if ( other.getStatusTimestamp () != null )
-            {
-                return false;
-            }
-        }
-        else if ( !getStatusTimestamp ().equals ( other.getStatusTimestamp () ) )
+        if ( getStatusTimestamp () != other.getStatusTimestamp () )
         {
             return false;
         }

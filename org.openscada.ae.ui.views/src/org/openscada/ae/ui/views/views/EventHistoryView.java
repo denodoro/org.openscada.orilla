@@ -45,7 +45,7 @@ import org.eclipse.ui.PartInitException;
 import org.openscada.ae.Event;
 import org.openscada.ae.Query;
 import org.openscada.ae.QueryListener;
-import org.openscada.ae.QueryState;
+import org.openscada.ae.data.QueryState;
 import org.openscada.ae.ui.views.Activator;
 import org.openscada.ae.ui.views.CustomizableAction;
 import org.openscada.ae.ui.views.config.ColumnLabelProviderInformation;
@@ -200,12 +200,12 @@ public class EventHistoryView extends AbstractAlarmsEventsView
     {
         switch ( cfg.getConnectionType () )
         {
-        case URI:
-            setConnectionUri ( cfg.getConnectionString () );
-            break;
-        case ID:
-            setConnectionId ( cfg.getConnectionString () );
-            break;
+            case URI:
+                setConnectionUri ( cfg.getConnectionString () );
+                break;
+            case ID:
+                setConnectionId ( cfg.getConnectionString () );
+                break;
         }
 
         if ( cfg.getLabel () != null )
@@ -350,7 +350,7 @@ public class EventHistoryView extends AbstractAlarmsEventsView
             }
 
             @Override
-            public void queryData ( final Event[] events )
+            public void queryData ( final List<Event> events )
             {
                 final Set<DecoratedEvent> decoratedEvents;
                 if ( events == null )
@@ -362,7 +362,7 @@ public class EventHistoryView extends AbstractAlarmsEventsView
                     // set initial capacity to expected capacity
                     // which should be a bit more efficient, because the space
                     // for the given events has to be reserved anyway
-                    decoratedEvents = new LinkedHashSet<DecoratedEvent> ( events.length + 1 );
+                    decoratedEvents = new LinkedHashSet<DecoratedEvent> ( events.size () + 1 );
                     for ( final Event event : events )
                     {
                         decoratedEvents.add ( new DecoratedEvent ( event ) );

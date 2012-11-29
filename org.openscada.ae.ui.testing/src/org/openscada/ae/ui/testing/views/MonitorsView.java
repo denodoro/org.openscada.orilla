@@ -22,7 +22,9 @@ package org.openscada.ae.ui.testing.views;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.core.databinding.beans.BeansObservables;
 import org.eclipse.core.databinding.observable.Realm;
@@ -47,9 +49,9 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IWorkbenchActionConstants;
-import org.openscada.ae.MonitorStatusInformation;
+import org.openscada.ae.data.MonitorStatusInformation;
 import org.openscada.ae.ui.connection.data.MonitorStatusBean;
-import org.openscada.core.subscription.SubscriptionState;
+import org.openscada.core.data.SubscriptionState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -201,24 +203,29 @@ public class MonitorsView extends AbstractConditionQueryViewPart
     }
 
     @Override
-    public void handleDataChanged ( final MonitorStatusInformation[] addedOrUpdated, final String[] removed, final boolean full )
+    public void handleDataChanged ( final List<MonitorStatusInformation> addedOrUpdated, final Set<String> removed, final boolean full )
     {
         scheduleJob ( new Runnable () {
 
             @Override
             public void run ()
             {
-                performDataChanged ( addedOrUpdated, removed );
+                performDataChanged ( addedOrUpdated, removed, full );
             }
         } );
     }
 
-    protected void performDataChanged ( final MonitorStatusInformation[] addedOrUpdated, final String[] removed )
+    protected void performDataChanged ( final List<MonitorStatusInformation> addedOrUpdated, final Set<String> removed, final boolean full )
     {
         logger.debug ( "Got data change" );
 
         try
         {
+            if ( full )
+            {
+                this.monitors.clear ();
+            }
+
             Collection<MonitorStatusBean> infos = new LinkedList<MonitorStatusBean> ();
             if ( removed != null )
             {

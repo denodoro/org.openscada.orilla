@@ -24,8 +24,8 @@ import java.util.TimeZone;
 import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.jface.databinding.viewers.ObservableMapLabelProvider;
 import org.eclipse.swt.graphics.Image;
-import org.openscada.ae.MonitorStatusInformation;
-import org.openscada.ae.Severity;
+import org.openscada.ae.data.MonitorStatusInformation;
+import org.openscada.ae.data.Severity;
 import org.openscada.ae.ui.views.model.DecoratedMonitor;
 
 public class MonitorTableLabelProvider extends ObservableMapLabelProvider

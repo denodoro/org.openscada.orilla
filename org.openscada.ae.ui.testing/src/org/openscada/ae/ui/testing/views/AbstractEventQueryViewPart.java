@@ -19,11 +19,13 @@
 
 package org.openscada.ae.ui.testing.views;
 
-import org.openscada.ae.BrowserType;
+import java.util.List;
+
 import org.openscada.ae.Event;
 import org.openscada.ae.client.EventListener;
+import org.openscada.ae.data.BrowserType;
 import org.openscada.ae.ui.connection.data.BrowserEntryBean;
-import org.openscada.core.subscription.SubscriptionState;
+import org.openscada.core.data.SubscriptionState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,19 +42,21 @@ public abstract class AbstractEventQueryViewPart extends AbstractEntryViewPart
             this.disposed = true;
         }
 
+        @Override
         public synchronized void statusChanged ( final SubscriptionState state )
         {
             if ( !this.disposed )
             {
-                AbstractEventQueryViewPart.this.handleStatusChanged ( state );
+                handleStatusChanged ( state );
             }
         }
 
-        public synchronized void dataChanged ( final Event[] addedEvents )
+        @Override
+        public synchronized void dataChanged ( final List<Event> addedEvents )
         {
             if ( !this.disposed )
             {
-                AbstractEventQueryViewPart.this.handleDataChanged ( addedEvents );
+                handleDataChanged ( addedEvents );
             }
         }
     }
@@ -79,7 +83,7 @@ public abstract class AbstractEventQueryViewPart extends AbstractEntryViewPart
         this.entry.getConnection ().getConnection ().setEventListener ( this.entry.getEntry ().getId (), this.listener = new EventListenerImpl () );
     }
 
-    protected abstract void handleDataChanged ( final Event[] addedEvents );
+    protected abstract void handleDataChanged ( final List<Event> addedEvents );
 
     protected abstract void handleStatusChanged ( final SubscriptionState state );
 

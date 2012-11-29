@@ -22,6 +22,7 @@ package org.openscada.ae.ui.views.views;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -34,11 +35,11 @@ import org.eclipse.core.databinding.observable.map.WritableMap;
 import org.eclipse.core.databinding.observable.set.WritableSet;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.swt.widgets.Composite;
-import org.openscada.ae.MonitorStatusInformation;
 import org.openscada.ae.client.MonitorListener;
+import org.openscada.ae.data.MonitorStatusInformation;
 import org.openscada.ae.ui.views.model.DecoratedMonitor;
 import org.openscada.core.client.ConnectionState;
-import org.openscada.core.subscription.SubscriptionState;
+import org.openscada.core.data.SubscriptionState;
 
 public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarmsEventsView
 {
@@ -96,9 +97,9 @@ public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarms
                 }
 
                 @Override
-                public void dataChanged ( final MonitorStatusInformation[] addedOrUpdated, final String[] removed )
+                public void dataChanged ( final List<MonitorStatusInformation> addedOrUpdated, final Set<String> removed, final boolean full )
                 {
-                    MonitorSubscriptionAlarmsEventsView.this.dataChanged ( addedOrUpdated, removed );
+                    MonitorSubscriptionAlarmsEventsView.this.dataChanged ( addedOrUpdated, removed, full );
                 }
             };
             getConnectionService ().getMonitorManager ().addMonitorListener ( this.monitorsId, this.monitorListener );
@@ -155,22 +156,27 @@ public abstract class MonitorSubscriptionAlarmsEventsView extends AbstractAlarms
         updateStatusBar ();
     }
 
-    protected void dataChanged ( final MonitorStatusInformation[] addedOrUpdated, final String[] removed )
+    protected void dataChanged ( final List<MonitorStatusInformation> addedOrUpdated, final Set<String> removed, final boolean full )
     {
         scheduleJob ( new Runnable () {
             @Override
             public void run ()
             {
-                performDataChanged ( addedOrUpdated, removed );
+                performDataChanged ( addedOrUpdated, removed, full );
             }
         } );
     }
 
-    private void performDataChanged ( final MonitorStatusInformation[] addedOrUpdated, final String[] removed )
+    private void performDataChanged ( final List<MonitorStatusInformation> addedOrUpdated, final Set<String> removed, final boolean full )
     {
         try
         {
             this.monitorsMap.setStale ( true );
+
+            if ( full )
+            {
+                this.monitorsMap.clear ();
+            }
 
             if ( removed != null )
             {

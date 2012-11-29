@@ -51,7 +51,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchActionConstants;
-import org.openscada.ae.MonitorStatusInformation;
+import org.openscada.ae.data.MonitorStatusInformation;
 import org.openscada.ae.ui.views.Messages;
 import org.openscada.ae.ui.views.Settings;
 import org.openscada.ae.ui.views.model.DecoratedMonitor;
@@ -155,7 +155,7 @@ public class MonitorsViewTable extends Composite
             // if values are the same, order by timestamp in descending order
             if ( this.column != Columns.LAST_FAIL_TIMESTAMP && result == 0 )
             {
-                result = m2.getStatusTimestamp ().compareTo ( m1.getStatusTimestamp () );
+                result = Long.valueOf ( m2.getStatusTimestamp () ).compareTo ( m1.getStatusTimestamp () );
             }
             // if values are still the same, order by id in ascending order
             if ( this.column != Columns.ID && result == 0 )

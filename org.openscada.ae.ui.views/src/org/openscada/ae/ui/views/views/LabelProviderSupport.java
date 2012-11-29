@@ -29,7 +29,7 @@ import java.util.TimeZone;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.graphics.Image;
 import org.openscada.ae.Event.Fields;
-import org.openscada.ae.Severity;
+import org.openscada.ae.data.Severity;
 import org.openscada.ae.ui.views.Activator;
 import org.openscada.ae.ui.views.model.DecoratedEvent;
 import org.openscada.core.Variant;
@@ -114,6 +114,15 @@ public class LabelProviderSupport
             }
         }
         return value.toLabel ( "" ); //$NON-NLS-1$
+    }
+
+    public String formatDate ( final Long date )
+    {
+        if ( date == null )
+        {
+            return ""; //$NON-NLS-1$
+        }
+        return formatDate ( new Date ( date ) );
     }
 
     public String formatDate ( final Date date )
